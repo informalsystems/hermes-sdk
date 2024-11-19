@@ -1,6 +1,9 @@
 use alloc::sync::Arc;
 use cgp::core::component::UseContext;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
+use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::{
+    DynamicGasGetterComponent, ReturnNoDynamicGas,
+};
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
 use std::path::PathBuf;
 
@@ -102,6 +105,8 @@ delegate_components! {
             CosmosGenesisConfigModifierComponent,
         ]:
             UseContext,
+        DynamicGasGetterComponent:
+            ReturnNoDynamicGas,
         CosmosSdkConfigModifierComponent:
             NoModifyCosmosSdkConfig,
         RelayerChainConfigBuilderComponent:

@@ -1,3 +1,4 @@
+pub mod convert_gas_to_fee;
 pub mod encode_tx;
 pub mod estimate_fee;
 pub mod event;

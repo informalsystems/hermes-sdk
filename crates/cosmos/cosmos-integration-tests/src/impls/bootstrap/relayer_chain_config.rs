@@ -3,6 +3,7 @@ use core::time::Duration;
 
 use cgp::core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
+use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
@@ -26,6 +27,7 @@ impl<Bootstrap, Chain> RelayerChainConfigBuilder<Bootstrap> for BuildRelayerChai
 where
     Bootstrap: HasAccountPrefix
         + HasCompatMode
+        + HasDynamicGas
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
         + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasChainType<Chain = Chain>
@@ -38,6 +40,11 @@ where
         chain_genesis_config: &CosmosGenesisConfig,
         relayer_wallet: &CosmosTestWallet,
     ) -> Result<CosmosSdkConfig, Bootstrap::Error> {
+        let dynamic_gas_price = if let Some(dynamic_gas_config) = bootstrap.dynamic_gas() {
+            DynamicGasPrice::unsafe_new(true, dynamic_gas_config.multiplier, dynamic_gas_config.max)
+        } else {
+            DynamicGasPrice::default()
+        };
         let relayer_chain_config = CosmosSdkConfig {
             id: chain_node_config.chain_id.clone(),
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))
@@ -63,8 +70,8 @@ where
             default_gas: None,
             max_gas: Some(900000000),
             gas_adjustment: None,
-            gas_multiplier: Some(GasMultiplier::unsafe_new(1.2)),
-            dynamic_gas_price: DynamicGasPrice::default(),
+            gas_multiplier: Some(GasMultiplier::unsafe_new(1.3)),
+            dynamic_gas_price,
             fee_granter: None,
             max_msg_num: Default::default(),
             max_tx_size: Default::default(),

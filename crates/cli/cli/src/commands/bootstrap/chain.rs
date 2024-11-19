@@ -2,6 +2,7 @@ use alloc::sync::Arc;
 
 use cgp::prelude::*;
 use hermes_cli_components::traits::bootstrap::{BootstrapLoader, HasBootstrapType};
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::HermesError;
@@ -56,6 +57,7 @@ where
             transfer_denom_prefix: args.transfer_denom.clone(),
             genesis_config_modifier: Box::new(|_| Ok(())),
             comet_config_modifier: Box::new(|_| Ok(())),
+            dynamic_gas: Some(DynamicGasConfig::default()),
         };
 
         Ok(bootstrap)

@@ -39,6 +39,7 @@ use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
 pub use crate::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, DenomPrefixGetter, GenesisDenomGetterComponent,
 };
+use crate::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 pub use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 pub use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
@@ -111,7 +112,8 @@ where
         + CanRaiseError<KeyringError>
         + CanRaiseError<serde_json::Error>
         + CanRaiseError<toml::ser::Error>
-        + CanRaiseError<toml::de::Error>,
+        + CanRaiseError<toml::de::Error>
+        + HasDynamicGas,
     Components: DelegatesToLegacyCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>
         + ProvideChainDriverType<Bootstrap, ChainDriver = ChainDriver>

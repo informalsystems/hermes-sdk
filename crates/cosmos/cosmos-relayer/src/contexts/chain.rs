@@ -1,5 +1,9 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
+use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
+use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
@@ -99,8 +103,6 @@ use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::chain::cosmos::types::config::TxConfig;
-use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::EventSourceMode;
 use ibc_relayer::event::source::queries::all as all_queries;
@@ -381,6 +383,8 @@ pub trait CanUseCosmosChain:
     + HasCreateClientPayloadOptionsType<CosmosChain, CreateClientPayloadOptions = Settings>
     + CanQueryBalance
     + CanIbcTransferToken<CosmosChain>
+    + CanConvertGasToFee
+    + CanQueryEipBaseFee
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>

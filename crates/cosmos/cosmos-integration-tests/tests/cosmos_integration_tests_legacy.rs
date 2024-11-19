@@ -3,9 +3,8 @@
 use core::time::Duration;
 use std::sync::Arc;
 
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::binary_channel::setup_legacy::LegacyCosmosBinaryChannelSetup;
+use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
@@ -19,21 +18,25 @@ use ibc_relayer_types::core::ics24_host::identifier::PortId;
 fn cosmos_integration_tests() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
+    // Note: This test only works with Gaia v14 or older. Hence we get the older version of
+    // gaiad from the environment variable, if applicable.
+    let gaia_bin = std::env::var("LEGACY_GAIA_BIN").unwrap_or("gaiad".into());
+
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
     // TODO: load parameters from environment variables
-    let bootstrap = Arc::new(CosmosBootstrap {
+    let bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime: runtime.clone(),
         cosmos_builder: builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
-        chain_command_path: "gaiad".into(),
+        chain_command_path: gaia_bin.into(),
         account_prefix: "cosmos".into(),
+        compat_mode: None,
         staking_denom_prefix: "stake".into(),
         transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
-        dynamic_gas: Some(DynamicGasConfig::default()),
     });
 
     let create_client_settings = Settings {
@@ -42,7 +45,7 @@ fn cosmos_integration_tests() -> Result<(), Error> {
         trust_threshold: TrustThreshold::ONE_THIRD,
     };
 
-    let setup = CosmosBinaryChannelSetup {
+    let setup = LegacyCosmosBinaryChannelSetup {
         bootstrap_a: bootstrap.clone(),
         bootstrap_b: bootstrap,
         create_client_settings,
