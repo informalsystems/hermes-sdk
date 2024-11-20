@@ -143,6 +143,7 @@ pub fn encode_signer_info(sequence: AccountSequence, key_bytes: Vec<u8>) -> Sign
     }
 }
 
+#[allow(deprecated)]
 pub fn auth_info_and_bytes(signer_info: SignerInfo, fee: Fee) -> (AuthInfo, Vec<u8>) {
     let auth_info = AuthInfo {
         signer_infos: vec![signer_info],

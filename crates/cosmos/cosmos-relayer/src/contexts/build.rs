@@ -189,7 +189,7 @@ impl CosmosBuilder {
         let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
-            compat_mode.clone().into()
+            *compat_mode
         } else {
             let status = rpc_client.status().await?;
 

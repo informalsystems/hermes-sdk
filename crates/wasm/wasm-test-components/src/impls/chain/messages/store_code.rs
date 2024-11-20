@@ -72,6 +72,7 @@ impl DynCosmosMessage for StoreCodeProposalMessage {
             metadata: "".into(),
             title: self.title.clone(),
             summary: self.summary.clone(),
+            expedited: false,
         };
 
         Any {
