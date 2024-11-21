@@ -27,9 +27,14 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
 
+    let dynamic_gas = None;
+
     let runtime = HermesRuntime::new(tokio_runtime.clone());
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let builder = Arc::new(CosmosBuilder::new_with_default(
+        runtime.clone(),
+        dynamic_gas.clone(),
+    ));
 
     let store_postfix = format!(
         "{}-{}",
@@ -62,7 +67,7 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             transfer_denom_prefix: "coin".into(),
             wasm_client_byte_code,
             governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
-            dynamic_gas: None,
+            dynamic_gas,
         });
 
         let chain_driver_a = bootstrap.bootstrap_chain("chain-a").await?;

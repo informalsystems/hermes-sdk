@@ -11,7 +11,12 @@ use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 fn test_cosmos_bootstrap() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let dynamic_gas = Some(DynamicGasConfig::default());
+
+    let builder = Arc::new(CosmosBuilder::new_with_default(
+        runtime.clone(),
+        dynamic_gas.clone(),
+    ));
 
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(CosmosBootstrap {
@@ -25,7 +30,7 @@ fn test_cosmos_bootstrap() -> Result<(), Error> {
         transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
-        dynamic_gas: Some(DynamicGasConfig::default()),
+        dynamic_gas,
     });
 
     runtime.runtime.clone().block_on(async move {

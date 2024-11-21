@@ -4,6 +4,7 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::eyre;
 use futures::lock::Mutex;
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use std::collections::HashMap;
 
 use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
@@ -54,6 +55,7 @@ pub struct CosmosBuilder {
     pub relay_cache: Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>>>,
     pub batch_senders:
         Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>>>,
+    pub dynamic_gas: Option<DynamicGasConfig>,
 }
 
 pub struct CosmosBuildComponents;
@@ -114,7 +116,7 @@ impl ProvideRelayTypeAt<CosmosBuilder, 1, 0> for CosmosBuildComponents {
 }
 
 impl CosmosBuilder {
-    pub fn new_with_default(runtime: HermesRuntime) -> Self {
+    pub fn new_with_default(runtime: HermesRuntime, dynamic_gas: Option<DynamicGasConfig>) -> Self {
         Self::new(
             Default::default(),
             runtime,
@@ -122,6 +124,7 @@ impl CosmosBuilder {
             Default::default(),
             Default::default(),
             Default::default(),
+            dynamic_gas,
         )
     }
 
@@ -132,6 +135,7 @@ impl CosmosBuilder {
         packet_filter: PacketFilter,
         batch_config: BatchConfig,
         key_map: HashMap<ChainId, Secp256k1KeyPair>,
+        dynamic_gas: Option<DynamicGasConfig>,
     ) -> Self {
         let config_map = HashMap::from_iter(
             chain_configs
@@ -149,6 +153,7 @@ impl CosmosBuilder {
             chain_cache: Default::default(),
             relay_cache: Default::default(),
             batch_senders: Default::default(),
+            dynamic_gas,
         }
     }
 
@@ -184,8 +189,10 @@ impl CosmosBuilder {
 
         let event_source_mode = chain_config.event_source.clone();
 
-        let tx_config = TxConfig::try_from(&chain_config)?;
+        let mut tx_config = TxConfig::try_from(&chain_config)?;
 
+        // TODO: Eventually use Config to define dynamic gas config
+        tx_config.gas_config.dynamic_gas_config = self.dynamic_gas.clone();
         let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {

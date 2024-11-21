@@ -19,7 +19,12 @@ use ibc_relayer_types::core::ics24_host::identifier::PortId;
 fn cosmos_integration_tests() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let dynamic_gas = Some(DynamicGasConfig::default());
+
+    let builder = Arc::new(CosmosBuilder::new_with_default(
+        runtime.clone(),
+        dynamic_gas.clone(),
+    ));
 
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(CosmosBootstrap {
@@ -33,7 +38,7 @@ fn cosmos_integration_tests() -> Result<(), Error> {
         transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
-        dynamic_gas: Some(DynamicGasConfig::default()),
+        dynamic_gas,
     });
 
     let create_client_settings = Settings {

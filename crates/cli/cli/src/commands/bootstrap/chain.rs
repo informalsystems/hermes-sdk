@@ -44,7 +44,9 @@ where
     ) -> Result<App::Bootstrap, App::Error> {
         let runtime = app.runtime();
 
-        let builder = CosmosBuilder::new_with_default(runtime.clone());
+        let dynamic_gas = Some(DynamicGasConfig::default());
+
+        let builder = CosmosBuilder::new_with_default(runtime.clone(), dynamic_gas.clone());
 
         let bootstrap = CosmosBootstrap {
             runtime: runtime.clone(),
@@ -57,7 +59,7 @@ where
             transfer_denom_prefix: args.transfer_denom.clone(),
             genesis_config_modifier: Box::new(|_| Ok(())),
             comet_config_modifier: Box::new(|_| Ok(())),
-            dynamic_gas: Some(DynamicGasConfig::default()),
+            dynamic_gas,
         };
 
         Ok(bootstrap)
