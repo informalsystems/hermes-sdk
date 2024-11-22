@@ -5,7 +5,7 @@ use crate::traits::state::query_light_block::{
     CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore, GetLowestTrustedOrVerified,
     GetTrustedOrVerified,
 };
-use crate::traits::verify::{
+use crate::traits::verify_target_height::{
     CanVerifyTargetHeight, TargetHeightVerifier, VerifyBackward, VerifyForward, VerifyToTarget,
 };
 
