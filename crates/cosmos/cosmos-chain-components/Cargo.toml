@@ -22,10 +22,13 @@ hermes-cosmos-encoding-components       = { workspace = true }
 
 ibc                                     = { workspace = true }
 ibc-proto                               = { workspace = true }
+ibc-client-tendermint                   = { workspace = true }
 ibc-relayer                             = { workspace = true }
 ibc-relayer-types                       = { workspace = true }
 tendermint                              = { workspace = true, features = ["secp256k1"] }
 tendermint-proto                        = { workspace = true }
+tendermint-light-client                 = { workspace = true }
+tendermint-light-client-verifier        = { workspace = true }
 tendermint-rpc                          = { workspace = true, features = ["http-client", "websocket-client"] }
 
 ics23           = { workspace = true }

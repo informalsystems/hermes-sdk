@@ -1681,6 +1681,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-comet-light-client-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+]
+
+[[package]]
 name = "hermes-cosmos-chain-components"
 version = "0.1.0"
 dependencies = [
@@ -1696,6 +1703,7 @@ dependencies = [
  "hermes-relayer-components-extra",
  "http 1.1.0",
  "ibc",
+ "ibc-client-tendermint",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
@@ -1708,6 +1716,8 @@ dependencies = [
  "serde_json",
  "subtle-encoding",
  "tendermint",
+ "tendermint-light-client",
+ "tendermint-light-client-verifier",
  "tendermint-proto",
  "tendermint-rpc",
  "time",
