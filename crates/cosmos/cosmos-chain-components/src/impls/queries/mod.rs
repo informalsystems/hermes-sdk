@@ -18,6 +18,7 @@ pub mod packet_receipt;
 pub mod received_packet;
 pub mod send_packet;
 pub mod send_packets;
+pub mod staking_params;
 pub mod unreceived_acks;
 pub mod unreceived_packet;
 pub mod write_ack_event;
