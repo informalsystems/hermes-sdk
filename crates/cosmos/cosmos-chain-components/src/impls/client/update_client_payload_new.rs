@@ -33,8 +33,8 @@ where
 {
     async fn build_update_client_payload(
         chain: &Chain,
-        trusted_height: &Chain::Height,
-        target_height: &Chain::Height,
+        _trusted_height: &Chain::Height,
+        _target_height: &Chain::Height,
         client_state: Chain::ClientState,
     ) -> Result<Chain::UpdateClientPayload, Chain::Error> {
         let rpc_client = chain.rpc_client();
@@ -47,7 +47,7 @@ where
 
         let verifier = ProdVerifier::default();
 
-        let trust_threshold = TrustThresholdFraction::new(
+        let _trust_threshold = TrustThresholdFraction::new(
             client_state.trust_level.numerator(),
             client_state.trust_level.denominator(),
         )
@@ -64,7 +64,7 @@ where
 
         // let block = io.fetch_light_block(AtHeight::At(trusted_block_height));
 
-        let light_client = LightClient::new(
+        let _light_client = LightClient::new(
             peer_id,
             light_client_options,
             clock,

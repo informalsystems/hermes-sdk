@@ -13,3 +13,4 @@ description  = """
 
 [dependencies]
 cgp  = { workspace = true }
+hermes-chain-type-components  = { workspace = true }
