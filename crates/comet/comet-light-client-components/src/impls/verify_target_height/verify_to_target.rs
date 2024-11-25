@@ -12,9 +12,9 @@ use crate::traits::verify_target_height::{
 
 pub struct DoVerifyToTarget;
 
-impl<Chain> TargetHeightVerifier<Chain, VerifyToTarget> for DoVerifyToTarget
+impl<Client> TargetHeightVerifier<Client, VerifyToTarget> for DoVerifyToTarget
 where
-    Chain: HasLightBlockHeight
+    Client: HasLightBlockHeight
         + CanVerifyTargetHeight<VerifyForward>
         + CanVerifyTargetHeight<VerifyBackward>
         + CanQueryLightBlock<GetTrustedOrVerified>
@@ -23,27 +23,27 @@ where
         + CanRaiseError<NoInitialTrustedState>,
 {
     async fn verify_target_height(
-        chain: &mut Chain,
+        client: &mut Client,
         _mode: VerifyToTarget,
-        target_height: &Chain::Height,
-    ) -> Result<Chain::LightBlock, Chain::Error> {
-        if let Some(block) = chain.query_light_block(GetTrustedOrVerified, target_height) {
+        target_height: &Client::Height,
+    ) -> Result<Client::LightBlock, Client::Error> {
+        if let Some(block) = client.query_light_block(GetTrustedOrVerified, target_height) {
             return Ok(block);
         }
 
-        let highest_block = chain
+        let highest_block = client
             .query_light_block(GetHighestTrustedOrVerifiedBefore, target_height)
-            .or_else(|| chain.query_light_block(GetHighestTrustedOrVerifiedBefore, target_height))
-            .ok_or_else(|| Chain::raise_error(NoInitialTrustedState))?;
+            .or_else(|| client.query_light_block(GetHighestTrustedOrVerifiedBefore, target_height))
+            .ok_or_else(|| Client::raise_error(NoInitialTrustedState))?;
 
-        let highest_height = Chain::light_block_height(&highest_block);
+        let highest_height = Client::light_block_height(&highest_block);
 
         if target_height >= highest_height {
-            chain
+            client
                 .verify_target_height(VerifyForward, target_height)
                 .await
         } else {
-            chain
+            client
                 .verify_target_height(VerifyBackward, target_height)
                 .await
         }

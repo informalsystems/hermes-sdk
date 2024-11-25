@@ -3,7 +3,7 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
 
 use crate::traits::types::light_block::HasLightBlockType;
 
-#[derive_component(TargetHeightVerifierComponent, TargetHeightVerifier<Chain>)]
+#[derive_component(TargetHeightVerifierComponent, TargetHeightVerifier<Client>)]
 #[async_trait]
 pub trait CanVerifyTargetHeight<Mode: Async>:
     HasHeightType + HasLightBlockType + HasErrorType

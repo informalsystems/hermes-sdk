@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-#[derive_component(LightBlockTypeComponent, ProvideLightBlockType<Chain>)]
+#[derive_component(LightBlockTypeComponent, ProvideLightBlockType<Client>)]
 pub trait HasLightBlockType: Async {
     type LightBlock: Async;
 }

@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 use tendermint_light_client_verifier::Verifier;
 
-#[derive_component(VerifierComponent, ProvideVerifier<Chain>)]
+#[derive_component(VerifierComponent, ProvideVerifier<Client>)]
 pub trait HasVerifier: Async {
     type Verifier: Verifier;
 

@@ -14,9 +14,9 @@ use crate::traits::verifier_options::HasVerifierOptions;
 
 pub struct VerifyUpdateHeaderWithProdVerifier;
 
-impl<Chain> UpdateHeaderVerifier<Chain> for VerifyUpdateHeaderWithProdVerifier
+impl<Client> UpdateHeaderVerifier<Client> for VerifyUpdateHeaderWithProdVerifier
 where
-    Chain: HasLightBlockType<LightBlock = LightBlock>
+    Client: HasLightBlockType<LightBlock = LightBlock>
         + HasVerdictType<Verdict = Verdict>
         + HasVerifier
         + HasVerifierOptions
@@ -24,13 +24,13 @@ where
         + CanRaiseError<VerificationErrorDetail>,
 {
     fn verify_update_header(
-        chain: &Chain,
+        client: &Client,
         untrusted_block: &LightBlock,
         trusted_block: &LightBlock,
-    ) -> Result<Verdict, Chain::Error> {
-        let verifier = chain.verifier();
-        let options = chain.verifier_options();
-        let current_time = chain.current_time();
+    ) -> Result<Verdict, Client::Error> {
+        let verifier = client.verifier();
+        let options = client.verifier_options();
+        let current_time = client.current_time();
 
         let verdict = verifier.verify_update_header(
             untrusted_block.as_untrusted_state(),
@@ -42,7 +42,7 @@ where
         match verdict {
             TendermintVerdict::Success => Ok(Verdict::Success),
             TendermintVerdict::NotEnoughTrust(_) => Ok(Verdict::NotEnoughTrust),
-            TendermintVerdict::Invalid(e) => Err(Chain::raise_error(e)),
+            TendermintVerdict::Invalid(e) => Err(Client::raise_error(e)),
         }
     }
 }

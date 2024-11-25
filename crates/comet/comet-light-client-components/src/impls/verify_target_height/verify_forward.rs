@@ -22,17 +22,17 @@ use crate::types::verdict::Verdict;
 
 pub struct DoVerifyForward;
 
-pub struct TargetLowerThanTrustedHeight<'a, Chain>
+pub struct TargetLowerThanTrustedHeight<'a, Client>
 where
-    Chain: HasHeightType,
+    Client: HasHeightType,
 {
-    pub target_height: &'a Chain::Height,
-    pub trusted_height: &'a Chain::Height,
+    pub target_height: &'a Client::Height,
+    pub trusted_height: &'a Client::Height,
 }
 
-impl<Chain, Mode> TargetHeightVerifier<Chain, Mode> for DoVerifyForward
+impl<Client, Mode> TargetHeightVerifier<Client, Mode> for DoVerifyForward
 where
-    Chain: HasLightBlockHeight
+    Client: HasLightBlockHeight
         + HasLightBlockTime
         + HasVerdictType<Verdict = Verdict>
         + HasVerificationStatusType<VerificationStatus = VerificationStatus>
@@ -46,52 +46,54 @@ where
         + CanQueryLightBlock<GetHighestTrustedOrVerifiedBefore>
         + CanQueryLightBlock<GetLowestTrustedOrVerified>
         + CanRaiseError<NoInitialTrustedState>
-        + for<'a> CanRaiseError<TargetLowerThanTrustedHeight<'a, Chain>>,
+        + for<'a> CanRaiseError<TargetLowerThanTrustedHeight<'a, Client>>,
     Mode: Async,
 {
     async fn verify_target_height(
-        chain: &mut Chain,
+        client: &mut Client,
         _mode: Mode,
-        target_height: &Chain::Height,
-    ) -> Result<Chain::LightBlock, Chain::Error> {
+        target_height: &Client::Height,
+    ) -> Result<Client::LightBlock, Client::Error> {
         let mut current_height = target_height.clone();
 
         loop {
-            let trusted_block = chain
+            let trusted_block = client
                 .query_light_block(GetHighestTrustedOrVerifiedBefore, target_height)
-                .ok_or_else(|| Chain::raise_error(NoInitialTrustedState))?;
+                .ok_or_else(|| Client::raise_error(NoInitialTrustedState))?;
 
-            let trusted_height = Chain::light_block_height(&trusted_block);
+            let trusted_height = Client::light_block_height(&trusted_block);
 
             if target_height < trusted_height {
-                return Err(Chain::raise_error(TargetLowerThanTrustedHeight {
+                return Err(Client::raise_error(TargetLowerThanTrustedHeight {
                     target_height,
                     trusted_height,
                 }));
             }
 
-            chain.validate_light_block(IsWithinTrustingPeriod, &trusted_block)?;
+            client.validate_light_block(IsWithinTrustingPeriod, &trusted_block)?;
 
-            chain.trace_light_block(target_height, &current_height);
+            client.trace_light_block(target_height, &current_height);
 
             if target_height == trusted_height {
                 return Ok(trusted_block);
             }
 
-            let (current_block, current_status) =
-                chain.fetch_light_block_with_status(&current_height).await?;
+            let (current_block, current_status) = client
+                .fetch_light_block_with_status(&current_height)
+                .await?;
 
-            let verdict = chain.verify_update_header(&current_block, &trusted_block)?;
+            let verdict = client.verify_update_header(&current_block, &trusted_block)?;
 
             if verdict == Verdict::Success {
                 if current_status == VerificationStatus::Unverified {
-                    chain.update_verification_status(VerifiedStatus, &current_height);
+                    client.update_verification_status(VerifiedStatus, &current_height);
                 }
 
-                chain.trace_light_block(&current_height, trusted_height);
+                client.trace_light_block(&current_height, trusted_height);
             }
 
-            current_height = chain.compute_next_verification_height(&current_height, target_height);
+            current_height =
+                client.compute_next_verification_height(&current_height, target_height);
         }
     }
 }
