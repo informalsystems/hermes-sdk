@@ -16,24 +16,12 @@ use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::consensus_state::AnyConsensusState;
-use ibc_relayer_types::clients::ics07_tendermint::error::Error as TendermintClientError;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use tendermint::node;
-use tendermint::trust_threshold::TrustThresholdFraction;
-use tendermint::Error as TendermintError;
-use tendermint_light_client::components::clock::FixedClock;
 use tendermint_light_client::components::io::IoError;
 use tendermint_light_client::components::io::{AtHeight, Io, ProdIo};
-use tendermint_light_client::components::scheduler::basic_bisecting_schedule;
-use tendermint_light_client::errors::Error as TendermintLightClientError;
-use tendermint_light_client::light_client::{LightClient, Options};
-use tendermint_light_client::state::State as LightClientState;
-use tendermint_light_client::store::memory::MemoryStore;
-use tendermint_light_client::store::LightStore;
-use tendermint_light_client::types::Status;
-use tendermint_light_client::verifier::ProdVerifier;
 use tendermint_proto::google::protobuf::Duration as ProtoDuration;
 use tendermint_rpc::Client;
 use tendermint_rpc::Error as TendermintRpcError;
@@ -112,11 +100,8 @@ where
         + CanQueryChainHeight<Height = Height>
         + CanQueryChainStatus<ChainStatus = ChainStatus>
         + HasRpcClient
-        + CanRaiseError<TendermintClientError>
         + CanRaiseError<TendermintRpcError>
-        + CanRaiseError<TendermintLightClientError>
         + CanRaiseError<IoError>
-        + CanRaiseError<TendermintError>
         + CanRaiseError<Report>,
 {
     async fn build_create_client_payload(
@@ -165,13 +150,6 @@ where
             allow_update_after_misbehaviour: true,
         };
 
-        // Build the consensus state.
-        let now = chain.query_chain_status().await?.time;
-
-        let clock = FixedClock::new(now);
-        let verifier = ProdVerifier::default();
-        let scheduler = basic_bisecting_schedule;
-
         let rpc_client = chain.rpc_client().clone();
 
         // Fetch Node info
@@ -187,51 +165,19 @@ where
             .fetch_light_block(AtHeight::At(latest_height.into()))
             .map_err(Chain::raise_error)?;
 
-        let client = LightClient::new(
-            status.id,
-            Options {
-                trust_threshold: TrustThresholdFraction::new(
-                    trust_threshold.numerator,
-                    trust_threshold.denominator,
-                )
-                .map_err(Chain::raise_error)?,
-                trusting_period: create_client_options
-                    .trusting_period
-                    .ok_or_else(|| {
-                        Report::msg("missing trusting_period from create_client_options")
-                    })
-                    .map_err(Chain::raise_error)?,
-                clock_drift: create_client_options.max_clock_drift,
-            },
-            clock,
-            scheduler,
-            verifier,
-            io,
-        );
-
-        let mut store = MemoryStore::new();
-        store.insert(trusted_block, Status::Trusted);
-
-        let mut state = LightClientState::new(store);
-
-        // Veriffied light block for consensus state
-        let verified_light_block = client
-            .verify_to_target(latest_height.into(), &mut state)
-            .map_err(Chain::raise_error)?;
-
-        let timestamp = verified_light_block.signed_header.header.time;
+        let timestamp = trusted_block.signed_header.header.time;
 
         let consensus_state = ProtoConsensusState {
             timestamp: Some(timestamp.into()),
             root: Some(MerkleRoot {
-                hash: verified_light_block
+                hash: trusted_block
                     .signed_header
                     .header
                     .app_hash
                     .as_ref()
                     .to_vec(),
             }),
-            next_validators_hash: verified_light_block
+            next_validators_hash: trusted_block
                 .signed_header
                 .header
                 .next_validators_hash
