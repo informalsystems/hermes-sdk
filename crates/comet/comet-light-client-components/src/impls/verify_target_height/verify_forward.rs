@@ -1,3 +1,4 @@
+use cgp::core::Async;
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 
@@ -14,10 +15,7 @@ use crate::traits::types::status::HasVerificationStatusType;
 use crate::traits::types::verdict::HasVerdictType;
 use crate::traits::update_verification_status::{CanUpdateVerificationStatus, VerifiedStatus};
 use crate::traits::validate_light_block::{CanValidateLightBlock, IsWithinTrustingPeriod};
-use crate::traits::verify_target_height::{
-    CanVerifyTargetHeight, NoInitialTrustedState, TargetHeightVerifier, VerifyBackward,
-    VerifyForward,
-};
+use crate::traits::verify_target_height::{NoInitialTrustedState, TargetHeightVerifier};
 use crate::traits::verify_update_header::CanVerifyUpdateHeader;
 use crate::types::status::VerificationStatus;
 use crate::types::verdict::Verdict;
@@ -32,7 +30,7 @@ where
     pub trusted_height: &'a Chain::Height,
 }
 
-impl<Chain> TargetHeightVerifier<Chain, VerifyForward> for DoVerifyForward
+impl<Chain, Mode> TargetHeightVerifier<Chain, Mode> for DoVerifyForward
 where
     Chain: HasLightBlockHeight
         + HasLightBlockTime
@@ -44,17 +42,16 @@ where
         + CanComputeNextVerificationHeight
         + CanUpdateVerificationStatus<VerifiedStatus>
         + CanValidateLightBlock<IsWithinTrustingPeriod>
-        + CanVerifyTargetHeight<VerifyForward>
-        + CanVerifyTargetHeight<VerifyBackward>
         + CanQueryLightBlock<GetTrustedOrVerified>
         + CanQueryLightBlock<GetHighestTrustedOrVerifiedBefore>
         + CanQueryLightBlock<GetLowestTrustedOrVerified>
         + CanRaiseError<NoInitialTrustedState>
         + for<'a> CanRaiseError<TargetLowerThanTrustedHeight<'a, Chain>>,
+    Mode: Async,
 {
     async fn verify_target_height(
         chain: &Chain,
-        _mode: VerifyForward,
+        _mode: Mode,
         state: &mut Chain::VerifierState,
         target_height: &Chain::Height,
     ) -> Result<Chain::LightBlock, Chain::Error> {

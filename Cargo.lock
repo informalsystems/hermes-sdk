@@ -1689,6 +1689,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-comet-light-client-context"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-chain-type-components",
+ "hermes-comet-light-client-components",
+ "tendermint-light-client-verifier",
+]
+
+[[package]]
 name = "hermes-cosmos-chain-components"
 version = "0.1.0"
 dependencies = [
