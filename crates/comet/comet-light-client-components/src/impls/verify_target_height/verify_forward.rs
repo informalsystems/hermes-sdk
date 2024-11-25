@@ -5,7 +5,6 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
 use crate::traits::compute_verification_height::CanComputeNextVerificationHeight;
 use crate::traits::fetch_light_block::CanFetchLightBlockWithStatus;
 use crate::traits::light_block::height::HasLightBlockHeight;
-use crate::traits::light_block::time::HasLightBlockTime;
 use crate::traits::state::query_light_block::{
     CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore, GetLowestTrustedOrVerified,
     GetTrustedOrVerified,
@@ -33,7 +32,6 @@ where
 impl<Client, Mode> TargetHeightVerifier<Client, Mode> for DoVerifyForward
 where
     Client: HasLightBlockHeight
-        + HasLightBlockTime
         + HasVerdictType<Verdict = Verdict>
         + HasVerificationStatusType<VerificationStatus = VerificationStatus>
         + CanVerifyUpdateHeader
