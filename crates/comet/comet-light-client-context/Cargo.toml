@@ -17,4 +17,6 @@ hermes-chain-components                 = { workspace = true }
 hermes-chain-type-components            = { workspace = true }
 hermes-comet-light-client-components    = { workspace = true }
 
-tendermint-light-client-verifier = { workspace = true}
+tendermint                          = { workspace = true}
+tendermint-rpc                      = { workspace = true}
+tendermint-light-client-verifier    = { workspace = true}

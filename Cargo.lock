@@ -1696,7 +1696,9 @@ dependencies = [
  "hermes-chain-components",
  "hermes-chain-type-components",
  "hermes-comet-light-client-components",
+ "tendermint",
  "tendermint-light-client-verifier",
+ "tendermint-rpc",
 ]
 
 [[package]]
