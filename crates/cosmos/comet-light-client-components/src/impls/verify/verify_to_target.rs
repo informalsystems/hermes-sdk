@@ -6,13 +6,11 @@ use crate::traits::state::query_light_block::{
     GetTrustedOrVerified,
 };
 use crate::traits::verify_target_height::{
-    CanVerifyTargetHeight, TargetHeightVerifier, VerifyBackward, VerifyForward, VerifyToTarget,
+    CanVerifyTargetHeight, NoInitialTrustedState, TargetHeightVerifier, VerifyBackward,
+    VerifyForward, VerifyToTarget,
 };
 
 pub struct DoVerifyToTarget;
-
-#[derive(Debug)]
-pub struct NoInitialTrustedState;
 
 impl<Chain> TargetHeightVerifier<Chain, VerifyToTarget> for DoVerifyToTarget
 where

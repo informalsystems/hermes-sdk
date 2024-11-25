@@ -17,6 +17,9 @@ pub trait CanVerifyTargetHeight<Mode: Async>:
     ) -> Result<Self::LightBlock, Self::Error>;
 }
 
+#[derive(Debug)]
+pub struct NoInitialTrustedState;
+
 pub struct VerifyToTarget;
 
 pub struct VerifyForward;
