@@ -1708,6 +1708,7 @@ dependencies = [
  "serde_json",
  "subtle-encoding",
  "tendermint",
+ "tendermint-light-client",
  "tendermint-proto",
  "tendermint-rpc",
  "time",
