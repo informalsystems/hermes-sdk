@@ -6,15 +6,17 @@ use hermes_comet_light_client_components::traits::state::query_light_block::{
     CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore,
 };
 use hermes_comet_light_client_components::traits::verify_target_height::NoInitialTrustedState;
+use tendermint::block::Height;
 
 pub struct BisectHeight;
 
 impl<Client> NextVerificationHeightComputer<Client> for BisectHeight
 where
-    Client: HasHeightType<Height = u64>
+    Client: HasHeightType<Height = Height>
         + HasLightBlockHeight
         + CanQueryLightBlock<GetHighestTrustedOrVerifiedBefore>
-        + CanRaiseError<NoInitialTrustedState>,
+        + CanRaiseError<NoInitialTrustedState>
+        + CanRaiseError<tendermint::Error>,
 {
     fn compute_next_verification_height(
         client: &Client,
@@ -30,12 +32,14 @@ where
         if trusted_height == target_height {
             Ok(*target_height)
         } else {
-            let low = trusted_height;
-            let high = current_height;
+            let low = trusted_height.value();
+            let high = current_height.value();
 
             let midpoint = low + (high + 1 - low) / 2;
 
-            Ok(midpoint)
+            let next_height = midpoint.try_into().map_err(Client::raise_error)?;
+
+            Ok(next_height)
         }
     }
 }
