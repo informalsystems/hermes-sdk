@@ -164,14 +164,19 @@ impl CosmosBuilder {
             .cloned()
             .ok_or_else(|| SpawnError::missing_chain_config(chain_id.clone()))?;
 
-        self.build_chain_with_config(chain_config, self.key_map.get(chain_id))
-            .await
+        self.build_chain_with_config(
+            chain_config,
+            self.key_map.get(chain_id),
+            self.dynamic_gas.clone(),
+        )
+        .await
     }
 
     pub async fn build_chain_with_config(
         &self,
         chain_config: CosmosSdkConfig,
         m_keypair: Option<&Secp256k1KeyPair>,
+        dynamic_gas_config: Option<DynamicGasConfig>,
     ) -> Result<CosmosChain, Error> {
         let runtime = self.runtime.runtime.clone();
         let chain_id = chain_config.id.clone();
@@ -191,8 +196,7 @@ impl CosmosBuilder {
 
         let mut tx_config = TxConfig::try_from(&chain_config)?;
 
-        // TODO: Eventually use Config to define dynamic gas config
-        tx_config.gas_config.dynamic_gas_config = self.dynamic_gas.clone();
+        tx_config.gas_config.dynamic_gas_config = dynamic_gas_config;
         let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
