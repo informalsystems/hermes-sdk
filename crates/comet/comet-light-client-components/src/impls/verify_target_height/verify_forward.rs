@@ -5,10 +5,7 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
 use crate::traits::compute_verification_height::CanComputeNextVerificationHeight;
 use crate::traits::fetch_light_block::CanFetchLightBlockWithStatus;
 use crate::traits::light_block::height::HasLightBlockHeight;
-use crate::traits::state::query_light_block::{
-    CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore, GetLowestTrustedOrVerified,
-    GetTrustedOrVerified,
-};
+use crate::traits::query_light_block::{CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore};
 use crate::traits::trace_verification_height::CanTraceVerificationHeight;
 use crate::traits::types::status::HasVerificationStatusType;
 use crate::traits::types::verdict::HasVerdictType;
@@ -40,9 +37,7 @@ where
         + CanComputeNextVerificationHeight
         + CanUpdateVerificationStatus<VerifiedStatus>
         + CanValidateLightBlock<IsWithinTrustingPeriod>
-        + CanQueryLightBlock<GetTrustedOrVerified>
         + CanQueryLightBlock<GetHighestTrustedOrVerifiedBefore>
-        + CanQueryLightBlock<GetLowestTrustedOrVerified>
         + CanRaiseError<NoInitialTrustedState>
         + for<'a> CanRaiseError<TargetLowerThanTrustedHeight<'a, Client>>,
     Mode: Async,

@@ -1,7 +1,7 @@
 pub mod compute_verification_height;
 pub mod fetch_light_block;
 pub mod light_block;
-pub mod state;
+pub mod query_light_block;
 pub mod trace_verification_height;
 pub mod types;
 pub mod update_verification_status;

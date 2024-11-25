@@ -2,7 +2,7 @@ use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_comet_light_client_components::traits::compute_verification_height::NextVerificationHeightComputer;
 use hermes_comet_light_client_components::traits::light_block::height::HasLightBlockHeight;
-use hermes_comet_light_client_components::traits::state::query_light_block::{
+use hermes_comet_light_client_components::traits::query_light_block::{
     CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore,
 };
 use hermes_comet_light_client_components::traits::verify_target_height::NoInitialTrustedState;

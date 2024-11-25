@@ -1,7 +1,7 @@
 use cgp::prelude::CanRaiseError;
 
 use crate::traits::light_block::height::HasLightBlockHeight;
-use crate::traits::state::query_light_block::{
+use crate::traits::query_light_block::{
     CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore, GetLowestTrustedOrVerified,
     GetTrustedOrVerified,
 };
