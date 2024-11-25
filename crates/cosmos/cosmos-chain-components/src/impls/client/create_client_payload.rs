@@ -1,6 +1,7 @@
 use cgp::core::error::CanRaiseError;
 use core::time::Duration;
 use eyre::Report;
+use ibc::core::client::types::Height;
 
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
@@ -16,15 +17,17 @@ use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::consensus_state::AnyConsensusState;
-use ibc_relayer_types::core::ics02_client::height::Height;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
+use tendermint::block::Height as TendermintHeight;
+use tendermint::error::Error as TendermintError;
 use tendermint::node;
 use tendermint_light_client::components::io::IoError;
 use tendermint_light_client::components::io::{AtHeight, Io, ProdIo};
 use tendermint_proto::google::protobuf::Duration as ProtoDuration;
 use tendermint_rpc::Client;
 use tendermint_rpc::Error as TendermintRpcError;
+
+use ibc::core::host::types::identifiers::ChainId;
 
 use ibc_proto::ibc::core::commitment::v1::MerkleRoot;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoClientState;
@@ -100,6 +103,7 @@ where
         + CanQueryChainHeight<Height = Height>
         + CanQueryChainStatus<ChainStatus = ChainStatus>
         + HasRpcClient
+        + CanRaiseError<TendermintError>
         + CanRaiseError<TendermintRpcError>
         + CanRaiseError<IoError>
         + CanRaiseError<Report>,
@@ -161,8 +165,11 @@ where
 
         let io = ProdIo::new(status.id, rpc_client.clone(), None);
 
+        let tendermint_latest_height = TendermintHeight::try_from(latest_height.revision_height())
+            .map_err(Chain::raise_error)?;
+
         let trusted_block = io
-            .fetch_light_block(AtHeight::At(latest_height.into()))
+            .fetch_light_block(AtHeight::At(tendermint_latest_height))
             .map_err(Chain::raise_error)?;
 
         let timestamp = trusted_block.signed_header.header.time;
