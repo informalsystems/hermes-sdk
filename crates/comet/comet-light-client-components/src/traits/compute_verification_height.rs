@@ -1,9 +1,11 @@
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 
-pub trait CanComputeNextVerificationHeight: HasHeightType {
+#[derive_component(NextVerificationHeightComputerComponent, NextVerificationHeightComputer<Client>)]
+pub trait CanComputeNextVerificationHeight: HasHeightType + HasErrorType {
     fn compute_next_verification_height(
         &self,
         current_height: &Self::Height,
         target_height: &Self::Height,
-    ) -> Self::Height;
+    ) -> Result<Self::Height, Self::Error>;
 }

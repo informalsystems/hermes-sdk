@@ -93,7 +93,7 @@ where
             }
 
             current_height =
-                client.compute_next_verification_height(&current_height, target_height);
+                client.compute_next_verification_height(&current_height, target_height)?;
         }
     }
 }
