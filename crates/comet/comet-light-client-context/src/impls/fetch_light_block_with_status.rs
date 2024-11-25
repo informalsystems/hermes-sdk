@@ -29,7 +29,7 @@ where
         let m_entry = client.light_block_store().get(height);
 
         if let Some((block, status)) = m_entry {
-            return Ok((block.clone(), status.clone()));
+            return Ok((block.clone(), *status));
         }
 
         let block = client.fetch_light_block(height).await?;

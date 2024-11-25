@@ -10,7 +10,7 @@ use crate::traits::state::query_light_block::{
     CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore, GetLowestTrustedOrVerified,
     GetTrustedOrVerified,
 };
-use crate::traits::trace_light_block::CanTraceLightBlock;
+use crate::traits::trace_verification_height::CanTraceVerificationHeight;
 use crate::traits::types::status::HasVerificationStatusType;
 use crate::traits::types::verdict::HasVerdictType;
 use crate::traits::update_verification_status::{CanUpdateVerificationStatus, VerifiedStatus};
@@ -37,7 +37,7 @@ where
         + HasVerdictType<Verdict = Verdict>
         + HasVerificationStatusType<VerificationStatus = VerificationStatus>
         + CanVerifyUpdateHeader
-        + CanTraceLightBlock
+        + CanTraceVerificationHeight
         + CanFetchLightBlockWithStatus
         + CanComputeNextVerificationHeight
         + CanUpdateVerificationStatus<VerifiedStatus>
@@ -72,7 +72,7 @@ where
 
             client.validate_light_block(IsWithinTrustingPeriod, &trusted_block)?;
 
-            client.trace_light_block(target_height, &current_height);
+            client.trace_verification_height(target_height, &current_height);
 
             if target_height == trusted_height {
                 return Ok(trusted_block);
@@ -89,7 +89,7 @@ where
                     client.update_verification_status(VerifiedStatus, &current_height);
                 }
 
-                client.trace_light_block(&current_height, trusted_height);
+                client.trace_verification_height(&current_height, trusted_height);
             }
 
             current_height =

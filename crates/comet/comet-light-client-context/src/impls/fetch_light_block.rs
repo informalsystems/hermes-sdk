@@ -52,12 +52,8 @@ where
 
         let next_validator_set = ValidatorSet::without_proposer(next_validators);
 
-        let light_block = LightBlock::new(
-            signed_header,
-            validator_set,
-            next_validator_set,
-            peer_id.clone(),
-        );
+        let light_block =
+            LightBlock::new(signed_header, validator_set, next_validator_set, *peer_id);
 
         Ok(light_block)
     }
