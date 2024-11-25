@@ -38,7 +38,7 @@ members = [
     "crates/cosmos/cosmos-integration-tests",
     "crates/cosmos/cosmos-relayer",
     "crates/cosmos/cosmos-wasm-relayer",
-    "crates/cosmos/comet-light-client-components",
+    "crates/comet/comet-light-client-components",
 
     "crates/celestia/celestia-test-components",
     "crates/celestia/celestia-integration-tests",
@@ -228,7 +228,7 @@ hermes-cosmos-relayer               = { path = "./crates/cosmos/cosmos-relayer" 
 hermes-cosmos-wasm-relayer          = { path = "./crates/cosmos/cosmos-wasm-relayer" }
 hermes-cosmos-test-components       = { path = "./crates/cosmos/cosmos-test-components" }
 hermes-cosmos-integration-tests     = { path = "./crates/cosmos/cosmos-integration-tests" }
-hermes-comet-light-client-components = { path = "./crates/cosmos/comet-light-client-components" }
+hermes-comet-light-client-components = { path = "./crates/comet/comet-light-client-components" }
 
 hermes-celestia-test-components     = { path = "./crates/celestia/celestia-test-components" }
 hermes-celestia-integration-tests   = { path = "./crates/celestia/celestia-integration-tests" }
