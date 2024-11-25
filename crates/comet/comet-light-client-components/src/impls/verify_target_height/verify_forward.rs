@@ -86,7 +86,7 @@ where
 
             if verdict == Verdict::Success {
                 if current_status == VerificationStatus::Unverified {
-                    client.update_verification_status(VerifiedStatus, &current_height);
+                    client.update_verification_status(VerifiedStatus, &current_block);
                 }
 
                 client.trace_verification_height(&current_height, trusted_height);
