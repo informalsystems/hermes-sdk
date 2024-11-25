@@ -23,35 +23,28 @@ where
         + CanRaiseError<NoInitialTrustedState>,
 {
     async fn verify_target_height(
-        chain: &Chain,
+        chain: &mut Chain,
         _mode: VerifyToTarget,
-        state: &mut Chain::VerifierState,
         target_height: &Chain::Height,
     ) -> Result<Chain::LightBlock, Chain::Error> {
-        if let Some(block) = Chain::query_light_block(GetTrustedOrVerified, state, target_height) {
+        if let Some(block) = chain.query_light_block(GetTrustedOrVerified, target_height) {
             return Ok(block);
         }
 
-        let highest_block =
-            Chain::query_light_block(GetHighestTrustedOrVerifiedBefore, state, target_height)
-                .or_else(|| {
-                    Chain::query_light_block(
-                        GetHighestTrustedOrVerifiedBefore,
-                        state,
-                        target_height,
-                    )
-                })
-                .ok_or_else(|| Chain::raise_error(NoInitialTrustedState))?;
+        let highest_block = chain
+            .query_light_block(GetHighestTrustedOrVerifiedBefore, target_height)
+            .or_else(|| chain.query_light_block(GetHighestTrustedOrVerifiedBefore, target_height))
+            .ok_or_else(|| Chain::raise_error(NoInitialTrustedState))?;
 
         let highest_height = Chain::light_block_height(&highest_block);
 
         if target_height >= highest_height {
             chain
-                .verify_target_height(VerifyForward, state, target_height)
+                .verify_target_height(VerifyForward, target_height)
                 .await
         } else {
             chain
-                .verify_target_height(VerifyBackward, state, target_height)
+                .verify_target_height(VerifyBackward, target_height)
                 .await
         }
     }

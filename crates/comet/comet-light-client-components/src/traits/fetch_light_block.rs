@@ -2,7 +2,6 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 
 use crate::traits::types::light_block::HasLightBlockType;
-use crate::traits::types::state::HasVerifierStateType;
 use crate::traits::types::status::HasVerificationStatusType;
 
 #[derive_component(LightBlockFetcherComponent, LightBlockFetcher<Chain>)]
@@ -17,11 +16,10 @@ pub trait CanFetchLightBlock: HasHeightType + HasLightBlockType + HasErrorType {
 #[derive_component(LightBlockWithStatusFetcherComponent, LightBlockWithStatusFetcher<Chain>)]
 #[async_trait]
 pub trait CanFetchLightBlockWithStatus:
-    HasHeightType + HasVerifierStateType + HasLightBlockType + HasVerificationStatusType + HasErrorType
+    HasHeightType + HasLightBlockType + HasVerificationStatusType + HasErrorType
 {
     async fn fetch_light_block_with_status(
-        &self,
+        &mut self,
         height: &Self::Height,
-        state: &mut Self::VerifierState,
     ) -> Result<(Self::LightBlock, Self::VerificationStatus), Self::Error>;
 }

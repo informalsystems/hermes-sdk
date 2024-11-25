@@ -50,17 +50,16 @@ where
     Mode: Async,
 {
     async fn verify_target_height(
-        chain: &Chain,
+        chain: &mut Chain,
         _mode: Mode,
-        state: &mut Chain::VerifierState,
         target_height: &Chain::Height,
     ) -> Result<Chain::LightBlock, Chain::Error> {
         let mut current_height = target_height.clone();
 
         loop {
-            let trusted_block =
-                Chain::query_light_block(GetHighestTrustedOrVerifiedBefore, state, target_height)
-                    .ok_or_else(|| Chain::raise_error(NoInitialTrustedState))?;
+            let trusted_block = chain
+                .query_light_block(GetHighestTrustedOrVerifiedBefore, target_height)
+                .ok_or_else(|| Chain::raise_error(NoInitialTrustedState))?;
 
             let trusted_height = Chain::light_block_height(&trusted_block);
 
@@ -73,28 +72,26 @@ where
 
             chain.validate_light_block(IsWithinTrustingPeriod, &trusted_block)?;
 
-            Chain::trace_light_block(state, target_height, &current_height);
+            chain.trace_light_block(target_height, &current_height);
 
             if target_height == trusted_height {
                 return Ok(trusted_block);
             }
 
-            let (current_block, current_status) = chain
-                .fetch_light_block_with_status(&current_height, state)
-                .await?;
+            let (current_block, current_status) =
+                chain.fetch_light_block_with_status(&current_height).await?;
 
             let verdict = chain.verify_update_header(&current_block, &trusted_block)?;
 
             if verdict == Verdict::Success {
                 if current_status == VerificationStatus::Unverified {
-                    Chain::update_verification_status(state, &current_height, VerifiedStatus);
+                    chain.update_verification_status(VerifiedStatus, &current_height);
                 }
 
-                Chain::trace_light_block(state, &current_height, trusted_height);
+                chain.trace_light_block(&current_height, trusted_height);
             }
 
-            current_height =
-                Chain::compute_next_verification_height(state, &current_height, target_height);
+            current_height = chain.compute_next_verification_height(&current_height, target_height);
         }
     }
 }
