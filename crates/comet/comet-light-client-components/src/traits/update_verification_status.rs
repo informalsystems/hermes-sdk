@@ -8,3 +8,5 @@ pub trait CanUpdateVerificationStatus<Status>: HasLightBlockType {
 }
 
 pub struct VerifiedStatus;
+
+pub struct TrustedStatus;

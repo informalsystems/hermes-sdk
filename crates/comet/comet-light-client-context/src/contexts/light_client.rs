@@ -30,7 +30,7 @@ use hermes_comet_light_client_components::traits::types::verdict::{
     HasVerdictType, VerdictTypeComponent,
 };
 use hermes_comet_light_client_components::traits::update_verification_status::{
-    CanUpdateVerificationStatus, VerificationStatusUpdaterComponent, VerifiedStatus,
+    CanUpdateVerificationStatus, TrustedStatus, VerificationStatusUpdaterComponent, VerifiedStatus,
 };
 use hermes_comet_light_client_components::traits::validate_light_block::{
     CanValidateLightBlock, IsWithinTrustingPeriod, LightBlockValidatorComponent,
@@ -169,6 +169,7 @@ pub trait CanUseCometLightClient:
     + CanQueryLightBlock<GetHighestTrustedOrVerifiedBefore>
     + CanValidateLightBlock<IsWithinTrustingPeriod>
     + CanUpdateVerificationStatus<VerifiedStatus>
+    + CanUpdateVerificationStatus<TrustedStatus>
     + CanComputeNextVerificationHeight
     + CanFetchLightBlock
     + CanFetchLightBlockWithStatus
