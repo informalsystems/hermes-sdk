@@ -1,0 +1,16 @@
+use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+
+use crate::traits::types::light_block::HasLightBlockType;
+
+#[derive_component(LightBlocksForUpdateClientBuilderComponent, LightBlocksForUpdateClientBuilder<Client>)]
+#[async_trait]
+pub trait CanBuildLightBlocksForUpdateClient:
+    HasHeightType + HasLightBlockType + HasErrorType
+{
+    async fn build_light_blocks_for_update_client(
+        &mut self,
+        trusted_height: &Self::Height,
+        target_height: &Self::Height,
+    ) -> Result<Vec<Self::LightBlock>, Self::Error>;
+}

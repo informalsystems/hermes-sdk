@@ -38,7 +38,7 @@ use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshak
 use crate::impls::client::create_client_message::BuildAnyCreateClientMessage;
 use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
-use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
+use crate::impls::client::update_client_payload::BuildTendermintUpdateClientPayload;
 use crate::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::message_height::GetCosmosCounterpartyMessageHeight;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
@@ -88,7 +88,7 @@ define_components! {
         CreateClientPayloadBuilderComponent:
             BuildCreateClientPayloadWithChainHandle,
         UpdateClientPayloadBuilderComponent:
-            BuildUpdateClientPayloadWithChainHandle,
+            BuildTendermintUpdateClientPayload,
         [
             ConnectionOpenInitMessageBuilderComponent,
             ConnectionOpenTryMessageBuilderComponent,
