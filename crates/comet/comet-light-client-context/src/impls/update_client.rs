@@ -1,5 +1,3 @@
-use core::iter;
-
 use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
 use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
@@ -47,11 +45,13 @@ where
         if let Some(heights) = m_heights {
             let store = client.light_block_store();
 
-            let blocks = iter::once(trusted_block)
-                .chain(heights.iter().filter_map(|height| match store.get(height) {
+            let blocks = heights
+                .iter()
+                .filter_map(|height| match store.get(height) {
+                    Some((block, VerificationStatus::Trusted)) => Some(block.clone()),
                     Some((block, VerificationStatus::Verified)) => Some(block.clone()),
                     _ => None,
-                }))
+                })
                 .collect();
 
             Ok(blocks)

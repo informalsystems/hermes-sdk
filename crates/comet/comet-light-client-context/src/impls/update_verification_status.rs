@@ -48,6 +48,6 @@ where
 
         client
             .light_block_store_mut()
-            .insert(height, (block.clone(), VerificationStatus::Verified));
+            .insert(height, (block.clone(), VerificationStatus::Trusted));
     }
 }
