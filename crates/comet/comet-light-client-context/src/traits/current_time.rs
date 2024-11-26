@@ -14,6 +14,6 @@ where
     Client: HasField<symbol!("current_time"), Field = Time>,
 {
     fn current_time(client: &Client) -> Time {
-        client.get_field(PhantomData).clone()
+        *client.get_field(PhantomData)
     }
 }

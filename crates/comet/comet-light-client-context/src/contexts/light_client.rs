@@ -29,6 +29,9 @@ use hermes_comet_light_client_components::traits::types::status::{
 use hermes_comet_light_client_components::traits::types::verdict::{
     HasVerdictType, VerdictTypeComponent,
 };
+use hermes_comet_light_client_components::traits::update_client::{
+    CanBuildLightBlocksForUpdateClient, LightBlocksForUpdateClientBuilderComponent,
+};
 use hermes_comet_light_client_components::traits::update_verification_status::{
     CanUpdateVerificationStatus, TrustedStatus, VerificationStatusUpdaterComponent, VerifiedStatus,
 };
@@ -59,6 +62,7 @@ use crate::impls::query_light_block::highest_trusted_or_before::QueryHighestTrus
 use crate::impls::trace_verification::TraceTendermintVerification;
 use crate::impls::types::all::CometLightClientTypes;
 use crate::impls::types::light_block::UseTendermintLightBlock;
+use crate::impls::update_client::BuildTendermintUpdateClientBlocks;
 use crate::impls::update_verification_status::DoUpdateVerifactionStatus;
 use crate::impls::validate_light_block::ValidateTendermintLightBlock;
 use crate::impls::verify_update_header::VerifyUpdateHeaderWithProdVerifier;
@@ -134,6 +138,8 @@ delegate_components! {
             VerifyUpdateHeaderWithProdVerifier,
         TargetHeightVerifierComponent:
             DoVerifyForward,
+        LightBlocksForUpdateClientBuilderComponent:
+            BuildTendermintUpdateClientBlocks,
     }
 }
 
@@ -176,6 +182,7 @@ pub trait CanUseCometLightClient:
     + CanTraceVerificationHeight
     + CanVerifyUpdateHeader
     + CanVerifyTargetHeight<VerifyForward>
+    + CanBuildLightBlocksForUpdateClient
 {
 }
 

@@ -32,7 +32,7 @@ where
         let trusting_period = client.verifier_options().trusting_period;
         let now = client.current_time();
 
-        if !is_within_trust_period(&light_block, trusting_period, now) {
+        if !is_within_trust_period(light_block, trusting_period, now) {
             Err(Client::raise_error(TrustedStateOutsideTrustingPeriod {
                 light_block,
                 trusting_period,

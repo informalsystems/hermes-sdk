@@ -1,7 +1,5 @@
 use cgp::prelude::CanRaiseError;
-use hermes_comet_light_client_components::traits::verify_target_height::{
-    CanVerifyTargetHeight, VerifyForward,
-};
+use hermes_comet_light_client_components::traits::update_client::CanBuildLightBlocksForUpdateClient;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use hermes_error::types::HermesError;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
@@ -33,7 +31,7 @@ where
 {
     async fn build_update_client_payload(
         chain: &Chain,
-        _trusted_height: &Chain::Height,
+        trusted_height: &Chain::Height,
         target_height: &Chain::Height,
         client_state: Chain::ClientState,
     ) -> Result<Chain::UpdateClientPayload, Chain::Error> {
@@ -54,11 +52,14 @@ where
             light_client_options,
         );
 
+        let trusted_tm_height = TmHeight::try_from(Chain::revision_height(trusted_height))
+            .map_err(Chain::raise_error)?;
+
         let target_tm_height = TmHeight::try_from(Chain::revision_height(target_height))
             .map_err(Chain::raise_error)?;
 
-        light_client
-            .verify_target_height(VerifyForward, &target_tm_height)
+        let _blocks = light_client
+            .build_light_blocks_for_update_client(&trusted_tm_height, &target_tm_height)
             .await
             .map_err(Chain::raise_error)?;
 
