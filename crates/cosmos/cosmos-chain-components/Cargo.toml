@@ -13,12 +13,15 @@ description  = """
 
 [dependencies]
 cgp                                     = { workspace = true }
+hermes-error                            = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-relayer-components-extra         = { workspace = true }
 hermes-chain-type-components            = { workspace = true }
 hermes-encoding-components              = { workspace = true }
 hermes-protobuf-encoding-components     = { workspace = true }
 hermes-cosmos-encoding-components       = { workspace = true }
+hermes-comet-light-client-components    = { workspace = true }
+hermes-comet-light-client-context       = { workspace = true }
 
 ibc                                     = { workspace = true }
 ibc-proto                               = { workspace = true }
