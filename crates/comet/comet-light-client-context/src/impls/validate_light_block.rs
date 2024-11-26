@@ -11,6 +11,7 @@ use crate::traits::verifier_options::HasVerifierOptions;
 
 pub struct ValidateTendermintLightBlock;
 
+#[derive(Debug)]
 pub struct TrustedStateOutsideTrustingPeriod<'a> {
     pub light_block: &'a LightBlock,
     pub trusting_period: Duration,

@@ -1,4 +1,3 @@
-use cgp::prelude::HasErrorType;
 use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_comet_light_client_components::traits::fetch_light_block::{
     CanFetchLightBlock, LightBlockWithStatusFetcher,
@@ -19,8 +18,7 @@ where
         + HasLightBlockType<LightBlock = LightBlock>
         + HasVerificationStatusType<VerificationStatus = VerificationStatus>
         + CanFetchLightBlock
-        + HasLightBlockStore
-        + HasErrorType,
+        + HasLightBlockStore,
 {
     async fn fetch_light_block_with_status(
         client: &mut Client,

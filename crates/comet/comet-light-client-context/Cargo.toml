@@ -13,10 +13,12 @@ description  = """
 
 [dependencies]
 cgp                                     = { workspace = true }
+hermes-error                            = { workspace = true }
 hermes-chain-components                 = { workspace = true }
 hermes-chain-type-components            = { workspace = true }
 hermes-comet-light-client-components    = { workspace = true }
 
+eyre                                = { workspace = true}
 tendermint                          = { workspace = true}
 tendermint-rpc                      = { workspace = true}
 tendermint-light-client-verifier    = { workspace = true}

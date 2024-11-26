@@ -1,25 +1,76 @@
-use cgp::core::component::UseContext;
+use cgp::core::component::{UseContext, UseDelegate};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::types::impls::WithDelegatedType;
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::height::{HasHeightType, HeightTypeComponent};
-use hermes_comet_light_client_components::traits::light_block::height::LightBlockHeightGetterComponent;
-use hermes_comet_light_client_components::traits::types::light_block::LightBlockTypeComponent;
-use hermes_comet_light_client_components::traits::types::status::VerificationStatusTypeComponent;
-use hermes_comet_light_client_components::traits::types::verdict::VerdictTypeComponent;
+use hermes_comet_light_client_components::impls::verify_target_height::verify_forward::DoVerifyForward;
+use hermes_comet_light_client_components::traits::compute_verification_height::{
+    CanComputeNextVerificationHeight, NextVerificationHeightComputerComponent,
+};
+use hermes_comet_light_client_components::traits::fetch_light_block::{
+    CanFetchLightBlock, CanFetchLightBlockWithStatus, LightBlockFetcherComponent,
+    LightBlockWithStatusFetcherComponent,
+};
+use hermes_comet_light_client_components::traits::light_block::height::{
+    HasLightBlockHeight, LightBlockHeightGetterComponent,
+};
+use hermes_comet_light_client_components::traits::query_light_block::{
+    CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore, LightBlockQuerierComponent,
+};
+use hermes_comet_light_client_components::traits::trace_verification_height::{
+    CanTraceVerificationHeight, VerificationHeightTracerComponent,
+};
+use hermes_comet_light_client_components::traits::types::light_block::{
+    HasLightBlockType, LightBlockTypeComponent,
+};
+use hermes_comet_light_client_components::traits::types::status::{
+    HasVerificationStatusType, VerificationStatusTypeComponent,
+};
+use hermes_comet_light_client_components::traits::types::verdict::{
+    HasVerdictType, VerdictTypeComponent,
+};
+use hermes_comet_light_client_components::traits::update_verification_status::{
+    CanUpdateVerificationStatus, VerificationStatusUpdaterComponent, VerifiedStatus,
+};
+use hermes_comet_light_client_components::traits::validate_light_block::{
+    CanValidateLightBlock, IsWithinTrustingPeriod, LightBlockValidatorComponent,
+};
+use hermes_comet_light_client_components::traits::verify_target_height::{
+    CanVerifyTargetHeight, TargetHeightVerifierComponent, VerifyForward,
+};
+use hermes_comet_light_client_components::traits::verify_update_header::{
+    CanVerifyUpdateHeader, UpdateHeaderVerifierComponent,
+};
+use hermes_comet_light_client_components::types::status::VerificationStatus;
+use hermes_comet_light_client_components::types::verdict::Verdict;
+use hermes_error::impls::ProvideHermesError;
+use tendermint::block::Height;
 use tendermint::Time;
 use tendermint_light_client_verifier::options::Options;
-use tendermint_light_client_verifier::types::PeerId;
+use tendermint_light_client_verifier::types::{LightBlock, PeerId};
 use tendermint_light_client_verifier::ProdVerifier;
 use tendermint_rpc::HttpClient;
 
+use crate::contexts::error::HandleLightClientError;
+use crate::impls::bisect_height::BisectHeight;
+use crate::impls::fetch_light_block::FetchTendermintLightBlock;
+use crate::impls::fetch_light_block_with_status::FetchTendermintLightBlockWithStatus;
+use crate::impls::query_light_block::highest_trusted_or_before::QueryHighestTrustedOrVerifiedBefore;
+use crate::impls::trace_verification::TraceTendermintVerification;
 use crate::impls::types::all::CometLightClientTypes;
 use crate::impls::types::light_block::UseTendermintLightBlock;
-use crate::traits::current_time::CurrentTimeGetterComponent;
-use crate::traits::light_block_store::{LightBlockStore, LightBlockStoreGetterComponent};
+use crate::impls::update_verification_status::DoUpdateVerifactionStatus;
+use crate::impls::validate_light_block::ValidateTendermintLightBlock;
+use crate::impls::verify_update_header::VerifyUpdateHeaderWithProdVerifier;
+use crate::traits::current_time::{CurrentTimeGetterComponent, HasCurrentTime};
+use crate::traits::light_block_store::{
+    HasLightBlockStore, LightBlockStore, LightBlockStoreGetterComponent,
+};
 use crate::traits::peer_id::PeerIdGetterComponent;
 use crate::traits::rpc_client::RpcClientGetterComponent;
 use crate::traits::verification_trace::{VerificationTrace, VerificationTraceGetterComponent};
 use crate::traits::verifier::VerifierComponent;
+use crate::traits::verifier_options::{HasVerifierOptions, VerifierOptionsGetterComponent};
 
 #[derive(HasField)]
 pub struct CometLightClient {
@@ -40,6 +91,10 @@ impl HasComponents for CometLightClient {
 
 delegate_components! {
     CometLightClientComponents {
+        ErrorTypeComponent:
+            ProvideHermesError,
+        ErrorRaiserComponent:
+            UseDelegate<HandleLightClientError>,
         [
             LightBlockTypeComponent,
             LightBlockHeightGetterComponent,
@@ -55,11 +110,30 @@ delegate_components! {
             CurrentTimeGetterComponent,
             PeerIdGetterComponent,
             RpcClientGetterComponent,
+            VerifierOptionsGetterComponent,
             LightBlockStoreGetterComponent,
             VerificationTraceGetterComponent,
-            VerifierComponent
+            VerifierComponent,
         ]:
             UseContext,
+        LightBlockQuerierComponent:
+            QueryHighestTrustedOrVerifiedBefore,
+        NextVerificationHeightComputerComponent:
+            BisectHeight,
+        LightBlockFetcherComponent:
+            FetchTendermintLightBlock,
+        LightBlockWithStatusFetcherComponent:
+            FetchTendermintLightBlockWithStatus,
+        VerificationHeightTracerComponent:
+            TraceTendermintVerification,
+        VerificationStatusUpdaterComponent:
+            DoUpdateVerifactionStatus,
+        LightBlockValidatorComponent:
+            ValidateTendermintLightBlock,
+        UpdateHeaderVerifierComponent:
+            VerifyUpdateHeaderWithProdVerifier,
+        TargetHeightVerifierComponent:
+            DoVerifyForward,
     }
 }
 
@@ -82,6 +156,26 @@ impl CometLightClient {
     }
 }
 
-pub trait CanUseCometLightClient: HasHeightType {}
+pub trait CanUseCometLightClient:
+    Async
+    + HasHeightType<Height = Height>
+    + HasLightBlockType<LightBlock = LightBlock>
+    + HasVerificationStatusType<VerificationStatus = VerificationStatus>
+    + HasVerdictType<Verdict = Verdict>
+    + HasLightBlockHeight
+    + HasLightBlockStore
+    + HasVerifierOptions
+    + HasCurrentTime
+    + CanQueryLightBlock<GetHighestTrustedOrVerifiedBefore>
+    + CanValidateLightBlock<IsWithinTrustingPeriod>
+    + CanUpdateVerificationStatus<VerifiedStatus>
+    + CanComputeNextVerificationHeight
+    + CanFetchLightBlock
+    + CanFetchLightBlockWithStatus
+    + CanTraceVerificationHeight
+    + CanVerifyUpdateHeader
+    + CanVerifyTargetHeight<VerifyForward>
+{
+}
 
 impl CanUseCometLightClient for CometLightClient {}

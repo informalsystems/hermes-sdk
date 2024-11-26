@@ -1,3 +1,5 @@
+use core::fmt::Debug;
+
 use cgp::core::Async;
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
@@ -88,5 +90,17 @@ where
             current_height =
                 client.compute_next_verification_height(&current_height, target_height)?;
         }
+    }
+}
+
+impl<'a, Client> Debug for TargetLowerThanTrustedHeight<'a, Client>
+where
+    Client: HasHeightType<Height: Debug>,
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("TargetLowerThanTrustedHeight")
+            .field("target_height", &self.target_height)
+            .field("trusted_height", &self.trusted_height)
+            .finish()
     }
 }

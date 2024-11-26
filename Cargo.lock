@@ -1693,9 +1693,11 @@ name = "hermes-comet-light-client-context"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "eyre",
  "hermes-chain-components",
  "hermes-chain-type-components",
  "hermes-comet-light-client-components",
+ "hermes-error",
  "tendermint",
  "tendermint-light-client-verifier",
  "tendermint-rpc",
