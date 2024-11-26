@@ -26,17 +26,18 @@ where
         + CanQueryChainStatus
         + HasRpcClient
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>
-        + HasClientStateType<Counterparty, ClientState = TendermintClientState>
+        + HasClientStateType<Counterparty>
         + CanRaiseError<tendermint::Error>
         + CanRaiseError<tendermint_rpc::Error>
         + CanRaiseError<ClientError>
         + CanRaiseError<HermesError>,
+    TendermintClientState: From<Chain::ClientState>,
 {
     async fn build_update_client_payload(
         chain: &Chain,
         trusted_height: &Height,
         target_height: &Height,
-        client_state: TendermintClientState,
+        client_state: Chain::ClientState,
     ) -> Result<Chain::UpdateClientPayload, Chain::Error> {
         let rpc_client = chain.rpc_client();
         let status = rpc_client.status().await.map_err(Chain::raise_error)?;
@@ -44,7 +45,8 @@ where
         let current_time = status.sync_info.latest_block_time;
         let peer_id = status.node_info.id;
 
-        let light_client_options = client_state.as_light_client_options();
+        let light_client_options =
+            TendermintClientState::from(client_state).as_light_client_options();
 
         let mut light_client = CometLightClient::new(
             current_time,
