@@ -1,9 +1,14 @@
 use cgp::core::error::CanRaiseError;
 use core::time::Duration;
 use eyre::Report;
+use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
+use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use ibc::core::client::types::Height;
+use tendermint::trust_threshold::TrustThresholdFraction;
+use tendermint_light_client::light_client::Options;
 
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
+use hermes_error::types::HermesError;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainHeight, CanQueryChainStatus,
@@ -20,9 +25,6 @@ use ibc_relayer::consensus_state::AnyConsensusState;
 
 use tendermint::block::Height as TendermintHeight;
 use tendermint::error::Error as TendermintError;
-use tendermint::node;
-use tendermint_light_client::components::io::IoError;
-use tendermint_light_client::components::io::{AtHeight, Io, ProdIo};
 use tendermint_proto::google::protobuf::Duration as ProtoDuration;
 use tendermint_rpc::Client;
 use tendermint_rpc::Error as TendermintRpcError;
@@ -105,8 +107,8 @@ where
         + HasRpcClient
         + CanRaiseError<TendermintError>
         + CanRaiseError<TendermintRpcError>
-        + CanRaiseError<IoError>
-        + CanRaiseError<Report>,
+        + CanRaiseError<Report>
+        + CanRaiseError<HermesError>,
 {
     async fn build_create_client_payload(
         chain: &Chain,
@@ -156,20 +158,34 @@ where
 
         let rpc_client = chain.rpc_client().clone();
 
-        // Fetch Node info
-        let status: node::Info = rpc_client
-            .status()
-            .await
-            .map(|s| s.node_info)
-            .map_err(Chain::raise_error)?;
-
-        let io = ProdIo::new(status.id, rpc_client.clone(), None);
-
         let tendermint_latest_height = TendermintHeight::try_from(latest_height.revision_height())
             .map_err(Chain::raise_error)?;
 
-        let trusted_block = io
-            .fetch_light_block(AtHeight::At(tendermint_latest_height))
+        let status = rpc_client.status().await.map_err(Chain::raise_error)?;
+
+        let current_time = status.sync_info.latest_block_time;
+        let peer_id = status.node_info.id;
+
+        let light_client_options = Options {
+            trust_threshold: TrustThresholdFraction::new(
+                trust_threshold.numerator,
+                trust_threshold.denominator,
+            )
+            .map_err(Chain::raise_error)?,
+            trusting_period: create_client_options.trusting_period.unwrap(),
+            clock_drift: create_client_options.max_clock_drift,
+        };
+
+        let light_client = CometLightClient::new(
+            current_time,
+            peer_id,
+            rpc_client.clone(),
+            light_client_options,
+        );
+
+        let trusted_block = light_client
+            .fetch_light_block(&tendermint_latest_height)
+            .await
             .map_err(Chain::raise_error)?;
 
         let timestamp = trusted_block.signed_header.header.time;
