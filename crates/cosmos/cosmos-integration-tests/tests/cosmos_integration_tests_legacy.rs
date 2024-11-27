@@ -15,7 +15,7 @@ use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
 #[test]
-fn cosmos_integration_tests() -> Result<(), Error> {
+fn cosmos_integration_tests_legacy() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
     // Note: This test only works with Gaia v14 or older. Hence we get the older version of
