@@ -57,12 +57,14 @@ where
 
         let unbonding_period = chain.query_unbonding_period().await?;
 
-        // Should we use a value for `trusting_period` in the config if it is not
+        // TODO: Should we use a value for `trusting_period` in the config if it is not
         // found in the client settings?
         // And if both are missing, should we default to another value?
+        // Current behaviour is to default to 2/3 of unbonding period if the
+        // trusting period is missing from the client settings.
         let trusting_period = create_client_options
             .trusting_period
-            .ok_or_else(|| Chain::raise_error("missing trusting period in client settings"))?;
+            .unwrap_or(2 * unbonding_period / 3);
 
         #[allow(deprecated)]
         let client_state = ClientState::new(
