@@ -56,7 +56,7 @@ where
     }
 }
 
-impl<'a, Chain, Counterparty> Debug for NoConsensusStateAtLessThanHeight<'a, Chain, Counterparty>
+impl<Chain, Counterparty> Debug for NoConsensusStateAtLessThanHeight<'_, Chain, Counterparty>
 where
     Chain: HasIbcChainTypes<Counterparty>,
     Counterparty: HasHeightType,
