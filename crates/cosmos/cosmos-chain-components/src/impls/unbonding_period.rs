@@ -1,6 +1,5 @@
 use cgp::prelude::*;
 use core::time::Duration;
-use eyre::Report;
 use prost::{DecodeError, Message};
 
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
@@ -20,7 +19,7 @@ where
     Chain: CanQueryChainHeight
         + CanQueryAbci
         + HasHeightType<Height = Height>
-        + CanRaiseError<Report>
+        + CanRaiseError<&'static str>
         + CanRaiseError<DecodeError>,
 {
     async fn query_unbonding_period(chain: &Chain) -> Result<Duration, Chain::Error> {
@@ -40,13 +39,11 @@ where
 
         let staking_params = query_staking_params
             .params
-            .ok_or_else(|| Report::msg("staking params is empty"))
-            .map_err(Chain::raise_error)?;
+            .ok_or_else(|| Chain::raise_error("staking params is empty"))?;
 
         let unbonding_time = staking_params
             .unbonding_time
-            .ok_or_else(|| Report::msg("unbonding time in staking params is empty"))
-            .map_err(Chain::raise_error)?;
+            .ok_or_else(|| Chain::raise_error("unbonding time in staking params is empty"))?;
 
         Ok(Duration::new(
             unbonding_time.seconds as u64,
