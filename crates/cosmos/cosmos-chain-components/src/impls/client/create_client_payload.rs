@@ -1,13 +1,11 @@
 use cgp::core::error::CanRaiseError;
 use core::time::Duration;
 use eyre::Report;
-use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
-use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
-use ibc::core::client::types::Height;
-use tendermint::trust_threshold::TrustThresholdFraction;
-use tendermint_light_client::light_client::Options;
 
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
+use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
+use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
+use hermes_comet_light_client_context::traits::rpc_client::HasRpcClient;
 use hermes_error::types::HermesError;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::queries::chain_status::{
@@ -22,25 +20,23 @@ use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::consensus_state::AnyConsensusState;
+use ibc_relayer_types::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState};
+use ibc_relayer_types::clients::ics07_tendermint::consensus_state::ConsensusState;
+use ibc_relayer_types::clients::ics07_tendermint::error::Error as TendermintClientError;
+use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentRoot;
+use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use ibc_relayer_types::Height;
 
 use tendermint::block::Height as TendermintHeight;
 use tendermint::error::Error as TendermintError;
-use tendermint_proto::google::protobuf::Duration as ProtoDuration;
 use tendermint_rpc::Client;
 use tendermint_rpc::Error as TendermintRpcError;
 
-use ibc::core::host::types::identifiers::ChainId;
-
-use ibc_proto::ibc::core::commitment::v1::MerkleRoot;
-use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoClientState;
-use ibc_proto::ibc::lightclients::tendermint::v1::ConsensusState as ProtoConsensusState;
-
 use crate::traits::chain_handle::HasBlockingChainHandle;
-use crate::traits::rpc_client::HasRpcClient;
 use crate::traits::unbonding_period::CanQueryUnbondingPeriod;
-use crate::types::payloads::client::CosmosCreateClientOptions;
-use crate::types::payloads::client::{CosmosCreateClientPayload, CosmosCreateClientPayloadV2};
+use crate::types::payloads::client::CosmosCreateClientPayload;
 use crate::types::status::ChainStatus;
+use crate::types::tendermint::TendermintClientState;
 
 pub struct BuildCreateClientPayloadWithChainHandle;
 
@@ -91,20 +87,19 @@ where
     }
 }
 
-pub struct BuildCreateClientPayload;
+pub struct BuildCreateClientPayloadWithChainHandleV2;
 
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
-    for BuildCreateClientPayload
+    for BuildCreateClientPayloadWithChainHandleV2
 where
-    Chain: HasCreateClientPayloadOptionsType<
-            Counterparty,
-            CreateClientPayloadOptions = CosmosCreateClientOptions,
-        > + HasCreateClientPayloadType<Counterparty, CreateClientPayload = CosmosCreateClientPayloadV2>
+    Chain: HasCreateClientPayloadOptionsType<Counterparty, CreateClientPayloadOptions = Settings>
+        + HasCreateClientPayloadType<Counterparty, CreateClientPayload = CosmosCreateClientPayload>
         + CanQueryUnbondingPeriod<UnbondingPeriod = Duration>
         + HasChainId<ChainId = ChainId>
         + CanQueryChainHeight<Height = Height>
         + CanQueryChainStatus<ChainStatus = ChainStatus>
         + HasRpcClient
+        + CanRaiseError<TendermintClientError>
         + CanRaiseError<TendermintError>
         + CanRaiseError<TendermintRpcError>
         + CanRaiseError<Report>
@@ -112,8 +107,8 @@ where
 {
     async fn build_create_client_payload(
         chain: &Chain,
-        create_client_options: &CosmosCreateClientOptions,
-    ) -> Result<CosmosCreateClientPayloadV2, Chain::Error> {
+        create_client_options: &Settings,
+    ) -> Result<CosmosCreateClientPayload, Chain::Error> {
         let latest_height = chain.query_chain_height().await?;
 
         let unbonding_period = chain.query_unbonding_period().await?;
@@ -123,38 +118,25 @@ where
         // And if both are missing, should we default to another value?
         let trusting_period = create_client_options
             .trusting_period
-            .map(|trusting_period| {
-                trusting_period.try_into().map_err(|e| {
-                    Chain::raise_error(Report::msg(format!(
-                        "Failed to convert create_client_options to tendermint-proto Duration: {e}"
-                    )))
-                })
-            })
-            .transpose()?;
-
-        let max_clock_drift: Option<ProtoDuration> =
-            create_client_options.max_clock_drift.try_into().ok();
-        let unbonding_period = unbonding_period.try_into().map_err(|e| {
-            Chain::raise_error(Report::msg(format!(
-                "Failed to convert create_client_options to tendermint-proto Duration: {e}"
-            )))
-        })?;
-        let trust_threshold = create_client_options.trust_threshold;
+            .ok_or_else(|| Report::msg("missing trusting period in client settings"))
+            .map_err(Chain::raise_error)?;
 
         #[allow(deprecated)]
-        let client_state = ProtoClientState {
-            chain_id: chain.chain_id().to_string(),
-            trust_level: Some(trust_threshold),
+        let client_state = ClientState::new(
+            chain.chain_id().clone(),
+            create_client_options.trust_threshold,
             trusting_period,
-            unbonding_period: Some(unbonding_period),
-            max_clock_drift,
-            frozen_height: None,
-            latest_height: Some(latest_height.into()),
-            proof_specs: Default::default(),
-            upgrade_path: vec!["upgrade".to_string(), "upgradedIBCState".to_string()],
-            allow_update_after_expiry: true,
-            allow_update_after_misbehaviour: true,
-        };
+            unbonding_period,
+            create_client_options.max_clock_drift,
+            latest_height,
+            Default::default(),
+            vec!["upgrade".to_string(), "upgradedIBCState".to_string()],
+            AllowUpdate {
+                after_expiry: true,
+                after_misbehaviour: true,
+            },
+        )
+        .map_err(Chain::raise_error)?;
 
         let rpc_client = chain.rpc_client().clone();
 
@@ -166,15 +148,8 @@ where
         let current_time = status.sync_info.latest_block_time;
         let peer_id = status.node_info.id;
 
-        let light_client_options = Options {
-            trust_threshold: TrustThresholdFraction::new(
-                trust_threshold.numerator,
-                trust_threshold.denominator,
-            )
-            .map_err(Chain::raise_error)?,
-            trusting_period: create_client_options.trusting_period.unwrap(),
-            clock_drift: create_client_options.max_clock_drift,
-        };
+        let light_client_options =
+            TendermintClientState::from(client_state.clone()).as_light_client_options();
 
         let light_client = CometLightClient::new(
             current_time,
@@ -188,28 +163,14 @@ where
             .await
             .map_err(Chain::raise_error)?;
 
-        let timestamp = trusted_block.signed_header.header.time;
-
-        let consensus_state = ProtoConsensusState {
-            timestamp: Some(timestamp.into()),
-            root: Some(MerkleRoot {
-                hash: trusted_block
-                    .signed_header
-                    .header
-                    .app_hash
-                    .as_ref()
-                    .to_vec(),
-            }),
-            next_validators_hash: trusted_block
-                .signed_header
-                .header
-                .next_validators_hash
-                .as_bytes()
-                .to_vec(),
+        let consensus_state = ConsensusState {
+            root: CommitmentRoot::from_bytes(trusted_block.signed_header.header.app_hash.as_ref()),
+            timestamp: trusted_block.signed_header.header.time,
+            next_validators_hash: trusted_block.signed_header.header.next_validators_hash,
         };
 
         // Create client payload
-        Ok(CosmosCreateClientPayloadV2 {
+        Ok(CosmosCreateClientPayload {
             client_state,
             consensus_state,
         })
