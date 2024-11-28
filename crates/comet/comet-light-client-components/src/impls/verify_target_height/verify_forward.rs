@@ -93,7 +93,7 @@ where
     }
 }
 
-impl<'a, Client> Debug for TargetLowerThanTrustedHeight<'a, Client>
+impl<Client> Debug for TargetLowerThanTrustedHeight<'_, Client>
 where
     Client: HasHeightType<Height: Debug>,
 {

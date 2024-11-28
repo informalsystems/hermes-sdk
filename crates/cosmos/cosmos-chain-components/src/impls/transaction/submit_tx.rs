@@ -21,7 +21,7 @@ pub struct BroadcastTxError<'a, Chain> {
     pub response: Response,
 }
 
-impl<'a, Chain> Debug for BroadcastTxError<'a, Chain> {
+impl<Chain> Debug for BroadcastTxError<'_, Chain> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("BroadcastTxError")
             .field("response", &self.response)

@@ -210,7 +210,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> BinaryConnectionTest for RunBinaryChannelTest<'a, Test>
+impl<Test, Overrides> BinaryConnectionTest for RunBinaryChannelTest<'_, Test>
 where
     Test: BinaryChannelTest,
     Test: HasOverrides<Overrides = Overrides>,
@@ -256,7 +256,7 @@ where
     }
 }
 
-impl<'a, Test: BinaryChannelTest> BinaryChannelTest for RunTwoWayBinaryChannelTest<'a, Test> {
+impl<Test: BinaryChannelTest> BinaryChannelTest for RunTwoWayBinaryChannelTest<'_, Test> {
     fn run<Context>(&self, relayer: RelayerDriver, context: &Context) -> Result<(), Error>
     where
         Context: HasTwoChains + HasTwoChannels + HasTestConfig,
@@ -297,7 +297,7 @@ impl<'a, Test: BinaryChannelTest> BinaryChannelTest for RunTwoWayBinaryChannelTe
     }
 }
 
-impl<'a, Test, Overrides> BinaryChannelTest for RunWithSupervisor<'a, Test>
+impl<Test, Overrides> BinaryChannelTest for RunWithSupervisor<'_, Test>
 where
     Test: BinaryChannelTest,
     Test: HasOverrides<Overrides = Overrides>,
@@ -325,7 +325,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> HasOverrides for RunBinaryChannelTest<'a, Test>
+impl<Test, Overrides> HasOverrides for RunBinaryChannelTest<'_, Test>
 where
     Test: HasOverrides<Overrides = Overrides>,
 {
@@ -336,7 +336,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> HasOverrides for RunTwoWayBinaryChannelTest<'a, Test>
+impl<Test, Overrides> HasOverrides for RunTwoWayBinaryChannelTest<'_, Test>
 where
     Test: HasOverrides<Overrides = Overrides>,
 {

@@ -8,7 +8,7 @@ pub struct NonceGuard<'a> {
     pub account: Account,
 }
 
-impl<'a> Deref for NonceGuard<'a> {
+impl Deref for NonceGuard<'_> {
     type Target = Account;
 
     fn deref(&self) -> &Account {

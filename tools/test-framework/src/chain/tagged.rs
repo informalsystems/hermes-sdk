@@ -81,7 +81,7 @@ pub trait TaggedChainDriverExt<Chain> {
     ) -> Result<json::Value, Error>;
 }
 
-impl<'a, Chain: Send> TaggedChainDriverExt<Chain> for MonoTagged<Chain, &'a ChainDriver> {
+impl<Chain: Send> TaggedChainDriverExt<Chain> for MonoTagged<Chain, &ChainDriver> {
     fn chain_id(&self) -> TaggedChainIdRef<Chain> {
         self.map_ref(|val| &val.chain_id)
     }
