@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_integration_tests::init::{init_bootstrap, init_test_runtime};
+use hermes_cosmos_integration_tests::init::{build_gaia_bootstrap, init_test_runtime};
 use hermes_error::types::Error;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 
@@ -9,15 +8,13 @@ use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 fn test_cosmos_bootstrap() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
-    let bootstrap = Arc::new(init_bootstrap(
-        0,
+    let bootstrap = Arc::new(build_gaia_bootstrap(
         runtime.clone(),
         true,
         "./test-data",
         "coin".into(),
         |_| Ok(()),
         |_| Ok(()),
-        Some(DynamicGasConfig::default()),
     ));
 
     runtime.runtime.clone().block_on(async move {

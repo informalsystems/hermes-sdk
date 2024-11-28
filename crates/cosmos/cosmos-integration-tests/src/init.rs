@@ -1,20 +1,37 @@
 use alloc::sync::Arc;
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_error::types::Error;
+use eyre::Report;
 use serde_json::Value as JsonValue;
-use std::env;
-use toml::Value as TomlValue;
-
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_runtime::types::runtime::HermesRuntime;
+use std::str::FromStr;
 use tokio::runtime::Builder;
+use toml::Value as TomlValue;
 use tracing::info;
 use tracing::level_filters::LevelFilter;
 use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{fmt, EnvFilter};
 
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_error::types::Error;
+use hermes_runtime::types::runtime::HermesRuntime;
+
 use crate::contexts::bootstrap::CosmosBootstrap;
+use crate::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
+
+pub enum TestPreset {
+    CosmosToCosmos,
+}
+
+impl FromStr for TestPreset {
+    type Err = Report;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "cosmostocosmos" => Ok(TestPreset::CosmosToCosmos),
+            _ => Err(Report::msg("unknown test preset: `{s}`")),
+        }
+    }
+}
 
 pub fn init_test_runtime() -> HermesRuntime {
     let _ = stable_eyre::install();
@@ -37,53 +54,52 @@ pub fn init_test_runtime() -> HermesRuntime {
     runtime
 }
 
-pub fn init_bootstrap(
-    chain_id: usize,
+pub fn build_osmosis_bootstrap(
     runtime: HermesRuntime,
     should_randomize_identifiers: bool,
     chain_store_dir: &str,
     transfer_denom_prefix: String,
     genesis_modifier: impl Fn(&mut JsonValue) -> Result<(), Error> + Send + Sync + 'static,
     comet_config_modifier: impl Fn(&mut TomlValue) -> Result<(), Error> + Send + Sync + 'static,
-    dynamic_gas: Option<DynamicGasConfig>,
-) -> CosmosBootstrap {
+) -> LegacyCosmosBootstrap {
     let cosmos_builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
-    let chain_command_path =
-        env::var("CHAIN_COMMAND_PATHS").unwrap_or_else(|_| "gaiad".to_string());
-    let chain_command_paths: Vec<String> = parse_chain_command_paths(chain_command_path);
+    LegacyCosmosBootstrap {
+        runtime,
+        cosmos_builder,
+        should_randomize_identifiers,
+        chain_store_dir: chain_store_dir.into(),
+        chain_command_path: "osmosisd".into(),
+        account_prefix: "osmosis".into(),
+        compat_mode: None,
+        staking_denom_prefix: "stake".into(),
+        transfer_denom_prefix,
+        genesis_config_modifier: Box::new(genesis_modifier),
+        comet_config_modifier: Box::new(comet_config_modifier),
+    }
+}
 
-    let account_prefix = env::var("ACCOUNT_PREFIXES").unwrap_or_else(|_| "cosmos".to_string());
-    let account_prefixes = parse_chain_command_paths(account_prefix);
-
-    let staking_denom_prefix = env::var("NATIVE_TOKENS").unwrap_or_else(|_| "stake".to_string());
-    let staking_denom_prefixes = parse_chain_command_paths(staking_denom_prefix);
+pub fn build_gaia_bootstrap(
+    runtime: HermesRuntime,
+    should_randomize_identifiers: bool,
+    chain_store_dir: &str,
+    transfer_denom_prefix: String,
+    genesis_modifier: impl Fn(&mut JsonValue) -> Result<(), Error> + Send + Sync + 'static,
+    comet_config_modifier: impl Fn(&mut TomlValue) -> Result<(), Error> + Send + Sync + 'static,
+) -> CosmosBootstrap {
+    let cosmos_builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
     CosmosBootstrap {
         runtime,
         cosmos_builder,
         should_randomize_identifiers,
         chain_store_dir: chain_store_dir.into(),
-        chain_command_path: chain_command_paths[chain_id % chain_command_paths.len()]
-            .as_str()
-            .into(),
-        account_prefix: account_prefixes[chain_id % account_prefixes.len()]
-            .as_str()
-            .into(),
-        staking_denom_prefix: staking_denom_prefixes[chain_id % staking_denom_prefixes.len()]
-            .as_str()
-            .into(),
+        chain_command_path: "gaiad".into(),
+        account_prefix: "cosmos".into(),
+        staking_denom_prefix: "stake".into(),
         transfer_denom_prefix,
         genesis_config_modifier: Box::new(genesis_modifier),
         comet_config_modifier: Box::new(comet_config_modifier),
-        dynamic_gas,
+        dynamic_gas: Some(DynamicGasConfig::default()),
     }
-}
-
-fn parse_chain_command_paths(chain_command_path: String) -> Vec<String> {
-    let patterns: Vec<String> = chain_command_path
-        .split(',')
-        .map(|chain_binary| chain_binary.to_string())
-        .collect();
-    patterns
 }
