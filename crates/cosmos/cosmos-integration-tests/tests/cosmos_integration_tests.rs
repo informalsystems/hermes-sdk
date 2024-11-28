@@ -40,7 +40,7 @@ fn cosmos_integration_tests() -> Result<(), Error> {
         max_clock_drift: Duration::from_secs(40),
         trust_threshold: Fraction {
             numerator: 1,
-            denominator: 2,
+            denominator: 3,
         },
         ..Default::default()
     };
