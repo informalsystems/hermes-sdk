@@ -23,9 +23,7 @@ where
         + CanRaiseError<Report>
         + CanRaiseError<DecodeError>,
 {
-    type UnbondingPeriod = Duration;
-
-    async fn query_unbonding_period(chain: &Chain) -> Result<Self::UnbondingPeriod, Chain::Error> {
+    async fn query_unbonding_period(chain: &Chain) -> Result<Duration, Chain::Error> {
         let latest_height = chain.query_chain_height().await?;
 
         let query_staking_params_bytes = chain

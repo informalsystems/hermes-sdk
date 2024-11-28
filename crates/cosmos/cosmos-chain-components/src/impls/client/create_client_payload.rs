@@ -1,11 +1,8 @@
 use cgp::core::error::CanRaiseError;
-use core::time::Duration;
-use eyre::Report;
 
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
 use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
-use hermes_comet_light_client_context::traits::rpc_client::HasRpcClient;
 use hermes_error::types::HermesError;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::queries::chain_status::{
@@ -33,6 +30,7 @@ use tendermint_rpc::Client;
 use tendermint_rpc::Error as TendermintRpcError;
 
 use crate::traits::chain_handle::HasBlockingChainHandle;
+use crate::traits::rpc_client::HasRpcClient;
 use crate::traits::unbonding_period::CanQueryUnbondingPeriod;
 use crate::types::payloads::client::CosmosCreateClientPayload;
 use crate::types::status::ChainStatus;
@@ -92,17 +90,17 @@ pub struct BuildCreateClientPayloadWithChainHandleV2;
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildCreateClientPayloadWithChainHandleV2
 where
-    Chain: HasCreateClientPayloadOptionsType<Counterparty, CreateClientPayloadOptions = Settings>
+    Chain: HasRpcClient
+        + HasCreateClientPayloadOptionsType<Counterparty, CreateClientPayloadOptions = Settings>
         + HasCreateClientPayloadType<Counterparty, CreateClientPayload = CosmosCreateClientPayload>
-        + CanQueryUnbondingPeriod<UnbondingPeriod = Duration>
+        + CanQueryUnbondingPeriod
         + HasChainId<ChainId = ChainId>
         + CanQueryChainHeight<Height = Height>
         + CanQueryChainStatus<ChainStatus = ChainStatus>
-        + HasRpcClient
         + CanRaiseError<TendermintClientError>
         + CanRaiseError<TendermintError>
         + CanRaiseError<TendermintRpcError>
-        + CanRaiseError<Report>
+        + CanRaiseError<&'static str>
         + CanRaiseError<HermesError>,
 {
     async fn build_create_client_payload(
@@ -118,8 +116,7 @@ where
         // And if both are missing, should we default to another value?
         let trusting_period = create_client_options
             .trusting_period
-            .ok_or_else(|| Report::msg("missing trusting period in client settings"))
-            .map_err(Chain::raise_error)?;
+            .ok_or_else(|| Chain::raise_error("missing trusting period in client settings"))?;
 
         #[allow(deprecated)]
         let client_state = ClientState::new(

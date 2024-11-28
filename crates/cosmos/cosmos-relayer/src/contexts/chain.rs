@@ -8,6 +8,7 @@ use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
@@ -416,9 +417,9 @@ pub trait CanUseCosmosChain:
     + CanBuildVoteProposalMessage
     + HasMessageResponseEvents
     + HasSendPacketEvent<CosmosChain>
+    + CanBuildCreateClientPayload<CosmosChain>
 where
     CosmosChain: HasClientStateType<Self>
-        + CanQueryUnbondingPeriod
         + HasConsensusStateType<Self>
         + HasCreateClientPayloadType<Self>
         + HasUpdateClientPayloadType<Self>,
