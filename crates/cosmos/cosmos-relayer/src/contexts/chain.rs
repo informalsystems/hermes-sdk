@@ -6,14 +6,13 @@ use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingP
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_cosmos_chain_components::types::payloads::client::{
-    CosmosCreateClientPayload, CosmosUpdateClientPayload,
+    CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use ibc_relayer::chain::cosmos::client::Settings;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
@@ -382,8 +381,10 @@ pub trait CanUseCosmosChain:
     + HasEventType<Event = Arc<AbciEvent>>
     + HasCreateClientPayloadType<CosmosChain, CreateClientPayload = CosmosCreateClientPayload>
     + HasUpdateClientPayloadType<CosmosChain, UpdateClientPayload = CosmosUpdateClientPayload>
-    + HasCreateClientPayloadOptionsType<CosmosChain, CreateClientPayloadOptions = Settings>
-    + CanQueryBalance
+    + HasCreateClientPayloadOptionsType<
+        CosmosChain,
+        CreateClientPayloadOptions = CosmosCreateClientOptions,
+    > + CanQueryBalance
     + CanIbcTransferToken<CosmosChain>
     + CanConvertGasToFee
     + CanQueryEipBaseFee

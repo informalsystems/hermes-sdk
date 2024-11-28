@@ -6,6 +6,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
@@ -17,8 +18,7 @@ use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use ibc_relayer::chain::cosmos::client::Settings;
-use ibc_relayer::config::types::TrustThreshold;
+use ibc_proto::ibc::lightclients::tendermint::v1::Fraction;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 
@@ -90,10 +90,13 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             chain: gaia_chain_driver.chain.clone(),
         };
 
-        let tm_create_client_settings = Settings {
+        let tm_create_client_settings = CosmosCreateClientOptions {
             max_clock_drift: Duration::from_secs(40),
-            trusting_period: None,
-            trust_threshold: TrustThreshold::ONE_THIRD,
+            trust_threshold: Fraction {
+                numerator: 1,
+                denominator: 2,
+            },
+            ..Default::default()
         };
 
         let client_id_a = CosmosToWasmCosmosRelay::create_client(

@@ -4,6 +4,7 @@ use core::time::Duration;
 use std::sync::Arc;
 
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
@@ -11,8 +12,6 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_test_components::setup::traits::run_test::CanRunTest;
-use ibc_relayer::chain::cosmos::client::Settings;
-use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
 // FIXME: Celestia currently can only be bootstrapped using CosmosBootstrap.
@@ -53,10 +52,10 @@ fn celestia_integration_tests() -> Result<(), Error> {
         dynamic_gas: Some(DynamicGasConfig::default()),
     });
 
-    let create_client_settings = Settings {
+    let create_client_settings = CosmosCreateClientOptions {
         max_clock_drift: Duration::from_secs(40),
-        trusting_period: Some(Duration::from_secs(60 * 60)),
-        trust_threshold: TrustThreshold::ONE_THIRD,
+        trusting_period: Duration::from_secs(60 * 60),
+        ..Default::default()
     };
 
     let setup = CosmosBinaryChannelSetup {

@@ -1,3 +1,4 @@
+use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_error::types::HermesError;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
@@ -6,7 +7,6 @@ use hermes_relayer_components::relay::traits::target::{DestinationTarget, Source
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_solomachine_relayer::contexts::chain::MockSolomachine;
 use hermes_solomachine_relayer::contexts::relay::SolomachineRelay;
-use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::PacketFilter;
 use ibc_test_framework::prelude::*;
 
@@ -45,10 +45,9 @@ impl BinaryChainTest for SolomachineToCosmosTest {
 
         let solomachine_chain = solomachine_chain_context(solomachine_runtime, Default::default());
 
-        let client_settings = Settings {
+        let client_settings = CosmosCreateClientOptions {
             max_clock_drift: Duration::from_secs(40),
-            trust_threshold: Default::default(),
-            trusting_period: None,
+            ..Default::default()
         };
 
         runtime

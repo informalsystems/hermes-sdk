@@ -12,7 +12,6 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 
-use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState};
 use ibc_relayer_types::clients::ics07_tendermint::consensus_state::ConsensusState;
 use ibc_relayer_types::clients::ics07_tendermint::error::Error as TendermintClientError;
@@ -27,7 +26,7 @@ use tendermint_rpc::Error as TendermintRpcError;
 
 use crate::traits::rpc_client::HasRpcClient;
 use crate::traits::unbonding_period::CanQueryUnbondingPeriod;
-use crate::types::payloads::client::CosmosCreateClientPayload;
+use crate::types::payloads::client::{CosmosCreateClientOptions, CosmosCreateClientPayload};
 use crate::types::status::ChainStatus;
 use crate::types::tendermint::TendermintClientState;
 
@@ -37,8 +36,10 @@ impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildCosmosCreateClientPayload
 where
     Chain: HasRpcClient
-        + HasCreateClientPayloadOptionsType<Counterparty, CreateClientPayloadOptions = Settings>
-        + HasCreateClientPayloadType<Counterparty, CreateClientPayload = CosmosCreateClientPayload>
+        + HasCreateClientPayloadOptionsType<
+            Counterparty,
+            CreateClientPayloadOptions = CosmosCreateClientOptions,
+        > + HasCreateClientPayloadType<Counterparty, CreateClientPayload = CosmosCreateClientPayload>
         + CanQueryUnbondingPeriod
         + HasChainId<ChainId = ChainId>
         + CanQueryChainHeight<Height = Height>
@@ -46,30 +47,31 @@ where
         + CanRaiseError<TendermintClientError>
         + CanRaiseError<TendermintError>
         + CanRaiseError<TendermintRpcError>
-        + CanRaiseError<&'static str>
+        + CanRaiseError<String>
         + CanRaiseError<HermesError>,
 {
     async fn build_create_client_payload(
         chain: &Chain,
-        create_client_options: &Settings,
+        create_client_options: &Chain::CreateClientPayloadOptions,
     ) -> Result<CosmosCreateClientPayload, Chain::Error> {
         let latest_height = chain.query_chain_height().await?;
 
         let unbonding_period = chain.query_unbonding_period().await?;
 
-        // TODO: Should we use a value for `trusting_period` in the config if it is not
-        // found in the client settings?
-        // And if both are missing, should we default to another value?
-        // Current behaviour is to default to 2/3 of unbonding period if the
-        // trusting period is missing from the client settings.
-        let trusting_period = create_client_options
-            .trusting_period
-            .unwrap_or(2 * unbonding_period / 3);
+        let trusting_period = create_client_options.trusting_period;
+        let trust_threshold = create_client_options
+            .trust_threshold
+            .try_into()
+            .map_err(|e| {
+                Chain::raise_error(format!(
+                    "failed to convert `Fraction` to  `TrustThreshold` for trust_threshold: {e}"
+                ))
+            })?;
 
         #[allow(deprecated)]
         let client_state = ClientState::new(
             chain.chain_id().clone(),
-            create_client_options.trust_threshold,
+            trust_threshold,
             trusting_period,
             unbonding_period,
             create_client_options.max_clock_drift,
