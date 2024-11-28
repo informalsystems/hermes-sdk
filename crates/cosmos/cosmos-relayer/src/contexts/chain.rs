@@ -2,6 +2,7 @@ use alloc::sync::Arc;
 use core::ops::Deref;
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
+use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_cosmos_chain_components::types::payloads::client::{
@@ -385,6 +386,7 @@ pub trait CanUseCosmosChain:
     + CanIbcTransferToken<CosmosChain>
     + CanConvertGasToFee
     + CanQueryEipBaseFee
+    + CanQueryUnbondingPeriod
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
@@ -416,6 +418,7 @@ pub trait CanUseCosmosChain:
     + HasSendPacketEvent<CosmosChain>
 where
     CosmosChain: HasClientStateType<Self>
+        + CanQueryUnbondingPeriod
         + HasConsensusStateType<Self>
         + HasCreateClientPayloadType<Self>
         + HasUpdateClientPayloadType<Self>,
