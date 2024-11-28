@@ -22,7 +22,6 @@ use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPor
    channel end at the source chain is really in the `OPEN` state. This will be implemented
    as a separate wrapper component. (TODO)
 */
-
 pub struct RelayChannelOpenConfirm;
 
 impl<Relay, SrcChain, DstChain> ChannelOpenConfirmRelayer<Relay> for RelayChannelOpenConfirm

@@ -49,7 +49,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> BasicTest for RunInterchainSecurityChainTest<'a, Test>
+impl<Test, Overrides> BasicTest for RunInterchainSecurityChainTest<'_, Test>
 where
     Test: InterchainSecurityChainTest,
     Test: HasOverrides<Overrides = Overrides>,
@@ -105,7 +105,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> HasOverrides for RunInterchainSecurityChainTest<'a, Test>
+impl<Test, Overrides> HasOverrides for RunInterchainSecurityChainTest<'_, Test>
 where
     Test: HasOverrides<Overrides = Overrides>,
 {

@@ -91,8 +91,8 @@ where
     }
 }
 
-impl<'a, Test, Overrides, const SIZE: usize> NaryChainTest<SIZE>
-    for RunNaryConnectionTest<'a, Test, SIZE>
+impl<Test, Overrides, const SIZE: usize> NaryChainTest<SIZE>
+    for RunNaryConnectionTest<'_, Test, SIZE>
 where
     Test: NaryConnectionTest<SIZE>,
     Test: HasOverrides<Overrides = Overrides>,
@@ -124,7 +124,7 @@ where
     }
 }
 
-impl<'a, Test> NaryConnectionTest<2> for RunBinaryAsNaryConnectionTest<'a, Test>
+impl<Test> NaryConnectionTest<2> for RunBinaryAsNaryConnectionTest<'_, Test>
 where
     Test: BinaryConnectionTest,
 {
@@ -140,8 +140,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides, const SIZE: usize> NaryConnectionTest<SIZE>
-    for RunWithSupervisor<'a, Test>
+impl<Test, Overrides, const SIZE: usize> NaryConnectionTest<SIZE> for RunWithSupervisor<'_, Test>
 where
     Test: NaryConnectionTest<SIZE>,
     Test: HasOverrides<Overrides = Overrides>,
@@ -166,7 +165,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides, const SIZE: usize> HasOverrides for RunNaryConnectionTest<'a, Test, SIZE>
+impl<Test, Overrides, const SIZE: usize> HasOverrides for RunNaryConnectionTest<'_, Test, SIZE>
 where
     Test: HasOverrides<Overrides = Overrides>,
 {
@@ -177,7 +176,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> HasOverrides for RunBinaryAsNaryConnectionTest<'a, Test>
+impl<Test, Overrides> HasOverrides for RunBinaryAsNaryConnectionTest<'_, Test>
 where
     Test: HasOverrides<Overrides = Overrides>,
 {

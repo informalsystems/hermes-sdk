@@ -196,7 +196,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> BinaryNodeTest for RunBinaryChainTest<'a, Test>
+impl<Test, Overrides> BinaryNodeTest for RunBinaryChainTest<'_, Test>
 where
     Test: BinaryChainTest,
     Test: HasOverrides<Overrides = Overrides>,
@@ -235,7 +235,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> InterchainSecurityChainTest for RunBinaryChainTest<'a, Test>
+impl<Test, Overrides> InterchainSecurityChainTest for RunBinaryChainTest<'_, Test>
 where
     Test: BinaryChainTest,
     Test: HasOverrides<Overrides = Overrides>,
@@ -274,7 +274,7 @@ where
     }
 }
 
-impl<'a, Test: BinaryChainTest> BinaryChainTest for RunTwoWayBinaryChainTest<'a, Test> {
+impl<Test: BinaryChainTest> BinaryChainTest for RunTwoWayBinaryChainTest<'_, Test> {
     fn run<ChainA: ChainHandle, ChainB: ChainHandle>(
         &self,
         config: &TestConfig,
@@ -303,7 +303,7 @@ impl<'a, Test: BinaryChainTest> BinaryChainTest for RunTwoWayBinaryChainTest<'a,
     }
 }
 
-impl<'a, Test, Overrides> BinaryChainTest for RunWithSupervisor<'a, Test>
+impl<Test, Overrides> BinaryChainTest for RunWithSupervisor<'_, Test>
 where
     Test: BinaryChainTest,
     Test: HasOverrides<Overrides = Overrides>,
@@ -327,7 +327,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> HasOverrides for RunBinaryChainTest<'a, Test>
+impl<Test, Overrides> HasOverrides for RunBinaryChainTest<'_, Test>
 where
     Test: HasOverrides<Overrides = Overrides>,
 {
@@ -338,7 +338,7 @@ where
     }
 }
 
-impl<'a, Test, Overrides> HasOverrides for RunTwoWayBinaryChainTest<'a, Test>
+impl<Test, Overrides> HasOverrides for RunTwoWayBinaryChainTest<'_, Test>
 where
     Test: HasOverrides<Overrides = Overrides>,
 {

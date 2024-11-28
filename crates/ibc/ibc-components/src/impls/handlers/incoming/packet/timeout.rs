@@ -58,7 +58,7 @@ where
     }
 }
 
-impl<'a, Chain, Counterparty> Debug for PacketTimedOut<'a, Chain, Counterparty>
+impl<Chain, Counterparty> Debug for PacketTimedOut<'_, Chain, Counterparty>
 where
     Chain: HasTimeType + HasPacketTimeoutType<Counterparty>,
     Counterparty: HasPacketType<Chain>,
