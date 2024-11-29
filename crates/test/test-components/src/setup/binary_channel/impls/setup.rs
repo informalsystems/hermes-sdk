@@ -1,5 +1,6 @@
 use cgp::core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::types::index::{Index, Twindex};
 
 use crate::chain_driver::traits::types::chain::HasChain;
@@ -18,8 +19,10 @@ impl<Setup, ChainA, ChainB> DriverBuilder<Setup> for SetupBinaryChannelDriver
 where
     Setup: HasTestDriverType
         + HasErrorType
-        + CanSetupChain<0, Chain = ChainA>
-        + CanSetupChain<1, Chain = ChainB>
+        + CanSetupChain<0>
+        + CanSetupChain<1>
+        + HasChainTypeAt<0, Chain = ChainA>
+        + HasChainTypeAt<1, Chain = ChainB>
         + CanSetupClients<0, 1>
         + CanSetupBiRelay<0, 1>
         + CanSetupConnection<0, 1>

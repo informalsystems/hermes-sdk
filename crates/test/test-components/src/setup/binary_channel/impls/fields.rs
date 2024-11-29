@@ -6,7 +6,9 @@ use hermes_relayer_components::multi::types::index::Index;
 
 use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::driver::traits::types::chain_driver::HasChainDriverType;
-use crate::driver::traits::types::chain_driver_at::HasChainDriverTypeAt;
+use crate::driver::traits::types::chain_driver_at::{
+    HasChainDriverTypeAt, ProvideChainDriverTypeAt,
+};
 use crate::setup::traits::bootstrap_at::ProvideBootstrapAt;
 
 pub struct UseBinarySetupFields;
@@ -53,11 +55,20 @@ where
     type Chain = Chain;
 }
 
-// impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, 1> for UseBinarySetupFields
-// where
-//     Setup: Async + HasField<symbol!("bootstrap_b"), Field = Bootstrap>,
-//     Bootstrap: HasChainDriverType<ChainDriver = ChainDriver>,
-//     ChainDriver: Async,
-// {
-//     type ChainDriver = ChainDriver;
-// }
+impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, 0> for UseBinarySetupFields
+where
+    Setup: Async + HasField<symbol!("bootstrap_a"), Field = Bootstrap>,
+    Bootstrap: HasChainDriverType<ChainDriver = ChainDriver>,
+    ChainDriver: Async,
+{
+    type ChainDriver = ChainDriver;
+}
+
+impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, 1> for UseBinarySetupFields
+where
+    Setup: Async + HasField<symbol!("bootstrap_b"), Field = Bootstrap>,
+    Bootstrap: HasChainDriverType<ChainDriver = ChainDriver>,
+    ChainDriver: Async,
+{
+    type ChainDriver = ChainDriver;
+}

@@ -18,6 +18,8 @@ pub struct SetupChannelHandshake;
 impl<Setup, const A: usize, const B: usize> ChannelSetup<Setup, A, B> for SetupChannelHandshake
 where
     Setup: HasBiRelayTypeAt<A, B>
+        + HasRelayTypeAt<A, B>
+        + HasRelayTypeAt<B, A>
         + HasInitChannelOptionsAt<A, B>
         + HasPortIdAt<A, B>
         + HasPortIdAt<B, A>

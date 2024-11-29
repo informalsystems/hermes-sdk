@@ -13,7 +13,10 @@ pub struct SetupRelayWithBuilder;
 
 impl<Setup, const A: usize, const B: usize> RelaySetup<Setup, A, B> for SetupRelayWithBuilder
 where
-    Setup: HasRelayTypeAt<A, B> + HasBuilderAt<A, B> + CanRaiseError<ErrorOf<Setup::Builder>>,
+    Setup: HasRelayTypeAt<A, B>
+        + HasRelayTypeAt<B, A>
+        + HasBuilderAt<A, B>
+        + CanRaiseError<ErrorOf<Setup::Builder>>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>> + Clone,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>> + Clone,
     Setup::Builder: CanBuildRelayFromChains<0, 1>

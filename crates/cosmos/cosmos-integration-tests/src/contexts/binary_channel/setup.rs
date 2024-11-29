@@ -70,6 +70,7 @@ delegate_components! {
         [
             BootstrapAtComponent,
             // ChainTypeAtComponent,
+            // ChainDriverTypeAtComponent,
         ]: UseBinarySetupFields,
     }
 }

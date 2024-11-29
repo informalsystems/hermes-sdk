@@ -3,7 +3,7 @@ use cgp::prelude::*;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainIdAt, HasChainTypeAt};
-use crate::multi::traits::relay_at::ClientIdAt;
+use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 
 #[derive_component(BiRelayBuilderComponent, BiRelayBuilder<Build>)]
 #[async_trait]
@@ -11,6 +11,8 @@ pub trait CanBuildBiRelay<const A: usize, const B: usize>:
     HasBiRelayTypeAt<A, B>
     + HasChainTypeAt<A, Chain: HasChainIdType>
     + HasChainTypeAt<B, Chain: HasChainIdType>
+    + HasRelayTypeAt<A, B>
+    + HasRelayTypeAt<B, A>
     + HasErrorType
 {
     async fn build_birelay(

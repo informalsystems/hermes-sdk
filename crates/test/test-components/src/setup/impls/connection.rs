@@ -17,6 +17,8 @@ impl<Setup, const A: usize, const B: usize> ConnectionSetup<Setup, A, B>
     for SetupConnectionHandshake
 where
     Setup: HasBiRelayTypeAt<A, B>
+        + HasRelayTypeAt<A, B>
+        + HasRelayTypeAt<B, A>
         + HasInitConnectionOptionsAt<A, B>
         + CanRaiseError<ErrorOf<RelayAt<Setup, A, B>>>,
     ChainAt<Setup, A>:
