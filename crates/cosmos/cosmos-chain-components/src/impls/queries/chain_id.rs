@@ -40,7 +40,7 @@ where
 
         let latest_height = chain.query_chain_height().await?;
 
-        // query channel end with proof
+        // channel end query path
         let channel_end_path = format!("channelEnds/ports/{port_id}/channels/{channel_id}");
 
         let channel_end_bytes = chain
@@ -60,7 +60,7 @@ where
             Chain::raise_error(format!("channel with id `{channel_id}` has no connections"))
         })?;
 
-        // query connection end
+        // connection end query path
         let connection_path = format!("connections/{connection_id}");
 
         let connnection_end_bytes = chain
@@ -72,6 +72,7 @@ where
 
         let client_id = connection_end.client_id();
 
+        // client state query path
         let client_state_path = format!("clients/{client_id}/clientState");
 
         let client_state_bytes = chain
