@@ -1,6 +1,5 @@
 #![recursion_limit = "256"]
 
-use core::time::Duration;
 use std::env::var;
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -17,8 +16,6 @@ use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use ibc_relayer::chain::cosmos::client::Settings;
-use ibc_relayer::config::types::TrustThreshold;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 
@@ -90,17 +87,11 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             chain: gaia_chain_driver.chain.clone(),
         };
 
-        let tm_create_client_settings = Settings {
-            max_clock_drift: Duration::from_secs(40),
-            trusting_period: None,
-            trust_threshold: TrustThreshold::ONE_THIRD,
-        };
-
         let client_id_a = CosmosToWasmCosmosRelay::create_client(
             SourceTarget,
             &simd_chain,
             &gaia_chain,
-            &tm_create_client_settings,
+            &Default::default(),
             &CreateWasmTendermintMessageOptions {
                 code_hash: wasm_code_hash.into(),
             },
@@ -113,7 +104,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             DestinationTarget,
             &gaia_chain,
             &simd_chain,
-            &tm_create_client_settings,
+            &Default::default(),
             &(),
         )
         .await?;

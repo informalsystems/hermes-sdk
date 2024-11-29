@@ -4,6 +4,7 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -26,7 +27,6 @@ use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChanne
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
 use hermes_test_components::setup::traits::port_id_at::ProvidePortIdAt;
-use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
@@ -41,7 +41,7 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
 pub struct LegacyCosmosBinaryChannelSetup {
     pub bootstrap_a: Arc<LegacyCosmosBootstrap>,
     pub bootstrap_b: Arc<LegacyCosmosBootstrap>,
-    pub create_client_settings: Settings,
+    pub create_client_settings: CosmosCreateClientOptions,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,
     pub port_id: PortId,
@@ -203,7 +203,7 @@ impl<const I: usize, const J: usize>
     fn create_client_payload_options(
         setup: &LegacyCosmosBinaryChannelSetup,
         _index: Twindex<I, J>,
-    ) -> &Settings {
+    ) -> &CosmosCreateClientOptions {
         &setup.create_client_settings
     }
 

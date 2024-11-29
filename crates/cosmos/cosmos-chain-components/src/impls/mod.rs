@@ -8,3 +8,4 @@ pub mod packet;
 pub mod queries;
 pub mod transaction;
 pub mod types;
+pub mod unbonding_period;

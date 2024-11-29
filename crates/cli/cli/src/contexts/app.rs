@@ -42,6 +42,7 @@ use hermes_cli_components::traits::output::{
 use hermes_cli_components::traits::parse::ArgParserComponent;
 use hermes_cli_components::traits::types::config::ConfigTypeComponent;
 use hermes_cli_framework::output::Output;
+use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -56,7 +57,6 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::Config;
 use ibc_relayer::foreign_client::CreateOptions;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
@@ -192,18 +192,30 @@ impl CreateClientOptionsParser<HermesApp, CreateClientArgs, 0, 1> for HermesAppC
         args: &CreateClientArgs,
         target_chain: &CosmosChain,
         counterparty_chain: &CosmosChain,
-    ) -> Result<((), Settings), Error> {
+    ) -> Result<((), CosmosCreateClientOptions), Error> {
         let options = CreateOptions {
             max_clock_drift: args.clock_drift.map(|d| d.into()),
             trusting_period: args.trusting_period.map(|d| d.into()),
             trust_threshold: args.trust_threshold,
         };
 
-        let settings = Settings::for_create_command(
-            options,
-            &target_chain.chain_config.clone(),
-            &counterparty_chain.chain_config.clone(),
-        );
+        let max_clock_drift = match options.max_clock_drift {
+            Some(input) => input,
+            None => {
+                target_chain.chain_config.clock_drift
+                    + counterparty_chain.chain_config.clock_drift
+                    + counterparty_chain.chain_config.max_block_time
+            }
+        };
+
+        let settings = CosmosCreateClientOptions {
+            max_clock_drift,
+            trusting_period: options.trusting_period.unwrap_or_default(),
+            trust_threshold: options
+                .trust_threshold
+                .map(|threshold| threshold.into())
+                .unwrap_or_default(),
+        };
 
         Ok(((), settings))
     }
