@@ -1,4 +1,3 @@
-use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_error::types::HermesError;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
