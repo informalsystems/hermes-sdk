@@ -2,6 +2,7 @@ use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
+use core::ops::Deref;
 use eyre::eyre;
 use futures::lock::Mutex;
 use std::collections::HashMap;
@@ -42,8 +43,21 @@ use crate::impls::error::HandleCosmosError;
 use crate::types::batch::CosmosBatchSender;
 use crate::types::telemetry::CosmosTelemetry;
 
-#[derive(HasField)]
+#[derive(Clone)]
 pub struct CosmosBuilder {
+    pub fields: Arc<CosmosBuilderFields>,
+}
+
+impl Deref for CosmosBuilder {
+    type Target = CosmosBuilderFields;
+
+    fn deref(&self) -> &Self::Target {
+        &self.fields
+    }
+}
+
+#[derive(HasField)]
+pub struct CosmosBuilderFields {
     pub config_map: HashMap<ChainId, CosmosSdkConfig>,
     pub packet_filter: PacketFilter,
     pub telemetry: CosmosTelemetry,
@@ -140,15 +154,17 @@ impl CosmosBuilder {
         );
 
         Self {
-            config_map,
-            packet_filter,
-            telemetry,
-            runtime,
-            batch_config,
-            key_map,
-            chain_cache: Default::default(),
-            relay_cache: Default::default(),
-            batch_senders: Default::default(),
+            fields: Arc::new(CosmosBuilderFields {
+                config_map,
+                packet_filter,
+                telemetry,
+                runtime,
+                batch_config,
+                key_map,
+                chain_cache: Default::default(),
+                relay_cache: Default::default(),
+                batch_senders: Default::default(),
+            }),
         }
     }
 

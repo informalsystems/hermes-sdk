@@ -55,7 +55,7 @@ pub struct CosmosBootstrap {
 #[derive(HasField)]
 pub struct CosmosBootstrapFields {
     pub runtime: HermesRuntime,
-    pub cosmos_builder: Arc<CosmosBuilder>,
+    pub cosmos_builder: CosmosBuilder,
     pub should_randomize_identifiers: bool,
     pub chain_store_dir: PathBuf,
     pub chain_command_path: PathBuf,

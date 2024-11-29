@@ -18,13 +18,13 @@ use ibc_relayer_types::core::ics24_host::identifier::PortId;
 fn cosmos_integration_tests() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     // TODO: load parameters from environment variables
     let bootstrap = CosmosBootstrap {
         fields: Arc::new(CosmosBootstrapFields {
             runtime: runtime.clone(),
-            cosmos_builder: builder,
+            cosmos_builder: builder.clone(),
             should_randomize_identifiers: true,
             chain_store_dir: "./test-data".into(),
             chain_command_path: "gaiad".into(),
@@ -40,6 +40,7 @@ fn cosmos_integration_tests() -> Result<(), Error> {
     let setup = CosmosBinaryChannelSetup {
         bootstrap_a: bootstrap.clone(),
         bootstrap_b: bootstrap,
+        builder,
         create_client_payload_options: Default::default(),
         init_connection_options: Default::default(),
         init_channel_options: Default::default(),

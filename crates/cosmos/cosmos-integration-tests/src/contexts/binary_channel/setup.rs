@@ -14,9 +14,7 @@ use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
-use hermes_relayer_components::multi::traits::birelay_at::{
-    BiRelayTypeAtComponent, ProvideBiRelayTypeAt,
-};
+use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAtComponent, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
 use hermes_relayer_components::multi::types::index::Twindex;
@@ -25,7 +23,7 @@ use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverT
 use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
 use hermes_test_components::setup::traits::bootstrap_at::{BootstrapAtComponent, HasBootstrapAt};
-use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
+use hermes_test_components::setup::traits::builder_at::BuilderAtComponent;
 use hermes_test_components::setup::traits::create_client_options_at::{
     CreateClientMessageOptionsAtComponent, CreateClientPayloadOptionsAtComponent,
 };
@@ -49,6 +47,7 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
 pub struct CosmosBinaryChannelSetup {
     pub bootstrap_a: CosmosBootstrap,
     pub bootstrap_b: CosmosBootstrap,
+    pub builder: CosmosBuilder,
     pub create_client_payload_options: CosmosCreateClientOptions,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,
@@ -61,14 +60,6 @@ pub struct CosmosBinaryChannelSetupComponents;
 
 impl HasComponents for CosmosBinaryChannelSetup {
     type Components = CosmosBinaryChannelSetupComponents;
-}
-
-impl HasField<symbol!("create_client_message_options")> for CosmosBinaryChannelSetup {
-    type Field = ();
-
-    fn get_field(&self, _phantom: PhantomData<symbol!("create_client_message_options")>) -> &() {
-        &()
-    }
 }
 
 with_binary_channel_test_components! {
@@ -90,6 +81,7 @@ delegate_components! {
         ]: UseBinarySetupFields,
         CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
         CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
+        BuilderAtComponent: UseField<symbol!("builder")>,
         TestDriverTypeComponent: WithType<CosmosBinaryChannelTestDriver>,
         BuilderTypeAtComponent: WithType<CosmosBuilder>,
         // BiRelayTypeAtComponent: WithType<CosmosBiRelay>,
@@ -127,6 +119,14 @@ impl BinaryChannelDriverBuilder<CosmosBinaryChannelSetup> for CosmosBinaryChanne
     }
 }
 
+impl HasField<symbol!("create_client_message_options")> for CosmosBinaryChannelSetup {
+    type Field = ();
+
+    fn get_field(&self, _phantom: PhantomData<symbol!("create_client_message_options")>) -> &() {
+        &()
+    }
+}
+
 impl<const I: usize, const J: usize> ProvideRelayTypeAt<CosmosBinaryChannelSetup, I, J>
     for CosmosBinaryChannelSetupComponents
 {
@@ -139,18 +139,6 @@ impl ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChanne
 
 impl ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
     type BiRelay = CosmosBiRelay;
-}
-
-impl ProvideBuilderAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {
-    fn builder(setup: &CosmosBinaryChannelSetup) -> &CosmosBuilder {
-        &setup.bootstrap_a.cosmos_builder
-    }
-}
-
-impl ProvideBuilderAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
-    fn builder(setup: &CosmosBinaryChannelSetup) -> &CosmosBuilder {
-        &setup.bootstrap_b.cosmos_builder
-    }
 }
 
 impl ProvideInitConnectionOptionsAt<CosmosBinaryChannelSetup, 0, 1>

@@ -1,4 +1,3 @@
-use alloc::sync::Arc;
 use cgp::core::component::UseContext;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
@@ -63,7 +62,7 @@ use crate::contexts::bridge_driver::CelestiaBridgeDriver;
 #[derive(HasField)]
 pub struct CelestiaBootstrap {
     pub runtime: HermesRuntime,
-    pub cosmos_builder: Arc<CosmosBuilder>,
+    pub cosmos_builder: CosmosBuilder,
     pub chain_store_dir: PathBuf,
     pub bridge_store_dir: PathBuf,
     pub dynamic_gas: Option<DynamicGasConfig>,

@@ -13,7 +13,7 @@ use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 fn test_cosmos_bootstrap() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     // TODO: load parameters from environment variables
     let bootstrap = CosmosBootstrap {

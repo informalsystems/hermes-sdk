@@ -45,7 +45,7 @@ where
         setup: &Setup,
         _index: Twindex<TARGET, COUNTERPARTY>,
     ) -> &ChainA::CreateClientMessageOptions {
-        setup.get_field(PhantomData::<Tag>)
+        setup.get_field(PhantomData)
     }
 }
 
@@ -61,6 +61,6 @@ where
         setup: &Setup,
         _index: Twindex<TARGET, COUNTERPARTY>,
     ) -> &ChainA::CreateClientPayloadOptions {
-        setup.get_field(PhantomData::<Tag>)
+        setup.get_field(PhantomData)
     }
 }

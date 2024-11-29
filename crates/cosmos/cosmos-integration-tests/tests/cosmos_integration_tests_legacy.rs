@@ -19,7 +19,7 @@ fn cosmos_integration_tests_legacy() -> Result<(), Error> {
     // gaiad from the environment variable, if applicable.
     let gaia_bin = std::env::var("LEGACY_GAIA_BIN").unwrap_or("gaiad".into());
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(LegacyCosmosBootstrap {

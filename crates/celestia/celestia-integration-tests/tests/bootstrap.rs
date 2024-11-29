@@ -20,7 +20,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
 
     let runtime = HermesRuntime::new(tokio_runtime.clone());
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
 

@@ -1,4 +1,3 @@
-use alloc::sync::Arc;
 use cgp::core::component::UseContext;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
@@ -53,7 +52,7 @@ use hermes_wasm_test_components::traits::bootstrap::gov_authority::GovernancePro
 #[derive(HasField)]
 pub struct CosmosWithWasmClientBootstrap {
     pub runtime: HermesRuntime,
-    pub cosmos_builder: Arc<CosmosBuilder>,
+    pub cosmos_builder: CosmosBuilder,
     pub should_randomize_identifiers: bool,
     pub chain_store_dir: PathBuf,
     pub chain_command_path: PathBuf,

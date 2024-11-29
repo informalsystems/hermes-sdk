@@ -51,7 +51,7 @@ where
         let bootstrap = CosmosBootstrap {
             fields: Arc::new(CosmosBootstrapFields {
                 runtime: runtime.clone(),
-                cosmos_builder: Arc::new(builder),
+                cosmos_builder: builder,
                 should_randomize_identifiers: false,
                 chain_store_dir: args.chain_store_dir.clone().into(),
                 chain_command_path: args.chain_command_path.clone().into(),
