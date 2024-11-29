@@ -162,7 +162,7 @@ use crate::impls::queries::send_packet::QueryCosmosSendPacket;
 use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
 use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
-use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
+use crate::impls::queries::write_ack_event::QueryCosmosWriteAckEvent;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::ProvideAnyRawClientState;
 use crate::impls::types::consensus_state::ProvideAnyRawConsensusState;
@@ -239,7 +239,7 @@ define_components! {
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightsAndFindHeightBefore,
         WriteAckQuerierComponent:
-            QueryWriteAckEventFromChainHandle,
+            QueryCosmosWriteAckEvent,
         [
             RawClientStateQuerierComponent,
             RawClientStateWithProofsQuerierComponent,
