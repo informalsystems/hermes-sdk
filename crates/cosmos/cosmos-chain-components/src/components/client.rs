@@ -157,7 +157,7 @@ use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledge
 use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
-use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
+use crate::impls::queries::received_packet::QueryCosmosReceivedPacket;
 use crate::impls::queries::send_packet::QueryCosmosSendPacket;
 use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
 use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
@@ -285,7 +285,7 @@ define_components! {
         PacketCommitmentsQuerierComponent:
             QueryCosmosPacketCommitments,
         ReceivedPacketQuerierComponent:
-            QueryReceivedPacketWithChainHandle,
+            QueryCosmosReceivedPacket,
 
         UnreceivedPacketSequencesQuerierComponent:
             QueryUnreceivedCosmosPacketSequences,
