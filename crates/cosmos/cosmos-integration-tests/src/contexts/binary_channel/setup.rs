@@ -11,13 +11,14 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
 use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
-use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
+use hermes_relayer_components::multi::traits::chain_at::{HasChainTypeAt, ProvideChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
-use hermes_relayer_components::multi::types::index::{Index, Twindex};
+use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTypeAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use hermes_test_components::setup::binary_channel::components::*;
-use hermes_test_components::setup::traits::bootstrap_at::ProvideBootstrapAt;
+use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
+use hermes_test_components::setup::traits::bootstrap_at::{BootstrapAtComponent, HasBootstrapAt};
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
 use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
 use hermes_test_components::setup::traits::driver::ProvideTestDriverType;
@@ -36,6 +37,7 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
    A setup context for setting up a binary channel test driver,
    with both chains being Cosmos chains.
 */
+#[derive(HasField)]
 pub struct CosmosBinaryChannelSetup {
     pub bootstrap_a: CosmosBootstrap,
     pub bootstrap_b: CosmosBootstrap,
@@ -65,6 +67,10 @@ delegate_components! {
     CosmosBinaryChannelSetupComponents {
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
+        [
+            BootstrapAtComponent,
+            // ChainTypeAtComponent,
+        ]: UseBinarySetupFields,
     }
 }
 
@@ -141,22 +147,6 @@ impl ProvideBuilderTypeAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChanne
     type Builder = CosmosBuilder;
 }
 
-impl ProvideBootstrapAt<CosmosBinaryChannelSetup, 0> for CosmosBinaryChannelSetupComponents {
-    type Bootstrap = CosmosBootstrap;
-
-    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<0>) -> &CosmosBootstrap {
-        &setup.bootstrap_a
-    }
-}
-
-impl ProvideBootstrapAt<CosmosBinaryChannelSetup, 1> for CosmosBinaryChannelSetupComponents {
-    type Bootstrap = CosmosBootstrap;
-
-    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<1>) -> &CosmosBootstrap {
-        &setup.bootstrap_b
-    }
-}
-
 impl ProvideBuilderAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {
     fn builder(setup: &CosmosBinaryChannelSetup) -> &CosmosBuilder {
         &setup.bootstrap_a.cosmos_builder
@@ -221,3 +211,13 @@ impl<const I: usize, const J: usize> ProvidePortIdAt<CosmosBinaryChannelSetup, I
         &setup.port_id
     }
 }
+
+pub trait CanUseCosmosBinaryChannelSetup:
+    HasBootstrapAt<0, Bootstrap = CosmosBootstrap>
+    + HasBootstrapAt<1, Bootstrap = CosmosBootstrap>
+    + HasChainTypeAt<0, Chain = CosmosChain>
+    + HasChainTypeAt<1, Chain = CosmosChain>
+{
+}
+
+impl CanUseCosmosBinaryChannelSetup for CosmosBinaryChannelSetup {}

@@ -5,7 +5,7 @@ use crate::multi::types::index::Index;
 
 #[derive_component(ChainTypeAtComponent, ProvideChainTypeAt<Context>)]
 pub trait HasChainTypeAt<const I: usize>: Async {
-    type Chain: HasErrorType;
+    type Chain: Async;
 }
 
 pub trait HasChainAt<const I: usize>: HasChainTypeAt<I> {

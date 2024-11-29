@@ -1,12 +1,10 @@
 use cgp::prelude::*;
-use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
-
-use crate::chain_driver::traits::types::chain::HasChainType;
 
 #[derive_component(ChainDriverTypeAtComponent, ProvideChainDriverTypeAt<Driver>)]
 pub trait HasChainDriverTypeAt<const I: usize>: HasChainTypeAt<I> {
-    type ChainDriver: HasChainType<Chain = ChainAt<Self, I>>;
+    type ChainDriver: Async;
 }
 
 pub type ChainDriverTypeAt<Driver, const I: usize> =

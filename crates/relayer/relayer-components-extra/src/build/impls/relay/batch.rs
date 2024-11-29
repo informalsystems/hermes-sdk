@@ -39,8 +39,8 @@ where
         + CanSpawnBatchMessageWorker<SourceTarget>
         + CanSpawnBatchMessageWorker<DestinationTarget>
         + CanRaiseRelayChainErrors,
-    ChainAt<Build, SRC>: HasChainId,
-    ChainAt<Build, DST>: HasChainId,
+    ChainAt<Build, SRC>: HasChainId + HasErrorType,
+    ChainAt<Build, DST>: HasChainId + HasErrorType,
 {
     async fn build_relay_from_chains(
         build: &Build,

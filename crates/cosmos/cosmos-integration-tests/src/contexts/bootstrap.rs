@@ -2,6 +2,7 @@ use alloc::sync::Arc;
 use cgp::core::component::UseContext;
 use core::ops::Deref;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
@@ -28,7 +29,9 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
+use hermes_test_components::chain_driver::traits::types::chain::{
+    ChainTypeComponent, HasChainType,
+};
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 
 use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
@@ -129,3 +132,7 @@ delegate_components! {
             BuildCosmosChainDriver,
     }
 }
+
+pub trait CanUseCosmosBootstrap: HasChainType<Chain = CosmosChain> {}
+
+impl CanUseCosmosBootstrap for CosmosBootstrap {}

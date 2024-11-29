@@ -8,7 +8,7 @@ use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainD
 pub trait HasBootstrapAt<const I: usize>: HasChainDriverTypeAt<I> {
     type Bootstrap: HasChainDriverType<ChainDriver = ChainDriverTypeAt<Self, I>>;
 
-    fn chain_bootstrap(&self, index: Index<I>) -> &Self::Bootstrap;
+    fn chain_bootstrap(&self, _index: Index<I>) -> &Self::Bootstrap;
 }
 
 pub type BootstrapAt<Context, const I: usize> = <Context as HasBootstrapAt<I>>::Bootstrap;

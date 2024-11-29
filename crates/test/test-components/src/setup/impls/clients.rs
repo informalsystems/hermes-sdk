@@ -26,10 +26,12 @@ where
         + CanRaiseError<<RelayAt<Setup, A, B> as HasErrorType>::Error>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>>
         + HasCreateClientPayloadOptionsType<ChainAt<Setup, B>>
-        + HasCreateClientMessageOptionsType<ChainAt<Setup, B>>,
+        + HasCreateClientMessageOptionsType<ChainAt<Setup, B>>
+        + HasErrorType,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>
         + HasCreateClientPayloadOptionsType<ChainAt<Setup, A>>
-        + HasCreateClientMessageOptionsType<ChainAt<Setup, A>>,
+        + HasCreateClientMessageOptionsType<ChainAt<Setup, A>>
+        + HasErrorType,
     RelayAt<Setup, A, B>: CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
         + CanRaiseRelayChainErrors,

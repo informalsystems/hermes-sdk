@@ -10,7 +10,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::PortIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
-use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
@@ -21,7 +21,7 @@ use hermes_relayer_components::relay::traits::target::{DestinationTarget, Source
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::chain_driver::traits::types::chain::HasChain;
 use crate::driver::traits::types::builder_at::ProvideBuilderTypeAt;
-use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
+use crate::driver::traits::types::chain_driver_at::HasChainDriverTypeAt;
 use crate::setup::binary_channel::impls::setup::SetupBinaryChannelDriver;
 use crate::setup::impls::birelay::SetupBiRelayWithBuilder;
 use crate::setup::impls::chain::SetupChainWithBootstrap;
@@ -70,15 +70,26 @@ pub trait CanUseBinaryChannelTestSetup: UseBinaryChannelTestSetup {}
 
 pub trait UseBinaryChannelTestSetup: CanBuildTestDriver {}
 
-impl<Setup, Components, BootstrapA, BootstrapB, Relay, Build> UseBinaryChannelTestSetup for Setup
+impl<
+        Setup,
+        Components,
+        BootstrapA,
+        BootstrapB,
+        ChainA,
+        ChainB,
+        ChainDriverA,
+        ChainDriverB,
+        Relay,
+        Build,
+    > UseBinaryChannelTestSetup for Setup
 where
-    Setup: HasChainTypeAt<0>
-        + HasChainTypeAt<1>
+    Setup: HasChainTypeAt<0, Chain = ChainA>
+        + HasChainTypeAt<1, Chain = ChainB>
         + HasRelayTypeAt<0, 1, Relay = Relay>
         + HasRelayTypeAt<1, 0>
         + HasBiRelayTypeAt<0, 1>
-        + HasChainDriverTypeAt<0>
-        + HasChainDriverTypeAt<1>
+        + HasChainDriverTypeAt<0, ChainDriver = ChainDriverA>
+        + HasChainDriverTypeAt<1, ChainDriver = ChainDriverB>
         + HasTestDriverType
         + HasErrorType
         + HasComponents<Components = Components>
@@ -101,21 +112,21 @@ where
         + ErrorRaiser<Setup, BootstrapB::Error>
         + ErrorRaiser<Setup, Relay::Error>
         + ErrorRaiser<Setup, Build::Error>,
-    ChainDriverTypeAt<Setup, 0>: HasChain<Chain = ChainAt<Setup, 0>>,
-    ChainDriverTypeAt<Setup, 1>: HasChain<Chain = ChainAt<Setup, 1>>,
-    ChainAt<Setup, 0>: HasIbcChainTypes<ChainAt<Setup, 1>>
-        + HasCreateClientPayloadOptionsType<ChainAt<Setup, 1>>
-        + HasCreateClientMessageOptionsType<ChainAt<Setup, 1>>
-        + HasInitConnectionOptionsType<ChainAt<Setup, 1>>
-        + HasInitChannelOptionsType<ChainAt<Setup, 1>>
+    ChainDriverA: HasChain<Chain = ChainA>,
+    ChainDriverB: HasChain<Chain = ChainB>,
+    ChainA: HasIbcChainTypes<ChainB>
+        + HasCreateClientPayloadOptionsType<ChainB>
+        + HasCreateClientMessageOptionsType<ChainB>
+        + HasInitConnectionOptionsType<ChainB>
+        + HasInitChannelOptionsType<ChainB>
         + HasErrorType
         + Clone,
-    ChainAt<Setup, 1>: HasIbcChainTypes<ChainAt<Setup, 0>>
-        + HasCreateClientPayloadOptionsType<ChainAt<Setup, 0>>
-        + HasCreateClientMessageOptionsType<ChainAt<Setup, 0>>
+    ChainB: HasIbcChainTypes<ChainA>
+        + HasCreateClientPayloadOptionsType<ChainA>
+        + HasCreateClientMessageOptionsType<ChainA>
         + HasErrorType
         + Clone,
-    Relay: HasRelayChains<SrcChain = ChainAt<Setup, 0>, DstChain = ChainAt<Setup, 1>>
+    Relay: HasRelayChains<SrcChain = ChainA, DstChain = ChainB>
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
         + CanBootstrapConnection
@@ -124,14 +135,14 @@ where
     BootstrapA: CanBootstrapChain,
     BootstrapB: CanBootstrapChain,
     Build: HasBiRelayTypeAt<0, 1, BiRelay = Setup::BiRelay>
-        + HasChainTypeAt<0, Chain = ChainAt<Setup, 0>>
-        + HasChainTypeAt<1, Chain = ChainAt<Setup, 1>>
+        + HasChainTypeAt<0, Chain = ChainA>
+        + HasChainTypeAt<1, Chain = ChainB>
         + HasRelayTypeAt<0, 1, Relay = Relay>
         + HasRelayTypeAt<1, 0, Relay = RelayAt<Setup, 1, 0>>
         + CanBuildRelayFromChains<0, 1>
         + CanBuildRelayFromChains<1, 0>
         + CanBuildBiRelayFromRelays<0, 1>,
-    PortIdOf<ChainAt<Setup, 0>, ChainAt<Setup, 1>>: Clone,
-    PortIdOf<ChainAt<Setup, 1>, ChainAt<Setup, 0>>: Clone,
+    PortIdOf<ChainA, ChainB>: Clone,
+    PortIdOf<ChainB, ChainA>: Clone,
 {
 }
