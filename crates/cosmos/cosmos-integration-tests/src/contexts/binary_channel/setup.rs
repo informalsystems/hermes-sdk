@@ -14,11 +14,13 @@ use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
-use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
+use hermes_relayer_components::multi::traits::birelay_at::{
+    BiRelayTypeAtComponent, ProvideBiRelayTypeAt,
+};
 use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAtComponent, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
 use hermes_relayer_components::multi::types::index::Twindex;
-use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTypeAt;
+use hermes_test_components::driver::traits::types::builder_at::BuilderTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
 use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
@@ -89,6 +91,8 @@ delegate_components! {
         CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
         CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
         TestDriverTypeComponent: WithType<CosmosBinaryChannelTestDriver>,
+        BuilderTypeAtComponent: WithType<CosmosBuilder>,
+        // BiRelayTypeAtComponent: WithType<CosmosBiRelay>,
     }
 }
 
@@ -135,14 +139,6 @@ impl ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChanne
 
 impl ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
     type BiRelay = CosmosBiRelay;
-}
-
-impl ProvideBuilderTypeAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {
-    type Builder = CosmosBuilder;
-}
-
-impl ProvideBuilderTypeAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
-    type Builder = CosmosBuilder;
 }
 
 impl ProvideBuilderAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {

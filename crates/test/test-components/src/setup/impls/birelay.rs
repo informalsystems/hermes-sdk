@@ -25,7 +25,7 @@ where
         + CanRaiseError<ErrorOf<Setup::Builder>>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>> + Clone,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>> + Clone,
-    Setup::Builder: CanBuildBiRelayFromRelays<0, 1>
+    Setup::Builder: CanBuildBiRelayFromRelays<0, 1, BiRelay = Setup::BiRelay>
         + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>
         + HasRelayTypeAt<1, 0, Relay = RelayAt<Setup, B, A>>,
 {
