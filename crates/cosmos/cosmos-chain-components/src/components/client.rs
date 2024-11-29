@@ -146,7 +146,7 @@ use crate::impls::queries::abci::QueryAbci;
 use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
 use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
-use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
+use crate::impls::queries::chain_id::QueryChainIdFromAbci;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::channel_end::QueryCosmosChannelEndFromAbci;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
@@ -252,7 +252,7 @@ define_components! {
         ]:
             QueryCosmosConsensusStateFromAbci,
         CounterpartyChainIdQuerierComponent:
-            QueryChainIdWithChainHandle,
+            QueryChainIdFromAbci,
 
         [
             ConnectionOpenInitPayloadBuilderComponent,
