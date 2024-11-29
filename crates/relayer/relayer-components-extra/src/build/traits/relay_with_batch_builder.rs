@@ -2,7 +2,9 @@ use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
-use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt, RelayAt};
+use hermes_relayer_components::multi::traits::relay_at::{
+    ClientIdAt, HasBoundedRelayTypeAt, RelayAt,
+};
 use hermes_relayer_components::multi::types::index::Twindex;
 
 use crate::batch::traits::channel::{HasMessageBatchSenderType, HasMessageBatchSenderTypes};
@@ -11,7 +13,7 @@ use crate::batch::types::aliases::MessageBatchSender;
 #[derive_component(RelayWithBatchBuilderComponent, RelayWithBatchBuilder<Build>)]
 #[async_trait]
 pub trait CanBuildRelayWithBatch<const SRC: usize, const DST: usize>:
-    HasRelayTypeAt<SRC, DST, Relay: HasMessageBatchSenderTypes>
+    HasBoundedRelayTypeAt<SRC, DST, Relay: HasMessageBatchSenderTypes>
     + HasChainTypeAt<
         SRC,
         Chain: HasChainIdType + HasMessageBatchSenderType<ErrorOf<RelayAt<Self, SRC, DST>>>,

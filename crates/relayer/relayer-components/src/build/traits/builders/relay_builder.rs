@@ -2,13 +2,13 @@ use cgp::prelude::*;
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::multi::traits::chain_at::{ChainIdAt, HasChainTypeAt};
-use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
+use crate::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt};
 use crate::multi::types::index::Twindex;
 
 #[derive_component(RelayBuilderComponent, RelayBuilder<Build>)]
 #[async_trait]
 pub trait CanBuildRelay<const SRC: usize, const DST: usize>:
-    HasRelayTypeAt<SRC, DST>
+    HasBoundedRelayTypeAt<SRC, DST>
     + HasChainTypeAt<SRC, Chain: HasChainIdType>
     + HasChainTypeAt<DST, Chain: HasChainIdType>
     + HasErrorType

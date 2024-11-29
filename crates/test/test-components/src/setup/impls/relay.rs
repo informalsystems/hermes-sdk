@@ -3,7 +3,9 @@ use hermes_relayer_components::build::traits::builders::relay_from_chains_builde
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
+use hermes_relayer_components::multi::traits::relay_at::{
+    HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
+};
 use hermes_relayer_components::multi::types::index::Twindex;
 
 use crate::setup::traits::builder_at::HasBuilderAt;
@@ -13,8 +15,8 @@ pub struct SetupRelayWithBuilder;
 
 impl<Setup, const A: usize, const B: usize> RelaySetup<Setup, A, B> for SetupRelayWithBuilder
 where
-    Setup: HasRelayTypeAt<A, B>
-        + HasRelayTypeAt<B, A>
+    Setup: HasBoundedRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<B, A>
         + HasBuilderAt<A, B>
         + CanRaiseError<ErrorOf<Setup::Builder>>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>> + Clone,

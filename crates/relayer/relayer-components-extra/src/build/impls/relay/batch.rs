@@ -5,7 +5,7 @@ use hermes_relayer_components::build::traits::builders::relay_from_chains_builde
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
-use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
+use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -30,7 +30,7 @@ impl<Build, const SRC: usize, const DST: usize> RelayFromChainsBuilder<Build, SR
 where
     Build: HasRuntime
         + HasBatchConfig
-        + HasRelayTypeAt<SRC, DST>
+        + HasBoundedRelayTypeAt<SRC, DST>
         + CanBuildRelayWithBatch<SRC, DST>
         + CanBuildBatchChannel<ErrorOf<Build::Relay>, SRC, DST>
         + CanBuildBatchChannel<ErrorOf<Build::Relay>, DST, SRC>,

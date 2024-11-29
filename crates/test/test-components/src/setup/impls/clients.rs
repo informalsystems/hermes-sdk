@@ -6,7 +6,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
+use hermes_relayer_components::multi::traits::relay_at::{HasBoundedRelayTypeAt, RelayAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
@@ -20,7 +20,7 @@ pub struct SetupClientsWithRelay;
 impl<Setup, const A: usize, const B: usize> ClientSetup<Setup, A, B> for SetupClientsWithRelay
 where
     Setup: HasErrorType
-        + HasRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<A, B>
         + HasCreateClientOptionsAt<A, B>
         + HasCreateClientOptionsAt<B, A>
         + CanRaiseError<<RelayAt<Setup, A, B> as HasErrorType>::Error>,

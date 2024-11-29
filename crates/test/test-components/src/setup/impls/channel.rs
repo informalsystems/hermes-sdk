@@ -5,7 +5,9 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
+use hermes_relayer_components::multi::traits::relay_at::{
+    HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
+};
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 
@@ -18,8 +20,8 @@ pub struct SetupChannelHandshake;
 impl<Setup, const A: usize, const B: usize> ChannelSetup<Setup, A, B> for SetupChannelHandshake
 where
     Setup: HasBiRelayTypeAt<A, B>
-        + HasRelayTypeAt<A, B>
-        + HasRelayTypeAt<B, A>
+        + HasBoundedRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<B, A>
         + HasInitChannelOptionsAt<A, B>
         + HasPortIdAt<A, B>
         + HasPortIdAt<B, A>

@@ -5,7 +5,9 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
+use hermes_relayer_components::multi::traits::relay_at::{
+    HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
+};
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 
 use crate::setup::traits::connection::ConnectionSetup;
@@ -17,8 +19,8 @@ impl<Setup, const A: usize, const B: usize> ConnectionSetup<Setup, A, B>
     for SetupConnectionHandshake
 where
     Setup: HasBiRelayTypeAt<A, B>
-        + HasRelayTypeAt<A, B>
-        + HasRelayTypeAt<B, A>
+        + HasBoundedRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<B, A>
         + HasInitConnectionOptionsAt<A, B>
         + CanRaiseError<ErrorOf<RelayAt<Setup, A, B>>>,
     ChainAt<Setup, A>:

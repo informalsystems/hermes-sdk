@@ -11,6 +11,7 @@ use crate::chain::traits::types::create_client::{
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
+use crate::multi::traits::relay_at::HasBoundedRelayTypeAt;
 use crate::multi::types::index::Twindex;
 use crate::relay::traits::chains::HasRelayChains;
 
@@ -44,6 +45,8 @@ impl<Build, ChainA, ChainB, const A: usize, const B: usize> CanBootstrapBiRelay<
 where
     Build: Async
         + HasBiRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<B, A>
         + HasChainTypeAt<A, Chain = ChainA>
         + HasChainTypeAt<B, Chain = ChainB>
         + CanBuildBiRelay<A, B>

@@ -1,17 +1,13 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
+use hermes_relayer_components::multi::traits::relay_at::{HasBoundedRelayTypeAt, RelayAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 
 #[derive_component(RelaySetupComponent, RelaySetup<Setup>)]
 #[async_trait]
 pub trait CanSetupRelays<const A: usize, const B: usize>:
-    HasRelayTypeAt<A, B> + HasRelayTypeAt<B, A> + HasErrorType
-where
-    ChainAt<Self, A>: HasIbcChainTypes<ChainAt<Self, B>>,
-    ChainAt<Self, B>: HasIbcChainTypes<ChainAt<Self, A>>,
+    HasBoundedRelayTypeAt<A, B> + HasBoundedRelayTypeAt<B, A> + HasErrorType
 {
     async fn setup_relays(
         &self,

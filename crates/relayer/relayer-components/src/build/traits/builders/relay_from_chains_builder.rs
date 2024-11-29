@@ -1,13 +1,13 @@
 use cgp::prelude::*;
 
 use crate::multi::traits::chain_at::ChainAt;
-use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
+use crate::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt};
 use crate::multi::types::index::Twindex;
 
 #[derive_component(RelayFromChainsBuilderComponent, RelayFromChainsBuilder<Build>)]
 #[async_trait]
 pub trait CanBuildRelayFromChains<const SRC: usize, const DST: usize>:
-    HasRelayTypeAt<SRC, DST> + HasErrorType
+    HasBoundedRelayTypeAt<SRC, DST> + HasErrorType
 {
     async fn build_relay_from_chains(
         &self,

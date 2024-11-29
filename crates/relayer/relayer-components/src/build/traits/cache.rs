@@ -5,7 +5,7 @@ use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
-use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt, RelayAt};
+use crate::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt, RelayAt};
 
 pub trait HasChainCache<const I: usize>:
     HasChainTypeAt<I, Chain: HasChainIdType> + HasRuntime<Runtime: HasMutex>
@@ -14,7 +14,7 @@ pub trait HasChainCache<const I: usize>:
 }
 
 pub trait HasRelayCache<const SRC: usize, const DST: usize>:
-    HasRelayTypeAt<SRC, DST> + HasRuntime<Runtime: HasMutex>
+    HasBoundedRelayTypeAt<SRC, DST> + HasRuntime<Runtime: HasMutex>
 {
     fn relay_cache(&self) -> &RelayCacheAt<Self, SRC, DST>;
 }
