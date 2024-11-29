@@ -1,16 +1,19 @@
+use std::marker::PhantomData;
+use std::str::FromStr;
+use tracing::{info, warn};
+
+use hermes_chain_components::traits::queries::client_state::CanQueryClientState;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{
-    IncludeProof, PageRequest, QueryChannelsRequest, QueryClientStateRequest,
-    QueryConnectionRequest, QueryHeight,
-};
-use ibc_relayer_types::core::ics04_channel::channel::State;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
-use tracing::{info, warn};
+
+use ibc::core::channel::types::proto::v1::query_client::QueryClient;
+use ibc_relayer::chain::requests::QueryChannelsRequest;
+use ibc_relayer_types::core::ics04_channel::channel::{IdentifiedChannelEnd, State};
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
 
 use crate::contexts::app::HermesApp;
 use crate::impls::error_wrapper::ErrorWrapper;
@@ -50,15 +53,19 @@ impl CommandRunner<HermesApp> for QueryChannels {
         let dst_chain_id = self.counterparty_chain_id.clone();
         let show_counterparty = self.show_counterparty;
 
-        let all_channels = chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                chain_handle
-                    .query_channels(QueryChannelsRequest {
-                        pagination: Some(PageRequest::all()),
-                    })
-                    .map_err(From::from)
-            })
-            .await?;
+        let mut client = QueryClient::connect(chain.grpc_address().clone())
+            .await
+            .unwrap();
+
+        let request = tonic::Request::new(QueryChannelsRequest { pagination: None }.into());
+
+        let response = client.channels(request).await.unwrap().into_inner();
+
+        let all_channels = response
+            .channels
+            .into_iter()
+            .filter_map(|ch| IdentifiedChannelEnd::try_from(ch.clone()).ok())
+            .collect::<Vec<IdentifiedChannelEnd>>();
 
         let chain_height = chain
             .query_chain_height()
@@ -91,21 +98,10 @@ impl CommandRunner<HermesApp> for QueryChannels {
 
             let counterparty = if show_counterparty || dst_chain_id.is_some() {
                 let connection_id = connection_id.clone();
-                let connection_end = chain
-                    .with_blocking_chain_handle(move |handle| {
-                        handle
-                            .query_connection(
-                                QueryConnectionRequest {
-                                    connection_id,
-                                    height: QueryHeight::Specific(chain_height),
-                                },
-                                IncludeProof::No,
-                            )
-                            .map_err(From::from)
-                    })
+                let connection_end = <hermes_cosmos_relayer::contexts::chain::CosmosChain as hermes_chain_components::traits::queries::connection_end::CanQueryConnectionEnd<Counterparty>>::query_connection_end(&chain, &connection_id, &chain_height)
                     .await;
 
-                let Ok((connection_end, _)) = connection_end else {
+                let Ok(connection_end) = connection_end else {
                     warn!(
                         "missing connection end for `{port_id}/{channel_id}` on chain `{chain_id}` at {chain_height}"
                     );
@@ -113,31 +109,20 @@ impl CommandRunner<HermesApp> for QueryChannels {
                     continue;
                 };
 
-                let client_id = connection_end.client_id().clone();
+                let client_id = ClientId::from_str(connection_end.client_id().as_str())?;
                 let client_state = chain
-                    .with_blocking_chain_handle(move |handle| {
-                        handle
-                            .query_client_state(
-                                QueryClientStateRequest {
-                                    client_id,
-                                    height: QueryHeight::Specific(chain_height),
-                                },
-                                IncludeProof::No,
-                            )
-                            .map_err(From::from)
-                    })
+                    .query_client_state(PhantomData::<CosmosChain>, &client_id, &chain_height)
                     .await;
 
-                let Ok((client_state, _)) = client_state else {
+                let Ok(client_state) = client_state else {
                     warn!("missing client state for {port_id}/{channel_id} on chain {chain_id} at {chain_height}");
 
                     continue;
                 };
 
-                let client_state_chain_id = client_state.chain_id();
                 let client_state_chain_id_matches_dst_chain_id = dst_chain_id
                     .as_ref()
-                    .map(|dst_chain_id| dst_chain_id == &client_state_chain_id)
+                    .map(|dst_chain_id| dst_chain_id == &client_state.chain_id)
                     .unwrap_or(true);
 
                 if !client_state_chain_id_matches_dst_chain_id {
@@ -147,7 +132,7 @@ impl CommandRunner<HermesApp> for QueryChannels {
                 let counterparty = channel_end.counterparty();
 
                 Some(Counterparty {
-                    chain_id: client_state_chain_id.clone(),
+                    chain_id: client_state.chain_id.clone(),
                     port_id: counterparty.port_id.clone(),
                     channel_id: counterparty.channel_id.clone(),
                 })
