@@ -13,7 +13,9 @@ use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
 use crate::setup::traits::clients::ClientSetup;
-use crate::setup::traits::create_client_options_at::HasCreateClientOptionsAt;
+use crate::setup::traits::create_client_options_at::{
+    HasCreateClientMessageOptionsAt, HasCreateClientPayloadOptionsAt,
+};
 
 pub struct SetupClientsWithRelay;
 
@@ -21,8 +23,10 @@ impl<Setup, const A: usize, const B: usize> ClientSetup<Setup, A, B> for SetupCl
 where
     Setup: HasErrorType
         + HasBoundedRelayTypeAt<A, B>
-        + HasCreateClientOptionsAt<A, B>
-        + HasCreateClientOptionsAt<B, A>
+        + HasCreateClientPayloadOptionsAt<A, B>
+        + HasCreateClientPayloadOptionsAt<B, A>
+        + HasCreateClientMessageOptionsAt<A, B>
+        + HasCreateClientMessageOptionsAt<B, A>
         + CanRaiseError<<RelayAt<Setup, A, B> as HasErrorType>::Error>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>>
         + HasCreateClientPayloadOptionsType<ChainAt<Setup, B>>

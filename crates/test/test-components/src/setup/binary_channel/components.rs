@@ -39,7 +39,9 @@ pub use crate::setup::traits::channel::ChannelSetupComponent;
 pub use crate::setup::traits::clients::ClientSetupComponent;
 use crate::setup::traits::connection::CanSetupConnection;
 pub use crate::setup::traits::connection::ConnectionSetupComponent;
-use crate::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
+use crate::setup::traits::create_client_options_at::{
+    ProvideCreateClientMessageOptionsAt, ProvideCreateClientPayloadOptionsAt,
+};
 use crate::setup::traits::driver::HasTestDriverType;
 pub use crate::setup::traits::driver::{
     CanBuildTestDriver, DriverBuilderComponent, ProvideTestDriverType,
@@ -100,8 +102,10 @@ where
         + BinaryChannelDriverBuilder<Setup>
         + ProvideBootstrapAt<Setup, 0, Bootstrap = BootstrapA>
         + ProvideBootstrapAt<Setup, 1, Bootstrap = BootstrapB>
-        + ProvideCreateClientOptionsAt<Setup, 0, 1>
-        + ProvideCreateClientOptionsAt<Setup, 1, 0>
+        + ProvideCreateClientMessageOptionsAt<Setup, 0, 1>
+        + ProvideCreateClientMessageOptionsAt<Setup, 1, 0>
+        + ProvideCreateClientPayloadOptionsAt<Setup, 0, 1>
+        + ProvideCreateClientPayloadOptionsAt<Setup, 1, 0>
         + ProvideInitConnectionOptionsAt<Setup, 0, 1>
         + ProvideInitChannelOptionsAt<Setup, 0, 1>
         + ProvidePortIdAt<Setup, 0, 1>

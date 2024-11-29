@@ -21,7 +21,9 @@ use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChain
 use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
-use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
+use hermes_test_components::setup::traits::create_client_options_at::{
+    ProvideCreateClientMessageOptionsAt, ProvideCreateClientPayloadOptionsAt,
+};
 use hermes_test_components::setup::traits::driver::ProvideTestDriverType;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
@@ -197,7 +199,7 @@ impl ProvideBuilderAt<LegacyCosmosBinaryChannelSetup, 1, 0>
 }
 
 impl<const I: usize, const J: usize>
-    ProvideCreateClientOptionsAt<LegacyCosmosBinaryChannelSetup, I, J>
+    ProvideCreateClientPayloadOptionsAt<LegacyCosmosBinaryChannelSetup, I, J>
     for LegacyCosmosBinaryChannelSetupComponents
 {
     fn create_client_payload_options(
@@ -206,7 +208,12 @@ impl<const I: usize, const J: usize>
     ) -> &CosmosCreateClientOptions {
         &setup.create_client_settings
     }
+}
 
+impl<const I: usize, const J: usize>
+    ProvideCreateClientMessageOptionsAt<LegacyCosmosBinaryChannelSetup, I, J>
+    for LegacyCosmosBinaryChannelSetupComponents
+{
     fn create_client_message_options(
         _setup: &LegacyCosmosBinaryChannelSetup,
         _index: Twindex<I, J>,

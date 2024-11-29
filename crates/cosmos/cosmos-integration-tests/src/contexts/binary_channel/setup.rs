@@ -1,4 +1,8 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::field::impls::use_field::UseField;
+use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
@@ -20,8 +24,10 @@ use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
 use hermes_test_components::setup::traits::bootstrap_at::{BootstrapAtComponent, HasBootstrapAt};
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
-use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
-use hermes_test_components::setup::traits::driver::ProvideTestDriverType;
+use hermes_test_components::setup::traits::create_client_options_at::{
+    CreateClientMessageOptionsAtComponent, CreateClientPayloadOptionsAtComponent,
+};
+use hermes_test_components::setup::traits::driver::TestDriverTypeComponent;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
@@ -41,7 +47,7 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
 pub struct CosmosBinaryChannelSetup {
     pub bootstrap_a: CosmosBootstrap,
     pub bootstrap_b: CosmosBootstrap,
-    pub create_client_settings: CosmosCreateClientOptions,
+    pub create_client_payload_options: CosmosCreateClientOptions,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,
     pub port_id: PortId,
@@ -53,6 +59,14 @@ pub struct CosmosBinaryChannelSetupComponents;
 
 impl HasComponents for CosmosBinaryChannelSetup {
     type Components = CosmosBinaryChannelSetupComponents;
+}
+
+impl HasField<symbol!("create_client_message_options")> for CosmosBinaryChannelSetup {
+    type Field = ();
+
+    fn get_field(&self, _phantom: PhantomData<symbol!("create_client_message_options")>) -> &() {
+        &()
+    }
 }
 
 with_binary_channel_test_components! {
@@ -72,14 +86,10 @@ delegate_components! {
             ChainTypeAtComponent,
             ChainDriverTypeAtComponent,
         ]: UseBinarySetupFields,
+        CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
+        CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
+        TestDriverTypeComponent: WithType<CosmosBinaryChannelTestDriver>,
     }
-}
-
-impl<Setup> ProvideTestDriverType<Setup> for CosmosBinaryChannelSetupComponents
-where
-    Setup: Async,
-{
-    type TestDriver = CosmosBinaryChannelTestDriver;
 }
 
 impl BinaryChannelDriverBuilder<CosmosBinaryChannelSetup> for CosmosBinaryChannelSetupComponents {
@@ -113,19 +123,6 @@ impl BinaryChannelDriverBuilder<CosmosBinaryChannelSetup> for CosmosBinaryChanne
     }
 }
 
-// impl<Setup, const I: usize> ProvideChainTypeAt<Setup, I> for CosmosBinaryChannelSetupComponents
-// where
-//     Setup: Async,
-// {
-//     type Chain = CosmosChain;
-// }
-
-// impl<const I: usize> ProvideChainDriverTypeAt<CosmosBinaryChannelSetup, I>
-//     for CosmosBinaryChannelSetupComponents
-// {
-//     type ChainDriver = CosmosChainDriver;
-// }
-
 impl<const I: usize, const J: usize> ProvideRelayTypeAt<CosmosBinaryChannelSetup, I, J>
     for CosmosBinaryChannelSetupComponents
 {
@@ -157,42 +154,6 @@ impl ProvideBuilderAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSet
 impl ProvideBuilderAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
     fn builder(setup: &CosmosBinaryChannelSetup) -> &CosmosBuilder {
         &setup.bootstrap_b.cosmos_builder
-    }
-}
-
-impl ProvideCreateClientOptionsAt<CosmosBinaryChannelSetup, 0, 1>
-    for CosmosBinaryChannelSetupComponents
-{
-    fn create_client_payload_options(
-        setup: &CosmosBinaryChannelSetup,
-        _index: Twindex<0, 1>,
-    ) -> &CosmosCreateClientOptions {
-        &setup.create_client_settings
-    }
-
-    fn create_client_message_options(
-        _setup: &CosmosBinaryChannelSetup,
-        _index: Twindex<0, 1>,
-    ) -> &() {
-        &()
-    }
-}
-
-impl ProvideCreateClientOptionsAt<CosmosBinaryChannelSetup, 1, 0>
-    for CosmosBinaryChannelSetupComponents
-{
-    fn create_client_payload_options(
-        setup: &CosmosBinaryChannelSetup,
-        _index: Twindex<1, 0>,
-    ) -> &CosmosCreateClientOptions {
-        &setup.create_client_settings
-    }
-
-    fn create_client_message_options(
-        _setup: &CosmosBinaryChannelSetup,
-        _index: Twindex<1, 0>,
-    ) -> &() {
-        &()
     }
 }
 

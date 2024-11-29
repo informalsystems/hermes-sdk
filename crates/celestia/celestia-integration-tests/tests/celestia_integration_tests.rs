@@ -59,7 +59,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
     let setup = CosmosBinaryChannelSetup {
         bootstrap_a: celestia_bootstrap,
         bootstrap_b: cosmos_bootstrap,
-        create_client_settings: Default::default(),
+        create_client_payload_options: Default::default(),
         init_connection_options: Default::default(),
         init_channel_options: Default::default(),
         port_id: PortId::transfer(),
