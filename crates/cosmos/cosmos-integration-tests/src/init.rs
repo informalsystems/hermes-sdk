@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 use eyre::Report;
 use serde_json::Value as JsonValue;
+use std::env;
 use std::str::FromStr;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;
@@ -101,5 +102,37 @@ pub fn build_gaia_bootstrap(
         genesis_config_modifier: Box::new(genesis_modifier),
         comet_config_modifier: Box::new(comet_config_modifier),
         dynamic_gas: Some(DynamicGasConfig::default()),
+    }
+}
+
+pub fn init_preset_bootstraps(
+    runtime: &HermesRuntime,
+) -> Result<(CosmosBootstrap, CosmosBootstrap), Error> {
+    let test_preset = env::var("TEST_PRESET")
+        .unwrap_or_else(|_| "CosmosToCosmos".to_string())
+        .parse::<TestPreset>()?;
+
+    match test_preset {
+        TestPreset::CosmosToCosmos => {
+            let bootstrap_chain_0 = build_gaia_bootstrap(
+                runtime.clone(),
+                true,
+                "./test-data",
+                "coin".into(),
+                |_| Ok(()),
+                |_| Ok(()),
+            );
+
+            let bootstrap_chain_1 = build_gaia_bootstrap(
+                runtime.clone(),
+                true,
+                "./test-data",
+                "coin".into(),
+                |_| Ok(()),
+                |_| Ok(()),
+            );
+
+            Ok((bootstrap_chain_0, bootstrap_chain_1))
+        }
     }
 }
