@@ -11,7 +11,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 
 use ibc::core::channel::types::proto::v1::query_client::QueryClient;
-use ibc_relayer::chain::requests::QueryChannelsRequest;
+use ibc::core::channel::types::proto::v1::QueryChannelsRequest;
 use ibc_relayer_types::core::ics04_channel::channel::{IdentifiedChannelEnd, State};
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
 
@@ -57,7 +57,7 @@ impl CommandRunner<HermesApp> for QueryChannels {
             .await
             .unwrap();
 
-        let request = tonic::Request::new(QueryChannelsRequest { pagination: None }.into());
+        let request = tonic::Request::new(QueryChannelsRequest { pagination: None });
 
         let response = client.channels(request).await.unwrap().into_inner();
 
