@@ -11,11 +11,11 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
 use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
-use hermes_relayer_components::multi::traits::chain_at::{HasChainTypeAt, ProvideChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAtComponent, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTypeAt;
-use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
+use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
 use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
 use hermes_test_components::setup::traits::bootstrap_at::{BootstrapAtComponent, HasBootstrapAt};
@@ -69,8 +69,8 @@ delegate_components! {
         ErrorRaiserComponent: DebugError,
         [
             BootstrapAtComponent,
-            // ChainTypeAtComponent,
-            // ChainDriverTypeAtComponent,
+            ChainTypeAtComponent,
+            ChainDriverTypeAtComponent,
         ]: UseBinarySetupFields,
     }
 }
@@ -113,18 +113,18 @@ impl BinaryChannelDriverBuilder<CosmosBinaryChannelSetup> for CosmosBinaryChanne
     }
 }
 
-impl<Setup, const I: usize> ProvideChainTypeAt<Setup, I> for CosmosBinaryChannelSetupComponents
-where
-    Setup: Async,
-{
-    type Chain = CosmosChain;
-}
+// impl<Setup, const I: usize> ProvideChainTypeAt<Setup, I> for CosmosBinaryChannelSetupComponents
+// where
+//     Setup: Async,
+// {
+//     type Chain = CosmosChain;
+// }
 
-impl<const I: usize> ProvideChainDriverTypeAt<CosmosBinaryChannelSetup, I>
-    for CosmosBinaryChannelSetupComponents
-{
-    type ChainDriver = CosmosChainDriver;
-}
+// impl<const I: usize> ProvideChainDriverTypeAt<CosmosBinaryChannelSetup, I>
+//     for CosmosBinaryChannelSetupComponents
+// {
+//     type ChainDriver = CosmosChainDriver;
+// }
 
 impl<const I: usize, const J: usize> ProvideRelayTypeAt<CosmosBinaryChannelSetup, I, J>
     for CosmosBinaryChannelSetupComponents
@@ -160,25 +160,43 @@ impl ProvideBuilderAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSet
     }
 }
 
-impl<const I: usize, const J: usize> ProvideCreateClientOptionsAt<CosmosBinaryChannelSetup, I, J>
+impl ProvideCreateClientOptionsAt<CosmosBinaryChannelSetup, 0, 1>
     for CosmosBinaryChannelSetupComponents
 {
     fn create_client_payload_options(
         setup: &CosmosBinaryChannelSetup,
-        _index: Twindex<I, J>,
+        _index: Twindex<0, 1>,
     ) -> &CosmosCreateClientOptions {
         &setup.create_client_settings
     }
 
     fn create_client_message_options(
         _setup: &CosmosBinaryChannelSetup,
-        _index: Twindex<I, J>,
+        _index: Twindex<0, 1>,
     ) -> &() {
         &()
     }
 }
 
-impl<const I: usize, const J: usize> ProvideInitConnectionOptionsAt<CosmosBinaryChannelSetup, I, J>
+impl ProvideCreateClientOptionsAt<CosmosBinaryChannelSetup, 1, 0>
+    for CosmosBinaryChannelSetupComponents
+{
+    fn create_client_payload_options(
+        setup: &CosmosBinaryChannelSetup,
+        _index: Twindex<1, 0>,
+    ) -> &CosmosCreateClientOptions {
+        &setup.create_client_settings
+    }
+
+    fn create_client_message_options(
+        _setup: &CosmosBinaryChannelSetup,
+        _index: Twindex<1, 0>,
+    ) -> &() {
+        &()
+    }
+}
+
+impl ProvideInitConnectionOptionsAt<CosmosBinaryChannelSetup, 0, 1>
     for CosmosBinaryChannelSetupComponents
 {
     fn init_connection_options(setup: &CosmosBinaryChannelSetup) -> CosmosInitConnectionOptions {
@@ -186,7 +204,15 @@ impl<const I: usize, const J: usize> ProvideInitConnectionOptionsAt<CosmosBinary
     }
 }
 
-impl<const I: usize, const J: usize> ProvideInitChannelOptionsAt<CosmosBinaryChannelSetup, I, J>
+impl ProvideInitConnectionOptionsAt<CosmosBinaryChannelSetup, 1, 0>
+    for CosmosBinaryChannelSetupComponents
+{
+    fn init_connection_options(setup: &CosmosBinaryChannelSetup) -> CosmosInitConnectionOptions {
+        setup.init_connection_options.clone()
+    }
+}
+
+impl ProvideInitChannelOptionsAt<CosmosBinaryChannelSetup, 0, 1>
     for CosmosBinaryChannelSetupComponents
 {
     fn init_channel_options(
@@ -205,10 +231,33 @@ impl<const I: usize, const J: usize> ProvideInitChannelOptionsAt<CosmosBinaryCha
     }
 }
 
-impl<const I: usize, const J: usize> ProvidePortIdAt<CosmosBinaryChannelSetup, I, J>
+impl ProvideInitChannelOptionsAt<CosmosBinaryChannelSetup, 1, 0>
     for CosmosBinaryChannelSetupComponents
 {
-    fn port_id_at(setup: &CosmosBinaryChannelSetup, _index: Twindex<I, J>) -> &PortId {
+    fn init_channel_options(
+        setup: &CosmosBinaryChannelSetup,
+        connection_id: &ConnectionId,
+        _counterparty_connection_id: &ConnectionId,
+    ) -> CosmosInitChannelOptions {
+        let mut options = setup.init_channel_options.clone();
+
+        // Use an init channel options that is provided by the setup.
+        // Insert the connection ID to the front (or to the back?) to allow
+        // testing multihop connections in the future.
+        options.connection_hops.insert(0, connection_id.clone());
+
+        options
+    }
+}
+
+impl ProvidePortIdAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {
+    fn port_id_at(setup: &CosmosBinaryChannelSetup, _index: Twindex<0, 1>) -> &PortId {
+        &setup.port_id
+    }
+}
+
+impl ProvidePortIdAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
+    fn port_id_at(setup: &CosmosBinaryChannelSetup, _index: Twindex<1, 0>) -> &PortId {
         &setup.port_id
     }
 }
