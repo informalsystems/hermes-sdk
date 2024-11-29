@@ -64,7 +64,7 @@ where
     pub duration: Duration,
 }
 
-impl<'a, Chain> Debug for EventualAmountTimeoutError<'a, Chain>
+impl<Chain> Debug for EventualAmountTimeoutError<'_, Chain>
 where
     Chain: HasAddressType + HasAmountType,
     Chain::Address: Debug,

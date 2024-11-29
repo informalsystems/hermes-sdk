@@ -161,7 +161,7 @@ where
 
 pub struct Pretty<'a, A: ?Sized>(&'a A);
 
-impl<'a> fmt::Debug for Pretty<'a, TendermintClientState> {
+impl fmt::Debug for Pretty<'_, TendermintClientState> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let client_state = self.0;
 
@@ -178,7 +178,7 @@ impl<'a> fmt::Debug for Pretty<'a, TendermintClientState> {
     }
 }
 
-impl<'a> fmt::Debug for Pretty<'a, AnyClientState> {
+impl fmt::Debug for Pretty<'_, AnyClientState> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.0 {
             AnyClientState::Tendermint(ref client_state) => Pretty(client_state).fmt(f),

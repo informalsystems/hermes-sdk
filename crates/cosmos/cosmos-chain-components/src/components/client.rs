@@ -167,7 +167,9 @@ use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::ProvideAnyRawClientState;
 use crate::impls::types::consensus_state::ProvideAnyRawConsensusState;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
+use crate::impls::unbonding_period::StakingParamsUnbondingPeriod;
 pub use crate::traits::abci_query::AbciQuerierComponent;
+pub use crate::traits::unbonding_period::UnbondingPeriodQuerierComponent;
 
 define_components! {
     CosmosClientComponents {
@@ -318,6 +320,8 @@ define_components! {
             QueryCometBlock,
         AbciQuerierComponent:
             QueryAbci,
+        UnbondingPeriodQuerierComponent:
+            StakingParamsUnbondingPeriod,
         [
             ConnectionEndQuerierComponent,
             ConnectionEndWithProofsQuerierComponent,

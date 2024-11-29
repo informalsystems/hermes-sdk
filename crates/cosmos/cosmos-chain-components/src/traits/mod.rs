@@ -7,3 +7,4 @@ pub mod grpc_address;
 pub mod message;
 pub mod rpc_client;
 pub mod tx_extension_options;
+pub mod unbonding_period;

@@ -36,9 +36,9 @@ use hermes_relayer_components::chain::traits::types::update_client::UpdateClient
 
 use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use crate::impls::client::create_client_message::BuildAnyCreateClientMessage;
-use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithChainHandle;
+use crate::impls::client::create_client_payload::BuildCosmosCreateClientPayload;
 use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
-use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
+use crate::impls::client::update_client_payload::BuildTendermintUpdateClientPayload;
 use crate::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::message_height::GetCosmosCounterpartyMessageHeight;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
@@ -86,9 +86,9 @@ define_components! {
         UpdateClientMessageBuilderComponent:
             BuildCosmosUpdateClientMessage,
         CreateClientPayloadBuilderComponent:
-            BuildCreateClientPayloadWithChainHandle,
+            BuildCosmosCreateClientPayload,
         UpdateClientPayloadBuilderComponent:
-            BuildUpdateClientPayloadWithChainHandle,
+            BuildTendermintUpdateClientPayload,
         [
             ConnectionOpenInitMessageBuilderComponent,
             ConnectionOpenTryMessageBuilderComponent,

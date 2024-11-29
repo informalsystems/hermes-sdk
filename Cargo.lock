@@ -1681,6 +1681,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-comet-light-client-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-chain-type-components",
+]
+
+[[package]]
+name = "hermes-comet-light-client-context"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "eyre",
+ "hermes-chain-components",
+ "hermes-chain-type-components",
+ "hermes-comet-light-client-components",
+ "hermes-error",
+ "tendermint",
+ "tendermint-light-client-verifier",
+ "tendermint-rpc",
+]
+
+[[package]]
 name = "hermes-cosmos-chain-components"
 version = "0.1.0"
 dependencies = [
@@ -1689,13 +1712,17 @@ dependencies = [
  "eyre",
  "futures",
  "hermes-chain-type-components",
+ "hermes-comet-light-client-components",
+ "hermes-comet-light-client-context",
  "hermes-cosmos-encoding-components",
  "hermes-encoding-components",
+ "hermes-error",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "http 1.1.0",
  "ibc",
+ "ibc-client-tendermint",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
@@ -1708,6 +1735,8 @@ dependencies = [
  "serde_json",
  "subtle-encoding",
  "tendermint",
+ "tendermint-light-client",
+ "tendermint-light-client-verifier",
  "tendermint-proto",
  "tendermint-rpc",
  "time",

@@ -23,7 +23,7 @@ pub trait ChainProposalMethodsExt {
     fn vote_proposal(&self, fees: &str) -> Result<(), Error>;
 }
 
-impl<'a, Chain: Send> ChainProposalMethodsExt for MonoTagged<Chain, &'a ChainDriver> {
+impl<Chain: Send> ChainProposalMethodsExt for MonoTagged<Chain, &ChainDriver> {
     fn query_upgrade_proposal_height(
         &self,
         grpc_address: &Uri,

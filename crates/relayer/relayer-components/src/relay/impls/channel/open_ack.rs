@@ -22,7 +22,6 @@ use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPor
    destination chain is really in the `OPEN_TRY` state. This will be implemented
    as a separate wrapper component. (TODO)
 */
-
 pub struct RelayChannelOpenAck;
 
 impl<Relay, SrcChain, DstChain> ChannelOpenAckRelayer<Relay> for RelayChannelOpenAck

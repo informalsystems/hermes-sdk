@@ -76,7 +76,7 @@ where
     }
 }
 
-impl<'a, Chain> Debug for ProposalFailed<'a, Chain> {
+impl<Chain> Debug for ProposalFailed<'_, Chain> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("ProposalFailed")
             .field("id", &self.proposal.id)
