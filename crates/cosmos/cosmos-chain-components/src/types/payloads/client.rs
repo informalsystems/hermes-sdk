@@ -28,7 +28,7 @@ impl Default for CosmosCreateClientOptions {
         Self {
             max_clock_drift: Default::default(),
             // Set default to 14 days
-            trusting_period: Duration::from_secs(1_209_600),
+            trusting_period: Duration::from_secs(14 * 24 * 60 * 60),
             trust_threshold: Fraction {
                 numerator: 2,
                 denominator: 3,

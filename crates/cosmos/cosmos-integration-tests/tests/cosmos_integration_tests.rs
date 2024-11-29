@@ -1,10 +1,8 @@
 #![recursion_limit = "256"]
 
-use core::time::Duration;
 use std::sync::Arc;
 
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
@@ -12,7 +10,6 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_test_components::setup::traits::run_test::CanRunTest;
-use ibc_proto::ibc::lightclients::tendermint::v1::Fraction;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
 #[test]
@@ -36,19 +33,10 @@ fn cosmos_integration_tests() -> Result<(), Error> {
         dynamic_gas: Some(DynamicGasConfig::default()),
     });
 
-    let create_client_settings = CosmosCreateClientOptions {
-        max_clock_drift: Duration::from_secs(40),
-        trust_threshold: Fraction {
-            numerator: 1,
-            denominator: 3,
-        },
-        ..Default::default()
-    };
-
     let setup = CosmosBinaryChannelSetup {
         bootstrap_a: bootstrap.clone(),
         bootstrap_b: bootstrap,
-        create_client_settings,
+        create_client_settings: Default::default(),
         init_connection_options: Default::default(),
         init_channel_options: Default::default(),
         port_id: PortId::transfer(),

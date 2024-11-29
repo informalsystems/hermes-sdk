@@ -45,11 +45,6 @@ impl BinaryChainTest for SolomachineToCosmosTest {
 
         let solomachine_chain = solomachine_chain_context(solomachine_runtime, Default::default());
 
-        let client_settings = CosmosCreateClientOptions {
-            max_clock_drift: Duration::from_secs(40),
-            ..Default::default()
-        };
-
         runtime
             .block_on(async move {
                 let cosmos_chain = builder.build_chain(&chain_id_a).await?;
@@ -58,7 +53,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
                     SourceTarget,
                     &solomachine_chain,
                     &cosmos_chain,
-                    &client_settings,
+                    &Default::default(),
                     &(),
                 )
                 .await

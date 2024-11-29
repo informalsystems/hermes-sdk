@@ -1,10 +1,8 @@
 #![recursion_limit = "256"]
 
-use core::time::Duration;
 use std::sync::Arc;
 
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
@@ -52,16 +50,10 @@ fn celestia_integration_tests() -> Result<(), Error> {
         dynamic_gas: Some(DynamicGasConfig::default()),
     });
 
-    let create_client_settings = CosmosCreateClientOptions {
-        max_clock_drift: Duration::from_secs(40),
-        trusting_period: Duration::from_secs(60 * 60),
-        ..Default::default()
-    };
-
     let setup = CosmosBinaryChannelSetup {
         bootstrap_a: celestia_bootstrap,
         bootstrap_b: cosmos_bootstrap,
-        create_client_settings,
+        create_client_settings: Default::default(),
         init_connection_options: Default::default(),
         init_channel_options: Default::default(),
         port_id: PortId::transfer(),

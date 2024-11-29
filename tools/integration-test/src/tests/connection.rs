@@ -1,5 +1,4 @@
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
-use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_error::types::HermesError;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::build::impls::bootstrap::birelay::CanBootstrapBiRelay;
@@ -40,20 +39,14 @@ impl BinaryChainTest for ConnectionAndChannelHandshakeTest {
         let chain_id_a = chains.chain_id_a().cloned_value();
         let chain_id_b = chains.chain_id_b().cloned_value();
 
-        // TODO: figure ways to build client settings easily without too much dependencies
-        let client_settings = CosmosCreateClientOptions {
-            max_clock_drift: Duration::from_secs(40),
-            ..Default::default()
-        };
-
         runtime
             .block_on(async move {
                 let birelay = builder
                     .bootstrap_birelay(
                         &chain_id_a,
                         &chain_id_b,
-                        &client_settings,
-                        &client_settings,
+                        &Default::default(),
+                        &Default::default(),
                         &(),
                         &(),
                     )

@@ -13,7 +13,6 @@ use crate::traits::unbonding_period::UnbondingPeriodQuerier;
 
 pub struct StakingParamsUnbondingPeriod;
 
-#[async_trait]
 impl<Chain> UnbondingPeriodQuerier<Chain> for StakingParamsUnbondingPeriod
 where
     Chain: CanQueryChainHeight
