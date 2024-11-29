@@ -68,6 +68,7 @@
           (nixpkgs)
           protobuf
           cargo-nextest
+          mdbook
         ;
 
         inherit
