@@ -1,5 +1,3 @@
-use alloc::sync::Arc;
-
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
@@ -39,8 +37,8 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
    with both chains being Cosmos chains.
 */
 pub struct CosmosBinaryChannelSetup {
-    pub bootstrap_a: Arc<CosmosBootstrap>,
-    pub bootstrap_b: Arc<CosmosBootstrap>,
+    pub bootstrap_a: CosmosBootstrap,
+    pub bootstrap_b: CosmosBootstrap,
     pub create_client_settings: CosmosCreateClientOptions,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,

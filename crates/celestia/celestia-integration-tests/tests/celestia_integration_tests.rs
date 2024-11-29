@@ -4,7 +4,9 @@ use std::sync::Arc;
 
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap::{
+    CosmosBootstrap, CosmosBootstrapFields,
+};
 use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
@@ -22,33 +24,37 @@ fn celestia_integration_tests() -> Result<(), Error> {
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
-    let celestia_bootstrap = Arc::new(CosmosBootstrap {
-        runtime: runtime.clone(),
-        cosmos_builder: builder.clone(),
-        should_randomize_identifiers: true,
-        chain_store_dir: "./test-data/chains".into(),
-        chain_command_path: "celestia-appd".into(),
-        account_prefix: "celestia".into(),
-        staking_denom_prefix: "utia".into(),
-        transfer_denom_prefix: "coin".into(),
-        genesis_config_modifier: Box::new(|_| Ok(())),
-        comet_config_modifier: Box::new(|_| Ok(())),
-        dynamic_gas: Some(DynamicGasConfig::default()),
-    });
+    let celestia_bootstrap = CosmosBootstrap {
+        fields: Arc::new(CosmosBootstrapFields {
+            runtime: runtime.clone(),
+            cosmos_builder: builder.clone(),
+            should_randomize_identifiers: true,
+            chain_store_dir: "./test-data/chains".into(),
+            chain_command_path: "celestia-appd".into(),
+            account_prefix: "celestia".into(),
+            staking_denom_prefix: "utia".into(),
+            transfer_denom_prefix: "coin".into(),
+            genesis_config_modifier: Box::new(|_| Ok(())),
+            comet_config_modifier: Box::new(|_| Ok(())),
+            dynamic_gas: Some(DynamicGasConfig::default()),
+        }),
+    };
 
-    let cosmos_bootstrap = Arc::new(CosmosBootstrap {
-        runtime: runtime.clone(),
-        cosmos_builder: builder,
-        should_randomize_identifiers: true,
-        chain_store_dir: "./test-data/chains".into(),
-        chain_command_path: "gaiad".into(),
-        account_prefix: "cosmos".into(),
-        staking_denom_prefix: "stake".into(),
-        transfer_denom_prefix: "coin".into(),
-        genesis_config_modifier: Box::new(|_| Ok(())),
-        comet_config_modifier: Box::new(|_| Ok(())),
-        dynamic_gas: Some(DynamicGasConfig::default()),
-    });
+    let cosmos_bootstrap = CosmosBootstrap {
+        fields: Arc::new(CosmosBootstrapFields {
+            runtime: runtime.clone(),
+            cosmos_builder: builder,
+            should_randomize_identifiers: true,
+            chain_store_dir: "./test-data/chains".into(),
+            chain_command_path: "gaiad".into(),
+            account_prefix: "cosmos".into(),
+            staking_denom_prefix: "stake".into(),
+            transfer_denom_prefix: "coin".into(),
+            genesis_config_modifier: Box::new(|_| Ok(())),
+            comet_config_modifier: Box::new(|_| Ok(())),
+            dynamic_gas: Some(DynamicGasConfig::default()),
+        }),
+    };
 
     let setup = CosmosBinaryChannelSetup {
         bootstrap_a: celestia_bootstrap,

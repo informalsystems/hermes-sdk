@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 use cgp::core::component::UseContext;
+use core::ops::Deref;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
@@ -43,8 +44,13 @@ use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderCom
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
    a `CosmosChainDriver`.
 */
-#[derive(HasField)]
+#[derive(Clone)]
 pub struct CosmosBootstrap {
+    pub fields: Arc<CosmosBootstrapFields>,
+}
+
+#[derive(HasField)]
+pub struct CosmosBootstrapFields {
     pub runtime: HermesRuntime,
     pub cosmos_builder: Arc<CosmosBuilder>,
     pub should_randomize_identifiers: bool,
@@ -66,6 +72,14 @@ pub struct CosmosBootstrapComponents;
 
 impl HasComponents for CosmosBootstrap {
     type Components = CosmosBootstrapComponents;
+}
+
+impl Deref for CosmosBootstrap {
+    type Target = CosmosBootstrapFields;
+
+    fn deref(&self) -> &Self::Target {
+        &self.fields
+    }
 }
 
 with_cosmos_sdk_bootstrap_components! {
