@@ -1,19 +1,29 @@
+use ibc::core::channel::types::proto::v1::query_client::QueryClient;
+use ibc::core::channel::types::proto::v1::{
+    QueryPacketAcknowledgementsRequest, QueryPacketCommitmentsRequest, QueryUnreceivedAcksRequest,
+};
+use oneline_eyre::eyre::eyre;
+
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
+use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use ibc_relayer::chain::counterparty::{channel_connection_client, unreceived_acknowledgements};
-use ibc_relayer::chain::requests::Paginate;
-use ibc_relayer::path::PathIdentifiers;
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
-use ibc_relayer_types::Height;
-use oneline_eyre::eyre::eyre;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 
-use super::util::PacketSequences;
+use ibc::primitives::proto::Protobuf;
+use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
+use ibc_relayer_types::core::ics04_channel::channel::State;
+use ibc_relayer_types::core::ics04_channel::packet::Sequence;
+use ibc_relayer_types::core::ics24_host::{
+    identifier::{ChainId, ChannelId, PortId},
+    IBC_QUERY_PATH,
+};
+use ibc_relayer_types::Height;
+
+use crate::commands::query::packet::util::PacketSequences;
 use crate::contexts::app::HermesApp;
-use crate::impls::error_wrapper::ErrorWrapper;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -52,34 +62,76 @@ impl QueryPendingAcks {
         let channel_id = self.channel_id.clone();
         let chain = builder.build_chain(&self.chain_id).await?;
 
-        let chan_conn_cli = chain
-            .with_blocking_chain_handle(move |handle| {
-                let chan_conn_cli = channel_connection_client(&handle, &port_id, &channel_id)
-                    .map_err(|e| eyre!("failed to get channel connection and client: {}", e))?;
-                Ok(chan_conn_cli)
-            })
+        let latest_height = chain.query_chain_height().await?;
+
+        // channel end query path
+        let channel_end_path = format!("channelEnds/ports/{port_id}/channels/{channel_id}");
+
+        let channel_end_bytes = chain
+            .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &latest_height)
             .await?;
 
-        let counterparty_chain_id = chan_conn_cli.client.client_state.chain_id();
-        let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
+        let channel_end = ChannelEnd::decode_vec(&channel_end_bytes).unwrap();
 
-        let channel = chan_conn_cli.channel.clone();
-        let path_identifiers =
-            PathIdentifiers::from_channel_end(channel.clone()).ok_or_else(|| {
-                eyre!(
-                    "failed to get the path identifiers for channel ({}, {})",
-                    channel.channel_id,
-                    channel.port_id
-                )
-            })?;
+        // check if channel end is initialized, otherwize return error.
+        if channel_end.state_matches(&State::Uninitialized) {
+            return Err(eyre!("channel with id `{channel_id}` is uninitialized").into());
+        }
 
-        unreceived_acknowledgements(
-            &chain.handle,
-            &counterparty_chain.handle,
-            &path_identifiers,
-            Paginate::All,
-        )
-        .wrap_error("failed to get the unreceived acknowledgments")
+        let mut client = QueryClient::connect(chain.grpc_address().clone())
+            .await
+            .unwrap();
+
+        let req = tonic::Request::new(QueryPacketCommitmentsRequest {
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            pagination: None,
+        });
+
+        let response = client.packet_commitments(req).await.unwrap().into_inner();
+
+        let commitment_sequences = response
+            .commitments
+            .iter()
+            .map(|commitment| commitment.sequence)
+            .collect();
+
+        let req = tonic::Request::new(QueryPacketAcknowledgementsRequest {
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            pagination: None,
+            packet_commitment_sequences: commitment_sequences,
+        });
+
+        let response = client
+            .packet_acknowledgements(req)
+            .await
+            .unwrap()
+            .into_inner();
+
+        let response_height = Height::try_from(response.height.unwrap()).unwrap();
+
+        let ack_sequences = response
+            .acknowledgements
+            .iter()
+            .map(|ack| ack.sequence)
+            .collect();
+
+        let request = tonic::Request::new(QueryUnreceivedAcksRequest {
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            packet_ack_sequences: ack_sequences,
+        });
+
+        let response = client.unreceived_acks(request).await.unwrap().into_inner();
+
+        let unreceived_ack_sequences = response
+            .sequences
+            .iter()
+            .map(|sequence| Sequence::from(*sequence))
+            .collect();
+
+        Ok(Some((unreceived_ack_sequences, response_height)))
     }
 }
 
