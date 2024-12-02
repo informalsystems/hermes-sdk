@@ -1,19 +1,28 @@
 use core::fmt;
-
-use hermes_cli_components::traits::build::CanLoadBuilder;
-use hermes_cli_framework::command::CommandRunner;
-use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use ibc_relayer::chain::counterparty::{
-    channel_connection_client, channel_on_destination, pending_packet_summary, PendingPackets,
-};
-use ibc_relayer::chain::requests::Paginate;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 use oneline_eyre::eyre::eyre;
 use serde::Serialize;
 
-use super::util::CollatedPendingPackets;
+use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
+use hermes_chain_components::traits::queries::packet_acknowledgements::CanQueryPacketAcknowledgements;
+use hermes_chain_components::traits::queries::unreceived_acks_sequences::CanQueryUnreceivedAcksSequences;
+use hermes_cli_components::traits::build::CanLoadBuilder;
+use hermes_cli_framework::command::CommandRunner;
+use hermes_cli_framework::output::{json, Output};
+use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
+use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
+
+use ibc::core::connection::types::ConnectionEnd;
+use ibc::primitives::proto::Protobuf;
+use ibc_relayer::chain::counterparty::PendingPackets;
+use ibc_relayer::client_state::AnyClientState;
+use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
+
+use crate::commands::query::packet::util::CollatedPendingPackets;
 use crate::contexts::app::HermesApp;
 use crate::Result;
 
@@ -115,46 +124,145 @@ impl QueryPendingPackets {
         let channel_id = self.channel_id.clone();
         let chain = builder.build_chain(&self.chain_id).await?;
 
-        let chan_conn_cli = chain
-            .with_blocking_chain_handle(move |handle| {
-                let chan_conn_cli = channel_connection_client(&handle, &port_id, &channel_id)
-                    .map_err(|e| eyre!("failed to get channel connection and client: {}", e))?;
-                Ok(chan_conn_cli)
-            })
+        let latest_height = chain.query_chain_height().await?;
+
+        // channel end query path
+        let channel_end_path = format!("channelEnds/ports/{port_id}/channels/{channel_id}");
+
+        let channel_end_bytes = chain
+            .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &latest_height)
             .await?;
 
-        let counterparty_chain_id = chan_conn_cli.client.client_state.chain_id();
-        let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
+        let channel_end = ChannelEnd::decode_vec(&channel_end_bytes)?;
 
-        let src_summary = pending_packet_summary(
-            &chain.handle,
-            &counterparty_chain.handle,
-            &chan_conn_cli.channel,
-            Paginate::All,
-        )
-        .map_err(|e| eyre!("failed to get pending packet summary: {}", e))?;
-
-        let counterparty_channel = channel_on_destination(
-            &chan_conn_cli.channel,
-            &chan_conn_cli.connection,
-            &counterparty_chain.handle,
-        )
-        .map_err(|e| eyre!("failed to get channel on destination: {}", e))?
-        .ok_or_else(|| {
+        let counterparty_channel_id = channel_end.counterparty().channel_id().ok_or_else(|| {
             eyre!(
-                "missing counterparty channel for ({}, {})",
-                chan_conn_cli.channel.channel_id,
-                chan_conn_cli.channel.port_id
+                "missing counterparty channel ID for channel `{}`",
+                channel_id
             )
         })?;
+        let counterparty_port_id = channel_end.counterparty().port_id();
 
-        let dst_summary = pending_packet_summary(
-            &counterparty_chain.handle,
-            &chain.handle,
-            &counterparty_channel,
-            Paginate::All,
+        let connection_id = channel_end
+            .connection_hops
+            .first()
+            .ok_or_else(|| eyre!("missing connection ID for channel `{}`", channel_id))?;
+
+        // connection end query path
+        let connection_path = format!("connections/{connection_id}");
+
+        let connnection_end_bytes = chain
+            .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), &latest_height)
+            .await?;
+
+        let connection_end = ConnectionEnd::decode_vec(&connnection_end_bytes)?;
+
+        let client_id = connection_end.client_id();
+
+        // client state query path
+        let client_state_path = format!("clients/{client_id}/clientState");
+
+        let client_state_bytes = chain
+            .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), &latest_height)
+            .await?;
+
+        let client_state = AnyClientState::decode_vec(&client_state_bytes)?;
+
+        let counterparty_chain_id = client_state.chain_id();
+        let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
+
+        // Retrieve source Chain summary
+        let (commitment_sequences, _) =
+            <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
+                &chain,
+                &channel_id,
+                &port_id,
+            )
+            .await?;
+
+        let unreceived_sequences = <CosmosChain as CanQueryUnreceivedPacketSequences<
+            CosmosChain,
+        >>::query_unreceived_packet_sequences(
+            &counterparty_chain,
+            counterparty_channel_id,
+            counterparty_port_id,
+            &commitment_sequences,
         )
-        .map_err(|e| eyre!("failed to get pending packet summary: {}", e))?;
+        .await?;
+
+        let acks_and_height_on_counterparty = <CosmosChain as CanQueryPacketAcknowledgements<
+            CosmosChain,
+        >>::query_packet_acknowlegements(
+            &counterparty_chain,
+            counterparty_channel_id,
+            counterparty_port_id,
+            &commitment_sequences,
+        )
+        .await?;
+
+        let unreceived_acknowledgement_sequences = if let Some((acks_on_counterparty, _)) =
+            acks_and_height_on_counterparty
+        {
+            <CosmosChain as CanQueryUnreceivedAcksSequences<CosmosChain>>::query_unreceived_acknowledgments_sequences(
+                        &chain,
+                        &channel_id,
+                        &port_id,
+                        &acks_on_counterparty,
+                    )
+                    .await?
+        } else {
+            Vec::new()
+        };
+
+        let src_summary = PendingPackets {
+            unreceived_packets: unreceived_sequences,
+            unreceived_acks: unreceived_acknowledgement_sequences,
+        };
+
+        // Retrieve destination chain summary
+        let (commitment_sequences, _) =
+            <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
+                &counterparty_chain,
+                counterparty_channel_id,
+                counterparty_port_id,
+            )
+            .await?;
+
+        let unreceived_sequences = <CosmosChain as CanQueryUnreceivedPacketSequences<
+            CosmosChain,
+        >>::query_unreceived_packet_sequences(
+            &chain, &channel_id, &port_id, &commitment_sequences
+        )
+        .await?;
+
+        let acks_and_height_on_counterparty = <CosmosChain as CanQueryPacketAcknowledgements<
+            CosmosChain,
+        >>::query_packet_acknowlegements(
+            &chain,
+            &channel_id,
+            &port_id,
+            &commitment_sequences,
+        )
+        .await?;
+
+        let unreceived_acknowledgement_sequences = if let Some((acks_on_counterparty, _)) =
+            acks_and_height_on_counterparty
+        {
+            <CosmosChain as CanQueryUnreceivedAcksSequences<CosmosChain>>::query_unreceived_acknowledgments_sequences(
+                    &counterparty_chain,
+                        counterparty_channel_id,
+                        counterparty_port_id,
+                        &acks_on_counterparty,
+                    )
+                    .await?
+        } else {
+            Vec::new()
+        };
+
+        let dst_summary = PendingPackets {
+            unreceived_packets: unreceived_sequences,
+            unreceived_acks: unreceived_acknowledgement_sequences,
+        };
 
         Ok(Summary {
             src_chain: chain_id,

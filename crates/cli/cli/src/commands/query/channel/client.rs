@@ -1,9 +1,10 @@
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::QueryChannelClientStateRequest;
+use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
+
+use ibc::core::channel::types::proto::v1::query_client::QueryClient;
+use ibc::core::channel::types::proto::v1::QueryChannelClientStateRequest;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 
 use crate::contexts::app::HermesApp;
@@ -47,20 +48,17 @@ impl CommandRunner<HermesApp> for QueryChannelClient {
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();
 
-        match chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                match chain_handle.query_channel_client_state(QueryChannelClientStateRequest {
-                    port_id,
-                    channel_id,
-                }) {
-                    Ok(maybe_client_state) => Ok(maybe_client_state),
-                    Err(e) => Err(e.into()),
-                }
-            })
-            .await
-        {
-            Ok(client_state) => Ok(Output::success(client_state)),
-            Err(e) => Err(e),
-        }
+        let mut client = QueryClient::connect(chain.grpc_address().clone()).await?;
+
+        let request = tonic::Request::new(QueryChannelClientStateRequest {
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+        });
+
+        let response = client.channel_client_state(request).await?.into_inner();
+
+        let client_state = response.identified_client_state;
+
+        Ok(Output::success(client_state))
     }
 }

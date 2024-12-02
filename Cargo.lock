@@ -1623,6 +1623,7 @@ dependencies = [
  "futures",
  "hdpath",
  "hermes-any-counterparty",
+ "hermes-chain-components",
  "hermes-cli-components",
  "hermes-cli-framework",
  "hermes-cosmos-chain-components",
@@ -1643,6 +1644,7 @@ dependencies = [
  "serde",
  "serde_json",
  "toml",
+ "tonic",
  "tracing",
 ]
 
