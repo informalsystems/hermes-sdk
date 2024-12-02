@@ -53,13 +53,11 @@ impl CommandRunner<HermesApp> for QueryChannels {
         let dst_chain_id = self.counterparty_chain_id.clone();
         let show_counterparty = self.show_counterparty;
 
-        let mut client = QueryClient::connect(chain.grpc_address().clone())
-            .await
-            .unwrap();
+        let mut client = QueryClient::connect(chain.grpc_address().clone()).await?;
 
         let request = tonic::Request::new(QueryChannelsRequest { pagination: None });
 
-        let response = client.channels(request).await.unwrap().into_inner();
+        let response = client.channels(request).await?.into_inner();
 
         let all_channels = response
             .channels

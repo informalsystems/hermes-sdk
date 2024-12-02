@@ -129,7 +129,7 @@ impl CommandRunner<HermesApp> for QueryChannelEnds {
             .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), &query_height)
             .await?;
 
-        let client_state = AnyClientState::decode_vec(&client_state_bytes).unwrap();
+        let client_state = AnyClientState::decode_vec(&client_state_bytes)?;
 
         let channel_counterparty = channel_end.counterparty().clone();
         let connection_counterparty = connection_end.counterparty().clone();

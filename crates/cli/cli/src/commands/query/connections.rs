@@ -51,13 +51,11 @@ impl CommandRunner<HermesApp> for QueryConnections {
         let counterparty_chain_id = self.counterparty_chain_id.clone();
         let verbose = self.verbose;
 
-        let mut client = QueryClient::connect(chain.grpc_address().clone())
-            .await
-            .unwrap();
+        let mut client = QueryClient::connect(chain.grpc_address().clone()).await?;
 
         let request = tonic::Request::new(QueryConnectionsRequest { pagination: None });
 
-        let response = client.connections(request).await.unwrap().into_inner();
+        let response = client.connections(request).await?.into_inner();
 
         let all_connections = response
             .connections

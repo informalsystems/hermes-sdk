@@ -48,20 +48,14 @@ impl CommandRunner<HermesApp> for QueryChannelClient {
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();
 
-        let mut client = QueryClient::connect(chain.grpc_address().clone())
-            .await
-            .unwrap();
+        let mut client = QueryClient::connect(chain.grpc_address().clone()).await?;
 
         let request = tonic::Request::new(QueryChannelClientStateRequest {
             port_id: port_id.to_string(),
             channel_id: channel_id.to_string(),
         });
 
-        let response = client
-            .channel_client_state(request)
-            .await
-            .unwrap()
-            .into_inner();
+        let response = client.channel_client_state(request).await?.into_inner();
 
         let client_state = response.identified_client_state;
 

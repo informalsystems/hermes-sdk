@@ -72,17 +72,25 @@ impl QueryPendingAcks {
             .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &latest_height)
             .await?;
 
-        let channel_end = ChannelEnd::decode_vec(&channel_end_bytes).unwrap();
+        let channel_end = ChannelEnd::decode_vec(&channel_end_bytes)?;
 
         // check if channel end is initialized, otherwize return error.
         if channel_end.state_matches(&State::Uninitialized) {
             return Err(eyre!("channel with id `{channel_id}` is uninitialized").into());
         }
 
-        let counterparty_channel_id = channel_end.counterparty().channel_id().unwrap();
+        let counterparty_channel_id = channel_end.counterparty().channel_id().ok_or_else(|| {
+            eyre!(
+                "missing counterparty channel ID for channel `{}`",
+                channel_id
+            )
+        })?;
         let counterparty_port_id = channel_end.counterparty().port_id();
 
-        let connection_id = channel_end.connection_hops.first().unwrap();
+        let connection_id = channel_end
+            .connection_hops
+            .first()
+            .ok_or_else(|| eyre!("missing connection ID for channel `{}`", channel_id))?;
 
         // connection end query path
         let connection_path = format!("connections/{connection_id}");
@@ -91,7 +99,7 @@ impl QueryPendingAcks {
             .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), &latest_height)
             .await?;
 
-        let connection_end = ConnectionEnd::decode_vec(&connnection_end_bytes).unwrap();
+        let connection_end = ConnectionEnd::decode_vec(&connnection_end_bytes)?;
 
         let client_id = connection_end.client_id();
 
@@ -102,7 +110,7 @@ impl QueryPendingAcks {
             .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), &latest_height)
             .await?;
 
-        let client_state = AnyClientState::decode_vec(&client_state_bytes).unwrap();
+        let client_state = AnyClientState::decode_vec(&client_state_bytes)?;
 
         let counterparty_chain_id = client_state.chain_id();
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
@@ -123,8 +131,7 @@ impl QueryPendingAcks {
             counterparty_port_id,
             &commitment_sequences,
         )
-        .await
-        .unwrap();
+        .await?;
 
         let unreceived_acknowledgement_sequences_and_height = if let Some((
             acks_on_counterparty,
@@ -138,7 +145,7 @@ impl QueryPendingAcks {
                         &port_id,
                         &acks_on_counterparty,
                     )
-                    .await.unwrap(), height))
+                    .await?, height))
         } else {
             None
         };
