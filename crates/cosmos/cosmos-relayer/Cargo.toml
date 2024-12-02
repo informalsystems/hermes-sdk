@@ -44,6 +44,7 @@ tendermint                              = { workspace = true, features = ["secp2
 tendermint-proto                        = { workspace = true }
 tendermint-rpc                          = { workspace = true, features = ["http-client", "websocket-client"] }
 
+dirs-next       = { workspace = true }
 eyre            = { workspace = true }
 prost           = { workspace = true }
 prost-types     = { workspace = true }
@@ -53,6 +54,7 @@ tokio           = { workspace = true }
 tonic           = { workspace = true, features = ["tls", "tls-roots"] }
 serde           = { workspace = true }
 serde_derive    = { workspace = true }
+serde_json      = { workspace = true }
 subtle-encoding = { workspace = true }
 itertools       = { workspace = true }
 futures         = { workspace = true }

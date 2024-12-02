@@ -102,7 +102,6 @@ use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::EventSourceMode;
 use ibc_relayer::event::source::queries::all as all_queries;
 use ibc_relayer::keyring::Secp256k1KeyPair;
@@ -125,7 +124,6 @@ pub struct CosmosChain {
 
 #[derive(HasField)]
 pub struct BaseCosmosChain {
-    pub handle: BaseChainHandle,
     pub chain_config: CosmosSdkConfig,
     pub chain_id: ChainId,
     pub compat_mode: CompatMode,
@@ -267,7 +265,6 @@ impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainContextComponents {
 
 impl CosmosChain {
     pub fn new(
-        handle: BaseChainHandle,
         chain_config: CosmosSdkConfig,
         tx_config: TxConfig,
         rpc_client: HttpClient,
@@ -297,7 +294,6 @@ impl CosmosChain {
 
         let chain = Self {
             base_chain: Arc::new(BaseCosmosChain {
-                handle,
                 chain_config,
                 chain_id,
                 compat_mode,
