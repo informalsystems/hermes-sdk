@@ -1,18 +1,19 @@
-use ibc::core::channel::types::proto::v1::query_client::QueryClient;
-use ibc::core::channel::types::proto::v1::{
-    QueryPacketAcknowledgementsRequest, QueryPacketCommitmentsRequest, QueryUnreceivedAcksRequest,
-};
 use oneline_eyre::eyre::eyre;
 
+use hermes_chain_components::traits::queries::packet_acknowledgements::CanQueryPacketAcknowledgements;
+use hermes_chain_components::traits::queries::packet_commitments::CanQueryPacketCommitments;
+use hermes_chain_components::traits::queries::unreceived_acks_sequences::CanQueryUnreceivedAcksSequences;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
-use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 
+use ibc::core::connection::types::ConnectionEnd;
 use ibc::primitives::proto::Protobuf;
+use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::channel::State;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
@@ -78,60 +79,71 @@ impl QueryPendingAcks {
             return Err(eyre!("channel with id `{channel_id}` is uninitialized").into());
         }
 
-        let mut client = QueryClient::connect(chain.grpc_address().clone())
-            .await
-            .unwrap();
+        let counterparty_channel_id = channel_end.counterparty().channel_id().unwrap();
+        let counterparty_port_id = channel_end.counterparty().port_id();
 
-        let req = tonic::Request::new(QueryPacketCommitmentsRequest {
-            port_id: port_id.to_string(),
-            channel_id: channel_id.to_string(),
-            pagination: None,
-        });
+        let connection_id = channel_end.connection_hops.first().unwrap();
 
-        let response = client.packet_commitments(req).await.unwrap().into_inner();
+        // connection end query path
+        let connection_path = format!("connections/{connection_id}");
 
-        let commitment_sequences = response
-            .commitments
-            .iter()
-            .map(|commitment| commitment.sequence)
-            .collect();
+        let connnection_end_bytes = chain
+            .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), &latest_height)
+            .await?;
 
-        let req = tonic::Request::new(QueryPacketAcknowledgementsRequest {
-            port_id: port_id.to_string(),
-            channel_id: channel_id.to_string(),
-            pagination: None,
-            packet_commitment_sequences: commitment_sequences,
-        });
+        let connection_end = ConnectionEnd::decode_vec(&connnection_end_bytes).unwrap();
 
-        let response = client
-            .packet_acknowledgements(req)
-            .await
-            .unwrap()
-            .into_inner();
+        let client_id = connection_end.client_id();
 
-        let response_height = Height::try_from(response.height.unwrap()).unwrap();
+        // client state query path
+        let client_state_path = format!("clients/{client_id}/clientState");
 
-        let ack_sequences = response
-            .acknowledgements
-            .iter()
-            .map(|ack| ack.sequence)
-            .collect();
+        let client_state_bytes = chain
+            .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), &latest_height)
+            .await?;
 
-        let request = tonic::Request::new(QueryUnreceivedAcksRequest {
-            port_id: port_id.to_string(),
-            channel_id: channel_id.to_string(),
-            packet_ack_sequences: ack_sequences,
-        });
+        let client_state = AnyClientState::decode_vec(&client_state_bytes).unwrap();
 
-        let response = client.unreceived_acks(request).await.unwrap().into_inner();
+        let counterparty_chain_id = client_state.chain_id();
+        let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
 
-        let unreceived_ack_sequences = response
-            .sequences
-            .iter()
-            .map(|sequence| Sequence::from(*sequence))
-            .collect();
+        let (commitment_sequences, _) =
+            <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
+                &chain,
+                &channel_id,
+                &port_id,
+            )
+            .await?;
 
-        Ok(Some((unreceived_ack_sequences, response_height)))
+        let acks_and_height_on_counterparty = <CosmosChain as CanQueryPacketAcknowledgements<
+            CosmosChain,
+        >>::query_packet_acknowlegements(
+            &counterparty_chain,
+            counterparty_channel_id,
+            counterparty_port_id,
+            &commitment_sequences,
+        )
+        .await
+        .unwrap();
+
+        let unreceived_acknowledgement_sequences_and_height = if let Some((
+            acks_on_counterparty,
+            height,
+        )) =
+            acks_and_height_on_counterparty
+        {
+            Some((<CosmosChain as CanQueryUnreceivedAcksSequences<CosmosChain>>::query_unreceived_acknowledgments_sequences(
+                        &chain,
+                        &channel_id,
+                        &port_id,
+                        &acks_on_counterparty,
+                    )
+                    .await.unwrap(), height))
+        } else {
+            None
+        };
+
+        Ok(unreceived_acknowledgement_sequences_and_height)
     }
 }
 
