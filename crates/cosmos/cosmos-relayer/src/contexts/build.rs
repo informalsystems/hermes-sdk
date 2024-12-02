@@ -28,8 +28,7 @@ use hermes_runtime_components::traits::runtime::{
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::keyring::{
-    AnySigningKeyPair, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_DISK_BACKEND,
-    KEYSTORE_FILE_EXTENSION,
+    AnySigningKeyPair, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
 };
 use ibc_relayer::spawn::SpawnError;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
@@ -169,9 +168,7 @@ impl CosmosBuilder {
         chain_config: CosmosSdkConfig,
         m_keypair: Option<&Secp256k1KeyPair>,
     ) -> Result<CosmosChain, Error> {
-        let chain_id = chain_config.id.clone();
-
-        let key = get_keypair(&chain_id, &chain_config, m_keypair)?;
+        let key = get_keypair(&chain_config, m_keypair)?;
 
         let event_source_mode = chain_config.event_source.clone();
 
@@ -228,7 +225,6 @@ impl CosmosBuilder {
 }
 
 pub fn get_keypair(
-    chain_id: &ChainId,
     chain_config: &CosmosSdkConfig,
     m_keypair: Option<&Secp256k1KeyPair>,
 ) -> Result<Secp256k1KeyPair, Error> {
@@ -242,20 +238,15 @@ pub fn get_keypair(
             home.join(KEYSTORE_DEFAULT_FOLDER)
         }
     };
+    // Create hermes_keyring folder if it does not exist
+    fs::create_dir_all(&ks_folder)?;
 
-    let keys_folder = ks_folder
-        .join(chain_id.as_str())
-        .join(KEYSTORE_DISK_BACKEND);
-
-    let mut filename = keys_folder.join(chain_config.key_name.clone());
+    let mut filename = ks_folder.join(chain_config.key_name.clone());
     filename.set_extension(KEYSTORE_FILE_EXTENSION);
 
     let file = File::create(filename.clone())?;
 
     if let Some(keypair) = m_keypair {
-        // Create keys folder if it does not exist
-        fs::create_dir_all(&keys_folder)?;
-
         serde_json::to_writer_pretty(file, &AnySigningKeyPair::Secp256k1(keypair.clone()))?;
     }
 
