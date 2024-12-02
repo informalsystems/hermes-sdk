@@ -1,5 +1,7 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use core::str::FromStr;
+use hermes_cosmos_chain_components::impls::types::config::{CosmosChainConfig, EventSourceMode};
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
 use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
@@ -100,9 +102,7 @@ use hermes_wasm_test_components::traits::chain::upload_client_code::{
 use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
-use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::config::EventSourceMode;
 use ibc_relayer::event::source::queries::all as all_queries;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics02_client::height::Height;
@@ -110,7 +110,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
-use tendermint_rpc::{HttpClient, Url};
+use tendermint_rpc::{HttpClient, Url, WebSocketClientUrl};
 
 use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
@@ -124,7 +124,7 @@ pub struct CosmosChain {
 
 #[derive(HasField)]
 pub struct BaseCosmosChain {
-    pub chain_config: CosmosSdkConfig,
+    pub chain_config: CosmosChainConfig,
     pub chain_id: ChainId,
     pub compat_mode: CompatMode,
     pub runtime: HermesRuntime,
@@ -265,7 +265,7 @@ impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainContextComponents {
 
 impl CosmosChain {
     pub fn new(
-        chain_config: CosmosSdkConfig,
+        chain_config: CosmosChainConfig,
         tx_config: TxConfig,
         rpc_client: HttpClient,
         compat_mode: CompatMode,
@@ -277,12 +277,12 @@ impl CosmosChain {
         let chain_version = tx_config.chain_id.version();
 
         let subscription = match event_source_mode {
-            EventSourceMode::Push {
-                url,
-                batch_delay: _,
-            } => {
-                runtime.new_abci_event_subscription(chain_version, url, compat_mode, all_queries())
-            }
+            EventSourceMode::Push { url } => runtime.new_abci_event_subscription(
+                chain_version,
+                WebSocketClientUrl::from_str(&url).unwrap(),
+                compat_mode,
+                all_queries(),
+            ),
             EventSourceMode::Pull { .. } => {
                 // TODO: implement pull-based event source
                 Arc::new(EmptySubscription::new())
