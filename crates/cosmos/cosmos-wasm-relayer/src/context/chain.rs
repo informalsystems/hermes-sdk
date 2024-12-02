@@ -16,7 +16,6 @@ use hermes_cosmos_chain_components::components::client::{
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::traits::eip::eip_query::EipQuerierComponent;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
@@ -40,7 +39,6 @@ use hermes_encoding_components::traits::has_encoding::{
     HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
-use hermes_error::types::Error;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
@@ -233,7 +231,6 @@ use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
@@ -538,25 +535,6 @@ impl RpcClientGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 
     fn rpc_address(chain: &WasmCosmosChain) -> &Url {
         &chain.tx_config.rpc_address
-    }
-}
-
-impl HasBlockingChainHandle for WasmCosmosChain {
-    type ChainHandle = BaseChainHandle;
-
-    async fn with_blocking_chain_handle<R>(
-        &self,
-        cont: impl FnOnce(BaseChainHandle) -> Result<R, Error> + Send + 'static,
-    ) -> Result<R, Error>
-    where
-        R: Send + 'static,
-    {
-        let chain_handle = self.handle.clone();
-
-        self.runtime
-            .runtime
-            .spawn_blocking(move || cont(chain_handle))
-            .await?
     }
 }
 

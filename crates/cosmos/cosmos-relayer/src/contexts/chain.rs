@@ -27,7 +27,6 @@ use hermes_cosmos_chain_components::components::client::*;
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
@@ -40,7 +39,6 @@ use hermes_cosmos_test_components::chain::components::*;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
-use hermes_error::types::Error;
 use hermes_logger::{HermesLogger, ProvideHermesLogger};
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -339,25 +337,6 @@ impl RpcClientGetter<CosmosChain> for CosmosChainContextComponents {
 
     fn rpc_address(chain: &CosmosChain) -> &Url {
         &chain.tx_config.rpc_address
-    }
-}
-
-impl HasBlockingChainHandle for CosmosChain {
-    type ChainHandle = BaseChainHandle;
-
-    async fn with_blocking_chain_handle<R>(
-        &self,
-        cont: impl FnOnce(BaseChainHandle) -> Result<R, Error> + Send + 'static,
-    ) -> Result<R, Error>
-    where
-        R: Send + 'static,
-    {
-        let chain_handle = self.handle.clone();
-
-        self.runtime
-            .runtime
-            .spawn_blocking(move || cont(chain_handle))
-            .await?
     }
 }
 

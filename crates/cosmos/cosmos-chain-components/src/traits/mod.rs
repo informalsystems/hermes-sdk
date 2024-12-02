@@ -1,5 +1,4 @@
 pub mod abci_query;
-pub mod chain_handle;
 pub mod convert_gas_to_fee;
 pub mod eip;
 pub mod gas_config;
