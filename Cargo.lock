@@ -1798,6 +1798,7 @@ name = "hermes-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "dirs-next",
  "eyre",
  "futures",
  "hermes-any-counterparty",
@@ -1832,6 +1833,7 @@ dependencies = [
  "reqwest 0.12.9",
  "serde",
  "serde_derive",
+ "serde_json",
  "subtle-encoding",
  "tendermint",
  "tendermint-proto",
