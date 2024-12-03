@@ -26,7 +26,7 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
 
     let runtime = HermesRuntime::new(tokio_runtime.clone());
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     let store_postfix = format!(
         "{}-{}",

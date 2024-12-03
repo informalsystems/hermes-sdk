@@ -1,12 +1,11 @@
-use cgp::prelude::*;
 use core::time::Duration;
-use prost::{DecodeError, Message};
 
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-
 use ibc_proto::cosmos::staking::v1beta1::QueryParamsResponse;
 use ibc_relayer_types::Height;
+use prost::{DecodeError, Message};
 
 use crate::traits::abci_query::CanQueryAbci;
 use crate::traits::unbonding_period::UnbondingPeriodQuerier;

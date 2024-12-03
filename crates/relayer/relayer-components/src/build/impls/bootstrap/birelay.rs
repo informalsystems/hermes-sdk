@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::Async;
 use cgp::prelude::{async_trait, HasErrorType};
 
@@ -11,11 +13,11 @@ use crate::chain::traits::types::create_client::{
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
-use crate::multi::types::index::Twindex;
+use crate::multi::traits::relay_at::HasBoundedRelayTypeAt;
 use crate::relay::traits::chains::HasRelayChains;
 
 #[async_trait]
-pub trait CanBootstrapBiRelay<const A: usize, const B: usize>:
+pub trait CanBootstrapBiRelay<A, B>:
     HasBiRelayTypeAt<A, B>
     + HasChainTypeAt<
         A,
@@ -40,10 +42,12 @@ pub trait CanBootstrapBiRelay<const A: usize, const B: usize>:
     ) -> Result<Self::BiRelay, Self::Error>;
 }
 
-impl<Build, ChainA, ChainB, const A: usize, const B: usize> CanBootstrapBiRelay<A, B> for Build
+impl<Build, ChainA, ChainB, A, B> CanBootstrapBiRelay<A, B> for Build
 where
     Build: Async
         + HasBiRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<B, A>
         + HasChainTypeAt<A, Chain = ChainA>
         + HasChainTypeAt<B, Chain = ChainB>
         + CanBuildBiRelay<A, B>
@@ -72,7 +76,7 @@ where
     ) -> Result<Build::BiRelay, Build::Error> {
         let relay_a_to_b = self
             .bootstrap_relay(
-                Twindex::<A, B>,
+                PhantomData,
                 chain_id_a,
                 chain_id_b,
                 payload_options_a,

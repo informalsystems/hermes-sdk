@@ -1,4 +1,5 @@
 use alloc::collections::BTreeMap;
+use core::marker::PhantomData;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -107,41 +108,41 @@ impl GrpcPortGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     }
 }
 
-impl WalletGetterAt<CosmosChainDriver, RelayerWallet, 0> for CosmosChainDriverComponents {
+impl WalletGetterAt<CosmosChainDriver, RelayerWallet, Index<0>> for CosmosChainDriverComponents {
     fn wallet_at(
         driver: &CosmosChainDriver,
         _kind: RelayerWallet,
-        _index: Index<0>,
+        _index: PhantomData<Index<0>>,
     ) -> &CosmosTestWallet {
         &driver.relayer_wallet
     }
 }
 
-impl WalletGetterAt<CosmosChainDriver, UserWallet, 0> for CosmosChainDriverComponents {
+impl WalletGetterAt<CosmosChainDriver, UserWallet, Index<0>> for CosmosChainDriverComponents {
     fn wallet_at(
         driver: &CosmosChainDriver,
         _kind: UserWallet,
-        _index: Index<0>,
+        _index: PhantomData<Index<0>>,
     ) -> &CosmosTestWallet {
         &driver.user_wallet_a
     }
 }
 
-impl WalletGetterAt<CosmosChainDriver, UserWallet, 1> for CosmosChainDriverComponents {
+impl WalletGetterAt<CosmosChainDriver, UserWallet, Index<1>> for CosmosChainDriverComponents {
     fn wallet_at(
         driver: &CosmosChainDriver,
         _kind: UserWallet,
-        _index: Index<1>,
+        _index: PhantomData<Index<1>>,
     ) -> &CosmosTestWallet {
         &driver.user_wallet_b
     }
 }
 
-impl WalletGetterAt<CosmosChainDriver, ValidatorWallet, 0> for CosmosChainDriverComponents {
+impl WalletGetterAt<CosmosChainDriver, ValidatorWallet, Index<0>> for CosmosChainDriverComponents {
     fn wallet_at(
         driver: &CosmosChainDriver,
         _kind: ValidatorWallet,
-        _index: Index<0>,
+        _index: PhantomData<Index<0>>,
     ) -> &CosmosTestWallet {
         &driver.validator_wallet
     }
@@ -153,14 +154,22 @@ impl WalletsGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     }
 }
 
-impl DenomGetterAt<CosmosChainDriver, TransferDenom, 0> for CosmosChainDriverComponents {
-    fn denom_at(driver: &CosmosChainDriver, _kind: TransferDenom, _index: Index<0>) -> &Denom {
+impl DenomGetterAt<CosmosChainDriver, TransferDenom, Index<0>> for CosmosChainDriverComponents {
+    fn denom_at(
+        driver: &CosmosChainDriver,
+        _kind: TransferDenom,
+        _index: PhantomData<Index<0>>,
+    ) -> &Denom {
         &driver.genesis_config.transfer_denom
     }
 }
 
-impl DenomGetterAt<CosmosChainDriver, StakingDenom, 0> for CosmosChainDriverComponents {
-    fn denom_at(driver: &CosmosChainDriver, _kind: StakingDenom, _index: Index<0>) -> &Denom {
+impl DenomGetterAt<CosmosChainDriver, StakingDenom, Index<0>> for CosmosChainDriverComponents {
+    fn denom_at(
+        driver: &CosmosChainDriver,
+        _kind: StakingDenom,
+        _index: PhantomData<Index<0>>,
+    ) -> &Denom {
         &driver.genesis_config.staking_denom
     }
 }

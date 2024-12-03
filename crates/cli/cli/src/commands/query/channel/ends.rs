@@ -1,5 +1,3 @@
-use oneline_eyre::eyre::eyre;
-use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
@@ -9,7 +7,6 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-
 use ibc::primitives::proto::Protobuf;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
@@ -18,6 +15,8 @@ use ibc_relayer_types::core::ics24_host::identifier::{
 };
 use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::Height;
+use oneline_eyre::eyre::eyre;
+use serde::{Deserialize, Serialize};
 
 use crate::contexts::app::HermesApp;
 use crate::Result;

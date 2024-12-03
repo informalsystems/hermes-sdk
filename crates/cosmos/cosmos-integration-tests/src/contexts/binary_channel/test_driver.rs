@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use hermes_error::handlers::debug::DebugError;
@@ -9,7 +11,7 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
-use hermes_relayer_components::multi::types::index::{Index, Twindex};
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_test_components::driver::traits::channel_at::ChannelGetterAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::{
     ChainDriverGetterAt, ChainDriverTypeAtComponent,
@@ -62,59 +64,71 @@ delegate_components! {
     }
 }
 
-impl ChainDriverGetterAt<CosmosBinaryChannelTestDriver, 0>
+impl ChainDriverGetterAt<CosmosBinaryChannelTestDriver, Index<0>>
     for CosmosBinaryChannelTestDriverComponents
 {
     fn chain_driver_at(
         driver: &CosmosBinaryChannelTestDriver,
-        _index: Index<0>,
+        _index: PhantomData<Index<0>>,
     ) -> &CosmosChainDriver {
         &driver.chain_driver_a
     }
 }
 
-impl ChainDriverGetterAt<CosmosBinaryChannelTestDriver, 1>
+impl ChainDriverGetterAt<CosmosBinaryChannelTestDriver, Index<1>>
     for CosmosBinaryChannelTestDriverComponents
 {
     fn chain_driver_at(
         driver: &CosmosBinaryChannelTestDriver,
-        _index: Index<1>,
+        _index: PhantomData<Index<1>>,
     ) -> &CosmosChainDriver {
         &driver.chain_driver_b
     }
 }
 
-impl RelayDriverGetterAt<CosmosBinaryChannelTestDriver, 0, 1>
+impl RelayDriverGetterAt<CosmosBinaryChannelTestDriver, Index<0>, Index<1>>
     for CosmosBinaryChannelTestDriverComponents
 {
     fn relay_driver_at(
         driver: &CosmosBinaryChannelTestDriver,
-        _index: Twindex<0, 1>,
+        _index: PhantomData<(Index<0>, Index<1>)>,
     ) -> &CosmosRelayDriver {
         &driver.relay_driver
     }
 }
 
-impl ChannelGetterAt<CosmosBinaryChannelTestDriver, 0, 1>
+impl ChannelGetterAt<CosmosBinaryChannelTestDriver, Index<0>, Index<1>>
     for CosmosBinaryChannelTestDriverComponents
 {
-    fn channel_id_at(driver: &CosmosBinaryChannelTestDriver, _index: Twindex<0, 1>) -> &ChannelId {
+    fn channel_id_at(
+        driver: &CosmosBinaryChannelTestDriver,
+        _index: PhantomData<(Index<0>, Index<1>)>,
+    ) -> &ChannelId {
         &driver.channel_id_a
     }
 
-    fn port_id_at(driver: &CosmosBinaryChannelTestDriver, _index: Twindex<0, 1>) -> &PortId {
+    fn port_id_at(
+        driver: &CosmosBinaryChannelTestDriver,
+        _index: PhantomData<(Index<0>, Index<1>)>,
+    ) -> &PortId {
         &driver.port_id_a
     }
 }
 
-impl ChannelGetterAt<CosmosBinaryChannelTestDriver, 1, 0>
+impl ChannelGetterAt<CosmosBinaryChannelTestDriver, Index<1>, Index<0>>
     for CosmosBinaryChannelTestDriverComponents
 {
-    fn channel_id_at(driver: &CosmosBinaryChannelTestDriver, _index: Twindex<1, 0>) -> &ChannelId {
+    fn channel_id_at(
+        driver: &CosmosBinaryChannelTestDriver,
+        _index: PhantomData<(Index<1>, Index<0>)>,
+    ) -> &ChannelId {
         &driver.channel_id_b
     }
 
-    fn port_id_at(driver: &CosmosBinaryChannelTestDriver, _index: Twindex<1, 0>) -> &PortId {
+    fn port_id_at(
+        driver: &CosmosBinaryChannelTestDriver,
+        _index: PhantomData<(Index<1>, Index<0>)>,
+    ) -> &PortId {
         &driver.port_id_b
     }
 }

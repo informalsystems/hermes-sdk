@@ -1,5 +1,4 @@
 use cgp::prelude::CanRaiseError;
-
 use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
 use hermes_comet_light_client_components::traits::types::verdict::HasVerdictType;
 use hermes_comet_light_client_components::traits::verify_update_header::UpdateHeaderVerifier;

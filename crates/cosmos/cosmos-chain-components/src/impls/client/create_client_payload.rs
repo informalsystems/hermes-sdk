@@ -1,5 +1,4 @@
 use cgp::core::error::CanRaiseError;
-
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
 use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
@@ -11,18 +10,15 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
-
 use ibc_relayer_types::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState};
 use ibc_relayer_types::clients::ics07_tendermint::consensus_state::ConsensusState;
 use ibc_relayer_types::clients::ics07_tendermint::error::Error as TendermintClientError;
 use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentRoot;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
-
 use tendermint::block::Height as TendermintHeight;
 use tendermint::error::Error as TendermintError;
-use tendermint_rpc::Client;
-use tendermint_rpc::Error as TendermintRpcError;
+use tendermint_rpc::{Client, Error as TendermintRpcError};
 
 use crate::traits::rpc_client::HasRpcClient;
 use crate::traits::unbonding_period::CanQueryUnbondingPeriod;

@@ -6,7 +6,6 @@ pub use list::KeysListCmd;
 
 mod delete;
 pub use delete::KeysDeleteCmd;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 

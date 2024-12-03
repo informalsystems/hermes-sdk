@@ -66,7 +66,7 @@ where
         + CanRaiseError<Build::Error>
         + CanRaiseError<Chain::Error>
         + CanRaiseError<String>,
-    Build: CanBuildChain<0, Chain = Chain> + HasChainTypeAt<1, Chain = Counterparty>,
+    Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
     Chain: CanQueryChainHeight
         + HasChainIdType
         + CanQueryConsensusState<Counterparty>
@@ -84,7 +84,7 @@ where
         let builder = app.load_builder().await?;
 
         let chain = builder
-            .build_chain(Index::<0>, &chain_id)
+            .build_chain(PhantomData, &chain_id)
             .await
             .map_err(App::raise_error)?;
 

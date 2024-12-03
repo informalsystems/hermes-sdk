@@ -1,13 +1,11 @@
 use cgp::prelude::CanRaiseError;
-use tonic::transport::Error as TransportError;
-use tonic::Status;
-
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
+use tonic::transport::Error as TransportError;
+use tonic::Status;
 
 use crate::traits::grpc_address::HasGrpcAddress;
 

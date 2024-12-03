@@ -7,6 +7,7 @@ use hermes_relayer_components::multi::traits::birelay_at::{
 };
 use hermes_relayer_components::multi::traits::chain_at::{HasChainTypeAt, ProvideChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, ProvideRelayTypeAt};
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use hermes_test_components::driver::traits::types::relay_driver_at::ProvideRelayDriverTypeAt;
 
@@ -15,40 +16,38 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
 
 pub struct ProvideCosmosTestTypes;
 
-impl<Context, const I: usize> ProvideChainTypeAt<Context, I> for ProvideCosmosTestTypes
+impl<Context, I: Async> ProvideChainTypeAt<Context, I> for ProvideCosmosTestTypes
 where
     Context: Async,
 {
     type Chain = CosmosChain;
 }
 
-impl<Context, const I: usize> ProvideChainDriverTypeAt<Context, I> for ProvideCosmosTestTypes
+impl<Context, I: Async> ProvideChainDriverTypeAt<Context, I> for ProvideCosmosTestTypes
 where
     Context: HasChainTypeAt<I, Chain = CosmosChain>,
 {
     type ChainDriver = CosmosChainDriver;
 }
 
-impl<Context, const I: usize, const J: usize> ProvideRelayTypeAt<Context, I, J>
-    for ProvideCosmosTestTypes
+impl<Context, I: Async, J: Async> ProvideRelayTypeAt<Context, I, J> for ProvideCosmosTestTypes
 where
     Context: HasChainTypeAt<I, Chain = CosmosChain> + HasChainTypeAt<J, Chain = CosmosChain>,
 {
     type Relay = CosmosRelay;
 }
 
-impl<Context> ProvideBiRelayTypeAt<Context, 0, 1> for ProvideCosmosTestTypes
+impl<Context> ProvideBiRelayTypeAt<Context, Index<0>, Index<1>> for ProvideCosmosTestTypes
 where
-    Context: HasChainTypeAt<0, Chain = CosmosChain>
-        + HasChainTypeAt<1, Chain = CosmosChain>
-        + HasRelayTypeAt<0, 1, Relay = CosmosRelay>
-        + HasRelayTypeAt<1, 0, Relay = CosmosRelay>,
+    Context: HasChainTypeAt<Index<0>, Chain = CosmosChain>
+        + HasChainTypeAt<Index<1>, Chain = CosmosChain>
+        + HasRelayTypeAt<Index<0>, Index<1>, Relay = CosmosRelay>
+        + HasRelayTypeAt<Index<1>, Index<0>, Relay = CosmosRelay>,
 {
     type BiRelay = CosmosBiRelay;
 }
 
-impl<Context, const I: usize, const J: usize> ProvideRelayDriverTypeAt<Context, I, J>
-    for ProvideCosmosTestTypes
+impl<Context, I: Async, J: Async> ProvideRelayDriverTypeAt<Context, I, J> for ProvideCosmosTestTypes
 where
     Context: HasChainTypeAt<I, Chain = CosmosChain>
         + HasChainTypeAt<J, Chain = CosmosChain>

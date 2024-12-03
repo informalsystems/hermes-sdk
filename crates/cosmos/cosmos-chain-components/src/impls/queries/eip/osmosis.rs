@@ -1,12 +1,11 @@
-use cgp::core::error::CanRaiseError;
 use core::str::FromStr;
+
+use cgp::core::error::CanRaiseError;
+use ibc_proto::cosmos::base::v1beta1::DecProto;
 use prost::DecodeError;
 use subtle_encoding::base64;
 
-use ibc_proto::cosmos::base::v1beta1::DecProto;
-
-use crate::impls::queries::eip::types::EipBaseFeeHTTPResult;
-use crate::impls::queries::eip::types::EipQueryError;
+use crate::impls::queries::eip::types::{EipBaseFeeHTTPResult, EipQueryError};
 use crate::traits::eip::eip_query::EipQuerier;
 use crate::traits::rpc_client::HasRpcClient;
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;

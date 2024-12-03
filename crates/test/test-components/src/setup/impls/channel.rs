@@ -1,12 +1,17 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::{CanRaiseError, ErrorOf};
+use cgp::core::Async;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
-use hermes_relayer_components::multi::types::index::Twindex;
+use hermes_relayer_components::multi::traits::relay_at::{
+    HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
+};
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 
 use crate::setup::traits::channel::ChannelSetup;
@@ -15,9 +20,11 @@ use crate::setup::traits::port_id_at::HasPortIdAt;
 
 pub struct SetupChannelHandshake;
 
-impl<Setup, const A: usize, const B: usize> ChannelSetup<Setup, A, B> for SetupChannelHandshake
+impl<Setup, A: Async, B: Async> ChannelSetup<Setup, A, B> for SetupChannelHandshake
 where
     Setup: HasBiRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<A, B>
+        + HasBoundedRelayTypeAt<B, A>
         + HasInitChannelOptionsAt<A, B>
         + HasPortIdAt<A, B>
         + HasPortIdAt<B, A>
@@ -26,7 +33,8 @@ where
         HasIbcChainTypes<ChainAt<Setup, B>> + HasInitChannelOptionsType<ChainAt<Setup, B>>,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,
     RelayAt<Setup, A, B>: CanBootstrapChannel,
-    BiRelayAt<Setup, A, B>: HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>,
+    BiRelayAt<Setup, A, B>:
+        HasTwoWayRelay + HasRelayTypeAt<Index<0>, Index<1>, Relay = RelayAt<Setup, A, B>>,
     PortIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>: Clone,
     PortIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>: Clone,
 {
@@ -44,8 +52,8 @@ where
         ),
         Setup::Error,
     > {
-        let port_id_a = setup.port_id_at(Twindex::<A, B>);
-        let port_id_b = setup.port_id_at(Twindex::<B, A>);
+        let port_id_a = setup.port_id_at(PhantomData::<(A, B)>);
+        let port_id_b = setup.port_id_at(PhantomData::<(B, A)>);
 
         let (channel_id_a, channel_id_b) = birelay
             .relay_a_to_b()
