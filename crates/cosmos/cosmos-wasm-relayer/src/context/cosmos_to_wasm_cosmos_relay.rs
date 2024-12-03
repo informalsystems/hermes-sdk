@@ -2,6 +2,7 @@ use std::collections::BTreeSet;
 use std::sync::Arc;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::types::impls::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
@@ -20,6 +21,8 @@ use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::impls::fields::{
@@ -30,7 +33,7 @@ use hermes_relayer_components::relay::impls::packet_lock::{
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::{
-    RelayChainTypesComponent, RelayChainsComponent, RelayClientIdGetterComponent,
+    RelayChainsComponent, RelayClientIdGetterComponent,
 };
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
@@ -99,14 +102,13 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             ProvideHermesLogger,
+        ChainTypeAtComponent<Src>: WithType<CosmosChain>,
+        ChainTypeAtComponent<Dst>: WithType<WasmCosmosChain>,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
-        [
-            RelayChainsComponent,
-            RelayChainTypesComponent,
-        ]:
+        RelayChainsComponent:
             UseDefaultRelayFields,
         RelayClientIdGetterComponent:
             UseDefaultClientIdFields,

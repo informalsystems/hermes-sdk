@@ -3,6 +3,7 @@ use alloc::sync::Arc;
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_error::types::Error;
@@ -14,12 +15,12 @@ use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
-use hermes_relayer_components::relay::traits::chains::{
-    ProvideRelayChainTypes, ProvideRelayChains, RelayClientIdGetter,
-};
+use hermes_relayer_components::relay::traits::chains::{ProvideRelayChains, RelayClientIdGetter};
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -118,6 +119,11 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
+        [
+            ChainTypeAtComponent<Src>,
+            ChainTypeAtComponent<Dst>,
+        ]:
+            WithType<CosmosChain>,
     }
 }
 
@@ -134,12 +140,6 @@ impl HasComponents for CosmosRelay {
 }
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
-
-impl ProvideRelayChainTypes<CosmosRelay> for CosmosRelayComponents {
-    type SrcChain = CosmosChain;
-
-    type DstChain = CosmosChain;
-}
 
 impl ProvideRelayChains<CosmosRelay> for CosmosRelayComponents {
     fn src_chain(relay: &CosmosRelay) -> &CosmosChain {

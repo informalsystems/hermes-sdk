@@ -4,14 +4,28 @@ use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;
+use crate::multi::traits::chain_at::HasChainTypeAt;
+use crate::multi::types::tags::{Dst, Src};
 
-#[derive_component(RelayChainTypesComponent, ProvideRelayChainTypes<Relay>)]
-pub trait HasRelayChainTypes: Async + HasErrorType {
+pub trait HasRelayChainTypes: HasChainTypeAt<Src> + HasChainTypeAt<Dst> + HasErrorType {
     type SrcChain: HasErrorType
         + HasIbcChainTypes<Self::DstChain>
         + HasOutgoingPacketType<Self::DstChain>;
 
     type DstChain: HasErrorType + HasIbcChainTypes<Self::SrcChain>;
+}
+
+impl<Relay, SrcChain, DstChain> HasRelayChainTypes for Relay
+where
+    Relay: HasChainTypeAt<Src, Chain = SrcChain>
+        + HasChainTypeAt<Dst, Chain = DstChain>
+        + HasErrorType,
+    SrcChain: HasErrorType + HasIbcChainTypes<DstChain> + HasOutgoingPacketType<DstChain>,
+    DstChain: HasErrorType + HasIbcChainTypes<SrcChain>,
+{
+    type SrcChain = SrcChain;
+
+    type DstChain = DstChain;
 }
 
 #[derive_component(RelayChainsComponent, ProvideRelayChains<Relay>)]

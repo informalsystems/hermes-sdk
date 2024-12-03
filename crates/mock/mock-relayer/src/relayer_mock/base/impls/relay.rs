@@ -3,9 +3,12 @@ use alloc::vec::Vec;
 use std::vec;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::traits::chains::{
-    HasRelayClientIds, ProvideRelayChainTypes, ProvideRelayChains, RelayClientIdGetter,
+    HasRelayClientIds, ProvideRelayChains, RelayClientIdGetter,
 };
 use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -40,13 +43,12 @@ delegate_components! {
             RuntimeGetterComponent,
         ]:
             ProvideDefaultRuntimeField,
+        [
+            ChainTypeAtComponent<Src>,
+            ChainTypeAtComponent<Dst>,
+        ]:
+            WithType<MockChainContext>,
     }
-}
-
-impl ProvideRelayChainTypes<MockRelayContext> for MockRelayComponents {
-    type SrcChain = MockChainContext;
-
-    type DstChain = MockChainContext;
 }
 
 impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
