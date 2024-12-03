@@ -4,7 +4,9 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::{
     DynamicGasGetterComponent, ReturnNoDynamicGas,
 };
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
+use core::ops::Deref;
 use std::path::PathBuf;
+use std::sync::Arc;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
@@ -44,8 +46,13 @@ use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderCom
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
    a `CosmosChainDriver`.
 */
-#[derive(HasField)]
+#[derive(Clone)]
 pub struct LegacyCosmosBootstrap {
+    pub fields: Arc<LegacyCosmosBootstrapFields>,
+}
+
+#[derive(HasField)]
+pub struct LegacyCosmosBootstrapFields {
     pub runtime: HermesRuntime,
     pub cosmos_builder: CosmosBuilder,
     pub should_randomize_identifiers: bool,
@@ -67,6 +74,14 @@ pub struct LegacyCosmosBootstrapComponents;
 
 impl HasComponents for LegacyCosmosBootstrap {
     type Components = LegacyCosmosBootstrapComponents;
+}
+
+impl Deref for LegacyCosmosBootstrap {
+    type Target = LegacyCosmosBootstrapFields;
+
+    fn deref(&self) -> &Self::Target {
+        &self.fields
+    }
 }
 
 with_legacy_cosmos_sdk_bootstrap_components! {

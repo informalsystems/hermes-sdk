@@ -9,18 +9,17 @@ use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptio
 use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAtComponent, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_test_components::driver::traits::types::builder_at::BuilderTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
 use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
-use hermes_test_components::setup::traits::bootstrap_at::{BootstrapAtComponent, HasBootstrapAt};
+use hermes_test_components::setup::traits::bootstrap_at::BootstrapAtComponent;
 use hermes_test_components::setup::traits::builder_at::BuilderAtComponent;
 use hermes_test_components::setup::traits::create_client_options_at::{
     CreateClientMessageOptionsAtComponent, CreateClientPayloadOptionsAtComponent,
@@ -34,6 +33,7 @@ use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
 use crate::contexts::bootstrap::CosmosBootstrap;
+use crate::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use crate::impls::binary_channel_driver::BuildCosmosBinaryChannelDriver;
 use crate::impls::init_channel_options::UseCosmosInitChannelOptions;
 
@@ -46,10 +46,10 @@ pub struct CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
     pub bootstrap_a: BootstrapA,
     pub bootstrap_b: BootstrapB,
     pub builder: CosmosBuilder,
-    pub create_client_payload_options: CosmosCreateClientOptions,
-    pub init_connection_options: CosmosInitConnectionOptions,
-    pub init_channel_options: CosmosInitChannelOptions,
     pub port_id: PortId,
+    pub init_channel_options: CosmosInitChannelOptions,
+    pub init_connection_options: CosmosInitConnectionOptions,
+    pub create_client_payload_options: CosmosCreateClientOptions,
 }
 pub struct CosmosBinaryChannelSetupComponents;
 
@@ -100,12 +100,12 @@ impl<BootstrapA, BootstrapB> HasField<symbol!("create_client_message_options")>
 
 impl CanUseBinaryChannelTestSetup for CosmosBinaryChannelSetup<CosmosBootstrap, CosmosBootstrap> {}
 
-pub trait CanUseCosmosBinaryChannelSetup:
-    HasBootstrapAt<0, Bootstrap = CosmosBootstrap>
-    + HasBootstrapAt<1, Bootstrap = CosmosBootstrap>
-    + HasChainTypeAt<0, Chain = CosmosChain>
-    + HasChainTypeAt<1, Chain = CosmosChain>
+impl CanUseBinaryChannelTestSetup
+    for CosmosBinaryChannelSetup<CosmosBootstrap, LegacyCosmosBootstrap>
 {
 }
 
-impl CanUseCosmosBinaryChannelSetup for CosmosBinaryChannelSetup<CosmosBootstrap, CosmosBootstrap> {}
+impl CanUseBinaryChannelTestSetup
+    for CosmosBinaryChannelSetup<LegacyCosmosBootstrap, LegacyCosmosBootstrap>
+{
+}
