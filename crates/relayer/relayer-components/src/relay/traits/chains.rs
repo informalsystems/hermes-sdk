@@ -1,10 +1,12 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;
-use crate::multi::traits::chain_at::HasChainTypeAt;
+use crate::multi::traits::chain_at::{HasChainAt, HasChainTypeAt};
 use crate::multi::types::tags::{Dst, Src};
 
 pub trait HasRelayChainTypes: HasChainTypeAt<Src> + HasChainTypeAt<Dst> + HasErrorType {
@@ -28,11 +30,25 @@ where
     type DstChain = DstChain;
 }
 
-#[derive_component(RelayChainsComponent, ProvideRelayChains<Relay>)]
 pub trait HasRelayChains: HasRelayChainTypes {
     fn src_chain(&self) -> &Self::SrcChain;
 
     fn dst_chain(&self) -> &Self::DstChain;
+}
+
+impl<Relay, SrcChain, DstChain> HasRelayChains for Relay
+where
+    Relay: HasChainAt<Src, Chain = SrcChain> + HasChainAt<Dst, Chain = DstChain> + HasErrorType,
+    SrcChain: HasErrorType + HasIbcChainTypes<DstChain> + HasOutgoingPacketType<DstChain>,
+    DstChain: HasErrorType + HasIbcChainTypes<SrcChain>,
+{
+    fn src_chain(&self) -> &Self::SrcChain {
+        self.chain_at(PhantomData::<Src>)
+    }
+
+    fn dst_chain(&self) -> &Self::DstChain {
+        self.chain_at(PhantomData::<Dst>)
+    }
 }
 
 #[derive_component(RelayClientIdGetterComponent, RelayClientIdGetter<Relay>)]

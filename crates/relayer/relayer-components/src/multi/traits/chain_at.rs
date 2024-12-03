@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
+use cgp::core::field::impls::use_field::UseField;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
@@ -11,6 +12,7 @@ pub trait HasChainTypeAt<Tag>: Async {
     type Chain: Async;
 }
 
+#[derive_component(ChainGetterAtComponent<Tag>, ChainGetterAt<Context>)]
 pub trait HasChainAt<Tag>: HasChainTypeAt<Tag> {
     fn chain_at(&self, _tag: PhantomData<Tag>) -> &Self::Chain;
 }
@@ -26,4 +28,22 @@ where
     Chain: Async,
 {
     type Chain = Chain;
+}
+
+impl<Context, ChainTag, FieldTag, Chain> ProvideChainTypeAt<Context, ChainTag>
+    for UseField<FieldTag>
+where
+    Context: Async + HasField<FieldTag, Field = Chain>,
+    Chain: Async,
+{
+    type Chain = Chain;
+}
+
+impl<Context, ChainTag, FieldTag, Chain> ChainGetterAt<Context, ChainTag> for UseField<FieldTag>
+where
+    Context: HasChainTypeAt<ChainTag, Chain = Chain> + HasField<FieldTag, Field = Chain>,
+{
+    fn chain_at(context: &Context, _tag: PhantomData<ChainTag>) -> &Context::Chain {
+        context.get_field(PhantomData)
+    }
 }

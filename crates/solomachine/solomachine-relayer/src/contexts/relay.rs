@@ -1,18 +1,18 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::types::impls::WithType;
+use cgp::core::field::impls::use_field::UseField;
 use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::relay::*;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
-use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::impls::fields::{
-    UseDefaultClientIdFields, UseDefaultRelayFields,
+use hermes_relayer_components::multi::traits::chain_at::{
+    ChainGetterAtComponent, ChainTypeAtComponent,
 };
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
+use hermes_relayer_components::relay::impls::fields::UseDefaultClientIdFields;
 use hermes_relayer_components::relay::traits::chains::{
-    HasRelayClientIds, RelayChainsComponent, RelayClientIdGetterComponent,
+    HasRelayClientIds, RelayClientIdGetterComponent,
 };
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::with_default_relay_components;
@@ -56,9 +56,16 @@ delegate_components! {
             ProvideDefaultRuntimeField,
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
-        ChainTypeAtComponent<Src>: WithType<MockSolomachine>,
-        ChainTypeAtComponent<Dst>: WithType<CosmosChain>,
-        RelayChainsComponent: UseDefaultRelayFields,
+        [
+            ChainTypeAtComponent<Src>,
+            ChainGetterAtComponent<Src>,
+        ]:
+            UseField<symbol!("src_chain")>,
+        [
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Dst>,
+        ]:
+            UseField<symbol!("dst_chain")>,
         RelayClientIdGetterComponent: UseDefaultClientIdFields,
     }
 }

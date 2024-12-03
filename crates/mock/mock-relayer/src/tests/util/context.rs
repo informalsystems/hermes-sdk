@@ -6,15 +6,11 @@ use crate::relayer_mock::contexts::chain::MockChainContext;
 use crate::relayer_mock::contexts::relay::MockRelayContext;
 use crate::relayer_mock::util::clock::MockClock;
 
-pub fn build_mock_relay_context() -> (
-    MockRelayContext,
-    Arc<MockChainContext>,
-    Arc<MockChainContext>,
-) {
+pub fn build_mock_relay_context() -> (MockRelayContext, MockChainContext, MockChainContext) {
     let clock = Arc::new(MockClock::default());
     let runtime = MockRuntimeContext::new(clock.clone());
-    let src_chain = Arc::new(MockChainContext::new("chain1".to_string(), clock.clone()));
-    let dst_chain = Arc::new(MockChainContext::new("chain2".to_string(), clock));
+    let src_chain = MockChainContext::new("chain1".to_string(), clock.clone());
+    let dst_chain = MockChainContext::new("chain2".to_string(), clock);
     let relay = MockRelayContext::new(
         src_chain.clone(),
         dst_chain.clone(),

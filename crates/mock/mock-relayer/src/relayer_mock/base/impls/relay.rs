@@ -3,13 +3,13 @@ use alloc::vec::Vec;
 use std::vec;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::types::impls::WithType;
+use cgp::core::field::impls::use_field::UseField;
 use cgp::prelude::*;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
-use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::traits::chains::{
-    HasRelayClientIds, ProvideRelayChains, RelayClientIdGetter,
+use hermes_relayer_components::multi::traits::chain_at::{
+    ChainGetterAtComponent, ChainTypeAtComponent,
 };
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
+use hermes_relayer_components::relay::traits::chains::{HasRelayClientIds, RelayClientIdGetter};
 use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
@@ -24,7 +24,6 @@ use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
 use crate::relayer_mock::base::types::packet::Packet;
 use crate::relayer_mock::components::relay::MockRelayComponents;
-use crate::relayer_mock::contexts::chain::MockChainContext;
 use crate::relayer_mock::contexts::relay::MockRelayContext;
 
 impl HasComponents for MockRelayContext {
@@ -45,19 +44,14 @@ delegate_components! {
             ProvideDefaultRuntimeField,
         [
             ChainTypeAtComponent<Src>,
-            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Src>,
         ]:
-            WithType<MockChainContext>,
-    }
-}
-
-impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
-    fn src_chain(relay: &MockRelayContext) -> &MockChainContext {
-        &relay.src_chain
-    }
-
-    fn dst_chain(relay: &MockRelayContext) -> &MockChainContext {
-        &relay.dst_chain
+            UseField<symbol!("src_chain")>,
+        [
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Dst>,
+        ]:
+            UseField<symbol!("dst_chain")>,
     }
 }
 

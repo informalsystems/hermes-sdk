@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 use std::sync::Arc;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::types::impls::WithType;
+use cgp::core::field::impls::use_field::UseField;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
@@ -20,20 +20,18 @@ use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::traits::chain_at::{
+    ChainGetterAtComponent, ChainTypeAtComponent,
+};
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_components::relay::impls::fields::{
-    UseDefaultClientIdFields, UseDefaultRelayFields,
-};
+use hermes_relayer_components::relay::impls::fields::UseDefaultClientIdFields;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetter, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::traits::chains::{
-    RelayChainsComponent, RelayClientIdGetterComponent,
-};
+use hermes_relayer_components::relay::traits::chains::RelayClientIdGetterComponent;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
@@ -101,17 +99,20 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             ProvideHermesLogger,
+        [
+            ChainTypeAtComponent<Src>,
+            ChainGetterAtComponent<Src>,
+        ]:
+            UseField<symbol!("src_chain")>,
+        [
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Dst>,
+        ]:
+            UseField<symbol!("dst_chain")>,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
-        [
-            ChainTypeAtComponent<Src>,
-            ChainTypeAtComponent<Dst>,
-        ]:
-            WithType<WasmCosmosChain>,
-        RelayChainsComponent:
-            UseDefaultRelayFields,
         RelayClientIdGetterComponent:
             UseDefaultClientIdFields,
     }

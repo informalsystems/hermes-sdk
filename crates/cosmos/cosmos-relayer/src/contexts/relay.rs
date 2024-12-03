@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::types::impls::WithType;
+use cgp::core::field::impls::use_field::UseField;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_error::types::Error;
@@ -15,12 +15,14 @@ use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::traits::chain_at::{
+    ChainGetterAtComponent, ChainTypeAtComponent,
+};
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
-use hermes_relayer_components::relay::traits::chains::{ProvideRelayChains, RelayClientIdGetter};
+use hermes_relayer_components::relay::traits::chains::RelayClientIdGetter;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -121,9 +123,14 @@ delegate_components! {
             ProvidePacketLockWithMutex,
         [
             ChainTypeAtComponent<Src>,
-            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Src>,
         ]:
-            WithType<CosmosChain>,
+            UseField<symbol!("src_chain")>,
+        [
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Dst>,
+        ]:
+            UseField<symbol!("dst_chain")>,
     }
 }
 
@@ -140,16 +147,6 @@ impl HasComponents for CosmosRelay {
 }
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
-
-impl ProvideRelayChains<CosmosRelay> for CosmosRelayComponents {
-    fn src_chain(relay: &CosmosRelay) -> &CosmosChain {
-        &relay.src_chain
-    }
-
-    fn dst_chain(relay: &CosmosRelay) -> &CosmosChain {
-        &relay.dst_chain
-    }
-}
 
 impl RelayClientIdGetter<CosmosRelay> for CosmosRelayComponents {
     fn src_client_id(relay: &CosmosRelay) -> &ClientId {
