@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasPortIdType;
 use hermes_relayer_components::chain::types::aliases::PortIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
-use hermes_relayer_components::multi::types::index::Twindex;
 
 #[derive_component(PortIdAtComponent, ProvidePortIdAt<Context>)]
 pub trait HasPortIdAt<TargetTag: Async, CounterpartyTag: Async>:

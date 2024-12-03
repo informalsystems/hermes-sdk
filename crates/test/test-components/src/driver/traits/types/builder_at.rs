@@ -8,7 +8,7 @@ pub trait HasBuilderTypeAt<A: Async, B: Async>: HasBiRelayTypeAt<A, B> {
     type Builder: Async;
 }
 
-pub type BuilderTypeAt<Context, A: Async, B: Async> = <Context as HasBuilderTypeAt<A, B>>::Builder;
+pub type BuilderTypeAt<Context, A, B> = <Context as HasBuilderTypeAt<A, B>>::Builder;
 
 impl<Context, A: Async, B: Async, Provider, Builder> ProvideBuilderTypeAt<Context, A, B>
     for WithProvider<Provider>

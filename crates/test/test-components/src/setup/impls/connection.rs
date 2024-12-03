@@ -43,7 +43,7 @@ where
     > {
         let (connection_id_a, connection_id_b) = birelay
             .relay_a_to_b()
-            .bootstrap_connection(&setup.init_connection_options())
+            .bootstrap_connection(setup.init_connection_options())
             .await
             .map_err(Setup::raise_error)?;
 

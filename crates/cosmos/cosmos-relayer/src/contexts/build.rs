@@ -17,7 +17,7 @@ use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCac
 use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
-use hermes_relayer_components::multi::types::index::{Index, Twindex};
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_relayer_components_extra::build::traits::cache::HasBatchSenderCache;

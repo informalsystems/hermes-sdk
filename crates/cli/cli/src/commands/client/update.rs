@@ -7,7 +7,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use hermes_relayer_components::multi::types::index::{Index, Twindex};
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use ibc_relayer_types::core::ics02_client::height::Height;

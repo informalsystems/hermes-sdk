@@ -11,7 +11,7 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
-use hermes_relayer_components::multi::types::index::{Index, Twindex};
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_test_components::driver::traits::channel_at::ChannelGetterAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::{
     ChainDriverGetterAt, ChainDriverTypeAtComponent,

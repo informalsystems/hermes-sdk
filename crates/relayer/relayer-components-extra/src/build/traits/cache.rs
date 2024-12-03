@@ -25,7 +25,7 @@ pub trait HasBatchSenderCache<Error: Async, Target: Async, Counterparty: Async>:
     ) -> &BatchSenderCache<Self, Error, Target, Counterparty>;
 }
 
-pub type BatchSenderCache<Build, Error, Target: Async, Counterparty: Async> = MutexOf<
+pub type BatchSenderCache<Build, Error, Target, Counterparty> = MutexOf<
     RuntimeOf<Build>,
     BTreeMap<
         (

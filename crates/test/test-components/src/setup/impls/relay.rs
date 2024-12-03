@@ -9,7 +9,7 @@ use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt
 use hermes_relayer_components::multi::traits::relay_at::{
     HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
 };
-use hermes_relayer_components::multi::types::index::{Index, Twindex};
+use hermes_relayer_components::multi::types::index::Index;
 
 use crate::setup::traits::builder_at::HasBuilderAt;
 use crate::setup::traits::relay::RelaySetup;

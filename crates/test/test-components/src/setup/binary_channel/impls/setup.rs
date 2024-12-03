@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_relayer_components::multi::types::index::{Index, Twindex};
+use hermes_relayer_components::multi::types::index::Index;
 
 use crate::chain_driver::traits::types::chain::HasChain;
 use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
