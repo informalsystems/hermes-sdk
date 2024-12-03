@@ -228,8 +228,8 @@ impl<const I: usize, const J: usize>
 {
     fn init_connection_options(
         setup: &LegacyCosmosBinaryChannelSetup,
-    ) -> CosmosInitConnectionOptions {
-        setup.init_connection_options.clone()
+    ) -> &CosmosInitConnectionOptions {
+        &setup.init_connection_options
     }
 }
 

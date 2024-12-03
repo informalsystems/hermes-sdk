@@ -30,7 +30,7 @@ use hermes_test_components::setup::traits::create_client_options_at::{
 use hermes_test_components::setup::traits::driver::TestDriverTypeComponent;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
-use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
+use hermes_test_components::setup::traits::init_connection_options_at::InitConnectionOptionsAtComponent;
 use hermes_test_components::setup::traits::port_id_at::ProvidePortIdAt;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
 
@@ -79,11 +79,12 @@ delegate_components! {
             ChainTypeAtComponent,
             ChainDriverTypeAtComponent,
         ]: UseBinarySetupFields,
-        CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
-        CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
-        BuilderAtComponent: UseField<symbol!("builder")>,
         TestDriverTypeComponent: WithType<CosmosBinaryChannelTestDriver>,
         BuilderTypeAtComponent: WithType<CosmosBuilder>,
+        BuilderAtComponent: UseField<symbol!("builder")>,
+        CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
+        CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
+        InitConnectionOptionsAtComponent: UseField<symbol!("init_connection_options")>,
         // BiRelayTypeAtComponent: WithType<CosmosBiRelay>,
     }
 }
@@ -139,22 +140,6 @@ impl ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChanne
 
 impl ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
     type BiRelay = CosmosBiRelay;
-}
-
-impl ProvideInitConnectionOptionsAt<CosmosBinaryChannelSetup, 0, 1>
-    for CosmosBinaryChannelSetupComponents
-{
-    fn init_connection_options(setup: &CosmosBinaryChannelSetup) -> CosmosInitConnectionOptions {
-        setup.init_connection_options.clone()
-    }
-}
-
-impl ProvideInitConnectionOptionsAt<CosmosBinaryChannelSetup, 1, 0>
-    for CosmosBinaryChannelSetupComponents
-{
-    fn init_connection_options(setup: &CosmosBinaryChannelSetup) -> CosmosInitConnectionOptions {
-        setup.init_connection_options.clone()
-    }
 }
 
 impl ProvideInitChannelOptionsAt<CosmosBinaryChannelSetup, 0, 1>
