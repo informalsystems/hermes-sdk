@@ -16,7 +16,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use hermes_relayer_components::multi::types::index::Index;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 
@@ -46,8 +46,9 @@ where
         + HasCreateClientMessageOptionsType<Counterparty>
         + HasErrorType,
     Counterparty: HasChainIdType + HasCreateClientPayloadOptionsType<Chain> + HasErrorType,
-    Relay:
-        HasRelayChains<SrcChain = Chain, DstChain = Counterparty> + CanCreateClient<SourceTarget>,
+    Relay: HasRelayChains<SrcChain = Chain, DstChain = Counterparty>
+        + HasRelayClientIds
+        + CanCreateClient<SourceTarget>,
     Args: Async,
     Chain::CreateClientMessageOptions: Debug,
     Counterparty::CreateClientPayloadOptions: Debug,

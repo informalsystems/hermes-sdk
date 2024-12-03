@@ -5,8 +5,12 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::relay::*;
-use hermes_relayer_components::relay::impls::fields::ProvideDefaultRelayFields;
-use hermes_relayer_components::relay::traits::chains::RelayChainsComponent;
+use hermes_relayer_components::relay::impls::fields::{
+    UseDefaultClientIdFields, UseDefaultRelayFields,
+};
+use hermes_relayer_components::relay::traits::chains::{
+    HasRelayClientIds, RelayChainsComponent, RelayClientIdGetterComponent,
+};
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -49,8 +53,8 @@ delegate_components! {
             ProvideDefaultRuntimeField,
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
-        RelayChainsComponent:
-            ProvideDefaultRelayFields,
+        RelayChainsComponent: UseDefaultRelayFields,
+        RelayClientIdGetterComponent: UseDefaultClientIdFields,
     }
 }
 
@@ -72,7 +76,7 @@ impl SolomachineRelay {
     }
 }
 
-pub trait CanUseSolomachineRelay: CanInitConnection
+pub trait CanUseSolomachineRelay: HasRelayClientIds + CanInitConnection
 where
     Self::SrcChain: HasInitConnectionOptionsType<Self::DstChain>,
 {

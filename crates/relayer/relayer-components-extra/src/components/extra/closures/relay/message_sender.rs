@@ -6,7 +6,9 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use hermes_relayer_components::relay::traits::chains::{
+    CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
+};
 use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -20,7 +22,8 @@ use crate::components::extra::closures::chain::message_sender::UseExtraChainComp
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;
 
 pub trait UseExtraIbcMessageSender:
-    CanSendIbcMessages<MainSink, SourceTarget>
+    HasRelayClientIds
+    + CanSendIbcMessages<MainSink, SourceTarget>
     + CanSendIbcMessages<MainSink, DestinationTarget>
     + CanSendIbcMessages<BatchWorkerSink, SourceTarget>
     + CanSendIbcMessages<BatchWorkerSink, DestinationTarget>
@@ -31,6 +34,7 @@ pub trait UseExtraIbcMessageSender:
 impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraIbcMessageSender for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + HasLogger<Logger = Logger>
         + HasMessageBatchSender<SourceTarget>
         + HasMessageBatchSender<DestinationTarget>

@@ -9,7 +9,7 @@ use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenTryEvent;
 use crate::chain::types::aliases::ConnectionIdOf;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -39,6 +39,7 @@ where
 impl<Relay, SrcChain, DstChain> ConnectionOpenTryRelayer<Relay> for RelayConnectionOpenTry
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + CanSendTargetUpdateClientMessage<SourceTarget>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
         + for<'a> CanRaiseError<MissingConnectionTryEventError<'a, Relay>>

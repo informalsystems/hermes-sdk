@@ -23,7 +23,7 @@ use hermes_relayer_components::chain::traits::types::ibc::{
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_runtime_components::traits::channel::CanUseChannels;
@@ -49,6 +49,7 @@ where
 impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraAckPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + HasLogger<Logger = Logger>
         + HasMessageBatchSender<SourceTarget>
         + HasComponents<Components = Components>,

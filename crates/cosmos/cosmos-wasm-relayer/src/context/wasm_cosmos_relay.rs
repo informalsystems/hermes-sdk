@@ -21,12 +21,16 @@ use hermes_relayer_components::error::traits::retry::{
 };
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_components::relay::impls::fields::ProvideDefaultRelayFields;
+use hermes_relayer_components::relay::impls::fields::{
+    UseDefaultClientIdFields, UseDefaultRelayFields,
+};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetter, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::traits::chains::RelayChainsComponent;
+use hermes_relayer_components::relay::traits::chains::{
+    RelayChainsComponent, RelayClientIdGetterComponent,
+};
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
@@ -99,7 +103,9 @@ delegate_components! {
         PacketLockComponent:
             ProvidePacketLockWithMutex,
         RelayChainsComponent:
-            ProvideDefaultRelayFields,
+            UseDefaultRelayFields,
+        RelayClientIdGetterComponent:
+            UseDefaultClientIdFields,
     }
 }
 

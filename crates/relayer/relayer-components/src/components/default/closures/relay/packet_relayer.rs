@@ -34,7 +34,7 @@ use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacke
 use crate::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
 use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::packet_filter::PacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
@@ -47,6 +47,7 @@ pub trait UseDefaultPacketRelayer: CanRelayPacket {}
 impl<Relay, SrcChain, DstChain, Components, Logger> UseDefaultPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + HasLogger<Logger = Logger>
         + HasPacketLock
         + HasComponents<Components = Components>,

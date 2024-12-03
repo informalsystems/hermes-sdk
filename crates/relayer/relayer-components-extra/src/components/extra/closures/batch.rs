@@ -3,7 +3,9 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::CanEstimateMessageSize;
-use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use hermes_relayer_components::relay::traits::chains::{
+    CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
+};
 use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime_components::traits::channel::{CanCloneSender, CanUseChannels, HasChannelTypes};
@@ -29,6 +31,7 @@ where
 pub trait UseBatchMessageWorkerSpawner:
     CanSpawnBatchMessageWorker<SourceTarget>
     + CanSpawnBatchMessageWorker<DestinationTarget>
+    + HasRelayClientIds
     + CanRaiseRelayChainErrors
 where
     Self::SrcChain: HasRuntime,
@@ -42,6 +45,7 @@ impl<Relay, SrcChain, DstChain> UseBatchMessageWorkerSpawner for Relay
 where
     Relay: Clone
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + CanSendIbcMessages<BatchWorkerSink, SourceTarget>
         + CanSendIbcMessages<BatchWorkerSink, DestinationTarget>
         + HasLogger

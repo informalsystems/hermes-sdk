@@ -8,7 +8,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt};
-use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
+use hermes_relayer_components::relay::traits::chains::{
+    CanRaiseRelayChainErrors, HasRelayClientIds,
+};
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime_components::traits::channel::{
     CanCloneSender, CanCreateChannels, HasChannelTypes,
@@ -36,6 +38,7 @@ where
         + CanBuildBatchChannel<ErrorOf<Build::Relay>, Src, Dst>
         + CanBuildBatchChannel<ErrorOf<Build::Relay>, Dst, Src>,
     Build::Relay: Clone
+        + HasRelayClientIds
         + HasMessageBatchSenderTypes
         + CanSpawnBatchMessageWorker<SourceTarget>
         + CanSpawnBatchMessageWorker<DestinationTarget>

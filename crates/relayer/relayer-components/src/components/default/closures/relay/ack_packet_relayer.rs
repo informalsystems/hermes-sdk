@@ -27,7 +27,7 @@ use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::target::SourceTarget;
 
@@ -38,6 +38,7 @@ pub trait UseDefaultAckPacketRelayer: CanRelayAckPacket {}
 impl<Relay, SrcChain, DstChain, Components, Logger> UseDefaultAckPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + HasLogger<Logger = Logger>
         + HasComponents<Components = Components>,
     SrcChain: HasErrorType

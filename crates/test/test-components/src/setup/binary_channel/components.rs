@@ -15,7 +15,9 @@ use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use hermes_relayer_components::relay::traits::chains::{
+    CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
+};
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
@@ -132,6 +134,7 @@ where
         + HasErrorType
         + Clone,
     Relay: HasRelayChains<SrcChain = ChainA, DstChain = ChainB>
+        + HasRelayClientIds
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
         + CanBootstrapConnection

@@ -2,43 +2,29 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
+use hermes_chain_components::types::aliases::ClientIdOf;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::relay::traits::chains::ProvideRelayChains;
+use crate::relay::traits::chains::{HasRelayChains, ProvideRelayChains, RelayClientIdGetter};
 
-pub struct ProvideRelayFields<SrcChainField, DstChainField, SrcClientIdField, DstClientIdField>(
-    pub  PhantomData<(
-        SrcChainField,
-        DstChainField,
-        SrcClientIdField,
-        DstClientIdField,
-    )>,
+pub struct UseRelayFields<SrcChainField, DstChainField>(
+    pub PhantomData<(SrcChainField, DstChainField)>,
 );
 
-pub type ProvideDefaultRelayFields = ProvideRelayFields<
-    symbol!("src_chain"),
-    symbol!("dst_chain"),
-    symbol!("src_client_id"),
-    symbol!("dst_client_id"),
->;
+pub struct UseClientIdFields<SrcClientId, DstClientId>(pub PhantomData<(SrcClientId, DstClientId)>);
 
-impl<
-        Relay,
-        SrcChain,
-        DstChain,
-        SrcChainField: Async,
-        DstChainField: Async,
-        SrcClientIdField: Async,
-        DstClientIdField: Async,
-    > ProvideRelayChains<Relay>
-    for ProvideRelayFields<SrcChainField, DstChainField, SrcClientIdField, DstClientIdField>
+pub type UseDefaultRelayFields = UseRelayFields<symbol!("src_chain"), symbol!("dst_chain")>;
+
+pub type UseDefaultClientIdFields =
+    UseClientIdFields<symbol!("src_client_id"), symbol!("dst_client_id")>;
+
+impl<Relay, SrcChain, DstChain, SrcChainField: Async, DstChainField: Async>
+    ProvideRelayChains<Relay> for UseRelayFields<SrcChainField, DstChainField>
 where
     Relay: Async
         + HasErrorType
         + HasField<SrcChainField, Field = SrcChain>
-        + HasField<DstChainField, Field = DstChain>
-        + HasField<SrcClientIdField, Field = SrcChain::ClientId>
-        + HasField<DstClientIdField, Field = DstChain::ClientId>,
+        + HasField<DstChainField, Field = DstChain>,
     SrcChain: HasErrorType + HasIbcChainTypes<DstChain> + HasOutgoingPacketType<DstChain>,
     DstChain: HasErrorType + HasIbcChainTypes<SrcChain>,
 {
@@ -53,12 +39,20 @@ where
     fn dst_chain(relay: &Relay) -> &DstChain {
         relay.get_field(PhantomData::<DstChainField>)
     }
+}
 
-    fn src_client_id(relay: &Relay) -> &SrcChain::ClientId {
-        relay.get_field(PhantomData::<SrcClientIdField>)
+impl<Relay, SrcClientId, DstClientId> RelayClientIdGetter<Relay>
+    for UseClientIdFields<SrcClientId, DstClientId>
+where
+    Relay: HasRelayChains
+        + HasField<SrcClientId, Field = ClientIdOf<Relay::SrcChain, Relay::DstChain>>
+        + HasField<DstClientId, Field = ClientIdOf<Relay::DstChain, Relay::SrcChain>>,
+{
+    fn src_client_id(relay: &Relay) -> &ClientIdOf<Relay::SrcChain, Relay::DstChain> {
+        relay.get_field(PhantomData::<SrcClientId>)
     }
 
-    fn dst_client_id(relay: &Relay) -> &DstChain::ClientId {
-        relay.get_field(PhantomData::<DstClientIdField>)
+    fn dst_client_id(relay: &Relay) -> &ClientIdOf<Relay::DstChain, Relay::SrcChain> {
+        relay.get_field(PhantomData::<DstClientId>)
     }
 }

@@ -3,7 +3,7 @@ use cgp::core::Async;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 
 #[derive(Default, Clone, Copy)]
 pub struct SourceTarget;
@@ -42,7 +42,7 @@ impl private::Sealed for DestinationTarget {}
 
 impl<Relay> ChainTargetType<Relay> for SourceTarget
 where
-    Relay: HasRelayChains,
+    Relay: HasRelayClientIds,
 {
     type TargetChain = Relay::SrcChain;
 
@@ -51,7 +51,7 @@ where
 
 impl<Relay> ChainTarget<Relay> for SourceTarget
 where
-    Relay: CanRaiseRelayChainErrors,
+    Relay: HasRelayClientIds + CanRaiseRelayChainErrors,
 {
     fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error {
         Relay::raise_error(e)
@@ -93,7 +93,7 @@ where
 
 impl<Relay> ChainTarget<Relay> for DestinationTarget
 where
-    Relay: CanRaiseRelayChainErrors,
+    Relay: HasRelayClientIds + CanRaiseRelayChainErrors,
 {
     fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error {
         Relay::raise_error(e)

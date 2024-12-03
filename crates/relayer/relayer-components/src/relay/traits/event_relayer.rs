@@ -2,7 +2,7 @@ use cgp::prelude::*;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::types::aliases::{EventOf, HeightOf};
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::HasRelayClientIds;
 use crate::relay::traits::target::ChainTarget;
 
 /**
@@ -16,7 +16,7 @@ use crate::relay::traits::target::ChainTarget;
 */
 #[derive_component(EventRelayerComponent, EventRelayer<Relay>)]
 #[async_trait]
-pub trait CanRelayEvent<Target>: HasRelayChains
+pub trait CanRelayEvent<Target>: HasRelayClientIds
 where
     Target: ChainTarget<Self>,
     Target::TargetChain: HasEventType,
