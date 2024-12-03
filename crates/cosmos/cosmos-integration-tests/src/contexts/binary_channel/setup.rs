@@ -28,7 +28,7 @@ use hermes_test_components::setup::traits::create_client_options_at::{
 };
 use hermes_test_components::setup::traits::driver::TestDriverTypeComponent;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
-use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
+use hermes_test_components::setup::traits::init_channel_options_at::InitChannelOptionsAtComponent;
 use hermes_test_components::setup::traits::init_connection_options_at::InitConnectionOptionsAtComponent;
 use hermes_test_components::setup::traits::port_id_at::PortIdAtComponent;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
@@ -37,6 +37,7 @@ use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
 use crate::contexts::bootstrap::CosmosBootstrap;
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;
+use crate::impls::init_channel_options::UseCosmosInitChannelOptions;
 
 /**
    A setup context for setting up a binary channel test driver,
@@ -81,10 +82,11 @@ delegate_components! {
         TestDriverTypeComponent: WithType<CosmosBinaryChannelTestDriver>,
         BuilderTypeAtComponent: WithType<CosmosBuilder>,
         BuilderAtComponent: UseField<symbol!("builder")>,
+        PortIdAtComponent: UseField<symbol!("port_id")>,
+        InitConnectionOptionsAtComponent: UseField<symbol!("init_connection_options")>,
         CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
         CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
-        InitConnectionOptionsAtComponent: UseField<symbol!("init_connection_options")>,
-        PortIdAtComponent: UseField<symbol!("port_id")>,
+        InitChannelOptionsAtComponent: UseCosmosInitChannelOptions,
         RelayTypeAtComponent: WithType<CosmosRelay>,
         BiRelayTypeAtComponent: WithType<CosmosBiRelay>,
     }
@@ -126,44 +128,6 @@ impl HasField<symbol!("create_client_message_options")> for CosmosBinaryChannelS
 
     fn get_field(&self, _phantom: PhantomData<symbol!("create_client_message_options")>) -> &() {
         &()
-    }
-}
-
-impl ProvideInitChannelOptionsAt<CosmosBinaryChannelSetup, 0, 1>
-    for CosmosBinaryChannelSetupComponents
-{
-    fn init_channel_options(
-        setup: &CosmosBinaryChannelSetup,
-        connection_id: &ConnectionId,
-        _counterparty_connection_id: &ConnectionId,
-    ) -> CosmosInitChannelOptions {
-        let mut options = setup.init_channel_options.clone();
-
-        // Use an init channel options that is provided by the setup.
-        // Insert the connection ID to the front (or to the back?) to allow
-        // testing multihop connections in the future.
-        options.connection_hops.insert(0, connection_id.clone());
-
-        options
-    }
-}
-
-impl ProvideInitChannelOptionsAt<CosmosBinaryChannelSetup, 1, 0>
-    for CosmosBinaryChannelSetupComponents
-{
-    fn init_channel_options(
-        setup: &CosmosBinaryChannelSetup,
-        connection_id: &ConnectionId,
-        _counterparty_connection_id: &ConnectionId,
-    ) -> CosmosInitChannelOptions {
-        let mut options = setup.init_channel_options.clone();
-
-        // Use an init channel options that is provided by the setup.
-        // Insert the connection ID to the front (or to the back?) to allow
-        // testing multihop connections in the future.
-        options.connection_hops.insert(0, connection_id.clone());
-
-        options
     }
 }
 
