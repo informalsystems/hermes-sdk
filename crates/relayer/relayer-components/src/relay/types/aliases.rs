@@ -1,10 +1,10 @@
 use hermes_chain_components::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 
-use crate::relay::traits::chains::HasRelayChainTypes;
+use crate::relay::traits::chains::{HasDstChainType, HasSrcChainType};
 
-pub type SrcChain<Relay> = <Relay as HasRelayChainTypes>::SrcChain;
+pub type SrcChain<Relay> = <Relay as HasSrcChainType>::SrcChain;
 
-pub type DstChain<Relay> = <Relay as HasRelayChainTypes>::DstChain;
+pub type DstChain<Relay> = <Relay as HasDstChainType>::DstChain;
 
 pub type SrcConnectionId<Relay> = ConnectionIdOf<SrcChain<Relay>, DstChain<Relay>>;
 

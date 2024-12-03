@@ -10,12 +10,36 @@ use crate::chain::types::aliases::ClientIdOf;
 use crate::multi::traits::chain_at::{HasChainAt, HasChainTypeAt};
 use crate::multi::types::tags::{Dst, Src};
 
-pub trait HasRelayChainTypes: HasChainTypeAt<Src> + HasChainTypeAt<Dst> + HasErrorType {
-    type SrcChain: HasErrorType
-        + HasIbcChainTypes<Self::DstChain>
-        + HasOutgoingPacketType<Self::DstChain>;
+pub trait HasSrcChainType: HasChainTypeAt<Src, Chain = Self::SrcChain> {
+    type SrcChain;
+}
 
-    type DstChain: HasErrorType + HasIbcChainTypes<Self::SrcChain>;
+pub trait HasDstChainType: HasChainTypeAt<Dst, Chain = Self::DstChain> {
+    type DstChain;
+}
+
+impl<Relay> HasSrcChainType for Relay
+where
+    Relay: HasChainTypeAt<Src>,
+{
+    type SrcChain = Relay::Chain;
+}
+
+impl<Relay> HasDstChainType for Relay
+where
+    Relay: HasChainTypeAt<Dst>,
+{
+    type DstChain = Relay::Chain;
+}
+
+pub trait HasRelayChainTypes:
+    HasErrorType
+    + HasSrcChainType<
+        SrcChain: HasErrorType
+                      + HasIbcChainTypes<Self::DstChain>
+                      + HasOutgoingPacketType<Self::DstChain>,
+    > + HasDstChainType<DstChain: HasErrorType + HasIbcChainTypes<Self::SrcChain>>
+{
 }
 
 impl<Relay, SrcChain, DstChain> HasRelayChainTypes for Relay
@@ -26,9 +50,6 @@ where
     SrcChain: HasErrorType + HasIbcChainTypes<DstChain> + HasOutgoingPacketType<DstChain>,
     DstChain: HasErrorType + HasIbcChainTypes<SrcChain>,
 {
-    type SrcChain = SrcChain;
-
-    type DstChain = DstChain;
 }
 
 pub trait HasRelayChains: HasRelayChainTypes {
@@ -85,9 +106,9 @@ where
     }
 }
 
-pub type SrcChainOf<Relay> = <Relay as HasRelayChainTypes>::SrcChain;
+pub type SrcChainOf<Relay> = <Relay as HasSrcChainType>::SrcChain;
 
-pub type DstChainOf<Relay> = <Relay as HasRelayChainTypes>::DstChain;
+pub type DstChainOf<Relay> = <Relay as HasDstChainType>::DstChain;
 
 pub type PacketOf<Relay> =
     <SrcChainOf<Relay> as HasOutgoingPacketType<DstChainOf<Relay>>>::OutgoingPacket;
