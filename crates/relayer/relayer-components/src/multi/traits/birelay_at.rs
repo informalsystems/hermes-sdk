@@ -13,7 +13,7 @@ pub type BiRelayAt<Context, const A: usize, const B: usize> =
 impl<Context, const A: usize, const B: usize, Provider, BiRelay> ProvideBiRelayTypeAt<Context, A, B>
     for WithProvider<Provider>
 where
-    Context: HasBiRelayTypeAt<A, B>,
+    Context: Async,
     Provider: ProvideType<Context, BiRelayTypeAtComponent, Type = BiRelay>,
     BiRelay: Async,
 {

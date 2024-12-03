@@ -1,3 +1,5 @@
+use cgp::core::component::WithProvider;
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -9,6 +11,12 @@ use crate::relay::traits::chains::HasRelayChains;
 pub trait HasRelayTypeAt<const SRC: usize, const DST: usize>: Async {
     type Relay: Async;
 }
+
+pub type RelayAt<Context, const SRC: usize, const DST: usize> =
+    <Context as HasRelayTypeAt<SRC, DST>>::Relay;
+
+pub type ClientIdAt<Context, const SRC: usize, const DST: usize> =
+    ClientIdOf<ChainAt<Context, SRC>, ChainAt<Context, DST>>;
 
 pub trait HasBoundedRelayTypeAt<const SRC: usize, const DST: usize>:
     HasRelayTypeAt<
@@ -30,8 +38,12 @@ impl<Context, const SRC: usize, const DST: usize> HasBoundedRelayTypeAt<SRC, DST
 {
 }
 
-pub type RelayAt<Context, const SRC: usize, const DST: usize> =
-    <Context as HasRelayTypeAt<SRC, DST>>::Relay;
-
-pub type ClientIdAt<Context, const SRC: usize, const DST: usize> =
-    ClientIdOf<ChainAt<Context, SRC>, ChainAt<Context, DST>>;
+impl<Context, const SRC: usize, const DST: usize, Provider, Relay>
+    ProvideRelayTypeAt<Context, SRC, DST> for WithProvider<Provider>
+where
+    Context: Async,
+    Provider: ProvideType<Context, RelayTypeAtComponent, Type = Relay>,
+    Relay: Async,
+{
+    type Relay = Relay;
+}
