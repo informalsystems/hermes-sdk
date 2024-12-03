@@ -30,7 +30,7 @@ use hermes_relayer_components::relay::impls::packet_lock::{
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::{
-    RelayChainsComponent, RelayClientIdGetterComponent,
+    RelayChainTypesComponent, RelayChainsComponent, RelayClientIdGetterComponent,
 };
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
@@ -103,7 +103,10 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
-        RelayChainsComponent:
+        [
+            RelayChainsComponent,
+            RelayChainTypesComponent,
+        ]:
             UseDefaultRelayFields,
         RelayClientIdGetterComponent:
             UseDefaultClientIdFields,

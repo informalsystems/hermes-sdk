@@ -5,14 +5,17 @@ use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;
 
-#[derive_component(RelayChainsComponent, ProvideRelayChains<Relay>)]
-pub trait HasRelayChains: Async + HasErrorType {
+#[derive_component(RelayChainTypesComponent, ProvideRelayChainTypes<Relay>)]
+pub trait HasRelayChainTypes: Async + HasErrorType {
     type SrcChain: HasErrorType
         + HasIbcChainTypes<Self::DstChain>
         + HasOutgoingPacketType<Self::DstChain>;
 
     type DstChain: HasErrorType + HasIbcChainTypes<Self::SrcChain>;
+}
 
+#[derive_component(RelayChainsComponent, ProvideRelayChains<Relay>)]
+pub trait HasRelayChains: HasRelayChainTypes {
     fn src_chain(&self) -> &Self::SrcChain;
 
     fn dst_chain(&self) -> &Self::DstChain;
@@ -25,9 +28,9 @@ pub trait HasRelayClientIds: HasRelayChains {
     fn dst_client_id(&self) -> &ClientIdOf<Self::DstChain, Self::SrcChain>;
 }
 
-pub type SrcChainOf<Relay> = <Relay as HasRelayChains>::SrcChain;
+pub type SrcChainOf<Relay> = <Relay as HasRelayChainTypes>::SrcChain;
 
-pub type DstChainOf<Relay> = <Relay as HasRelayChains>::DstChain;
+pub type DstChainOf<Relay> = <Relay as HasRelayChainTypes>::DstChain;
 
 pub type PacketOf<Relay> =
     <SrcChainOf<Relay> as HasOutgoingPacketType<DstChainOf<Relay>>>::OutgoingPacket;

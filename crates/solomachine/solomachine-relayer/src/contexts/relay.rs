@@ -9,7 +9,7 @@ use hermes_relayer_components::relay::impls::fields::{
     UseDefaultClientIdFields, UseDefaultRelayFields,
 };
 use hermes_relayer_components::relay::traits::chains::{
-    HasRelayClientIds, RelayChainsComponent, RelayClientIdGetterComponent,
+    HasRelayClientIds, RelayChainTypesComponent, RelayChainsComponent, RelayClientIdGetterComponent,
 };
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::with_default_relay_components;
@@ -53,7 +53,11 @@ delegate_components! {
             ProvideDefaultRuntimeField,
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
-        RelayChainsComponent: UseDefaultRelayFields,
+        [
+            RelayChainsComponent,
+            RelayChainTypesComponent,
+        ]:
+            UseDefaultRelayFields,
         RelayClientIdGetterComponent: UseDefaultClientIdFields,
     }
 }

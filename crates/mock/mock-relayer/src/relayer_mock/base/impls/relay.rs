@@ -5,7 +5,7 @@ use std::vec;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use hermes_relayer_components::relay::traits::chains::{
-    HasRelayClientIds, ProvideRelayChains, RelayClientIdGetter,
+    HasRelayClientIds, ProvideRelayChainTypes, ProvideRelayChains, RelayClientIdGetter,
 };
 use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -43,11 +43,13 @@ delegate_components! {
     }
 }
 
-impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
+impl ProvideRelayChainTypes<MockRelayContext> for MockRelayComponents {
     type SrcChain = MockChainContext;
 
     type DstChain = MockChainContext;
+}
 
+impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
     fn src_chain(relay: &MockRelayContext) -> &MockChainContext {
         &relay.src_chain
     }

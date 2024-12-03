@@ -17,7 +17,9 @@ use hermes_relayer_components::error::traits::retry::{
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
-use hermes_relayer_components::relay::traits::chains::{ProvideRelayChains, RelayClientIdGetter};
+use hermes_relayer_components::relay::traits::chains::{
+    ProvideRelayChainTypes, ProvideRelayChains, RelayClientIdGetter,
+};
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -133,11 +135,13 @@ impl HasComponents for CosmosRelay {
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
 
-impl ProvideRelayChains<CosmosRelay> for CosmosRelayComponents {
+impl ProvideRelayChainTypes<CosmosRelay> for CosmosRelayComponents {
     type SrcChain = CosmosChain;
 
     type DstChain = CosmosChain;
+}
 
+impl ProvideRelayChains<CosmosRelay> for CosmosRelayComponents {
     fn src_chain(relay: &CosmosRelay) -> &CosmosChain {
         &relay.src_chain
     }
