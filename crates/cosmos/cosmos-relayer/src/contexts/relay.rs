@@ -4,8 +4,10 @@ use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::impls::use_field::UseField;
+use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
+use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetter;
 use hermes_error::types::Error;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
@@ -16,14 +18,14 @@ use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
 use hermes_relayer_components::multi::traits::chain_at::{
-    ChainGetterAtComponent, ChainTypeAtComponent,
+    ChainGetterAt, ChainGetterAtComponent, ChainTypeAtComponent, ProvideChainTypeAt,
 };
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::traits::chains::{
-    DstClientIdGetterComponent, SrcClientIdGetterComponent,
+    DstClientIdGetter, DstClientIdGetterComponent, SrcClientIdGetter, SrcClientIdGetterComponent,
 };
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
@@ -123,20 +125,16 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
-        [
-            ChainTypeAtComponent<Src>,
-            ChainGetterAtComponent<Src>,
-        ]:
-            UseField<symbol!("src_chain")>,
-        [
-            ChainTypeAtComponent<Dst>,
-            ChainGetterAtComponent<Dst>,
-        ]:
-            UseField<symbol!("dst_chain")>,
-        SrcClientIdGetterComponent:
-            UseField<symbol!("src_client_id")>,
-        DstClientIdGetterComponent:
-            UseField<symbol!("dst_client_id")>,
+        // ChainTypeAtComponent<Src>: WithType<CosmosChain>,
+        // ChainTypeAtComponent<Dst>: WithType<CosmosChain>,
+        // ChainGetterAtComponent<Src>:
+        //     UseField<symbol!("src_chain")>,
+        // ChainGetterAtComponent<Dst>:
+        //     UseField<symbol!("dst_chain")>,
+        // SrcClientIdGetterComponent:
+        //     UseField<symbol!("src_client_id")>,
+        // DstClientIdGetterComponent:
+        //     UseField<symbol!("dst_client_id")>,
     }
 }
 
@@ -153,6 +151,38 @@ impl HasComponents for CosmosRelay {
 }
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
+
+impl ProvideChainTypeAt<CosmosRelay, Src> for CosmosRelayComponents {
+    type Chain = CosmosChain;
+}
+
+impl ProvideChainTypeAt<CosmosRelay, Dst> for CosmosRelayComponents {
+    type Chain = CosmosChain;
+}
+
+impl ChainGetterAt<CosmosRelay, Src> for CosmosRelayComponents {
+    fn chain_at(relay: &CosmosRelay, _tag: std::marker::PhantomData<Src>) -> &CosmosChain {
+        &relay.src_chain
+    }
+}
+
+impl ChainGetterAt<CosmosRelay, Dst> for CosmosRelayComponents {
+    fn chain_at(relay: &CosmosRelay, _tag: std::marker::PhantomData<Dst>) -> &CosmosChain {
+        &relay.dst_chain
+    }
+}
+
+impl SrcClientIdGetter<CosmosRelay> for CosmosRelayComponents {
+    fn src_client_id(relay: &CosmosRelay) -> &ClientId {
+        &relay.src_client_id
+    }
+}
+
+impl DstClientIdGetter<CosmosRelay> for CosmosRelayComponents {
+    fn dst_client_id(relay: &CosmosRelay) -> &ClientId {
+        &relay.dst_client_id
+    }
+}
 
 impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
     async fn should_relay_packet(relay: &CosmosRelay, packet: &Packet) -> Result<bool, Error> {
