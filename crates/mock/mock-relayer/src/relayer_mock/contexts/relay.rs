@@ -9,8 +9,8 @@ use crate::relayer_mock::contexts::chain::MockChainContext;
 pub struct MockRelayContext {
     pub src_chain: MockChainContext,
     pub dst_chain: MockChainContext,
-    pub src_to_dst_client: String,
-    pub dst_to_src_client: String,
+    pub dst_client_id: String,
+    pub src_client_id: String,
     pub runtime: MockRuntimeContext,
 }
 
@@ -25,17 +25,17 @@ impl MockRelayContext {
         Self {
             src_chain,
             dst_chain,
-            src_to_dst_client,
-            dst_to_src_client,
+            dst_client_id: src_to_dst_client,
+            src_client_id: dst_to_src_client,
             runtime,
         }
     }
 
     pub fn src_to_dst_client(&self) -> &String {
-        &self.src_to_dst_client
+        &self.dst_client_id
     }
 
     pub fn dst_to_src_client(&self) -> &String {
-        &self.dst_to_src_client
+        &self.src_client_id
     }
 }

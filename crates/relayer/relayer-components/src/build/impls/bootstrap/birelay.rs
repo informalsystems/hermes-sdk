@@ -14,7 +14,7 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::HasBoundedRelayTypeAt;
-use crate::relay::traits::chains::HasRelayClientIds;
+use crate::relay::traits::chains::{HasDstClientId, HasRelayClientIds, HasSrcClientId};
 
 #[async_trait]
 pub trait CanBootstrapBiRelay<A, B>:

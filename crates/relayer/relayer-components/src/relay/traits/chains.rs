@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
+use cgp::core::field::impls::use_field::UseField;
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
@@ -51,11 +52,37 @@ where
     }
 }
 
-#[derive_component(RelayClientIdGetterComponent, RelayClientIdGetter<Relay>)]
-pub trait HasRelayClientIds: HasRelayChains {
+#[derive_component(SrcClientIdGetterComponent, SrcClientIdGetter<Relay>)]
+pub trait HasSrcClientId: HasRelayChainTypes {
     fn src_client_id(&self) -> &ClientIdOf<Self::SrcChain, Self::DstChain>;
+}
 
+#[derive_component(DstClientIdGetterComponent, DstClientIdGetter<Relay>)]
+pub trait HasDstClientId: HasRelayChainTypes {
     fn dst_client_id(&self) -> &ClientIdOf<Self::DstChain, Self::SrcChain>;
+}
+
+pub trait HasRelayClientIds: HasRelayChains + HasSrcClientId + HasDstClientId {}
+
+impl<Relay> HasRelayClientIds for Relay where Relay: HasRelayChains + HasSrcClientId + HasDstClientId
+{}
+
+impl<Relay, Tag> SrcClientIdGetter<Relay> for UseField<Tag>
+where
+    Relay: HasRelayChainTypes + HasField<Tag, Field = ClientIdOf<Relay::SrcChain, Relay::DstChain>>,
+{
+    fn src_client_id(relay: &Relay) -> &ClientIdOf<Relay::SrcChain, Relay::DstChain> {
+        relay.get_field(PhantomData)
+    }
+}
+
+impl<Relay, Tag> DstClientIdGetter<Relay> for UseField<Tag>
+where
+    Relay: HasRelayChainTypes + HasField<Tag, Field = ClientIdOf<Relay::DstChain, Relay::SrcChain>>,
+{
+    fn dst_client_id(relay: &Relay) -> &ClientIdOf<Relay::DstChain, Relay::SrcChain> {
+        relay.get_field(PhantomData)
+    }
 }
 
 pub type SrcChainOf<Relay> = <Relay as HasRelayChainTypes>::SrcChain;

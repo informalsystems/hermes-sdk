@@ -22,7 +22,9 @@ use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
-use hermes_relayer_components::relay::traits::chains::RelayClientIdGetter;
+use hermes_relayer_components::relay::traits::chains::{
+    DstClientIdGetterComponent, SrcClientIdGetterComponent,
+};
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -131,6 +133,10 @@ delegate_components! {
             ChainGetterAtComponent<Dst>,
         ]:
             UseField<symbol!("dst_chain")>,
+        SrcClientIdGetterComponent:
+            UseField<symbol!("src_client_id")>,
+        DstClientIdGetterComponent:
+            UseField<symbol!("dst_client_id")>,
     }
 }
 
@@ -147,16 +153,6 @@ impl HasComponents for CosmosRelay {
 }
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
-
-impl RelayClientIdGetter<CosmosRelay> for CosmosRelayComponents {
-    fn src_client_id(relay: &CosmosRelay) -> &ClientId {
-        &relay.src_client_id
-    }
-
-    fn dst_client_id(relay: &CosmosRelay) -> &ClientId {
-        &relay.dst_client_id
-    }
-}
 
 impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
     async fn should_relay_packet(relay: &CosmosRelay, packet: &Packet) -> Result<bool, Error> {
