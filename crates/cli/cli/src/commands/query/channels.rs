@@ -1,3 +1,4 @@
+use http::Uri;
 use std::marker::PhantomData;
 use std::str::FromStr;
 use tracing::{info, warn};
@@ -53,7 +54,8 @@ impl CommandRunner<HermesApp> for QueryChannels {
         let dst_chain_id = self.counterparty_chain_id.clone();
         let show_counterparty = self.show_counterparty;
 
-        let mut client = QueryClient::connect(chain.grpc_address().clone()).await?;
+        let mut client =
+            QueryClient::connect(Uri::try_from(&chain.grpc_address().to_string())?).await?;
 
         let request = tonic::Request::new(QueryChannelsRequest { pagination: None });
 

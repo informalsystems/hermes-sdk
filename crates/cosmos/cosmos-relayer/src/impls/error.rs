@@ -3,6 +3,7 @@ use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseFloatError, ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
+use http::uri::InvalidUri;
 
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -145,6 +146,7 @@ delegate_components! {
             TryFromSliceError,
             subtle_encoding::Error,
             reqwest::Error,
+            InvalidUri,
 
             // TODO: make it retryable?
             TransportError,

@@ -9,7 +9,6 @@ use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use std::collections::HashMap;
 use std::fs::{self, File};
 
-use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
@@ -173,9 +172,9 @@ impl CosmosBuilder {
 
         let event_source_mode = chain_config.event_source.clone();
 
-        let tx_config = TxConfig::try_from(&chain_config)?;
+        //let tx_config = TxConfig::try_from(&chain_config)?;
 
-        let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
+        let mut rpc_client = HttpClient::new(chain_config.rpc_addr.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
             CompatMode::from_str(compat_mode.as_str()).unwrap()
@@ -189,7 +188,6 @@ impl CosmosBuilder {
 
         let context = CosmosChain::new(
             chain_config,
-            tx_config,
             rpc_client,
             compat_mode,
             key,

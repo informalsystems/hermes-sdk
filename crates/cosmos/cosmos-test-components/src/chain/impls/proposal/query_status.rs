@@ -1,14 +1,17 @@
-use core::fmt::Debug;
-
 use cgp::core::error::CanRaiseError;
+use core::fmt::Debug;
+use http::uri::InvalidUri;
+use http::Uri;
+use tonic::transport::Error as TransportError;
+use tonic::Status;
+
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerier;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
+
 use ibc_proto::cosmos::gov::v1::query_client::QueryClient;
 use ibc_proto::cosmos::gov::v1::{Proposal, QueryProposalRequest};
-use tonic::transport::Error as TransportError;
-use tonic::Status;
 
 use crate::chain::types::proposal_status::ProposalStatus;
 
@@ -24,6 +27,7 @@ where
     Chain: HasProposalIdType<ProposalId = u64>
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasGrpcAddress
+        + CanRaiseError<InvalidUri>
         + CanRaiseError<Status>
         + CanRaiseError<TransportError>
         + CanRaiseError<String>
@@ -33,11 +37,11 @@ where
         chain: &Chain,
         proposal_id: &u64,
     ) -> Result<ProposalStatus, Chain::Error> {
-        let grpc_address = chain.grpc_address();
-
-        let mut client = QueryClient::connect(grpc_address.clone())
-            .await
-            .map_err(Chain::raise_error)?;
+        let mut client = QueryClient::connect(
+            Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,
+        )
+        .await
+        .map_err(Chain::raise_error)?;
 
         let request = tonic::Request::new(QueryProposalRequest {
             proposal_id: *proposal_id,

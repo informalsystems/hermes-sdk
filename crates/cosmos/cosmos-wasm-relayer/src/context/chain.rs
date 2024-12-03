@@ -227,7 +227,6 @@ use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeM
 use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
-use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::types::account::Account;
@@ -475,13 +474,13 @@ delegate_components! {
 
 impl TxExtensionOptionsGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn tx_extension_options(chain: &WasmCosmosChain) -> &Vec<ibc_proto::google::protobuf::Any> {
-        &chain.tx_config.extension_options
+        &chain.chain_config.extension_options
     }
 }
 
 impl GasConfigGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn gas_config(chain: &WasmCosmosChain) -> &GasConfig {
-        &chain.tx_config.gas_config
+        &chain.chain_config.gas_config
     }
 }
 
@@ -493,7 +492,7 @@ impl DefaultSignerGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 
 impl FeeForSimulationGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn fee_for_simulation(chain: &WasmCosmosChain) -> &Fee {
-        &chain.tx_config.gas_config.max_fee
+        &chain.chain_config.gas_config.max_fee
     }
 }
 
@@ -523,8 +522,8 @@ impl IbcCommitmentPrefixGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 }
 
 impl GrpcAddressGetter<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn grpc_address(chain: &WasmCosmosChain) -> &Uri {
-        &chain.tx_config.grpc_address
+    fn grpc_address(chain: &WasmCosmosChain) -> &Url {
+        &chain.chain_config.grpc_addr
     }
 }
 
@@ -534,7 +533,7 @@ impl RpcClientGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     }
 
     fn rpc_address(chain: &WasmCosmosChain) -> &Url {
-        &chain.tx_config.rpc_address
+        &chain.chain_config.rpc_addr
     }
 }
 

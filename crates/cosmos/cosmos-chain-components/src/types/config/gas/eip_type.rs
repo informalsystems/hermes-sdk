@@ -1,7 +1,9 @@
 use core::str::FromStr;
 use eyre::Report;
+use serde::Deserialize;
+use serde::Serialize;
 
-#[derive(Clone, Debug, Default, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Default, PartialEq, PartialOrd, Serialize, Deserialize)]
 pub enum EipQueryType {
     #[default]
     FeeMarket,

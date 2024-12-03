@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use http::Uri;
 use tracing::{info, warn};
 
 use hermes_cli_components::traits::build::CanLoadBuilder;
@@ -51,7 +52,8 @@ impl CommandRunner<HermesApp> for QueryConnections {
         let counterparty_chain_id = self.counterparty_chain_id.clone();
         let verbose = self.verbose;
 
-        let mut client = QueryClient::connect(chain.grpc_address().clone()).await?;
+        let mut client =
+            QueryClient::connect(Uri::try_from(&chain.grpc_address().to_string())?).await?;
 
         let request = tonic::Request::new(QueryConnectionsRequest { pagination: None });
 

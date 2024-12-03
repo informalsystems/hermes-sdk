@@ -1,6 +1,9 @@
+use serde::Deserialize;
+use serde::Serialize;
+
 use crate::types::config::gas::eip_type::EipQueryType;
 
-#[derive(Debug, Clone, PartialEq, PartialOrd)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize)]
 pub struct DynamicGasConfig {
     pub multiplier: f64,
     pub max: f64,

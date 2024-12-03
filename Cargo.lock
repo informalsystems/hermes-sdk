@@ -1636,6 +1636,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
+ "http 1.1.0",
  "humantime",
  "ibc",
  "ibc-relayer",
@@ -1660,6 +1661,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime-components",
  "hermes-test-components",
+ "http 1.1.0",
  "serde",
  "toml",
 ]
@@ -1854,6 +1856,7 @@ dependencies = [
  "hermes-runtime",
  "hermes-runtime-components",
  "hermes-test-components",
+ "http 1.1.0",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
