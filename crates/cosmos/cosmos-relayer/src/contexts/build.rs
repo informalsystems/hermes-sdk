@@ -6,6 +6,7 @@ use core::ops::Deref;
 use eyre::eyre;
 use futures::lock::Mutex;
 use std::collections::HashMap;
+use std::fs::{self, File};
 
 use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_error::types::Error;
@@ -26,15 +27,14 @@ use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
-use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
-use ibc_relayer::config::ChainConfig;
-use ibc_relayer::keyring::{AnySigningKeyPair, Secp256k1KeyPair};
-use ibc_relayer::spawn::{spawn_chain_runtime_with_config, SpawnError};
+use ibc_relayer::keyring::{
+    AnySigningKeyPair, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
+};
+use ibc_relayer::spawn::SpawnError;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
-use tokio::task;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::chain::CosmosChain;
@@ -184,19 +184,7 @@ impl CosmosBuilder {
         chain_config: CosmosSdkConfig,
         m_keypair: Option<&Secp256k1KeyPair>,
     ) -> Result<CosmosChain, Error> {
-        let runtime = self.runtime.runtime.clone();
-        let chain_id = chain_config.id.clone();
-
-        let (handle, key) = task::block_in_place(|| -> Result<_, Error> {
-            let handle = spawn_chain_runtime_with_config::<BaseChainHandle>(
-                ChainConfig::CosmosSdk(chain_config.clone()),
-                runtime,
-            )?;
-
-            let key = get_keypair(&chain_id, &handle, m_keypair)?;
-
-            Ok((handle, key))
-        })?;
+        let key = get_keypair(&chain_config, m_keypair)?;
 
         let event_source_mode = chain_config.event_source.clone();
 
@@ -215,7 +203,6 @@ impl CosmosBuilder {
         rpc_client.set_compat_mode(compat_mode);
 
         let context = CosmosChain::new(
-            handle,
             chain_config,
             tx_config,
             rpc_client,
@@ -254,30 +241,36 @@ impl CosmosBuilder {
 }
 
 pub fn get_keypair(
-    chain_id: &ChainId,
-    handle: &BaseChainHandle,
+    chain_config: &CosmosSdkConfig,
     m_keypair: Option<&Secp256k1KeyPair>,
 ) -> Result<Secp256k1KeyPair, Error> {
+    let ks_folder = &chain_config.key_store_folder;
+
+    let ks_folder = match ks_folder {
+        Some(folder) => folder.to_owned(),
+        None => {
+            let home =
+                dirs_next::home_dir().ok_or_else(|| eyre!("failed to retrieve home directory"))?;
+            home.join(KEYSTORE_DEFAULT_FOLDER)
+        }
+    };
+    // Create hermes_keyring folder if it does not exist
+    fs::create_dir_all(&ks_folder)?;
+
+    let mut filename = ks_folder.join(chain_config.key_name.clone());
+    filename.set_extension(KEYSTORE_FILE_EXTENSION);
+
+    let file = File::create(filename.clone())?;
+
     if let Some(keypair) = m_keypair {
-        let ChainConfig::CosmosSdk(chain_config) = handle.config()?;
-
-        // try add the key to the chain handle, in case if it is only in the key map,
-        // as for the case of integration tests.
-        let _ = handle.add_key(
-            chain_config.key_name,
-            AnySigningKeyPair::Secp256k1(keypair.clone()),
-        );
-
-        return Ok(keypair.clone());
+        serde_json::to_writer_pretty(file, &AnySigningKeyPair::Secp256k1(keypair.clone()))?;
     }
 
-    let keypair = handle.get_key()?;
+    let file = File::open(&filename)?;
 
-    let AnySigningKeyPair::Secp256k1(key) = keypair else {
-        return Err(eyre!("no Secp256k1 key pair for chain {}", chain_id).into());
-    };
+    let key_entry = serde_json::from_reader(file)?;
 
-    Ok(key)
+    Ok(key_entry)
 }
 
 impl ChainBuilder<CosmosBuilder, 0> for CosmosBaseBuildComponents {

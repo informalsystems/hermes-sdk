@@ -1623,6 +1623,7 @@ dependencies = [
  "futures",
  "hdpath",
  "hermes-any-counterparty",
+ "hermes-chain-components",
  "hermes-cli-components",
  "hermes-cli-framework",
  "hermes-cosmos-chain-components",
@@ -1643,6 +1644,7 @@ dependencies = [
  "serde",
  "serde_json",
  "toml",
+ "tonic",
  "tracing",
 ]
 
@@ -1796,6 +1798,7 @@ name = "hermes-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "dirs-next",
  "eyre",
  "futures",
  "hermes-any-counterparty",
@@ -1830,6 +1833,7 @@ dependencies = [
  "reqwest 0.12.9",
  "serde",
  "serde_derive",
+ "serde_json",
  "subtle-encoding",
  "tendermint",
  "tendermint-proto",
