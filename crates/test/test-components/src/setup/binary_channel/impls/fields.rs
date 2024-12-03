@@ -13,31 +13,31 @@ use crate::setup::traits::bootstrap_at::ProvideBootstrapAt;
 
 pub struct UseBinarySetupFields;
 
-impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, 0> for UseBinarySetupFields
+impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<0>> for UseBinarySetupFields
 where
-    Setup: HasChainDriverTypeAt<0> + HasField<symbol!("bootstrap_a"), Field = Bootstrap>,
+    Setup: HasChainDriverTypeAt<Index<0>> + HasField<symbol!("bootstrap_a"), Field = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = Setup::ChainDriver>,
 {
     type Bootstrap = Bootstrap;
 
-    fn chain_bootstrap(setup: &Setup, _index: Index<0>) -> &Bootstrap {
+    fn chain_bootstrap(setup: &Setup, _index: PhantomData<Index<0>>) -> &Bootstrap {
         setup.get_field(PhantomData)
     }
 }
 
-impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, 1> for UseBinarySetupFields
+impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<1>> for UseBinarySetupFields
 where
-    Setup: HasChainDriverTypeAt<1> + HasField<symbol!("bootstrap_b"), Field = Bootstrap>,
+    Setup: HasChainDriverTypeAt<Index<1>> + HasField<symbol!("bootstrap_b"), Field = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = Setup::ChainDriver>,
 {
     type Bootstrap = Bootstrap;
 
-    fn chain_bootstrap(setup: &Setup, _index: Index<1>) -> &Bootstrap {
+    fn chain_bootstrap(setup: &Setup, _index: PhantomData<Index<1>>) -> &Bootstrap {
         setup.get_field(PhantomData)
     }
 }
 
-impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, 0> for UseBinarySetupFields
+impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, Index<0>> for UseBinarySetupFields
 where
     Setup: Async + HasField<symbol!("bootstrap_a"), Field = Bootstrap>,
     Bootstrap: HasChainType<Chain = Chain>,
@@ -46,7 +46,7 @@ where
     type Chain = Chain;
 }
 
-impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, 1> for UseBinarySetupFields
+impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, Index<1>> for UseBinarySetupFields
 where
     Setup: Async + HasField<symbol!("bootstrap_b"), Field = Bootstrap>,
     Bootstrap: HasChainType<Chain = Chain>,
@@ -55,7 +55,8 @@ where
     type Chain = Chain;
 }
 
-impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, 0> for UseBinarySetupFields
+impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, Index<0>>
+    for UseBinarySetupFields
 where
     Setup: Async + HasField<symbol!("bootstrap_a"), Field = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = ChainDriver>,
@@ -64,7 +65,8 @@ where
     type ChainDriver = ChainDriver;
 }
 
-impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, 1> for UseBinarySetupFields
+impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, Index<1>>
+    for UseBinarySetupFields
 where
     Setup: Async + HasField<symbol!("bootstrap_b"), Field = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = ChainDriver>,

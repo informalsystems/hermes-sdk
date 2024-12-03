@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use alloc::collections::BTreeMap;
 use alloc::string::String;
 
@@ -17,11 +19,11 @@ pub struct RelayerWallet;
 pub struct ValidatorWallet;
 
 #[derive_component(WalletGetterComponent, WalletGetterAt<ChainDriver>)]
-pub trait HasWalletAt<WalletKind, const I: usize>: HasChainType
+pub trait HasWalletAt<WalletKind, I: Async>: HasChainType
 where
     Self::Chain: HasWalletType,
 {
-    fn wallet_at(&self, kind: WalletKind, index: Index<I>) -> &WalletOf<Self::Chain>;
+    fn wallet_at(&self, _kind: WalletKind, _index: PhantomData<I>) -> &WalletOf<Self::Chain>;
 }
 
 #[derive_component(WalletsGetterComponent, WalletsGetter<ChainDriver>)]

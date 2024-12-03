@@ -10,11 +10,11 @@ use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 
 pub struct UseCosmosInitChannelOptions;
 
-impl<Context, const TARGET: usize, const COUNTERPARTY: usize, Chain, Counterparty>
-    ProvideInitChannelOptionsAt<Context, TARGET, COUNTERPARTY> for UseCosmosInitChannelOptions
+impl<Context, Chain, Counterparty, TargetTag: Async, CounterpartyTag: Async>
+    ProvideInitChannelOptionsAt<Context, TargetTag, CounterpartyTag> for UseCosmosInitChannelOptions
 where
-    Context: HasChainTypeAt<TARGET, Chain = Chain>
-        + HasChainTypeAt<COUNTERPARTY, Chain = Counterparty>
+    Context: HasChainTypeAt<TargetTag, Chain = Chain>
+        + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>
         + HasField<symbol!("init_channel_options"), Field = CosmosInitChannelOptions>,
     Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>
         + HasInitChannelOptionsType<Counterparty, InitChannelOptions = CosmosInitChannelOptions>,

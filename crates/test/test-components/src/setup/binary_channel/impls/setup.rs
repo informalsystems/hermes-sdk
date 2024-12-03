@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
@@ -19,24 +21,24 @@ impl<Setup, ChainA, ChainB> DriverBuilder<Setup> for SetupBinaryChannelDriver
 where
     Setup: HasTestDriverType
         + HasErrorType
-        + CanSetupChain<0>
-        + CanSetupChain<1>
-        + HasChainTypeAt<0, Chain = ChainA>
-        + HasChainTypeAt<1, Chain = ChainB>
-        + CanSetupClients<0, 1>
-        + CanSetupBiRelay<0, 1>
-        + CanSetupConnection<0, 1>
-        + CanSetupChannel<0, 1>
+        + CanSetupChain<Index<0>>
+        + CanSetupChain<Index<1>>
+        + HasChainTypeAt<Index<0>, Chain = ChainA>
+        + HasChainTypeAt<Index<1>, Chain = ChainB>
+        + CanSetupClients<Index<0>, Index<1>>
+        + CanSetupBiRelay<Index<0>, Index<1>>
+        + CanSetupConnection<Index<0>, Index<1>>
+        + CanSetupChannel<Index<0>, Index<1>>
         + CanBuildTestDriverWithBinaryChannel,
-    ChainDriverTypeAt<Setup, 0>: HasChain<Chain = ChainA>,
-    ChainDriverTypeAt<Setup, 1>: HasChain<Chain = ChainB>,
+    ChainDriverTypeAt<Setup, Index<0>>: HasChain<Chain = ChainA>,
+    ChainDriverTypeAt<Setup, Index<1>>: HasChain<Chain = ChainB>,
     ChainA: HasIbcChainTypes<ChainB>,
     ChainB: HasIbcChainTypes<ChainA>,
 {
     async fn build_driver(setup: &Setup) -> Result<Setup::TestDriver, Setup::Error> {
-        let chain_driver_a = setup.setup_chain(Index::<0>).await?;
+        let chain_driver_a = setup.setup_chain(PhantomData::<Index<0>>).await?;
 
-        let chain_driver_b = setup.setup_chain(Index::<1>).await?;
+        let chain_driver_b = setup.setup_chain(PhantomData::<Index<1>>).await?;
 
         let chain_a = chain_driver_a.chain();
 
@@ -46,7 +48,7 @@ where
 
         let birelay = setup
             .setup_birelay(
-                Twindex::<0, 1>,
+                PhantomData::<(Index<0>, Index<1>)>,
                 chain_a,
                 chain_b,
                 &client_id_a,

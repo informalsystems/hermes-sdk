@@ -1,15 +1,15 @@
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
-use hermes_relayer_components::multi::types::index::Index;
 
 #[derive_component(ChainDriverTypeAtComponent, ProvideChainDriverTypeAt<Driver>)]
-pub trait HasChainDriverTypeAt<const I: usize>: Async {
+pub trait HasChainDriverTypeAt<Tag>: Async {
     type ChainDriver: Async;
 }
 
-pub type ChainDriverTypeAt<Driver, const I: usize> =
-    <Driver as HasChainDriverTypeAt<I>>::ChainDriver;
+pub type ChainDriverTypeAt<Driver, Tag> = <Driver as HasChainDriverTypeAt<Tag>>::ChainDriver;
 
 #[derive_component(ChainDriverGetterAtComponent, ChainDriverGetterAt<Driver>)]
-pub trait HasChainDriverAt<const I: usize>: HasChainDriverTypeAt<I> {
-    fn chain_driver_at(&self, index: Index<I>) -> &Self::ChainDriver;
+pub trait HasChainDriverAt<Tag>: HasChainDriverTypeAt<Tag> {
+    fn chain_driver_at(&self, _tag: PhantomData<Tag>) -> &Self::ChainDriver;
 }

@@ -9,6 +9,7 @@ use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::multi::types::index::Index;
 
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::CommandRunner;
@@ -70,9 +71,9 @@ where
         + CanWrapError<&'static str>,
     Args: Async,
     App::Logger: CanLog<LevelInfo>,
-    Build: CanBuildBiRelay<0, 1, BiRelay = BiRelay>
-        + HasChainTypeAt<0, Chain = ChainA>
-        + HasChainTypeAt<1, Chain = ChainB>,
+    Build: CanBuildBiRelay<Index<0>, Index<1>, BiRelay = BiRelay>
+        + HasChainTypeAt<Index<0>, Chain = ChainA>
+        + HasChainTypeAt<Index<1>, Chain = ChainB>,
     BiRelay: CanRun,
     ChainA: HasIbcChainTypes<ChainB>,
     ChainB: HasIbcChainTypes<ChainA>,

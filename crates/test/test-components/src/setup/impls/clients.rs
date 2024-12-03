@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::CanRaiseError;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -19,7 +21,7 @@ use crate::setup::traits::create_client_options_at::{
 
 pub struct SetupClientsWithRelay;
 
-impl<Setup, const A: usize, const B: usize> ClientSetup<Setup, A, B> for SetupClientsWithRelay
+impl<Setup, A: Async, B: Async> ClientSetup<Setup, A, B> for SetupClientsWithRelay
 where
     Setup: HasErrorType
         + HasBoundedRelayTypeAt<A, B>
@@ -55,8 +57,8 @@ where
             SourceTarget,
             chain_a,
             chain_b,
-            setup.create_client_payload_options(Twindex::<B, A>),
-            setup.create_client_message_options(Twindex::<A, B>),
+            setup.create_client_payload_options(PhantomData::<(B, A)>),
+            setup.create_client_message_options(PhantomData::<(A, B)>),
         )
         .await
         .map_err(Setup::raise_error)?;
@@ -65,8 +67,8 @@ where
             DestinationTarget,
             chain_b,
             chain_a,
-            setup.create_client_payload_options(Twindex::<A, B>),
-            setup.create_client_message_options(Twindex::<B, A>),
+            setup.create_client_payload_options(PhantomData::<(A, B)>),
+            setup.create_client_message_options(PhantomData::<(B, A)>),
         )
         .await
         .map_err(Setup::raise_error)?;

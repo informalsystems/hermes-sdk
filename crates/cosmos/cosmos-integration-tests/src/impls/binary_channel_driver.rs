@@ -5,6 +5,7 @@ use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverTypeAt;
 use hermes_test_components::setup::traits::driver::HasTestDriverType;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
@@ -18,13 +19,13 @@ pub struct BuildCosmosBinaryChannelDriver;
 
 impl<Setup> BinaryChannelDriverBuilder<Setup> for BuildCosmosBinaryChannelDriver
 where
-    Setup: HasBiRelayTypeAt<0, 1, BiRelay = CosmosBiRelay>
-        + HasRelayTypeAt<0, 1, Relay = CosmosRelay>
-        + HasRelayTypeAt<1, 0, Relay = CosmosRelay>
-        + HasChainTypeAt<0, Chain = CosmosChain>
-        + HasChainTypeAt<1, Chain = CosmosChain>
-        + HasChainDriverTypeAt<0, ChainDriver = CosmosChainDriver>
-        + HasChainDriverTypeAt<1, ChainDriver = CosmosChainDriver>
+    Setup: HasBiRelayTypeAt<Index<0>, Index<1>, BiRelay = CosmosBiRelay>
+        + HasRelayTypeAt<Index<0>, Index<1>, Relay = CosmosRelay>
+        + HasRelayTypeAt<Index<1>, Index<0>, Relay = CosmosRelay>
+        + HasChainTypeAt<Index<0>, Chain = CosmosChain>
+        + HasChainTypeAt<Index<1>, Chain = CosmosChain>
+        + HasChainDriverTypeAt<Index<0>, ChainDriver = CosmosChainDriver>
+        + HasChainDriverTypeAt<Index<1>, ChainDriver = CosmosChainDriver>
         + HasTestDriverType<TestDriver = CosmosBinaryChannelTestDriver>
         + HasErrorType,
 {

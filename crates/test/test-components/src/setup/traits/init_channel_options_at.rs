@@ -7,19 +7,19 @@ use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
 #[derive_component(InitChannelOptionsAtComponent, ProvideInitChannelOptionsAt<Setup>)]
-pub trait HasInitChannelOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:
+pub trait HasInitChannelOptionsAt<Target: Async, Counterparty: Async>:
     HasChainTypeAt<
-        TARGET,
-        Chain: HasInitChannelOptionsType<ChainAt<Self, COUNTERPARTY>>
-                   + HasConnectionIdType<ChainAt<Self, COUNTERPARTY>>,
-    > + HasChainTypeAt<COUNTERPARTY, Chain: HasConnectionIdType<ChainAt<Self, TARGET>>>
+        Target,
+        Chain: HasInitChannelOptionsType<ChainAt<Self, Counterparty>>
+                   + HasConnectionIdType<ChainAt<Self, Counterparty>>,
+    > + HasChainTypeAt<Counterparty, Chain: HasConnectionIdType<ChainAt<Self, Target>>>
 {
     fn init_channel_options(
         &self,
-        connection_id: &ConnectionIdOf<ChainAt<Self, TARGET>, ChainAt<Self, COUNTERPARTY>>,
+        connection_id: &ConnectionIdOf<ChainAt<Self, Target>, ChainAt<Self, Counterparty>>,
         counterparty_connection_id: &ConnectionIdOf<
-            ChainAt<Self, COUNTERPARTY>,
-            ChainAt<Self, TARGET>,
+            ChainAt<Self, Counterparty>,
+            ChainAt<Self, Target>,
         >,
-    ) -> InitChannelOptions<ChainAt<Self, TARGET>, ChainAt<Self, COUNTERPARTY>>;
+    ) -> InitChannelOptions<ChainAt<Self, Target>, ChainAt<Self, Counterparty>>;
 }

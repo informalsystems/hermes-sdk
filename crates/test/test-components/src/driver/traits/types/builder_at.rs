@@ -4,14 +4,13 @@ use cgp::prelude::*;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 
 #[derive_component(BuilderTypeAtComponent, ProvideBuilderTypeAt<Context>)]
-pub trait HasBuilderTypeAt<const A: usize, const B: usize>: HasBiRelayTypeAt<A, B> {
+pub trait HasBuilderTypeAt<A: Async, B: Async>: HasBiRelayTypeAt<A, B> {
     type Builder: Async;
 }
 
-pub type BuilderTypeAt<Context, const A: usize, const B: usize> =
-    <Context as HasBuilderTypeAt<A, B>>::Builder;
+pub type BuilderTypeAt<Context, A: Async, B: Async> = <Context as HasBuilderTypeAt<A, B>>::Builder;
 
-impl<Context, const A: usize, const B: usize, Provider, Builder> ProvideBuilderTypeAt<Context, A, B>
+impl<Context, A: Async, B: Async, Provider, Builder> ProvideBuilderTypeAt<Context, A, B>
     for WithProvider<Provider>
 where
     Context: HasBiRelayTypeAt<A, B>,

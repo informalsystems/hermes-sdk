@@ -1,34 +1,34 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::HasErrorType;
+use cgp::core::Async;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::build::traits::builders::relay_builder::RelayBuilder;
 use crate::build::traits::cache::HasRelayCache;
 use crate::multi::traits::chain_at::ChainIdAt;
 use crate::multi::traits::relay_at::ClientIdAt;
-use crate::multi::types::index::Twindex;
 
 pub struct BuildRelayWithCache<InBuilder>(pub PhantomData<InBuilder>);
 
-impl<InBuilder, Build, const SRC: usize, const DST: usize> RelayBuilder<Build, SRC, DST>
+impl<InBuilder, Build, Src: Async, Dst: Async> RelayBuilder<Build, Src, Dst>
     for BuildRelayWithCache<InBuilder>
 where
-    ChainIdAt<Build, SRC>: Ord + Clone,
-    ChainIdAt<Build, DST>: Ord + Clone,
-    ClientIdAt<Build, SRC, DST>: Ord + Clone,
-    ClientIdAt<Build, DST, SRC>: Ord + Clone,
-    Build: HasRelayCache<SRC, DST> + HasErrorType,
-    InBuilder: RelayBuilder<Build, SRC, DST>,
+    ChainIdAt<Build, Src>: Ord + Clone,
+    ChainIdAt<Build, Dst>: Ord + Clone,
+    ClientIdAt<Build, Src, Dst>: Ord + Clone,
+    ClientIdAt<Build, Dst, Src>: Ord + Clone,
+    Build: HasRelayCache<Src, Dst> + HasErrorType,
+    InBuilder: RelayBuilder<Build, Src, Dst>,
     Build::Relay: Clone,
 {
     async fn build_relay(
         build: &Build,
-        index: Twindex<SRC, DST>,
-        src_chain_id: &ChainIdAt<Build, SRC>,
-        dst_chain_id: &ChainIdAt<Build, DST>,
-        src_client_id: &ClientIdAt<Build, SRC, DST>,
-        dst_client_id: &ClientIdAt<Build, DST, SRC>,
+        index: PhantomData<(Src, Dst)>,
+        src_chain_id: &ChainIdAt<Build, Src>,
+        dst_chain_id: &ChainIdAt<Build, Dst>,
+        src_client_id: &ClientIdAt<Build, Src, Dst>,
+        dst_client_id: &ClientIdAt<Build, Dst, Src>,
     ) -> Result<Build::Relay, Build::Error> {
         let relay_id = (
             src_chain_id.clone(),

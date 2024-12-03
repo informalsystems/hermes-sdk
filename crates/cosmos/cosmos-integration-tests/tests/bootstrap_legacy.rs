@@ -1,6 +1,8 @@
 use std::sync::Arc;
 
-use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::{LegacyCosmosBootstrap, LegacyCosmosBootstrapFields};
+use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::{
+    LegacyCosmosBootstrap, LegacyCosmosBootstrapFields,
+};
 use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
@@ -30,7 +32,7 @@ fn test_cosmos_legacy_bootstrap() -> Result<(), Error> {
             transfer_denom_prefix: "coin".into(),
             genesis_config_modifier: Box::new(|_| Ok(())),
             comet_config_modifier: Box::new(|_| Ok(())),
-        })
+        }),
     };
 
     runtime.runtime.clone().block_on(async move {

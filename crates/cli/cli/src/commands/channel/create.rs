@@ -1,9 +1,11 @@
+use core::marker::PhantomData;
+
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
-use hermes_relayer_components::multi::types::index::Twindex;
+use hermes_relayer_components::multi::types::index::{Index, Twindex};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use ibc_relayer::channel::version::Version;
 use ibc_relayer_types::core::ics04_channel::channel::Ordering;
@@ -100,7 +102,7 @@ impl CommandRunner<HermesApp> for ChannelCreate {
 
         let relay = builder
             .build_relay(
-                Twindex::<0, 1>,
+                PhantomData::<(Index<0>, Index<1>)>,
                 &self.chain_id_a,
                 &self.chain_id_b,
                 &self.client_id_a,

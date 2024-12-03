@@ -10,56 +10,56 @@ use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt
 use hermes_relayer_components::multi::types::index::Twindex;
 
 #[derive_component(CreateClientMessageOptionsAtComponent, ProvideCreateClientMessageOptionsAt<Setup>)]
-pub trait HasCreateClientMessageOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:
-    HasChainTypeAt<TARGET> + HasChainTypeAt<COUNTERPARTY>
+pub trait HasCreateClientMessageOptionsAt<Target: Async, Counterparty: Async>:
+    HasChainTypeAt<Target> + HasChainTypeAt<Counterparty>
 where
-    ChainAt<Self, TARGET>: HasCreateClientMessageOptionsType<ChainAt<Self, COUNTERPARTY>>,
+    ChainAt<Self, Target>: HasCreateClientMessageOptionsType<ChainAt<Self, Counterparty>>,
 {
     fn create_client_message_options(
         &self,
-        _index: Twindex<TARGET, COUNTERPARTY>,
-    ) -> &CreateClientMessageOptionsOf<ChainAt<Self, TARGET>, ChainAt<Self, COUNTERPARTY>>;
+        _index: PhantomData<(Target, Counterparty)>,
+    ) -> &CreateClientMessageOptionsOf<ChainAt<Self, Target>, ChainAt<Self, Counterparty>>;
 }
 
 #[derive_component(CreateClientPayloadOptionsAtComponent, ProvideCreateClientPayloadOptionsAt<Setup>)]
-pub trait HasCreateClientPayloadOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:
-    HasChainTypeAt<TARGET> + HasChainTypeAt<COUNTERPARTY>
+pub trait HasCreateClientPayloadOptionsAt<Target: Async, Counterparty: Async>:
+    HasChainTypeAt<Target> + HasChainTypeAt<Counterparty>
 where
-    ChainAt<Self, TARGET>: HasCreateClientPayloadOptionsType<ChainAt<Self, COUNTERPARTY>>,
+    ChainAt<Self, Target>: HasCreateClientPayloadOptionsType<ChainAt<Self, Counterparty>>,
 {
     fn create_client_payload_options(
         &self,
-        _index: Twindex<TARGET, COUNTERPARTY>,
-    ) -> &CreateClientPayloadOptionsOf<ChainAt<Self, TARGET>, ChainAt<Self, COUNTERPARTY>>;
+        _index: PhantomData<(Target, Counterparty)>,
+    ) -> &CreateClientPayloadOptionsOf<ChainAt<Self, Target>, ChainAt<Self, Counterparty>>;
 }
 
-impl<Setup, Tag, const TARGET: usize, const COUNTERPARTY: usize, ChainA, ChainB>
-    ProvideCreateClientMessageOptionsAt<Setup, TARGET, COUNTERPARTY> for UseField<Tag>
+impl<Setup, Tag, Target: Async, Counterparty: Async, ChainA, ChainB>
+    ProvideCreateClientMessageOptionsAt<Setup, Target, Counterparty> for UseField<Tag>
 where
-    Setup: HasChainTypeAt<TARGET, Chain = ChainA>
-        + HasChainTypeAt<COUNTERPARTY, Chain = ChainB>
+    Setup: HasChainTypeAt<Target, Chain = ChainA>
+        + HasChainTypeAt<Counterparty, Chain = ChainB>
         + HasField<Tag, Field = ChainA::CreateClientMessageOptions>,
     ChainA: HasCreateClientPayloadOptionsType<ChainB> + HasCreateClientMessageOptionsType<ChainB>,
 {
     fn create_client_message_options(
         setup: &Setup,
-        _index: Twindex<TARGET, COUNTERPARTY>,
+        _index: PhantomData<(Target, Counterparty)>,
     ) -> &ChainA::CreateClientMessageOptions {
         setup.get_field(PhantomData)
     }
 }
 
-impl<Setup, Tag, const TARGET: usize, const COUNTERPARTY: usize, ChainA, ChainB>
-    ProvideCreateClientPayloadOptionsAt<Setup, TARGET, COUNTERPARTY> for UseField<Tag>
+impl<Setup, Tag, Target: Async, Counterparty: Async, ChainA, ChainB>
+    ProvideCreateClientPayloadOptionsAt<Setup, Target, Counterparty> for UseField<Tag>
 where
-    Setup: HasChainTypeAt<TARGET, Chain = ChainA>
-        + HasChainTypeAt<COUNTERPARTY, Chain = ChainB>
+    Setup: HasChainTypeAt<Target, Chain = ChainA>
+        + HasChainTypeAt<Counterparty, Chain = ChainB>
         + HasField<Tag, Field = ChainA::CreateClientPayloadOptions>,
     ChainA: HasCreateClientPayloadOptionsType<ChainB> + HasCreateClientMessageOptionsType<ChainB>,
 {
     fn create_client_payload_options(
         setup: &Setup,
-        _index: Twindex<TARGET, COUNTERPARTY>,
+        _index: PhantomData<(Target, Counterparty)>,
     ) -> &ChainA::CreateClientPayloadOptions {
         setup.get_field(PhantomData)
     }

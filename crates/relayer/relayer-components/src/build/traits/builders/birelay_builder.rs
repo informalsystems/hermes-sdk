@@ -8,7 +8,7 @@ use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 
 #[derive_component(BiRelayBuilderComponent, BiRelayBuilder<Build>)]
 #[async_trait]
-pub trait CanBuildBiRelay<const A: usize, const B: usize>:
+pub trait CanBuildBiRelay<A, B>:
     HasBiRelayTypeAt<A, B>
     + HasChainTypeAt<A, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, B>>>
     + HasChainTypeAt<B, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, A>>>

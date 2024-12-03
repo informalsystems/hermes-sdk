@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use alloc::format;
 
 use cgp::prelude::*;
@@ -31,19 +33,20 @@ impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB, RelayDriver, Logger> Te
 where
     Driver: HasErrorType
         + HasLogger<Logger = Logger>
-        + HasChainTypeAt<0, Chain = ChainA>
-        + HasChainTypeAt<1, Chain = ChainB>
-        + HasChainDriverAt<0, ChainDriver = ChainDriverA>
-        + HasChainDriverAt<1, ChainDriver = ChainDriverB>
-        + HasRelayDriverAt<0, 1, RelayDriver = RelayDriver>
-        + HasChannelAt<0, 1>
-        + HasChannelAt<1, 0>,
+        + HasChainTypeAt<Index<0>, Chain = ChainA>
+        + HasChainTypeAt<Index<1>, Chain = ChainB>
+        + HasChainDriverAt<Index<0>, ChainDriver = ChainDriverA>
+        + HasChainDriverAt<Index<1>, ChainDriver = ChainDriverB>
+        + HasRelayDriverAt<Index<0>, Index<1>, RelayDriver = RelayDriver>
+        + HasChannelAt<Index<0>, Index<1>>
+        + HasChannelAt<Index<1>, Index<0>>,
     ChainDriverA: HasChain<Chain = ChainA>
-        + HasDenomAt<TransferDenom, 0>
-        + HasWalletAt<UserWallet, 0>
-        + HasWalletAt<UserWallet, 1>
+        + HasDenomAt<TransferDenom, Index<0>>
+        + HasWalletAt<UserWallet, Index<0>>
+        + HasWalletAt<UserWallet, Index<1>>
         + CanGenerateRandomAmount,
-    ChainDriverB: HasChain<Chain = ChainB> + HasWalletAt<UserWallet, 0> + CanGenerateRandomAmount,
+    ChainDriverB:
+        HasChain<Chain = ChainB> + HasWalletAt<UserWallet, Index<0>> + CanGenerateRandomAmount,
     RelayDriver: CanRunRelayerInBackground,
     ChainA: HasIbcChainTypes<ChainB>
         + HasChainId
@@ -69,11 +72,11 @@ where
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
         let logger = driver.logger();
 
-        let chain_driver_a = driver.chain_driver_at(Index::<0>);
+        let chain_driver_a = driver.chain_driver_at(PhantomData::<Index<0>>);
 
-        let chain_driver_b = driver.chain_driver_at(Index::<1>);
+        let chain_driver_b = driver.chain_driver_at(PhantomData::<Index<1>>);
 
-        let relay_driver = driver.relay_driver_at(Twindex::<0, 1>);
+        let relay_driver = driver.relay_driver_at(PhantomData::<(Index<0>, Index<1>)>);
 
         let chain_a = chain_driver_a.chain();
 
@@ -83,27 +86,27 @@ where
 
         let chain_id_b = chain_b.chain_id();
 
-        let wallet_a1 = chain_driver_a.wallet_at(UserWallet, Index::<0>);
+        let wallet_a1 = chain_driver_a.wallet_at(UserWallet, PhantomData::<Index<0>>);
 
         let address_a1 = ChainA::wallet_address(wallet_a1);
 
-        let wallet_b = chain_driver_b.wallet_at(UserWallet, Index::<0>);
+        let wallet_b = chain_driver_b.wallet_at(UserWallet, PhantomData::<Index<0>>);
 
         let address_b = ChainB::wallet_address(wallet_b);
 
-        let denom_a = chain_driver_a.denom_at(TransferDenom, Index::<0>);
+        let denom_a = chain_driver_a.denom_at(TransferDenom, PhantomData::<Index<0>>);
 
         let balance_a1 = chain_a.query_balance(address_a1, denom_a).await?;
 
         let a_to_b_amount = chain_driver_a.random_amount(1000, &balance_a1).await;
 
-        let channel_id_a = driver.channel_id_at(Twindex::<0, 1>);
+        let channel_id_a = driver.channel_id_at(PhantomData::<(Index<0>, Index<1>)>);
 
-        let port_id_a = driver.port_id_at(Twindex::<0, 1>);
+        let port_id_a = driver.port_id_at(PhantomData::<(Index<0>, Index<1>)>);
 
-        let channel_id_b = driver.channel_id_at(Twindex::<1, 0>);
+        let channel_id_b = driver.channel_id_at(PhantomData::<(Index<1>, Index<0>)>);
 
-        let port_id_b = driver.port_id_at(Twindex::<1, 0>);
+        let port_id_b = driver.port_id_at(PhantomData::<(Index<1>, Index<0>)>);
 
         let _relayer = relay_driver.run_relayer_in_background().await?;
 
@@ -144,7 +147,7 @@ where
             .assert_eventual_amount(address_b, &balance_b1)
             .await?;
 
-        let wallet_a2 = chain_driver_a.wallet_at(UserWallet, Index::<1>);
+        let wallet_a2 = chain_driver_a.wallet_at(UserWallet, PhantomData::<Index<1>>);
 
         let address_a2 = ChainA::wallet_address(wallet_a2);
 

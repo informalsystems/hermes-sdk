@@ -1,13 +1,16 @@
+use core::marker::PhantomData;
+
+use cgp::core::Async;
+
 use crate::build::traits::builders::birelay_builder::BiRelayBuilder;
 use crate::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use crate::build::traits::builders::relay_builder::CanBuildRelay;
 use crate::multi::traits::chain_at::ChainIdAt;
 use crate::multi::traits::relay_at::ClientIdAt;
-use crate::multi::types::index::Twindex;
 
 pub struct BuildBiRelayFromRelays;
 
-impl<Build, const A: usize, const B: usize> BiRelayBuilder<Build, A, B> for BuildBiRelayFromRelays
+impl<Build, A: Async, B: Async> BiRelayBuilder<Build, A, B> for BuildBiRelayFromRelays
 where
     Build: CanBuildBiRelayFromRelays<A, B> + CanBuildRelay<A, B> + CanBuildRelay<B, A>,
 {
@@ -20,7 +23,7 @@ where
     ) -> Result<Build::BiRelay, Build::Error> {
         let relay_a_to_b = build
             .build_relay(
-                Twindex::<A, B>,
+                PhantomData::<(A, B)>,
                 chain_id_a,
                 chain_id_b,
                 client_id_a,
@@ -30,7 +33,7 @@ where
 
         let relay_b_to_a = build
             .build_relay(
-                Twindex::<B, A>,
+                PhantomData::<(B, A)>,
                 chain_id_b,
                 chain_id_a,
                 client_id_b,

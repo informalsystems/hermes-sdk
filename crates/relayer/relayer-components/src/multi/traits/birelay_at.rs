@@ -3,14 +3,13 @@ use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(BiRelayTypeAtComponent, ProvideBiRelayTypeAt<Setup>)]
-pub trait HasBiRelayTypeAt<const A: usize, const B: usize>: Async {
+pub trait HasBiRelayTypeAt<TagA, TagB>: Async {
     type BiRelay: Async;
 }
 
-pub type BiRelayAt<Context, const A: usize, const B: usize> =
-    <Context as HasBiRelayTypeAt<A, B>>::BiRelay;
+pub type BiRelayAt<Context, TagA, TagB> = <Context as HasBiRelayTypeAt<TagA, TagB>>::BiRelay;
 
-impl<Context, const A: usize, const B: usize, Provider, BiRelay> ProvideBiRelayTypeAt<Context, A, B>
+impl<Context, TagA, TagB, Provider, BiRelay> ProvideBiRelayTypeAt<Context, TagA, TagB>
     for WithProvider<Provider>
 where
     Context: Async,

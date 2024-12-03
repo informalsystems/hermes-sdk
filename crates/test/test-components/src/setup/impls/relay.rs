@@ -1,4 +1,7 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::{CanRaiseError, ErrorOf};
+use cgp::core::Async;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
@@ -6,14 +9,14 @@ use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt
 use hermes_relayer_components::multi::traits::relay_at::{
     HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
 };
-use hermes_relayer_components::multi::types::index::Twindex;
+use hermes_relayer_components::multi::types::index::{Index, Twindex};
 
 use crate::setup::traits::builder_at::HasBuilderAt;
 use crate::setup::traits::relay::RelaySetup;
 
 pub struct SetupRelayWithBuilder;
 
-impl<Setup, const A: usize, const B: usize> RelaySetup<Setup, A, B> for SetupRelayWithBuilder
+impl<Setup, A: Async, B: Async> RelaySetup<Setup, A, B> for SetupRelayWithBuilder
 where
     Setup: HasBoundedRelayTypeAt<A, B>
         + HasBoundedRelayTypeAt<B, A>
@@ -21,16 +24,16 @@ where
         + CanRaiseError<ErrorOf<Setup::Builder>>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>> + Clone,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>> + Clone,
-    Setup::Builder: CanBuildRelayFromChains<0, 1>
-        + CanBuildRelayFromChains<1, 0>
-        + HasChainTypeAt<0, Chain = ChainAt<Setup, A>>
-        + HasChainTypeAt<1, Chain = ChainAt<Setup, B>>
-        + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>
-        + HasRelayTypeAt<1, 0, Relay = RelayAt<Setup, B, A>>,
+    Setup::Builder: CanBuildRelayFromChains<Index<0>, Index<1>>
+        + CanBuildRelayFromChains<Index<1>, Index<0>>
+        + HasChainTypeAt<Index<0>, Chain = ChainAt<Setup, A>>
+        + HasChainTypeAt<Index<1>, Chain = ChainAt<Setup, B>>
+        + HasRelayTypeAt<Index<0>, Index<1>, Relay = RelayAt<Setup, A, B>>
+        + HasRelayTypeAt<Index<1>, Index<0>, Relay = RelayAt<Setup, B, A>>,
 {
     async fn setup_relays(
         setup: &Setup,
-        _index: Twindex<A, B>,
+        _index: PhantomData<(A, B)>,
         chain_a: &ChainAt<Setup, A>,
         chain_b: &ChainAt<Setup, B>,
         client_id_a: &ClientIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
@@ -40,7 +43,7 @@ where
 
         let relay_a_to_b = build
             .build_relay_from_chains(
-                Twindex::<0, 1>,
+                PhantomData::<(Index<0>, Index<1>)>,
                 client_id_a,
                 client_id_b,
                 chain_a.clone(),
@@ -51,7 +54,7 @@ where
 
         let relay_b_to_a = build
             .build_relay_from_chains(
-                Twindex::<1, 0>,
+                PhantomData::<(Index<1>, Index<0>)>,
                 client_id_b,
                 client_id_a,
                 chain_b.clone(),

@@ -12,6 +12,7 @@ use hermes_relayer_components::chain::types::aliases::PortIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
@@ -85,33 +86,33 @@ impl<
         Build,
     > UseBinaryChannelTestSetup for Setup
 where
-    Setup: HasChainTypeAt<0, Chain = ChainA>
-        + HasChainTypeAt<1, Chain = ChainB>
-        + HasRelayTypeAt<0, 1, Relay = Relay>
-        + HasRelayTypeAt<1, 0>
-        + HasBiRelayTypeAt<0, 1>
-        + HasChainDriverTypeAt<0, ChainDriver = ChainDriverA>
-        + HasChainDriverTypeAt<1, ChainDriver = ChainDriverB>
+    Setup: HasChainTypeAt<Index<0>, Chain = ChainA>
+        + HasChainTypeAt<Index<1>, Chain = ChainB>
+        + HasRelayTypeAt<Index<0>, Index<1>, Relay = Relay>
+        + HasRelayTypeAt<Index<1>, Index<0>>
+        + HasBiRelayTypeAt<Index<0>, Index<1>>
+        + HasChainDriverTypeAt<Index<0>, ChainDriver = ChainDriverA>
+        + HasChainDriverTypeAt<Index<1>, ChainDriver = ChainDriverB>
         + HasTestDriverType
         + HasErrorType
         + HasComponents<Components = Components>
-        + CanSetupConnection<0, 1>
-        + CanSetupChannel<0, 1>
+        + CanSetupConnection<Index<0>, Index<1>>
+        + CanSetupChannel<Index<0>, Index<1>>
         + CanBuildTestDriverWithBinaryChannel,
     Components: DelegatesToBinaryChannelTestComponents
         + BinaryChannelDriverBuilder<Setup>
-        + ProvideBootstrapAt<Setup, 0, Bootstrap = BootstrapA>
-        + ProvideBootstrapAt<Setup, 1, Bootstrap = BootstrapB>
-        + ProvideCreateClientMessageOptionsAt<Setup, 0, 1>
-        + ProvideCreateClientMessageOptionsAt<Setup, 1, 0>
-        + ProvideCreateClientPayloadOptionsAt<Setup, 0, 1>
-        + ProvideCreateClientPayloadOptionsAt<Setup, 1, 0>
-        + ProvideInitConnectionOptionsAt<Setup, 0, 1>
-        + ProvideInitChannelOptionsAt<Setup, 0, 1>
-        + ProvidePortIdAt<Setup, 0, 1>
-        + ProvidePortIdAt<Setup, 1, 0>
-        + ProvideBuilderTypeAt<Setup, 0, 1, Builder = Build>
-        + ProvideBuilderAt<Setup, 0, 1>
+        + ProvideBootstrapAt<Setup, Index<0>, Bootstrap = BootstrapA>
+        + ProvideBootstrapAt<Setup, Index<1>, Bootstrap = BootstrapB>
+        + ProvideCreateClientMessageOptionsAt<Setup, Index<0>, Index<1>>
+        + ProvideCreateClientMessageOptionsAt<Setup, Index<1>, Index<0>>
+        + ProvideCreateClientPayloadOptionsAt<Setup, Index<0>, Index<1>>
+        + ProvideCreateClientPayloadOptionsAt<Setup, Index<1>, Index<0>>
+        + ProvideInitConnectionOptionsAt<Setup, Index<0>, Index<1>>
+        + ProvideInitChannelOptionsAt<Setup, Index<0>, Index<1>>
+        + ProvidePortIdAt<Setup, Index<0>, Index<1>>
+        + ProvidePortIdAt<Setup, Index<1>, Index<0>>
+        + ProvideBuilderTypeAt<Setup, Index<0>, Index<1>, Builder = Build>
+        + ProvideBuilderAt<Setup, Index<0>, Index<1>>
         + ErrorRaiser<Setup, BootstrapA::Error>
         + ErrorRaiser<Setup, BootstrapB::Error>
         + ErrorRaiser<Setup, Relay::Error>
@@ -138,14 +139,14 @@ where
         + CanRaiseRelayChainErrors,
     BootstrapA: CanBootstrapChain,
     BootstrapB: CanBootstrapChain,
-    Build: HasBiRelayTypeAt<0, 1, BiRelay = Setup::BiRelay>
-        + HasChainTypeAt<0, Chain = ChainA>
-        + HasChainTypeAt<1, Chain = ChainB>
-        + HasRelayTypeAt<0, 1, Relay = Relay>
-        + HasRelayTypeAt<1, 0, Relay = RelayAt<Setup, 1, 0>>
-        + CanBuildRelayFromChains<0, 1>
-        + CanBuildRelayFromChains<1, 0>
-        + CanBuildBiRelayFromRelays<0, 1>,
+    Build: HasBiRelayTypeAt<Index<0>, Index<1>, BiRelay = Setup::BiRelay>
+        + HasChainTypeAt<Index<0>, Chain = ChainA>
+        + HasChainTypeAt<Index<1>, Chain = ChainB>
+        + HasRelayTypeAt<Index<0>, Index<1>, Relay = Relay>
+        + HasRelayTypeAt<Index<1>, Index<0>, Relay = RelayAt<Setup, Index<1>, Index<0>>>
+        + CanBuildRelayFromChains<Index<0>, Index<1>>
+        + CanBuildRelayFromChains<Index<1>, Index<0>>
+        + CanBuildBiRelayFromRelays<Index<0>, Index<1>>,
     PortIdOf<ChainA, ChainB>: Clone,
     PortIdOf<ChainB, ChainA>: Clone,
 {
