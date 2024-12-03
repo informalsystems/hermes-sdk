@@ -17,7 +17,6 @@ use hermes_error::types::Error;
 use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAtComponent, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
-use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_test_components::driver::traits::types::builder_at::BuilderTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
 use hermes_test_components::setup::binary_channel::components::*;
@@ -31,7 +30,7 @@ use hermes_test_components::setup::traits::driver::TestDriverTypeComponent;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use hermes_test_components::setup::traits::init_connection_options_at::InitConnectionOptionsAtComponent;
-use hermes_test_components::setup::traits::port_id_at::ProvidePortIdAt;
+use hermes_test_components::setup::traits::port_id_at::PortIdAtComponent;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
@@ -85,6 +84,7 @@ delegate_components! {
         CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
         CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
         InitConnectionOptionsAtComponent: UseField<symbol!("init_connection_options")>,
+        PortIdAtComponent: UseField<symbol!("port_id")>,
         // BiRelayTypeAtComponent: WithType<CosmosBiRelay>,
     }
 }
@@ -177,18 +177,6 @@ impl ProvideInitChannelOptionsAt<CosmosBinaryChannelSetup, 1, 0>
         options.connection_hops.insert(0, connection_id.clone());
 
         options
-    }
-}
-
-impl ProvidePortIdAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {
-    fn port_id_at(setup: &CosmosBinaryChannelSetup, _index: Twindex<0, 1>) -> &PortId {
-        &setup.port_id
-    }
-}
-
-impl ProvidePortIdAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
-    fn port_id_at(setup: &CosmosBinaryChannelSetup, _index: Twindex<1, 0>) -> &PortId {
-        &setup.port_id
     }
 }
 
