@@ -20,8 +20,7 @@ pub struct ClearAckPackets;
 
 pub struct RelayPacketTask<Relay>
 where
-    Relay: HasRelayChains,
-    Relay::DstChain: HasWriteAckEvent<Relay::SrcChain>,
+    Relay: HasRelayChains<DstChain: HasWriteAckEvent<Relay::SrcChain>>,
 {
     pub relay: Relay,
     pub height: HeightOf<Relay::DstChain>,
