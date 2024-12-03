@@ -18,6 +18,14 @@ pub trait HasDstChainType: HasChainTypeAt<Dst, Chain = Self::DstChain> {
     type DstChain;
 }
 
+pub trait HasSrcChain: HasSrcChainType {
+    fn src_chain(&self) -> &Self::SrcChain;
+}
+
+pub trait HasDstChain: HasDstChainType {
+    fn dst_chain(&self) -> &Self::DstChain;
+}
+
 impl<Relay> HasSrcChainType for Relay
 where
     Relay: HasChainTypeAt<Src>,
@@ -30,6 +38,24 @@ where
     Relay: HasChainTypeAt<Dst>,
 {
     type DstChain = Relay::Chain;
+}
+
+impl<Relay> HasSrcChain for Relay
+where
+    Relay: HasChainAt<Src>,
+{
+    fn src_chain(&self) -> &Self::SrcChain {
+        self.chain_at(PhantomData)
+    }
+}
+
+impl<Relay> HasDstChain for Relay
+where
+    Relay: HasChainAt<Dst>,
+{
+    fn dst_chain(&self) -> &Self::DstChain {
+        self.chain_at(PhantomData)
+    }
 }
 
 pub trait HasRelayChainTypes:
@@ -52,26 +78,9 @@ where
 {
 }
 
-pub trait HasRelayChains: HasRelayChainTypes {
-    fn src_chain(&self) -> &Self::SrcChain;
+pub trait HasRelayChains: HasRelayChainTypes + HasSrcChain + HasDstChain {}
 
-    fn dst_chain(&self) -> &Self::DstChain;
-}
-
-impl<Relay, SrcChain, DstChain> HasRelayChains for Relay
-where
-    Relay: HasChainAt<Src, Chain = SrcChain> + HasChainAt<Dst, Chain = DstChain> + HasErrorType,
-    SrcChain: HasErrorType + HasIbcChainTypes<DstChain> + HasOutgoingPacketType<DstChain>,
-    DstChain: HasErrorType + HasIbcChainTypes<SrcChain>,
-{
-    fn src_chain(&self) -> &Self::SrcChain {
-        self.chain_at(PhantomData::<Src>)
-    }
-
-    fn dst_chain(&self) -> &Self::DstChain {
-        self.chain_at(PhantomData::<Dst>)
-    }
-}
+impl<Relay> HasRelayChains for Relay where Relay: HasRelayChainTypes + HasSrcChain + HasDstChain {}
 
 #[derive_component(SrcClientIdGetterComponent, SrcClientIdGetter<Relay>)]
 pub trait HasSrcClientId: HasRelayChainTypes {
