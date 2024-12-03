@@ -30,10 +30,10 @@ jobs:
         with:
           toolchain: nightly
           override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+          components: rustfmt
+      - name: Run Formatter
+        run: |
+          cargo +nightly fmt --all -- --check
 
   clippy-all-features:
     runs-on: ubuntu-latest
