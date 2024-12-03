@@ -1,7 +1,6 @@
+use alloc::format;
 use core::fmt::Display;
 use core::marker::PhantomData;
-
-use alloc::format;
 
 use cgp::core::error::{CanRaiseError, ErrorOf};
 use cgp::core::Async;

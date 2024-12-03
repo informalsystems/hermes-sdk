@@ -1,11 +1,4 @@
 max_width = 100
 reorder_imports = true
-
-# nightly only
-
-# unstable_features = true
-# format_strings = false
-# comment_width = 100
-# wrap_comments = true
-# group_imports = "StdExternalCrate"
-# imports_granularity = "Module"
+group_imports = "StdExternalCrate"
+imports_granularity = "Module"

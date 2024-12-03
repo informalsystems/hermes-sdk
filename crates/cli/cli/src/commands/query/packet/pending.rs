@@ -1,6 +1,4 @@
 use core::fmt;
-use oneline_eyre::eyre::eyre;
-use serde::Serialize;
 
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::queries::packet_acknowledgements::CanQueryPacketAcknowledgements;
@@ -13,7 +11,6 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
-
 use ibc::core::connection::types::ConnectionEnd;
 use ibc::primitives::proto::Protobuf;
 use ibc_relayer::chain::counterparty::PendingPackets;
@@ -21,6 +18,8 @@ use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
+use oneline_eyre::eyre::eyre;
+use serde::Serialize;
 
 use crate::commands::query::packet::util::CollatedPendingPackets;
 use crate::contexts::app::HermesApp;

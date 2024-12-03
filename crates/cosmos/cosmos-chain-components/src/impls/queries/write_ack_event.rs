@@ -1,15 +1,12 @@
 use cgp::prelude::CanRaiseError;
-
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-
 use ibc_relayer::event::write_acknowledgement_try_from_abci_event;
 use ibc_relayer_types::core::ics04_channel::events::WriteAcknowledgement;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::Height;
-
 use tendermint_rpc::error::Error as TendermintRpcError;
 use tendermint_rpc::Client;
 

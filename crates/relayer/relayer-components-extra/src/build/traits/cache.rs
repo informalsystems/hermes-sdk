@@ -1,6 +1,5 @@
-use core::marker::PhantomData;
-
 use alloc::collections::BTreeMap;
+use core::marker::PhantomData;
 
 use cgp::core::Async;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

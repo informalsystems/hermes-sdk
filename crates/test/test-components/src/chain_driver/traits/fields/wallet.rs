@@ -1,7 +1,6 @@
-use core::marker::PhantomData;
-
 use alloc::collections::BTreeMap;
 use alloc::string::String;
+use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
