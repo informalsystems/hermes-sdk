@@ -57,8 +57,9 @@ where
         + CanBuildDepositProposalMessage
         + CanBuildVoteProposalMessage
         + CanSendMessagesWithSigner,
-    ChainDriver:
-        HasChain<Chain = Chain> + HasWalletAt<ValidatorWallet, 0> + HasDenomAt<StakingDenom, 0>,
+    ChainDriver: HasChain<Chain = Chain>
+        + HasWalletAt<ValidatorWallet, Index<0>>
+        + HasDenomAt<StakingDenom, Index<0>>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
 {
     async fn build_chain_driver(
@@ -79,9 +80,9 @@ where
 
         let chain = chain_driver.chain();
 
-        let validator_wallet = chain_driver.wallet_at(ValidatorWallet, Index::<0>);
+        let validator_wallet = chain_driver.wallet_at(ValidatorWallet, PhantomData::<Index<0>>);
 
-        let staking_denom = chain_driver.denom_at(StakingDenom, Index::<0>);
+        let staking_denom = chain_driver.denom_at(StakingDenom, PhantomData::<Index<0>>);
 
         let proposal_id = chain
             .upload_wasm_client_code(

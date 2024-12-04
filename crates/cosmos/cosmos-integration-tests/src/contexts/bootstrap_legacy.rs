@@ -1,25 +1,25 @@
-use alloc::sync::Arc;
-use cgp::core::component::UseContext;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
-use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::{
-    DynamicGasGetterComponent, ReturnNoDynamicGas,
-};
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
+use core::ops::Deref;
 use std::path::PathBuf;
+use std::sync::Arc;
 
+use cgp::core::component::UseContext;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
+use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::DenomPrefixGetterComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
@@ -45,10 +45,15 @@ use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderCom
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
    a `CosmosChainDriver`.
 */
-#[derive(HasField)]
+#[derive(Clone)]
 pub struct LegacyCosmosBootstrap {
+    pub fields: Arc<LegacyCosmosBootstrapFields>,
+}
+
+#[derive(HasField)]
+pub struct LegacyCosmosBootstrapFields {
     pub runtime: HermesRuntime,
-    pub cosmos_builder: Arc<CosmosBuilder>,
+    pub cosmos_builder: CosmosBuilder,
     pub should_randomize_identifiers: bool,
     pub chain_store_dir: PathBuf,
     pub chain_command_path: PathBuf,
@@ -60,6 +65,7 @@ pub struct LegacyCosmosBootstrap {
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub comet_config_modifier:
         Box<dyn Fn(&mut toml::Value) -> Result<(), Error> + Send + Sync + 'static>,
+    pub dynamic_gas: Option<DynamicGasConfig>,
 }
 
 impl CanUseLegacyCosmosSdkChainBootstrapper for LegacyCosmosBootstrap {}
@@ -68,6 +74,14 @@ pub struct LegacyCosmosBootstrapComponents;
 
 impl HasComponents for LegacyCosmosBootstrap {
     type Components = LegacyCosmosBootstrapComponents;
+}
+
+impl Deref for LegacyCosmosBootstrap {
+    type Target = LegacyCosmosBootstrapFields;
+
+    fn deref(&self) -> &Self::Target {
+        &self.fields
+    }
 }
 
 with_legacy_cosmos_sdk_bootstrap_components! {
@@ -98,6 +112,7 @@ delegate_components! {
             ChainCommandPathGetterComponent,
             AccountPrefixGetterComponent,
             DenomPrefixGetterComponent,
+            DynamicGasGetterComponent,
             RandomIdFlagGetterComponent,
             CompatModeGetterComponent,
             CosmosBuilderGetterComponent,
@@ -105,8 +120,6 @@ delegate_components! {
             CosmosGenesisConfigModifierComponent,
         ]:
             UseContext,
-        DynamicGasGetterComponent:
-            ReturnNoDynamicGas,
         CosmosSdkConfigModifierComponent:
             NoModifyCosmosSdkConfig,
         RelayerChainConfigBuilderComponent:

@@ -5,7 +5,9 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap::{
+    CosmosBootstrap, CosmosBootstrapFields,
+};
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
@@ -27,7 +29,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
 
     let runtime = HermesRuntime::new(tokio_runtime.clone());
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     let store_postfix = format!(
         "{}-{}",
@@ -40,19 +42,21 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
     let wasm_client_code_path =
         PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
 
-    let gaia_bootstrap = Arc::new(CosmosBootstrap {
-        runtime: runtime.clone(),
-        cosmos_builder: builder.clone(),
-        should_randomize_identifiers: true,
-        chain_store_dir: store_dir.join("chains"),
-        chain_command_path: "simd".into(),
-        account_prefix: "cosmos".into(),
-        staking_denom_prefix: "stake".into(),
-        transfer_denom_prefix: "coin".into(),
-        genesis_config_modifier: Box::new(|_| Ok(())),
-        comet_config_modifier: Box::new(|_| Ok(())),
-        dynamic_gas: None,
-    });
+    let gaia_bootstrap = CosmosBootstrap {
+        fields: Arc::new(CosmosBootstrapFields {
+            runtime: runtime.clone(),
+            cosmos_builder: builder.clone(),
+            should_randomize_identifiers: true,
+            chain_store_dir: store_dir.join("chains"),
+            chain_command_path: "simd".into(),
+            account_prefix: "cosmos".into(),
+            staking_denom_prefix: "stake".into(),
+            transfer_denom_prefix: "coin".into(),
+            genesis_config_modifier: Box::new(|_| Ok(())),
+            comet_config_modifier: Box::new(|_| Ok(())),
+            dynamic_gas: None,
+        }),
+    };
 
     tokio_runtime.block_on(async move {
         let wasm_client_byte_code = tokio::fs::read(&wasm_client_code_path).await?;

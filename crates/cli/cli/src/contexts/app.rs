@@ -53,6 +53,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
@@ -186,7 +187,9 @@ where
     }
 }
 
-impl CreateClientOptionsParser<HermesApp, CreateClientArgs, 0, 1> for HermesAppComponents {
+impl CreateClientOptionsParser<HermesApp, CreateClientArgs, Index<0>, Index<1>>
+    for HermesAppComponents
+{
     async fn parse_create_client_options(
         _app: &HermesApp,
         args: &CreateClientArgs,

@@ -2,6 +2,8 @@ use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerier;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use http::uri::InvalidUri;
+use http::Uri;
 use ibc_proto::ibc::core::client::v1::query_client::QueryClient;
 use ibc_relayer::chain::requests::QueryConsensusStateHeightsRequest;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -19,6 +21,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
         + HasGrpcAddress
         + CanRaiseError<TransportError>
+        + CanRaiseError<InvalidUri>
         + CanRaiseError<Status>,
     Counterparty: HasHeightType<Height = Height>,
 {
@@ -26,10 +29,12 @@ where
         chain: &Chain,
         client_id: &ClientId,
     ) -> Result<Vec<Height>, Chain::Error> {
-        let mut client = QueryClient::connect(chain.grpc_address().clone())
-            .await
-            .map_err(Chain::raise_error)?
-            .max_decoding_message_size(33554432);
+        let mut client = QueryClient::connect(
+            Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,
+        )
+        .await
+        .map_err(Chain::raise_error)?
+        .max_decoding_message_size(33554432);
 
         let request = QueryConsensusStateHeightsRequest {
             client_id: client_id.clone(),

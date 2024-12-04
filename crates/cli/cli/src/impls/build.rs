@@ -24,7 +24,7 @@ where
             .into_iter()
             .map(|config| {
                 let ChainConfig::CosmosSdk(config) = config;
-                config
+                config.into()
             })
             .collect();
 

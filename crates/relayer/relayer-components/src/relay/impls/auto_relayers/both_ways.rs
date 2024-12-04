@@ -7,6 +7,7 @@ use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::multi::traits::relay_at::RelayAt;
+use crate::multi::types::index::Index;
 
 /// A concurrent two-way relay context that is composed of a `BiRelay` type that
 /// can auto-relay between two connected targets.
@@ -19,15 +20,15 @@ pub enum TwoWayRelayerTask<BiRelay>
 where
     BiRelay: HasTwoWayRelay,
 {
-    AToB(RelayAt<BiRelay, 0, 1>),
-    BToA(RelayAt<BiRelay, 1, 0>),
+    AToB(RelayAt<BiRelay, Index<0>, Index<1>>),
+    BToA(RelayAt<BiRelay, Index<1>, Index<0>>),
 }
 
 impl<BiRelay> Task for TwoWayRelayerTask<BiRelay>
 where
     BiRelay: HasTwoWayRelay,
-    RelayAt<BiRelay, 0, 1>: CanRun,
-    RelayAt<BiRelay, 1, 0>: CanRun,
+    RelayAt<BiRelay, Index<0>, Index<1>>: CanRun,
+    RelayAt<BiRelay, Index<1>, Index<0>>: CanRun,
 {
     async fn run(self) {
         match self {
@@ -44,8 +45,8 @@ where
 impl<BiRelay> Runner<BiRelay> for RelayBothWays
 where
     BiRelay: HasTwoWayRelay + HasRuntime + HasErrorType,
-    RelayAt<BiRelay, 0, 1>: Clone + CanRun,
-    RelayAt<BiRelay, 1, 0>: Clone + CanRun,
+    RelayAt<BiRelay, Index<0>, Index<1>>: Clone + CanRun,
+    RelayAt<BiRelay, Index<1>, Index<0>>: Clone + CanRun,
     BiRelay::Runtime: CanRunConcurrentTasks,
 {
     async fn run(birelay: &BiRelay) -> Result<(), BiRelay::Error> {

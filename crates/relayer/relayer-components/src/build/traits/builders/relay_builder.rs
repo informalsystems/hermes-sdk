@@ -1,24 +1,25 @@
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::multi::traits::chain_at::{ChainIdAt, HasChainTypeAt};
-use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
-use crate::multi::types::index::Twindex;
+use crate::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt};
 
 #[derive_component(RelayBuilderComponent, RelayBuilder<Build>)]
 #[async_trait]
-pub trait CanBuildRelay<const SRC: usize, const DST: usize>:
-    HasRelayTypeAt<SRC, DST>
-    + HasChainTypeAt<SRC, Chain: HasChainIdType>
-    + HasChainTypeAt<DST, Chain: HasChainIdType>
+pub trait CanBuildRelay<Src: Async, Dst: Async>:
+    HasBoundedRelayTypeAt<Src, Dst>
+    + HasChainTypeAt<Src, Chain: HasChainIdType>
+    + HasChainTypeAt<Dst, Chain: HasChainIdType>
     + HasErrorType
 {
     async fn build_relay(
         &self,
-        index: Twindex<SRC, DST>,
-        src_chain_id: &ChainIdAt<Self, SRC>,
-        dst_chain_id: &ChainIdAt<Self, DST>,
-        src_client_id: &ClientIdAt<Self, SRC, DST>,
-        dst_client_id: &ClientIdAt<Self, DST, SRC>,
+        _tag: PhantomData<(Src, Dst)>,
+        src_chain_id: &ChainIdAt<Self, Src>,
+        dst_chain_id: &ChainIdAt<Self, Dst>,
+        src_client_id: &ClientIdAt<Self, Src, Dst>,
+        dst_client_id: &ClientIdAt<Self, Dst, Src>,
     ) -> Result<Self::Relay, Self::Error>;
 }

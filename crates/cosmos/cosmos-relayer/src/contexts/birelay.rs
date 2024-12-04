@@ -4,6 +4,7 @@ use hermes_relayer_components::birelay::traits::two_way::TwoWayRelayGetter;
 use hermes_relayer_components::components::default::birelay::*;
 use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
@@ -63,19 +64,19 @@ impl CosmosBiRelay {
     }
 }
 
-impl ProvideChainTypeAt<CosmosBiRelay, 0> for CosmosBiRelayComponents {
+impl ProvideChainTypeAt<CosmosBiRelay, Index<0>> for CosmosBiRelayComponents {
     type Chain = CosmosChain;
 }
 
-impl ProvideChainTypeAt<CosmosBiRelay, 1> for CosmosBiRelayComponents {
+impl ProvideChainTypeAt<CosmosBiRelay, Index<1>> for CosmosBiRelayComponents {
     type Chain = CosmosChain;
 }
 
-impl ProvideRelayTypeAt<CosmosBiRelay, 0, 1> for CosmosBiRelayComponents {
+impl ProvideRelayTypeAt<CosmosBiRelay, Index<0>, Index<1>> for CosmosBiRelayComponents {
     type Relay = CosmosRelay;
 }
 
-impl ProvideRelayTypeAt<CosmosBiRelay, 1, 0> for CosmosBiRelayComponents {
+impl ProvideRelayTypeAt<CosmosBiRelay, Index<1>, Index<0>> for CosmosBiRelayComponents {
     type Relay = CosmosRelay;
 }
 

@@ -1,3 +1,4 @@
+use core::marker::PhantomData;
 use std::time::Duration;
 
 use hermes_cli_components::traits::build::CanLoadBuilder;
@@ -5,7 +6,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
-use hermes_relayer_components::multi::types::index::Twindex;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
@@ -60,7 +61,7 @@ impl CommandRunner<HermesApp> for ConnectionCreate {
 
         let relay = builder
             .build_relay(
-                Twindex::<0, 1>,
+                PhantomData::<(Index<0>, Index<1>)>,
                 &self.chain_id_a,
                 &self.chain_id_b,
                 &self.client_id_a,

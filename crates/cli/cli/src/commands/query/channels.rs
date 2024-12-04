@@ -1,6 +1,5 @@
 use std::marker::PhantomData;
 use std::str::FromStr;
-use tracing::{info, warn};
 
 use hermes_chain_components::traits::queries::client_state::CanQueryClientState;
 use hermes_cli_components::traits::build::CanLoadBuilder;
@@ -9,11 +8,12 @@ use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-
+use http::Uri;
 use ibc::core::channel::types::proto::v1::query_client::QueryClient;
 use ibc::core::channel::types::proto::v1::QueryChannelsRequest;
 use ibc_relayer_types::core::ics04_channel::channel::{IdentifiedChannelEnd, State};
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
+use tracing::{info, warn};
 
 use crate::contexts::app::HermesApp;
 use crate::impls::error_wrapper::ErrorWrapper;
@@ -53,7 +53,8 @@ impl CommandRunner<HermesApp> for QueryChannels {
         let dst_chain_id = self.counterparty_chain_id.clone();
         let show_counterparty = self.show_counterparty;
 
-        let mut client = QueryClient::connect(chain.grpc_address().clone()).await?;
+        let mut client =
+            QueryClient::connect(Uri::try_from(&chain.grpc_address().to_string())?).await?;
 
         let request = tonic::Request::new(QueryChannelsRequest { pagination: None });
 

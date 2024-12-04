@@ -21,8 +21,9 @@ pub use hermes_relayer_components::transaction::traits::types::tx_hash::Transact
 pub use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
 pub use crate::impls::queries::eip::dispatch::DispatchQueryEip;
-pub use crate::impls::transaction::convert_gas_to_fee::DynamicConvertCosmosGasToFee;
-pub use crate::impls::transaction::convert_gas_to_fee::StaticConvertCosmosGasToFee;
+pub use crate::impls::transaction::convert_gas_to_fee::{
+    DynamicConvertCosmosGasToFee, StaticConvertCosmosGasToFee,
+};
 use crate::impls::transaction::encode_tx::EncodeCosmosTx;
 use crate::impls::transaction::estimate_fee::EstimateCosmosTxFee;
 use crate::impls::transaction::event::ParseCosmosTxResponseAsEvents;
