@@ -1,20 +1,14 @@
 use cgp::core::error::CanRaiseError;
-
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerier;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_relayer::client_state::AnyClientState;
-use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
-use ibc_relayer_types::core::ics04_channel::channel::State;
-use ibc_relayer_types::core::ics24_host::{
-    identifier::{ChainId, ChannelId, PortId},
-    IBC_QUERY_PATH,
-};
-
 use ibc_proto::Protobuf;
+use ibc_relayer::client_state::AnyClientState;
+use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use tendermint_proto::Error as TendermintProtoError;
 
 use crate::traits::abci_query::CanQueryAbci;

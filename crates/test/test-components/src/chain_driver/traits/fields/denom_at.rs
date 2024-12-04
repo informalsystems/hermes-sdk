@@ -1,5 +1,6 @@
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
-use hermes_relayer_components::multi::types::index::Index;
 
 use crate::chain::traits::types::denom::{DenomOf, HasDenomType};
 use crate::chain_driver::traits::types::chain::HasChainType;
@@ -11,9 +12,9 @@ pub struct TransferDenom;
 pub struct StakingDenom;
 
 #[derive_component(DenomGetterComponent, DenomGetterAt<ChainDriver>)]
-pub trait HasDenomAt<DenomKind, const I: usize>: HasChainType
+pub trait HasDenomAt<DenomKind, I: Async>: HasChainType
 where
     Self::Chain: HasDenomType,
 {
-    fn denom_at(&self, kind: DenomKind, index: Index<I>) -> &DenomOf<Self::Chain>;
+    fn denom_at(&self, _kind: DenomKind, _index: PhantomData<I>) -> &DenomOf<Self::Chain>;
 }

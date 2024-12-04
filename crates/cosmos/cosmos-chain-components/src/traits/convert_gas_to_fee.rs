@@ -1,5 +1,4 @@
 use cgp::prelude::*;
-
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 
 #[derive_component(GasToFeeConverterComponent, GasToFeeConverter<TxContext>)]

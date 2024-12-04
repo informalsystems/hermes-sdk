@@ -1,7 +1,6 @@
+use ibc_proto::cosmos::base::v1beta1::DecCoin;
 use reqwest::Response;
 use serde::Deserialize;
-
-use ibc_proto::cosmos::base::v1beta1::DecCoin;
 
 #[derive(Debug)]
 pub struct EipQueryError {

@@ -1,17 +1,23 @@
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::ibc::HasClientIdType;
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
-use crate::multi::traits::chain_at::{ChainIdAt, HasChainTypeAt};
-use crate::multi::traits::relay_at::ClientIdAt;
+use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
+use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 
 #[derive_component(BiRelayBuilderComponent, BiRelayBuilder<Build>)]
 #[async_trait]
-pub trait CanBuildBiRelay<const A: usize, const B: usize>:
+pub trait CanBuildBiRelay<A, B>:
     HasBiRelayTypeAt<A, B>
-    + HasChainTypeAt<A, Chain: HasChainIdType>
-    + HasChainTypeAt<B, Chain: HasChainIdType>
+    + HasChainTypeAt<A, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, B>>>
+    + HasChainTypeAt<B, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, A>>>
+    + HasRelayTypeAt<A, B>
+    + HasRelayTypeAt<B, A>
     + HasErrorType
+where
+    ChainAt<Self, A>: HasClientIdType<ChainAt<Self, B>>,
+    ChainAt<Self, B>: HasClientIdType<ChainAt<Self, A>>,
 {
     async fn build_birelay(
         &self,

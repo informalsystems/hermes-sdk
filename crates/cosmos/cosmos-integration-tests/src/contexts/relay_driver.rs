@@ -11,6 +11,7 @@ use hermes_error::types::Error;
 use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_test_components::relay_driver::run::RelayerBackgroundRunner;
 
@@ -46,22 +47,22 @@ impl RelayerBackgroundRunner<CosmosRelayDriver> for CosmosRelayDriverComponents 
     }
 }
 
-impl ProvideChainTypeAt<CosmosRelayDriver, 0> for CosmosRelayDriverComponents {
+impl ProvideChainTypeAt<CosmosRelayDriver, Index<0>> for CosmosRelayDriverComponents {
     type Chain = CosmosChain;
 }
 
-impl ProvideChainTypeAt<CosmosRelayDriver, 1> for CosmosRelayDriverComponents {
+impl ProvideChainTypeAt<CosmosRelayDriver, Index<1>> for CosmosRelayDriverComponents {
     type Chain = CosmosChain;
 }
 
-impl ProvideRelayTypeAt<CosmosRelayDriver, 0, 1> for CosmosRelayDriverComponents {
+impl ProvideRelayTypeAt<CosmosRelayDriver, Index<0>, Index<1>> for CosmosRelayDriverComponents {
     type Relay = CosmosRelay;
 }
 
-impl ProvideRelayTypeAt<CosmosRelayDriver, 1, 0> for CosmosRelayDriverComponents {
+impl ProvideRelayTypeAt<CosmosRelayDriver, Index<1>, Index<0>> for CosmosRelayDriverComponents {
     type Relay = CosmosRelay;
 }
 
-impl ProvideBiRelayTypeAt<CosmosRelayDriver, 0, 1> for CosmosRelayDriverComponents {
+impl ProvideBiRelayTypeAt<CosmosRelayDriver, Index<0>, Index<1>> for CosmosRelayDriverComponents {
     type BiRelay = CosmosBiRelay;
 }
