@@ -6,7 +6,7 @@
     rust-overlay.url = github:oxalica/rust-overlay;
     flake-utils.url = github:numtide/flake-utils;
 
-    cosmos-nix.url = github:informalsystems/cosmos.nix/luca_joss/update-osmosis-to-v27;
+    cosmos-nix.url = github:informalsystems/cosmos.nix;
 
     cosmwasm-ibc-src = {
       url = github:informalsystems/cosmwasm-ibc;

@@ -263,16 +263,15 @@
         "wasmvm_2_1_3-src": "wasmvm_2_1_3-src"
       },
       "locked": {
-        "lastModified": 1732127958,
+        "lastModified": 1733317488,
         "narHash": "sha256-Kr/h0A92hdsnFGAX4ujwLrwlk1voYJkkBp7pHwa4/ag=",
         "owner": "informalsystems",
         "repo": "cosmos.nix",
-        "rev": "ab6c234d71822f10df955027eafd99af2964ba8d",
+        "rev": "a615496057a069e03674f804e2b089ac67aac925",
         "type": "github"
       },
       "original": {
         "owner": "informalsystems",
-        "ref": "luca_joss/update-osmosis-to-v27",
         "repo": "cosmos.nix",
         "type": "github"
       }
@@ -1517,11 +1516,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1731890469,
-        "narHash": "sha256-D1FNZ70NmQEwNxpSSdTXCSklBH1z2isPR84J6DQrJGs=",
+        "lastModified": 1733097829,
+        "narHash": "sha256-9hbb1rqGelllb4kVUCZ307G2k3/UhmA8PPGBoyuWaSw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "5083ec887760adfe12af64830a66807423a859a7",
+        "rev": "2c15aa59df0017ca140d9ba302412298ab4bf22a",
         "type": "github"
       },
       "original": {
@@ -1695,11 +1694,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1732156292,
-        "narHash": "sha256-XuTCME5ZausokOJ28AsIoayBVD1soscdoiKweT4VY50=",
+        "lastModified": 1733279627,
+        "narHash": "sha256-NCNDAGPkdFdu+DLErbmNbavmVW9AwkgP7azROFFSB0U=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "2d484c7a0db32f2700e253160bcd2aaa6cdca3ba",
+        "rev": "4da5a80ef76039e80468c902f1e9f5c0eab87d96",
         "type": "github"
       },
       "original": {
