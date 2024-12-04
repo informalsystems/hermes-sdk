@@ -12,7 +12,9 @@ use crate::chain::types::aliases::ConnectionIdOf;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::target::{DestinationTarget, SourceTarget};
+use crate::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
 use crate::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 
 /**
@@ -39,6 +41,8 @@ where
 impl<Relay, SrcChain, DstChain> ConnectionOpenTryRelayer<Relay> for RelayConnectionOpenTry
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
         + HasRelayClientIds
         + CanSendTargetUpdateClientMessage<SourceTarget>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>

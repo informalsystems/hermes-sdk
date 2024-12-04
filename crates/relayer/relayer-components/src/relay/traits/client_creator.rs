@@ -1,20 +1,22 @@
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::ibc::HasClientIdType;
 
 use crate::chain::traits::types::create_client::{
     CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,
     HasCreateClientPayloadOptionsType,
 };
 use crate::chain::types::aliases::ClientIdOf;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::target::ChainTargetType;
+use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
 #[derive_component(ClientCreatorComponent, ClientCreator<Relay>)]
 #[async_trait]
-pub trait CanCreateClient<Target>: HasRelayChains
-where
-    Target: ChainTargetType<Self>,
-    Target::TargetChain: HasCreateClientMessageOptionsType<Target::CounterpartyChain>,
-    Target::CounterpartyChain: HasCreateClientPayloadOptionsType<Target::TargetChain>,
+pub trait CanCreateClient<Target: RelayTarget>:
+    HasTargetChainTypes<
+        Target,
+        TargetChain: HasClientIdType<Self::CounterpartyChain>
+                         + HasCreateClientMessageOptionsType<Self::CounterpartyChain>,
+        CounterpartyChain: HasCreateClientPayloadOptionsType<Self::TargetChain>,
+    > + HasErrorType
 {
     /**
        Create a new IBC client on the target chain.
@@ -30,15 +32,15 @@ where
     */
     async fn create_client(
         target: Target,
-        target_chain: &Target::TargetChain,
-        counterparty_chain: &Target::CounterpartyChain,
+        target_chain: &Self::TargetChain,
+        counterparty_chain: &Self::CounterpartyChain,
         create_client_payload_options: &CreateClientPayloadOptionsOf<
-            Target::CounterpartyChain,
-            Target::TargetChain,
+            Self::CounterpartyChain,
+            Self::TargetChain,
         >,
         create_client_message_options: &CreateClientMessageOptionsOf<
-            Target::TargetChain,
-            Target::CounterpartyChain,
+            Self::TargetChain,
+            Self::CounterpartyChain,
         >,
-    ) -> Result<ClientIdOf<Target::TargetChain, Target::CounterpartyChain>, Self::Error>;
+    ) -> Result<ClientIdOf<Self::TargetChain, Self::CounterpartyChain>, Self::Error>;
 }

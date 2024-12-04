@@ -1,9 +1,9 @@
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::height::HasHeightType;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::types::aliases::{EventOf, HeightOf};
-use crate::relay::traits::chains::HasRelayClientIds;
-use crate::relay::traits::target::ChainTarget;
+use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
 /**
    An event relayer performs relay actions based on one event at a time from
@@ -16,10 +16,8 @@ use crate::relay::traits::target::ChainTarget;
 */
 #[derive_component(EventRelayerComponent, EventRelayer<Relay>)]
 #[async_trait]
-pub trait CanRelayEvent<Target>: HasRelayClientIds
-where
-    Target: ChainTarget<Self>,
-    Target::TargetChain: HasEventType,
+pub trait CanRelayEvent<Target: RelayTarget>:
+    HasTargetChainTypes<Target, TargetChain: HasHeightType + HasEventType> + HasErrorType
 {
     /**
        Relay a chain event which is emitted from the target chain at a given
@@ -30,7 +28,7 @@ where
     */
     async fn relay_chain_event(
         &self,
-        height: &HeightOf<Target::TargetChain>,
-        event: &EventOf<Target::TargetChain>,
+        height: &HeightOf<Self::TargetChain>,
+        event: &EventOf<Self::TargetChain>,
     ) -> Result<(), Self::Error>;
 }

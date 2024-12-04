@@ -1,15 +1,16 @@
 use core::marker::PhantomData;
 
+use cgp::core::error::ErrorOf;
+use cgp::prelude::CanRaiseError;
+
 use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
 use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::{
-    CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds, PacketOf,
-};
+use crate::relay::traits::chains::{HasRelayChains, HasSrcClientId, PacketOf};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayer;
-use crate::relay::traits::target::SourceTarget;
+use crate::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
 
 /// The minimal component that implements timeout packet relayer
 /// capabilities. Timeout packet relayers with more capabilities can be
@@ -18,7 +19,11 @@ pub struct BaseTimeoutUnorderedPacketRelayer;
 
 impl<Relay> TimeoutUnorderedPacketRelayer<Relay> for BaseTimeoutUnorderedPacketRelayer
 where
-    Relay: HasRelayChains + HasRelayClientIds + CanRaiseRelayChainErrors,
+    Relay: HasSourceTargetChainTypes
+        + HasRelayChains
+        + HasSrcClientId
+        + CanRaiseError<ErrorOf<Relay::SrcChain>>
+        + CanRaiseError<ErrorOf<Relay::DstChain>>,
     Relay: CanSendSingleIbcMessage<MainSink, SourceTarget>,
     Relay::SrcChain: CanQueryClientStateWithLatestHeight<Relay::DstChain>
         + CanBuildTimeoutUnorderedPacketMessage<Relay::DstChain>,

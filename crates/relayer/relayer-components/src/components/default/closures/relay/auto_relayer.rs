@@ -10,6 +10,7 @@ use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::target::{HasDestinationTargetChainTypes, HasSourceTargetChainTypes};
 
 pub trait CanUseDefaultAutoRelayer: UseDefaultAutoRelayer {}
 
@@ -20,6 +21,8 @@ where
     Relay: Clone
         + HasRuntime
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
         + UseDefaultEventRelayer
         + HasComponents<Components = Components>,
     SrcChain: HasEventSubscription + HasErrorType,

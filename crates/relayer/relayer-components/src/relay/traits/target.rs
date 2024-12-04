@@ -1,15 +1,13 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{ErrorOf, HasErrorType};
 use cgp::core::Async;
-use cgp::prelude::CanRaiseError;
+use hermes_chain_components::traits::types::ibc::HasClientIdType;
 
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;
 use crate::multi::traits::chain_at::{HasChainAt, HasChainTypeAt};
 use crate::multi::traits::client_id_at::HasClientIdAt;
 use crate::multi::types::tags::{Dst, Src};
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
+use crate::relay::traits::chains::HasRelayChainTypes;
 
 #[derive(Default, Clone, Copy)]
 pub struct SourceTarget;
@@ -36,25 +34,19 @@ impl RelayTarget for DestinationTarget {
 }
 
 pub trait HasTargetChainTypes<Target: RelayTarget>:
-    CanRaiseError<ErrorOf<Self::TargetChain>>
-    + CanRaiseError<ErrorOf<Self::CounterpartyChain>>
-    + HasChainTypeAt<Target::Chain, Chain = Self::TargetChain>
+    HasChainTypeAt<Target::Chain, Chain = Self::TargetChain>
     + HasChainTypeAt<Target::Counterparty, Chain = Self::CounterpartyChain>
 {
-    type TargetChain: HasIbcChainTypes<Self::CounterpartyChain> + HasErrorType;
+    type TargetChain;
 
-    type CounterpartyChain: HasIbcChainTypes<Self::TargetChain> + HasErrorType;
+    type CounterpartyChain;
 }
 
 impl<Relay, Target, TargetChain, CounterpartyChain> HasTargetChainTypes<Target> for Relay
 where
     Target: RelayTarget,
-    Relay: CanRaiseError<TargetChain::Error>
-        + CanRaiseError<CounterpartyChain::Error>
-        + HasChainTypeAt<Target::Chain, Chain = TargetChain>
+    Relay: HasChainTypeAt<Target::Chain, Chain = TargetChain>
         + HasChainTypeAt<Target::Counterparty, Chain = CounterpartyChain>,
-    TargetChain: HasIbcChainTypes<CounterpartyChain> + HasErrorType,
-    CounterpartyChain: HasIbcChainTypes<TargetChain> + HasErrorType,
 {
     type TargetChain = TargetChain;
 
@@ -82,7 +74,13 @@ where
     }
 }
 
-pub trait HasTargetClientIds<Target: RelayTarget>: HasTargetChainTypes<Target> {
+pub trait HasTargetClientIds<Target: RelayTarget>:
+    HasTargetChainTypes<
+    Target,
+    TargetChain: HasClientIdType<Self::CounterpartyChain>,
+    CounterpartyChain: HasClientIdType<Self::TargetChain>,
+>
+{
     fn target_client_id(&self) -> &ClientIdOf<Self::TargetChain, Self::CounterpartyChain>;
 
     fn counterparty_client_id(&self) -> &ClientIdOf<Self::CounterpartyChain, Self::TargetChain>;
@@ -104,118 +102,53 @@ where
     }
 }
 
-pub trait ChainTargetType<Relay>: Async + Default + Copy + private::Sealed {
-    type TargetChain: HasIbcChainTypes<Self::CounterpartyChain> + HasErrorType;
-
-    type CounterpartyChain: HasIbcChainTypes<Self::TargetChain> + HasErrorType;
+pub trait HasSourceTargetChainTypes:
+    HasRelayChainTypes
+    + HasTargetChainTypes<
+        SourceTarget,
+        TargetChain = Self::SrcChain,
+        CounterpartyChain = Self::DstChain,
+    >
+{
 }
 
-pub trait ChainTarget<Relay: HasRelayChains>: ChainTargetType<Relay> {
-    fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error;
-
-    fn counterparty_chain_error(e: ErrorOf<Self::CounterpartyChain>) -> Relay::Error;
-
-    fn target_chain(relay: &Relay) -> &Self::TargetChain;
-
-    fn counterparty_chain(relay: &Relay) -> &Self::CounterpartyChain;
-
-    fn target_client_id(relay: &Relay) -> &ClientIdOf<Self::TargetChain, Self::CounterpartyChain>;
-
-    fn counterparty_client_id(
-        relay: &Relay,
-    ) -> &ClientIdOf<Self::CounterpartyChain, Self::TargetChain>;
+impl<Relay> HasSourceTargetChainTypes for Relay where
+    Relay: HasRelayChainTypes
+        + HasTargetChainTypes<
+            SourceTarget,
+            TargetChain = Self::SrcChain,
+            CounterpartyChain = Self::DstChain,
+        >
+{
 }
 
-pub type TargetChainOf<Relay, Target> = <Target as ChainTargetType<Relay>>::TargetChain;
+pub trait HasDestinationTargetChainTypes:
+    HasRelayChainTypes
+    + HasTargetChainTypes<
+        DestinationTarget,
+        TargetChain = Self::DstChain,
+        CounterpartyChain = Self::SrcChain,
+    >
+{
+}
 
-pub type CounterpartyChainOf<Relay, Target> = <Target as ChainTargetType<Relay>>::CounterpartyChain;
+impl<Relay> HasDestinationTargetChainTypes for Relay where
+    Relay: HasRelayChainTypes
+        + HasTargetChainTypes<
+            DestinationTarget,
+            TargetChain = Self::DstChain,
+            CounterpartyChain = Self::SrcChain,
+        >
+{
+}
+
+pub type TargetChainOf<Relay, Target> = <Relay as HasTargetChainTypes<Target>>::TargetChain;
+
+pub type CounterpartyChainOf<Relay, Target> =
+    <Relay as HasTargetChainTypes<Target>>::CounterpartyChain;
 
 impl private::Sealed for SourceTarget {}
 impl private::Sealed for DestinationTarget {}
-
-impl<Relay> ChainTargetType<Relay> for SourceTarget
-where
-    Relay: HasRelayClientIds,
-{
-    type TargetChain = Relay::SrcChain;
-
-    type CounterpartyChain = Relay::DstChain;
-}
-
-impl<Relay> ChainTarget<Relay> for SourceTarget
-where
-    Relay: HasRelayClientIds + CanRaiseRelayChainErrors,
-{
-    fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error {
-        Relay::raise_error(e)
-    }
-
-    fn counterparty_chain_error(e: ErrorOf<Self::CounterpartyChain>) -> Relay::Error {
-        Relay::raise_error(e)
-    }
-
-    fn target_chain(context: &Relay) -> &Self::TargetChain {
-        context.src_chain()
-    }
-
-    fn counterparty_chain(context: &Relay) -> &Self::CounterpartyChain {
-        context.dst_chain()
-    }
-
-    fn target_client_id(
-        context: &Relay,
-    ) -> &ClientIdOf<Self::TargetChain, Self::CounterpartyChain> {
-        context.src_client_id()
-    }
-
-    fn counterparty_client_id(
-        context: &Relay,
-    ) -> &ClientIdOf<Self::CounterpartyChain, Self::TargetChain> {
-        context.dst_client_id()
-    }
-}
-
-impl<Relay> ChainTargetType<Relay> for DestinationTarget
-where
-    Relay: HasRelayChains,
-{
-    type TargetChain = Relay::DstChain;
-
-    type CounterpartyChain = Relay::SrcChain;
-}
-
-impl<Relay> ChainTarget<Relay> for DestinationTarget
-where
-    Relay: HasRelayClientIds + CanRaiseRelayChainErrors,
-{
-    fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error {
-        Relay::raise_error(e)
-    }
-
-    fn counterparty_chain_error(e: ErrorOf<Self::CounterpartyChain>) -> Relay::Error {
-        Relay::raise_error(e)
-    }
-
-    fn target_chain(context: &Relay) -> &Self::TargetChain {
-        context.dst_chain()
-    }
-
-    fn counterparty_chain(context: &Relay) -> &Self::CounterpartyChain {
-        context.src_chain()
-    }
-
-    fn target_client_id(
-        context: &Relay,
-    ) -> &ClientIdOf<Self::TargetChain, Self::CounterpartyChain> {
-        context.dst_client_id()
-    }
-
-    fn counterparty_client_id(
-        context: &Relay,
-    ) -> &ClientIdOf<Self::CounterpartyChain, Self::TargetChain> {
-        context.src_client_id()
-    }
-}
 
 mod private {
     pub trait Sealed {}

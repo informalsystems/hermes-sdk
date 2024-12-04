@@ -10,9 +10,8 @@ use crate::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use crate::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientPayloadType,
 };
-use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::client_creator::ClientCreator;
-use crate::relay::traits::target::ChainTarget;
+use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
 pub struct CreateClientWithChains;
 
@@ -48,9 +47,14 @@ where
 impl<Relay, Target, TargetChain, CounterpartyChain> ClientCreator<Relay, Target>
     for CreateClientWithChains
 where
-    Relay: HasRelayChains
-        + for<'a> CanRaiseError<MissingCreateClientEventError<'a, TargetChain, CounterpartyChain>>,
-    Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
+    Target: RelayTarget,
+    Relay: HasTargetChainTypes<
+            Target,
+            TargetChain = TargetChain,
+            CounterpartyChain = CounterpartyChain,
+        > + for<'a> CanRaiseError<MissingCreateClientEventError<'a, TargetChain, CounterpartyChain>>
+        + CanRaiseError<TargetChain::Error>
+        + CanRaiseError<CounterpartyChain::Error>,
     TargetChain: CanSendSingleMessage
         + HasChainId
         + CanBuildCreateClientMessage<CounterpartyChain>
@@ -71,17 +75,17 @@ where
         let payload = counterparty_chain
             .build_create_client_payload(create_client_payload_options)
             .await
-            .map_err(Target::counterparty_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let message = target_chain
             .build_create_client_message(create_client_message_options, payload)
             .await
-            .map_err(Target::target_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let response = target_chain
             .send_message(message)
             .await
-            .map_err(Target::target_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let create_client_event = TargetChain::try_extract_create_client_event(&response)
             .ok_or_else(|| {

@@ -3,45 +3,47 @@ use alloc::vec::Vec;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::send_message::EmptyMessageResponse;
-use hermes_chain_type_components::traits::types::message_response::MessageResponseOf;
+use hermes_chain_components::traits::types::message::HasMessageType;
+use hermes_chain_type_components::traits::types::message_response::{
+    HasMessageResponseType, MessageResponseOf,
+};
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::MessageOf;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::target::ChainTarget;
+use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
 pub struct MainSink;
 
 #[derive_component(IbcMessageSenderComponent<Sink>, IbcMessageSender<Relay>)]
 #[async_trait]
-pub trait CanSendIbcMessages<Sink, Target>: HasRelayChains
-where
-    Target: ChainTarget<Self>,
+pub trait CanSendIbcMessages<Sink, Target: RelayTarget>:
+    HasTargetChainTypes<Target, TargetChain: HasMessageType + HasMessageResponseType> + HasErrorType
 {
     async fn send_messages(
         &self,
         target: Target,
-        messages: Vec<MessageOf<Target::TargetChain>>,
-    ) -> Result<Vec<MessageResponseOf<Target::TargetChain>>, Self::Error>;
+        messages: Vec<MessageOf<Self::TargetChain>>,
+    ) -> Result<Vec<MessageResponseOf<Self::TargetChain>>, Self::Error>;
 }
 
 #[async_trait]
-pub trait CanSendSingleIbcMessage<Sink, Target>: HasRelayChains
-where
-    Target: ChainTarget<Self>,
+pub trait CanSendSingleIbcMessage<Sink, Target: RelayTarget>:
+    HasTargetChainTypes<Target, TargetChain: HasMessageType + HasMessageResponseType> + HasErrorType
 {
     async fn send_message(
         &self,
         target: Target,
-        message: MessageOf<Target::TargetChain>,
-    ) -> Result<MessageResponseOf<Target::TargetChain>, Self::Error>;
+        message: MessageOf<Self::TargetChain>,
+    ) -> Result<MessageResponseOf<Self::TargetChain>, Self::Error>;
 }
 
 impl<Relay, Sink, Target, TargetChain> CanSendSingleIbcMessage<Sink, Target> for Relay
 where
-    Relay: CanSendIbcMessages<Sink, Target> + CanRaiseError<EmptyMessageResponse>,
-    Target: ChainTarget<Relay, TargetChain = TargetChain>,
-    TargetChain: HasIbcChainTypes<Target::CounterpartyChain>,
+    Relay: HasTargetChainTypes<Target, TargetChain = TargetChain>
+        + CanSendIbcMessages<Sink, Target>
+        + CanRaiseError<EmptyMessageResponse>,
+    Target: RelayTarget,
+    TargetChain: HasIbcChainTypes<Relay::CounterpartyChain> + HasErrorType,
 {
     async fn send_message(
         &self,
