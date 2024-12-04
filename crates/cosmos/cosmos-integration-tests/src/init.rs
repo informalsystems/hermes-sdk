@@ -7,6 +7,8 @@ use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::Dyna
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_test_components::setup::traits::driver::{CanBuildTestDriver, HasTestDriverType};
+use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;
@@ -16,11 +18,15 @@ use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{fmt, EnvFilter};
 
+use crate::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
+use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
 use crate::contexts::bootstrap::{CosmosBootstrap, CosmosBootstrapFields};
 use crate::contexts::bootstrap_legacy::{LegacyCosmosBootstrap, LegacyCosmosBootstrapFields};
 
 pub enum TestPreset {
-    CosmosToCosmos,
+    GaiaToGaia,
+    OsmosisToOsmosis,
+    OsmosisToGaia,
 }
 
 impl FromStr for TestPreset {
@@ -28,7 +34,9 @@ impl FromStr for TestPreset {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
-            "cosmostocosmos" => Ok(TestPreset::CosmosToCosmos),
+            "gaiatogaia" => Ok(TestPreset::GaiaToGaia),
+            "osmosistoosmosis" => Ok(TestPreset::OsmosisToOsmosis),
+            "osmosistogaia" => Ok(TestPreset::OsmosisToGaia),
             _ => Err(Report::msg("unknown test preset: `{s}`")),
         }
     }
@@ -63,6 +71,8 @@ pub fn build_osmosis_bootstrap(
     genesis_modifier: impl Fn(&mut JsonValue) -> Result<(), Error> + Send + Sync + 'static,
     comet_config_modifier: impl Fn(&mut TomlValue) -> Result<(), Error> + Send + Sync + 'static,
 ) -> LegacyCosmosBootstrap {
+    let dynamic_gas_config = Some(DynamicGasConfig::new(1.1, 1.6, "osmosis", "stake"));
+
     let cosmos_builder = CosmosBuilder::new_with_default(runtime.clone());
 
     LegacyCosmosBootstrap {
@@ -78,6 +88,7 @@ pub fn build_osmosis_bootstrap(
             transfer_denom_prefix,
             genesis_config_modifier: Box::new(genesis_modifier),
             comet_config_modifier: Box::new(comet_config_modifier),
+            dynamic_gas: dynamic_gas_config,
         }),
     }
 }
@@ -90,6 +101,7 @@ pub fn build_gaia_bootstrap(
     genesis_modifier: impl Fn(&mut JsonValue) -> Result<(), Error> + Send + Sync + 'static,
     comet_config_modifier: impl Fn(&mut TomlValue) -> Result<(), Error> + Send + Sync + 'static,
 ) -> CosmosBootstrap {
+    let dynamic_gas_config = Some(DynamicGasConfig::default());
     let cosmos_builder = CosmosBuilder::new_with_default(runtime.clone());
 
     CosmosBootstrap {
@@ -104,39 +116,130 @@ pub fn build_gaia_bootstrap(
             transfer_denom_prefix,
             genesis_config_modifier: Box::new(genesis_modifier),
             comet_config_modifier: Box::new(comet_config_modifier),
-            dynamic_gas: Some(DynamicGasConfig::default()),
+            dynamic_gas: dynamic_gas_config,
         }),
     }
 }
 
-pub fn init_preset_bootstraps(
+async fn setup_gaia_to_gaia(
     runtime: &HermesRuntime,
-) -> Result<(CosmosBootstrap, CosmosBootstrap), Error> {
+    builder: CosmosBuilder,
+) -> Result<CosmosBinaryChannelTestDriver, Error> {
+    let bootstrap_chain_0 = build_gaia_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let bootstrap_chain_1 = build_gaia_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let setup = CosmosBinaryChannelSetup {
+        bootstrap_a: bootstrap_chain_0,
+        bootstrap_b: bootstrap_chain_1,
+        builder,
+        create_client_payload_options: Default::default(),
+        init_connection_options: Default::default(),
+        init_channel_options: Default::default(),
+        port_id: PortId::transfer(),
+    };
+
+    setup.build_driver().await
+}
+
+async fn setup_osmosis_to_osmosis(
+    runtime: &HermesRuntime,
+    builder: CosmosBuilder,
+) -> Result<CosmosBinaryChannelTestDriver, Error> {
+    let bootstrap_chain_0 = build_osmosis_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let bootstrap_chain_1 = build_osmosis_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let setup = CosmosBinaryChannelSetup {
+        bootstrap_a: bootstrap_chain_0,
+        bootstrap_b: bootstrap_chain_1,
+        builder,
+        create_client_payload_options: Default::default(),
+        init_connection_options: Default::default(),
+        init_channel_options: Default::default(),
+        port_id: PortId::transfer(),
+    };
+
+    setup.build_driver().await
+}
+
+async fn setup_osmosis_to_gaia(
+    runtime: &HermesRuntime,
+    builder: CosmosBuilder,
+) -> Result<CosmosBinaryChannelTestDriver, Error> {
+    let bootstrap_chain_0 = build_osmosis_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let bootstrap_chain_1 = build_gaia_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let setup = CosmosBinaryChannelSetup {
+        bootstrap_a: bootstrap_chain_0,
+        bootstrap_b: bootstrap_chain_1,
+        builder,
+        create_client_payload_options: Default::default(),
+        init_connection_options: Default::default(),
+        init_channel_options: Default::default(),
+        port_id: PortId::transfer(),
+    };
+
+    setup.build_driver().await
+}
+
+pub async fn init_preset_bootstraps<Setup>(
+    runtime: &HermesRuntime,
+) -> Result<Setup::TestDriver, Error>
+where
+    Setup: HasTestDriverType<TestDriver = CosmosBinaryChannelTestDriver>,
+{
     let test_preset = env::var("TEST_PRESET")
-        .unwrap_or_else(|_| "CosmosToCosmos".to_string())
+        .unwrap_or_else(|_| "GaiaToGaia".to_string())
         .parse::<TestPreset>()?;
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     match test_preset {
-        TestPreset::CosmosToCosmos => {
-            let bootstrap_chain_0 = build_gaia_bootstrap(
-                runtime.clone(),
-                true,
-                "./test-data",
-                "coin".into(),
-                |_| Ok(()),
-                |_| Ok(()),
-            );
-
-            let bootstrap_chain_1 = build_gaia_bootstrap(
-                runtime.clone(),
-                true,
-                "./test-data",
-                "coin".into(),
-                |_| Ok(()),
-                |_| Ok(()),
-            );
-
-            Ok((bootstrap_chain_0, bootstrap_chain_1))
-        }
+        TestPreset::GaiaToGaia => setup_gaia_to_gaia(runtime, builder).await,
+        TestPreset::OsmosisToOsmosis => setup_osmosis_to_osmosis(runtime, builder).await,
+        TestPreset::OsmosisToGaia => setup_osmosis_to_gaia(runtime, builder).await,
     }
 }

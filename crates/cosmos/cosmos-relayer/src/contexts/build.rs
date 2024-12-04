@@ -189,8 +189,6 @@ impl CosmosBuilder {
 
         let event_source_mode = chain_config.event_source.clone();
 
-        //let tx_config = TxConfig::try_from(&chain_config)?;
-
         let mut rpc_client = HttpClient::new(chain_config.rpc_addr.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
