@@ -1,3 +1,5 @@
+use alloc::boxed::Box;
+
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -115,11 +117,13 @@ where
 
             let tasks = ack_packets
                 .into_iter()
-                .map(|(packet, ack)| RelayPacketTask {
-                    height: height.clone(),
-                    relay: relay.clone(),
-                    packet,
-                    ack,
+                .map(|(packet, ack)| {
+                    Box::new(RelayPacketTask {
+                        height: height.clone(),
+                        relay: relay.clone(),
+                        packet,
+                        ack,
+                    })
                 })
                 .collect();
 

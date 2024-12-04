@@ -16,7 +16,7 @@ use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
 use hermes_relayer_components::multi::traits::chain_at::{
-    ChainGetterAtComponent, ProvideChainTypeAt,
+    ChainGetterAtComponent, ChainTypeAtComponent,
 };
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
@@ -123,19 +123,20 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
-        ChainGetterAtComponent<Src>:
+        [
+            ChainTypeAtComponent<Src>,
+            ChainGetterAtComponent<Src>,
+        ]:
             UseField<symbol!("src_chain")>,
-        ChainGetterAtComponent<Dst>:
+        [
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Dst>,
+        ]:
             UseField<symbol!("dst_chain")>,
         SrcClientIdGetterComponent:
             UseField<symbol!("src_client_id")>,
         DstClientIdGetterComponent:
             UseField<symbol!("dst_client_id")>,
-
-        // FIXME: Rust compiler is panicking with the error
-        // `Failed to normalize Alias` during link time
-        // ChainTypeAtComponent<Src>: WithType<CosmosChain>,
-        // ChainTypeAtComponent<Dst>: WithType<CosmosChain>,
     }
 }
 
@@ -153,13 +154,13 @@ impl HasComponents for CosmosRelay {
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
 
-impl ProvideChainTypeAt<CosmosRelay, Src> for CosmosRelayComponents {
-    type Chain = CosmosChain;
-}
+// impl ProvideChainTypeAt<CosmosRelay, Src> for CosmosRelayComponents {
+//     type Chain = CosmosChain;
+// }
 
-impl ProvideChainTypeAt<CosmosRelay, Dst> for CosmosRelayComponents {
-    type Chain = CosmosChain;
-}
+// impl ProvideChainTypeAt<CosmosRelay, Dst> for CosmosRelayComponents {
+//     type Chain = CosmosChain;
+// }
 
 impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
     async fn should_relay_packet(relay: &CosmosRelay, packet: &Packet) -> Result<bool, Error> {
