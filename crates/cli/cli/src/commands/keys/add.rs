@@ -6,7 +6,7 @@ use hdpath::StandardHDPath;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
+use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,
 };
@@ -94,7 +94,7 @@ pub struct KeysAddCmd {
 }
 
 impl KeysAddCmd {
-    fn options(&self, chain_config: &CosmosSdkConfig) -> eyre::Result<KeysAddOptions> {
+    fn options(&self, chain_config: &CosmosChainConfig) -> eyre::Result<KeysAddOptions> {
         let name = self
             .key_name
             .clone()
@@ -114,12 +114,12 @@ impl KeysAddCmd {
 #[derive(Clone, Debug)]
 pub struct KeysAddOptions {
     pub name: String,
-    pub config: CosmosSdkConfig,
+    pub config: CosmosChainConfig,
     pub hd_path: StandardHDPath,
 }
 
 pub fn add_key(
-    config: &CosmosSdkConfig,
+    config: &CosmosChainConfig,
     key_name: &str,
     file: &Path,
     hd_path: &StandardHDPath,
@@ -128,7 +128,7 @@ pub fn add_key(
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &config.account_prefix,
-        &config.id,
+        &ChainId::from_string(&config.id),
         &config.key_store_folder,
     )?;
 
@@ -146,7 +146,7 @@ pub fn restore_key(
     mnemonic: &Path,
     key_name: &str,
     hdpath: &StandardHDPath,
-    config: &CosmosSdkConfig,
+    config: &CosmosChainConfig,
     overwrite: bool,
 ) -> eyre::Result<AnySigningKeyPair> {
     let mnemonic_content =
@@ -155,7 +155,7 @@ pub fn restore_key(
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &config.account_prefix,
-        &config.id,
+        &ChainId::from_string(&config.id),
         &config.key_store_folder,
     )?;
 
@@ -164,7 +164,7 @@ pub fn restore_key(
     let key_pair = Secp256k1KeyPair::from_mnemonic(
         &mnemonic_content,
         hdpath,
-        &config.address_type,
+        &ibc_relayer::config::AddressType::Cosmos,
         keyring.account_prefix(),
     )?;
 

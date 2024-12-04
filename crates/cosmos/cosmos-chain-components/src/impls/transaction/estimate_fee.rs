@@ -3,6 +3,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimator;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
+use http::uri::InvalidUri;
 use ibc_proto::cosmos::tx::v1beta1::service_client::ServiceClient;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, SimulateRequest, SimulateResponse, Tx};
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
@@ -31,6 +32,7 @@ where
         + HasChainId<ChainId = ChainId>
         + CanRaiseError<TransportError>
         + CanRaiseError<Status>
+        + CanRaiseError<InvalidUri>
         + CanConvertGasToFee
         + CanRaiseError<&'static str>,
 {
@@ -48,10 +50,12 @@ where
             ..Default::default()
         };
 
-        let mut client = ServiceClient::connect(chain.grpc_address().clone())
-            .await
-            .map_err(Chain::raise_error)?
-            .max_decoding_message_size(max_grpc_decoding_size().get_bytes() as usize);
+        let mut client = ServiceClient::connect(
+            Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,
+        )
+        .await
+        .map_err(Chain::raise_error)?
+        .max_decoding_message_size(max_grpc_decoding_size().get_bytes() as usize);
 
         let response = client
             .simulate(request)

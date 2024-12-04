@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use std::str::FromStr;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
@@ -14,6 +15,7 @@ use hermes_cosmos_chain_components::components::client::*;
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
+use hermes_cosmos_chain_components::impls::types::config::{CosmosChainConfig, EventSourceMode};
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
@@ -23,7 +25,6 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOpt
 use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::commitment_proof::CosmosCommitmentProof;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
-use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
@@ -97,12 +98,9 @@ use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeM
 use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
-use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
-use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::config::EventSourceMode;
 use ibc_relayer::event::source::queries::all as all_queries;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics02_client::height::Height;
@@ -110,7 +108,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
-use tendermint_rpc::{HttpClient, Url};
+use tendermint_rpc::{HttpClient, Url, WebSocketClientUrl};
 
 use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
@@ -124,13 +122,12 @@ pub struct CosmosChain {
 
 #[derive(HasField)]
 pub struct BaseCosmosChain {
-    pub chain_config: CosmosSdkConfig,
+    pub chain_config: CosmosChainConfig,
     pub chain_id: ChainId,
     pub compat_mode: CompatMode,
     pub runtime: HermesRuntime,
     pub telemetry: CosmosTelemetry,
     pub subscription: Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>,
-    pub tx_config: TxConfig,
     pub ibc_commitment_prefix: Vec<u8>,
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
@@ -216,13 +213,13 @@ delegate_components! {
 
 impl TxExtensionOptionsGetter<CosmosChain> for CosmosChainContextComponents {
     fn tx_extension_options(chain: &CosmosChain) -> &Vec<ibc_proto::google::protobuf::Any> {
-        &chain.tx_config.extension_options
+        &chain.chain_config.extension_options
     }
 }
 
 impl GasConfigGetter<CosmosChain> for CosmosChainContextComponents {
     fn gas_config(chain: &CosmosChain) -> &GasConfig {
-        &chain.tx_config.gas_config
+        &chain.chain_config.gas_config
     }
 }
 
@@ -234,7 +231,7 @@ impl DefaultSignerGetter<CosmosChain> for CosmosChainContextComponents {
 
 impl FeeForSimulationGetter<CosmosChain> for CosmosChainContextComponents {
     fn fee_for_simulation(chain: &CosmosChain) -> &Fee {
-        &chain.tx_config.gas_config.max_fee
+        &chain.chain_config.gas_config.max_fee
     }
 }
 
@@ -265,8 +262,7 @@ impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainContextComponents {
 
 impl CosmosChain {
     pub fn new(
-        chain_config: CosmosSdkConfig,
-        tx_config: TxConfig,
+        chain_config: CosmosChainConfig,
         rpc_client: HttpClient,
         compat_mode: CompatMode,
         key_entry: Secp256k1KeyPair,
@@ -274,22 +270,22 @@ impl CosmosChain {
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
     ) -> Self {
-        let chain_version = tx_config.chain_id.version();
+        let chain_id = ChainId::from_string(&chain_config.id);
+        let chain_version = chain_id.version();
 
         let subscription = match event_source_mode {
-            EventSourceMode::Push {
-                url,
-                batch_delay: _,
-            } => {
-                runtime.new_abci_event_subscription(chain_version, url, compat_mode, all_queries())
-            }
+            EventSourceMode::Push { url } => runtime.new_abci_event_subscription(
+                chain_version,
+                WebSocketClientUrl::from_str(&url).unwrap(),
+                compat_mode,
+                all_queries(),
+            ),
             EventSourceMode::Pull { .. } => {
                 // TODO: implement pull-based event source
                 Arc::new(EmptySubscription::new())
             }
         };
 
-        let chain_id = tx_config.chain_id.clone();
         let ibc_commitment_prefix = chain_config.store_prefix.clone().into();
 
         let chain = Self {
@@ -300,7 +296,6 @@ impl CosmosChain {
                 runtime,
                 telemetry,
                 subscription,
-                tx_config,
                 ibc_commitment_prefix,
                 rpc_client,
                 key_entry,
@@ -321,8 +316,8 @@ impl HasTelemetry for CosmosChain {
 }
 
 impl GrpcAddressGetter<CosmosChain> for CosmosChainContextComponents {
-    fn grpc_address(chain: &CosmosChain) -> &Uri {
-        &chain.tx_config.grpc_address
+    fn grpc_address(chain: &CosmosChain) -> &Url {
+        &chain.chain_config.grpc_addr
     }
 }
 
@@ -332,7 +327,7 @@ impl RpcClientGetter<CosmosChain> for CosmosChainContextComponents {
     }
 
     fn rpc_address(chain: &CosmosChain) -> &Url {
-        &chain.tx_config.rpc_address
+        &chain.chain_config.rpc_addr
     }
 }
 

@@ -2,6 +2,7 @@ use core::time::Duration;
 
 use cgp::core::error::CanRaiseError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_error::types::HermesError;
@@ -22,6 +23,7 @@ where
         + CanBuildRelayerChainConfig
         + HasCosmosBuilder
         + HasRuntime
+        + HasDynamicGas
         + CanRaiseError<HermesError>,
     Bootstrap::Runtime: CanSleep,
 {

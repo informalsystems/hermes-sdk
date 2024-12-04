@@ -2,6 +2,7 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
+use http::Uri;
 use ibc::core::channel::types::proto::v1::query_client::QueryClient;
 use ibc::core::channel::types::proto::v1::QueryChannelClientStateRequest;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
@@ -47,7 +48,8 @@ impl CommandRunner<HermesApp> for QueryChannelClient {
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();
 
-        let mut client = QueryClient::connect(chain.grpc_address().clone()).await?;
+        let mut client =
+            QueryClient::connect(Uri::try_from(&chain.grpc_address().to_string())?).await?;
 
         let request = tonic::Request::new(QueryChannelClientStateRequest {
             port_id: port_id.to_string(),

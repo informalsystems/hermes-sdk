@@ -19,6 +19,7 @@ use ibc_relayer_types::core::ics02_client::height::HeightError;
 use ibc_relayer_types::core::ics03_connection::error::Error as Ics03Error;
 use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
 use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
+use tonic::transport::Error as TransportError;
 
 pub struct ProvideCliError;
 
@@ -59,6 +60,7 @@ delegate_components! {
             Ics03Error,
             Ics23Error,
             Ics24ValidationError,
+            TransportError,
         ]: ReportError,
         [
             <'a> &'a str,

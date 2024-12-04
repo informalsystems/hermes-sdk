@@ -1,7 +1,7 @@
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
+use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use ibc_relayer::keyring::{KeyRing, Store};
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre::{eyre, Context};
@@ -46,7 +46,7 @@ pub struct KeysDeleteCmd {
 }
 
 impl KeysDeleteCmd {
-    fn options(&self, config: &CosmosSdkConfig) -> eyre::Result<KeysDeleteOptions<'_>> {
+    fn options(&self, config: &CosmosChainConfig) -> eyre::Result<KeysDeleteOptions<'_>> {
         let id = match (self.all, &self.key_name) {
             (true, None) => KeysDeleteId::All,
             (false, Some(ref key_name)) => KeysDeleteId::Named(key_name),
@@ -67,7 +67,7 @@ impl KeysDeleteCmd {
 #[derive(Clone, Debug)]
 struct KeysDeleteOptions<'a> {
     id: KeysDeleteId<'a>,
-    config: CosmosSdkConfig,
+    config: CosmosChainConfig,
 }
 
 #[derive(Clone, Debug)]
@@ -118,11 +118,11 @@ impl CommandRunner<HermesApp> for KeysDeleteCmd {
     }
 }
 
-fn delete_key(config: &CosmosSdkConfig, key_name: &str) -> eyre::Result<()> {
+fn delete_key(config: &CosmosChainConfig, key_name: &str) -> eyre::Result<()> {
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &config.account_prefix,
-        &config.id,
+        &ChainId::from_string(&config.id),
         &config.key_store_folder,
     )?;
 
@@ -131,11 +131,11 @@ fn delete_key(config: &CosmosSdkConfig, key_name: &str) -> eyre::Result<()> {
     Ok(())
 }
 
-fn delete_all_keys(config: &CosmosSdkConfig) -> eyre::Result<()> {
+fn delete_all_keys(config: &CosmosChainConfig) -> eyre::Result<()> {
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &config.account_prefix,
-        &config.id,
+        &ChainId::from_string(&config.id),
         &config.key_store_folder,
     )?;
 

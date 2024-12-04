@@ -4,12 +4,13 @@ use core::marker::PhantomData;
 use core::ops::Deref;
 use std::collections::HashMap;
 use std::fs::{self, File};
+use std::str::FromStr;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::eyre;
 use futures::lock::Mutex;
-use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
+use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
@@ -27,7 +28,6 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
@@ -59,7 +59,7 @@ impl Deref for CosmosBuilder {
 
 #[derive(HasField)]
 pub struct CosmosBuilderFields {
-    pub config_map: HashMap<ChainId, CosmosSdkConfig>,
+    pub config_map: HashMap<ChainId, CosmosChainConfig>,
     pub packet_filter: PacketFilter,
     pub telemetry: CosmosTelemetry,
     pub runtime: HermesRuntime,
@@ -141,7 +141,7 @@ impl CosmosBuilder {
     }
 
     pub fn new(
-        chain_configs: Vec<CosmosSdkConfig>,
+        chain_configs: Vec<CosmosChainConfig>,
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
         packet_filter: PacketFilter,
@@ -151,7 +151,7 @@ impl CosmosBuilder {
         let config_map = HashMap::from_iter(
             chain_configs
                 .into_iter()
-                .map(|config| (config.id.clone(), config)),
+                .map(|config| (ChainId::from_string(&config.id), config)),
         );
 
         Self {
@@ -182,19 +182,17 @@ impl CosmosBuilder {
 
     pub async fn build_chain_with_config(
         &self,
-        chain_config: CosmosSdkConfig,
+        chain_config: CosmosChainConfig,
         m_keypair: Option<&Secp256k1KeyPair>,
     ) -> Result<CosmosChain, Error> {
         let key = get_keypair(&chain_config, m_keypair)?;
 
         let event_source_mode = chain_config.event_source.clone();
 
-        let tx_config = TxConfig::try_from(&chain_config)?;
-
-        let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
+        let mut rpc_client = HttpClient::new(chain_config.rpc_addr.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
-            *compat_mode
+            CompatMode::from_str(compat_mode.as_str()).unwrap()
         } else {
             let status = rpc_client.status().await?;
 
@@ -205,7 +203,6 @@ impl CosmosBuilder {
 
         let context = CosmosChain::new(
             chain_config,
-            tx_config,
             rpc_client,
             compat_mode,
             key,
@@ -242,7 +239,7 @@ impl CosmosBuilder {
 }
 
 pub fn get_keypair(
-    chain_config: &CosmosSdkConfig,
+    chain_config: &CosmosChainConfig,
     m_keypair: Option<&Secp256k1KeyPair>,
 ) -> Result<Secp256k1KeyPair, Error> {
     let ks_folder = &chain_config.key_store_folder;

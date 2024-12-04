@@ -6,6 +6,7 @@ use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use http::Uri;
 use ibc::core::connection::types::proto::v1::query_client::QueryClient;
 use ibc::core::connection::types::proto::v1::QueryConnectionsRequest;
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
@@ -50,7 +51,8 @@ impl CommandRunner<HermesApp> for QueryConnections {
         let counterparty_chain_id = self.counterparty_chain_id.clone();
         let verbose = self.verbose;
 
-        let mut client = QueryClient::connect(chain.grpc_address().clone()).await?;
+        let mut client =
+            QueryClient::connect(Uri::try_from(&chain.grpc_address().to_string())?).await?;
 
         let request = tonic::Request::new(QueryConnectionsRequest { pagination: None });
 

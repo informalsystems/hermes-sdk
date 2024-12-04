@@ -17,14 +17,3 @@ where
         bootstrap.get_field(PhantomData)
     }
 }
-
-pub struct ReturnNoDynamicGas;
-
-impl<Bootstrap> DynamicGasGetter<Bootstrap> for ReturnNoDynamicGas
-where
-    Bootstrap: Async,
-{
-    fn dynamic_gas(_bootstrap: &Bootstrap) -> &Option<DynamicGasConfig> {
-        &None
-    }
-}
