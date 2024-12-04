@@ -2,6 +2,7 @@ use cgp::core::component::HasComponents;
 use cgp::core::error::{ErrorRaiser, HasErrorType};
 use hermes_chain_components::traits::send_message::EmptyMessageResponse;
 use hermes_chain_components::traits::types::ibc::HasIbcChainTypes;
+use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_logging_components::traits::has_logger::HasLogger;
@@ -24,12 +25,15 @@ use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::components::default::relay::DelegatesToDefaultRelayComponents;
+use crate::components::default::relay::{DelegatesToDefaultRelayComponents, MainSink};
 use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use crate::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
+use crate::relay::traits::ibc_message_sender::CanSendSingleIbcMessage;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
-use crate::relay::traits::target::SourceTarget;
+use crate::relay::traits::target::{
+    HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
 
 pub trait CanUseDefaultAckPacketRelayer: UseDefaultAckPacketRelayer {}
 
@@ -38,7 +42,11 @@ pub trait UseDefaultAckPacketRelayer: CanRelayAckPacket {}
 impl<Relay, SrcChain, DstChain, Components, Logger> UseDefaultAckPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
         + HasRelayClientIds
+        + CanSendSingleIbcMessage<MainSink, SourceTarget>
+        + CanRaiseRelayChainErrors
         + HasLogger<Logger = Logger>
         + HasComponents<Components = Components>,
     SrcChain: HasErrorType
@@ -46,6 +54,7 @@ where
         + CanSendMessages
         + HasMessageResponseEvents
         + CanQueryChainStatus
+        + HasOutgoingPacketType<DstChain>
         + HasIbcChainTypes<DstChain>
         + CanReadOutgoingPacketFields<DstChain>
         + HasConsensusStateType<DstChain>

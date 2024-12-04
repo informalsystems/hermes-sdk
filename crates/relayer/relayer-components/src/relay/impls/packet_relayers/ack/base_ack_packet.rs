@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 use hermes_chain_components::traits::types::packets::ack::AcknowledgementOf;
 use hermes_chain_components::types::aliases::HeightOf;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
@@ -26,8 +25,7 @@ where
         + HasRelayClientIds
         + CanRaiseRelayChainErrors
         + CanSendSingleIbcMessage<MainSink, SourceTarget>,
-    Relay::SrcChain: HasMessageResponseType
-        + CanQueryClientStateWithLatestHeight<Relay::DstChain>
+    Relay::SrcChain: CanQueryClientStateWithLatestHeight<Relay::DstChain>
         + CanBuildAckPacketMessage<Relay::DstChain>
         + HasOutgoingPacketType<Relay::DstChain>,
     Relay::DstChain: HasClientStateType<Relay::SrcChain>

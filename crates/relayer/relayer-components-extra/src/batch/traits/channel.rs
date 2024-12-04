@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
-use hermes_relayer_components::relay::traits::target::ChainTarget;
+use hermes_relayer_components::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 use hermes_runtime_components::traits::channel::HasChannelTypes;
 use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
 use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
@@ -9,13 +9,13 @@ use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
 use crate::batch::types::aliases::MessageBatchSender;
 
 #[derive_component(MessageBatchSenderGetterComponent, MessageBatchSenderGetter<Relay>)]
-pub trait HasMessageBatchSender<Target>: HasRelayChains
-where
-    Target: ChainTarget<Self>,
-    Target::TargetChain: HasRuntime,
-    RuntimeOf<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
+pub trait HasMessageBatchSender<Target: RelayTarget>:
+    HasTargetChainTypes<
+        Target,
+        TargetChain: HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
+    > + HasErrorType
 {
-    fn get_batch_sender(&self) -> &MessageBatchSender<Target::TargetChain, Self::Error>;
+    fn get_batch_sender(&self) -> &MessageBatchSender<Self::TargetChain, Self::Error>;
 }
 
 pub trait HasMessageBatchSenderType<Error>:

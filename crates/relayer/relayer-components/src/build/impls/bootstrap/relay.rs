@@ -16,7 +16,9 @@ use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::HasRelayTypeAt;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayClientIds};
 use crate::relay::traits::client_creator::CanCreateClient;
-use crate::relay::traits::target::{DestinationTarget, SourceTarget};
+use crate::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
 
 #[async_trait]
 pub trait CanBootstrapRelay<Src, Dst>:
@@ -51,7 +53,9 @@ where
         + CanBuildChain<Src, Chain = SrcChain>
         + CanBuildChain<Dst, Chain = DstChain>
         + CanRaiseError<ErrorOf<Build::Relay>>,
-    Build::Relay: CanCreateClient<SourceTarget>
+    Build::Relay: HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
+        + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
         + CanRaiseRelayChainErrors,
     SrcChain: HasCreateClientPayloadOptionsType<DstChain>
