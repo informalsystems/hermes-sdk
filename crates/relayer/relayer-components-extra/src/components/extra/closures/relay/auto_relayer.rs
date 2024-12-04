@@ -4,7 +4,11 @@ use cgp::extra::run::CanRun;
 use cgp::prelude::HasErrorType;
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
+use hermes_relayer_components::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, HasTargetChains,
+    SourceTarget,
+};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::stream::CanMapStream;
@@ -23,6 +27,11 @@ where
     Relay: Clone
         + HasRuntime
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
+        + HasTargetChains<SourceTarget>
+        + HasTargetChains<DestinationTarget>
         + UseExtraEventRelayer
         + HasComponents<Components = Components>,
     SrcChain: HasErrorType + HasRuntime + HasChainId + HasEventSubscription,

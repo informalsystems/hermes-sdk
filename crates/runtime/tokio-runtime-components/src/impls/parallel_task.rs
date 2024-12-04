@@ -12,14 +12,14 @@ impl<Runtime> ConcurrentTaskRunner<Runtime> for TokioRunParallelTasks
 where
     Runtime: HasBoxedStreamType,
 {
-    async fn run_concurrent_tasks<T>(_runtime: &Runtime, tasks: Vec<T>)
+    async fn run_concurrent_tasks<T>(_runtime: &Runtime, tasks: Vec<Box<T>>)
     where
         T: Task,
     {
         run_parallel_tasks(tasks).await
     }
 
-    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Runtime::Stream<T>)
+    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Runtime::Stream<Box<T>>)
     where
         T: Task,
     {
@@ -27,7 +27,7 @@ where
     }
 }
 
-pub async fn run_parallel_tasks<T>(tasks: Vec<T>)
+pub async fn run_parallel_tasks<T>(tasks: Vec<Box<T>>)
 where
     T: Task,
 {
@@ -42,7 +42,7 @@ where
     while join_set.join_next().await.is_some() {}
 }
 
-pub async fn run_parallel_task_stream<T>(tasks: impl Stream<Item = T>)
+pub async fn run_parallel_task_stream<T>(tasks: impl Stream<Item = Box<T>>)
 where
     T: Task,
 {

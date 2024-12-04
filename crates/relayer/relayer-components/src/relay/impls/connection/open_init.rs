@@ -10,7 +10,7 @@ use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::connection::open_init::ConnectionInitializer;
 
 /**
@@ -28,6 +28,7 @@ pub struct MissingConnectionInitEventError<'a, Relay> {
 impl<Relay, SrcChain, DstChain> ConnectionInitializer<Relay> for InitializeConnection
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + for<'a> CanRaiseError<MissingConnectionInitEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
     SrcChain: CanSendSingleMessage

@@ -9,7 +9,7 @@ use crate::relay::impls::packet_filters::chain::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use crate::relay::traits::chains::CanRaiseRelayChainErrors;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayClientIds};
 use crate::relay::traits::event_relayer::EventRelayer;
 use crate::relay::traits::packet_filter::{CanFilterPackets, PacketFilter};
 use crate::relay::traits::packet_lock::HasPacketLock;
@@ -38,7 +38,7 @@ pub struct PacketEventRelayer;
 
 impl<Relay> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
-    Relay: CanRelayPacket + CanRaiseRelayChainErrors,
+    Relay: HasRelayClientIds + CanRelayPacket + CanRaiseRelayChainErrors,
     Relay::SrcChain: HasSendPacketEvent<Relay::DstChain>,
     MatchPacketDestinationChain: PacketFilter<Relay>,
 {
@@ -61,8 +61,12 @@ where
 
 impl<Relay> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
-    Relay:
-        CanRelayAckPacket + CanFilterPackets + HasPacketLock + HasLogger + CanRaiseRelayChainErrors,
+    Relay: HasRelayClientIds
+        + CanRelayAckPacket
+        + CanFilterPackets
+        + HasPacketLock
+        + HasLogger
+        + CanRaiseRelayChainErrors,
     Relay::DstChain: CanBuildPacketFromWriteAck<Relay::SrcChain>,
     MatchPacketSourceChain: PacketFilter<Relay>,
     Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,

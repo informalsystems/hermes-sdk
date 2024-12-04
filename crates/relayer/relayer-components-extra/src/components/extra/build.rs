@@ -17,7 +17,9 @@ use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
-use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use hermes_relayer_components::relay::traits::chains::{
+    CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
+};
 use hermes_runtime_components::traits::channel::{CanCloneSender, CanCreateChannels};
 use hermes_runtime_components::traits::channel_once::CanUseChannelsOnce;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -63,11 +65,13 @@ where
     RelayAToB: Clone
         + HasErrorType<Error = Error>
         + HasRelayChains<SrcChain = ChainA, DstChain = ChainB>
+        + HasRelayClientIds
         + UseBatchMessageWorkerSpawner
         + CanRaiseRelayChainErrors,
     RelayBToA: Clone
         + HasErrorType<Error = Error>
         + HasRelayChains<SrcChain = ChainB, DstChain = ChainA>
+        + HasRelayClientIds
         + UseBatchMessageWorkerSpawner
         + CanRaiseRelayChainErrors,
     ChainA: Clone + HasErrorType + HasRuntime + HasChainId + HasIbcChainTypes<ChainB>,

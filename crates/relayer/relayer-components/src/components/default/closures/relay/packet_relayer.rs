@@ -28,17 +28,22 @@ use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::components::default::relay::DelegatesToDefaultRelayComponents;
+use crate::components::default::relay::{DelegatesToDefaultRelayComponents, MainSink};
 use crate::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
 use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
+use crate::relay::traits::ibc_message_sender::CanSendSingleIbcMessage;
 use crate::relay::traits::packet_filter::PacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
-use crate::relay::traits::target::{DestinationTarget, SourceTarget};
+use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
+use crate::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;
+use crate::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
 
 pub trait CanUseDefaultPacketRelayer: UseDefaultPacketRelayer {}
 
@@ -47,6 +52,12 @@ pub trait UseDefaultPacketRelayer: CanRelayPacket {}
 impl<Relay, SrcChain, DstChain, Components, Logger> UseDefaultPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
+        + HasRelayClientIds
+        + CanRelayReceivePacket
+        + CanRelayTimeoutUnorderedPacket
+        + CanSendSingleIbcMessage<MainSink, SourceTarget>
         + HasLogger<Logger = Logger>
         + HasPacketLock
         + HasComponents<Components = Components>,

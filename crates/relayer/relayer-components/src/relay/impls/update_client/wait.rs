@@ -1,14 +1,17 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
+use cgp::prelude::CanRaiseError;
+use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::target::{ChainTarget, CounterpartyChainOf};
+use crate::relay::traits::target::{
+    CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, RelayTarget,
+};
 use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 
 /**
@@ -19,8 +22,8 @@ pub struct WaitUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
 
 pub enum LogWaitUpdateClientHeightStatus<'a, Relay, Target>
 where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
+    Target: RelayTarget,
+    Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>,
 {
     Waiting {
         relay: &'a Relay,
@@ -36,8 +39,10 @@ where
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
     TargetUpdateClientMessageBuilder<Relay, Target> for WaitUpdateClient<InUpdateClient>
 where
-    Relay: HasRelayChains + HasLogger,
-    Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
+    Target: RelayTarget,
+    Relay: HasLogger
+        + HasTargetChains<Target, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>
+        + CanRaiseError<CounterpartyChain::Error>,
     InUpdateClient: TargetUpdateClientMessageBuilder<Relay, Target>,
     TargetChain: HasIbcChainTypes<CounterpartyChain>,
     CounterpartyChain: CanWaitChainReachHeight + HasIbcChainTypes<TargetChain>,
@@ -48,7 +53,7 @@ where
         target: Target,
         target_height: &CounterpartyChain::Height,
     ) -> Result<Vec<TargetChain::Message>, Relay::Error> {
-        let counterparty_chain = Target::counterparty_chain(relay);
+        let counterparty_chain = relay.counterparty_chain();
         let logger = relay.logger();
 
         logger
@@ -68,7 +73,7 @@ where
         let current_height = counterparty_chain
             .wait_chain_reach_height(target_height)
             .await
-            .map_err(Target::counterparty_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         logger
             .log(

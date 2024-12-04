@@ -1,40 +1,42 @@
 use core::marker::PhantomData;
 
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_chain_components::traits::types::packets::ack::AcknowledgementOf;
+use hermes_chain_components::types::aliases::HeightOf;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayClientIds, PacketOf};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayer;
-use crate::relay::traits::target::SourceTarget;
+use crate::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
 
 /// The minimal component that can send an acknowledgement packet.
 /// Ack packet relayers with more capabilities can be implemented
 /// on top of this base type.
 pub struct BaseAckPacketRelayer;
 
-impl<Relay, SrcChain, DstChain> AckPacketRelayer<Relay> for BaseAckPacketRelayer
+impl<Relay> AckPacketRelayer<Relay> for BaseAckPacketRelayer
 where
-    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain> + CanRaiseRelayChainErrors,
-    Relay: CanSendSingleIbcMessage<MainSink, SourceTarget>,
-    SrcChain: HasMessageResponseType
-        + CanQueryClientStateWithLatestHeight<DstChain>
-        + CanBuildAckPacketMessage<DstChain>
-        + HasOutgoingPacketType<DstChain>,
-    DstChain: HasClientStateType<SrcChain>
-        + CanBuildAckPacketPayload<SrcChain>
-        + HasWriteAckEvent<SrcChain>,
+    Relay: HasSourceTargetChainTypes
+        + HasRelayClientIds
+        + CanRaiseRelayChainErrors
+        + CanSendSingleIbcMessage<MainSink, SourceTarget>,
+    Relay::SrcChain: CanQueryClientStateWithLatestHeight<Relay::DstChain>
+        + CanBuildAckPacketMessage<Relay::DstChain>
+        + HasOutgoingPacketType<Relay::DstChain>,
+    Relay::DstChain: HasClientStateType<Relay::SrcChain>
+        + CanBuildAckPacketPayload<Relay::SrcChain>
+        + HasWriteAckEvent<Relay::SrcChain>,
 {
     async fn relay_ack_packet(
         relay: &Relay,
-        destination_height: &DstChain::Height,
-        packet: &SrcChain::OutgoingPacket,
-        ack: &DstChain::Acknowledgement,
+        destination_height: &HeightOf<Relay::DstChain>,
+        packet: &PacketOf<Relay>,
+        ack: &AcknowledgementOf<Relay::DstChain, Relay::SrcChain>,
     ) -> Result<(), Relay::Error> {
         let src_client_state = relay
             .src_chain()

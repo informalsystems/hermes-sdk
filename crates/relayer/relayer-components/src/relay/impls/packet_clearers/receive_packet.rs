@@ -1,3 +1,5 @@
+use alloc::boxed::Box;
+
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -62,7 +64,7 @@ where
 
 impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
-    Relay: Clone + HasRuntime + CanRaiseRelayChainErrors,
+    Relay: Clone + HasRuntime + HasRelayChains + CanRaiseRelayChainErrors,
     Relay::DstChain: CanQueryUnreceivedPacketSequences<Relay::SrcChain>,
     Relay::SrcChain:
         CanQueryPacketCommitments<Relay::DstChain> + CanQuerySendPackets<Relay::DstChain>,
@@ -103,9 +105,11 @@ where
 
         let tasks = send_packets
             .into_iter()
-            .map(|packet| RelayPacketTask {
-                relay: relay.clone(),
-                packet,
+            .map(|packet| {
+                Box::new(RelayPacketTask {
+                    relay: relay.clone(),
+                    packet,
+                })
             })
             .collect();
 

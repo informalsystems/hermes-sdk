@@ -1,15 +1,16 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::ErrorOf;
 use cgp::core::Async;
 use cgp::prelude::{async_trait, HasErrorType};
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasIbcChainTypes};
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
-use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt};
-use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
+use hermes_relayer_components::relay::traits::chains::{HasRelayChainTypes, HasRelayClientIds};
+use hermes_relayer_components::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
 use hermes_runtime_components::traits::channel::{
     CanCloneSender, CanCreateChannels, HasChannelTypes,
 };
@@ -26,30 +27,41 @@ use crate::build::traits::relay_with_batch_builder::CanBuildRelayWithBatch;
 
 pub struct BuildRelayWithBatchWorker;
 
-impl<Build, Src: Async, Dst: Async> RelayFromChainsBuilder<Build, Src, Dst>
-    for BuildRelayWithBatchWorker
+impl<Build, SrcTag: Async, DstTag: Async, Relay, SrcChain, DstChain>
+    RelayFromChainsBuilder<Build, SrcTag, DstTag> for BuildRelayWithBatchWorker
 where
     Build: HasRuntime
         + HasBatchConfig
-        + HasBoundedRelayTypeAt<Src, Dst>
-        + CanBuildRelayWithBatch<Src, Dst>
-        + CanBuildBatchChannel<ErrorOf<Build::Relay>, Src, Dst>
-        + CanBuildBatchChannel<ErrorOf<Build::Relay>, Dst, Src>,
-    Build::Relay: Clone
+        + HasRelayTypeAt<SrcTag, DstTag, Relay = Relay>
+        + HasChainTypeAt<SrcTag, Chain = SrcChain>
+        + HasChainTypeAt<DstTag, Chain = DstChain>
+        + CanBuildRelayWithBatch<SrcTag, DstTag>
+        + CanBuildBatchChannel<Relay::Error, SrcTag, DstTag>
+        + CanBuildBatchChannel<Relay::Error, DstTag, SrcTag>,
+    Relay: Clone
+        + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
+        + HasRelayClientIds
         + HasMessageBatchSenderTypes
         + CanSpawnBatchMessageWorker<SourceTarget>
-        + CanSpawnBatchMessageWorker<DestinationTarget>
-        + CanRaiseRelayChainErrors,
-    ChainAt<Build, Src>: HasChainId + HasErrorType,
-    ChainAt<Build, Dst>: HasChainId + HasErrorType,
+        + CanSpawnBatchMessageWorker<DestinationTarget>,
+    SrcChain: HasChainId
+        + HasClientIdType<DstChain>
+        + HasErrorType
+        + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
+    DstChain: HasChainId
+        + HasClientIdType<SrcChain>
+        + HasErrorType
+        + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
 {
     async fn build_relay_from_chains(
         build: &Build,
-        index: PhantomData<(Src, Dst)>,
-        src_client_id: &ClientIdAt<Build, Src, Dst>,
-        dst_client_id: &ClientIdAt<Build, Dst, Src>,
-        src_chain: ChainAt<Build, Src>,
-        dst_chain: ChainAt<Build, Dst>,
+        index: PhantomData<(SrcTag, DstTag)>,
+        src_client_id: &SrcChain::ClientId,
+        dst_client_id: &DstChain::ClientId,
+        src_chain: SrcChain,
+        dst_chain: DstChain,
     ) -> Result<Build::Relay, Build::Error> {
         let src_chain_id = src_chain.chain_id();
         let dst_chain_id = dst_chain.chain_id();
@@ -66,7 +78,7 @@ where
 
         let (dst_sender, m_dst_receiver) = build
             .build_batch_channel(
-                PhantomData::<(Dst, Src)>,
+                PhantomData::<(DstTag, SrcTag)>,
                 dst_chain_id,
                 src_chain_id,
                 dst_client_id,

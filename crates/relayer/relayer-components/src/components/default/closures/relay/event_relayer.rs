@@ -12,7 +12,7 @@ use crate::components::default::closures::relay::ack_packet_relayer::UseDefaultA
 use crate::components::default::closures::relay::packet_relayer::UseDefaultPacketRelayer;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::event_relayer::CanRelayEvent;
 use crate::relay::traits::packet_filter::PacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
@@ -28,6 +28,7 @@ pub trait UseDefaultEventRelayer:
 impl<Relay, SrcChain, DstChain, Components> UseDefaultEventRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + HasPacketLock
         + HasLogger
         + UseDefaultAckPacketRelayer

@@ -10,6 +10,9 @@ use hermes_relayer_components::relay::traits::channel::open_init::{
     CanInitChannel, ChannelInitializer,
 };
 use hermes_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayer;
+use hermes_relayer_components::relay::traits::target::{
+    HasDestinationTargetChainTypes, HasSourceTargetChainTypes,
+};
 
 use crate::components::extra::closures::chain::channel_handshake::UseExtraChainComponentsForChannelHandshake;
 use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;
@@ -24,7 +27,11 @@ where
 impl<Relay, SrcChain, DstChain, Components> UseExtraChannelHandshakeRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
         + HasComponents<Components = Components>
+        + CanRaiseError<SrcChain::Error>
+        + CanRaiseError<DstChain::Error>
         + for<'a> CanRaiseError<MissingChannelInitEventError<'a, Relay>>
         + for<'a> CanRaiseError<MissingChannelTryEventError<'a, Relay>>
         + UseExtraIbcMessageSender,

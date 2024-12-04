@@ -5,13 +5,15 @@ use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
-use hermes_relayer_components::multi::traits::chain_at::ChainAt;
-use hermes_relayer_components::multi::traits::relay_at::{HasBoundedRelayTypeAt, RelayAt};
-use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
+use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
+use hermes_relayer_components::relay::traits::chains::{HasRelayChainTypes, HasRelayClientIds};
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
 
 use crate::setup::traits::clients::ClientSetup;
 use crate::setup::traits::create_client_options_at::{
@@ -20,26 +22,33 @@ use crate::setup::traits::create_client_options_at::{
 
 pub struct SetupClientsWithRelay;
 
-impl<Setup, A: Async, B: Async> ClientSetup<Setup, A, B> for SetupClientsWithRelay
+impl<Setup, A: Async, B: Async, Relay, SrcChain, DstChain> ClientSetup<Setup, A, B>
+    for SetupClientsWithRelay
 where
-    Setup: HasErrorType
-        + HasBoundedRelayTypeAt<A, B>
+    Setup: HasRelayTypeAt<A, B, Relay = Relay>
+        + HasChainTypeAt<A, Chain = SrcChain>
+        + HasChainTypeAt<B, Chain = DstChain>
         + HasCreateClientPayloadOptionsAt<A, B>
         + HasCreateClientPayloadOptionsAt<B, A>
         + HasCreateClientMessageOptionsAt<A, B>
         + HasCreateClientMessageOptionsAt<B, A>
-        + CanRaiseError<<RelayAt<Setup, A, B> as HasErrorType>::Error>,
-    ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>>
-        + HasCreateClientPayloadOptionsType<ChainAt<Setup, B>>
-        + HasCreateClientMessageOptionsType<ChainAt<Setup, B>>
+        + CanRaiseError<Relay::Error>,
+    SrcChain: HasClientIdType<DstChain>
+        + HasCreateClientPayloadOptionsType<DstChain>
+        + HasCreateClientMessageOptionsType<DstChain>
         + HasErrorType,
-    ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>
-        + HasCreateClientPayloadOptionsType<ChainAt<Setup, A>>
-        + HasCreateClientMessageOptionsType<ChainAt<Setup, A>>
+    DstChain: HasClientIdType<SrcChain>
+        + HasCreateClientPayloadOptionsType<SrcChain>
+        + HasCreateClientMessageOptionsType<SrcChain>
         + HasErrorType,
-    RelayAt<Setup, A, B>: CanCreateClient<SourceTarget>
+    Relay: HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
+        + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
-        + CanRaiseRelayChainErrors,
+        + CanRaiseError<SrcChain::Error>
+        + CanRaiseError<DstChain::Error>,
 {
     async fn setup_clients(
         setup: &Setup,
@@ -52,7 +61,7 @@ where
         ),
         Setup::Error,
     > {
-        let client_id_a = <RelayAt<Setup, A, B>>::create_client(
+        let client_id_a = Relay::create_client(
             SourceTarget,
             chain_a,
             chain_b,
@@ -62,7 +71,7 @@ where
         .await
         .map_err(Setup::raise_error)?;
 
-        let client_id_b = <RelayAt<Setup, A, B>>::create_client(
+        let client_id_b = Relay::create_client(
             DestinationTarget,
             chain_b,
             chain_a,

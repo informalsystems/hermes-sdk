@@ -5,7 +5,7 @@ use hermes_chain_components::traits::packet::fields::CanReadOutgoingPacketFields
 use crate::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{HeightOf, WriteAckEventOf};
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, PacketOf};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayer;
 
 pub struct SkipReceivedPacketRelayer<Relayer> {
@@ -14,7 +14,7 @@ pub struct SkipReceivedPacketRelayer<Relayer> {
 
 impl<Relay, Relayer> ReceivePacketRelayer<Relay> for SkipReceivedPacketRelayer<Relayer>
 where
-    Relay: CanRaiseRelayChainErrors,
+    Relay: HasRelayChains + CanRaiseRelayChainErrors,
     Relayer: ReceivePacketRelayer<Relay>,
     Relay::SrcChain: CanReadOutgoingPacketFields<Relay::DstChain>,
     Relay::DstChain: HasWriteAckEvent<Relay::SrcChain>,

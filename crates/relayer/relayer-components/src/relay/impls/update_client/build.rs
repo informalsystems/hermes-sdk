@@ -1,13 +1,16 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
+use cgp::prelude::CanRaiseError;
+
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use crate::chain::traits::types::client_state::HasClientStateFields;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::target::ChainTarget;
+use crate::relay::traits::target::{
+    HasTargetChainTypes, HasTargetChains, HasTargetClientIds, RelayTarget,
+};
 use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 
 pub struct BuildUpdateClientMessages;
@@ -15,8 +18,15 @@ pub struct BuildUpdateClientMessages;
 impl<Relay, Target, TargetChain, CounterpartyChain> TargetUpdateClientMessageBuilder<Relay, Target>
     for BuildUpdateClientMessages
 where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
+    Target: RelayTarget,
+    Relay: HasTargetChainTypes<
+            Target,
+            TargetChain = TargetChain,
+            CounterpartyChain = CounterpartyChain,
+        > + HasTargetChains<Target>
+        + HasTargetClientIds<Target>
+        + CanRaiseError<TargetChain::Error>
+        + CanRaiseError<CounterpartyChain::Error>,
     TargetChain: CanQueryClientStateWithLatestHeight<CounterpartyChain>
         + CanBuildUpdateClientMessage<CounterpartyChain>
         + CanQueryConsensusStateHeight<CounterpartyChain>,
@@ -28,15 +38,15 @@ where
         _target: Target,
         target_height: &CounterpartyChain::Height,
     ) -> Result<Vec<TargetChain::Message>, Relay::Error> {
-        let target_client_id = Target::target_client_id(relay);
+        let target_client_id = relay.target_client_id();
 
-        let target_chain = Target::target_chain(relay);
-        let counterparty_chain = Target::counterparty_chain(relay);
+        let target_chain = relay.target_chain();
+        let counterparty_chain = relay.counterparty_chain();
 
         let client_state = target_chain
             .query_client_state_with_latest_height(PhantomData, target_client_id)
             .await
-            .map_err(Target::target_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let client_state_height = CounterpartyChain::client_state_latest_height(&client_state);
 
@@ -56,7 +66,7 @@ where
             let consensus_state_height = target_chain
                 .find_consensus_state_height_before(target_client_id, target_height)
                 .await
-                .map_err(Target::target_chain_error)?;
+                .map_err(Relay::raise_error)?;
 
             // If we happen to find a consensus height that matches the target height,
             // then there is no need to build any UpdateClient message.
@@ -70,12 +80,12 @@ where
         let update_payload = counterparty_chain
             .build_update_client_payload(&trusted_height, target_height, client_state)
             .await
-            .map_err(Target::counterparty_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let messages = target_chain
             .build_update_client_message(target_client_id, update_payload)
             .await
-            .map_err(Target::target_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         Ok(messages)
     }
