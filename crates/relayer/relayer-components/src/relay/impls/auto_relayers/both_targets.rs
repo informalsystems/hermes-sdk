@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use alloc::vec;
 
 use cgp::extra::run::Runner;
@@ -52,14 +53,14 @@ where
 {
     async fn run(relay: &Relay) -> Result<(), Relay::Error> {
         let tasks = vec![
-            TargetRelayerTask {
+            Box::new(TargetRelayerTask {
                 relay: relay.clone(),
                 target: EitherTarget::Source,
-            },
-            TargetRelayerTask {
+            }),
+            Box::new(TargetRelayerTask {
                 relay: relay.clone(),
                 target: EitherTarget::Destination,
-            },
+            }),
         ];
 
         relay.runtime().run_concurrent_tasks(tasks).await;

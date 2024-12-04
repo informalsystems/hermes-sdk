@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use alloc::vec;
 
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -80,23 +81,23 @@ where
         dst_channel_id: &DstChain::ChannelId,
         dst_port_id: &DstChain::PortId,
     ) -> Result<(), Relay::Error> {
-        let receive_packet_task = RunPacketClearer {
+        let receive_packet_task = Box::new(RunPacketClearer {
             relay: relay.clone(),
             src_channel_id: src_channel_id.clone(),
             src_port_id: src_port_id.clone(),
             dst_channel_id: dst_channel_id.clone(),
             dst_port_id: dst_port_id.clone(),
             clear_option: ClearOption::Receive,
-        };
+        });
 
-        let ack_packet_task = RunPacketClearer {
+        let ack_packet_task = Box::new(RunPacketClearer {
             relay: relay.clone(),
             src_channel_id: src_channel_id.clone(),
             src_port_id: src_port_id.clone(),
             dst_channel_id: dst_channel_id.clone(),
             dst_port_id: dst_port_id.clone(),
             clear_option: ClearOption::Ack,
-        };
+        });
 
         relay
             .runtime()

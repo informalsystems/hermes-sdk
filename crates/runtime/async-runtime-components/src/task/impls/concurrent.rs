@@ -12,21 +12,21 @@ impl<Runtime> ConcurrentTaskRunner<Runtime> for RunConcurrentTasks
 where
     Runtime: HasBoxedStreamType,
 {
-    async fn run_concurrent_tasks<T>(_runtime: &Runtime, tasks: Vec<T>)
+    async fn run_concurrent_tasks<T>(_runtime: &Runtime, tasks: Vec<Box<T>>)
     where
         T: Task,
     {
         run_concurrent_tasks(stream::iter(tasks)).await
     }
 
-    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Runtime::Stream<T>)
+    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Runtime::Stream<Box<T>>)
     where
         T: Task,
     {
         run_concurrent_tasks(Runtime::to_boxed_stream(tasks)).await
     }
 }
-pub async fn run_concurrent_tasks<T>(tasks: impl Stream<Item = T>)
+pub async fn run_concurrent_tasks<T>(tasks: impl Stream<Item = Box<T>>)
 where
     T: Task,
 {

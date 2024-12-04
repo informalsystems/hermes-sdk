@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use core::marker::PhantomData;
 
 use cgp::prelude::HasErrorType;
@@ -59,11 +60,13 @@ where
                 let tasks = {
                     let relay = relay.clone();
 
-                    Runtime::map_stream(event_stream, move |(height, event)| EventRelayerTask {
-                        relay: relay.clone(),
-                        height,
-                        event,
-                        phantom: PhantomData,
+                    Runtime::map_stream(event_stream, move |(height, event)| {
+                        Box::new(EventRelayerTask {
+                            relay: relay.clone(),
+                            height,
+                            event,
+                            phantom: PhantomData,
+                        })
                     })
                 };
 

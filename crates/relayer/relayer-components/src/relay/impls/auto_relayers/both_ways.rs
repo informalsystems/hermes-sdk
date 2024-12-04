@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use alloc::vec;
 
 use cgp::core::error::HasErrorType;
@@ -51,8 +52,12 @@ where
 {
     async fn run(birelay: &BiRelay) -> Result<(), BiRelay::Error> {
         let tasks = vec![
-            <TwoWayRelayerTask<BiRelay>>::AToB(birelay.relay_a_to_b().clone()),
-            <TwoWayRelayerTask<BiRelay>>::BToA(birelay.relay_b_to_a().clone()),
+            Box::new(<TwoWayRelayerTask<BiRelay>>::AToB(
+                birelay.relay_a_to_b().clone(),
+            )),
+            Box::new(<TwoWayRelayerTask<BiRelay>>::BToA(
+                birelay.relay_b_to_a().clone(),
+            )),
         ];
 
         birelay.runtime().run_concurrent_tasks(tasks).await;
