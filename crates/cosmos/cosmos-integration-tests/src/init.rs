@@ -121,6 +121,111 @@ pub fn build_gaia_bootstrap(
     }
 }
 
+async fn setup_gaia_to_gaia(
+    runtime: &HermesRuntime,
+    builder: CosmosBuilder,
+) -> Result<CosmosBinaryChannelTestDriver, Error> {
+    let bootstrap_chain_0 = build_gaia_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let bootstrap_chain_1 = build_gaia_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let setup = CosmosBinaryChannelSetup {
+        bootstrap_a: bootstrap_chain_0,
+        bootstrap_b: bootstrap_chain_1,
+        builder,
+        create_client_payload_options: Default::default(),
+        init_connection_options: Default::default(),
+        init_channel_options: Default::default(),
+        port_id: PortId::transfer(),
+    };
+
+    setup.build_driver().await
+}
+
+async fn setup_osmosis_to_osmosis(
+    runtime: &HermesRuntime,
+    builder: CosmosBuilder,
+) -> Result<CosmosBinaryChannelTestDriver, Error> {
+    let bootstrap_chain_0 = build_osmosis_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let bootstrap_chain_1 = build_osmosis_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let setup = CosmosBinaryChannelSetup {
+        bootstrap_a: bootstrap_chain_0,
+        bootstrap_b: bootstrap_chain_1,
+        builder,
+        create_client_payload_options: Default::default(),
+        init_connection_options: Default::default(),
+        init_channel_options: Default::default(),
+        port_id: PortId::transfer(),
+    };
+
+    setup.build_driver().await
+}
+
+async fn setup_osmosis_to_gaia(
+    runtime: &HermesRuntime,
+    builder: CosmosBuilder,
+) -> Result<CosmosBinaryChannelTestDriver, Error> {
+    let bootstrap_chain_0 = build_osmosis_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let bootstrap_chain_1 = build_gaia_bootstrap(
+        runtime.clone(),
+        true,
+        "./test-data",
+        "coin".into(),
+        |_| Ok(()),
+        |_| Ok(()),
+    );
+
+    let setup = CosmosBinaryChannelSetup {
+        bootstrap_a: bootstrap_chain_0,
+        bootstrap_b: bootstrap_chain_1,
+        builder,
+        create_client_payload_options: Default::default(),
+        init_connection_options: Default::default(),
+        init_channel_options: Default::default(),
+        port_id: PortId::transfer(),
+    };
+
+    setup.build_driver().await
+}
+
 pub async fn init_preset_bootstraps<Setup>(
     runtime: &HermesRuntime,
 ) -> Result<Setup::TestDriver, Error>
@@ -128,103 +233,13 @@ where
     Setup: HasTestDriverType<TestDriver = CosmosBinaryChannelTestDriver>,
 {
     let test_preset = env::var("TEST_PRESET")
-        .unwrap_or_else(|_| "CosmosToCosmos".to_string())
+        .unwrap_or_else(|_| "GaiaToGaia".to_string())
         .parse::<TestPreset>()?;
     let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     match test_preset {
-        TestPreset::GaiaToGaia => {
-            let bootstrap_chain_0 = build_gaia_bootstrap(
-                runtime.clone(),
-                true,
-                "./test-data",
-                "coin".into(),
-                |_| Ok(()),
-                |_| Ok(()),
-            );
-
-            let bootstrap_chain_1 = build_gaia_bootstrap(
-                runtime.clone(),
-                true,
-                "./test-data",
-                "coin".into(),
-                |_| Ok(()),
-                |_| Ok(()),
-            );
-
-            let setup = CosmosBinaryChannelSetup {
-                bootstrap_a: bootstrap_chain_0,
-                bootstrap_b: bootstrap_chain_1,
-                builder,
-                create_client_payload_options: Default::default(),
-                init_connection_options: Default::default(),
-                init_channel_options: Default::default(),
-                port_id: PortId::transfer(),
-            };
-
-            Ok(setup.build_driver().await?)
-        }
-        TestPreset::OsmosisToOsmosis => {
-            let bootstrap_chain_0 = build_osmosis_bootstrap(
-                runtime.clone(),
-                true,
-                "./test-data",
-                "coin".into(),
-                |_| Ok(()),
-                |_| Ok(()),
-            );
-
-            let bootstrap_chain_1 = build_osmosis_bootstrap(
-                runtime.clone(),
-                true,
-                "./test-data",
-                "coin".into(),
-                |_| Ok(()),
-                |_| Ok(()),
-            );
-
-            let setup = CosmosBinaryChannelSetup {
-                bootstrap_a: bootstrap_chain_0,
-                bootstrap_b: bootstrap_chain_1,
-                builder,
-                create_client_payload_options: Default::default(),
-                init_connection_options: Default::default(),
-                init_channel_options: Default::default(),
-                port_id: PortId::transfer(),
-            };
-
-            Ok(setup.build_driver().await?)
-        }
-        TestPreset::OsmosisToGaia => {
-            let bootstrap_chain_0 = build_osmosis_bootstrap(
-                runtime.clone(),
-                true,
-                "./test-data",
-                "coin".into(),
-                |_| Ok(()),
-                |_| Ok(()),
-            );
-
-            let bootstrap_chain_1 = build_gaia_bootstrap(
-                runtime.clone(),
-                true,
-                "./test-data",
-                "coin".into(),
-                |_| Ok(()),
-                |_| Ok(()),
-            );
-
-            let setup = CosmosBinaryChannelSetup {
-                bootstrap_a: bootstrap_chain_0,
-                bootstrap_b: bootstrap_chain_1,
-                builder,
-                create_client_payload_options: Default::default(),
-                init_connection_options: Default::default(),
-                init_channel_options: Default::default(),
-                port_id: PortId::transfer(),
-            };
-
-            Ok(setup.build_driver().await?)
-        }
+        TestPreset::GaiaToGaia => setup_gaia_to_gaia(runtime, builder).await,
+        TestPreset::OsmosisToOsmosis => setup_osmosis_to_osmosis(runtime, builder).await,
+        TestPreset::OsmosisToGaia => setup_osmosis_to_gaia(runtime, builder).await,
     }
 }
