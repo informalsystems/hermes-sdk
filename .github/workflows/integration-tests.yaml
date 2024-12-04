@@ -16,9 +16,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        - preset: GaiaToGaia
-        - preset: OsmosisToOsmosis
-        - preset: OsmosisToGaia
+        preset:
+          - GaiaToGaia
+          - OsmosisToOsmosis
+          - OsmosisToGaia
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v30
