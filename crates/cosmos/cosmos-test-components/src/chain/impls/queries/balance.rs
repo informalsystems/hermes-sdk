@@ -5,6 +5,8 @@ use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerier;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
+use http::uri::InvalidUri;
+use http::Uri;
 use ibc_relayer::chain::cosmos::query::balance::query_balance;
 use ibc_relayer::error::Error as RelayerError;
 
@@ -19,6 +21,7 @@ where
         + HasAmountType<Amount = Amount, Denom = Denom>
         + HasGrpcAddress
         + CanRaiseError<ParseIntError>
+        + CanRaiseError<InvalidUri>
         + CanRaiseError<RelayerError>,
 {
     async fn query_balance(
@@ -26,12 +29,15 @@ where
         address: &Chain::Address,
         denom: &Denom,
     ) -> Result<Amount, Chain::Error> {
-        let grpc_address = chain.grpc_address();
         let denom_str = denom.to_string();
 
-        let balance = query_balance(grpc_address, &address.to_string(), &denom_str)
-            .await
-            .map_err(Chain::raise_error)?;
+        let balance = query_balance(
+            &Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,
+            &address.to_string(),
+            &denom_str,
+        )
+        .await
+        .map_err(Chain::raise_error)?;
 
         let quantity = balance.amount.parse().map_err(Chain::raise_error)?;
 

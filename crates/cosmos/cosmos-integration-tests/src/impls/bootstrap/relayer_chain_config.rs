@@ -2,6 +2,7 @@ use core::str::FromStr;
 use core::time::Duration;
 
 use cgp::core::error::CanRaiseError;
+use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
@@ -39,7 +40,7 @@ where
         chain_node_config: &CosmosChainNodeConfig,
         chain_genesis_config: &CosmosGenesisConfig,
         relayer_wallet: &CosmosTestWallet,
-    ) -> Result<CosmosSdkConfig, Bootstrap::Error> {
+    ) -> Result<CosmosChainConfig, Bootstrap::Error> {
         let dynamic_gas_price = if let Some(dynamic_gas_config) = bootstrap.dynamic_gas() {
             DynamicGasPrice::unsafe_new(true, dynamic_gas_config.multiplier, dynamic_gas_config.max)
         } else {
@@ -97,6 +98,6 @@ where
             allow_ccq: false,
         };
 
-        Ok(relayer_chain_config)
+        Ok(relayer_chain_config.into())
     }
 }

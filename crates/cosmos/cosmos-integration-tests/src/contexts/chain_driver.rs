@@ -33,7 +33,7 @@ use hermes_test_components::chain_driver::traits::fields::wallet::{
     RelayerWallet, UserWallet, ValidatorWallet, WalletGetterAt, WalletsGetter,
 };
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
-use ibc_relayer::config::{ChainConfig, Config};
+use ibc_relayer::config::Config;
 use tokio::process::Child;
 use toml::to_string_pretty;
 
@@ -189,13 +189,13 @@ impl ChainProcessTaker<CosmosChainDriver> for CosmosChainDriverComponents {
 impl ConfigUpdater<CosmosChainDriver, Config> for CosmosChainDriverComponents {
     fn update_config(
         chain_driver: &CosmosChainDriver,
-        config: &mut Config,
+        _config: &mut Config,
     ) -> Result<String, Error> {
         let chain_config_str = to_string_pretty(&chain_driver.chain.chain_config)?;
 
-        let chain_config = chain_driver.chain.chain_config.clone();
+        let _chain_config = chain_driver.chain.chain_config.clone();
 
-        config.chains.push(ChainConfig::CosmosSdk(chain_config));
+        //config.chains.push(ChainConfig::CosmosSdk(chain_config));
 
         Ok(chain_config_str)
     }
