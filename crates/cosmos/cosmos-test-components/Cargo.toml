@@ -23,6 +23,7 @@ ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 ibc-proto                           = { workspace = true }
 
+http            = { workspace = true }
 itertools       = { workspace = true }
 serde           = { workspace = true }
 serde_json      = { workspace = true }
