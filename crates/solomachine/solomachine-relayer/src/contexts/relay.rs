@@ -9,10 +9,9 @@ use hermes_relayer_components::components::default::relay::*;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeAtComponent,
 };
+use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::traits::chains::{
-    DstClientIdGetterComponent, HasRelayClientIds, SrcClientIdGetterComponent,
-};
+use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -65,9 +64,9 @@ delegate_components! {
             ChainGetterAtComponent<Dst>,
         ]:
             UseField<symbol!("dst_chain")>,
-        SrcClientIdGetterComponent:
+        ClientIdAtGetterComponent<Src, Dst>:
             UseField<symbol!("src_client_id")>,
-        DstClientIdGetterComponent:
+        ClientIdAtGetterComponent<Dst, Src>:
             UseField<symbol!("dst_client_id")>,
     }
 }

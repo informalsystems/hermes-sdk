@@ -7,10 +7,9 @@ use cgp::prelude::*;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeAtComponent,
 };
+use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::traits::chains::{
-    DstClientIdGetterComponent, HasDstClientId, HasSrcClientId, SrcClientIdGetterComponent,
-};
+use hermes_relayer_components::relay::traits::chains::{HasDstClientId, HasSrcClientId};
 use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
@@ -52,9 +51,9 @@ delegate_components! {
             ChainGetterAtComponent<Dst>,
         ]:
             UseField<symbol!("dst_chain")>,
-        SrcClientIdGetterComponent:
+        ClientIdAtGetterComponent<Src, Dst>:
             UseField<symbol!("src_client_id")>,
-        DstClientIdGetterComponent:
+        ClientIdAtGetterComponent<Dst, Src>:
             UseField<symbol!("dst_client_id")>,
     }
 }
