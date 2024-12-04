@@ -2,6 +2,7 @@ use cgp::core::component::HasComponents;
 use cgp::core::error::{CanRaiseError, ErrorOf, ErrorRaiser};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
+use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
@@ -11,7 +12,11 @@ use hermes_relayer_components::relay::traits::chains::{
 };
 use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, HasTargetChains,
+    SourceTarget,
+};
+use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 use hermes_runtime_components::traits::channel::CanUseChannels;
 use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
 use hermes_runtime_components::traits::sleep::CanSleep;
@@ -34,16 +39,28 @@ pub trait UseExtraIbcMessageSender:
 impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraIbcMessageSender for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
         + HasRelayClientIds
         + HasLogger<Logger = Logger>
         + HasMessageBatchSender<SourceTarget>
         + HasMessageBatchSender<DestinationTarget>
+        + HasTargetChains<SourceTarget>
+        + HasTargetChains<DestinationTarget>
+        + CanBuildTargetUpdateClientMessage<SourceTarget>
+        + CanBuildTargetUpdateClientMessage<DestinationTarget>
+        + CanRaiseError<SrcChain::Error>
+        + CanRaiseError<DstChain::Error>
+        + CanRaiseError<ErrorOf<SrcChain::Runtime>>
+        + CanRaiseError<ErrorOf<DstChain::Runtime>>
         + HasComponents<Components = Components>,
     SrcChain: HasIbcChainTypes<DstChain>
         + HasOutgoingPacketType<DstChain>
+        + CanSendMessages
         + UseExtraChainComponentsForIbcMessageSender<DstChain>
         + CanRaiseError<ErrorOf<SrcChain::Runtime>>,
     DstChain: HasIbcChainTypes<SrcChain>
+        + CanSendMessages
         + UseExtraChainComponentsForIbcMessageSender<SrcChain>
         + CanRaiseError<ErrorOf<DstChain::Runtime>>,
     SrcChain::Height: Clone,

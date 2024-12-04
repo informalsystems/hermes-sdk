@@ -19,7 +19,10 @@ use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
 };
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, HasTargetChains,
+    SourceTarget,
+};
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::chain_driver::traits::types::chain::HasChain;
@@ -40,9 +43,11 @@ pub use crate::setup::traits::chain::ChainSetupComponent;
 use crate::setup::traits::channel::CanSetupChannel;
 pub use crate::setup::traits::channel::ChannelSetupComponent;
 pub use crate::setup::traits::clients::ClientSetupComponent;
+use crate::setup::traits::clients::{CanSetupClients, ClientSetup};
 use crate::setup::traits::connection::CanSetupConnection;
 pub use crate::setup::traits::connection::ConnectionSetupComponent;
 use crate::setup::traits::create_client_options_at::{
+    HasCreateClientMessageOptionsAt, HasCreateClientPayloadOptionsAt,
     ProvideCreateClientMessageOptionsAt, ProvideCreateClientPayloadOptionsAt,
 };
 use crate::setup::traits::driver::HasTestDriverType;
@@ -91,16 +96,21 @@ where
     Setup: HasChainTypeAt<Index<0>, Chain = ChainA>
         + HasChainTypeAt<Index<1>, Chain = ChainB>
         + HasRelayTypeAt<Index<0>, Index<1>, Relay = Relay>
-        + HasRelayTypeAt<Index<1>, Index<0>>
-        + HasBiRelayTypeAt<Index<0>, Index<1>>
         + HasChainDriverTypeAt<Index<0>, ChainDriver = ChainDriverA>
         + HasChainDriverTypeAt<Index<1>, ChainDriver = ChainDriverB>
+        + HasCreateClientPayloadOptionsAt<Index<0>, Index<1>>
+        + HasCreateClientMessageOptionsAt<Index<0>, Index<1>>
+        + HasCreateClientPayloadOptionsAt<Index<1>, Index<0>>
+        + HasCreateClientMessageOptionsAt<Index<1>, Index<0>>
         + HasTestDriverType
-        + HasErrorType
+        + CanRaiseError<Relay::Error>
+        + CanBuildTestDriverWithBinaryChannel
         + HasComponents<Components = Components>
         + CanSetupConnection<Index<0>, Index<1>>
         + CanSetupChannel<Index<0>, Index<1>>
-        + CanBuildTestDriverWithBinaryChannel,
+        // + CanSetupClients<Index<0>, Index<1>>
+        + CanBuildTestDriverWithBinaryChannel
+        + CanRaiseError<Relay::Error>,
     Components: DelegatesToBinaryChannelTestComponents
         + BinaryChannelDriverBuilder<Setup>
         + ProvideBootstrapAt<Setup, Index<0>, Bootstrap = BootstrapA>
@@ -134,12 +144,17 @@ where
         + HasErrorType
         + Clone,
     Relay: HasRelayChains<SrcChain = ChainA, DstChain = ChainB>
+        + HasTargetChains<SourceTarget>
+        + HasTargetChains<DestinationTarget>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
         + HasRelayClientIds
-        + CanCreateClient<SourceTarget>
-        + CanCreateClient<DestinationTarget>
+        // + CanCreateClient<SourceTarget>
+        // + CanCreateClient<DestinationTarget>
         + CanBootstrapConnection
         + CanBootstrapChannel
-        + CanRaiseRelayChainErrors,
+        + CanRaiseError<ChainA::Error>
+        + CanRaiseError<ChainB::Error>,
     BootstrapA: CanBootstrapChain,
     BootstrapB: CanBootstrapChain,
     Build: HasBiRelayTypeAt<Index<0>, Index<1>, BiRelay = Setup::BiRelay>
@@ -152,5 +167,6 @@ where
         + CanBuildBiRelayFromRelays<Index<0>, Index<1>>,
     PortIdOf<ChainA, ChainB>: Clone,
     PortIdOf<ChainB, ChainA>: Clone,
+    SetupClientsWithRelay: ClientSetup<Setup, Index<0>, Index<1>>,
 {
 }

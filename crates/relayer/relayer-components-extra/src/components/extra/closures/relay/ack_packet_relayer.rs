@@ -21,11 +21,15 @@ use hermes_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::components::default::relay::MainSink;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
+use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendSingleIbcMessage;
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
-use hermes_relayer_components::relay::traits::target::SourceTarget;
+use hermes_relayer_components::relay::traits::target::{
+    HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
 use hermes_runtime_components::traits::channel::CanUseChannels;
 use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -49,7 +53,10 @@ where
 impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraAckPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
         + HasRelayClientIds
+        + CanSendSingleIbcMessage<MainSink, SourceTarget>
         + HasLogger<Logger = Logger>
         + HasMessageBatchSender<SourceTarget>
         + HasComponents<Components = Components>,

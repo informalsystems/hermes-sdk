@@ -1,15 +1,14 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasIbcChainTypes};
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
 #[derive_component(ClientSetupComponent, ClientSetup<Setup>)]
 #[async_trait]
 pub trait CanSetupClients<A: Async, B: Async>:
-    HasChainTypeAt<A> + HasChainTypeAt<B> + HasErrorType
-where
-    ChainAt<Self, A>: HasIbcChainTypes<ChainAt<Self, B>>,
-    ChainAt<Self, B>: HasIbcChainTypes<ChainAt<Self, A>>,
+    HasChainTypeAt<A, Chain: HasClientIdType<ChainAt<Self, B>>>
+    + HasChainTypeAt<B, Chain: HasClientIdType<ChainAt<Self, A>>>
+    + HasErrorType
 {
     async fn setup_clients(
         &self,

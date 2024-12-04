@@ -23,9 +23,13 @@ use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
+use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
+use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
 use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetter;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::*;
@@ -152,14 +156,6 @@ impl HasComponents for CosmosRelay {
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
 
-// impl ProvideChainTypeAt<CosmosRelay, Src> for CosmosRelayComponents {
-//     type Chain = CosmosChain;
-// }
-
-// impl ProvideChainTypeAt<CosmosRelay, Dst> for CosmosRelayComponents {
-//     type Chain = CosmosChain;
-// }
-
 impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
     async fn should_relay_packet(relay: &CosmosRelay, packet: &Packet) -> Result<bool, Error> {
         Ok(relay
@@ -186,3 +182,14 @@ impl MessageBatchSenderGetter<CosmosRelay, DestinationTarget> for CosmosRelayCom
         &relay.dst_chain_message_batch_sender
     }
 }
+
+pub trait CanUseCosmosRelay:
+    HasRelayClientIds
+    + HasSourceTargetChainTypes
+    + HasDestinationTargetChainTypes
+    + CanCreateClient<SourceTarget>
+    + CanCreateClient<DestinationTarget>
+{
+}
+
+impl CanUseCosmosRelay for CosmosRelay {}

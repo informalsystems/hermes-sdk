@@ -28,7 +28,7 @@ use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::components::default::relay::{DelegatesToDefaultRelayComponents, MainSink};
 use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
+use crate::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::ibc_message_sender::CanSendSingleIbcMessage;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::target::{
@@ -46,7 +46,6 @@ where
         + HasDestinationTargetChainTypes
         + HasRelayClientIds
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
-        + CanRaiseRelayChainErrors
         + HasLogger<Logger = Logger>
         + HasComponents<Components = Components>,
     SrcChain: HasErrorType

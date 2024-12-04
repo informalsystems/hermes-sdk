@@ -4,6 +4,7 @@ use cgp::core::Async;
 use hermes_logging_components::traits::logger::Logger;
 use hermes_logging_components::types::level::LogLevel;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
@@ -13,7 +14,7 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, PacketOf};
-use hermes_relayer_components::relay::traits::target::ChainTarget;
+use hermes_relayer_components::relay::traits::target::{HasTargetChains, RelayTarget};
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use tracing::{error, trace};
 
@@ -121,10 +122,10 @@ impl<'a, Logging, Relay, Target> Logger<Logging, LogSkipBuildUpdateClientMessage
     for TracingLogger
 where
     Logging: Async,
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-    Target::TargetChain: HasChainId,
-    Target::CounterpartyChain: HasChainId,
+    Relay: HasTargetChains<Target>,
+    Target: RelayTarget,
+    Relay::TargetChain: HasChainId,
+    Relay::CounterpartyChain: HasChainId + HasHeightType,
 {
     async fn log(
         _logging: &Logging,
@@ -132,8 +133,8 @@ where
         details: &LogSkipBuildUpdateClientMessage<'a, Relay, Target>,
     ) {
         trace!(
-            target_chain_id = %Target::target_chain(details.relay).chain_id(),
-            counterparty_chain_id = %Target::counterparty_chain(details.relay).chain_id(),
+            target_chain_id = %details.relay.target_chain().chain_id(),
+            counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
             target_height = %details.target_height,
             "{message}",
         );
@@ -144,10 +145,10 @@ impl<'a, Logging, Relay, Target> Logger<Logging, LogWaitUpdateClientHeightStatus
     for TracingLogger
 where
     Logging: Async,
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-    Target::TargetChain: HasChainId,
-    Target::CounterpartyChain: HasChainId,
+    Relay: HasTargetChains<Target>,
+    Target: RelayTarget,
+    Relay::TargetChain: HasChainId,
+    Relay::CounterpartyChain: HasChainId + HasHeightType,
 {
     async fn log(
         _logging: &Logging,
@@ -160,8 +161,8 @@ where
                 target_height,
             } => {
                 trace!(
-                    target_chain_id = %Target::target_chain(relay).chain_id(),
-                    counterparty_chain_id = %Target::counterparty_chain(relay).chain_id(),
+                    target_chain_id = %relay.target_chain().chain_id(),
+                    counterparty_chain_id = %relay.counterparty_chain().chain_id(),
                     %target_height,
                     "{message}",
                 );
@@ -172,8 +173,8 @@ where
                 current_height,
             } => {
                 trace!(
-                    target_chain_id = %Target::target_chain(relay).chain_id(),
-                    counterparty_chain_id = %Target::counterparty_chain(relay).chain_id(),
+                    target_chain_id = %relay.target_chain().chain_id(),
+                    counterparty_chain_id = %relay.counterparty_chain().chain_id(),
                     %target_height,
                     %current_height,
                     "{message}",
@@ -187,25 +188,25 @@ impl<'a, Logging, Relay, Target> Logger<Logging, LogBatchWorker<'a, Relay, Targe
     for TracingLogger
 where
     Logging: Async,
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-    Target::TargetChain: HasChainId,
-    Target::CounterpartyChain: HasChainId,
+    Relay: HasTargetChains<Target>,
+    Target: RelayTarget,
+    Relay::TargetChain: HasChainId,
+    Relay::CounterpartyChain: HasChainId,
 {
     async fn log(_logging: &Logging, message: &str, details: &LogBatchWorker<'a, Relay, Target>) {
         match details.log_level {
             LogLevel::Error => {
                 error!(
-                    target_chain_id = %Target::target_chain(details.relay).chain_id(),
-                    counterparty_chain_id = %Target::counterparty_chain(details.relay).chain_id(),
+                    target_chain_id = %details.relay.target_chain().chain_id(),
+                    counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
                     details = %details.details,
                     "{message}",
                 );
             }
             _ => {
                 trace!(
-                    target_chain_id = %Target::target_chain(details.relay).chain_id(),
-                    counterparty_chain_id = %Target::counterparty_chain(details.relay).chain_id(),
+                    target_chain_id = %details.relay.target_chain().chain_id(),
+                    counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
                     details = %details.details,
                     "{message}",
                 );

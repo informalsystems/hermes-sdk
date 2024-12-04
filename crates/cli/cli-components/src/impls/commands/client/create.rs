@@ -18,7 +18,7 @@ use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::SourceTarget;
+use hermes_relayer_components::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
 
 use crate::traits::build::{BuilderOf, CanLoadBuilder, HasBuilderType};
 use crate::traits::command::CommandRunner;
@@ -47,6 +47,7 @@ where
         + HasErrorType,
     Counterparty: HasChainIdType + HasCreateClientPayloadOptionsType<Chain> + HasErrorType,
     Relay: HasRelayChains<SrcChain = Chain, DstChain = Counterparty>
+        + HasSourceTargetChainTypes
         + HasRelayClientIds
         + CanCreateClient<SourceTarget>,
     Args: Async,
