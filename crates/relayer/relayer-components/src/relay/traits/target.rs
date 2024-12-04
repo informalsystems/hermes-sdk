@@ -112,15 +112,7 @@ pub trait HasSourceTargetChainTypes:
 {
 }
 
-impl<Relay> HasSourceTargetChainTypes for Relay where
-    Relay: HasRelayChainTypes
-        + HasTargetChainTypes<
-            SourceTarget,
-            TargetChain = Self::SrcChain,
-            CounterpartyChain = Self::DstChain,
-        >
-{
-}
+impl<Relay> HasSourceTargetChainTypes for Relay where Relay: HasRelayChainTypes {}
 
 pub trait HasDestinationTargetChainTypes:
     HasRelayChainTypes
@@ -132,15 +124,7 @@ pub trait HasDestinationTargetChainTypes:
 {
 }
 
-impl<Relay> HasDestinationTargetChainTypes for Relay where
-    Relay: HasRelayChainTypes
-        + HasTargetChainTypes<
-            DestinationTarget,
-            TargetChain = Self::DstChain,
-            CounterpartyChain = Self::SrcChain,
-        >
-{
-}
+impl<Relay> HasDestinationTargetChainTypes for Relay where Relay: HasRelayChainTypes {}
 
 pub type TargetChainOf<Relay, Target> = <Relay as HasTargetChainTypes<Target>>::TargetChain;
 

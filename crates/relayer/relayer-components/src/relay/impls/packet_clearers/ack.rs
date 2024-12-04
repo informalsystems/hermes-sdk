@@ -65,7 +65,7 @@ where
 
 impl<Relay> PacketClearer<Relay> for ClearAckPackets
 where
-    Relay: Clone + HasRuntime + CanRaiseRelayChainErrors + HasLogger,
+    Relay: Clone + HasRuntime + HasRelayChains + CanRaiseRelayChainErrors + HasLogger,
     Relay::DstChain:
         CanQueryAckPackets<Relay::SrcChain> + CanQueryPacketAcknowledgements<Relay::SrcChain>,
     Relay::SrcChain: CanQueryPacketCommitments<Relay::DstChain>

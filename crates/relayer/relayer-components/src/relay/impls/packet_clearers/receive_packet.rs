@@ -64,7 +64,7 @@ where
 
 impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
-    Relay: Clone + HasRuntime + CanRaiseRelayChainErrors,
+    Relay: Clone + HasRuntime + HasRelayChains + CanRaiseRelayChainErrors,
     Relay::DstChain: CanQueryUnreceivedPacketSequences<Relay::SrcChain>,
     Relay::SrcChain:
         CanQueryPacketCommitments<Relay::DstChain> + CanQuerySendPackets<Relay::DstChain>,
