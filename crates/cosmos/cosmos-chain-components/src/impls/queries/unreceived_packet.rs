@@ -3,14 +3,12 @@ use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequenc
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
-use tonic::transport::Error as TransportError;
-use tonic::Status;
-
 use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;
 use ibc_relayer::chain::requests::QueryUnreceivedPacketsRequest;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use tonic::Request;
+use tonic::transport::Error as TransportError;
+use tonic::{Request, Status};
 
 use crate::traits::grpc_address::HasGrpcAddress;
 

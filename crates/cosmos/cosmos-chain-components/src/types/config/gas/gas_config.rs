@@ -1,8 +1,6 @@
-use serde::Deserialize;
-use serde::Serialize;
-
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::config::GasPrice;
+use serde::{Deserialize, Serialize};
 
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 

@@ -1,6 +1,4 @@
 use core::marker::PhantomData;
-use http::Uri;
-use tracing::{info, warn};
 
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
@@ -8,12 +6,13 @@ use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-
+use http::Uri;
 use ibc::core::connection::types::proto::v1::query_client::QueryClient;
 use ibc::core::connection::types::proto::v1::QueryConnectionsRequest;
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics03_connection::connection::IdentifiedConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use tracing::{info, warn};
 
 use crate::contexts::app::HermesApp;
 use crate::Result;

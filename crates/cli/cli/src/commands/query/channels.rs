@@ -1,4 +1,3 @@
-use http::Uri;
 use std::marker::PhantomData;
 use std::str::FromStr;
 
@@ -9,6 +8,7 @@ use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use http::Uri;
 use ibc::core::channel::types::proto::v1::query_client::QueryClient;
 use ibc::core::channel::types::proto::v1::QueryChannelsRequest;
 use ibc_relayer_types::core::ics04_channel::channel::{IdentifiedChannelEnd, State};

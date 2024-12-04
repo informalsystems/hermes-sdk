@@ -1,14 +1,12 @@
 use core::time::Duration;
-use ibc_proto::cosmos::base::v1beta1::Coin;
-use serde::Deserialize;
-use serde::Serialize;
 use std::path::PathBuf;
 
-use tendermint_rpc::Url;
-
+use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_proto::google::protobuf::Any;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
+use serde::{Deserialize, Serialize};
+use tendermint_rpc::Url;
 
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use crate::types::config::gas::gas_config::GasConfig;

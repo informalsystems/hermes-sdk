@@ -3,7 +3,6 @@ use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseFloatError, ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
-use http::uri::InvalidUri;
 
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -53,6 +52,7 @@ use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventEr
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_wasm_test_components::impls::chain::upload_client_code::ProposalIdNotFound;
+use http::uri::InvalidUri;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::commitment_types::error::CommitmentError;
 use ibc::core::host::types::error::DecodingError;

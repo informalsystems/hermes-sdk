@@ -1,17 +1,16 @@
-use cgp::core::error::CanRaiseError;
 use core::fmt::Debug;
-use http::uri::InvalidUri;
-use http::Uri;
-use tonic::transport::Error as TransportError;
-use tonic::Status;
 
+use cgp::core::error::CanRaiseError;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerier;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
-
+use http::uri::InvalidUri;
+use http::Uri;
 use ibc_proto::cosmos::gov::v1::query_client::QueryClient;
 use ibc_proto::cosmos::gov::v1::{Proposal, QueryProposalRequest};
+use tonic::transport::Error as TransportError;
+use tonic::Status;
 
 use crate::chain::types::proposal_status::ProposalStatus;
 

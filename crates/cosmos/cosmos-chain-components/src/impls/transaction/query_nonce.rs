@@ -4,7 +4,6 @@ use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 use http::uri::InvalidUri;
 use http::Uri;
-
 use ibc_relayer::chain::cosmos::query::account::query_account;
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::error::Error as RelayerError;

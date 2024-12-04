@@ -7,7 +7,6 @@ use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use http::uri::InvalidUri;
 use http::Uri;
-
 use ibc_relayer::chain::cosmos::query::balance::query_balance;
 use ibc_relayer::error::Error as RelayerError;
 
