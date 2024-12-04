@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::ErrorOf;
 use cgp::core::Async;
 use cgp::prelude::{async_trait, CanRaiseError, HasErrorType};
 
@@ -14,7 +13,9 @@ use crate::chain::traits::types::create_client::{
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::HasRelayTypeAt;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayClientIds};
+use crate::relay::traits::chains::{
+    CanRaiseRelayChainErrors, HasRelayChainTypes, HasRelayClientIds,
+};
 use crate::relay::traits::client_creator::CanCreateClient;
 use crate::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
@@ -47,13 +48,15 @@ pub trait CanBootstrapRelay<Src, Dst>:
     ) -> Result<Self::Relay, Self::Error>;
 }
 
-impl<Build, SrcChain, DstChain, Src: Async, Dst: Async> CanBootstrapRelay<Src, Dst> for Build
+impl<Build, Relay, SrcChain, DstChain, Src: Async, Dst: Async> CanBootstrapRelay<Src, Dst> for Build
 where
-    Build: CanBuildRelay<Src, Dst, Relay: HasRelayClientIds>
+    Build: CanBuildRelay<Src, Dst, Relay = Relay>
         + CanBuildChain<Src, Chain = SrcChain>
         + CanBuildChain<Dst, Chain = DstChain>
-        + CanRaiseError<ErrorOf<Build::Relay>>,
-    Build::Relay: HasSourceTargetChainTypes
+        + CanRaiseError<Relay::Error>,
+    Relay: HasRelayClientIds
+        + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
         + HasDestinationTargetChainTypes
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>

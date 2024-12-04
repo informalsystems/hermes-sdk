@@ -5,7 +5,8 @@ use cgp::prelude::*;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;
 use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
-use crate::relay::traits::chains::HasRelayChains;
+use crate::multi::types::tags::{Dst, Src};
+use crate::relay::traits::chains::HasRelayChainTypes;
 
 #[derive_component(RelayTypeAtComponent, ProvideRelayTypeAt<Context>)]
 pub trait HasRelayTypeAt<SrcTag, DstTag>: Async {
@@ -21,7 +22,12 @@ pub trait HasBoundedRelayTypeAt<SrcTag, DstTag>:
     HasRelayTypeAt<
         SrcTag,
         DstTag,
-        Relay: HasRelayChains<SrcChain = ChainAt<Self, SrcTag>, DstChain = ChainAt<Self, DstTag>>,
+        Relay: HasChainTypeAt<Src, Chain = ChainAt<Self, SrcTag>>
+                   + HasChainTypeAt<Dst, Chain = ChainAt<Self, DstTag>>
+                   + HasRelayChainTypes<
+            SrcChain = ChainAt<Self, SrcTag>,
+            DstChain = ChainAt<Self, DstTag>,
+        >,
     > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>>>
     + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>>>
 {
@@ -31,7 +37,7 @@ impl<Context, SrcTag, DstTag> HasBoundedRelayTypeAt<SrcTag, DstTag> for Context 
     Context: HasRelayTypeAt<
             SrcTag,
             DstTag,
-            Relay: HasRelayChains<
+            Relay: HasRelayChainTypes<
                 SrcChain = ChainAt<Self, SrcTag>,
                 DstChain = ChainAt<Self, DstTag>,
             >,
