@@ -50,7 +50,6 @@ where
             .build_chain_with_config(
                 relayer_chain_config.clone(),
                 Some(&relayer_wallet.keypair.clone()),
-                bootstrap.dynamic_gas().clone(),
             )
             .await
             .map_err(Bootstrap::raise_error)?;

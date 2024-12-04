@@ -16,6 +16,7 @@ use hermes_relayer_components::components::default::build::DefaultBuildComponent
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_runtime_components::traits::channel::{CanCloneSender, CanCreateChannels};
 use hermes_runtime_components::traits::channel_once::CanUseChannelsOnce;
@@ -41,23 +42,23 @@ define_components! {
 
 pub trait CanUseExtraBuildComponents: UseExtraBuildComponents {}
 
-pub trait UseExtraBuildComponents: CanBuildBiRelay<0, 1> {}
+pub trait UseExtraBuildComponents: CanBuildBiRelay<Index<0>, Index<1>> {}
 
 impl<Build, RelayAToB, RelayBToA, ChainA, ChainB, Error, Components, BaseComponents>
     UseExtraBuildComponents for Build
 where
     Build: HasBatchConfig
-        + HasBiRelayTypeAt<0, 1>
-        + HasRelayTypeAt<0, 1, Relay = RelayAToB>
-        + HasRelayTypeAt<1, 0, Relay = RelayBToA>
-        + HasChainTypeAt<0, Chain = ChainA>
-        + HasChainTypeAt<1, Chain = ChainB>
-        + HasRelayCache<0, 1>
-        + HasRelayCache<1, 0>
-        + HasChainCache<0>
-        + HasChainCache<1>
-        + HasBatchSenderCache<Error, 0, 1>
-        + HasBatchSenderCache<Error, 1, 0>
+        + HasBiRelayTypeAt<Index<0>, Index<1>>
+        + HasRelayTypeAt<Index<0>, Index<1>, Relay = RelayAToB>
+        + HasRelayTypeAt<Index<1>, Index<0>, Relay = RelayBToA>
+        + HasChainTypeAt<Index<0>, Chain = ChainA>
+        + HasChainTypeAt<Index<1>, Chain = ChainB>
+        + HasRelayCache<Index<0>, Index<1>>
+        + HasRelayCache<Index<1>, Index<0>>
+        + HasChainCache<Index<0>>
+        + HasChainCache<Index<1>>
+        + HasBatchSenderCache<Error, Index<0>, Index<1>>
+        + HasBatchSenderCache<Error, Index<1>, Index<0>>
         + HasComponents<Components = Components>,
     RelayAToB: Clone
         + HasErrorType<Error = Error>
@@ -80,10 +81,10 @@ where
     ChainB::Runtime: CanCreateChannels + CanUseChannelsOnce + CanCloneSender,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraBuildComponents<BaseComponents>
-        + BiRelayFromRelayBuilder<Build, 0, 1>
-        + RelayWithBatchBuilder<Build, 0, 1>
-        + RelayWithBatchBuilder<Build, 1, 0>
+        + BiRelayFromRelayBuilder<Build, Index<0>, Index<1>>
+        + RelayWithBatchBuilder<Build, Index<0>, Index<1>>
+        + RelayWithBatchBuilder<Build, Index<1>, Index<0>>
         + ProvideErrorType<Build>,
-    BaseComponents: Async + ChainBuilder<Build, 0> + ChainBuilder<Build, 1>,
+    BaseComponents: Async + ChainBuilder<Build, Index<0>> + ChainBuilder<Build, Index<1>>,
 {
 }

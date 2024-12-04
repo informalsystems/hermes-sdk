@@ -1,4 +1,7 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::ErrorOf;
+use cgp::core::Async;
 use cgp::prelude::{async_trait, CanRaiseError, HasErrorType};
 
 use crate::build::traits::builders::chain_builder::CanBuildChain;
@@ -11,44 +14,42 @@ use crate::chain::traits::types::create_client::{
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::HasRelayTypeAt;
-use crate::multi::types::index::{Index, Twindex};
 use crate::relay::traits::chains::CanRaiseRelayChainErrors;
 use crate::relay::traits::client_creator::CanCreateClient;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 
 #[async_trait]
-pub trait CanBootstrapRelay<const SRC: usize, const DST: usize>:
-    HasRelayTypeAt<SRC, DST>
+pub trait CanBootstrapRelay<Src, Dst>:
+    HasRelayTypeAt<Src, Dst>
     + HasChainTypeAt<
-        SRC,
+        Src,
         Chain: HasChainIdType
-                   + HasCreateClientPayloadOptionsType<ChainAt<Self, DST>>
-                   + HasCreateClientMessageOptionsType<ChainAt<Self, DST>>,
+                   + HasCreateClientPayloadOptionsType<ChainAt<Self, Dst>>
+                   + HasCreateClientMessageOptionsType<ChainAt<Self, Dst>>,
     > + HasChainTypeAt<
-        DST,
+        Dst,
         Chain: HasChainIdType
-                   + HasCreateClientPayloadOptionsType<ChainAt<Self, SRC>>
-                   + HasCreateClientMessageOptionsType<ChainAt<Self, SRC>>,
+                   + HasCreateClientPayloadOptionsType<ChainAt<Self, Src>>
+                   + HasCreateClientMessageOptionsType<ChainAt<Self, Src>>,
     > + HasErrorType
 {
     async fn bootstrap_relay(
         &self,
-        index: Twindex<SRC, DST>,
-        src_chain_id: &ChainIdAt<Self, SRC>,
-        dst_chain_id: &ChainIdAt<Self, DST>,
-        src_payload_options: &CreateClientPayloadOptionsOf<ChainAt<Self, SRC>, ChainAt<Self, DST>>,
-        dst_payload_options: &CreateClientPayloadOptionsOf<ChainAt<Self, DST>, ChainAt<Self, SRC>>,
-        src_message_options: &CreateClientMessageOptionsOf<ChainAt<Self, SRC>, ChainAt<Self, DST>>,
-        dst_message_options: &CreateClientMessageOptionsOf<ChainAt<Self, DST>, ChainAt<Self, SRC>>,
+        _tag: PhantomData<(Src, Dst)>,
+        src_chain_id: &ChainIdAt<Self, Src>,
+        dst_chain_id: &ChainIdAt<Self, Dst>,
+        src_payload_options: &CreateClientPayloadOptionsOf<ChainAt<Self, Src>, ChainAt<Self, Dst>>,
+        dst_payload_options: &CreateClientPayloadOptionsOf<ChainAt<Self, Dst>, ChainAt<Self, Src>>,
+        src_message_options: &CreateClientMessageOptionsOf<ChainAt<Self, Src>, ChainAt<Self, Dst>>,
+        dst_message_options: &CreateClientMessageOptionsOf<ChainAt<Self, Dst>, ChainAt<Self, Src>>,
     ) -> Result<Self::Relay, Self::Error>;
 }
 
-impl<Build, SrcChain, DstChain, const SRC: usize, const DST: usize> CanBootstrapRelay<SRC, DST>
-    for Build
+impl<Build, SrcChain, DstChain, Src: Async, Dst: Async> CanBootstrapRelay<Src, Dst> for Build
 where
-    Build: CanBuildRelay<SRC, DST>
-        + CanBuildChain<SRC, Chain = SrcChain>
-        + CanBuildChain<DST, Chain = DstChain>
+    Build: CanBuildRelay<Src, Dst>
+        + CanBuildChain<Src, Chain = SrcChain>
+        + CanBuildChain<Dst, Chain = DstChain>
         + CanRaiseError<ErrorOf<Build::Relay>>,
     Build::Relay: CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
@@ -64,7 +65,7 @@ where
 {
     async fn bootstrap_relay(
         &self,
-        index: Twindex<SRC, DST>,
+        tag: PhantomData<(Src, Dst)>,
         src_chain_id: &SrcChain::ChainId,
         dst_chain_id: &DstChain::ChainId,
         src_payload_options: &SrcChain::CreateClientPayloadOptions,
@@ -72,9 +73,9 @@ where
         src_message_options: &SrcChain::CreateClientMessageOptions,
         dst_message_options: &DstChain::CreateClientMessageOptions,
     ) -> Result<Build::Relay, Self::Error> {
-        let src_chain = self.build_chain(Index::<SRC>, src_chain_id).await?;
+        let src_chain = self.build_chain(PhantomData::<Src>, src_chain_id).await?;
 
-        let dst_chain = self.build_chain(Index::<DST>, dst_chain_id).await?;
+        let dst_chain = self.build_chain(PhantomData::<Dst>, dst_chain_id).await?;
 
         let src_client_id = Build::Relay::create_client(
             SourceTarget,
@@ -98,7 +99,7 @@ where
 
         let relay = self
             .build_relay(
-                index,
+                tag,
                 src_chain_id,
                 dst_chain_id,
                 &src_client_id,

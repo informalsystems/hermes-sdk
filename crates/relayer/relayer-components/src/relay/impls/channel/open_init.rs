@@ -16,7 +16,6 @@ use crate::relay::traits::channel::open_init::ChannelInitializer;
 
    This implements the `ChanOpenInit` step in the IBC channel handshake protocol.
 */
-
 pub struct InitializeChannel;
 
 pub struct MissingChannelInitEventError<'a, Relay> {

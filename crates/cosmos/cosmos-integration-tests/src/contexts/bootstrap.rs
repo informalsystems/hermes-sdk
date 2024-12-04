@@ -1,24 +1,26 @@
 use alloc::sync::Arc;
-use cgp::core::component::UseContext;
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
-use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
+use core::ops::Deref;
 use std::path::PathBuf;
 
+use cgp::core::component::UseContext;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
+use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::DenomPrefixGetterComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
@@ -27,7 +29,9 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
+use hermes_test_components::chain_driver::traits::types::chain::{
+    ChainTypeComponent, HasChainType,
+};
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 
 use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
@@ -43,10 +47,15 @@ use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderCom
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
    a `CosmosChainDriver`.
 */
-#[derive(HasField)]
+#[derive(Clone)]
 pub struct CosmosBootstrap {
+    pub fields: Arc<CosmosBootstrapFields>,
+}
+
+#[derive(HasField)]
+pub struct CosmosBootstrapFields {
     pub runtime: HermesRuntime,
-    pub cosmos_builder: Arc<CosmosBuilder>,
+    pub cosmos_builder: CosmosBuilder,
     pub should_randomize_identifiers: bool,
     pub chain_store_dir: PathBuf,
     pub chain_command_path: PathBuf,
@@ -66,6 +75,14 @@ pub struct CosmosBootstrapComponents;
 
 impl HasComponents for CosmosBootstrap {
     type Components = CosmosBootstrapComponents;
+}
+
+impl Deref for CosmosBootstrap {
+    type Target = CosmosBootstrapFields;
+
+    fn deref(&self) -> &Self::Target {
+        &self.fields
+    }
 }
 
 with_cosmos_sdk_bootstrap_components! {
@@ -115,3 +132,7 @@ delegate_components! {
             BuildCosmosChainDriver,
     }
 }
+
+pub trait CanUseCosmosBootstrap: HasChainType<Chain = CosmosChain> {}
+
+impl CanUseCosmosBootstrap for CosmosBootstrap {}

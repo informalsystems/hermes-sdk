@@ -5,32 +5,32 @@ use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
-use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt, RelayAt};
+use crate::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt, RelayAt};
 
-pub trait HasChainCache<const I: usize>:
+pub trait HasChainCache<I>:
     HasChainTypeAt<I, Chain: HasChainIdType> + HasRuntime<Runtime: HasMutex>
 {
     fn chain_cache(&self) -> &ChainCacheAt<Self, I>;
 }
 
-pub trait HasRelayCache<const SRC: usize, const DST: usize>:
-    HasRelayTypeAt<SRC, DST> + HasRuntime<Runtime: HasMutex>
+pub trait HasRelayCache<Src, Dst>:
+    HasBoundedRelayTypeAt<Src, Dst> + HasRuntime<Runtime: HasMutex>
 {
-    fn relay_cache(&self) -> &RelayCacheAt<Self, SRC, DST>;
+    fn relay_cache(&self) -> &RelayCacheAt<Self, Src, Dst>;
 }
 
-pub type RelayCacheAt<Build, const SRC: usize, const DST: usize> = MutexOf<
+pub type RelayCacheAt<Build, Src, Dst> = MutexOf<
     RuntimeOf<Build>,
     BTreeMap<
         (
-            ChainIdAt<Build, SRC>,
-            ChainIdAt<Build, DST>,
-            ClientIdAt<Build, SRC, DST>,
-            ClientIdAt<Build, DST, SRC>,
+            ChainIdAt<Build, Src>,
+            ChainIdAt<Build, Dst>,
+            ClientIdAt<Build, Src, Dst>,
+            ClientIdAt<Build, Dst, Src>,
         ),
-        RelayAt<Build, SRC, DST>,
+        RelayAt<Build, Src, Dst>,
     >,
 >;
 
-pub type ChainCacheAt<Build, const I: usize> =
+pub type ChainCacheAt<Build, I> =
     MutexOf<RuntimeOf<Build>, BTreeMap<ChainIdAt<Build, I>, ChainAt<Build, I>>>;

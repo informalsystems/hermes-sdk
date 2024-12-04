@@ -1,15 +1,19 @@
+use std::str::FromStr;
+
+use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
+use hermes_chain_components::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{
-    IncludeProof, QueryChannelRequest, QueryClientStateRequest, QueryConnectionRequest, QueryHeight,
-};
-use ibc_relayer_types::core::ics04_channel::channel::State;
+use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use ibc::primitives::proto::Protobuf;
+use ibc_relayer::client_state::AnyClientState;
+use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
+use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::Height;
 use oneline_eyre::eyre::eyre;
 use serde::{Deserialize, Serialize};
@@ -80,109 +84,88 @@ impl CommandRunner<HermesApp> for QueryChannelEnds {
         let chain = builder.build_chain(&chain_id).await?;
 
         let query_height = if let Some(height) = height {
-            let specified_height = Height::new(chain_id.version(), height)
-                .map_err(|e| eyre!("Failed to create Height with revision number `{}` and revision height `{height}`: {e}", chain_id.version()))?;
-
-            QueryHeight::Specific(specified_height)
+            Height::new(chain.chain_id.version(), height)?
         } else {
-            QueryHeight::Latest
+            chain.query_chain_height().await?
         };
 
-        let channel_ends_summary = chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let Ok((channel_end , _)) = chain_handle
-                    .query_channel(
-                        QueryChannelRequest {
-                            port_id: port_id.clone(),
-                            channel_id: channel_id.clone(),
-                            height: query_height,
-                        },
-                        IncludeProof::No,
-                    ) else {
-                        return Err(eyre!(
-                            "failed to query channel end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}"
-                        ).into());
-                };
+        // channel end query path
+        let channel_end_path = format!("channelEnds/ports/{port_id}/channels/{channel_id}");
 
-                if channel_end.state_matches(&State::Uninitialized) {
-                    return Err(eyre!(
-                        "{port_id}/{channel_id} on chain {chain_id} @ {query_height:?} is uninitialized",
-                    )
-                    .into());
-                }
+        let channel_end_bytes = chain
+            .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &query_height)
+            .await?;
 
-                let Some(connection_id) = channel_end.connection_hops.first() else {
-                    return Err(eyre!(
+        let channel_end = ChannelEnd::decode_vec(&channel_end_bytes)?;
+
+        if channel_end.state_matches(&State::Uninitialized) {
+            return Err(eyre!(
+                "{port_id}/{channel_id} on chain {chain_id} @ {query_height:?} is uninitialized",
+            )
+            .into());
+        }
+
+        let Some(connection_id) = channel_end.connection_hops.first() else {
+            return Err(eyre!(
                         "missing connection hops for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}",
                     ).into());
-                };
+        };
 
-                let Ok((connection_end, _)) = chain_handle
-                    .query_connection(
-                        QueryConnectionRequest {
-                            connection_id: connection_id.clone(),
-                            height: query_height,
-                        },
-                        IncludeProof::No,
-                    ) else {
-                        return Err(eyre!(
-                            "failed to query connection end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}"
-                        ).into());
-                };
+        let connection_end =
+            <CosmosChain as CanQueryConnectionEnd<CosmosChain>>::query_connection_end(
+                &chain,
+                connection_id,
+                &query_height,
+            )
+            .await?;
 
-                let client_id = connection_end.client_id().clone();
+        let client_id = ClientId::from_str(connection_end.client_id().as_str())?;
 
-                let Ok((client_state, _)) = chain_handle
-                    .query_client_state(
-                        QueryClientStateRequest {
-                            client_id: client_id.clone(),
-                            height: query_height,
-                        },
-                        IncludeProof::No,
-                    ) else {
-                        return Err(eyre!(
-                            "failed to query client state for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}"
-                        ).into());
-                };
+        // client state query path
+        let client_state_path = format!("clients/{client_id}/clientState");
 
-                let channel_counterparty = channel_end.counterparty().clone();
-                let connection_counterparty = connection_end.counterparty().clone();
-                let counterparty_client_id = connection_counterparty.client_id().clone();
+        let client_state_bytes = chain
+            .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), &query_height)
+            .await?;
 
-                let Some(counterparty_connection_id) = connection_counterparty.connection_id else {
-                    return Err(eyre!(
+        let client_state = AnyClientState::decode_vec(&client_state_bytes)?;
+
+        let channel_counterparty = channel_end.counterparty().clone();
+        let connection_counterparty = connection_end.counterparty().clone();
+        let counterparty_client_id =
+            ClientId::from_str(connection_counterparty.client_id().as_str())?;
+
+        let Some(counterparty_connection_id) = connection_counterparty.connection_id else {
+            return Err(eyre!(
                         "connection end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?} does not have counterparty connection id {connection_end:?}",
                     ).into());
-                };
+        };
 
-                let counterparty_port_id = channel_counterparty.port_id().clone();
+        let counterparty_port_id = channel_counterparty.port_id().clone();
 
-                let Some(counterparty_channel_id) = channel_counterparty.channel_id else {
-                    return Err(eyre!(
+        let Some(counterparty_channel_id) = channel_counterparty.channel_id else {
+            return Err(eyre!(
                         "channel end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?} does not have counterparty channel id {channel_end:?}",
                     ).into());
-                };
+        };
 
-                let counterparty_chain_id = client_state.chain_id();
+        let counterparty_chain_id = client_state.chain_id();
 
-                Ok(ChannelEndsSummary {
-                    chain_id,
-                    client_id,
-                    connection_id: connection_id.clone(),
-                    channel_id,
-                    port_id,
-                    counterparty_chain_id,
-                    counterparty_client_id,
-                    counterparty_connection_id,
-                    counterparty_channel_id,
-                    counterparty_port_id,
-                })
-            })
-            .await;
+        let channel_ends_summary = ChannelEndsSummary {
+            chain_id,
+            client_id,
+            connection_id: connection_id.clone(),
+            channel_id,
+            port_id,
+            counterparty_chain_id,
+            counterparty_client_id,
+            counterparty_connection_id: ConnectionId::from_str(
+                counterparty_connection_id.as_str(),
+            )?,
+            counterparty_channel_id,
+            counterparty_port_id,
+        };
 
-        match channel_ends_summary {
-            Ok(summary) => Ok(Output::success(summary)),
-            Err(e) => Err(e),
-        }
+        Ok(Output::success(channel_ends_summary))
     }
 }

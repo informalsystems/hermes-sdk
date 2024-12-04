@@ -94,7 +94,7 @@ where
     }
 }
 
-impl<'a, Chain, Counterparty> Debug for MismatchSrcAppId<'a, Chain, Counterparty>
+impl<Chain, Counterparty> Debug for MismatchSrcAppId<'_, Chain, Counterparty>
 where
     Chain: HasAppIdType<Counterparty>
         + HasPayloadHeaderType<Counterparty>
@@ -109,7 +109,7 @@ where
     }
 }
 
-impl<'a, Chain, Counterparty> Debug for MismatchDstAppId<'a, Chain, Counterparty>
+impl<Chain, Counterparty> Debug for MismatchDstAppId<'_, Chain, Counterparty>
 where
     Chain: HasPayloadHeaderType<Counterparty> + HasIbcMessageHeaderType<Counterparty>,
     Counterparty: HasAppIdType<Chain>,

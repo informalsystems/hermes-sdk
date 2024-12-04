@@ -66,7 +66,7 @@ where
     }
 }
 
-impl<'a, Chain, Counterparty> Debug for DoublePacketReceive<'a, Chain, Counterparty>
+impl<Chain, Counterparty> Debug for DoublePacketReceive<'_, Chain, Counterparty>
 where
     Chain: HasChannelIdType<Counterparty>,
     Counterparty: HasChannelIdType<Chain> + HasPacketNonceType<Chain> + HasPacketType<Chain>,

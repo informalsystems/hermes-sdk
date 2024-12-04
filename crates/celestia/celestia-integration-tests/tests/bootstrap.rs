@@ -20,12 +20,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
 
     let runtime = HermesRuntime::new(tokio_runtime.clone());
 
-    let dynamic_gas = Some(DynamicGasConfig::default());
-
-    let builder = Arc::new(CosmosBuilder::new_with_default(
-        runtime.clone(),
-        dynamic_gas.clone(),
-    ));
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
 
@@ -36,7 +31,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
         cosmos_builder: builder.clone(),
         chain_store_dir: store_dir.join("chains"),
         bridge_store_dir: store_dir.join("bridges"),
-        dynamic_gas,
+        dynamic_gas: Some(DynamicGasConfig::default()),
     };
 
     tokio_runtime.block_on(async move {

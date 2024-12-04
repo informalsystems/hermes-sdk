@@ -1,7 +1,7 @@
 use cgp::prelude::*;
-use http::Uri;
+use tendermint_rpc::Url;
 
 #[derive_component(GrpcAddressGetterComponent, GrpcAddressGetter<Chain>)]
 pub trait HasGrpcAddress: Async {
-    fn grpc_address(&self) -> &Uri;
+    fn grpc_address(&self) -> &Url;
 }

@@ -1,6 +1,5 @@
 #![recursion_limit = "256"]
 
-use core::time::Duration;
 use std::env::var;
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -16,8 +15,6 @@ use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use ibc_relayer::chain::cosmos::client::Settings;
-use ibc_relayer::config::types::TrustThreshold;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 
@@ -27,14 +24,9 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
 
-    let dynamic_gas = None;
-
     let runtime = HermesRuntime::new(tokio_runtime.clone());
 
-    let builder = Arc::new(CosmosBuilder::new_with_default(
-        runtime.clone(),
-        dynamic_gas.clone(),
-    ));
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     let store_postfix = format!(
         "{}-{}",
@@ -67,7 +59,7 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             transfer_denom_prefix: "coin".into(),
             wasm_client_byte_code,
             governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
-            dynamic_gas,
+            dynamic_gas: None,
         });
 
         let chain_driver_a = bootstrap.bootstrap_chain("chain-a").await?;
@@ -82,17 +74,11 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             chain: chain_driver_b.chain.clone(),
         };
 
-        let tm_create_client_settings = Settings {
-            max_clock_drift: Duration::from_secs(40),
-            trusting_period: None,
-            trust_threshold: TrustThreshold::ONE_THIRD,
-        };
-
         let client_id_a = WasmCosmosRelay::create_client(
             SourceTarget,
             &chain_a,
             &chain_b,
-            &tm_create_client_settings,
+            &Default::default(),
             &CreateWasmTendermintMessageOptions {
                 code_hash: wasm_code_hash.into(),
             },
@@ -105,7 +91,7 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             DestinationTarget,
             &chain_b,
             &chain_a,
-            &tm_create_client_settings,
+            &Default::default(),
             &CreateWasmTendermintMessageOptions {
                 code_hash: wasm_code_hash.into(),
             },

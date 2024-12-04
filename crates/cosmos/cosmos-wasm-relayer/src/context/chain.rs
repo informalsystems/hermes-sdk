@@ -11,17 +11,17 @@ use hermes_cosmos_chain_components::components::client::{
     ClientStateTypeComponent, ConnectionIdTypeComponent, CosmosClientComponents,
     MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
     OutgoingPacketFieldsReaderComponent, OutgoingPacketTypeComponent, PortIdTypeComponent,
-    SequenceTypeComponent, TimeTypeComponent,
+    SequenceTypeComponent, TimeTypeComponent, UnbondingPeriodQuerierComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::traits::eip::eip_query::EipQuerierComponent;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
+use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::payloads::client::{
@@ -39,7 +39,6 @@ use hermes_encoding_components::traits::has_encoding::{
     HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
-use hermes_error::types::Error;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
@@ -228,11 +227,9 @@ use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeM
 use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
-use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
@@ -439,6 +436,7 @@ delegate_components! {
             InitChannelOptionsTypeComponent,
             BlockQuerierComponent,
             AbciQuerierComponent,
+            UnbondingPeriodQuerierComponent,
             CounterpartyMessageHeightGetterComponent,
             ChainStatusQuerierComponent,
             ConsensusStateQuerierComponent,
@@ -476,13 +474,13 @@ delegate_components! {
 
 impl TxExtensionOptionsGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn tx_extension_options(chain: &WasmCosmosChain) -> &Vec<ibc_proto::google::protobuf::Any> {
-        &chain.tx_config.extension_options
+        &chain.chain_config.extension_options
     }
 }
 
 impl GasConfigGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn gas_config(chain: &WasmCosmosChain) -> &GasConfig {
-        &chain.tx_config.gas_config
+        &chain.chain_config.gas_config
     }
 }
 
@@ -494,7 +492,7 @@ impl DefaultSignerGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 
 impl FeeForSimulationGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn fee_for_simulation(chain: &WasmCosmosChain) -> &Fee {
-        &chain.tx_config.gas_config.max_fee
+        &chain.chain_config.gas_config.max_fee
     }
 }
 
@@ -524,8 +522,8 @@ impl IbcCommitmentPrefixGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 }
 
 impl GrpcAddressGetter<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn grpc_address(chain: &WasmCosmosChain) -> &Uri {
-        &chain.tx_config.grpc_address
+    fn grpc_address(chain: &WasmCosmosChain) -> &Url {
+        &chain.chain_config.grpc_addr
     }
 }
 
@@ -535,26 +533,7 @@ impl RpcClientGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     }
 
     fn rpc_address(chain: &WasmCosmosChain) -> &Url {
-        &chain.tx_config.rpc_address
-    }
-}
-
-impl HasBlockingChainHandle for WasmCosmosChain {
-    type ChainHandle = BaseChainHandle;
-
-    async fn with_blocking_chain_handle<R>(
-        &self,
-        cont: impl FnOnce(BaseChainHandle) -> Result<R, Error> + Send + 'static,
-    ) -> Result<R, Error>
-    where
-        R: Send + 'static,
-    {
-        let chain_handle = self.handle.clone();
-
-        self.runtime
-            .runtime
-            .spawn_blocking(move || cont(chain_handle))
-            .await?
+        &chain.chain_config.rpc_addr
     }
 }
 
@@ -614,6 +593,7 @@ pub trait CanUseWasmCosmosChain:
     + HasRuntime
     // + CanAssertEventualAmount
     + CanQueryAbci
+    + CanQueryUnbondingPeriod
     + CanQueryClientState<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
     + CanBuildConnectionOpenInitPayload<CosmosChain>

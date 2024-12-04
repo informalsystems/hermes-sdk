@@ -1623,6 +1623,7 @@ dependencies = [
  "futures",
  "hdpath",
  "hermes-any-counterparty",
+ "hermes-chain-components",
  "hermes-cli-components",
  "hermes-cli-framework",
  "hermes-cosmos-chain-components",
@@ -1635,6 +1636,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
+ "http 1.1.0",
  "humantime",
  "ibc",
  "ibc-relayer",
@@ -1643,6 +1645,7 @@ dependencies = [
  "serde",
  "serde_json",
  "toml",
+ "tonic",
  "tracing",
 ]
 
@@ -1658,6 +1661,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime-components",
  "hermes-test-components",
+ "http 1.1.0",
  "serde",
  "toml",
 ]
@@ -1681,6 +1685,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-comet-light-client-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-chain-type-components",
+]
+
+[[package]]
+name = "hermes-comet-light-client-context"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "eyre",
+ "hermes-chain-components",
+ "hermes-chain-type-components",
+ "hermes-comet-light-client-components",
+ "hermes-error",
+ "tendermint",
+ "tendermint-light-client-verifier",
+ "tendermint-rpc",
+]
+
+[[package]]
 name = "hermes-cosmos-chain-components"
 version = "0.1.0"
 dependencies = [
@@ -1689,13 +1716,17 @@ dependencies = [
  "eyre",
  "futures",
  "hermes-chain-type-components",
+ "hermes-comet-light-client-components",
+ "hermes-comet-light-client-context",
  "hermes-cosmos-encoding-components",
  "hermes-encoding-components",
+ "hermes-error",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "http 1.1.0",
  "ibc",
+ "ibc-client-tendermint",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
@@ -1708,6 +1739,8 @@ dependencies = [
  "serde_json",
  "subtle-encoding",
  "tendermint",
+ "tendermint-light-client",
+ "tendermint-light-client-verifier",
  "tendermint-proto",
  "tendermint-rpc",
  "time",
@@ -1767,6 +1800,7 @@ name = "hermes-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "dirs-next",
  "eyre",
  "futures",
  "hermes-any-counterparty",
@@ -1801,6 +1835,7 @@ dependencies = [
  "reqwest 0.12.9",
  "serde",
  "serde_derive",
+ "serde_json",
  "subtle-encoding",
  "tendermint",
  "tendermint-proto",
@@ -1821,6 +1856,7 @@ dependencies = [
  "hermes-runtime",
  "hermes-runtime-components",
  "hermes-test-components",
+ "http 1.1.0",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",

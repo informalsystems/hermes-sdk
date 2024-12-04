@@ -24,7 +24,7 @@ where
             .into_iter()
             .map(|config| {
                 let ChainConfig::CosmosSdk(config) = config;
-                config
+                config.into()
             })
             .collect();
 
@@ -35,7 +35,6 @@ where
             Default::default(),
             Default::default(),
             Default::default(),
-            None, // TODO: Fix CLIs to be able to use dynamic gas
         );
 
         Ok(builder)

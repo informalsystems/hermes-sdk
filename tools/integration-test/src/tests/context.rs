@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
@@ -36,7 +37,7 @@ where
         .iter()
         .map(|config| {
             let ChainConfig::CosmosSdk(config) = config;
-            config.clone()
+            CosmosChainConfig::from(config.clone())
         })
         .collect();
 
@@ -47,7 +48,6 @@ where
         packet_filter,
         Default::default(),
         key_map,
-        None,
     );
 
     Ok(builder)

@@ -45,7 +45,7 @@ where
     pub height: &'a Chain::Height,
 }
 
-impl<'a, Chain, Counterparty> Debug for ChannelNotFoundError<'a, Chain, Counterparty>
+impl<Chain, Counterparty> Debug for ChannelNotFoundError<'_, Chain, Counterparty>
 where
     Chain: HasIbcChainTypes<Counterparty>,
 {

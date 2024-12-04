@@ -2,7 +2,6 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
-
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 
 #[derive_component(DynamicGasGetterComponent, DynamicGasGetter<Bootstrap>)]

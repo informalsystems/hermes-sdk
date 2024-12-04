@@ -39,6 +39,9 @@ members = [
     "crates/cosmos/cosmos-relayer",
     "crates/cosmos/cosmos-wasm-relayer",
 
+    "crates/comet/comet-light-client-components",
+    "crates/comet/comet-light-client-context",
+
     "crates/celestia/celestia-test-components",
     "crates/celestia/celestia-integration-tests",
 
@@ -75,6 +78,7 @@ overflow-checks = true
 [workspace.dependencies]
 async-trait                     = { version = "0.1.83" }
 ibc                             = { version = "0.56.0", default-features = false }
+ibc-client-tendermint           = { version = "0.56.0", default-features = false }
 ibc-proto                       = { version = "0.51.1", default-features = false }
 ibc-relayer                     = { version = "0.29.3" }
 ibc-relayer-types               = { version = "0.29.3" }
@@ -83,12 +87,15 @@ tendermint                      = { version = "0.40" }
 tendermint-proto                = { version = "0.40" }
 tendermint-rpc                  = { version = "0.40" }
 tendermint-testgen              = { version = "0.40" }
+tendermint-light-client-verifier = { version = "0.40" }
+tendermint-light-client         = { version = "0.40" }
 basecoin                        = { version = "0.2.0" }
 cgp                             = { version = "0.1.0" }
 cgp-core                        = { version = "0.1.0" }
 cgp-error-eyre                  = { version = "0.1.0" }
 cgp-component-macro             = { version = "0.1.0" }
 clap                            = { version = "4.5.20" }
+dirs-next                       = { version = "2.0.0" }
 oneline-eyre                    = { version = "0.1.0" }
 prost                           = { version = "0.13.3" }
 prost-types                     = { version = "0.13.3" }
@@ -152,6 +159,9 @@ hermes-cosmos-relayer                   = { version = "0.1.0" }
 hermes-cosmos-wasm-relayer              = { version = "0.1.0" }
 hermes-cosmos-test-components           = { version = "0.1.0" }
 hermes-cosmos-integration-tests         = { version = "0.1.0" }
+
+hermes-comet-light-client-components    = { version = "0.1.0" }
+hermes-comet-light-client-context       = { version = "0.1.0" }
 
 hermes-celestia-test-components         = { version = "0.1.0" }
 hermes-celestia-integration-tests       = { version = "0.1.0" }
@@ -223,6 +233,9 @@ hermes-cosmos-relayer               = { path = "./crates/cosmos/cosmos-relayer" 
 hermes-cosmos-wasm-relayer          = { path = "./crates/cosmos/cosmos-wasm-relayer" }
 hermes-cosmos-test-components       = { path = "./crates/cosmos/cosmos-test-components" }
 hermes-cosmos-integration-tests     = { path = "./crates/cosmos/cosmos-integration-tests" }
+
+hermes-comet-light-client-components = { path = "./crates/comet/comet-light-client-components" }
+hermes-comet-light-client-context    = { path = "./crates/comet/comet-light-client-context" }
 
 hermes-celestia-test-components     = { path = "./crates/celestia/celestia-test-components" }
 hermes-celestia-integration-tests   = { path = "./crates/celestia/celestia-integration-tests" }
