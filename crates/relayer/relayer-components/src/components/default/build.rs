@@ -14,6 +14,7 @@ use crate::build::traits::cache::{HasChainCache, HasRelayCache};
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt};
 use crate::multi::traits::relay_at::{ClientIdAt, RelayAt};
+use crate::multi::types::index::Index;
 
 define_components! {
     DefaultBuildComponents<BaseComponents: Async> {
@@ -25,31 +26,31 @@ define_components! {
 
 pub trait CanUseDefaultBuildComponents: UseDefaultBuildComponents {}
 
-pub trait UseDefaultBuildComponents: CanBuildBiRelay<0, 1> {}
+pub trait UseDefaultBuildComponents: CanBuildBiRelay<Index<0>, Index<1>> {}
 
 impl<Build, Components, BaseComponents> UseDefaultBuildComponents for Build
 where
     Build: Async
-        + HasBiRelayTypeAt<0, 1>
-        + HasRelayCache<0, 1>
-        + HasRelayCache<1, 0>
-        + HasChainCache<0>
-        + HasChainCache<1>
+        + HasBiRelayTypeAt<Index<0>, Index<1>>
+        + HasRelayCache<Index<0>, Index<1>>
+        + HasRelayCache<Index<1>, Index<0>>
+        + HasChainCache<Index<0>>
+        + HasChainCache<Index<1>>
         + HasComponents<Components = Components>,
-    RelayAt<Build, 0, 1>: Clone,
-    RelayAt<Build, 1, 0>: Clone,
-    ChainAt<Build, 0>: Clone,
-    ChainAt<Build, 1>: Clone,
-    ChainIdAt<Build, 0>: Ord + Clone,
-    ChainIdAt<Build, 1>: Ord + Clone,
-    ClientIdAt<Build, 0, 1>: Ord + Clone,
-    ClientIdAt<Build, 1, 0>: Ord + Clone,
+    RelayAt<Build, Index<0>, Index<1>>: Clone,
+    RelayAt<Build, Index<1>, Index<0>>: Clone,
+    ChainAt<Build, Index<0>>: Clone,
+    ChainAt<Build, Index<1>>: Clone,
+    ChainIdAt<Build, Index<0>>: Ord + Clone,
+    ChainIdAt<Build, Index<1>>: Ord + Clone,
+    ClientIdAt<Build, Index<0>, Index<1>>: Ord + Clone,
+    ClientIdAt<Build, Index<1>, Index<0>>: Ord + Clone,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToDefaultBuildComponents<BaseComponents>
-        + BiRelayFromRelayBuilder<Build, 0, 1>
-        + RelayFromChainsBuilder<Build, 0, 1>
-        + RelayFromChainsBuilder<Build, 1, 0>
+        + BiRelayFromRelayBuilder<Build, Index<0>, Index<1>>
+        + RelayFromChainsBuilder<Build, Index<0>, Index<1>>
+        + RelayFromChainsBuilder<Build, Index<1>, Index<0>>
         + ProvideErrorType<Build>,
-    BaseComponents: Async + ChainBuilder<Build, 0> + ChainBuilder<Build, 1>,
+    BaseComponents: Async + ChainBuilder<Build, Index<0>> + ChainBuilder<Build, Index<1>>,
 {
 }

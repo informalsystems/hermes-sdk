@@ -1,14 +1,14 @@
 use core::str::FromStr;
 use core::time::Duration;
+
 use eyre::Report;
 use http::Uri;
 use ibc::primitives::proto::Any;
-use tendermint_rpc::Url;
-
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::config::types::{MaxMsgNum, MaxTxSize};
 use ibc_relayer::config::AddressType;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use tendermint_rpc::Url;
 
 use crate::types::config::gas::gas_config::GasConfig;
 

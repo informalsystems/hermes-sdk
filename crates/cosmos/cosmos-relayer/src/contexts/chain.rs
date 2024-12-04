@@ -1,18 +1,5 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
-use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
-use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
-use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
-use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
-use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
-use hermes_cosmos_chain_components::types::payloads::client::{
-    CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
-};
-use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
-use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
-};
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
@@ -27,20 +14,26 @@ use hermes_cosmos_chain_components::components::client::*;
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
+use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
+use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::commitment_proof::CosmosCommitmentProof;
+use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
+use hermes_cosmos_chain_components::types::payloads::client::{
+    CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
+};
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_chain_components::with_cosmos_tx_components;
 use hermes_cosmos_test_components::chain::components::*;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
-use hermes_error::types::Error;
 use hermes_logger::{HermesLogger, ProvideHermesLogger};
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -49,6 +42,7 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     CanQueryChannelEnd, CanQueryChannelEndWithProofs,
 };
@@ -70,8 +64,12 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
@@ -104,7 +102,6 @@ use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::EventSourceMode;
 use ibc_relayer::event::source::queries::all as all_queries;
 use ibc_relayer::keyring::Secp256k1KeyPair;
@@ -127,7 +124,6 @@ pub struct CosmosChain {
 
 #[derive(HasField)]
 pub struct BaseCosmosChain {
-    pub handle: BaseChainHandle,
     pub chain_config: CosmosSdkConfig,
     pub chain_id: ChainId,
     pub compat_mode: CompatMode,
@@ -269,7 +265,6 @@ impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainContextComponents {
 
 impl CosmosChain {
     pub fn new(
-        handle: BaseChainHandle,
         chain_config: CosmosSdkConfig,
         tx_config: TxConfig,
         rpc_client: HttpClient,
@@ -299,7 +294,6 @@ impl CosmosChain {
 
         let chain = Self {
             base_chain: Arc::new(BaseCosmosChain {
-                handle,
                 chain_config,
                 chain_id,
                 compat_mode,
@@ -339,25 +333,6 @@ impl RpcClientGetter<CosmosChain> for CosmosChainContextComponents {
 
     fn rpc_address(chain: &CosmosChain) -> &Url {
         &chain.tx_config.rpc_address
-    }
-}
-
-impl HasBlockingChainHandle for CosmosChain {
-    type ChainHandle = BaseChainHandle;
-
-    async fn with_blocking_chain_handle<R>(
-        &self,
-        cont: impl FnOnce(BaseChainHandle) -> Result<R, Error> + Send + 'static,
-    ) -> Result<R, Error>
-    where
-        R: Send + 'static,
-    {
-        let chain_handle = self.handle.clone();
-
-        self.runtime
-            .runtime
-            .spawn_blocking(move || cont(chain_handle))
-            .await?
     }
 }
 

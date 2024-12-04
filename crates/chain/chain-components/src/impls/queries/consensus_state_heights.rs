@@ -1,7 +1,7 @@
-use core::marker::PhantomData;
-
 use alloc::vec;
 use alloc::vec::Vec;
+use core::marker::PhantomData;
+
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 
 use crate::traits::queries::client_state::CanQueryClientStateWithLatestHeight;

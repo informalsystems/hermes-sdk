@@ -1,8 +1,9 @@
 use ibc_proto::cosmos::tx::v1beta1::Fee;
+use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
+use ibc_relayer::chain::cosmos::gas::calculate_fee;
 use ibc_relayer::chain::cosmos::types::gas::{
     default_gas_from_config, gas_multiplier_from_config, max_gas_from_config,
 };
-use ibc_relayer::chain::cosmos::{config::CosmosSdkConfig, gas::calculate_fee};
 use ibc_relayer::config::GasPrice;
 
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;

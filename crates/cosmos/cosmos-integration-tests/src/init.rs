@@ -1,8 +1,13 @@
 use alloc::sync::Arc;
-use eyre::Report;
-use serde_json::Value as JsonValue;
 use std::env;
 use std::str::FromStr;
+
+use eyre::Report;
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_error::types::Error;
+use hermes_runtime::types::runtime::HermesRuntime;
+use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;
 use tracing::info;
@@ -11,13 +16,8 @@ use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{fmt, EnvFilter};
 
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_error::types::Error;
-use hermes_runtime::types::runtime::HermesRuntime;
-
-use crate::contexts::bootstrap::CosmosBootstrap;
-use crate::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
+use crate::contexts::bootstrap::{CosmosBootstrap, CosmosBootstrapFields};
+use crate::contexts::bootstrap_legacy::{LegacyCosmosBootstrap, LegacyCosmosBootstrapFields};
 
 pub enum TestPreset {
     CosmosToCosmos,
@@ -63,20 +63,22 @@ pub fn build_osmosis_bootstrap(
     genesis_modifier: impl Fn(&mut JsonValue) -> Result<(), Error> + Send + Sync + 'static,
     comet_config_modifier: impl Fn(&mut TomlValue) -> Result<(), Error> + Send + Sync + 'static,
 ) -> LegacyCosmosBootstrap {
-    let cosmos_builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let cosmos_builder = CosmosBuilder::new_with_default(runtime.clone());
 
     LegacyCosmosBootstrap {
-        runtime,
-        cosmos_builder,
-        should_randomize_identifiers,
-        chain_store_dir: chain_store_dir.into(),
-        chain_command_path: "osmosisd".into(),
-        account_prefix: "osmosis".into(),
-        compat_mode: None,
-        staking_denom_prefix: "stake".into(),
-        transfer_denom_prefix,
-        genesis_config_modifier: Box::new(genesis_modifier),
-        comet_config_modifier: Box::new(comet_config_modifier),
+        fields: Arc::new(LegacyCosmosBootstrapFields {
+            runtime,
+            cosmos_builder,
+            should_randomize_identifiers,
+            chain_store_dir: chain_store_dir.into(),
+            chain_command_path: "osmosisd".into(),
+            account_prefix: "osmosis".into(),
+            compat_mode: None,
+            staking_denom_prefix: "stake".into(),
+            transfer_denom_prefix,
+            genesis_config_modifier: Box::new(genesis_modifier),
+            comet_config_modifier: Box::new(comet_config_modifier),
+        }),
     }
 }
 
@@ -88,20 +90,22 @@ pub fn build_gaia_bootstrap(
     genesis_modifier: impl Fn(&mut JsonValue) -> Result<(), Error> + Send + Sync + 'static,
     comet_config_modifier: impl Fn(&mut TomlValue) -> Result<(), Error> + Send + Sync + 'static,
 ) -> CosmosBootstrap {
-    let cosmos_builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
+    let cosmos_builder = CosmosBuilder::new_with_default(runtime.clone());
 
     CosmosBootstrap {
-        runtime,
-        cosmos_builder,
-        should_randomize_identifiers,
-        chain_store_dir: chain_store_dir.into(),
-        chain_command_path: "gaiad".into(),
-        account_prefix: "cosmos".into(),
-        staking_denom_prefix: "stake".into(),
-        transfer_denom_prefix,
-        genesis_config_modifier: Box::new(genesis_modifier),
-        comet_config_modifier: Box::new(comet_config_modifier),
-        dynamic_gas: Some(DynamicGasConfig::default()),
+        fields: Arc::new(CosmosBootstrapFields {
+            runtime,
+            cosmos_builder,
+            should_randomize_identifiers,
+            chain_store_dir: chain_store_dir.into(),
+            chain_command_path: "gaiad".into(),
+            account_prefix: "cosmos".into(),
+            staking_denom_prefix: "stake".into(),
+            transfer_denom_prefix,
+            genesis_config_modifier: Box::new(genesis_modifier),
+            comet_config_modifier: Box::new(comet_config_modifier),
+            dynamic_gas: Some(DynamicGasConfig::default()),
+        }),
     }
 }
 

@@ -1,19 +1,25 @@
+use hermes_chain_components::traits::queries::packet_acknowledgements::CanQueryPacketAcknowledgements;
+use hermes_chain_components::traits::queries::packet_commitments::CanQueryPacketCommitments;
+use hermes_chain_components::traits::queries::unreceived_acks_sequences::CanQueryUnreceivedAcksSequences;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use ibc_relayer::chain::counterparty::{channel_connection_client, unreceived_acknowledgements};
-use ibc_relayer::chain::requests::Paginate;
-use ibc_relayer::path::PathIdentifiers;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use ibc::core::connection::types::ConnectionEnd;
+use ibc::primitives::proto::Protobuf;
+use ibc_relayer::client_state::AnyClientState;
+use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::Height;
 use oneline_eyre::eyre::eyre;
 
-use super::util::PacketSequences;
+use crate::commands::query::packet::util::PacketSequences;
 use crate::contexts::app::HermesApp;
-use crate::impls::error_wrapper::ErrorWrapper;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -52,34 +58,94 @@ impl QueryPendingAcks {
         let channel_id = self.channel_id.clone();
         let chain = builder.build_chain(&self.chain_id).await?;
 
-        let chan_conn_cli = chain
-            .with_blocking_chain_handle(move |handle| {
-                let chan_conn_cli = channel_connection_client(&handle, &port_id, &channel_id)
-                    .map_err(|e| eyre!("failed to get channel connection and client: {}", e))?;
-                Ok(chan_conn_cli)
-            })
+        let latest_height = chain.query_chain_height().await?;
+
+        // channel end query path
+        let channel_end_path = format!("channelEnds/ports/{port_id}/channels/{channel_id}");
+
+        let channel_end_bytes = chain
+            .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &latest_height)
             .await?;
 
-        let counterparty_chain_id = chan_conn_cli.client.client_state.chain_id();
+        let channel_end = ChannelEnd::decode_vec(&channel_end_bytes)?;
+
+        // check if channel end is initialized, otherwize return error.
+        if channel_end.state_matches(&State::Uninitialized) {
+            return Err(eyre!("channel with id `{channel_id}` is uninitialized").into());
+        }
+
+        let counterparty_channel_id = channel_end.counterparty().channel_id().ok_or_else(|| {
+            eyre!(
+                "missing counterparty channel ID for channel `{}`",
+                channel_id
+            )
+        })?;
+        let counterparty_port_id = channel_end.counterparty().port_id();
+
+        let connection_id = channel_end
+            .connection_hops
+            .first()
+            .ok_or_else(|| eyre!("missing connection ID for channel `{}`", channel_id))?;
+
+        // connection end query path
+        let connection_path = format!("connections/{connection_id}");
+
+        let connnection_end_bytes = chain
+            .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), &latest_height)
+            .await?;
+
+        let connection_end = ConnectionEnd::decode_vec(&connnection_end_bytes)?;
+
+        let client_id = connection_end.client_id();
+
+        // client state query path
+        let client_state_path = format!("clients/{client_id}/clientState");
+
+        let client_state_bytes = chain
+            .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), &latest_height)
+            .await?;
+
+        let client_state = AnyClientState::decode_vec(&client_state_bytes)?;
+
+        let counterparty_chain_id = client_state.chain_id();
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
 
-        let channel = chan_conn_cli.channel.clone();
-        let path_identifiers =
-            PathIdentifiers::from_channel_end(channel.clone()).ok_or_else(|| {
-                eyre!(
-                    "failed to get the path identifiers for channel ({}, {})",
-                    channel.channel_id,
-                    channel.port_id
-                )
-            })?;
+        let (commitment_sequences, _) =
+            <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
+                &chain,
+                &channel_id,
+                &port_id,
+            )
+            .await?;
 
-        unreceived_acknowledgements(
-            &chain.handle,
-            &counterparty_chain.handle,
-            &path_identifiers,
-            Paginate::All,
+        let acks_and_height_on_counterparty = <CosmosChain as CanQueryPacketAcknowledgements<
+            CosmosChain,
+        >>::query_packet_acknowlegements(
+            &counterparty_chain,
+            counterparty_channel_id,
+            counterparty_port_id,
+            &commitment_sequences,
         )
-        .wrap_error("failed to get the unreceived acknowledgments")
+        .await?;
+
+        let unreceived_acknowledgement_sequences_and_height = if let Some((
+            acks_on_counterparty,
+            height,
+        )) =
+            acks_and_height_on_counterparty
+        {
+            Some((<CosmosChain as CanQueryUnreceivedAcksSequences<CosmosChain>>::query_unreceived_acknowledgments_sequences(
+                        &chain,
+                        &channel_id,
+                        &port_id,
+                        &acks_on_counterparty,
+                    )
+                    .await?, height))
+        } else {
+            None
+        };
+
+        Ok(unreceived_acknowledgement_sequences_and_height)
     }
 }
 

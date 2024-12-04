@@ -1,11 +1,12 @@
+use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
-use ibc_relayer_types::core::ics04_channel::channel::State;
+use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
+use ibc::primitives::proto::Protobuf;
+use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::Height;
 use oneline_eyre::eyre::eyre;
 
@@ -59,29 +60,19 @@ impl CommandRunner<HermesApp> for QueryChannelEnd {
         let height = self.height;
 
         let query_height = if let Some(height) = height {
-            let specified_height = Height::new(chain.chain_id.version(), height)
-                .map_err(|e| eyre!("Failed to create Height with revision number `{}` and revision height `{height}`. Error: {e}", chain.chain_id.version()))?;
-
-            QueryHeight::Specific(specified_height)
+            Height::new(chain.chain_id.version(), height)?
         } else {
-            QueryHeight::Latest
+            chain.query_chain_height().await?
         };
 
-        let channel_end = chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                match chain_handle.query_channel(
-                    QueryChannelRequest {
-                        port_id,
-                        channel_id,
-                        height: query_height,
-                    },
-                    IncludeProof::No,
-                ) {
-                    Ok((channel_end, _)) => Ok(channel_end),
-                    Err(e) => Err(e.into()),
-                }
-            })
-            .await;
+        // channel end query path
+        let channel_end_path = format!("channelEnds/ports/{port_id}/channels/{channel_id}");
+
+        let channel_end_bytes = chain
+            .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &query_height)
+            .await?;
+
+        let channel_end = ChannelEnd::decode_vec(&channel_end_bytes);
 
         match channel_end {
             Ok(channel_end) => {
@@ -96,7 +87,7 @@ impl CommandRunner<HermesApp> for QueryChannelEnd {
                     Ok(Output::success(channel_end))
                 }
             }
-            Err(e) => Err(e),
+            Err(e) => Err(e.into()),
         }
     }
 }

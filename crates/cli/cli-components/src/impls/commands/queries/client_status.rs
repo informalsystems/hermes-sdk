@@ -72,7 +72,7 @@ where
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
         + CanRaiseError<Build::Error>
         + CanRaiseError<Chain::Error>,
-    Build: CanBuildChain<0, Chain = Chain> + HasChainTypeAt<1, Chain = Counterparty>,
+    Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
     Chain: HasIbcChainTypes<Counterparty> + CanQueryClientStatus<Counterparty>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
@@ -91,7 +91,7 @@ where
         let builder = app.load_builder().await?;
 
         let chain = builder
-            .build_chain(Index::<0>, &chain_id)
+            .build_chain(PhantomData, &chain_id)
             .await
             .map_err(App::raise_error)?;
 
