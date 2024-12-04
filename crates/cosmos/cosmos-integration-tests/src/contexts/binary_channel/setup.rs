@@ -9,13 +9,12 @@ use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptio
 use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAtComponent, HasChainTypeAt};
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAtComponent};
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_test_components::driver::traits::types::builder_at::BuilderTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
@@ -23,10 +22,8 @@ use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
 use hermes_test_components::setup::traits::bootstrap_at::BootstrapAtComponent;
 use hermes_test_components::setup::traits::builder_at::BuilderAtComponent;
-use hermes_test_components::setup::traits::clients::CanSetupClients;
 use hermes_test_components::setup::traits::create_client_options_at::{
     CreateClientMessageOptionsAtComponent, CreateClientPayloadOptionsAtComponent,
-    HasCreateClientMessageOptionsAt, HasCreateClientPayloadOptionsAt,
 };
 use hermes_test_components::setup::traits::driver::TestDriverTypeComponent;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilderComponent;
@@ -102,20 +99,6 @@ impl<BootstrapA, BootstrapB> HasField<symbol!("create_client_message_options")>
         &()
     }
 }
-
-pub trait CanUseSetup:
-    // CanSetupClients<Index<0>, Index<1>>
-    HasChainTypeAt<Index<0>, Chain = CosmosChain>
-    + HasChainTypeAt<Index<1>, Chain = CosmosChain>
-    + HasRelayTypeAt<Index<0>, Index<1>, Relay = CosmosRelay>
-
-    + HasCreateClientPayloadOptionsAt<Index<0>, Index<1>>
-    + HasCreateClientMessageOptionsAt<Index<0>, Index<1>>
-    + HasCreateClientPayloadOptionsAt<Index<1>, Index<0>>
-    + HasCreateClientMessageOptionsAt<Index<1>, Index<0>>
-    {}
-
-impl CanUseSetup for CosmosBinaryChannelSetup<CosmosBootstrap, CosmosBootstrap> {}
 
 impl CanUseBinaryChannelTestSetup for CosmosBinaryChannelSetup<CosmosBootstrap, CosmosBootstrap> {}
 

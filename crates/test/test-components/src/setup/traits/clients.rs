@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasIbcChainTypes};
+use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 

@@ -5,13 +5,11 @@ use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasIbcChainTypes};
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
-use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainAt};
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
-use hermes_relayer_components::relay::traits::chains::{
-    CanRaiseRelayChainErrors, HasRelayChainTypes, HasRelayClientIds,
-};
+use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
+use hermes_relayer_components::relay::traits::chains::{HasRelayChainTypes, HasRelayClientIds};
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
@@ -28,14 +26,14 @@ impl<Setup, A: Async, B: Async, Relay, SrcChain, DstChain> ClientSetup<Setup, A,
     for SetupClientsWithRelay
 where
     Setup: HasRelayTypeAt<A, B, Relay = Relay>
-        + HasChainAt<A, Chain = SrcChain>
-        + HasChainAt<B, Chain = DstChain>
+        + HasChainTypeAt<A, Chain = SrcChain>
+        + HasChainTypeAt<B, Chain = DstChain>
         + HasCreateClientPayloadOptionsAt<A, B>
         + HasCreateClientPayloadOptionsAt<B, A>
         + HasCreateClientMessageOptionsAt<A, B>
         + HasCreateClientMessageOptionsAt<B, A>
         + CanRaiseError<Relay::Error>,
-    SrcChain: HasIbcChainTypes<DstChain>
+    SrcChain: HasClientIdType<DstChain>
         + HasCreateClientPayloadOptionsType<DstChain>
         + HasCreateClientMessageOptionsType<DstChain>
         + HasErrorType,
