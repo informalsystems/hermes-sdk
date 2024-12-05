@@ -33,6 +33,9 @@ use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
 };
 use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetter;
+use hermes_relayer_components_extra::batch::traits::types::{
+    CanUseMessageBatchChannel, HasMessageBatchChannelTypes,
+};
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -193,6 +196,8 @@ pub trait CanUseCosmosRelay:
     + HasDestinationTargetChainTypes
     + CanCreateClient<SourceTarget>
     + CanCreateClient<DestinationTarget>
+    + CanUseMessageBatchChannel<Src>
+    + CanUseMessageBatchChannel<Dst>
 {
 }
 
