@@ -19,6 +19,7 @@ use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_relayer_components_extra::build::traits::cache::HasBatchSenderCache;
@@ -383,19 +384,37 @@ impl HasRelayCache<Index<1>, Index<0>> for CosmosBuilder {
     }
 }
 
-impl HasBatchSenderCache<Error, Index<0>, Index<1>> for CosmosBuilder {
+impl HasBatchSenderCache<Index<0>, Index<1>, SourceTarget> for CosmosBuilder {
     fn batch_sender_cache(
         &self,
-        _index: PhantomData<(Index<0>, Index<1>)>,
+        _index: PhantomData<(Index<0>, Index<1>, SourceTarget)>,
     ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
         &self.batch_senders
     }
 }
 
-impl HasBatchSenderCache<Error, Index<1>, Index<0>> for CosmosBuilder {
+impl HasBatchSenderCache<Index<0>, Index<1>, DestinationTarget> for CosmosBuilder {
     fn batch_sender_cache(
         &self,
-        _index: PhantomData<(Index<1>, Index<0>)>,
+        _index: PhantomData<(Index<0>, Index<1>, DestinationTarget)>,
+    ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
+        &self.batch_senders
+    }
+}
+
+impl HasBatchSenderCache<Index<1>, Index<0>, SourceTarget> for CosmosBuilder {
+    fn batch_sender_cache(
+        &self,
+        _index: PhantomData<(Index<1>, Index<0>, SourceTarget)>,
+    ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
+        &self.batch_senders
+    }
+}
+
+impl HasBatchSenderCache<Index<1>, Index<0>, DestinationTarget> for CosmosBuilder {
+    fn batch_sender_cache(
+        &self,
+        _index: PhantomData<(Index<1>, Index<0>, DestinationTarget)>,
     ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
         &self.batch_senders
     }

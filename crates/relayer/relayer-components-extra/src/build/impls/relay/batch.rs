@@ -21,7 +21,7 @@ use hermes_runtime_components::traits::channel::{
 };
 use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
 use hermes_runtime_components::traits::mutex::HasMutex;
-use hermes_runtime_components::traits::runtime::{HasRuntime, HasRuntimeType, RuntimeOf};
+use hermes_runtime_components::traits::runtime::{HasRuntimeType, RuntimeOf};
 
 use crate::batch::traits::config::HasBatchConfig;
 use crate::batch::traits::types::{
@@ -37,11 +37,11 @@ pub struct BuildRelayWithBatchWorker;
 impl<Build, SrcTag: Async, DstTag: Async, Relay, SrcChain, DstChain>
     RelayFromChainsBuilder<Build, SrcTag, DstTag> for BuildRelayWithBatchWorker
 where
-    Build: HasRuntime
-        + HasBatchConfig
+    Build: HasBatchConfig
         + HasRelayTypeAt<SrcTag, DstTag, Relay = Relay>
         + HasChainTypeAt<SrcTag, Chain = SrcChain>
         + HasChainTypeAt<DstTag, Chain = DstChain>
+        + HasErrorType
         + CanBuildRelayWithBatch<SrcTag, DstTag>
         + CanBuildBatchChannel<SrcTag, DstTag, SourceTarget>
         + CanBuildBatchChannel<SrcTag, DstTag, DestinationTarget>,

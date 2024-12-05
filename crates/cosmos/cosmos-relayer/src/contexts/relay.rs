@@ -1,5 +1,6 @@
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
+use core::marker::PhantomData;
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -23,6 +24,7 @@ use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
+use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelay;
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
@@ -171,20 +173,22 @@ impl PacketMutexGetter<CosmosRelay> for CosmosRelayComponents {
     }
 }
 
-impl MessageBatchSenderGetter<CosmosRelay, SourceTarget> for CosmosRelayComponents {
-    fn get_batch_sender(relay: &CosmosRelay) -> &CosmosBatchSender {
+impl MessageBatchSenderGetter<CosmosRelay, Src> for CosmosRelayComponents {
+    fn get_batch_sender(relay: &CosmosRelay, _tag: PhantomData<Src>) -> &CosmosBatchSender {
         &relay.src_chain_message_batch_sender
     }
 }
 
-impl MessageBatchSenderGetter<CosmosRelay, DestinationTarget> for CosmosRelayComponents {
-    fn get_batch_sender(relay: &CosmosRelay) -> &CosmosBatchSender {
+impl MessageBatchSenderGetter<CosmosRelay, Dst> for CosmosRelayComponents {
+    fn get_batch_sender(relay: &CosmosRelay, _tag: PhantomData<Dst>) -> &CosmosBatchSender {
         &relay.dst_chain_message_batch_sender
     }
 }
 
 pub trait CanUseCosmosRelay:
     HasRelayClientIds
+    + CanAutoRelay<SourceTarget>
+    + CanAutoRelay<DestinationTarget>
     + HasSourceTargetChainTypes
     + HasDestinationTargetChainTypes
     + CanCreateClient<SourceTarget>
