@@ -1,6 +1,5 @@
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
-use core::marker::PhantomData;
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -32,10 +31,8 @@ use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
 };
-use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetter;
-use hermes_relayer_components_extra::batch::traits::types::{
-    CanUseMessageBatchChannel, HasMessageBatchChannelTypes,
-};
+use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetterComponent;
+use hermes_relayer_components_extra::batch::traits::types::CanUseMessageBatchChannel;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -144,6 +141,10 @@ delegate_components! {
             UseField<symbol!("src_client_id")>,
         ClientIdAtGetterComponent<Dst, Src>:
             UseField<symbol!("dst_client_id")>,
+        MessageBatchSenderGetterComponent<Src>:
+            UseField<symbol!("src_chain_message_batch_sender")>,
+        MessageBatchSenderGetterComponent<Dst>:
+            UseField<symbol!("dst_chain_message_batch_sender")>,
     }
 }
 
@@ -173,18 +174,6 @@ impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
 impl PacketMutexGetter<CosmosRelay> for CosmosRelayComponents {
     fn packet_mutex(relay: &CosmosRelay) -> &PacketMutex<CosmosRelay> {
         &relay.packet_lock_mutex
-    }
-}
-
-impl MessageBatchSenderGetter<CosmosRelay, Src> for CosmosRelayComponents {
-    fn get_batch_sender(relay: &CosmosRelay, _tag: PhantomData<Src>) -> &CosmosBatchSender {
-        &relay.src_chain_message_batch_sender
-    }
-}
-
-impl MessageBatchSenderGetter<CosmosRelay, Dst> for CosmosRelayComponents {
-    fn get_batch_sender(relay: &CosmosRelay, _tag: PhantomData<Dst>) -> &CosmosBatchSender {
-        &relay.dst_chain_message_batch_sender
     }
 }
 

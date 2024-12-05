@@ -48,8 +48,6 @@ where
         + HasDestinationTargetChainTypes
         + HasRelayClientIds
         + HasLogger<Logger = Logger>
-        + HasMessageBatchSender<SourceTarget>
-        + HasMessageBatchSender<DestinationTarget>
         + HasTargetChains<SourceTarget>
         + HasTargetChains<DestinationTarget>
         + CanBuildTargetUpdateClientMessage<SourceTarget>
