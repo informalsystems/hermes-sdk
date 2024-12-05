@@ -13,7 +13,7 @@ use hermes_relayer_components::chain::traits::types::message::{
 };
 use hermes_relayer_components::multi::traits::chain_at::HasChainAt;
 use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
-use hermes_relayer_components::relay::traits::target::{HasTargetChains, RelayTarget};
+use hermes_relayer_components::relay::traits::target::RelayTarget;
 use hermes_runtime_components::traits::channel::{CanUseChannels, HasChannelTypes};
 use hermes_runtime_components::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
 use hermes_runtime_components::traits::mutex::HasMutex;
@@ -49,7 +49,7 @@ pub trait CanSpawnBatchMessageWorker<Target: RelayTarget>:
 impl<Relay, Target> CanSpawnBatchMessageWorker<Target> for Relay
 where
     Target: RelayTarget,
-    Relay: Clone + CanRunLoop<Target> + CanUseMessageBatchChannel<Target::Chain>,
+    Relay: Clone + HasRuntime + CanRunLoop<Target> + CanUseMessageBatchChannel<Target::Chain>,
     Relay::Runtime: CanSpawnTask,
 {
     fn spawn_batch_message_worker(
@@ -65,7 +65,7 @@ where
             phantom: PhantomData,
         };
 
-        self.target_chain().runtime().spawn_task(task);
+        self.runtime().spawn_task(task);
     }
 }
 
@@ -188,6 +188,7 @@ impl<Relay, Target> CanProcessMessageBatches<Target> for Relay
 where
     Target: RelayTarget,
     Relay: Clone
+        + HasRuntime
         + CanUseMessageBatchChannel<Target::Chain>
         + CanPartitionMessageBatches<Target>
         + HasLogger,

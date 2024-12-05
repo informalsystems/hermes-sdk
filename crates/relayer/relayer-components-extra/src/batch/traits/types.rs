@@ -10,7 +10,7 @@ use hermes_relayer_components::chain::types::aliases::MessageOf;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_runtime_components::traits::channel::{HasChannelTypes, ReceiverOf, SenderOf};
 use hermes_runtime_components::traits::channel_once::{HasChannelOnceTypes, SenderOnceOf};
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntimeType;
 
 pub trait HasMessageBatchChannelTypes<Tag>: Async {
     type BatchSubmission: Async;
@@ -23,9 +23,12 @@ pub trait HasMessageBatchChannelTypes<Tag>: Async {
 pub type MessageBatchSenderOf<Context, Tag> =
     <Context as HasMessageBatchChannelTypes<Tag>>::MessageBatchSender;
 
+pub type MessageBatchReceiverOf<Context, Tag> =
+    <Context as HasMessageBatchChannelTypes<Tag>>::MessageBatchReceiver;
+
 impl<Context, Tag, Chain, Runtime> HasMessageBatchChannelTypes<Tag> for Context
 where
-    Context: HasChainTypeAt<Tag, Chain = Chain> + HasRuntime<Runtime = Runtime> + HasErrorType,
+    Context: HasChainTypeAt<Tag, Chain = Chain> + HasRuntimeType<Runtime = Runtime> + HasErrorType,
     Chain: HasMessageType + HasMessageResponseType,
     Runtime: HasChannelTypes + HasChannelOnceTypes,
 {
@@ -41,7 +44,7 @@ where
 
 pub trait CanUseMessageBatchChannel<Tag>:
     HasChainTypeAt<Tag, Chain: HasMessageType + HasMessageResponseType>
-    + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>
+    + HasRuntimeType<Runtime: HasChannelTypes + HasChannelOnceTypes>
     + HasErrorType
     + HasMessageBatchChannelTypes<
         Tag,
@@ -75,7 +78,7 @@ pub trait CanUseMessageBatchChannel<Tag>:
 
 impl<Context, Tag, Chain, Runtime> CanUseMessageBatchChannel<Tag> for Context
 where
-    Context: HasChainTypeAt<Tag, Chain = Chain> + HasRuntime<Runtime = Runtime> + HasErrorType,
+    Context: HasChainTypeAt<Tag, Chain = Chain> + HasRuntimeType<Runtime = Runtime> + HasErrorType,
     Chain: HasMessageType + HasMessageResponseType,
     Runtime: HasChannelTypes + HasChannelOnceTypes,
 {

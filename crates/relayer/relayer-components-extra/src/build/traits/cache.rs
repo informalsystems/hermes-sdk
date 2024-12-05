@@ -4,11 +4,13 @@ use core::marker::PhantomData;
 use cgp::core::Async;
 use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
-use hermes_relayer_components::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
-use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
-use hermes_relayer_components::relay::traits::target::RelayTarget;
+use hermes_relayer_components::chain::types::aliases::{ChainIdOf, ClientIdOf};
+use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
+use hermes_relayer_components::relay::traits::target::{
+    CounterpartyChainOf, HasTargetChainTypes, RelayTarget, TargetChainOf,
+};
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntimeType;
 
 use crate::batch::traits::types::{HasMessageBatchChannelTypes, MessageBatchSenderOf};
 
@@ -18,34 +20,43 @@ pub trait HasBatchSenderCacheType<SrcTag: Async, DstTag: Async, Target: RelayTar
     type BatchSenderCache;
 }
 
-impl<Build, SrcTag: Async, DstTag: Async, Target: RelayTarget>
+impl<Build, SrcTag: Async, DstTag: Async, Target: RelayTarget, Relay>
     HasBatchSenderCacheType<SrcTag, DstTag, Target> for Build
 where
-    Build: HasRuntime<Runtime: HasMutex>
-        + HasChainTypeAt<SrcTag, Chain: HasChainIdType + HasClientIdType<ChainAt<Build, DstTag>>>
-        + HasChainTypeAt<DstTag, Chain: HasChainIdType + HasClientIdType<ChainAt<Build, SrcTag>>>
-        + HasRelayTypeAt<SrcTag, DstTag, Relay: HasMessageBatchChannelTypes<Target::Chain>>,
+    Build: HasRuntimeType<Runtime: HasMutex> + HasRelayTypeAt<SrcTag, DstTag, Relay = Relay>,
+    Relay: HasMessageBatchChannelTypes<Target::Chain>
+        + HasTargetChainTypes<
+            Target,
+            TargetChain: HasChainIdType + HasClientIdType<Relay::CounterpartyChain>,
+            CounterpartyChain: HasChainIdType + HasClientIdType<Relay::TargetChain>,
+        >,
 {
     type BatchSenderCache = MutexOf<
         Build::Runtime,
         BTreeMap<
             (
-                ChainIdAt<Build, SrcTag>,
-                ChainIdAt<Build, DstTag>,
-                ClientIdAt<Build, SrcTag, DstTag>,
-                ClientIdAt<Build, DstTag, SrcTag>,
+                ChainIdOf<Relay::TargetChain>,
+                ChainIdOf<Relay::CounterpartyChain>,
+                ClientIdOf<Relay::TargetChain, Relay::CounterpartyChain>,
+                ClientIdOf<Relay::CounterpartyChain, Relay::TargetChain>,
             ),
-            MessageBatchSenderOf<Build::Relay, Target::Chain>,
+            MessageBatchSenderOf<Relay, Target::Chain>,
         >,
     >;
 }
 
-pub trait CanUseBatchSenderCacheType<SrcTag: Async, DstTag: Async, Target: RelayTarget>:
-    HasRuntime<Runtime: HasMutex>
-    + HasChainTypeAt<SrcTag, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, DstTag>>>
-    + HasChainTypeAt<DstTag, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, SrcTag>>>
-    + HasRelayTypeAt<SrcTag, DstTag, Relay: HasMessageBatchChannelTypes<Target::Chain>>
-    + HasBatchSenderCacheType<
+pub trait CanUseBatchSenderCache<SrcTag: Async, DstTag: Async, Target: RelayTarget>:
+    HasRuntimeType<Runtime: HasMutex>
+    + HasRelayTypeAt<
+        SrcTag,
+        DstTag,
+        Relay: HasMessageBatchChannelTypes<Target::Chain>
+                   + HasTargetChainTypes<
+            Target,
+            TargetChain: HasChainIdType + HasClientIdType<CounterpartyChainOf<Self::Relay, Target>>,
+            CounterpartyChain: HasChainIdType + HasClientIdType<TargetChainOf<Self::Relay, Target>>,
+        >,
+    > + HasBatchSenderCacheType<
         SrcTag,
         DstTag,
         Target,
@@ -53,10 +64,16 @@ pub trait CanUseBatchSenderCacheType<SrcTag: Async, DstTag: Async, Target: Relay
             Self::Runtime,
             BTreeMap<
                 (
-                    ChainIdAt<Self, SrcTag>,
-                    ChainIdAt<Self, DstTag>,
-                    ClientIdAt<Self, SrcTag, DstTag>,
-                    ClientIdAt<Self, DstTag, SrcTag>,
+                    ChainIdOf<TargetChainOf<Self::Relay, Target>>,
+                    ChainIdOf<CounterpartyChainOf<Self::Relay, Target>>,
+                    ClientIdOf<
+                        TargetChainOf<Self::Relay, Target>,
+                        CounterpartyChainOf<Self::Relay, Target>,
+                    >,
+                    ClientIdOf<
+                        CounterpartyChainOf<Self::Relay, Target>,
+                        TargetChainOf<Self::Relay, Target>,
+                    >,
                 ),
                 MessageBatchSenderOf<Self::Relay, Target::Chain>,
             >,
@@ -65,13 +82,16 @@ pub trait CanUseBatchSenderCacheType<SrcTag: Async, DstTag: Async, Target: Relay
 {
 }
 
-impl<Build, SrcTag: Async, DstTag: Async, Target: RelayTarget>
-    CanUseBatchSenderCacheType<SrcTag, DstTag, Target> for Build
+impl<Build, SrcTag: Async, DstTag: Async, Target: RelayTarget, Relay>
+    CanUseBatchSenderCache<SrcTag, DstTag, Target> for Build
 where
-    Build: HasRuntime<Runtime: HasMutex>
-        + HasChainTypeAt<SrcTag, Chain: HasChainIdType + HasClientIdType<ChainAt<Build, DstTag>>>
-        + HasChainTypeAt<DstTag, Chain: HasChainIdType + HasClientIdType<ChainAt<Build, SrcTag>>>
-        + HasRelayTypeAt<SrcTag, DstTag, Relay: HasMessageBatchChannelTypes<Target::Chain>>,
+    Build: HasRuntimeType<Runtime: HasMutex> + HasRelayTypeAt<SrcTag, DstTag, Relay = Relay>,
+    Relay: HasMessageBatchChannelTypes<Target::Chain>
+        + HasTargetChainTypes<
+            Target,
+            TargetChain: HasChainIdType + HasClientIdType<Relay::CounterpartyChain>,
+            CounterpartyChain: HasChainIdType + HasClientIdType<Relay::TargetChain>,
+        >,
 {
 }
 

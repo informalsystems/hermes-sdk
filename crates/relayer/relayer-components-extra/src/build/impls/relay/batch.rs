@@ -2,27 +2,34 @@ use core::marker::PhantomData;
 
 use cgp::core::Async;
 use cgp::prelude::{async_trait, HasErrorType};
+use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
+use hermes_chain_type_components::traits::types::message::HasMessageType;
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasIbcChainTypes};
-use hermes_relayer_components::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
-use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
+use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
+use hermes_relayer_components::chain::types::aliases::{ChainIdOf, ClientIdOf};
+use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
 use hermes_relayer_components::relay::traits::chains::{HasRelayChainTypes, HasRelayClientIds};
 use hermes_relayer_components::relay::traits::target::{
-    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+    CounterpartyChainOf, DestinationTarget, HasDestinationTargetChainTypes,
+    HasSourceTargetChainTypes, HasTargetChainTypes, RelayTarget, SourceTarget, TargetChainOf,
 };
 use hermes_runtime_components::traits::channel::{
     CanCloneSender, CanCreateChannels, HasChannelTypes,
 };
 use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
 use hermes_runtime_components::traits::mutex::HasMutex;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::{HasRuntime, HasRuntimeType, RuntimeOf};
 
-use crate::batch::traits::channel::HasMessageBatchSenderTypes;
 use crate::batch::traits::config::HasBatchConfig;
-use crate::batch::types::aliases::{MessageBatchReceiver, MessageBatchSender};
+use crate::batch::traits::types::{
+    CanUseMessageBatchChannel, HasMessageBatchChannelTypes, MessageBatchReceiverOf,
+    MessageBatchSenderOf,
+};
 use crate::batch::worker::CanSpawnBatchMessageWorker;
-use crate::build::traits::cache::HasBatchSenderCache;
+use crate::build::traits::cache::{CanUseBatchSenderCache, HasBatchSenderCache};
 use crate::build::traits::relay_with_batch_builder::CanBuildRelayWithBatch;
 
 pub struct BuildRelayWithBatchWorker;
@@ -36,24 +43,27 @@ where
         + HasChainTypeAt<SrcTag, Chain = SrcChain>
         + HasChainTypeAt<DstTag, Chain = DstChain>
         + CanBuildRelayWithBatch<SrcTag, DstTag>
-        + CanBuildBatchChannel<Relay::Error, SrcTag, DstTag>
-        + CanBuildBatchChannel<Relay::Error, DstTag, SrcTag>,
+        + CanBuildBatchChannel<SrcTag, DstTag, SourceTarget>
+        + CanBuildBatchChannel<SrcTag, DstTag, DestinationTarget>,
     Relay: Clone
+        + HasRuntimeType
         + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
         + HasSourceTargetChainTypes
         + HasDestinationTargetChainTypes
         + HasRelayClientIds
-        + HasMessageBatchSenderTypes
         + CanSpawnBatchMessageWorker<SourceTarget>
         + CanSpawnBatchMessageWorker<DestinationTarget>,
     SrcChain: HasChainId
         + HasClientIdType<DstChain>
-        + HasErrorType
-        + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
+        + HasMessageType
+        + HasMessageResponseType
+        + HasErrorType,
     DstChain: HasChainId
         + HasClientIdType<SrcChain>
-        + HasErrorType
-        + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
+        + HasMessageType
+        + HasMessageResponseType
+        + HasErrorType,
+    Relay::Runtime: HasChannelTypes + HasChannelOnceTypes,
 {
     async fn build_relay_from_chains(
         build: &Build,
@@ -68,7 +78,7 @@ where
 
         let (src_sender, m_src_receiver) = build
             .build_batch_channel(
-                index,
+                PhantomData::<(SrcTag, DstTag, SourceTarget)>,
                 src_chain_id,
                 dst_chain_id,
                 src_client_id,
@@ -78,7 +88,7 @@ where
 
         let (dst_sender, m_dst_receiver) = build
             .build_batch_channel(
-                PhantomData::<(DstTag, SrcTag)>,
+                PhantomData::<(SrcTag, DstTag, DestinationTarget)>,
                 dst_chain_id,
                 src_chain_id,
                 dst_client_id,
@@ -119,61 +129,72 @@ where
 }
 
 #[async_trait]
-pub trait CanBuildBatchChannel<Error: Async, TargetTag: Async, CounterpartyTag: Async>:
-    HasChainTypeAt<
-        TargetTag,
-        Chain: HasIbcChainTypes<ChainAt<Self, CounterpartyTag>>
-                   + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
-    > + HasChainTypeAt<CounterpartyTag, Chain: HasIbcChainTypes<ChainAt<Self, TargetTag>>>
-    + HasErrorType
+pub trait CanBuildBatchChannel<SrcTag: Async, DstTag: Async, Target: RelayTarget>:
+    HasErrorType + CanUseBatchSenderCache<SrcTag, DstTag, Target>
 {
     async fn build_batch_channel(
         &self,
-        index: PhantomData<(TargetTag, CounterpartyTag)>,
-        chain_id: &ChainIdAt<Self, TargetTag>,
-        counterparty_chain_id: &ChainIdAt<Self, CounterpartyTag>,
-        client_id: &ClientIdAt<Self, TargetTag, CounterpartyTag>,
-        counterparty_client_id: &ClientIdAt<Self, CounterpartyTag, TargetTag>,
+        index: PhantomData<(SrcTag, DstTag, Target)>,
+        chain_id: &ChainIdOf<TargetChainOf<Self::Relay, Target>>,
+        counterparty_chain_id: &ChainIdOf<CounterpartyChainOf<Self::Relay, Target>>,
+        client_id: &ClientIdOf<
+            TargetChainOf<Self::Relay, Target>,
+            CounterpartyChainOf<Self::Relay, Target>,
+        >,
+        counterparty_client_id: &ClientIdOf<
+            CounterpartyChainOf<Self::Relay, Target>,
+            TargetChainOf<Self::Relay, Target>,
+        >,
     ) -> Result<
         (
-            MessageBatchSender<ChainAt<Self, TargetTag>, Error>,
-            Option<MessageBatchReceiver<ChainAt<Self, TargetTag>, Error>>,
+            MessageBatchSenderOf<Self::Relay, Target::Chain>,
+            Option<MessageBatchReceiverOf<Self::Relay, Target::Chain>>,
         ),
         Self::Error,
     >;
 }
 
-impl<Build, Error, Chain, Counterparty, TargetTag: Async, CounterpartyTag: Async>
-    CanBuildBatchChannel<Error, TargetTag, CounterpartyTag> for Build
+impl<
+        Build,
+        SrcTag: Async,
+        DstTag: Async,
+        Target: RelayTarget,
+        Relay,
+        TargetChain,
+        CounterpartyChain,
+    > CanBuildBatchChannel<SrcTag, DstTag, Target> for Build
 where
-    Build: HasChainTypeAt<TargetTag, Chain = Chain>
-        + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>
-        + HasBatchSenderCache<Error, TargetTag, CounterpartyTag>
-        + HasRuntime
+    Build: CanUseBatchSenderCache<SrcTag, DstTag, Target>
+        + HasBatchSenderCache<SrcTag, DstTag, Target>
+        + HasRelayTypeAt<SrcTag, DstTag, Relay = Relay>
         + HasErrorType,
-    Chain: HasIbcChainTypes<Counterparty> + HasRuntime,
-    Counterparty: HasIbcChainTypes<Chain>,
-    Chain::Runtime: CanCreateChannels + HasChannelOnceTypes + CanCloneSender + HasErrorType,
-    Build::Runtime: HasMutex,
-    Chain::ChainId: Ord + Clone,
-    Counterparty::ChainId: Ord + Clone,
-    Chain::ClientId: Ord + Clone,
-    Counterparty::ClientId: Ord + Clone,
-    Error: Async,
+    Relay: HasTargetChainTypes<
+            Target,
+            TargetChain = TargetChain,
+            CounterpartyChain = CounterpartyChain,
+        > + HasMessageBatchChannelTypes<Target::Chain>
+        + CanUseMessageBatchChannel<Target::Chain>,
+    TargetChain: HasChainIdType<ChainId: Ord + Clone>
+        + HasClientIdType<CounterpartyChain, ClientId: Ord + Clone>
+        + HasMessageType
+        + HasMessageResponseType,
+    CounterpartyChain:
+        HasChainIdType<ChainId: Ord + Clone> + HasClientIdType<TargetChain, ClientId: Ord + Clone>,
+    Relay::Runtime: CanCloneSender + CanCreateChannels,
 {
     async fn build_batch_channel(
         &self,
-        index: PhantomData<(TargetTag, CounterpartyTag)>,
-        chain_id: &Chain::ChainId,
-        counterparty_chain_id: &Counterparty::ChainId,
-        client_id: &Chain::ClientId,
-        counterparty_client_id: &Counterparty::ClientId,
+        index: PhantomData<(SrcTag, DstTag, Target)>,
+        chain_id: &TargetChain::ChainId,
+        counterparty_chain_id: &CounterpartyChain::ChainId,
+        client_id: &TargetChain::ClientId,
+        counterparty_client_id: &CounterpartyChain::ClientId,
     ) -> Result<
         (
-            MessageBatchSender<Chain, Error>,
-            Option<MessageBatchReceiver<Chain, Error>>,
+            Relay::MessageBatchSender,
+            Option<Relay::MessageBatchReceiver>,
         ),
-        Self::Error,
+        Build::Error,
     > {
         let mutex = self.batch_sender_cache(index);
 
@@ -187,10 +208,10 @@ where
         );
 
         if let Some(sender) = sender_cache.get(&cache_key) {
-            Ok((Chain::Runtime::clone_sender(sender), None))
+            Ok((<RuntimeOf<Build::Relay>>::clone_sender(sender), None))
         } else {
-            let (sender, receiver) = Chain::Runtime::new_channel();
-            sender_cache.insert(cache_key, Chain::Runtime::clone_sender(&sender));
+            let (sender, receiver) = <RuntimeOf<Build::Relay>>::new_channel();
+            sender_cache.insert(cache_key, <RuntimeOf<Build::Relay>>::clone_sender(&sender));
             Ok((sender, Some(receiver)))
         }
     }
