@@ -47,11 +47,11 @@ use crate::types::batch::CosmosBatchSender;
 
 #[derive(Clone)]
 pub struct CosmosRelay {
-    pub base_relay: Arc<BaseCosmosRelay>,
+    pub fields: Arc<CosmosRelayFields>,
 }
 
 #[derive(HasField)]
-pub struct BaseCosmosRelay {
+pub struct CosmosRelayFields {
     pub runtime: HermesRuntime,
     pub src_chain: CosmosChain,
     pub dst_chain: CosmosChain,
@@ -64,10 +64,10 @@ pub struct BaseCosmosRelay {
 }
 
 impl Deref for CosmosRelay {
-    type Target = BaseCosmosRelay;
+    type Target = CosmosRelayFields;
 
-    fn deref(&self) -> &BaseCosmosRelay {
-        &self.base_relay
+    fn deref(&self) -> &CosmosRelayFields {
+        &self.fields
     }
 }
 
@@ -83,7 +83,7 @@ impl CosmosRelay {
         dst_chain_message_batch_sender: CosmosBatchSender,
     ) -> Self {
         let relay = Self {
-            base_relay: Arc::new(BaseCosmosRelay {
+            fields: Arc::new(CosmosRelayFields {
                 runtime,
                 src_chain,
                 dst_chain,

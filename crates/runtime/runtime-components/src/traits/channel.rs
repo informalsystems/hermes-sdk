@@ -155,3 +155,7 @@ pub trait CanCloneSender: HasChannelTypes {
     where
         T: Async;
 }
+
+pub type SenderOf<Runtime, T> = <Runtime as HasChannelTypes>::Sender<T>;
+
+pub type ReceiverOf<Runtime, T> = <Runtime as HasChannelTypes>::Receiver<T>;
