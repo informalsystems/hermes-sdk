@@ -20,6 +20,9 @@ pub trait HasMessageBatchChannelTypes<Tag>: Async {
     type MessageBatchReceiver: Async;
 }
 
+pub type MessageBatchSenderOf<Context, Tag> =
+    <Context as HasMessageBatchChannelTypes<Tag>>::MessageBatchSender;
+
 impl<Context, Tag, Chain, Runtime> HasMessageBatchChannelTypes<Tag> for Context
 where
     Context: HasChainTypeAt<Tag, Chain = Chain> + HasRuntime<Runtime = Runtime> + HasErrorType,
