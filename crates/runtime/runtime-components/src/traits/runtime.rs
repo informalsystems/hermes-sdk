@@ -8,7 +8,7 @@ use cgp::prelude::*;
 
 #[derive_component(RuntimeTypeComponent, ProvideRuntimeType<Context>)]
 pub trait HasRuntimeType: Async {
-    type Runtime: HasErrorType;
+    type Runtime: Async + HasErrorType;
 }
 
 #[derive_component(RuntimeGetterComponent, RuntimeGetter<Context>)]
@@ -22,7 +22,7 @@ impl<Context, Provider, Runtime> ProvideRuntimeType<Context> for WithProvider<Pr
 where
     Context: Async,
     Provider: ProvideType<Context, RuntimeTypeComponent, Type = Runtime>,
-    Runtime: HasErrorType,
+    Runtime: Async + HasErrorType,
 {
     type Runtime = Runtime;
 }

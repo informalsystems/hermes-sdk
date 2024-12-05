@@ -35,7 +35,6 @@ use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, Can
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
-use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;
 
 pub trait CanUseExtraAckPacketRelayer: UseExtraAckPacketRelayer
@@ -58,7 +57,6 @@ where
         + HasRelayClientIds
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
         + HasLogger<Logger = Logger>
-        + HasMessageBatchSender<SourceTarget>
         + HasComponents<Components = Components>,
     SrcChain: HasErrorType
         + HasRuntime

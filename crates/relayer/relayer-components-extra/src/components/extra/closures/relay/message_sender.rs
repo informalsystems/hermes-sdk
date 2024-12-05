@@ -5,6 +5,7 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::{
@@ -19,6 +20,7 @@ use hermes_relayer_components::relay::traits::target::{
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 use hermes_runtime_components::traits::channel::CanUseChannels;
 use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
@@ -38,21 +40,21 @@ pub trait UseExtraIbcMessageSender:
 
 impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraIbcMessageSender for Relay
 where
-    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+    Relay: HasRuntime
+        + HasMessageBatchSender<Src>
+        + HasMessageBatchSender<Dst>
+        + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasSourceTargetChainTypes
         + HasDestinationTargetChainTypes
         + HasRelayClientIds
         + HasLogger<Logger = Logger>
-        + HasMessageBatchSender<SourceTarget>
-        + HasMessageBatchSender<DestinationTarget>
         + HasTargetChains<SourceTarget>
         + HasTargetChains<DestinationTarget>
         + CanBuildTargetUpdateClientMessage<SourceTarget>
         + CanBuildTargetUpdateClientMessage<DestinationTarget>
         + CanRaiseError<SrcChain::Error>
         + CanRaiseError<DstChain::Error>
-        + CanRaiseError<ErrorOf<SrcChain::Runtime>>
-        + CanRaiseError<ErrorOf<DstChain::Runtime>>
+        + CanRaiseError<ErrorOf<Relay::Runtime>>
         + HasComponents<Components = Components>,
     SrcChain: HasIbcChainTypes<DstChain>
         + HasOutgoingPacketType<DstChain>
@@ -65,8 +67,7 @@ where
         + CanRaiseError<ErrorOf<DstChain::Runtime>>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
-    SrcChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
-    DstChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
+    Relay::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, DestinationTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>
