@@ -5,28 +5,19 @@ use core::marker::PhantomData;
 use core::mem;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message_response::{
-    HasMessageResponseType, MessageResponseOf,
-};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LogLevel;
-use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
 };
-use hermes_relayer_components::chain::types::aliases::MessageOf;
 use hermes_relayer_components::multi::traits::chain_at::HasChainAt;
 use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
-use hermes_relayer_components::relay::traits::target::{
-    HasTargetChainTypes, HasTargetChains, RelayTarget,
-};
+use hermes_relayer_components::relay::traits::target::{HasTargetChains, RelayTarget};
 use hermes_runtime_components::traits::channel::{CanUseChannels, HasChannelTypes};
-use hermes_runtime_components::traits::channel_once::{
-    CanUseChannelsOnce, HasChannelOnceTypes, SenderOnceOf,
-};
+use hermes_runtime_components::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
 use hermes_runtime_components::traits::mutex::HasMutex;
-use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
@@ -44,23 +35,26 @@ pub struct LogBatchWorker<'a, Relay, Tag> {
 }
 
 #[async_trait]
-pub trait CanSpawnBatchMessageWorker<Tag>: HasMessageBatchChannelTypes<Tag> + HasErrorType {
+pub trait CanSpawnBatchMessageWorker<Target: RelayTarget>:
+    HasMessageBatchChannelTypes<Target::Chain> + HasErrorType
+{
     fn spawn_batch_message_worker(
         &self,
-        tag: PhantomData<Tag>,
+        _target: Target,
         config: BatchConfig,
         receiver: Self::MessageBatchReceiver,
     );
 }
 
-impl<Relay, Tag> CanSpawnBatchMessageWorker<Tag> for Relay
+impl<Relay, Target> CanSpawnBatchMessageWorker<Target> for Relay
 where
-    Relay: Clone + CanRunLoop<Tag> + CanUseMessageBatchChannel<Tag>,
+    Target: RelayTarget,
+    Relay: Clone + CanRunLoop<Target> + CanUseMessageBatchChannel<Target::Chain>,
     Relay::Runtime: CanSpawnTask,
 {
     fn spawn_batch_message_worker(
         &self,
-        _tag: PhantomData<Tag>,
+        _target: Target,
         config: BatchConfig,
         receiver: Relay::MessageBatchReceiver,
     ) {
@@ -75,20 +69,21 @@ where
     }
 }
 
-pub struct BatchMessageTask<Relay, Tag>
+pub struct BatchMessageTask<Relay, Target>
 where
-    Relay: HasMessageBatchChannelTypes<Tag>,
+    Target: RelayTarget,
+    Relay: HasMessageBatchChannelTypes<Target::Chain>,
 {
     pub relay: Relay,
     pub config: BatchConfig,
     pub receiver: Relay::MessageBatchReceiver,
-    pub phantom: PhantomData<Tag>,
+    pub phantom: PhantomData<Target>,
 }
 
-impl<Relay, Tag> Task for BatchMessageTask<Relay, Tag>
+impl<Relay, Target> Task for BatchMessageTask<Relay, Target>
 where
-    Tag: Async,
-    Relay: HasMessageBatchChannelTypes<Tag> + CanRunLoop<Tag>,
+    Target: RelayTarget,
+    Relay: HasMessageBatchChannelTypes<Target::Chain> + CanRunLoop<Target>,
 {
     async fn run(self) {
         self.relay.run_loop(&self.config, self.receiver).await;
@@ -96,19 +91,19 @@ where
 }
 
 #[async_trait]
-trait CanRunLoop<Tag>: HasMessageBatchChannelTypes<Tag> {
+trait CanRunLoop<Target: RelayTarget>: HasMessageBatchChannelTypes<Target::Chain> {
     async fn run_loop(&self, config: &BatchConfig, receiver: Self::MessageBatchReceiver);
 }
 
-impl<Relay, Tag> CanRunLoop<Tag> for Relay
+impl<Relay, Target> CanRunLoop<Target> for Relay
 where
-    Tag: Async,
-    Relay: HasChainAt<Tag>
-        + CanUseMessageBatchChannel<Tag>
-        + CanProcessMessageBatches<Tag>
+    Target: RelayTarget,
+    Relay: HasChainAt<Target::Chain>
+        + CanUseMessageBatchChannel<Target::Chain>
+        + CanProcessMessageBatches<Target>
         + HasLogger,
     Relay::Runtime: HasTime + HasMutex + CanSleep + CanUseChannels + HasChannelOnceTypes,
-    Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Tag>>,
+    Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
 {
     async fn run_loop(&self, config: &BatchConfig, mut receiver: Relay::MessageBatchReceiver) {
         let runtime = self.runtime();
@@ -177,8 +172,8 @@ where
 }
 
 #[async_trait]
-pub trait CanProcessMessageBatches<Tag>:
-    HasMessageBatchChannelTypes<Tag> + HasRuntime<Runtime: HasTime>
+pub trait CanProcessMessageBatches<Target: RelayTarget>:
+    HasMessageBatchChannelTypes<Target::Chain> + HasRuntime<Runtime: HasTime>
 {
     async fn process_message_batches(
         &self,
@@ -189,12 +184,16 @@ pub trait CanProcessMessageBatches<Tag>:
     );
 }
 
-impl<Relay, Tag> CanProcessMessageBatches<Tag> for Relay
+impl<Relay, Target> CanProcessMessageBatches<Target> for Relay
 where
-    Tag: Async,
-    Relay: Clone + CanUseMessageBatchChannel<Tag> + CanPartitionMessageBatches<Tag> + HasLogger,
+    Target: RelayTarget,
+    Relay: Clone
+        + CanUseMessageBatchChannel<Target::Chain>
+        + CanPartitionMessageBatches<Target>
+        + HasLogger,
     Relay::Runtime: HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes + HasErrorType,
-    Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Tag>>,
+    Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
+    SendReadyBatchTask<Relay, Target>: Task,
 {
     async fn process_message_batches(
         &self,
@@ -203,8 +202,6 @@ where
         now: TimeOf<Relay::Runtime>,
         last_sent_time: &mut TimeOf<Relay::Runtime>,
     ) {
-        let runtime = self.runtime();
-
         let ready_batches = Relay::partition_message_batches(config, pending_batches);
 
         if ready_batches.is_empty() {
@@ -242,34 +239,38 @@ where
     }
 }
 
-pub struct SendReadyBatchTask<Relay, Tag>
+pub struct SendReadyBatchTask<Relay, Target>
 where
-    Relay: HasMessageBatchChannelTypes<Tag>,
+    Target: RelayTarget,
+    Relay: HasMessageBatchChannelTypes<Target::Chain>,
 {
     pub relay: Relay,
     pub ready_batches: VecDeque<Relay::BatchSubmission>,
 }
 
-impl<Relay, Tag> Task for SendReadyBatchTask<Relay, Tag>
+impl<Relay, Target> Task for SendReadyBatchTask<Relay, Target>
 where
-    Tag: Async,
-    Relay: CanSendReadyBatches<Tag>,
+    Target: RelayTarget,
+    Relay: CanSendReadyBatches<Target>,
 {
     async fn run(self) {
         self.relay.send_ready_batches(self.ready_batches).await
     }
 }
 
-pub trait CanPartitionMessageBatches<Tag>: HasMessageBatchChannelTypes<Tag> {
+pub trait CanPartitionMessageBatches<Target: RelayTarget>:
+    HasMessageBatchChannelTypes<Target::Chain>
+{
     fn partition_message_batches(
         config: &BatchConfig,
         pending_batches: &mut VecDeque<Self::BatchSubmission>,
     ) -> VecDeque<Self::BatchSubmission>;
 }
 
-impl<Relay, Tag> CanPartitionMessageBatches<Tag> for Relay
+impl<Relay, Target> CanPartitionMessageBatches<Target> for Relay
 where
-    Relay: CanUseMessageBatchChannel<Tag>,
+    Target: RelayTarget,
+    Relay: CanUseMessageBatchChannel<Target::Chain>,
     Relay::Chain: CanEstimateBatchSize,
 {
     fn partition_message_batches(
@@ -321,17 +322,21 @@ where
 }
 
 #[async_trait]
-pub trait CanSendReadyBatches<Tag>: HasMessageBatchChannelTypes<Tag> {
+pub trait CanSendReadyBatches<Target: RelayTarget>:
+    HasMessageBatchChannelTypes<Target::Chain>
+{
     async fn send_ready_batches(&self, ready_batches: VecDeque<Self::BatchSubmission>);
 }
 
-impl<Relay, Tag> CanSendReadyBatches<Tag> for Relay
+impl<Relay, Target> CanSendReadyBatches<Target> for Relay
 where
-    Tag: Async,
-    Relay: CanUseMessageBatchChannel<Tag> + CanSendIbcMessages<BatchWorkerSink, Target> + HasLogger,
+    Target: RelayTarget,
+    Relay: CanUseMessageBatchChannel<Target::Chain>
+        + CanSendIbcMessages<BatchWorkerSink, Target>
+        + HasLogger,
     Relay::Runtime: CanUseChannelsOnce + CanUseChannels,
     Relay::Error: Clone,
-    Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Tag>>,
+    Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
 {
     async fn send_ready_batches(&self, ready_batches: VecDeque<Relay::BatchSubmission>) {
         let logger = self.logger();
@@ -377,7 +382,7 @@ where
                     .await;
 
                 for (_, sender) in senders.into_iter() {
-                    let _ = Runtime::send_once(sender, Err(e.clone()));
+                    let _ = Relay::Runtime::send_once(sender, Err(e.clone()));
                 }
             }
             Ok(all_events) => {
@@ -398,7 +403,7 @@ where
 
                 for (message_count, sender) in senders.into_iter() {
                     let events = take(&mut all_events, message_count);
-                    let _ = Runtime::send_once(sender, Ok(events));
+                    let _ = Relay::Runtime::send_once(sender, Ok(events));
                 }
             }
         }
@@ -409,33 +414,33 @@ trait CanEstimateBatchSize: HasMessageType {
     fn estimate_batch_size(messages: &[Self::Message]) -> usize;
 }
 
-// impl<Chain> CanEstimateBatchSize for Chain
-// where
-//     Chain: CanEstimateMessageSize,
-// {
-//     fn estimate_batch_size(messages: &[Self::Message]) -> usize {
-//         messages
-//             .iter()
-//             .map(|message| {
-//                 // return 0 on encoding error, as we don't want
-//                 // the batching operation to error out.
-//                 Chain::estimate_message_size(message).unwrap_or(0)
-//             })
-//             .sum()
-//     }
-// }
+impl<Chain> CanEstimateBatchSize for Chain
+where
+    Chain: CanEstimateMessageSize,
+{
+    fn estimate_batch_size(messages: &[Self::Message]) -> usize {
+        messages
+            .iter()
+            .map(|message| {
+                // return 0 on encoding error, as we don't want
+                // the batching operation to error out.
+                Chain::estimate_message_size(message).unwrap_or(0)
+            })
+            .sum()
+    }
+}
 
-// fn take<T, I: Iterator<Item = T>>(it: &mut I, count: usize) -> Vec<T> {
-//     let mut res = Vec::new();
-//     for _ in 0..count {
-//         match it.next() {
-//             Some(x) => {
-//                 res.push(x);
-//             }
-//             None => {
-//                 return res;
-//             }
-//         }
-//     }
-//     res
-// }
+fn take<T, I: Iterator<Item = T>>(it: &mut I, count: usize) -> Vec<T> {
+    let mut res = Vec::new();
+    for _ in 0..count {
+        match it.next() {
+            Some(x) => {
+                res.push(x);
+            }
+            None => {
+                return res;
+            }
+        }
+    }
+    res
+}
