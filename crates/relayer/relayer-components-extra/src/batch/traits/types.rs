@@ -1,5 +1,6 @@
 use alloc::vec::Vec;
 
+use cgp::core::Async;
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_chain_type_components::traits::types::message_response::{
@@ -11,10 +12,12 @@ use hermes_runtime_components::traits::channel::{HasChannelTypes, ReceiverOf, Se
 use hermes_runtime_components::traits::channel_once::{HasChannelOnceTypes, SenderOnceOf};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
-pub trait HasMessageBatchChannelTypes<Tag> {
-    type MessageBatchSender;
+pub trait HasMessageBatchChannelTypes<Tag>: Async {
+    type BatchSubmission: Async;
 
-    type MessageBatchReceiver;
+    type MessageBatchSender: Async;
+
+    type MessageBatchReceiver: Async;
 }
 
 impl<Context, Tag, Chain, Runtime> HasMessageBatchChannelTypes<Tag> for Context
@@ -23,21 +26,14 @@ where
     Chain: HasMessageType + HasMessageResponseType,
     Runtime: HasChannelTypes + HasChannelOnceTypes,
 {
-    type MessageBatchSender = SenderOf<
-        Runtime,
-        (
-            Vec<Chain::Message>,
-            SenderOnceOf<Runtime, Result<Vec<Chain::MessageResponse>, Context::Error>>,
-        ),
-    >;
+    type BatchSubmission = (
+        Vec<Chain::Message>,
+        SenderOnceOf<Runtime, Result<Vec<Chain::MessageResponse>, Context::Error>>,
+    );
 
-    type MessageBatchReceiver = ReceiverOf<
-        Runtime,
-        (
-            Vec<Chain::Message>,
-            SenderOnceOf<Runtime, Result<Vec<Chain::MessageResponse>, Context::Error>>,
-        ),
-    >;
+    type MessageBatchSender = SenderOf<Runtime, Self::BatchSubmission>;
+
+    type MessageBatchReceiver = ReceiverOf<Runtime, Self::BatchSubmission>;
 }
 
 pub trait CanUseMessageBatchChannel<Tag>:
@@ -46,6 +42,10 @@ pub trait CanUseMessageBatchChannel<Tag>:
     + HasErrorType
     + HasMessageBatchChannelTypes<
         Tag,
+        BatchSubmission = (
+            Vec<MessageOf<Self::Chain>>,
+            SenderOnceOf<Self::Runtime, Result<Vec<MessageResponseOf<Self::Chain>>, Self::Error>>,
+        ),
         MessageBatchSender = SenderOf<
             Self::Runtime,
             (
