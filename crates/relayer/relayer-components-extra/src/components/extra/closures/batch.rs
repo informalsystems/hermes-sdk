@@ -1,12 +1,12 @@
-use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::CanEstimateMessageSize;
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::traits::chains::{
-    CanRaiseRelayChainErrors, HasDstChainType, HasRelayChains, HasRelayClientIds, HasSrcChainType,
+    CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
 };
 use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
 use hermes_relayer_components::relay::traits::target::{
@@ -21,6 +21,7 @@ use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::time::HasTime;
 
+use crate::batch::traits::types::CanUseMessageBatchChannel;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::batch::worker::{CanSpawnBatchMessageWorker, LogBatchWorker};
 
@@ -34,21 +35,20 @@ where
 }
 
 pub trait UseBatchMessageWorkerSpawner:
-    HasSrcChainType<SrcChain: HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>>
-    + HasDstChainType<DstChain: HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>>
-    + HasSourceTargetChainTypes
-    + HasDestinationTargetChainTypes
+    HasRelayClientIds
     + CanSpawnBatchMessageWorker<SourceTarget>
     + CanSpawnBatchMessageWorker<DestinationTarget>
-    + HasRelayClientIds
     + CanRaiseRelayChainErrors
 {
 }
 
-impl<Relay, SrcChain, DstChain> UseBatchMessageWorkerSpawner for Relay
+impl<Relay> UseBatchMessageWorkerSpawner for Relay
 where
     Relay: Clone
-        + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRuntime
+        + CanUseMessageBatchChannel<Src>
+        + CanUseMessageBatchChannel<Dst>
+        + HasRelayChains
         + HasRelayClientIds
         + HasSourceTargetChainTypes
         + HasDestinationTargetChainTypes
@@ -57,26 +57,18 @@ where
         + CanSendIbcMessages<BatchWorkerSink, SourceTarget>
         + CanSendIbcMessages<BatchWorkerSink, DestinationTarget>
         + HasLogger
-        + CanRaiseError<SrcChain::Error>
-        + CanRaiseError<DstChain::Error>,
-    SrcChain: HasRuntime
+        + CanRaiseRelayChainErrors,
+    Relay::SrcChain: HasRuntime
         + HasChainId
         + HasMessageResponseType
         + CanEstimateMessageSize
-        + HasIbcChainTypes<DstChain>,
-    DstChain: HasRuntime
+        + HasIbcChainTypes<Relay::DstChain>,
+    Relay::DstChain: HasRuntime
         + HasChainId
         + HasMessageResponseType
         + CanEstimateMessageSize
-        + HasIbcChainTypes<SrcChain>,
-    SrcChain::Runtime: HasTime
-        + HasMutex
-        + CanSleep
-        + CanSpawnTask
-        + CanUseChannels
-        + CanUseChannelsOnce
-        + CanCloneSender,
-    DstChain::Runtime: HasTime
+        + HasIbcChainTypes<Relay::SrcChain>,
+    Relay::Runtime: HasTime
         + HasMutex
         + CanSleep
         + CanSpawnTask

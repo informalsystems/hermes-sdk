@@ -91,7 +91,7 @@ where
 }
 
 #[async_trait]
-trait CanRunLoop<Target: RelayTarget>: HasMessageBatchChannelTypes<Target::Chain> {
+pub trait CanRunLoop<Target: RelayTarget>: HasMessageBatchChannelTypes<Target::Chain> {
     async fn run_loop(&self, config: &BatchConfig, receiver: Self::MessageBatchReceiver);
 }
 

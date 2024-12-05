@@ -30,7 +30,7 @@ pub use hermes_relayer_components::relay::traits::packet_relayers::receive_packe
 pub use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 pub use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 
-use crate::batch::components::message_sender::SendMessagesToBatchWorker;
+use crate::batch::impls::message_sender::SendMessagesToBatchWorker;
 pub use crate::batch::types::sink::BatchWorkerSink;
 use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
