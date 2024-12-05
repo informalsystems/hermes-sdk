@@ -27,7 +27,7 @@ where
         Runtime,
         (
             Vec<Chain::Message>,
-            SenderOnceOf<Runtime, Result<Chain::MessageResponse, Context::Error>>,
+            SenderOnceOf<Runtime, Result<Vec<Chain::MessageResponse>, Context::Error>>,
         ),
     >;
 
@@ -35,12 +35,12 @@ where
         Runtime,
         (
             Vec<Chain::Message>,
-            SenderOnceOf<Runtime, Result<Chain::MessageResponse, Context::Error>>,
+            SenderOnceOf<Runtime, Result<Vec<Chain::MessageResponse>, Context::Error>>,
         ),
     >;
 }
 
-pub trait CanUseMessageBatchChannelTypes<Tag>:
+pub trait CanUseMessageBatchChannel<Tag>:
     HasChainTypeAt<Tag, Chain: HasMessageType + HasMessageResponseType>
     + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>
     + HasErrorType
@@ -50,21 +50,27 @@ pub trait CanUseMessageBatchChannelTypes<Tag>:
             Self::Runtime,
             (
                 Vec<MessageOf<Self::Chain>>,
-                SenderOnceOf<Self::Runtime, Result<MessageResponseOf<Self::Chain>, Self::Error>>,
+                SenderOnceOf<
+                    Self::Runtime,
+                    Result<Vec<MessageResponseOf<Self::Chain>>, Self::Error>,
+                >,
             ),
         >,
         MessageBatchReceiver = ReceiverOf<
             Self::Runtime,
             (
                 Vec<MessageOf<Self::Chain>>,
-                SenderOnceOf<Self::Runtime, Result<MessageResponseOf<Self::Chain>, Self::Error>>,
+                SenderOnceOf<
+                    Self::Runtime,
+                    Result<Vec<MessageResponseOf<Self::Chain>>, Self::Error>,
+                >,
             ),
         >,
     >
 {
 }
 
-impl<Context, Tag, Chain, Runtime> CanUseMessageBatchChannelTypes<Tag> for Context
+impl<Context, Tag, Chain, Runtime> CanUseMessageBatchChannel<Tag> for Context
 where
     Context: HasChainTypeAt<Tag, Chain = Chain> + HasRuntime<Runtime = Runtime> + HasErrorType,
     Chain: HasMessageType + HasMessageResponseType,
