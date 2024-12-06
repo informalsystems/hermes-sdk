@@ -2,7 +2,8 @@ use std::collections::BTreeSet;
 use std::sync::Arc;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::impls::use_field::UseField;
+use cgp::core::field::impls::use_field::{UseField, WithField};
+use cgp::core::types::impls::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
@@ -37,9 +38,7 @@ use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
-};
+use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
@@ -88,11 +87,8 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        [
-            RuntimeTypeComponent,
-            RuntimeGetterComponent,
-        ]:
-            ProvideDefaultRuntimeField,
+        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,

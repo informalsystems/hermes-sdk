@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::impls::use_field::UseField;
+use cgp::core::field::impls::use_field::{UseField, WithField};
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
@@ -39,9 +39,7 @@ use hermes_relayer_components_extra::batch::traits::types::{
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
-};
+use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
@@ -125,13 +123,12 @@ delegate_components! {
         ]:
             HandleCosmosError,
         RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             ChainTypeAtComponent<Src>,
             ChainTypeAtComponent<Dst>,
         ]:
             WithType<CosmosChain>,
-        RuntimeGetterComponent:
-            ProvideDefaultRuntimeField,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,

@@ -5,6 +5,8 @@ use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::field::impls::use_field::WithField;
+use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::{eyre, Error};
@@ -41,9 +43,7 @@ use hermes_relayer_components::chain::traits::types::connection::HasInitConnecti
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
-};
+use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use hermes_solomachine_chain_components::components::cosmos::SolomachineCosmosComponents;
 use hermes_solomachine_chain_components::components::solomachine::*;
 use hermes_solomachine_chain_components::methods::encode::public_key::PublicKey;
@@ -101,11 +101,8 @@ delegate_components! {
             ProvideEyreError,
         ErrorRaiserComponent:
             RaiseDebugError,
-        [
-            RuntimeTypeComponent,
-            RuntimeGetterComponent,
-        ]:
-            ProvideDefaultRuntimeField,
+        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,

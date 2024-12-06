@@ -7,7 +7,7 @@ use std::fs::{self, File};
 use std::str::FromStr;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::impls::use_field::UseField;
+use cgp::core::field::impls::use_field::{UseField, WithField};
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use eyre::eyre;
@@ -32,9 +32,7 @@ use hermes_relayer_components_extra::build::traits::cache::{
 use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::RelayWithBatchBuilder;
 use hermes_relayer_components_extra::components::extra::build::*;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
-};
+use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
@@ -116,7 +114,7 @@ delegate_components! {
         ]:
             HandleCosmosError,
         RuntimeTypeComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: ProvideDefaultRuntimeField,
+        RuntimeGetterComponent: WithField<symbol!("runtime")>,
         BiRelayTypeAtComponent:
             WithType<CosmosBiRelay>,
         [
@@ -282,9 +280,7 @@ impl ChainBuilder<CosmosBuilder, Index<0>> for CosmosBaseBuildComponents {
         _index: PhantomData<Index<0>>,
         chain_id: &ChainId,
     ) -> Result<CosmosChain, Error> {
-        let chain = build.build_chain(chain_id).await?;
-
-        Ok(chain)
+        build.build_chain(chain_id).await
     }
 }
 
@@ -294,9 +290,7 @@ impl ChainBuilder<CosmosBuilder, Index<1>> for CosmosBaseBuildComponents {
         _index: PhantomData<Index<1>>,
         chain_id: &ChainId,
     ) -> Result<CosmosChain, Error> {
-        let chain = build.build_chain(chain_id).await?;
-
-        Ok(chain)
+        build.build_chain(chain_id).await
     }
 }
 

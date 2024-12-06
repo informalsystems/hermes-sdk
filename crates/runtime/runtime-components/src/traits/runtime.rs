@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
-use cgp::core::field::impls::use_field::WithField;
 use cgp::core::field::FieldGetter;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
@@ -36,17 +35,3 @@ where
         Provider::get_field(context, PhantomData)
     }
 }
-
-pub struct ProvideRuntimeField<Tag>(pub PhantomData<Tag>);
-
-delegate_components! {
-    <Tag>
-    ProvideRuntimeField<Tag> {
-        [
-            RuntimeTypeComponent,
-            RuntimeGetterComponent,
-        ]: WithField<Tag>,
-    }
-}
-
-pub type ProvideDefaultRuntimeField = ProvideRuntimeField<symbol!("runtime")>;
