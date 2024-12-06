@@ -4,6 +4,7 @@ use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::impls::use_field::UseField;
+use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_error::types::Error;
@@ -64,9 +65,7 @@ pub struct CosmosRelayFields {
     pub packet_filter: PacketFilterConfig,
     pub packet_lock_mutex: Arc<Mutex<BTreeSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
     pub src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
-    // pub src_chain_message_batch_sender: CosmosBatchSender,
-    // pub dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
-    pub dst_chain_message_batch_sender: CosmosBatchSender,
+    pub dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
 }
 
 pub trait HasCosmosRelayFields: Send + Sync + 'static {
@@ -126,8 +125,13 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
+        RuntimeTypeComponent: WithType<HermesRuntime>,
         [
-            RuntimeTypeComponent,
+            ChainTypeAtComponent<Src>,
+            ChainTypeAtComponent<Dst>,
+        ]:
+            WithType<CosmosChain>,
+        [
             RuntimeGetterComponent,
         ]:
             ProvideDefaultRuntimeField,
@@ -141,15 +145,9 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
-        [
-            ChainTypeAtComponent<Src>,
-            ChainGetterAtComponent<Src>,
-        ]:
+        ChainGetterAtComponent<Src>:
             UseField<symbol!("src_chain")>,
-        [
-            ChainTypeAtComponent<Dst>,
-            ChainGetterAtComponent<Dst>,
-        ]:
+        ChainGetterAtComponent<Dst>:
             UseField<symbol!("dst_chain")>,
         ClientIdAtGetterComponent<Src, Dst>:
             UseField<symbol!("src_client_id")>,
