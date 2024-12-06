@@ -34,7 +34,7 @@ impl CommandRunner<HermesApp> for KeysListCmd {
         let keyring = KeyRing::new_secp256k1(
             Store::Test,
             &chain_config.account_prefix,
-            &ChainId::new(&chain_config.id).unwrap().to_string().into(),
+            &ChainId::new(&chain_config.id)?.to_string().into(),
             &chain_config.key_store_folder,
         )?;
 

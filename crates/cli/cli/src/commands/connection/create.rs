@@ -72,6 +72,7 @@ impl CommandRunner<HermesApp> for ConnectionCreate {
 
         let options = CosmosInitConnectionOptions {
             delay_period: Duration::from_secs(0),
+            // Can unwrap safely since compatibles() returns a vector containing 1 Version
             connection_version: Version::compatibles().first().unwrap().clone(),
         };
 

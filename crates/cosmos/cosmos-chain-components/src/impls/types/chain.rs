@@ -120,7 +120,7 @@ where
     Chain: HasHeightType<Height = Height> + HasChainId<ChainId = ChainId> + HasErrorType,
 {
     fn genesis_height(chain: &Chain) -> Height {
-        Height::new(1, chain.chain_id().revision_number()).unwrap()
+        Height::new(chain.chain_id().revision_number(), 1).unwrap()
     }
 }
 

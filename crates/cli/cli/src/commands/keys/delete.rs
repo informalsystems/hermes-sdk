@@ -122,7 +122,7 @@ fn delete_key(config: &CosmosChainConfig, key_name: &str) -> eyre::Result<()> {
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &config.account_prefix,
-        &ChainId::new(&config.id).unwrap().to_string().into(),
+        &ChainId::new(&config.id)?.to_string().into(),
         &config.key_store_folder,
     )?;
 
@@ -135,7 +135,7 @@ fn delete_all_keys(config: &CosmosChainConfig) -> eyre::Result<()> {
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &config.account_prefix,
-        &ChainId::new(&config.id).unwrap().to_string().into(),
+        &ChainId::new(&config.id)?.to_string().into(),
         &config.key_store_folder,
     )?;
 
