@@ -5,9 +5,9 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use ibc::core::client::types::Height;
 use ibc::core::connection::types::State;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ConnectionId};
-use ibc_relayer_types::Height;
+use ibc::core::host::types::identifiers::{ChainId, ConnectionId};
 use oneline_eyre::eyre::eyre;
 
 use crate::contexts::app::HermesApp;
@@ -50,8 +50,8 @@ impl CommandRunner<HermesApp> for QueryConnectionEnd {
 
         let height = match self.height {
             Some(height) => {
-                Height::new(chain.chain_id().version(), height)
-                    .map_err(|e| eyre!("Failed to create Height with revision number `{}` and revision height `{height}`. Error: {e}", chain.chain_id().version()))?
+                Height::new(chain.chain_id().revision_number(), height)
+                    .map_err(|e| eyre!("Failed to create Height with revision number `{}` and revision height `{height}`. Error: {e}", chain.chain_id().revision_number()))?
             }
             None => {
                 chain.query_chain_height().await?

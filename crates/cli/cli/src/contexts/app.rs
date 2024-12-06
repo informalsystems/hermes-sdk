@@ -58,10 +58,9 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use ibc_relayer::config::Config;
-use ibc_relayer::foreign_client::CreateOptions;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
-use ibc_relayer_types::Height;
 use serde::Serialize;
 
 use crate::commands::bootstrap::chain::{BootstrapChainArgs, LoadCosmosBootstrap};
@@ -196,13 +195,7 @@ impl CreateClientOptionsParser<HermesApp, CreateClientArgs, Index<0>, Index<1>>
         target_chain: &CosmosChain,
         counterparty_chain: &CosmosChain,
     ) -> Result<((), CosmosCreateClientOptions), Error> {
-        let options = CreateOptions {
-            max_clock_drift: args.clock_drift.map(|d| d.into()),
-            trusting_period: args.trusting_period.map(|d| d.into()),
-            trust_threshold: args.trust_threshold,
-        };
-
-        let max_clock_drift = match options.max_clock_drift {
+        let max_clock_drift = match args.clock_drift.map(|d| d.into()) {
             Some(input) => input,
             None => {
                 target_chain.chain_config.clock_drift
@@ -213,8 +206,8 @@ impl CreateClientOptionsParser<HermesApp, CreateClientArgs, Index<0>, Index<1>>
 
         let settings = CosmosCreateClientOptions {
             max_clock_drift,
-            trusting_period: options.trusting_period.unwrap_or_default(),
-            trust_threshold: options
+            trusting_period: args.trusting_period.map(|d| d.into()).unwrap_or_default(),
+            trust_threshold: args
                 .trust_threshold
                 .map(|threshold| threshold.into())
                 .unwrap_or_default(),

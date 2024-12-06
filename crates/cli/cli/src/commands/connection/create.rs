@@ -8,8 +8,8 @@ use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptio
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use ibc_relayer_types::core::ics03_connection::version::Version;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+use ibc::core::connection::types::version::Version;
+use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use oneline_eyre::eyre::eyre;
 use tracing::info;
 
@@ -72,7 +72,7 @@ impl CommandRunner<HermesApp> for ConnectionCreate {
 
         let options = CosmosInitConnectionOptions {
             delay_period: Duration::from_secs(0),
-            connection_version: Version::default(),
+            connection_version: Version::compatibles().first().unwrap().clone(),
         };
 
         info!(

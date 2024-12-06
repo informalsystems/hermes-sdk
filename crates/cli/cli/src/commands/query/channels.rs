@@ -9,10 +9,10 @@ use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use http::Uri;
+use ibc::core::channel::types::channel::{IdentifiedChannelEnd, State};
 use ibc::core::channel::types::proto::v1::query_client::QueryClient;
 use ibc::core::channel::types::proto::v1::QueryChannelsRequest;
-use ibc_relayer_types::core::ics04_channel::channel::{IdentifiedChannelEnd, State};
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
+use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, PortId};
 use tracing::{info, warn};
 
 use crate::contexts::app::HermesApp;
@@ -79,7 +79,10 @@ impl CommandRunner<HermesApp> for QueryChannels {
             let chain_id = chain_id.clone();
             let channel_end = &channel.channel_end;
 
-            if channel_end.state_matches(&State::Uninitialized) {
+            if channel_end
+                .verify_state_matches(&State::Uninitialized)
+                .is_ok()
+            {
                 warn!(
                     "channel `{port_id}/{channel_id}` on chain `{chain_id}` at {chain_height} is uninitialized"
                 );
@@ -121,7 +124,7 @@ impl CommandRunner<HermesApp> for QueryChannels {
 
                 let client_state_chain_id_matches_dst_chain_id = dst_chain_id
                     .as_ref()
-                    .map(|dst_chain_id| dst_chain_id == &client_state.chain_id)
+                    .map(|dst_chain_id| dst_chain_id == &client_state.inner().chain_id.clone())
                     .unwrap_or(true);
 
                 if !client_state_chain_id_matches_dst_chain_id {
@@ -131,7 +134,7 @@ impl CommandRunner<HermesApp> for QueryChannels {
                 let counterparty = channel_end.counterparty();
 
                 Some(Counterparty {
-                    chain_id: client_state.chain_id.clone(),
+                    chain_id: client_state.inner().chain_id.clone(),
                     port_id: counterparty.port_id.clone(),
                     channel_id: counterparty.channel_id.clone(),
                 })

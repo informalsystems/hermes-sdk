@@ -4,8 +4,8 @@ use std::collections::BTreeMap;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
+use ibc::core::host::types::identifiers::ChainId;
 use ibc_relayer::keyring::{KeyRing, SigningKeyPair, Store};
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre::eyre;
 
 use crate::contexts::app::HermesApp;
@@ -34,7 +34,7 @@ impl CommandRunner<HermesApp> for KeysListCmd {
         let keyring = KeyRing::new_secp256k1(
             Store::Test,
             &chain_config.account_prefix,
-            &ChainId::from_string(&chain_config.id),
+            &ChainId::new(&chain_config.id).unwrap().to_string().into(),
             &chain_config.key_store_folder,
         )?;
 
