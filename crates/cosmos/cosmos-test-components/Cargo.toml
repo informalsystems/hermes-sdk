@@ -23,8 +23,6 @@ ibc                                 = { workspace = true }
 ibc-relayer                         = { workspace = true }
 ibc-proto                           = { workspace = true }
 
-tendermint-proto                    = { workspace = true }
-
 http            = { workspace = true }
 itertools       = { workspace = true }
 serde           = { workspace = true }
