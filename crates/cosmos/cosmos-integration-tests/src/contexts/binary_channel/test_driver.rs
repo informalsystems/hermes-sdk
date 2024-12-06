@@ -51,7 +51,8 @@ delegate_components! {
             ChainTypeAtComponent<Index<0>>,
             ChainTypeAtComponent<Index<1>>,
             ChainDriverTypeAtComponent,
-            RelayTypeAtComponent,
+            RelayTypeAtComponent<Index<0>, Index<1>>,
+            RelayTypeAtComponent<Index<1>, Index<0>>,
             BiRelayTypeAtComponent,
             RelayDriverTypeAtComponent,
         ]:
