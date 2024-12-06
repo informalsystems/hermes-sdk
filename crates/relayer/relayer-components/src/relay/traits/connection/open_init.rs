@@ -6,9 +6,8 @@ use crate::relay::types::aliases::SrcConnectionId;
 
 #[derive_component(ConnectionInitializerComponent, ConnectionInitializer<Relay>)]
 #[async_trait]
-pub trait CanInitConnection: HasRelayChains
-where
-    Self::SrcChain: HasInitConnectionOptionsType<Self::DstChain>,
+pub trait CanInitConnection:
+    HasRelayChains<SrcChain: HasInitConnectionOptionsType<Self::DstChain>>
 {
     async fn init_connection(
         &self,

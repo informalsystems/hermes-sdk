@@ -7,16 +7,20 @@ use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacke
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
+use crate::relay::traits::chains::{
+    CanRaiseRelayChainErrors, HasDstClientId, HasRelayChains, PacketOf,
+};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayer;
-use crate::relay::traits::target::DestinationTarget;
+use crate::relay::traits::target::{DestinationTarget, HasDestinationTargetChainTypes};
 
 pub struct BaseReceivePacketRelayer;
 
 impl<Relay, AckEvent> ReceivePacketRelayer<Relay> for BaseReceivePacketRelayer
 where
     Relay: HasRelayChains
+        + HasDestinationTargetChainTypes
+        + HasDstClientId
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
         + CanRaiseRelayChainErrors,
     Relay::SrcChain: CanBuildReceivePacketPayload<Relay::DstChain>,

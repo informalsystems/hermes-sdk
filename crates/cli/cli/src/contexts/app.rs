@@ -19,6 +19,12 @@ use hermes_cli_components::impls::commands::queries::client_state::{
 use hermes_cli_components::impls::commands::queries::client_status::{
     QueryClientStatusArgs, RunQueryClientStatusCommand,
 };
+use hermes_cli_components::impls::commands::queries::connection::{
+    QueryConnectionSubCommand, RunQueryConnectionSubCommand,
+};
+use hermes_cli_components::impls::commands::queries::connection_end::{
+    QueryConnectionEndArgs, RunQueryConnectionEndCommand,
+};
 use hermes_cli_components::impls::commands::queries::consensus_state::{
     QueryConsensusStateArgs, RunQueryConsensusStateCommand,
 };
@@ -59,7 +65,7 @@ use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::{ChainId, ClientId};
+use ibc::core::host::types::identifiers::{ChainId, ClientId, ConnectionId};
 use ibc_relayer::config::Config;
 use serde::Serialize;
 
@@ -131,6 +137,10 @@ delegate_components! {
 
 delegate_components! {
     HermesParserComponents {
+        (QueryConnectionEndArgs, symbol!("chain_id")): ParseFromString<ChainId>,
+        (QueryConnectionEndArgs, symbol!("connection_id")): ParseFromString<ConnectionId>,
+        (QueryConnectionEndArgs, symbol!("height")): ParseFromOptionalString<Height>,
+
         (QueryClientStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryClientStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
         (QueryClientStateArgs, symbol!("height")): ParseFromOptionalString<Height>,
@@ -166,6 +176,9 @@ delegate_components! {
 
         BootstrapSubCommand: RunBootstrapSubCommand,
         BootstrapChainArgs: RunBootstrapChainCommand<UseContext>,
+
+        QueryConnectionSubCommand: RunQueryConnectionSubCommand,
+        QueryConnectionEndArgs: RunQueryConnectionEndCommand,
     }
 }
 

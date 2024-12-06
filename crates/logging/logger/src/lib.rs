@@ -8,6 +8,7 @@ use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_logging_components::types::level::{
     LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,
 };
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
@@ -16,7 +17,7 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogR
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
-use hermes_relayer_components::relay::traits::target::ChainTarget;
+use hermes_relayer_components::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
@@ -66,11 +67,11 @@ delegate_components! {
                 LogClearPacketError<'a, Relay>,
             <'a, Relay: HasRelayChains>
                 LogRelayPacketStatus<'a, Relay>,
-            <'a, Relay: HasRelayChains, Target: ChainTarget<Relay>>
+            <'a, Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>, Target: RelayTarget>
                 LogSkipBuildUpdateClientMessage<'a, Relay, Target>,
-            <'a, Relay: HasRelayChains, Target: ChainTarget<Relay>>
+            <'a, Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>, Target: RelayTarget>
                 LogWaitUpdateClientHeightStatus<'a, Relay, Target>,
-            <'a, Relay: HasRelayChains, Target: ChainTarget<Relay>>
+            <'a, Relay: HasRelayChains, Target: RelayTarget>
                 LogBatchWorker<'a, Relay, Target>,
         ]: TracingLogger,
     }

@@ -2,7 +2,7 @@ use hermes_chain_components::traits::packet::fields::CanReadOutgoingPacketFields
 
 use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, PacketOf};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_filter::PacketFilter;
 
 pub struct MatchPacketSourceChain;
@@ -11,7 +11,7 @@ pub struct MatchPacketDestinationChain;
 
 impl<Relay> PacketFilter<Relay> for MatchPacketSourceChain
 where
-    Relay: CanRaiseRelayChainErrors,
+    Relay: HasRelayChains + CanRaiseRelayChainErrors,
     Relay::DstChain: CanQueryCounterpartyChainId<Relay::SrcChain>,
     Relay::SrcChain: HasChainId + CanReadOutgoingPacketFields<Relay::DstChain>,
 {
@@ -36,7 +36,7 @@ where
 
 impl<Relay> PacketFilter<Relay> for MatchPacketDestinationChain
 where
-    Relay: CanRaiseRelayChainErrors,
+    Relay: HasRelayChains + CanRaiseRelayChainErrors,
     Relay::SrcChain:
         CanQueryCounterpartyChainId<Relay::DstChain> + CanReadOutgoingPacketFields<Relay::DstChain>,
     Relay::DstChain: HasChainId,

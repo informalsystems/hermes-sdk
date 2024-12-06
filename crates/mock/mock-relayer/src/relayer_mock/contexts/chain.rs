@@ -10,6 +10,7 @@
 //! Merkle Trees and Proofs.
 
 use alloc::string::String;
+use core::ops::Deref;
 use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -32,8 +33,13 @@ use crate::relayer_mock::base::types::state::State;
 use crate::relayer_mock::util::clock::MockClock;
 use crate::relayer_mock::util::mutex::MutexUtil;
 
-#[derive(HasField)]
+#[derive(Clone)]
 pub struct MockChainContext {
+    pub fields: Arc<MockChainContextFields>,
+}
+
+#[derive(HasField)]
+pub struct MockChainContextFields {
     pub name: String,
     pub past_chain_states: Arc<Mutex<StateStore>>,
     pub current_height: Arc<Mutex<MockHeight>>,
@@ -43,20 +49,31 @@ pub struct MockChainContext {
     pub runtime: MockRuntimeContext,
 }
 
+impl Deref for MockChainContext {
+    type Target = MockChainContextFields;
+
+    fn deref(&self) -> &Self::Target {
+        &self.fields
+    }
+}
+
 impl MockChainContext {
     pub fn new(name: String, clock: Arc<MockClock>) -> Self {
         let runtime = MockRuntimeContext::new(clock);
         let chain_state = State::default();
         let initial_state: StateStore =
             HashMap::from([(MockHeight::default(), chain_state.clone())]);
+
         Self {
-            name,
-            past_chain_states: Arc::new(Mutex::new(initial_state)),
-            current_height: Arc::new(Mutex::new(Height(1))),
-            current_state: Arc::new(Mutex::new(chain_state)),
-            consensus_states: Arc::new(Mutex::new(HashMap::new())),
-            channel_to_client: Arc::new(Mutex::new(HashMap::new())),
-            runtime,
+            fields: Arc::new(MockChainContextFields {
+                name,
+                past_chain_states: Arc::new(Mutex::new(initial_state)),
+                current_height: Arc::new(Mutex::new(Height(1))),
+                current_state: Arc::new(Mutex::new(chain_state)),
+                consensus_states: Arc::new(Mutex::new(HashMap::new())),
+                channel_to_client: Arc::new(Mutex::new(HashMap::new())),
+                runtime,
+            }),
         }
     }
 

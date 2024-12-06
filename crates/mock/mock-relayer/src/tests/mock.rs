@@ -2,7 +2,7 @@ use alloc::string::String;
 use std::time::Duration;
 
 use hermes_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAck;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{HasDstClientId, HasSrcClientId};
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use tracing::info;

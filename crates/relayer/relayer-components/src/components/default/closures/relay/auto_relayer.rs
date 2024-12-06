@@ -9,7 +9,11 @@ use hermes_runtime_components::traits::task::CanRunConcurrentTasks;
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
+use crate::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, HasTargetChains,
+    SourceTarget,
+};
 
 pub trait CanUseDefaultAutoRelayer: UseDefaultAutoRelayer {}
 
@@ -20,6 +24,11 @@ where
     Relay: Clone
         + HasRuntime
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
+        + HasTargetChains<SourceTarget>
+        + HasTargetChains<DestinationTarget>
         + UseDefaultEventRelayer
         + HasComponents<Components = Components>,
     SrcChain: HasEventSubscription + HasErrorType,

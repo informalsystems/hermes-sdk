@@ -7,7 +7,7 @@ use hermes_relayer_components::chain::traits::queries::send_packets::CanQuerySen
 use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::CanQueryUnreceivedAcksSequences;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{HasDstChain, HasSrcChain};
 use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
 use ibc_relayer::config::PacketFilter;

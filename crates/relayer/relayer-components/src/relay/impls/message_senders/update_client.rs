@@ -1,9 +1,11 @@
 use alloc::collections::BTreeSet;
 use alloc::vec::Vec;
 
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+
 use crate::chain::traits::types::ibc::{HasCounterpartyMessageHeight, HasIbcChainTypes};
 use crate::relay::traits::ibc_message_sender::IbcMessageSender;
-use crate::relay::traits::target::ChainTarget;
+use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 use crate::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 
 pub struct SendIbcMessagesWithUpdateClient<Sender>(pub Sender);
@@ -11,12 +13,15 @@ pub struct SendIbcMessagesWithUpdateClient<Sender>(pub Sender);
 impl<InSender, Relay, Sink, Target, TargetChain, CounterpartyChain>
     IbcMessageSender<Relay, Sink, Target> for SendIbcMessagesWithUpdateClient<InSender>
 where
-    Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
+    Target: RelayTarget,
+    Relay: HasTargetChainTypes<
+            Target,
+            TargetChain = TargetChain,
+            CounterpartyChain = CounterpartyChain,
+        > + CanBuildTargetUpdateClientMessage<Target>,
     InSender: IbcMessageSender<Relay, Sink, Target>,
-    TargetChain: HasIbcChainTypes<CounterpartyChain>,
-    TargetChain: HasCounterpartyMessageHeight<CounterpartyChain>,
+    TargetChain: HasMessageResponseType + HasCounterpartyMessageHeight<CounterpartyChain>,
     CounterpartyChain: HasIbcChainTypes<TargetChain>,
-    Relay: CanBuildTargetUpdateClientMessage<Target>,
 {
     async fn send_messages(
         relay: &Relay,

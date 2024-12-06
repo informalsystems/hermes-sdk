@@ -4,10 +4,10 @@ use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOp
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenAckPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::channel::open_ack::ChannelOpenAckRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::target::SourceTarget;
+use crate::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
 use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
 
 /**
@@ -27,6 +27,8 @@ pub struct RelayChannelOpenAck;
 impl<Relay, SrcChain, DstChain> ChannelOpenAckRelayer<Relay> for RelayChannelOpenAck
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasSourceTargetChainTypes
+        + HasRelayClientIds
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
         + CanRaiseRelayChainErrors,
     SrcChain:

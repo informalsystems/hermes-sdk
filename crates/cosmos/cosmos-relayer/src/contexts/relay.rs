@@ -3,6 +3,7 @@ use alloc::sync::Arc;
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::field::impls::use_field::UseField;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_error::types::Error;
@@ -14,14 +15,24 @@ use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
+use hermes_relayer_components::multi::traits::chain_at::{
+    ChainGetterAtComponent, ChainTypeAtComponent,
+};
+use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
-use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
+use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelay;
+use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
+use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetter;
+use hermes_relayer_components::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
+use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetterComponent;
+use hermes_relayer_components_extra::batch::traits::types::CanUseMessageBatchChannel;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -38,11 +49,11 @@ use crate::types::packet_filter::PacketFilter as PacketFilterConfig;
 
 #[derive(Clone)]
 pub struct CosmosRelay {
-    pub base_relay: Arc<BaseCosmosRelay>,
+    pub fields: Arc<CosmosRelayFields>,
 }
 
 #[derive(HasField)]
-pub struct BaseCosmosRelay {
+pub struct CosmosRelayFields {
     pub runtime: HermesRuntime,
     pub src_chain: CosmosChain,
     pub dst_chain: CosmosChain,
@@ -55,10 +66,10 @@ pub struct BaseCosmosRelay {
 }
 
 impl Deref for CosmosRelay {
-    type Target = BaseCosmosRelay;
+    type Target = CosmosRelayFields;
 
-    fn deref(&self) -> &BaseCosmosRelay {
-        &self.base_relay
+    fn deref(&self) -> &CosmosRelayFields {
+        &self.fields
     }
 }
 
@@ -74,7 +85,7 @@ impl CosmosRelay {
         dst_chain_message_batch_sender: CosmosBatchSender,
     ) -> Self {
         let relay = Self {
-            base_relay: Arc::new(BaseCosmosRelay {
+            fields: Arc::new(CosmosRelayFields {
                 runtime,
                 src_chain,
                 dst_chain,
@@ -116,6 +127,24 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
+        [
+            ChainTypeAtComponent<Src>,
+            ChainGetterAtComponent<Src>,
+        ]:
+            UseField<symbol!("src_chain")>,
+        [
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Dst>,
+        ]:
+            UseField<symbol!("dst_chain")>,
+        ClientIdAtGetterComponent<Src, Dst>:
+            UseField<symbol!("src_client_id")>,
+        ClientIdAtGetterComponent<Dst, Src>:
+            UseField<symbol!("dst_client_id")>,
+        MessageBatchSenderGetterComponent<Src>:
+            UseField<symbol!("src_chain_message_batch_sender")>,
+        MessageBatchSenderGetterComponent<Dst>:
+            UseField<symbol!("dst_chain_message_batch_sender")>,
     }
 }
 
@@ -133,28 +162,6 @@ impl HasComponents for CosmosRelay {
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
 
-impl ProvideRelayChains<CosmosRelay> for CosmosRelayComponents {
-    type SrcChain = CosmosChain;
-
-    type DstChain = CosmosChain;
-
-    fn src_chain(relay: &CosmosRelay) -> &CosmosChain {
-        &relay.src_chain
-    }
-
-    fn dst_chain(relay: &CosmosRelay) -> &CosmosChain {
-        &relay.dst_chain
-    }
-
-    fn src_client_id(relay: &CosmosRelay) -> &ClientId {
-        &relay.src_client_id
-    }
-
-    fn dst_client_id(relay: &CosmosRelay) -> &ClientId {
-        &relay.dst_client_id
-    }
-}
-
 impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
     async fn should_relay_packet(relay: &CosmosRelay, packet: &Packet) -> Result<bool, Error> {
         Ok(relay
@@ -169,14 +176,17 @@ impl PacketMutexGetter<CosmosRelay> for CosmosRelayComponents {
     }
 }
 
-impl MessageBatchSenderGetter<CosmosRelay, SourceTarget> for CosmosRelayComponents {
-    fn get_batch_sender(relay: &CosmosRelay) -> &CosmosBatchSender {
-        &relay.src_chain_message_batch_sender
-    }
+pub trait CanUseCosmosRelay:
+    HasRelayClientIds
+    + CanAutoRelay<SourceTarget>
+    + CanAutoRelay<DestinationTarget>
+    + HasSourceTargetChainTypes
+    + HasDestinationTargetChainTypes
+    + CanCreateClient<SourceTarget>
+    + CanCreateClient<DestinationTarget>
+    + CanUseMessageBatchChannel<Src>
+    + CanUseMessageBatchChannel<Dst>
+{
 }
 
-impl MessageBatchSenderGetter<CosmosRelay, DestinationTarget> for CosmosRelayComponents {
-    fn get_batch_sender(relay: &CosmosRelay) -> &CosmosBatchSender {
-        &relay.dst_chain_message_batch_sender
-    }
-}
+impl CanUseCosmosRelay for CosmosRelay {}

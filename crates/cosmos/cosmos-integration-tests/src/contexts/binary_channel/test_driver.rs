@@ -48,7 +48,8 @@ delegate_components! {
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
-            ChainTypeAtComponent,
+            ChainTypeAtComponent<Index<0>>,
+            ChainTypeAtComponent<Index<1>>,
             ChainDriverTypeAtComponent,
             RelayTypeAtComponent,
             BiRelayTypeAtComponent,

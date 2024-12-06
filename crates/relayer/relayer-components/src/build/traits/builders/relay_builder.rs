@@ -1,17 +1,18 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::ibc::HasClientIdType;
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
-use crate::multi::traits::chain_at::{ChainIdAt, HasChainTypeAt};
-use crate::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt};
+use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
+use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 
 #[derive_component(RelayBuilderComponent, RelayBuilder<Build>)]
 #[async_trait]
 pub trait CanBuildRelay<Src: Async, Dst: Async>:
-    HasBoundedRelayTypeAt<Src, Dst>
-    + HasChainTypeAt<Src, Chain: HasChainIdType>
-    + HasChainTypeAt<Dst, Chain: HasChainIdType>
+    HasRelayTypeAt<Src, Dst>
+    + HasChainTypeAt<Src, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, Dst>>>
+    + HasChainTypeAt<Dst, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, Src>>>
     + HasErrorType
 {
     async fn build_relay(

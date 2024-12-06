@@ -1,3 +1,5 @@
+use alloc::boxed::Box;
+
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -20,8 +22,7 @@ pub struct ClearAckPackets;
 
 pub struct RelayPacketTask<Relay>
 where
-    Relay: HasRelayChains,
-    Relay::DstChain: HasWriteAckEvent<Relay::SrcChain>,
+    Relay: HasRelayChains<DstChain: HasWriteAckEvent<Relay::SrcChain>>,
 {
     pub relay: Relay,
     pub height: HeightOf<Relay::DstChain>,
@@ -64,7 +65,7 @@ where
 
 impl<Relay> PacketClearer<Relay> for ClearAckPackets
 where
-    Relay: Clone + HasRuntime + CanRaiseRelayChainErrors + HasLogger,
+    Relay: Clone + HasRuntime + HasRelayChains + CanRaiseRelayChainErrors + HasLogger,
     Relay::DstChain:
         CanQueryAckPackets<Relay::SrcChain> + CanQueryPacketAcknowledgements<Relay::SrcChain>,
     Relay::SrcChain: CanQueryPacketCommitments<Relay::DstChain>
@@ -116,11 +117,13 @@ where
 
             let tasks = ack_packets
                 .into_iter()
-                .map(|(packet, ack)| RelayPacketTask {
-                    height: height.clone(),
-                    relay: relay.clone(),
-                    packet,
-                    ack,
+                .map(|(packet, ack)| {
+                    Box::new(RelayPacketTask {
+                        height: height.clone(),
+                        relay: relay.clone(),
+                        packet,
+                        ack,
+                    })
                 })
                 .collect();
 

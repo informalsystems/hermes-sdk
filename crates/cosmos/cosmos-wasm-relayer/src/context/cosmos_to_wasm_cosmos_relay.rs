@@ -2,6 +2,7 @@ use std::collections::BTreeSet;
 use std::sync::Arc;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::field::impls::use_field::UseField;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
@@ -21,14 +22,17 @@ use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
+use hermes_relayer_components::multi::traits::chain_at::{
+    ChainGetterAtComponent, ChainTypeAtComponent,
+};
+use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_components::relay::impls::fields::ProvideDefaultRelayFields;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetter, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::traits::chains::RelayChainsComponent;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
@@ -95,12 +99,24 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             ProvideHermesLogger,
+        [
+            ChainTypeAtComponent<Src>,
+            ChainGetterAtComponent<Src>,
+        ]:
+            UseField<symbol!("src_chain")>,
+        [
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Dst>,
+        ]:
+            UseField<symbol!("dst_chain")>,
+        ClientIdAtGetterComponent<Src, Dst>:
+            UseField<symbol!("src_client_id")>,
+        ClientIdAtGetterComponent<Dst, Src>:
+            UseField<symbol!("dst_client_id")>,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
-        RelayChainsComponent:
-            ProvideDefaultRelayFields,
     }
 }
 

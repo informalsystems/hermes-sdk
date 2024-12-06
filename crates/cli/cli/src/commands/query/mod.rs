@@ -1,6 +1,3 @@
-mod connection;
-pub use connection::QueryConnection;
-
 mod clients;
 pub use clients::QueryClients;
 
@@ -15,6 +12,7 @@ pub use channels::QueryChannels;
 
 mod packet;
 use hermes_cli_components::impls::commands::queries::client::QueryClientSubCommand;
+use hermes_cli_components::impls::commands::queries::connection::QueryConnectionSubCommand;
 use hermes_cli_components::traits::command::CanRunCommand;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
@@ -41,7 +39,7 @@ pub enum QueryCommands {
 
     /// Query connection information
     #[clap(subcommand)]
-    Connection(QueryConnection),
+    Connection(QueryConnectionSubCommand),
 
     /// Query channel information
     #[clap(subcommand)]
@@ -57,7 +55,7 @@ impl CommandRunner<HermesApp> for QueryCommands {
         match self {
             Self::Client(cmd) => app.run_command(cmd).await,
             Self::Clients(cmd) => cmd.run(app).await,
-            Self::Connection(cmd) => cmd.run(app).await,
+            Self::Connection(cmd) => app.run_command(cmd).await,
             Self::Connections(cmd) => cmd.run(app).await,
             Self::Channels(cmd) => cmd.run(app).await,
             Self::Channel(cmd) => cmd.run(app).await,

@@ -48,7 +48,6 @@ use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBu
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;

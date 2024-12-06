@@ -14,6 +14,9 @@ use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
+use hermes_relayer_components::relay::traits::target::{
+    HasDestinationTargetChainTypes, HasSourceTargetChainTypes,
+};
 
 use crate::components::extra::closures::chain::packet_relayer::UseExtraChainComponentsForPacketRelayer;
 use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;
@@ -27,6 +30,8 @@ impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraPacketRelayer for Re
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasLogger<Logger = Logger>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
         + HasPacketLock
         + UseExtraIbcMessageSender
         + HasRetryableError

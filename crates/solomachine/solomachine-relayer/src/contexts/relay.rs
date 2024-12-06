@@ -1,12 +1,17 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::field::impls::use_field::UseField;
 use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::relay::*;
-use hermes_relayer_components::relay::impls::fields::ProvideDefaultRelayFields;
-use hermes_relayer_components::relay::traits::chains::RelayChainsComponent;
+use hermes_relayer_components::multi::traits::chain_at::{
+    ChainGetterAtComponent, ChainTypeAtComponent,
+};
+use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
+use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -49,8 +54,20 @@ delegate_components! {
             ProvideDefaultRuntimeField,
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
-        RelayChainsComponent:
-            ProvideDefaultRelayFields,
+        [
+            ChainTypeAtComponent<Src>,
+            ChainGetterAtComponent<Src>,
+        ]:
+            UseField<symbol!("src_chain")>,
+        [
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Dst>,
+        ]:
+            UseField<symbol!("dst_chain")>,
+        ClientIdAtGetterComponent<Src, Dst>:
+            UseField<symbol!("src_client_id")>,
+        ClientIdAtGetterComponent<Dst, Src>:
+            UseField<symbol!("dst_client_id")>,
     }
 }
 
@@ -72,7 +89,7 @@ impl SolomachineRelay {
     }
 }
 
-pub trait CanUseSolomachineRelay: CanInitConnection
+pub trait CanUseSolomachineRelay: HasRelayClientIds + CanInitConnection
 where
     Self::SrcChain: HasInitConnectionOptionsType<Self::DstChain>,
 {
