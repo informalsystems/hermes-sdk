@@ -3,23 +3,26 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-use ibc_relayer::event::write_acknowledgement_try_from_abci_event;
-use ibc_relayer_types::core::ics04_channel::events::WriteAcknowledgement;
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::Height;
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::types::Height;
+use tendermint::block::Height as TmHeight;
+use tendermint::Error as TendermintError;
 use tendermint_rpc::error::Error as TendermintRpcError;
 use tendermint_rpc::Client;
 
 use crate::traits::rpc_client::HasRpcClient;
+use crate::types::events::channel::try_write_acknowledgment_from_abci_event;
+use crate::types::events::write_acknowledgment::WriteAckEvent;
 
 pub struct QueryCosmosWriteAckEvent;
 
 impl<Chain, Counterparty> WriteAckQuerier<Chain, Counterparty> for QueryCosmosWriteAckEvent
 where
-    Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>
+    Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAckEvent>
         + HasRpcClient
         + CanQueryChainHeight<Height = Height>
         + CanRaiseError<TendermintRpcError>
+        + CanRaiseError<TendermintError>
         + CanRaiseError<&'static str>,
     Counterparty: HasOutgoingPacketType<Chain, OutgoingPacket = Packet>,
 {
@@ -30,9 +33,11 @@ where
         let rpc_client = chain.rpc_client();
 
         let latest_height = chain.query_chain_height().await?;
+        let tm_height =
+            TmHeight::try_from(latest_height.revision_height()).map_err(Chain::raise_error)?;
 
         let block_results = rpc_client
-            .block_results(latest_height)
+            .block_results(tm_height)
             .await
             .map_err(Chain::raise_error)?;
 
@@ -40,9 +45,11 @@ where
             .begin_block_events
             .unwrap_or_default()
             .iter()
-            .filter_map(|ev| write_acknowledgement_try_from_abci_event(ev).ok())
+            .filter_map(|ev| try_write_acknowledgment_from_abci_event(ev).ok())
+            .flatten()
+            .map(WriteAckEvent::from)
             .filter(|ev| &ev.packet == packet)
-            .collect::<Vec<WriteAcknowledgement>>()
+            .collect::<Vec<WriteAckEvent>>()
             .first()
             .cloned();
 
@@ -56,9 +63,11 @@ where
                 let write_ack_event_from_txs = tx
                     .events
                     .iter()
-                    .filter_map(|ev| write_acknowledgement_try_from_abci_event(ev).ok())
+                    .filter_map(|ev| try_write_acknowledgment_from_abci_event(ev).ok())
+                    .flatten()
+                    .map(WriteAckEvent::from)
                     .filter(|ev| &ev.packet == packet)
-                    .collect::<Vec<WriteAcknowledgement>>()
+                    .collect::<Vec<WriteAckEvent>>()
                     .first()
                     .cloned();
                 if write_ack_event_from_txs.is_some() {

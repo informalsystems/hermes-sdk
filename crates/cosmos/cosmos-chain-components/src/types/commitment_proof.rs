@@ -4,8 +4,8 @@ use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofBytesGetter, CommitmentProofHeightGetter, HasCommitmentProofType,
     ProvideCommitmentProofType,
 };
+use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
-use ibc_relayer_types::core::ics02_client::height::Height;
 
 pub struct CosmosCommitmentProof {
     pub merkle_proof: MerkleProof,

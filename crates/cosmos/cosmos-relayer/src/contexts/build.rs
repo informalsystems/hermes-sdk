@@ -8,7 +8,7 @@ use std::str::FromStr;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
-use eyre::eyre;
+use eyre::{eyre, Report};
 use futures::lock::Mutex;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_error::types::Error;
@@ -28,12 +28,10 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use ibc_relayer::config::filter::PacketFilter;
+use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use ibc_relayer::keyring::{
     AnySigningKeyPair, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
 };
-use ibc_relayer::spawn::SpawnError;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
 
@@ -42,6 +40,7 @@ use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::error::HandleCosmosError;
 use crate::types::batch::CosmosBatchSender;
+use crate::types::packet_filter::PacketFilter;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(Clone)]
@@ -151,7 +150,7 @@ impl CosmosBuilder {
         let config_map = HashMap::from_iter(
             chain_configs
                 .into_iter()
-                .map(|config| (ChainId::from_string(&config.id), config)),
+                .map(|config| (ChainId::new(&config.id).unwrap(), config)),
         );
 
         Self {
@@ -170,11 +169,9 @@ impl CosmosBuilder {
     }
 
     pub async fn build_chain(&self, chain_id: &ChainId) -> Result<CosmosChain, Error> {
-        let chain_config = self
-            .config_map
-            .get(chain_id)
-            .cloned()
-            .ok_or_else(|| SpawnError::missing_chain_config(chain_id.clone()))?;
+        let chain_config = self.config_map.get(chain_id).cloned().ok_or_else(|| {
+            Report::msg(format!("missing configuration for chain ID `{chain_id}`"))
+        })?;
 
         self.build_chain_with_config(chain_config, self.key_map.get(chain_id))
             .await

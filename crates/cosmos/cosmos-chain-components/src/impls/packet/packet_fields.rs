@@ -1,11 +1,11 @@
 use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReader;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics04_channel::timeout::TimeoutHeight;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::Height;
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::channel::types::timeout::{TimeoutHeight, TimeoutTimestamp};
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};
+use ibc::primitives::Timestamp;
 
 pub struct CosmosPacketFieldReader;
 
@@ -31,33 +31,36 @@ where
     Counterparty::Height: From<Height>,
 {
     fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
-        &packet.source_channel
+        &packet.chan_id_on_a
     }
 
     fn outgoing_packet_dst_channel_id(packet: &Packet) -> &ChannelId {
-        &packet.destination_channel
+        &packet.chan_id_on_b
     }
 
     fn outgoing_packet_src_port(packet: &Packet) -> &PortId {
-        &packet.source_port
+        &packet.port_id_on_a
     }
 
     fn outgoing_packet_dst_port(packet: &Packet) -> &PortId {
-        &packet.destination_port
+        &packet.port_id_on_b
     }
 
     fn outgoing_packet_sequence(packet: &Packet) -> &Sequence {
-        &packet.sequence
+        &packet.seq_on_a
     }
 
     fn outgoing_packet_timeout_height(packet: &Packet) -> Option<Counterparty::Height> {
-        match &packet.timeout_height {
+        match &packet.timeout_height_on_b {
             TimeoutHeight::Never => None,
             TimeoutHeight::At(h) => Some((*h).into()),
         }
     }
 
     fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
-        Some(packet.timeout_timestamp)
+        match &packet.timeout_timestamp_on_b {
+            TimeoutTimestamp::Never => None,
+            TimeoutTimestamp::At(timestamp) => Some(*timestamp),
+        }
     }
 }

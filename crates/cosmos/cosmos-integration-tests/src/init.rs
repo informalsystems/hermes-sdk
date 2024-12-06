@@ -8,7 +8,7 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::setup::traits::driver::{CanBuildTestDriver, HasTestDriverType};
-use ibc_relayer_types::core::ics24_host::identifier::PortId;
+use ibc::core::host::types::identifiers::PortId;
 use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;

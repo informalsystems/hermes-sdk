@@ -99,12 +99,12 @@ use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::event::source::queries::all as all_queries;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_relayer_types::core::ics02_client::height::Height;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
@@ -270,8 +270,8 @@ impl CosmosChain {
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
     ) -> Self {
-        let chain_id = ChainId::from_string(&chain_config.id);
-        let chain_version = chain_id.version();
+        let chain_id = ChainId::new(&chain_config.id).unwrap();
+        let chain_version = chain_id.revision_number();
 
         let subscription = match event_source_mode {
             EventSourceMode::Push { url } => runtime.new_abci_event_subscription(

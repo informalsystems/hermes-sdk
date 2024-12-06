@@ -3,12 +3,14 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerier;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc::core::channel::types::channel::{ChannelEnd, State};
+use ibc::core::channel::types::error::ChannelError;
 use ibc::core::connection::types::ConnectionEnd;
+use ibc::core::host::types::error::IdentifierError;
+use ibc::core::host::types::identifiers::{ChainId, ChannelId, PortId};
+use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc_proto::Protobuf;
 use ibc_relayer::client_state::AnyClientState;
-use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
-use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use tendermint_proto::Error as TendermintProtoError;
 
 use crate::traits::abci_query::CanQueryAbci;
@@ -20,6 +22,8 @@ where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
         + CanQueryChainHeight
         + CanQueryAbci
+        + CanRaiseError<ChannelError>
+        + CanRaiseError<IdentifierError>
         + CanRaiseError<TendermintProtoError>
         + CanRaiseError<String>,
     Counterparty: HasChainIdType<ChainId = ChainId>,
@@ -44,11 +48,9 @@ where
         let channel_end = ChannelEnd::decode_vec(&channel_end_bytes).map_err(Chain::raise_error)?;
 
         // check if channel end is initialized, otherwize return error.
-        if channel_end.state_matches(&State::Uninitialized) {
-            return Err(Chain::raise_error(format!(
-                "channel with id `{channel_id}` is uninitialized"
-            )));
-        }
+        channel_end
+            .verify_state_matches(&State::Uninitialized)
+            .map_err(Chain::raise_error)?;
 
         let connection_id = channel_end.connection_hops.first().ok_or_else(|| {
             Chain::raise_error(format!("channel with id `{channel_id}` has no connections"))
@@ -76,6 +78,6 @@ where
         let client_state =
             AnyClientState::decode_vec(&client_state_bytes).map_err(Chain::raise_error)?;
 
-        Ok(client_state.chain_id())
+        ChainId::new(client_state.chain_id().as_str()).map_err(Chain::raise_error)
     }
 }

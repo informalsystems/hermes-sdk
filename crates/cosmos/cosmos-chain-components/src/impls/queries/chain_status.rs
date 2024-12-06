@@ -1,9 +1,10 @@
 use cgp::core::error::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
-use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::error::ClientError;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::error::IdentifierError;
+use ibc::core::host::types::identifiers::ChainId;
 use tendermint_rpc::{Client, Error as TendermintRpcError};
 
 use crate::traits::rpc_client::HasRpcClient;
@@ -17,7 +18,8 @@ where
         + HasChainStatusType<ChainStatus = ChainStatus>
         + HasRpcClient
         + CanRaiseError<TendermintRpcError>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<ClientError>
+        + CanRaiseError<IdentifierError>,
 {
     async fn query_chain_status(chain: &Chain) -> Result<Chain::ChainStatus, Chain::Error> {
         let rpc_client = chain.rpc_client();
@@ -29,8 +31,11 @@ where
             .await
             .map_err(Chain::raise_error)?;
 
+        let chain_id =
+            ChainId::new(response.header.chain_id.as_str()).map_err(Chain::raise_error)?;
+
         let height = Height::new(
-            ChainId::chain_version(response.header.chain_id.as_str()),
+            chain_id.revision_number(),
             u64::from(abci_info.last_block_height),
         )
         .map_err(Chain::raise_error)?;

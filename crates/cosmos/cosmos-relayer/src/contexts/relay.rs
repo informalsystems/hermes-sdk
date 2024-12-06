@@ -28,13 +28,13 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::error::HandleCosmosError;
 use crate::types::batch::CosmosBatchSender;
+use crate::types::packet_filter::PacketFilter as PacketFilterConfig;
 
 #[derive(Clone)]
 pub struct CosmosRelay {
@@ -159,8 +159,7 @@ impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
     async fn should_relay_packet(relay: &CosmosRelay, packet: &Packet) -> Result<bool, Error> {
         Ok(relay
             .packet_filter
-            .channel_policy
-            .is_allowed(&packet.source_port, &packet.source_channel))
+            .is_allowed(&packet.port_id_on_a, &packet.chan_id_on_a))
     }
 }
 

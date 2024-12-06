@@ -7,6 +7,7 @@ use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
+use hermes_cosmos_relayer::types::packet_filter::PacketFilter as PacketFilterConfig;
 use hermes_error::types::Error;
 use hermes_logger::{HermesLogger, ProvideHermesLogger};
 use hermes_logging_components::traits::has_logger::{
@@ -36,9 +37,8 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
 
 use crate::context::chain::WasmCosmosChain;
 
@@ -140,8 +140,7 @@ impl PacketFilter<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayComponents
     ) -> Result<bool, Error> {
         Ok(relay
             .packet_filter
-            .channel_policy
-            .is_allowed(&packet.source_port, &packet.source_channel))
+            .is_allowed(&packet.port_id_on_a, &packet.chan_id_on_a))
     }
 }
 

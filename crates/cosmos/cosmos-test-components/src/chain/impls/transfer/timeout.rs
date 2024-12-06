@@ -4,7 +4,8 @@ use hermes_cosmos_chain_components::types::status::Time;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::timestamp::{HasTimeType, HasTimeoutType};
 use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculator;
-use ibc_relayer_types::timestamp::Timestamp;
+use ibc::primitives::Timestamp;
+use time::OffsetDateTime;
 
 pub struct IbcTransferTimeoutAfterSeconds<const SECS: u64>;
 
@@ -15,7 +16,7 @@ where
 {
     fn ibc_transfer_timeout_time(_chain: &Chain, current_time: &Time) -> Option<Timestamp> {
         let time = (*current_time + Duration::from_secs(SECS)).unwrap();
-        Some(time.into())
+        OffsetDateTime::from(time).try_into().ok()
     }
 
     fn ibc_transfer_timeout_height(

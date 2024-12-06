@@ -1,6 +1,8 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
+use hermes_cosmos_chain_components::types::tendermint::{
+    TendermintClientState, TendermintConsensusState,
+};
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, CanConvertBothWays};
@@ -16,7 +18,6 @@ use hermes_wasm_encoding_components::types::client_message::WasmClientMessage;
 use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 use hermes_wasm_encoding_components::types::consensus_state::WasmConsensusState;
 use ibc::core::client::types::Height;
-use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost_types::Any;
 
 use crate::encoding::components::*;

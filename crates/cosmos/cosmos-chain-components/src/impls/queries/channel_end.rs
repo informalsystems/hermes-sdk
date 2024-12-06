@@ -6,10 +6,10 @@ use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::core::channel::types::channel::ChannelEnd;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChannelId, PortId};
+use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc_proto::Protobuf;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
-use ibc_relayer_types::Height;
 use tendermint_proto::Error as TendermintProtoError;
 
 use crate::traits::abci_query::CanQueryAbci;

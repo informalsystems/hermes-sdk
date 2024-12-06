@@ -1,7 +1,7 @@
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetter;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
 
 use crate::traits::message::CosmosMessage;
 

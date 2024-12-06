@@ -6,7 +6,7 @@ use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOpti
 use hermes_relayer_components::chain::traits::types::ibc::HasConnectionIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
-use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
+use ibc::core::host::types::identifiers::ConnectionId;
 
 pub struct UseCosmosInitChannelOptions;
 
