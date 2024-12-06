@@ -9,9 +9,9 @@ use hermes_relayer_components::chain::traits::types::channel::{
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc_relayer_types::Height;
+use ibc::core::channel::types::channel::{ChannelEnd, State};
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChannelId, PortId};
 
 use crate::methods::encode::sign_data::sign_with_data;
 use crate::methods::proofs::channel::channel_proof_data;

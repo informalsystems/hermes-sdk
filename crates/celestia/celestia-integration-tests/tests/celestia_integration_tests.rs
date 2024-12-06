@@ -12,7 +12,7 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_test_components::setup::traits::run_test::CanRunTest;
-use ibc_relayer_types::core::ics24_host::identifier::PortId;
+use ibc::core::host::types::identifiers::PortId;
 
 // FIXME: Celestia currently can only be bootstrapped using CosmosBootstrap.
 // We need to refactor `CosmosBinaryChannelSetup` to make it support generic

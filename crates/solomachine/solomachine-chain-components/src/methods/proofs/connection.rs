@@ -1,9 +1,9 @@
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use ibc::core::connection::types::ConnectionEnd;
+use ibc::core::host::types::identifiers::ConnectionId;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::ibc::core::connection::v1::ConnectionEnd as ProtoConnectionEnd;
-use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use secp256k1::hashes::sha256;
 use secp256k1::{Message, Secp256k1, SecretKey};
 

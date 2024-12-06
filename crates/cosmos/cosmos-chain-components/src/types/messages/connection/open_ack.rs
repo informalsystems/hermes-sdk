@@ -1,9 +1,9 @@
+use ibc::core::client::types::Height;
 use ibc::core::connection::types::version::Version;
+use ibc::core::host::types::identifiers::ConnectionId;
+use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_proto::ibc::core::connection::v1::MsgConnectionOpenAck as ProtoMsgConnectionOpenAck;
-use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
-use ibc_relayer_types::signer::Signer;
-use ibc_relayer_types::Height;
 use prost_types::Any;
 
 use crate::methods::encode::encode_to_any;

@@ -1,9 +1,9 @@
 use alloc::sync::Arc;
 use core::fmt::Debug;
 
+use ibc::core::client::types::Height;
+use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any;
-use ibc_relayer_types::signer::Signer;
-use ibc_relayer_types::Height;
 
 #[derive(Debug, Clone)]
 pub struct CosmosMessage {

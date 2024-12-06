@@ -5,11 +5,11 @@ use hermes_relayer_components::chain::traits::queries::connection_end::{
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionEndType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use ibc::core::client::types::Height;
 use ibc::core::connection::types::ConnectionEnd;
+use ibc::core::host::types::identifiers::ConnectionId;
+use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc_proto::Protobuf;
-use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
-use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
-use ibc_relayer_types::Height;
 use tendermint_proto::Error as TendermintProtoError;
 
 use crate::traits::abci_query::CanQueryAbci;

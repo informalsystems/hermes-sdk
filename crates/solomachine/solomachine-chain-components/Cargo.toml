@@ -26,13 +26,13 @@ hermes-protobuf-encoding-components     = { workspace = true }
 ibc                                     = { workspace = true }
 ibc-proto                               = { workspace = true }
 ibc-relayer                             = { workspace = true }
-ibc-relayer-types                       = { workspace = true }
 ibc-telemetry                           = { workspace = true }
 tendermint                              = { workspace = true, features = ["secp256k1"] }
 
 serde           = { workspace = true }
 serde_derive    = { workspace = true }
 prost           = { workspace = true }
+prost-types     = { workspace = true }
 eyre            = { workspace = true }
 tokio           = { workspace = true }
 itertools       = { workspace = true }

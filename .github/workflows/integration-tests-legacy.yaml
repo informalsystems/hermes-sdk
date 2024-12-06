@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   integration-test:
+    if: false # Disable legacy tests as they depend on ibc-relayer-types
     runs-on: ubuntu-20.04
     timeout-minutes: 60
     strategy:

@@ -3,8 +3,6 @@ use hermes_error::types::Error;
 use ibc_proto::google::protobuf::Any;
 pub use ibc_proto::ibc::lightclients::solomachine::v3::ClientState as ProtoSolomachineClientState;
 use ibc_proto::Protobuf;
-use ibc_relayer_types::keys::ROUTER_KEY;
-use ibc_relayer_types::tx_msg::Msg;
 use prost::Message;
 
 use crate::types::consensus_state::SolomachineConsensusState;
@@ -41,7 +39,7 @@ impl TryFrom<Any> for SolomachineClientState {
     }
 }
 
-impl Msg for SolomachineClientState {
+/*impl Msg for SolomachineClientState {
     type ValidationError = Error;
     type Raw = ProtoSolomachineClientState;
 
@@ -52,7 +50,7 @@ impl Msg for SolomachineClientState {
     fn type_url(&self) -> String {
         SOLOMACHINE_CLIENT_STATE_TYPE_URL.to_string()
     }
-}
+}*/
 
 impl Protobuf<ProtoSolomachineClientState> for SolomachineClientState {}
 

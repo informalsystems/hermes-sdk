@@ -1,10 +1,10 @@
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ClientId;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::ibc::lightclients::tendermint::v1::ConsensusState as ProtoConsensusState;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use ibc_relayer_types::Height;
 use secp256k1::SecretKey;
 
 use crate::methods::encode::sign_data::sign_with_data;

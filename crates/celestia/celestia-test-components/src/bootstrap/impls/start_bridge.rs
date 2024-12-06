@@ -8,7 +8,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use ibc::core::host::types::identifiers::ChainId;
 
 use crate::bootstrap::traits::start_bridge::BridgeStarter;
 use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;

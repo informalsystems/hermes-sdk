@@ -4,12 +4,12 @@ use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstima
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use http::uri::InvalidUri;
+use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::service_client::ServiceClient;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, SimulateRequest, SimulateResponse, Tx};
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use ibc_relayer::config::default::max_grpc_decoding_size;
 use ibc_relayer::error::Error as RelayerError;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use prost::Message;
 use tonic::codegen::http::Uri;
 use tonic::transport::Error as TransportError;

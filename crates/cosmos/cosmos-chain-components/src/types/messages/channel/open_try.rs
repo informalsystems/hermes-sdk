@@ -1,7 +1,7 @@
+use ibc::core::client::types::Height;
+use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::channel::v1::{Channel, MsgChannelOpenTry as ProtoMsgChannelOpenTry};
-use ibc_relayer_types::signer::Signer;
-use ibc_relayer_types::Height;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;

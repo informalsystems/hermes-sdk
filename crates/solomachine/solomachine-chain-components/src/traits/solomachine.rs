@@ -2,9 +2,9 @@ use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
+use ibc::core::channel::types::packet::Packet;
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 use secp256k1::SecretKey;
 
 use crate::methods::encode::public_key::PublicKey;

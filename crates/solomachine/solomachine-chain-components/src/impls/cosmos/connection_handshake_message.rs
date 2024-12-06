@@ -12,8 +12,8 @@ use hermes_relayer_components::chain::traits::types::connection::{
     HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::methods::encode::sign_data::timestamped_sign_data_to_bytes;
 use crate::types::payloads::connection::{

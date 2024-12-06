@@ -5,9 +5,9 @@ use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTrans
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::memo::HasMemoType;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChannelId, PortId};
+use ibc::primitives::Timestamp;
 
 use crate::chain::types::amount::Amount;
 use crate::chain::types::messages::token_transfer::TokenTransferMessage;

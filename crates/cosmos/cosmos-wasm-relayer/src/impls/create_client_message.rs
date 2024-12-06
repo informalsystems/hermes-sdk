@@ -52,7 +52,7 @@ where
             .encode(&payload.client_state)
             .map_err(Chain::raise_error)?;
 
-        let latest_height = payload.client_state.latest_height();
+        let latest_height = payload.client_state.inner().latest_height;
 
         let wasm_client_state = WasmClientState {
             data: tm_client_state_bytes,

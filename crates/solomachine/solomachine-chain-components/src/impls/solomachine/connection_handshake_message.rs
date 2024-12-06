@@ -16,7 +16,7 @@ use hermes_relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 
 use crate::types::message::SolomachineMessage;
 

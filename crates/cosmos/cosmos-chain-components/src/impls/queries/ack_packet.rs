@@ -5,17 +5,15 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketQue
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-use ibc_relayer::chain::cosmos::query::packet_query;
-use ibc_relayer::chain::requests::{Qualified, QueryHeight, QueryPacketEventDataRequest};
-use ibc_relayer_types::core::ics04_channel::events::WriteAcknowledgement;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc_relayer_types::events::WithBlockDataType;
-use ibc_relayer_types::Height;
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};
 use tendermint::abci::Event as AbciEvent;
+use tendermint_rpc::query::Query;
 use tendermint_rpc::{Client, Error as RpcError, Order};
 
 use crate::traits::rpc_client::HasRpcClient;
+use crate::types::events::write_acknowledgment::WriteAckEvent;
 
 pub struct QueryCosmosAckPacket;
 
@@ -27,7 +25,7 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
             Event = Arc<AbciEvent>,
-        > + HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>
+        > + HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAckEvent>
         + HasRpcClient
         + CanRaiseError<RpcError>
         + CanRaiseError<&'static str>,
@@ -42,22 +40,32 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_port_id: &PortId,
         sequence: &Sequence,
-        height: &Height,
-    ) -> Result<(Packet, WriteAcknowledgement), Chain::Error> {
+        _height: &Height,
+    ) -> Result<(Packet, WriteAckEvent), Chain::Error> {
         // The ack packet are queried from the destination chain, so the destination
         // channel id and port id are the counterparty channel id and counterparty port id.
-        let request = QueryPacketEventDataRequest {
-            event_id: WithBlockDataType::WriteAck,
-            source_channel_id: channel_id.clone(),
-            source_port_id: port_id.clone(),
-            destination_channel_id: counterparty_channel_id.clone(),
-            destination_port_id: counterparty_port_id.clone(),
-            sequences: vec![*sequence],
-            height: Qualified::SmallerEqual(QueryHeight::Specific(*height)),
-        };
+        let query = Query::eq(
+            format!("{}.packet_src_channel", "write_acknowledgement"),
+            channel_id.to_string(),
+        )
+        .and_eq(
+            format!("{}.packet_src_port", "write_acknowledgement"),
+            port_id.to_string(),
+        )
+        .and_eq(
+            format!("{}.packet_dst_channel", "write_acknowledgement"),
+            counterparty_channel_id.to_string(),
+        )
+        .and_eq(
+            format!("{}.packet_dst_port", "write_acknowledgement"),
+            counterparty_port_id.to_string(),
+        )
+        .and_eq(
+            format!("{}.packet_sequence", "write_acknowledgement"),
+            sequence.to_string(),
+        );
 
         let mut events = vec![];
-        let query = packet_query(&request, *sequence);
 
         let response = chain
             .rpc_client()
@@ -75,7 +83,7 @@ where
             events.append(&mut event);
         }
 
-        let write_acks: Vec<WriteAcknowledgement> = events
+        let write_acks: Vec<WriteAckEvent> = events
             .iter()
             .filter_map(Chain::try_extract_write_ack_event)
             .collect();

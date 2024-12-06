@@ -45,18 +45,18 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimeType, ProvideTimeType, ProvideTimeoutType, TimeMeasurer,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::types::Height;
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{
-    ChainId, ChannelId, ClientId, ConnectionId, PortId,
+use ibc::core::host::types::identifiers::{
+    ChainId, ChannelId, ClientId, ConnectionId, PortId, Sequence,
 };
-use ibc_relayer_types::signer::Signer;
-use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::Height;
+use ibc::primitives::{Signer, Timestamp};
 use prost::{EncodeError, Message};
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
 use tendermint::{Hash, Time};
+use time::OffsetDateTime;
 
 use crate::traits::message::CosmosMessage;
 use crate::types::commitment_proof::ProvideCosmosCommitmentProof;
@@ -120,7 +120,7 @@ where
     Chain: HasHeightType<Height = Height> + HasChainId<ChainId = ChainId> + HasErrorType,
 {
     fn genesis_height(chain: &Chain) -> Height {
-        Height::from_tm(1_i64.try_into().unwrap(), chain.chain_id())
+        Height::new(chain.chain_id().revision_number(), 1).unwrap()
     }
 }
 
@@ -147,7 +147,7 @@ where
     type Timeout = Timestamp;
 
     fn has_timed_out(time: &Time, timeout: &Timestamp) -> bool {
-        &Timestamp::from(*time) > timeout
+        OffsetDateTime::from(*time) > OffsetDateTime::from(*timeout)
     }
 }
 
@@ -156,7 +156,9 @@ where
     Chain: HasMessageType<Message = CosmosMessage> + CanRaiseError<EncodeError>,
 {
     fn estimate_message_size(message: &CosmosMessage) -> Result<usize, Chain::Error> {
-        let raw = message.message.encode_protobuf(&Signer::dummy());
+        let raw = message.message.encode_protobuf(&Signer::from(
+            "cosmos000000000000000000000000000000000000000".to_string(),
+        ));
 
         Ok(raw.encoded_len())
     }

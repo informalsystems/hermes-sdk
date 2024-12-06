@@ -1,8 +1,8 @@
 use core::time::Duration;
 
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
+use ibc::core::client::types::Height;
 use ibc::core::connection::types::version::Version;
-use ibc_relayer_types::Height;
 
 use crate::types::sign_data::SolomachineTimestampedSignData;
 

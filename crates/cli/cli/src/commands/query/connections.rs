@@ -9,9 +9,8 @@ use hermes_relayer_components::chain::traits::queries::client_state::CanQueryCli
 use http::Uri;
 use ibc::core::connection::types::proto::v1::query_client::QueryClient;
 use ibc::core::connection::types::proto::v1::QueryConnectionsRequest;
-use ibc_relayer_types::core::ics02_client::client_state::ClientState;
-use ibc_relayer_types::core::ics03_connection::connection::IdentifiedConnectionEnd;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use ibc::core::connection::types::IdentifiedConnectionEnd;
+use ibc::core::host::types::identifiers::ChainId;
 use tracing::{info, warn};
 
 use crate::contexts::app::HermesApp;
@@ -81,8 +80,8 @@ impl CommandRunner<HermesApp> for QueryConnections {
 
                 let include = match client_state {
                     Ok(client_state) => {
-                        let counterparty_chain_id = client_state.chain_id();
-                        counterparty_chain_id == filter_chain_id
+                        let counterparty_chain_id = client_state.inner().chain_id();
+                        counterparty_chain_id == &filter_chain_id
                     }
                     Err(e) => {
                         warn!("failed to query client state for client `{client_id}`, skipping...");

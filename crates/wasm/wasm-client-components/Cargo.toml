@@ -21,7 +21,6 @@ hermes-protobuf-encoding-components     = { workspace = true }
 hermes-cosmos-encoding-components       = { workspace = true }
 hermes-wasm-encoding-components         = { workspace = true }
 
-ibc-relayer-types                       = { workspace = true }
 tendermint-proto                        = { workspace = true }
 ibc-proto                               = { workspace = true }
 ibc                                     = { workspace = true, features = ["borsh","schema","serde"] }

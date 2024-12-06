@@ -3,7 +3,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+use ibc::core::host::types::identifiers::{ChainId, ChannelId, PortId};
 
 use crate::commands::query::packet::util::PacketSequences;
 use crate::contexts::app::HermesApp;

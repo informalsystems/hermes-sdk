@@ -1,5 +1,5 @@
-use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
+use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 
 #[derive(Clone)]
 pub enum SolomachineEvent {
@@ -10,7 +10,7 @@ pub enum SolomachineEvent {
 #[derive(Clone)]
 pub struct SolomachineCreateClientEvent {
     pub client_id: ClientId,
-    pub client_state: ClientState,
+    pub client_state: TendermintClientState,
 }
 
 #[derive(Clone)]

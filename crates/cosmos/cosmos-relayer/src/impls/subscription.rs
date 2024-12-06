@@ -12,7 +12,7 @@ use hermes_async_runtime_components::subscription::traits::subscription::Subscri
 use hermes_error::types::Error;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
-use ibc_relayer_types::core::ics02_client::height::Height;
+use ibc::core::client::types::Height;
 use moka::future::Cache;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;

@@ -6,9 +6,9 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasRawCons
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ClientId;
+use ibc::cosmos_host::IBC_QUERY_PATH;
 use prost::{DecodeError, Message};
 use prost_types::Any;
 

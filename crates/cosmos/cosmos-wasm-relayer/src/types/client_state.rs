@@ -35,7 +35,7 @@ where
         let tendermint_client_state_bytes =
             encoding.encode(&client_state.tendermint_client_state)?;
 
-        let latest_height = client_state.tendermint_client_state.latest_height;
+        let latest_height = client_state.tendermint_client_state.inner().latest_height;
 
         let wasm_client_state = WasmClientState {
             data: tendermint_client_state_bytes,

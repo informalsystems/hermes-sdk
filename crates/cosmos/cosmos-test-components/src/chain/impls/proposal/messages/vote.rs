@@ -5,9 +5,9 @@ use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_test_components::chain::traits::proposal::messages::vote::VoteProposalMessageBuilder;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
+use ibc::primitives::Signer;
 use ibc_proto::cosmos::gov::v1::MsgVote;
 use ibc_proto::google::protobuf::Any;
-use ibc_relayer_types::signer::Signer;
 use prost::{Message, Name};
 
 use crate::chain::types::proposal_vote::ProposalVote;

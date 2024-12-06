@@ -5,8 +5,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_types::core::ics02_client::client_state::ClientState;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
 
 use crate::types::client_state::WasmTendermintClientState;
 
@@ -27,17 +26,17 @@ where
         + HasHeightType<Height = Height>,
 {
     fn client_state_latest_height(client_state: &WasmTendermintClientState) -> Height {
-        client_state.tendermint_client_state.latest_height
+        client_state.tendermint_client_state.inner().latest_height
     }
 
     fn client_state_is_frozen(client_state: &WasmTendermintClientState) -> bool {
-        client_state.tendermint_client_state.is_frozen()
+        client_state.tendermint_client_state.inner().is_frozen()
     }
 
     fn client_state_has_expired(
         client_state: &WasmTendermintClientState,
         elapsed: Duration,
     ) -> bool {
-        elapsed > client_state.tendermint_client_state.trusting_period
+        elapsed > client_state.tendermint_client_state.inner().trusting_period
     }
 }

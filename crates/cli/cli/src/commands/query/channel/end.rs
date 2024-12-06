@@ -3,11 +3,11 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
+use ibc::core::channel::types::channel::{ChannelEnd, State};
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChainId, ChannelId, PortId};
+use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc::primitives::proto::Protobuf;
-use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
-use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
-use ibc_relayer_types::Height;
 use oneline_eyre::eyre::eyre;
 
 use crate::contexts::app::HermesApp;
@@ -60,7 +60,7 @@ impl CommandRunner<HermesApp> for QueryChannelEnd {
         let height = self.height;
 
         let query_height = if let Some(height) = height {
-            Height::new(chain.chain_id.version(), height)?
+            Height::new(chain.chain_id.revision_number(), height)?
         } else {
             chain.query_chain_height().await?
         };
@@ -76,7 +76,10 @@ impl CommandRunner<HermesApp> for QueryChannelEnd {
 
         match channel_end {
             Ok(channel_end) => {
-                if channel_end.state_matches(&State::Uninitialized) {
+                if channel_end
+                    .verify_state_matches(&State::Uninitialized)
+                    .is_ok()
+                {
                     Err(eyre!(
                         "port '{}' & channel '{}' do not exist",
                         self.port_id,

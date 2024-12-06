@@ -20,10 +20,10 @@ use hermes_relayer_components::chain::traits::types::connection::{
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc::core::client::types::Height;
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use ibc_relayer_types::Height;
+use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 
 use crate::methods::proofs::client_state::client_state_proof_data;
 use crate::methods::proofs::connection::connection_proof_data;

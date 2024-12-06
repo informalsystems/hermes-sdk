@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::U
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use ibc::core::host::types::identifiers::ClientId;
 
 use crate::types::message::SolomachineMessage;
 

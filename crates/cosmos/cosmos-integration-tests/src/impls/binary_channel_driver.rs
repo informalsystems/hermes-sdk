@@ -9,7 +9,7 @@ use hermes_relayer_components::multi::types::index::Index;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverTypeAt;
 use hermes_test_components::setup::traits::driver::HasTestDriverType;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
+use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
 use crate::contexts::chain_driver::CosmosChainDriver;

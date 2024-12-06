@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use ibc::core::host::types::identifiers::ChainId;
 use toml::Value;
 
 #[derive(Clone)]

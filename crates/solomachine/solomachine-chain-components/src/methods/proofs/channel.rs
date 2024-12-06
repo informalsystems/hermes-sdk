@@ -1,7 +1,7 @@
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
+use ibc::core::channel::types::channel::ChannelEnd;
+use ibc::core::host::types::identifiers::ChannelId;
 use ibc_proto::ibc::core::channel::v1::Channel as ProtoChannelEnd;
-use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
-use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 
 use crate::types::client_state::SolomachineClientState;
 use crate::types::sign_data::SolomachineSignData;

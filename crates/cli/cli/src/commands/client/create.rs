@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use eyre::eyre;
-use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
+use ibc::clients::tendermint::types::TrustThreshold;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct CreateClientArgs {

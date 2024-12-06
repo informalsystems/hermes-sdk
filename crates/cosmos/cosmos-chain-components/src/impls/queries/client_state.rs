@@ -8,15 +8,15 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasRawClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::error::IdentifierError;
+use ibc::core::host::types::identifiers::ClientId;
+use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc_proto::ibc::core::client::v1::{
     IdentifiedClientState, QueryClientStatesRequest as ProtoQueryClientStatesRequest,
     QueryClientStatesResponse,
 };
 use ibc_relayer::chain::requests::{PageRequest, QueryClientStatesRequest};
-use ibc_relayer_types::core::ics24_host::error::ValidationError;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
-use ibc_relayer_types::Height;
 use prost::{DecodeError, Message};
 use prost_types::Any;
 
@@ -90,7 +90,10 @@ where
         height: &Height,
     ) -> Result<Vec<(ClientId, Any)>, Chain::Error> {
         let request = ProtoQueryClientStatesRequest::from(QueryClientStatesRequest {
-            pagination: Some(PageRequest::all()),
+            pagination: Some(PageRequest {
+                limit: u32::MAX as u64,
+                ..Default::default()
+            }),
         });
 
         let data = prost::Message::encode_to_vec(&request);
@@ -123,7 +126,7 @@ pub trait CanParseClientStateEntryToAny<Counterparty>:
 impl<Chain, Counterparty> CanParseClientStateEntryToAny<Counterparty> for Chain
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
-        + CanRaiseError<ValidationError>
+        + CanRaiseError<IdentifierError>
         + CanRaiseError<&'static str>,
 {
     fn parse_client_state_entry_to_any(

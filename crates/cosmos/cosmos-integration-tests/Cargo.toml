@@ -28,9 +28,9 @@ hermes-wasm-test-components         = { workspace = true }
 hermes-runtime-components           = { workspace = true }
 hermes-logging-components           = { workspace = true }
 
+ibc                                 = { workspace = true }
 ibc-proto                           = { workspace = true }
 ibc-relayer                         = { workspace = true }
-ibc-relayer-types                   = { workspace = true }
 tendermint-rpc                      = { workspace = true }
 
 eyre                = { workspace = true }

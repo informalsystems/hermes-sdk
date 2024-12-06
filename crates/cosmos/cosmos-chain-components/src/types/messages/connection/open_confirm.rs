@@ -1,8 +1,8 @@
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ConnectionId;
+use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::connection::v1::MsgConnectionOpenConfirm as ProtoMsgConnectionOpenConfirm;
-use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
-use ibc_relayer_types::signer::Signer;
-use ibc_relayer_types::Height;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;

@@ -10,8 +10,8 @@ use hermes_relayer_components::chain::traits::queries::client_state::CanQueryCli
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
-use ibc_relayer_types::core::ics02_client::height::Height;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use oneline_eyre::eyre::Context;
 use tracing::info;
 
@@ -57,7 +57,7 @@ impl CommandRunner<HermesApp> for ClientUpdate {
             .query_client_state_with_latest_height(PhantomData::<CosmosChain>, &self.client_id)
             .await?;
 
-        let reference_chain_id = client_state.chain_id;
+        let reference_chain_id = client_state.inner().chain_id.clone();
         let reference_chain = builder.build_chain(&reference_chain_id).await?;
 
         let relayer = builder
@@ -72,7 +72,7 @@ impl CommandRunner<HermesApp> for ClientUpdate {
 
         let target_height = match self.target_height {
             Some(height) => {
-                let height = Height::new(reference_chain_id.version(), height)
+                let height = Height::new(reference_chain_id.revision_number(), height)
                     .wrap_err("Invalid value for --target-height")?;
 
                 info!("Updating client using specified target height: {height}");

@@ -3,10 +3,9 @@ use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
+use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};
 use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;
-use ibc_relayer::chain::requests::QueryUnreceivedAcksRequest;
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
+use ibc_proto::ibc::core::channel::v1::QueryUnreceivedAcksRequest;
 use tonic::transport::Error as TransportError;
 use tonic::{Request, Status};
 
@@ -38,13 +37,13 @@ where
         .await
         .map_err(Chain::raise_error)?;
 
-        let raw_request = QueryUnreceivedAcksRequest {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
-            packet_ack_sequences: sequences.to_vec(),
+        let raw_request: QueryUnreceivedAcksRequest = QueryUnreceivedAcksRequest {
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            packet_ack_sequences: sequences.iter().map(|sequence| sequence.value()).collect(),
         };
 
-        let request = Request::new(raw_request.into());
+        let request = Request::new(raw_request);
 
         let response = client
             .unreceived_acks(request)

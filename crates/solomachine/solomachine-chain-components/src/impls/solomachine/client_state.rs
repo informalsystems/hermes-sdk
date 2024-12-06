@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_types::core::ics02_client::height::Height;
+use ibc::core::client::types::Height;
 
 use crate::types::client_state::SolomachineClientState;
 

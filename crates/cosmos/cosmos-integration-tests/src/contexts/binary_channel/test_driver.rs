@@ -19,7 +19,7 @@ use hermes_test_components::driver::traits::types::chain_driver_at::{
 use hermes_test_components::driver::traits::types::relay_driver_at::{
     RelayDriverGetterAt, RelayDriverTypeAtComponent,
 };
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
+use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;

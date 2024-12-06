@@ -1,6 +1,10 @@
-use cgp::prelude::{Async, HasErrorType};
+use cgp::prelude::{Async, CanRaiseError, HasErrorType};
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
+use hermes_encoding_components::traits::convert::CanConvert;
+use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
+use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -8,8 +12,9 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientMessageOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use ibc_relayer_types::tx_msg::Msg;
 
+use crate::types::client_state::SolomachineClientState;
+use crate::types::consensus_state::SolomachineConsensusState;
 use crate::types::payloads::client::SolomachineCreateClientPayload;
 
 pub struct BuildCreateSolomachineClientMessage;
@@ -22,23 +27,33 @@ where
     type CreateClientMessageOptions = ();
 }
 
-impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateSolomachineClientMessage
 where
     Chain: HasMessageType<Message = CosmosMessage>
         + HasCreateClientMessageOptionsType<Counterparty>
-        + HasErrorType,
-    Counterparty:
-        HasCreateClientPayloadType<Chain, CreateClientPayload = SolomachineCreateClientPayload>,
+        + HasErrorType
+        + CanRaiseError<Encoding::Error>,
+    Counterparty: HasCreateClientPayloadType<Chain, CreateClientPayload = SolomachineCreateClientPayload>
+        + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
+    Encoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanConvert<SolomachineClientState, Any>
+        + CanConvert<SolomachineConsensusState, Any>,
 {
     async fn build_create_client_message(
         _chain: &Chain,
         _options: &Chain::CreateClientMessageOptions,
         counterparty_payload: SolomachineCreateClientPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
-        let client_state = counterparty_payload.client_state.clone().to_any();
+        let encoding = Counterparty::default_encoding();
 
-        let consensus_state = counterparty_payload.client_state.consensus_state.to_any();
+        let client_state = encoding
+            .convert(&counterparty_payload.client_state)
+            .map_err(Chain::raise_error)?;
+
+        let consensus_state = encoding
+            .convert(&counterparty_payload.client_state.consensus_state)
+            .map_err(Chain::raise_error)?;
 
         let message = CosmosCreateClientMessage {
             client_state: Any {

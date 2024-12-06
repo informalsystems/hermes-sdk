@@ -18,7 +18,7 @@ hermes-relayer-components           = { workspace = true }
 hermes-test-components              = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
 
-ibc-relayer-types                   = { workspace = true }
+ibc                                 = { workspace = true }
 
 tokio                               = { workspace = true }
 toml                                = { workspace = true }

@@ -14,10 +14,10 @@ use hermes_relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
 use ibc::core::channel::types::channel::{ChannelEnd, State};
+use ibc::core::client::types::error::ClientError;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use ibc_proto::ibc::core::channel::v1::{Channel, Counterparty as ChannelCounterparty};
-use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc_relayer_types::Height;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
 use crate::types::channel::CosmosInitChannelOptions;
@@ -79,7 +79,7 @@ impl<Chain, Counterparty> ChannelOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<ClientError>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
         + HasChannelOpenTryPayloadType<
             Chain,
@@ -143,7 +143,7 @@ impl<Chain, Counterparty> ChannelOpenAckMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<ClientError>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
         + HasChannelOpenAckPayloadType<
             Chain,
@@ -185,7 +185,7 @@ impl<Chain, Counterparty> ChannelOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<ClientError>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
         + HasChannelOpenConfirmPayloadType<
             Chain,
