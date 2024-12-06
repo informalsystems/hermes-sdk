@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::CanRaiseError;
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::schema::HasSchema;
@@ -8,7 +9,6 @@ use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
-use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 
 use crate::types::client_state::AnyClientState;
 
