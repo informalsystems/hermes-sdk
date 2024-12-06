@@ -7,8 +7,8 @@ use cgp::core::types::impls::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
+use hermes_cosmos_chain_components::impls::relay::packet_filter::FilterPacketWithConfig;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
-use hermes_error::types::Error;
 use hermes_logger::{HermesLogger, ProvideHermesLogger};
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -32,14 +32,14 @@ use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
+use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
 
 use crate::context::chain::WasmCosmosChain;
@@ -110,6 +110,8 @@ delegate_components! {
             UseField<symbol!("dst_client_id")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
+        PacketFilterComponent:
+            FilterPacketWithConfig<symbol!("packet_filter")>,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:
@@ -142,12 +144,3 @@ impl CanUseWasmCosmosRelay for WasmCosmosRelay {}
 pub trait CanUseLogger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, WasmCosmosRelay>> {}
 
 impl CanUseLogger for HermesLogger {}
-
-impl PacketFilter<WasmCosmosRelay> for WasmCosmosRelayComponents {
-    async fn should_relay_packet(relay: &WasmCosmosRelay, packet: &Packet) -> Result<bool, Error> {
-        Ok(relay
-            .packet_filter
-            .channel_policy
-            .is_allowed(&packet.source_port, &packet.source_channel))
-    }
-}

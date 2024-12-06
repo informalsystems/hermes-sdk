@@ -7,7 +7,7 @@ use cgp::core::field::impls::use_field::{UseField, WithField};
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_error::types::Error;
+use hermes_cosmos_chain_components::impls::relay::packet_filter::FilterPacketWithConfig;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -27,7 +27,7 @@ use hermes_relayer_components::relay::impls::packet_lock::{
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelay;
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
@@ -41,7 +41,6 @@ use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::contexts::chain::CosmosChain;
@@ -153,6 +152,8 @@ delegate_components! {
             UseField<symbol!("src_chain_message_batch_sender")>,
         MessageBatchSenderGetterComponent<Dst>:
             UseField<symbol!("dst_chain_message_batch_sender")>,
+        PacketFilterComponent:
+            FilterPacketWithConfig<symbol!("packet_filter")>,
     }
 }
 
@@ -169,15 +170,6 @@ impl HasComponents for CosmosRelay {
 }
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
-
-impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
-    async fn should_relay_packet(relay: &CosmosRelay, packet: &Packet) -> Result<bool, Error> {
-        Ok(relay
-            .packet_filter
-            .channel_policy
-            .is_allowed(&packet.source_port, &packet.source_channel))
-    }
-}
 
 pub trait CanUseCosmosRelay:
     HasRelayClientIds
