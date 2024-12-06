@@ -8,17 +8,34 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
 use hermes_celestia_test_components::bootstrap::components::CelestiaBootstrapComponents as BaseCelestiaBootstrapComponents;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::BridgeBootstrapperComponent;
-use hermes_celestia_test_components::bootstrap::traits::bridge_auth_token::BridgeAuthTokenGeneratorComponent;
-use hermes_celestia_test_components::bootstrap::traits::bridge_store_dir::BridgeStoreDirGetter;
-use hermes_celestia_test_components::bootstrap::traits::build_bridge_driver::BridgeDriverBuilder;
-use hermes_celestia_test_components::bootstrap::traits::import_bridge_key::BridgeKeyImporterComponent;
-use hermes_celestia_test_components::bootstrap::traits::init_bridge_config::BridgeConfigInitializerComponent;
-use hermes_celestia_test_components::bootstrap::traits::init_bridge_data::BridgeDataInitializerComponent;
-use hermes_celestia_test_components::bootstrap::traits::start_bridge::BridgeStarterComponent;
-use hermes_celestia_test_components::bootstrap::traits::types::bridge_config::BridgeConfigTypeComponent;
+use hermes_celestia_test_components::bootstrap::traits::bridge_auth_token::{
+    BridgeAuthTokenGeneratorComponent, CanGenerateBridgeAuthToken,
+};
+use hermes_celestia_test_components::bootstrap::traits::bridge_store_dir::{
+    BridgeStoreDirGetter, HasBridgeStoreDir,
+};
+use hermes_celestia_test_components::bootstrap::traits::build_bridge_driver::{
+    BridgeDriverBuilder, CanBuildBridgeDriver,
+};
+use hermes_celestia_test_components::bootstrap::traits::import_bridge_key::{
+    BridgeKeyImporterComponent, CanImportBridgeKey,
+};
+use hermes_celestia_test_components::bootstrap::traits::init_bridge_config::{
+    BridgeConfigInitializerComponent, CanInitBridgeConfig,
+};
+use hermes_celestia_test_components::bootstrap::traits::init_bridge_data::{
+    BridgeDataInitializerComponent, CanInitBridgeData,
+};
+use hermes_celestia_test_components::bootstrap::traits::start_bridge::{
+    BridgeStarterComponent, CanStartBridge,
+};
+use hermes_celestia_test_components::bootstrap::traits::types::bridge_config::{
+    BridgeConfigTypeComponent, HasBridgeConfigType,
+};
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::ProvideBridgeDriverType;
 use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
@@ -30,6 +47,8 @@ use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
@@ -51,10 +70,14 @@ use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_s
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+    HasRuntime, ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
-use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
+use hermes_test_components::chain_driver::traits::types::chain::{
+    ChainTypeComponent, HasChainType,
+};
+use hermes_test_components::driver::traits::types::chain_driver::{
+    ChainDriverTypeComponent, HasChainDriverType,
+};
 use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
@@ -184,3 +207,52 @@ impl AccountPrefixGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
         "celestia"
     }
 }
+
+use core::str::Utf8Error;
+use std::io::Error as IoError;
+use std::process::ExitStatus;
+
+use hermes_async_runtime_components::channel::types::ChannelClosedError;
+use hermes_tokio_runtime_components::impls::os::child_process::PrematureChildProcessExitError;
+use hermes_tokio_runtime_components::impls::os::exec_command::{
+    CommandNotFound, ExecCommandFailure,
+};
+
+trait CanBootstrapCelestia: HasChainType<Chain = CosmosChain>
+        + HasChainDriverType<ChainDriver = CosmosChainDriver>
+        + HasRuntime<Runtime = HermesRuntime>
+        + HasBridgeStoreDir
+        + CanInitBridgeData
+        + CanImportBridgeKey
+        + CanGenerateBridgeAuthToken<BridgeDriver = CelestiaBridgeDriver>
+        + CanStartBridge
+        + CanBuildBridgeDriver
+        + HasBridgeStoreDir
+        + CanInitBridgeData
+        + CanImportBridgeKey
+        + CanGenerateBridgeAuthToken
+        + CanStartBridge
+        + CanBuildBridgeDriver
+        + HasBridgeConfigType
+        //+ CanInitBridgeConfig // This fails
+        // These CanRaiseError are taken from CanRaiseError<Runtime::Error> for HermesRuntime
+        // from this file crates/runtime/runtime/src/impls/runtime/error.rs
+        + CanRaiseError<PrematureChildProcessExitError> // This fails
+        + CanRaiseError<ExitStatus>
+        + CanRaiseError<IoError>
+        + CanRaiseError<Utf8Error>
+        + CanRaiseError<ChannelClosedError> // This fails
+        + CanRaiseError<ExecCommandFailure> // This fails
+        + CanRaiseError<CommandNotFound> // This fails
+
+        + CanRaiseError<toml::de::Error>
+        + CanRaiseError<toml::ser::Error>
+        + CanRaiseError<&'static str>
+    + CanRaiseError<toml::de::Error>
+    + CanRaiseError<toml::ser::Error>
+    + CanRaiseError<&'static str>
+{
+
+}
+
+impl CanBootstrapCelestia for CelestiaBootstrap {}

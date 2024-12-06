@@ -11,7 +11,6 @@ use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use toml::Value;
 
 use crate::bootstrap::traits::init_bridge_config::BridgeConfigInitializer;
@@ -29,7 +28,6 @@ where
         + HasBridgeConfigType
         + CanRaiseError<Chain::Error>
         + CanRaiseError<Runtime::Error>
-        + CanRaiseError<Ics02Error>
         + CanRaiseError<toml::de::Error>
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<&'static str>,
