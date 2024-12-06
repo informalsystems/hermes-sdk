@@ -48,7 +48,6 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortI
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::error::HandleCosmosError;
-use crate::types::batch::CosmosBatchSender;
 
 #[derive(Clone)]
 pub struct CosmosRelay {
@@ -94,8 +93,8 @@ impl CosmosRelay {
         src_client_id: ClientId,
         dst_client_id: ClientId,
         packet_filter: PacketFilterConfig,
-        src_chain_message_batch_sender: CosmosBatchSender,
-        dst_chain_message_batch_sender: CosmosBatchSender,
+        src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
+        dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
     ) -> Self {
         let relay = Self {
             fields: Arc::new(CosmosRelayFields {

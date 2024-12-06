@@ -21,7 +21,9 @@ use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_relayer_components::multi::types::index::Index;
+use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
+use hermes_relayer_components_extra::batch::traits::types::MessageBatchSenderOf;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_relayer_components_extra::build::traits::cache::BatchSenderCacheGetterComponent;
 use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::RelayWithBatchBuilder;
@@ -43,7 +45,6 @@ use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::error::HandleCosmosError;
-use crate::types::batch::CosmosBatchSender;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(Clone)]
@@ -69,8 +70,14 @@ pub struct CosmosBuilderFields {
     pub key_map: HashMap<ChainId, Secp256k1KeyPair>,
     pub chain_cache: Arc<Mutex<BTreeMap<ChainId, CosmosChain>>>,
     pub relay_cache: Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>>>,
-    pub batch_senders:
-        Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>>>,
+    pub batch_senders: Arc<
+        Mutex<
+            BTreeMap<
+                (ChainId, ChainId, ClientId, ClientId),
+                MessageBatchSenderOf<CosmosRelay, Src>,
+            >,
+        >,
+    >,
 }
 
 pub struct CosmosBuildComponents;
@@ -215,8 +222,8 @@ impl CosmosBuilder {
         dst_client_id: &ClientId,
         src_chain: CosmosChain,
         dst_chain: CosmosChain,
-        src_batch_sender: CosmosBatchSender,
-        dst_batch_sender: CosmosBatchSender,
+        src_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
+        dst_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
     ) -> Result<CosmosRelay, Error> {
         let relay = CosmosRelay::new(
             self.runtime.clone(),
@@ -298,8 +305,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildCom
         dst_client_id: &ClientId,
         src_chain: CosmosChain,
         dst_chain: CosmosChain,
-        src_batch_sender: CosmosBatchSender,
-        dst_batch_sender: CosmosBatchSender,
+        src_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
+        dst_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
     ) -> Result<CosmosRelay, Error> {
         let relay = build.build_cosmos_relay(
             src_client_id,
@@ -322,8 +329,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildCom
         dst_client_id: &ClientId,
         src_chain: CosmosChain,
         dst_chain: CosmosChain,
-        src_batch_sender: CosmosBatchSender,
-        dst_batch_sender: CosmosBatchSender,
+        src_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
+        dst_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
     ) -> Result<CosmosRelay, Error> {
         let relay = build.build_cosmos_relay(
             src_client_id,
