@@ -22,7 +22,7 @@ use hermes_relayer_components::multi::traits::chain_at::{
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
-    PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
+    PacketMutexGetterComponent, PacketMutexOf, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelay;
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
@@ -60,7 +60,7 @@ pub struct CosmosRelayFields {
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilterConfig,
-    pub packet_lock_mutex: PacketMutex<CosmosRelay>,
+    pub packet_lock_mutex: PacketMutexOf<CosmosRelay>,
     pub src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
     pub dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
 }
@@ -147,6 +147,8 @@ delegate_components! {
             UseField<symbol!("src_client_id")>,
         ClientIdAtGetterComponent<Dst, Src>:
             UseField<symbol!("dst_client_id")>,
+        PacketMutexGetterComponent:
+            UseField<symbol!("packet_lock_mutex")>,
         MessageBatchSenderGetterComponent<Src>:
             UseField<symbol!("src_chain_message_batch_sender")>,
         MessageBatchSenderGetterComponent<Dst>:
@@ -174,12 +176,6 @@ impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
             .packet_filter
             .channel_policy
             .is_allowed(&packet.source_port, &packet.source_channel))
-    }
-}
-
-impl PacketMutexGetter<CosmosRelay> for CosmosRelayComponents {
-    fn packet_mutex(relay: &CosmosRelay) -> &PacketMutex<CosmosRelay> {
-        &relay.packet_lock_mutex
     }
 }
 

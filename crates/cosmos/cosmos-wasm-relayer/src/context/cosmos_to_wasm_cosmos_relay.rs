@@ -30,7 +30,7 @@ use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::impls::packet_lock::{
-    PacketMutexGetter, ProvidePacketLockWithMutex,
+    PacketMutexGetterComponent, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
@@ -109,6 +109,8 @@ delegate_components! {
             UseField<symbol!("src_client_id")>,
         ClientIdAtGetterComponent<Dst, Src>:
             UseField<symbol!("dst_client_id")>,
+        PacketMutexGetterComponent:
+            UseField<symbol!("packet_lock_mutex")>,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:
@@ -154,14 +156,5 @@ impl PacketFilter<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayComponents
             .packet_filter
             .channel_policy
             .is_allowed(&packet.source_port, &packet.source_channel))
-    }
-}
-
-impl PacketMutexGetter<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayComponents {
-    fn packet_mutex(
-        relay: &CosmosToWasmCosmosRelay,
-    ) -> &hermes_relayer_components::relay::impls::packet_lock::PacketMutex<CosmosToWasmCosmosRelay>
-    {
-        &relay.packet_lock_mutex
     }
 }

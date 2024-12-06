@@ -1,6 +1,8 @@
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
+use core::marker::PhantomData;
 
+use cgp::core::field::impls::use_field::UseField;
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::ibc::{
     HasChannelIdType, HasPortIdType, HasSequenceType,
@@ -9,15 +11,13 @@ use hermes_runtime_components::traits::channel_once::{
     CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes, ReceiverOnce, SenderOnceOf,
 };
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
-use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
 
 use crate::chain::traits::packet::fields::CanReadOutgoingPacketFields;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf, SequenceOf};
-use crate::relay::traits::chains::{
-    DstChainOf, HasRelayChainTypes, HasRelayChains, PacketOf, SrcChainOf,
-};
+use crate::relay::traits::chains::{HasRelayChainTypes, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_lock::ProvidePacketLock;
 
 pub struct ProvidePacketLockWithMutex;
@@ -104,16 +104,6 @@ where
 {
 }
 
-pub type PacketKey<Relay> = (
-    ChannelIdOf<SrcChainOf<Relay>, DstChainOf<Relay>>,
-    PortIdOf<SrcChainOf<Relay>, DstChainOf<Relay>>,
-    ChannelIdOf<DstChainOf<Relay>, SrcChainOf<Relay>>,
-    PortIdOf<DstChainOf<Relay>, SrcChainOf<Relay>>,
-    SequenceOf<SrcChainOf<Relay>, DstChainOf<Relay>>,
-);
-
-pub type PacketMutex<Relay> = Arc<MutexOf<RuntimeOf<Relay>, BTreeSet<PacketKey<Relay>>>>;
-
 #[derive_component(PacketMutexGetterComponent, PacketMutexGetter<Relay>)]
 pub trait HasPacketMutex: HasPacketMutexType {
     fn packet_mutex(&self) -> &Self::PacketMutex;
@@ -152,7 +142,7 @@ where
         relay: &'a Relay,
         packet: &'a PacketOf<Relay>,
     ) -> Option<PacketLock<Relay>> {
-        let packet_key: PacketKey<Relay> = (
+        let packet_key = (
             Relay::SrcChain::outgoing_packet_src_channel_id(packet).clone(),
             Relay::SrcChain::outgoing_packet_src_port(packet).clone(),
             Relay::SrcChain::outgoing_packet_dst_channel_id(packet).clone(),
@@ -183,6 +173,15 @@ where
                 release_sender: Some(sender),
             })
         }
+    }
+}
+
+impl<Relay, FieldTag> PacketMutexGetter<Relay> for UseField<FieldTag>
+where
+    Relay: HasPacketMutexType + HasField<FieldTag, Field = Relay::PacketMutex>,
+{
+    fn packet_mutex(relay: &Relay) -> &Relay::PacketMutex {
+        relay.get_field(PhantomData)
     }
 }
 
