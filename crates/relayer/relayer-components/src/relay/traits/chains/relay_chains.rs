@@ -4,11 +4,11 @@ use crate::multi::traits::chain_at::HasChainAt;
 use crate::multi::types::tags::{Dst, Src};
 use crate::relay::traits::chains::types::{HasDstChainType, HasRelayChainTypes, HasSrcChainType};
 
-pub trait HasSrcChain: HasSrcChainType {
+pub trait HasSrcChain: HasSrcChainType + HasChainAt<Src> {
     fn src_chain(&self) -> &Self::SrcChain;
 }
 
-pub trait HasDstChain: HasDstChainType {
+pub trait HasDstChain: HasDstChainType + HasChainAt<Dst> {
     fn dst_chain(&self) -> &Self::DstChain;
 }
 
