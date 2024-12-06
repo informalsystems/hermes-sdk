@@ -11,6 +11,8 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::field::impls::use_field::WithField;
+use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use eyre::eyre;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
@@ -56,9 +58,7 @@ use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusT
 use hermes_relayer_components::chain::traits::types::timestamp::{
     ProvideTimeType, ProvideTimeoutType,
 };
-use hermes_runtime_components::traits::runtime::{
-    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
-};
+use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -70,6 +70,7 @@ use crate::relayer_mock::base::types::events::{Event, SendPacketEvent, WriteAckE
 use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
 use crate::relayer_mock::base::types::packet::Packet;
+use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::components::chain::MockChainComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
@@ -84,11 +85,8 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleMockError,
-        [
-            RuntimeTypeComponent,
-            RuntimeGetterComponent,
-        ]:
-            ProvideDefaultRuntimeField,
+        RuntimeTypeComponent: WithType<MockRuntimeContext>,
+        RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             MessageResponseTypeComponent,
             MessageResponseEventsGetterComponent,

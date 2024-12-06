@@ -9,7 +9,9 @@ use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments
 use crate::chain::traits::queries::send_packets::CanQuerySendPackets;
 use crate::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
+use crate::relay::traits::chains::{
+    CanRaiseRelayChainErrors, HasRelayChainTypes, HasRelayChains, PacketOf,
+};
 use crate::relay::traits::packet_clearer::PacketClearer;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
 
@@ -17,7 +19,7 @@ pub struct ClearReceivePackets;
 
 pub struct LogClearPacketError<'a, Relay>
 where
-    Relay: HasRelayChains,
+    Relay: HasRelayChainTypes,
 {
     pub relay: &'a Relay,
     pub packet: &'a PacketOf<Relay>,
@@ -33,7 +35,7 @@ pub enum ClearPacketAction {
 
 pub struct RelayPacketTask<Relay>
 where
-    Relay: HasRelayChains,
+    Relay: HasRelayChainTypes,
 {
     pub relay: Relay,
     pub packet: PacketOf<Relay>,

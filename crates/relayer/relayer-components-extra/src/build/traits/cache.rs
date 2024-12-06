@@ -1,7 +1,10 @@
 use alloc::collections::BTreeMap;
+use alloc::sync::Arc;
 use core::marker::PhantomData;
 
+use cgp::core::field::impls::use_field::UseField;
 use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::chain::types::aliases::{ChainIdOf, ClientIdOf};
@@ -31,19 +34,24 @@ where
             CounterpartyChain: HasChainIdType + HasClientIdType<Relay::TargetChain>,
         >,
 {
-    type BatchSenderCache = MutexOf<
-        Build::Runtime,
-        BTreeMap<
-            (
-                ChainIdOf<Relay::TargetChain>,
-                ChainIdOf<Relay::CounterpartyChain>,
-                ClientIdOf<Relay::TargetChain, Relay::CounterpartyChain>,
-                ClientIdOf<Relay::CounterpartyChain, Relay::TargetChain>,
-            ),
-            MessageBatchSenderOf<Relay, Target::Chain>,
+    type BatchSenderCache = Arc<
+        MutexOf<
+            Build::Runtime,
+            BTreeMap<
+                (
+                    ChainIdOf<Relay::TargetChain>,
+                    ChainIdOf<Relay::CounterpartyChain>,
+                    ClientIdOf<Relay::TargetChain, Relay::CounterpartyChain>,
+                    ClientIdOf<Relay::CounterpartyChain, Relay::TargetChain>,
+                ),
+                MessageBatchSenderOf<Relay, Target::Chain>,
+            >,
         >,
     >;
 }
+
+pub type BatchSenderCacheAt<Build, SrcTag, DstTag, Target> =
+    <Build as HasBatchSenderCacheType<SrcTag, DstTag, Target>>::BatchSenderCache;
 
 pub trait CanUseBatchSenderCache<SrcTag: Async, DstTag: Async, Target: RelayTarget>:
     HasRuntimeType<Runtime: HasMutex>
@@ -60,22 +68,24 @@ pub trait CanUseBatchSenderCache<SrcTag: Async, DstTag: Async, Target: RelayTarg
         SrcTag,
         DstTag,
         Target,
-        BatchSenderCache = MutexOf<
-            Self::Runtime,
-            BTreeMap<
-                (
-                    ChainIdOf<TargetChainOf<Self::Relay, Target>>,
-                    ChainIdOf<CounterpartyChainOf<Self::Relay, Target>>,
-                    ClientIdOf<
-                        TargetChainOf<Self::Relay, Target>,
-                        CounterpartyChainOf<Self::Relay, Target>,
-                    >,
-                    ClientIdOf<
-                        CounterpartyChainOf<Self::Relay, Target>,
-                        TargetChainOf<Self::Relay, Target>,
-                    >,
-                ),
-                MessageBatchSenderOf<Self::Relay, Target::Chain>,
+        BatchSenderCache = Arc<
+            MutexOf<
+                Self::Runtime,
+                BTreeMap<
+                    (
+                        ChainIdOf<TargetChainOf<Self::Relay, Target>>,
+                        ChainIdOf<CounterpartyChainOf<Self::Relay, Target>>,
+                        ClientIdOf<
+                            TargetChainOf<Self::Relay, Target>,
+                            CounterpartyChainOf<Self::Relay, Target>,
+                        >,
+                        ClientIdOf<
+                            CounterpartyChainOf<Self::Relay, Target>,
+                            TargetChainOf<Self::Relay, Target>,
+                        >,
+                    ),
+                    MessageBatchSenderOf<Self::Relay, Target::Chain>,
+                >,
             >,
         >,
     >
@@ -95,6 +105,7 @@ where
 {
 }
 
+#[derive_component(BatchSenderCacheGetterComponent, BatchSenderCacheGetter<Build>)]
 pub trait HasBatchSenderCache<SrcTag: Async, DstTag: Async, Target: RelayTarget>:
     HasBatchSenderCacheType<SrcTag, DstTag, Target>
 {
@@ -102,4 +113,18 @@ pub trait HasBatchSenderCache<SrcTag: Async, DstTag: Async, Target: RelayTarget>
         &self,
         _tag: PhantomData<(SrcTag, DstTag, Target)>,
     ) -> &Self::BatchSenderCache;
+}
+
+impl<Build, SrcTag: Async, DstTag: Async, Target: RelayTarget, FieldTag>
+    BatchSenderCacheGetter<Build, SrcTag, DstTag, Target> for UseField<FieldTag>
+where
+    Build: HasBatchSenderCacheType<SrcTag, DstTag, Target>
+        + HasField<FieldTag, Field = Build::BatchSenderCache>,
+{
+    fn batch_sender_cache(
+        build: &Build,
+        _tag: PhantomData<(SrcTag, DstTag, Target)>,
+    ) -> &Build::BatchSenderCache {
+        build.get_field(PhantomData)
+    }
 }

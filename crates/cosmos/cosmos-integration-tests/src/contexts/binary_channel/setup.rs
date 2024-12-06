@@ -84,7 +84,10 @@ delegate_components! {
         CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
         CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
         InitChannelOptionsAtComponent: UseCosmosInitChannelOptions,
-        RelayTypeAtComponent: WithType<CosmosRelay>,
+        [
+            RelayTypeAtComponent<Index<0>, Index<1>>,
+            RelayTypeAtComponent<Index<1>, Index<0>>,
+        ]: WithType<CosmosRelay>,
         BiRelayTypeAtComponent: WithType<CosmosBiRelay>,
         BinaryChannelDriverBuilderComponent: BuildCosmosBinaryChannelDriver,
     }
