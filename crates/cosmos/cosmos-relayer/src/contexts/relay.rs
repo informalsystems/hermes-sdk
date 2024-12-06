@@ -32,7 +32,9 @@ use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
 };
 use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetterComponent;
-use hermes_relayer_components_extra::batch::traits::types::CanUseMessageBatchChannel;
+use hermes_relayer_components_extra::batch::traits::types::{
+    CanUseMessageBatchChannel, MessageBatchSenderOf,
+};
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -49,7 +51,7 @@ use crate::types::batch::CosmosBatchSender;
 
 #[derive(Clone)]
 pub struct CosmosRelay {
-    pub fields: Arc<CosmosRelayFields>,
+    pub fields: Arc<dyn HasCosmosRelayFields>,
 }
 
 #[derive(HasField)]
@@ -61,15 +63,27 @@ pub struct CosmosRelayFields {
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilterConfig,
     pub packet_lock_mutex: Arc<Mutex<BTreeSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
-    pub src_chain_message_batch_sender: CosmosBatchSender,
+    pub src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
+    // pub src_chain_message_batch_sender: CosmosBatchSender,
+    // pub dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
     pub dst_chain_message_batch_sender: CosmosBatchSender,
+}
+
+pub trait HasCosmosRelayFields: Send + Sync + 'static {
+    fn cosmos_relay_fields(&self) -> &CosmosRelayFields;
+}
+
+impl HasCosmosRelayFields for CosmosRelayFields {
+    fn cosmos_relay_fields(&self) -> &CosmosRelayFields {
+        self
+    }
 }
 
 impl Deref for CosmosRelay {
     type Target = CosmosRelayFields;
 
     fn deref(&self) -> &CosmosRelayFields {
-        &self.fields
+        &self.fields.cosmos_relay_fields()
     }
 }
 

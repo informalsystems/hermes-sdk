@@ -7,6 +7,7 @@ use std::fs::{self, File};
 use std::str::FromStr;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::field::impls::use_field::UseField;
 use cgp::prelude::*;
 use eyre::eyre;
 use futures::lock::Mutex;
@@ -19,10 +20,9 @@ use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
-use hermes_relayer_components_extra::build::traits::cache::HasBatchSenderCache;
+use hermes_relayer_components_extra::build::traits::cache::BatchSenderCacheGetterComponent;
 use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::RelayWithBatchBuilder;
 use hermes_relayer_components_extra::components::extra::build::*;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -106,6 +106,8 @@ delegate_components! {
             RuntimeGetterComponent,
         ]:
             ProvideDefaultRuntimeField,
+        BatchSenderCacheGetterComponent:
+            UseField<symbol!("batch_senders")>
     }
 }
 
@@ -381,42 +383,6 @@ impl HasRelayCache<Index<0>, Index<1>> for CosmosBuilder {
 impl HasRelayCache<Index<1>, Index<0>> for CosmosBuilder {
     fn relay_cache(&self) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>> {
         &self.relay_cache
-    }
-}
-
-impl HasBatchSenderCache<Index<0>, Index<1>, SourceTarget> for CosmosBuilder {
-    fn batch_sender_cache(
-        &self,
-        _index: PhantomData<(Index<0>, Index<1>, SourceTarget)>,
-    ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
-        &self.batch_senders
-    }
-}
-
-impl HasBatchSenderCache<Index<0>, Index<1>, DestinationTarget> for CosmosBuilder {
-    fn batch_sender_cache(
-        &self,
-        _index: PhantomData<(Index<0>, Index<1>, DestinationTarget)>,
-    ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
-        &self.batch_senders
-    }
-}
-
-impl HasBatchSenderCache<Index<1>, Index<0>, SourceTarget> for CosmosBuilder {
-    fn batch_sender_cache(
-        &self,
-        _index: PhantomData<(Index<1>, Index<0>, SourceTarget)>,
-    ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
-        &self.batch_senders
-    }
-}
-
-impl HasBatchSenderCache<Index<1>, Index<0>, DestinationTarget> for CosmosBuilder {
-    fn batch_sender_cache(
-        &self,
-        _index: PhantomData<(Index<1>, Index<0>, DestinationTarget)>,
-    ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
-        &self.batch_senders
     }
 }
 
