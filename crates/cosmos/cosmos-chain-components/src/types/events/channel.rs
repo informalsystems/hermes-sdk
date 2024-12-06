@@ -25,6 +25,39 @@ pub fn try_chan_open_init_from_abci_event(event: &Event) -> Result<Option<OpenIn
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("port_id"))
+            .ok_or_else(|| Report::msg("missing attribute `port_id` in ABCI Event"))?
+            .value_str()
+            .map_err(|e| {
+                Report::msg(format!(
+                    "failed to retrieve `port_id` attribute value as str. Cause {e}"
+                ))
+            })?;
+        let chan_id_on_a_str = event
+            .attributes
+            .iter()
+            .find(|attribute| attribute.key_str().ok() == Some("channel_id"))
+            .ok_or_else(|| Report::msg("missing attribute `channel_id` in ABCI Event"))?
+            .value_str()
+            .map_err(|e| {
+                Report::msg(format!(
+                    "failed to retrieve `channel_id` attribute value as str. Cause {e}"
+                ))
+            })?;
+        let port_id_on_b_str = event
+            .attributes
+            .iter()
+            .find(|attribute| attribute.key_str().ok() == Some("counterparty_port_id"))
+            .ok_or_else(|| Report::msg("missing attribute `counterparty_port_id` in ABCI Event"))?
+            .value_str()
+            .map_err(|e| {
+                Report::msg(format!(
+                    "failed to retrieve `counterparty_port_id` attribute value as str. Cause {e}"
+                ))
+            })?;
+        let conn_id_on_a_str = event
+            .attributes
+            .iter()
+            .find(|attribute| attribute.key_str().ok() == Some("connection_id"))
             .ok_or_else(|| Report::msg("missing attribute `connection_id` in ABCI Event"))?
             .value_str()
             .map_err(|e| {
@@ -32,48 +65,15 @@ pub fn try_chan_open_init_from_abci_event(event: &Event) -> Result<Option<OpenIn
                     "failed to retrieve `connection_id` attribute value as str. Cause {e}"
                 ))
             })?;
-        let chan_id_on_a_str = event
-            .attributes
-            .iter()
-            .find(|attribute| attribute.key_str().ok() == Some("channel_id"))
-            .ok_or_else(|| Report::msg("missing attribute `client_id` in ABCI Event"))?
-            .value_str()
-            .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `client_id` attribute value as str. Cause {e}"
-                ))
-            })?;
-        let port_id_on_b_str = event
-            .attributes
-            .iter()
-            .find(|attribute| attribute.key_str().ok() == Some("counterparty_port_id"))
-            .ok_or_else(|| Report::msg("missing attribute `counterparty_client_id` in ABCI Event"))?
-            .value_str()
-            .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `counterparty_client_id` attribute value as str. Cause {e}"
-                ))
-            })?;
-        let conn_id_on_a_str = event
-            .attributes
-            .iter()
-            .find(|attribute| attribute.key_str().ok() == Some("connection_id"))
-            .ok_or_else(|| Report::msg("missing attribute `counterparty_client_id` in ABCI Event"))?
-            .value_str()
-            .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `counterparty_client_id` attribute value as str. Cause {e}"
-                ))
-            })?;
         let version_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("version"))
-            .ok_or_else(|| Report::msg("missing attribute `counterparty_client_id` in ABCI Event"))?
+            .ok_or_else(|| Report::msg("missing attribute `version` in ABCI Event"))?
             .value_str()
             .map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `counterparty_client_id` attribute value as str. Cause {e}"
+                    "failed to retrieve `version` attribute value as str. Cause {e}"
                 ))
             })?;
         Ok(Some(OpenInit::new(
@@ -118,7 +118,7 @@ pub fn try_chan_open_try_from_abci_event(event: &Event) -> Result<Option<OpenTry
             .value_str()
             .map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `connection_id` attribute value as str. Cause {e}"
+                    "failed to retrieve `port_id` attribute value as str. Cause {e}"
                 ))
             })?;
         let chan_id_on_b_str = event
@@ -129,7 +129,7 @@ pub fn try_chan_open_try_from_abci_event(event: &Event) -> Result<Option<OpenTry
             .value_str()
             .map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `client_id` attribute value as str. Cause {e}"
+                    "failed to retrieve `channel_id` attribute value as str. Cause {e}"
                 ))
             })?;
         let port_id_on_a_str = event
@@ -140,7 +140,7 @@ pub fn try_chan_open_try_from_abci_event(event: &Event) -> Result<Option<OpenTry
             .value_str()
             .map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `counterparty_client_id` attribute value as str. Cause {e}"
+                    "failed to retrieve `counterparty_port_id` attribute value as str. Cause {e}"
                 ))
             })?;
         let chan_id_on_a_str = event
@@ -153,7 +153,7 @@ pub fn try_chan_open_try_from_abci_event(event: &Event) -> Result<Option<OpenTry
             .value_str()
             .map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `client_id` attribute value as str. Cause {e}"
+                    "failed to retrieve `counterparty_channel_id` attribute value as str. Cause {e}"
                 ))
             })?;
         let conn_id_on_b_str = event
@@ -164,7 +164,7 @@ pub fn try_chan_open_try_from_abci_event(event: &Event) -> Result<Option<OpenTry
             .value_str()
             .map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `counterparty_client_id` attribute value as str. Cause {e}"
+                    "failed to retrieve `connection_id` attribute value as str. Cause {e}"
                 ))
             })?;
         let version_on_b_str = event
@@ -175,7 +175,7 @@ pub fn try_chan_open_try_from_abci_event(event: &Event) -> Result<Option<OpenTry
             .value_str()
             .map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `counterparty_client_id` attribute value as str. Cause {e}"
+                    "failed to retrieve `version` attribute value as str. Cause {e}"
                 ))
             })?;
         Ok(Some(OpenTry::new(
@@ -227,7 +227,7 @@ pub fn try_write_acknowledgment_from_abci_event(
             .value_str()
             .map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `connection_id` attribute value as str. Cause {e}"
+                    "failed to retrieve `packet_sequence` attribute value as str. Cause {e}"
                 ))
             })?;
         let port_id_on_a_str = event
@@ -326,7 +326,7 @@ pub fn try_write_acknowledgment_from_abci_event(
         let timeout_timestamp_on_b = if timeout_timestamp_on_b_str == "0" {
             TimeoutTimestamp::no_timeout()
         } else {
-            let timeout_timestamp = Timestamp::from_str(timeout_height_on_b_str)?;
+            let timeout_timestamp = Timestamp::from_str(timeout_timestamp_on_b_str)?;
             TimeoutTimestamp::from(timeout_timestamp)
         };
 
@@ -409,7 +409,7 @@ pub fn try_send_packet_from_abci_event(event: &Event) -> Result<Option<SendPacke
             .value_str()
             .map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `connection_id` attribute value as str. Cause {e}"
+                    "failed to retrieve `packet_sequence` attribute value as str. Cause {e}"
                 ))
             })?;
         let port_id_on_a_str = event
@@ -484,11 +484,12 @@ pub fn try_send_packet_from_abci_event(event: &Event) -> Result<Option<SendPacke
         let maybe_packet_data_str = event
             .attributes
             .iter()
-            .find(|attribute| attribute.key_str().ok() == Some("packet_data")); //.ok_or_else(|| Report::msg("missing attribute `packet_data` in ABCI Event"))?.value_str().map_err(|e| Report::msg(format!("failed to retrieve `packet_data` attribute value as str. Cause {e}")))?;
+            .find(|attribute| attribute.key_str().ok() == Some("packet_data"));
+
         let maybe_packet_data_hex_str = event
             .attributes
             .iter()
-            .find(|attribute| attribute.key_str().ok() == Some("packet_data_hex")); //.ok_or_else(|| Report::msg("missing attribute `packet_data_hex` in ABCI Event"))?.value_str().map_err(|e| Report::msg(format!("failed to retrieve `packet_data_hex` attribute value as str. Cause {e}")))?;
+            .find(|attribute| attribute.key_str().ok() == Some("packet_data_hex"));
 
         let timeout_height_on_b = if timeout_height_on_b_str == "0-0" {
             TimeoutHeight::no_timeout()
@@ -500,7 +501,7 @@ pub fn try_send_packet_from_abci_event(event: &Event) -> Result<Option<SendPacke
         let timeout_timestamp_on_b = if timeout_timestamp_on_b_str == "0" {
             TimeoutTimestamp::no_timeout()
         } else {
-            let timeout_timestamp = Timestamp::from_str(timeout_height_on_b_str)?;
+            let timeout_timestamp = Timestamp::from_str(timeout_timestamp_on_b_str)?;
             TimeoutTimestamp::from(timeout_timestamp)
         };
 
@@ -517,7 +518,7 @@ pub fn try_send_packet_from_abci_event(event: &Event) -> Result<Option<SendPacke
         } else if let Some(event_attribute) = maybe_packet_data_hex_str {
             hex::decode(event_attribute.value_str().map_err(|e| {
                 Report::msg(format!(
-                    "failed to retrieve `packet_data` attribute value as str. Cause {e}"
+                    "failed to retrieve `packet_data_hex` attribute value as str. Cause {e}"
                 ))
             })?)?
         } else {
