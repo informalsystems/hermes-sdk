@@ -48,9 +48,14 @@ where
         let channel_end = ChannelEnd::decode_vec(&channel_end_bytes).map_err(Chain::raise_error)?;
 
         // check if channel end is initialized, otherwize return error.
-        channel_end
+        if channel_end
             .verify_state_matches(&State::Uninitialized)
-            .map_err(Chain::raise_error)?;
+            .is_ok()
+        {
+            return Err(Chain::raise_error(format!(
+                "channel with id `{channel_id}` is uninitialized"
+            )));
+        }
 
         let connection_id = channel_end.connection_hops.first().ok_or_else(|| {
             Chain::raise_error(format!("channel with id `{channel_id}` has no connections"))
