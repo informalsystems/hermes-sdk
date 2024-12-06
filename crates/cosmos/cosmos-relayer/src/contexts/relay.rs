@@ -41,8 +41,8 @@ use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
+use ibc_relayer_types::core::ics04_channel::packet::Packet;
+use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::error::HandleCosmosError;
@@ -60,7 +60,7 @@ pub struct CosmosRelayFields {
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilterConfig,
-    pub packet_lock_mutex: Arc<Mutex<BTreeSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
+    pub packet_lock_mutex: PacketMutex<CosmosRelay>,
     pub src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
     pub dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
 }
