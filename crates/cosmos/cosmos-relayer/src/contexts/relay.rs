@@ -78,7 +78,7 @@ impl Deref for CosmosRelay {
     type Target = CosmosRelayFields;
 
     fn deref(&self) -> &CosmosRelayFields {
-        &self.fields.cosmos_relay_fields()
+        self.fields.cosmos_relay_fields()
     }
 }
 

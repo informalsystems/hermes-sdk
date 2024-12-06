@@ -70,7 +70,7 @@ impl Deref for CosmosBuilder {
     type Target = CosmosBuilderFields;
 
     fn deref(&self) -> &Self::Target {
-        &self.fields.fields()
+        self.fields.fields()
     }
 }
 
