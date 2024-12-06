@@ -1,4 +1,4 @@
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
 use secp256k1::ecdsa::Signature;
 
 pub struct SolomachineReceivePacketPayload {

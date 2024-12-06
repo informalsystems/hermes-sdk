@@ -1,4 +1,5 @@
 use core::str::FromStr;
+use core::time::Duration;
 
 use cgp::core::error::HasErrorType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
@@ -7,8 +8,6 @@ use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::{ConnectionEnd, Counterparty, State as ConnectionState};
 use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
-use ibc_relayer_types::core::ics24_host::identifier::ConnectionId as RelayerConnectionId;
-use ibc_relayer_types::timestamp::ZERO_DURATION;
 
 use crate::traits::solomachine::Solomachine;
 use crate::types::event::{
@@ -46,7 +45,7 @@ where
                 SolomachineMessage::CosmosConnectionOpenInit { .. } => {
                     let connection_id = ConnectionId::from_str("connection-1").unwrap();
                     let relayer_connection_id =
-                        RelayerConnectionId::from_str(connection_id.as_str()).unwrap();
+                        ConnectionId::from_str(connection_id.as_str()).unwrap();
 
                     let counterparty_connection_id =
                         ConnectionId::from_str("connection-0").unwrap();
@@ -65,7 +64,7 @@ where
                         client_id,
                         counterparty,
                         Version::compatibles(),
-                        ZERO_DURATION,
+                        Duration::ZERO,
                     )
                     .unwrap();
 

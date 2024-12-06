@@ -26,8 +26,8 @@ use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPac
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
-use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc::core::channel::types::channel::ChannelEnd;
+use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,

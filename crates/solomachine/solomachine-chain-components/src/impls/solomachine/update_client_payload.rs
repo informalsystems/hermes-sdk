@@ -3,7 +3,7 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::U
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
 
 use crate::methods::encode::header_data::sign_header_data;
 use crate::traits::solomachine::Solomachine;

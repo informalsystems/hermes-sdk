@@ -13,7 +13,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::chain::MockSolomachine;
 

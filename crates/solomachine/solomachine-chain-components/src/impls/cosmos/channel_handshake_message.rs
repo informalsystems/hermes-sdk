@@ -1,4 +1,5 @@
 use cgp::core::error::HasErrorType;
+use cgp::prelude::CanRaiseError;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
@@ -14,10 +15,9 @@ use hermes_relayer_components::chain::traits::types::channel::{
     HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_types::core::ics04_channel::channel::{
-    ChannelEnd, Counterparty as ChannelCounterparty, State,
-};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
+use ibc::core::channel::types::channel::{ChannelEnd, Counterparty as ChannelCounterparty, State};
+use ibc::core::channel::types::error::ChannelError;
+use ibc::core::host::types::identifiers::{ChannelId, PortId};
 
 use crate::types::payloads::channel::{
     SolomachineChannelOpenAckPayload, SolomachineChannelOpenConfirmPayload,
@@ -35,7 +35,8 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType,
+        > + HasErrorType
+        + CanRaiseError<ChannelError>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
 {
     async fn build_channel_open_init_message(
@@ -55,8 +56,8 @@ where
             counterparty,
             connection_hops,
             channel_version,
-            0.into(),
-        );
+        )
+        .map_err(Chain::raise_error)?;
 
         let message = CosmosChannelOpenInitMessage {
             port_id: port_id.to_string(),
@@ -75,7 +76,8 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType,
+        > + HasErrorType
+        + CanRaiseError<ChannelError>,
     Counterparty: HasChannelOpenTryPayloadType<
             Chain,
             ChannelOpenTryPayload = SolomachineChannelOpenTryPayload,
@@ -101,8 +103,8 @@ where
             counterparty,
             counterparty_payload.connection_hops,
             counterparty_payload.version.clone(),
-            0.into(),
-        );
+        )
+        .map_err(Chain::raise_error)?;
 
         let message = CosmosChannelOpenTryMessage {
             port_id: port_id.to_string(),

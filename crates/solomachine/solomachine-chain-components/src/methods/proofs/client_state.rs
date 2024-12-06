@@ -1,9 +1,9 @@
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
+use ibc::core::host::types::identifiers::ClientId;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoClientState;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use secp256k1::SecretKey;
 
 use crate::methods::encode::public_key::PublicKey;
