@@ -8,6 +8,7 @@ use std::str::FromStr;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::impls::use_field::UseField;
+use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use eyre::eyre;
 use futures::lock::Mutex;
@@ -16,9 +17,9 @@ use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
 use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
-use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
-use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
-use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
+use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
@@ -106,29 +107,20 @@ delegate_components! {
             RuntimeGetterComponent,
         ]:
             ProvideDefaultRuntimeField,
+        BiRelayTypeAtComponent:
+            WithType<CosmosBiRelay>,
+        [
+            ChainTypeAtComponent<Index<0>>,
+            ChainTypeAtComponent<Index<1>>,
+        ]:
+            WithType<CosmosChain>,
+        [
+            RelayTypeAtComponent<Index<0>, Index<1>>,
+            RelayTypeAtComponent<Index<1>, Index<0>>,
+        ]: WithType<CosmosRelay>,
         BatchSenderCacheGetterComponent:
-            UseField<symbol!("batch_senders")>
+            UseField<symbol!("batch_senders")>,
     }
-}
-
-impl ProvideBiRelayTypeAt<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildComponents {
-    type BiRelay = CosmosBiRelay;
-}
-
-impl ProvideChainTypeAt<CosmosBuilder, Index<0>> for CosmosBuildComponents {
-    type Chain = CosmosChain;
-}
-
-impl ProvideChainTypeAt<CosmosBuilder, Index<1>> for CosmosBuildComponents {
-    type Chain = CosmosChain;
-}
-
-impl ProvideRelayTypeAt<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildComponents {
-    type Relay = CosmosRelay;
-}
-
-impl ProvideRelayTypeAt<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildComponents {
-    type Relay = CosmosRelay;
 }
 
 impl CosmosBuilder {
