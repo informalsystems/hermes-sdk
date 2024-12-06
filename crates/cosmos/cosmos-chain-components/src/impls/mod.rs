@@ -6,6 +6,7 @@ pub mod events;
 pub mod message_height;
 pub mod packet;
 pub mod queries;
+pub mod relay;
 pub mod transaction;
 pub mod types;
 pub mod unbonding_period;
