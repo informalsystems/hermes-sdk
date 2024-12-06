@@ -22,10 +22,13 @@ use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
+use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_relayer_components_extra::batch::traits::types::MessageBatchSenderOf;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
-use hermes_relayer_components_extra::build::traits::cache::BatchSenderCacheGetterComponent;
+use hermes_relayer_components_extra::build::traits::cache::{
+    BatchSenderCacheAt, BatchSenderCacheGetterComponent,
+};
 use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::RelayWithBatchBuilder;
 use hermes_relayer_components_extra::components::extra::build::*;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -49,15 +52,7 @@ use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(Clone)]
 pub struct CosmosBuilder {
-    pub fields: Arc<CosmosBuilderFields>,
-}
-
-impl Deref for CosmosBuilder {
-    type Target = CosmosBuilderFields;
-
-    fn deref(&self) -> &Self::Target {
-        &self.fields
-    }
+    pub fields: Arc<dyn HasCosmosBuilderFields>,
 }
 
 #[derive(HasField)]
@@ -70,14 +65,25 @@ pub struct CosmosBuilderFields {
     pub key_map: HashMap<ChainId, Secp256k1KeyPair>,
     pub chain_cache: Arc<Mutex<BTreeMap<ChainId, CosmosChain>>>,
     pub relay_cache: Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>>>,
-    pub batch_senders: Arc<
-        Mutex<
-            BTreeMap<
-                (ChainId, ChainId, ClientId, ClientId),
-                MessageBatchSenderOf<CosmosRelay, Src>,
-            >,
-        >,
-    >,
+    pub batch_senders: BatchSenderCacheAt<CosmosBuilder, Index<0>, Index<1>, SourceTarget>,
+}
+
+impl Deref for CosmosBuilder {
+    type Target = CosmosBuilderFields;
+
+    fn deref(&self) -> &Self::Target {
+        &self.fields.fields()
+    }
+}
+
+pub trait HasCosmosBuilderFields: Send + Sync + 'static {
+    fn fields(&self) -> &CosmosBuilderFields;
+}
+
+impl HasCosmosBuilderFields for CosmosBuilderFields {
+    fn fields(&self) -> &CosmosBuilderFields {
+        self
+    }
 }
 
 pub struct CosmosBuildComponents;
@@ -109,11 +115,8 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
-        [
-            RuntimeTypeComponent,
-            RuntimeGetterComponent,
-        ]:
-            ProvideDefaultRuntimeField,
+        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeGetterComponent: ProvideDefaultRuntimeField,
         BiRelayTypeAtComponent:
             WithType<CosmosBiRelay>,
         [

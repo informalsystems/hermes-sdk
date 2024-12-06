@@ -130,9 +130,7 @@ delegate_components! {
             ChainTypeAtComponent<Dst>,
         ]:
             WithType<CosmosChain>,
-        [
-            RuntimeGetterComponent,
-        ]:
+        RuntimeGetterComponent:
             ProvideDefaultRuntimeField,
         [
             LoggerTypeComponent,

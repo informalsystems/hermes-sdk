@@ -50,6 +50,9 @@ where
     >;
 }
 
+pub type BatchSenderCacheAt<Build, SrcTag, DstTag, Target> =
+    <Build as HasBatchSenderCacheType<SrcTag, DstTag, Target>>::BatchSenderCache;
+
 pub trait CanUseBatchSenderCache<SrcTag: Async, DstTag: Async, Target: RelayTarget>:
     HasRuntimeType<Runtime: HasMutex>
     + HasRelayTypeAt<
