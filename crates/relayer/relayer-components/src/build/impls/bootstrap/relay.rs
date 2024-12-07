@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::Async;
-use cgp::prelude::{async_trait, CanRaiseError, HasErrorType};
+use cgp::prelude::*;
 
 use crate::build::traits::builders::chain_builder::CanBuildChain;
 use crate::build::traits::builders::relay_builder::CanBuildRelay;

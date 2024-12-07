@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::Async;
-use cgp::prelude::{async_trait, HasErrorType};
+use cgp::prelude::*;
 
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;
 use crate::build::traits::builders::birelay_builder::CanBuildBiRelay;

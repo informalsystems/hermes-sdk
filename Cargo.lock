@@ -520,7 +520,7 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 [[package]]
 name = "cgp"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-core",
  "cgp-extra",
@@ -529,15 +529,16 @@ dependencies = [
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-async-macro",
+ "cgp-sync",
 ]
 
 [[package]]
 name = "cgp-async-macro"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -547,7 +548,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -556,7 +557,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-component-macro-lib",
  "proc-macro2",
@@ -565,7 +566,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro-lib"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "itertools 0.11.0",
  "prettyplease",
@@ -577,7 +578,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -590,7 +591,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -610,7 +611,7 @@ dependencies = [
 [[package]]
 name = "cgp-extra"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-run",
 ]
@@ -618,7 +619,7 @@ dependencies = [
 [[package]]
 name = "cgp-field"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-component",
  "cgp-field-macro",
@@ -628,7 +629,7 @@ dependencies = [
 [[package]]
 name = "cgp-field-macro"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-field-macro-lib",
  "proc-macro2",
@@ -637,7 +638,7 @@ dependencies = [
 [[package]]
 name = "cgp-field-macro-lib"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "itertools 0.11.0",
  "prettyplease",
@@ -649,7 +650,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -658,7 +659,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -666,9 +667,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "cgp-sync"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e252878f2156970e777311cf627c62dc66f7a75a002be26262194468ea69ce50"
+dependencies = [
+ "cgp-async-macro",
+]
+
+[[package]]
 name = "cgp-type"
 version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=field-types#a07f5b1bcbfbf4ec48de7c17baad07f4c4ab6900"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=async-feature-flags#601d698275b2c19a08154fef32918809a5b71823"
 dependencies = [
  "cgp-component",
 ]
