@@ -91,9 +91,6 @@ tendermint-light-client-verifier = { version = "0.40" }
 tendermint-light-client         = { version = "0.40" }
 basecoin                        = { version = "0.2.0" }
 cgp                             = { version = "0.1.0" }
-cgp-core                        = { version = "0.1.0" }
-cgp-error-eyre                  = { version = "0.1.0" }
-cgp-component-macro             = { version = "0.1.0" }
 clap                            = { version = "4.5.20" }
 dirs-next                       = { version = "2.0.0" }
 oneline-eyre                    = { version = "0.1.0" }

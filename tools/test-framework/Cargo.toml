@@ -14,7 +14,6 @@ description = """
 
 [dependencies]
 cgp                         = { workspace = true }
-cgp-core                    = { workspace = true }
 hermes-runtime-components   = { workspace = true }
 hermes-relayer-components   = { workspace = true }
 hermes-cosmos-relayer       = { workspace = true }
