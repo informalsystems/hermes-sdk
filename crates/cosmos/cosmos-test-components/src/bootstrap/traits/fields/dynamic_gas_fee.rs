@@ -11,7 +11,7 @@ pub trait HasDynamicGas: Async {
 
 impl<Bootstrap> DynamicGasGetter<Bootstrap> for UseContext
 where
-    Bootstrap: Async + HasField<symbol!("dynamic_gas"), Field = Option<DynamicGasConfig>>,
+    Bootstrap: Async + HasField<symbol!("dynamic_gas"), Value = Option<DynamicGasConfig>>,
 {
     fn dynamic_gas(bootstrap: &Bootstrap) -> &Option<DynamicGasConfig> {
         bootstrap.get_field(PhantomData)

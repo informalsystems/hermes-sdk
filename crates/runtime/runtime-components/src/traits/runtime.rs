@@ -29,7 +29,7 @@ where
 impl<Context, Provider, Runtime> RuntimeGetter<Context> for WithProvider<Provider>
 where
     Context: HasRuntimeType<Runtime = Runtime>,
-    Provider: FieldGetter<Context, RuntimeGetterComponent, Field = Runtime>,
+    Provider: FieldGetter<Context, RuntimeGetterComponent, Value = Runtime>,
 {
     fn runtime(context: &Context) -> &Runtime {
         Provider::get_field(context, PhantomData)

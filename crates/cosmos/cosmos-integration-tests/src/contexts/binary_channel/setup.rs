@@ -96,7 +96,7 @@ delegate_components! {
 impl<BootstrapA, BootstrapB> HasField<symbol!("create_client_message_options")>
     for CosmosBinaryChannelSetup<BootstrapA, BootstrapB>
 {
-    type Field = ();
+    type Value = ();
 
     fn get_field(&self, _phantom: PhantomData<symbol!("create_client_message_options")>) -> &() {
         &()

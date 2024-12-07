@@ -37,7 +37,7 @@ impl<Setup, Tag, Target: Async, Counterparty: Async, ChainA, ChainB>
 where
     Setup: HasChainTypeAt<Target, Chain = ChainA>
         + HasChainTypeAt<Counterparty, Chain = ChainB>
-        + HasField<Tag, Field = ChainA::CreateClientMessageOptions>,
+        + HasField<Tag, Value = ChainA::CreateClientMessageOptions>,
     ChainA: HasCreateClientPayloadOptionsType<ChainB> + HasCreateClientMessageOptionsType<ChainB>,
 {
     fn create_client_message_options(
@@ -53,7 +53,7 @@ impl<Setup, Tag, Target: Async, Counterparty: Async, ChainA, ChainB>
 where
     Setup: HasChainTypeAt<Target, Chain = ChainA>
         + HasChainTypeAt<Counterparty, Chain = ChainB>
-        + HasField<Tag, Field = ChainA::CreateClientPayloadOptions>,
+        + HasField<Tag, Value = ChainA::CreateClientPayloadOptions>,
     ChainA: HasCreateClientPayloadOptionsType<ChainB> + HasCreateClientMessageOptionsType<ChainB>,
 {
     fn create_client_payload_options(

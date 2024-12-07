@@ -19,7 +19,7 @@ impl<Chain, Counterparty, App, Provider> IbcTransferReceiverGetter<Chain, Counte
 where
     Chain: HasPayloadDataType<Counterparty, App>,
     Counterparty: HasAddressType,
-    Provider: FieldGetter<Chain::PayloadData, symbol!("receiver"), Field = Counterparty::Address>,
+    Provider: FieldGetter<Chain::PayloadData, symbol!("receiver"), Value = Counterparty::Address>,
 {
     fn ibc_transfer_receiver(payload_data: &Chain::PayloadData) -> &Counterparty::Address {
         Provider::get_field(payload_data, PhantomData)

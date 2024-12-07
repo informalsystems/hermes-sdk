@@ -16,7 +16,7 @@ where
 impl<Bootstrap, Runtime> ChainCommandPathGetter<Bootstrap> for UseContext
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasField<symbol!("chain_command_path"), Field = Runtime::FilePath>,
+        + HasField<symbol!("chain_command_path"), Value = Runtime::FilePath>,
     Runtime: HasFilePathType,
 {
     fn chain_command_path(bootstrap: &Bootstrap) -> &Runtime::FilePath {

@@ -11,7 +11,7 @@ pub trait HasRpcClient: Async {
 
 impl<Client> RpcClientGetter<Client> for UseContext
 where
-    Client: Async + HasField<symbol!("rpc_client"), Field = HttpClient>,
+    Client: Async + HasField<symbol!("rpc_client"), Value = HttpClient>,
 {
     fn rpc_client(client: &Client) -> &HttpClient {
         client.get_field(PhantomData::<symbol!("rpc_client")>)

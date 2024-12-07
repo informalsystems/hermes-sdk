@@ -29,7 +29,7 @@ pub trait HasDenomPrefix<Label>: Async {
 
 impl<Bootstrap> DenomPrefixGetter<Bootstrap, DenomForStaking> for UseContext
 where
-    Bootstrap: Async + HasField<symbol!("staking_denom_prefix"), Field = String>,
+    Bootstrap: Async + HasField<symbol!("staking_denom_prefix"), Value = String>,
 {
     fn denom_prefix(bootstrap: &Bootstrap, _label: DenomForStaking) -> &str {
         bootstrap.get_field(PhantomData)
@@ -38,7 +38,7 @@ where
 
 impl<Bootstrap> DenomPrefixGetter<Bootstrap, DenomForTransfer> for UseContext
 where
-    Bootstrap: Async + HasField<symbol!("transfer_denom_prefix"), Field = String>,
+    Bootstrap: Async + HasField<symbol!("transfer_denom_prefix"), Value = String>,
 {
     fn denom_prefix(bootstrap: &Bootstrap, _label: DenomForTransfer) -> &str {
         bootstrap.get_field(PhantomData)

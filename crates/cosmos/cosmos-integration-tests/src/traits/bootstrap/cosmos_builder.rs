@@ -11,7 +11,7 @@ pub trait HasCosmosBuilder: Async {
 
 impl<Bootstrap> CosmosBuilderGetter<Bootstrap> for UseContext
 where
-    Bootstrap: Async + HasField<symbol!("cosmos_builder"), Field = CosmosBuilder>,
+    Bootstrap: Async + HasField<symbol!("cosmos_builder"), Value = CosmosBuilder>,
 {
     fn cosmos_builder(bootstrap: &Bootstrap) -> &CosmosBuilder {
         bootstrap.get_field(PhantomData)

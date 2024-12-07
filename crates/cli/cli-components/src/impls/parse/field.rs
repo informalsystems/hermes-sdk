@@ -9,7 +9,7 @@ pub struct GetField;
 impl<App, Args, Tag, Field> ArgParser<App, Args, Tag> for GetField
 where
     App: HasErrorType,
-    Args: HasField<Tag, Field = Field>,
+    Args: HasField<Tag, Value = Field>,
     Field: Async + Clone,
 {
     type Parsed = Field;
@@ -28,7 +28,7 @@ pub struct GetFieldWithTag<Tag>(pub PhantomData<Tag>);
 impl<App, Args, TagA, TagB, Field> ArgParser<App, Args, TagA> for GetFieldWithTag<TagB>
 where
     App: HasErrorType,
-    Args: HasField<TagB, Field = Field>,
+    Args: HasField<TagB, Value = Field>,
     Field: Async + Clone,
     TagB: Async,
 {

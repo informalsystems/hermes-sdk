@@ -119,7 +119,7 @@ impl<Build, SrcTag: Async, DstTag: Async, Target: RelayTarget, FieldTag>
     BatchSenderCacheGetter<Build, SrcTag, DstTag, Target> for UseField<FieldTag>
 where
     Build: HasBatchSenderCacheType<SrcTag, DstTag, Target>
-        + HasField<FieldTag, Field = Build::BatchSenderCache>,
+        + HasField<FieldTag, Value = Build::BatchSenderCache>,
 {
     fn batch_sender_cache(
         build: &Build,

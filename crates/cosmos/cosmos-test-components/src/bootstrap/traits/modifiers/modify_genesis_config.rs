@@ -11,7 +11,7 @@ pub trait CanModifyCosmosGenesisConfig: HasErrorType {
 
 impl<Bootstrap, Modifier> CosmosGenesisConfigModifier<Bootstrap> for UseContext
 where
-    Bootstrap: HasErrorType + HasField<symbol!("genesis_config_modifier"), Field = Modifier>,
+    Bootstrap: HasErrorType + HasField<symbol!("genesis_config_modifier"), Value = Modifier>,
     Modifier: Fn(&mut Value) -> Result<(), Bootstrap::Error> + Send + Sync + 'static,
 {
     fn modify_genesis_config(

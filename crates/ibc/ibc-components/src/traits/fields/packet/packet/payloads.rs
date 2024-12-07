@@ -18,7 +18,7 @@ impl<Chain, Counterparty, Provider, Payloads> PacketPayloadsGetter<Chain, Counte
     for WithProvider<Provider>
 where
     Chain: HasPacketType<Counterparty> + HasPayloadType<Counterparty>,
-    Provider: FieldGetter<Chain::Packet, symbol!("payloads"), Field = Payloads>,
+    Provider: FieldGetter<Chain::Packet, symbol!("payloads"), Value = Payloads>,
     Payloads: AsRef<[Chain::Payload]> + 'static,
 {
     fn packet_payloads(packet: &Chain::Packet) -> &[Chain::Payload] {

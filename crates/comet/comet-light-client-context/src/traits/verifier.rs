@@ -13,9 +13,9 @@ pub trait HasVerifier: Async {
 
 impl<Client> ProvideVerifier<Client> for UseContext
 where
-    Client: Async + HasField<symbol!("verifier"), Field: Verifier>,
+    Client: Async + HasField<symbol!("verifier"), Value: Verifier>,
 {
-    type Verifier = Client::Field;
+    type Verifier = Client::Value;
 
     fn verifier(client: &Client) -> &Self::Verifier {
         client.get_field(PhantomData)

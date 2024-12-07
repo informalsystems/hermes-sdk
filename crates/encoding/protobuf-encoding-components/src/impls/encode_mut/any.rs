@@ -42,7 +42,7 @@ delegate_components! {
 }
 
 impl FieldGetter<Any, symbol!("type_url")> for EncodeAny {
-    type Field = String;
+    type Value = String;
 
     fn get_field(any: &Any, _tag: PhantomData<symbol!("type_url")>) -> &String {
         &any.type_url
@@ -50,7 +50,7 @@ impl FieldGetter<Any, symbol!("type_url")> for EncodeAny {
 }
 
 impl FieldGetter<Any, symbol!("value")> for EncodeAny {
-    type Field = Vec<u8>;
+    type Value = Vec<u8>;
 
     fn get_field(any: &Any, _tag: PhantomData<symbol!("value")>) -> &Vec<u8> {
         &any.value

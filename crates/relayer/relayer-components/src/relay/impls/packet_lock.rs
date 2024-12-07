@@ -178,7 +178,7 @@ where
 
 impl<Relay, FieldTag> PacketMutexGetter<Relay> for UseField<FieldTag>
 where
-    Relay: HasPacketMutexType + HasField<FieldTag, Field = Relay::PacketMutex>,
+    Relay: HasPacketMutexType + HasField<FieldTag, Value = Relay::PacketMutex>,
 {
     fn packet_mutex(relay: &Relay) -> &Relay::PacketMutex {
         relay.get_field(PhantomData)

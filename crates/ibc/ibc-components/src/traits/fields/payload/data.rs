@@ -18,7 +18,7 @@ impl<Chain, Counterparty, App, Provider> PayloadDataGetter<Chain, Counterparty, 
     for WithProvider<Provider>
 where
     Chain: HasPayloadType<Counterparty> + HasPayloadDataType<Counterparty, App>,
-    Provider: FieldGetter<Chain::Payload, symbol!("data"), Field = Chain::PayloadData>,
+    Provider: FieldGetter<Chain::Payload, symbol!("data"), Value = Chain::PayloadData>,
 {
     fn payload_data(payload: &Chain::Payload) -> &Chain::PayloadData {
         Provider::get_field(payload, PhantomData)

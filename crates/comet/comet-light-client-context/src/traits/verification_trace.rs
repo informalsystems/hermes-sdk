@@ -16,7 +16,7 @@ pub trait HasVerificationTrace {
 
 impl<Client> VerificationTraceGetter<Client> for UseContext
 where
-    Client: HasFieldMut<symbol!("verification_trace"), Field = VerificationTrace>,
+    Client: HasFieldMut<symbol!("verification_trace"), Value = VerificationTrace>,
 {
     fn verification_trace(client: &Client) -> &VerificationTrace {
         client.get_field(PhantomData)

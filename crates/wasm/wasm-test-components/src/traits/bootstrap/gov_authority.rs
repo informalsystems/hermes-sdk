@@ -13,7 +13,7 @@ pub trait HasGovernanceProposalAuthority: HasChainType<Chain: HasAddressType> {
 impl<Bootstrap, Chain> GovernanceProposalAuthorityGetter<Bootstrap> for UseContext
 where
     Bootstrap: HasChainType<Chain = Chain>
-        + HasField<symbol!("governance_proposal_authority"), Field = Chain::Address>,
+        + HasField<symbol!("governance_proposal_authority"), Value = Chain::Address>,
     Chain: HasAddressType,
 {
     fn governance_proposal_authority(bootstrap: &Bootstrap) -> &Chain::Address {

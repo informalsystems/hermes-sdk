@@ -11,7 +11,7 @@ pub trait HasVerifierOptions: Async {
 
 impl<Client> VerifierOptionsGetter<Client> for UseContext
 where
-    Client: Async + HasField<symbol!("verifier_options"), Field = Options>,
+    Client: Async + HasField<symbol!("verifier_options"), Value = Options>,
 {
     fn verifier_options(client: &Client) -> &Options {
         client.get_field(PhantomData)

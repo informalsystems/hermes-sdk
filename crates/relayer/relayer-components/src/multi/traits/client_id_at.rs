@@ -23,7 +23,7 @@ impl<Context, ChainTag, CounterpartyTag, FieldTag, Chain, Counterparty, ClientId
 where
     Context: HasChainTypeAt<ChainTag, Chain = Chain>
         + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>
-        + HasField<FieldTag, Field = ClientId>,
+        + HasField<FieldTag, Value = ClientId>,
     Chain: HasClientIdType<Counterparty, ClientId = ClientId>,
 {
     fn client_id_at(

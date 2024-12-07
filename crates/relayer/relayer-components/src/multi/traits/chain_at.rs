@@ -33,7 +33,7 @@ where
 impl<Context, ChainTag, FieldTag, Chain> ProvideChainTypeAt<Context, ChainTag>
     for UseField<FieldTag>
 where
-    Context: Async + HasField<FieldTag, Field = Chain>,
+    Context: Async + HasField<FieldTag, Value = Chain>,
     Chain: Async,
 {
     type Chain = Chain;
@@ -41,7 +41,7 @@ where
 
 impl<Context, ChainTag, FieldTag, Chain> ChainGetterAt<Context, ChainTag> for UseField<FieldTag>
 where
-    Context: HasChainTypeAt<ChainTag, Chain = Chain> + HasField<FieldTag, Field = Chain>,
+    Context: HasChainTypeAt<ChainTag, Chain = Chain> + HasField<FieldTag, Value = Chain>,
 {
     fn chain_at(context: &Context, _tag: PhantomData<ChainTag>) -> &Context::Chain {
         context.get_field(PhantomData)

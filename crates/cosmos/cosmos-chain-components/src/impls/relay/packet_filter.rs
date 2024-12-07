@@ -13,7 +13,7 @@ pub struct FilterPacketWithConfig<Tag>(pub PhantomData<Tag>);
 impl<Relay, Tag, SrcChain, DstChain> PacketFilter<Relay> for FilterPacketWithConfig<Tag>
 where
     Relay: HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
-        + HasField<Tag, Field = PacketFilterConfig>,
+        + HasField<Tag, Value = PacketFilterConfig>,
     SrcChain: CanReadOutgoingPacketFields<DstChain>
         + HasPortIdType<DstChain, PortId = PortId>
         + HasChannelIdType<DstChain, ChannelId = ChannelId>,

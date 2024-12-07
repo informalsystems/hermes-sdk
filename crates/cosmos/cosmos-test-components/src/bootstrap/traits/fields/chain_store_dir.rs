@@ -13,7 +13,7 @@ pub trait HasChainStoreDir: HasRuntime<Runtime: HasFilePathType> {
 impl<Bootstrap, Runtime> ChainStoreDirGetter<Bootstrap> for UseContext
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasField<symbol!("chain_store_dir"), Field = Runtime::FilePath>,
+        + HasField<symbol!("chain_store_dir"), Value = Runtime::FilePath>,
     Runtime: HasFilePathType,
 {
     fn chain_store_dir(bootstrap: &Bootstrap) -> &Runtime::FilePath {

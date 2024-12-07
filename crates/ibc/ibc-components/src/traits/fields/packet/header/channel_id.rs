@@ -23,8 +23,8 @@ impl<Chain, Counterparty, Provider> PacketChannelIdGetter<Chain, Counterparty>
 where
     Chain: HasPacketHeaderType<Counterparty> + HasChannelIdType<Counterparty>,
     Counterparty: HasChannelIdType<Chain>,
-    Provider: FieldGetter<Chain::PacketHeader, symbol!("src_channel_id"), Field = Chain::ChannelId>
-        + FieldGetter<Chain::PacketHeader, symbol!("dst_channel_id"), Field = Counterparty::ChannelId>,
+    Provider: FieldGetter<Chain::PacketHeader, symbol!("src_channel_id"), Value = Chain::ChannelId>
+        + FieldGetter<Chain::PacketHeader, symbol!("dst_channel_id"), Value = Counterparty::ChannelId>,
 {
     fn packet_src_channel_id(packet_header: &Chain::PacketHeader) -> &Chain::ChannelId {
         Provider::get_field(packet_header, PhantomData::<symbol!("src_channel_id")>)

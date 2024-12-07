@@ -11,7 +11,7 @@ pub trait HasPeerId: Async {
 
 impl<Client> PeerIdGetter<Client> for UseContext
 where
-    Client: Async + HasField<symbol!("peer_id"), Field = PeerId>,
+    Client: Async + HasField<symbol!("peer_id"), Value = PeerId>,
 {
     fn peer_id(client: &Client) -> &PeerId {
         client.get_field(PhantomData)

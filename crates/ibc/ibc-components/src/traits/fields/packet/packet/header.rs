@@ -18,7 +18,7 @@ impl<Chain, Counterparty, Provider> PacketHeaderGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
     Chain: HasPacketType<Counterparty> + HasPacketHeaderType<Counterparty>,
-    Provider: FieldGetter<Chain::Packet, symbol!("header"), Field = Chain::PacketHeader>,
+    Provider: FieldGetter<Chain::Packet, symbol!("header"), Value = Chain::PacketHeader>,
 {
     fn packet_header(packet: &Chain::Packet) -> &Chain::PacketHeader {
         Provider::get_field(packet, PhantomData)

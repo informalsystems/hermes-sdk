@@ -12,7 +12,7 @@ pub trait CanModifyCometConfig: HasErrorType {
 
 impl<Bootstrap, Modifier> CometConfigModifier<Bootstrap> for UseContext
 where
-    Bootstrap: HasErrorType + HasField<symbol!("comet_config_modifier"), Field = Modifier>,
+    Bootstrap: HasErrorType + HasField<symbol!("comet_config_modifier"), Value = Modifier>,
     Modifier: Fn(&mut Value) -> Result<(), Bootstrap::Error> + Send + Sync + 'static,
 {
     fn modify_comet_config(

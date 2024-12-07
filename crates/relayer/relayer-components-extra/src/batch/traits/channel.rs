@@ -14,7 +14,7 @@ impl<Context, SenderTag, FieldTag> MessageBatchSenderGetter<Context, SenderTag>
     for UseField<FieldTag>
 where
     Context: HasMessageBatchChannelTypes<SenderTag>
-        + HasField<FieldTag, Field = Context::MessageBatchSender>,
+        + HasField<FieldTag, Value = Context::MessageBatchSender>,
 {
     fn get_batch_sender(
         context: &Context,

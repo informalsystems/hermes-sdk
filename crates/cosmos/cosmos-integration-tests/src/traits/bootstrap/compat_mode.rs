@@ -11,7 +11,7 @@ pub trait HasCompatMode: Async {
 
 impl<Bootstrap> CompatModeGetter<Bootstrap> for UseContext
 where
-    Bootstrap: Async + HasField<symbol!("compat_mode"), Field = Option<CompatMode>>,
+    Bootstrap: Async + HasField<symbol!("compat_mode"), Value = Option<CompatMode>>,
 {
     fn compat_mode(bootstrap: &Bootstrap) -> Option<&CompatMode> {
         bootstrap.get_field(PhantomData).as_ref()

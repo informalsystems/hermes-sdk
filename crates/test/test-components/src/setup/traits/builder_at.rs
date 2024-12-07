@@ -12,7 +12,7 @@ pub trait HasBuilderAt<A: Async, B: Async>: HasBuilderTypeAt<A, B> {
 
 impl<Context, A: Async, B: Async, Tag> ProvideBuilderAt<Context, A, B> for UseField<Tag>
 where
-    Context: HasBuilderTypeAt<A, B> + HasField<Tag, Field = Context::Builder>,
+    Context: HasBuilderTypeAt<A, B> + HasField<Tag, Value = Context::Builder>,
 {
     fn builder(context: &Context) -> &Context::Builder {
         context.get_field(PhantomData)

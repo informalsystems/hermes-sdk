@@ -22,7 +22,7 @@ impl<Context, TargetTag: Async, CounterpartyTag: Async, Tag, Chain, Counterparty
 where
     Context: HasChainTypeAt<TargetTag, Chain = Chain>
         + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>
-        + HasField<Tag, Field = PortId>,
+        + HasField<Tag, Value = PortId>,
     Chain: HasPortIdType<Counterparty, PortId = PortId>,
 {
     fn port_id_at(context: &Context, _index: PhantomData<(TargetTag, CounterpartyTag)>) -> &PortId {

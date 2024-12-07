@@ -11,7 +11,7 @@ pub trait HasCurrentTime: Async {
 
 impl<Client: Async> CurrentTimeGetter<Client> for UseContext
 where
-    Client: HasField<symbol!("current_time"), Field = Time>,
+    Client: HasField<symbol!("current_time"), Value = Time>,
 {
     fn current_time(client: &Client) -> Time {
         *client.get_field(PhantomData)

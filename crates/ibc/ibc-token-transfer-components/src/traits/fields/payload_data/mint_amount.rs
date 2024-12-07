@@ -19,7 +19,7 @@ impl<Chain, Counterparty, App, Provider> PayloadMintAmountGetter<Chain, Counterp
     for WithProvider<Provider>
 where
     Chain: HasAmountType + HasPayloadDataType<Counterparty, App>,
-    Provider: FieldGetter<Chain::PayloadData, symbol!("amount"), Field = Chain::Amount>,
+    Provider: FieldGetter<Chain::PayloadData, symbol!("amount"), Value = Chain::Amount>,
 {
     fn payload_mint_amount(payload_data: &Chain::PayloadData) -> &Chain::Amount {
         Provider::get_field(payload_data, PhantomData)

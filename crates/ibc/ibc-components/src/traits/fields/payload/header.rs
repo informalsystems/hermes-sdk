@@ -18,7 +18,7 @@ impl<Chain, Counterparty, Provider> PayloadHeaderGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
     Chain: HasPayloadType<Counterparty> + HasPayloadHeaderType<Counterparty>,
-    Provider: FieldGetter<Chain::Payload, symbol!("header"), Field = Chain::PayloadHeader>,
+    Provider: FieldGetter<Chain::Payload, symbol!("header"), Value = Chain::PayloadHeader>,
 {
     fn payload_header(payload: &Chain::Payload) -> &Chain::PayloadHeader {
         Provider::get_field(payload, PhantomData)

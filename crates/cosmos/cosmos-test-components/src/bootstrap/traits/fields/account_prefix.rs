@@ -10,7 +10,7 @@ pub trait HasAccountPrefix: Async {
 
 impl<Bootstrap> AccountPrefixGetter<Bootstrap> for UseContext
 where
-    Bootstrap: Async + HasField<symbol!("account_prefix"), Field = String>,
+    Bootstrap: Async + HasField<symbol!("account_prefix"), Value = String>,
 {
     fn account_prefix(bootstrap: &Bootstrap) -> &str {
         bootstrap.get_field(PhantomData)
