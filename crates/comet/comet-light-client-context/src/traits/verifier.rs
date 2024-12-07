@@ -4,7 +4,11 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use tendermint_light_client_verifier::Verifier;
 
-#[derive_component(VerifierComponent, ProvideVerifier<Client>)]
+#[cgp_component {
+  name: VerifierComponent,
+  provider: ProvideVerifier,
+  context: Client,
+}]
 pub trait HasVerifier: Async {
     type Verifier: Verifier;
 

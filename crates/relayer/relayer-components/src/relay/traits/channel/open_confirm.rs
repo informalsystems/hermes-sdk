@@ -3,7 +3,11 @@ use cgp::prelude::*;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
 
-#[derive_component(ChannelOpenConfirmRelayerComponent, ChannelOpenConfirmRelayer<Relay>)]
+#[cgp_component {
+  name: ChannelOpenConfirmRelayerComponent,
+  provider: ChannelOpenConfirmRelayer,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanRelayChannelOpenConfirm: HasRelayChains {
     async fn relay_channel_open_confirm(

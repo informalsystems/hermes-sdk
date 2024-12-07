@@ -2,7 +2,11 @@ use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(ConsensusStateTypeComponent, ProvideConsensusStateType<Chain>)]
+#[cgp_component {
+  name: ConsensusStateTypeComponent,
+  provider: ProvideConsensusStateType,
+  context: Chain,
+}]
 pub trait HasConsensusStateType<Counterparty>: Async {
     /**
         The consensus state of the `Self` chain's client on the `Counterparty` chain

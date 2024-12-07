@@ -4,7 +4,11 @@
 
 use cgp::prelude::*;
 
-#[derive_component(OutgoingPacketTypeComponent, ProvideOutgoingPacketType<Chain>)]
+#[cgp_component {
+  name: OutgoingPacketTypeComponent,
+  provider: ProvideOutgoingPacketType,
+  context: Chain,
+}]
 pub trait HasOutgoingPacketType<Counterparty>: Async {
     /**
        A packet sent from self to counterparty.

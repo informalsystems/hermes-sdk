@@ -5,7 +5,10 @@ use cgp::prelude::*;
 
 use crate::driver::traits::types::builder_at::{BuilderTypeAt, HasBuilderTypeAt};
 
-#[derive_component(BuilderAtComponent, ProvideBuilderAt<Context>)]
+#[cgp_component {
+  name: BuilderAtComponent,
+  provider: ProvideBuilderAt,
+}]
 pub trait HasBuilderAt<A: Async, B: Async>: HasBuilderTypeAt<A, B> {
     fn builder(&self) -> &BuilderTypeAt<Self, A, B>;
 }

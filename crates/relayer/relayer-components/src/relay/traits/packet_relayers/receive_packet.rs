@@ -4,7 +4,11 @@ use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{HeightOf, WriteAckEventOf};
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 
-#[derive_component(ReceivePacketRelayerComponent, ReceivePacketRelayer<Relay>)]
+#[cgp_component {
+  name: ReceivePacketRelayerComponent,
+  provider: ReceivePacketRelayer,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanRelayReceivePacket:
     HasRelayChains<DstChain: HasWriteAckEvent<Self::SrcChain>>

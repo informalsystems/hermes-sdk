@@ -104,7 +104,11 @@ where
 {
 }
 
-#[derive_component(PacketMutexGetterComponent, PacketMutexGetter<Relay>)]
+#[cgp_component {
+  name: PacketMutexGetterComponent,
+  provider: PacketMutexGetter,
+  context: Relay,
+}]
 pub trait HasPacketMutex: HasPacketMutexType {
     fn packet_mutex(&self) -> &Self::PacketMutex;
 }

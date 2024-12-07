@@ -4,7 +4,11 @@ use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use crate::chain::traits::types::amount::HasAmountType;
 
-#[derive_component(DepositProposalMessageBuilderComponent, DepositProposalMessageBuilder<Chain>)]
+#[cgp_component {
+  name: DepositProposalMessageBuilderComponent,
+  provider: DepositProposalMessageBuilder,
+  context: Chain,
+}]
 pub trait CanBuildDepositProposalMessage:
     HasProposalIdType + HasAmountType + HasMessageType
 {

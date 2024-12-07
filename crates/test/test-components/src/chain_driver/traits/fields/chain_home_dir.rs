@@ -2,7 +2,11 @@ use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
-#[derive_component(ChainHomeDirGetterComponent, ChainHomeDirGetter<ChainDriver>)]
+#[cgp_component {
+  name: ChainHomeDirGetterComponent,
+  provider: ChainHomeDirGetter,
+  context: ChainDriver,
+}]
 pub trait HasChainHomeDir: HasRuntime
 where
     Self::Runtime: HasFilePathType,

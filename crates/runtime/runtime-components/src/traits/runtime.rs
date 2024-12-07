@@ -5,12 +5,18 @@ use cgp::core::field::FieldGetter;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(RuntimeTypeComponent, ProvideRuntimeType<Context>)]
+#[cgp_component {
+  name: RuntimeTypeComponent,
+  provider: ProvideRuntimeType,
+}]
 pub trait HasRuntimeType: Async {
     type Runtime: Async + HasErrorType;
 }
 
-#[derive_component(RuntimeGetterComponent, RuntimeGetter<Context>)]
+#[cgp_component {
+  name: RuntimeGetterComponent,
+  provider: RuntimeGetter,
+}]
 pub trait HasRuntime: HasRuntimeType {
     fn runtime(&self) -> &Self::Runtime;
 }

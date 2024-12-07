@@ -8,7 +8,11 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 /**
    Initialize a new chain with data files stored at the given home directory
 */
-#[derive_component(BridgeDataInitializerComponent, BridgeDataInitializer<Bootstrap>)]
+#[cgp_component {
+  name: BridgeDataInitializerComponent,
+  provider: BridgeDataInitializer,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanInitBridgeData: HasRuntime + HasChainType + HasErrorType
 where

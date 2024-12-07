@@ -12,7 +12,11 @@ use crate::traits::types::packets::ack::HasAcknowledgementType;
    [`Event`](crate::traits::types::event::HasEventType::Event)
    type contains a [`WriteAckEvent`](Self::WriteAckEvent) variant.
 */
-#[derive_component(WriteAckEventComponent, ProvideWriteAckEvent<Chain>)]
+#[cgp_component {
+  name: WriteAckEventComponent,
+  provider: ProvideWriteAckEvent,
+  context: Chain,
+}]
 pub trait HasWriteAckEvent<Counterparty>:
     HasEventType + HasAcknowledgementType<Counterparty>
 {

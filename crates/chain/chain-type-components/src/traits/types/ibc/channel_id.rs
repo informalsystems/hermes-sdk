@@ -4,7 +4,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(ChannelIdTypeComponent, ProvideChannelIdType<Chain>)]
+#[cgp_component {
+  name: ChannelIdTypeComponent,
+  provider: ProvideChannelIdType,
+  context: Chain,
+}]
 pub trait HasChannelIdType<Counterparty>: Sized + Async {
     /**
        The channel ID of the counterparty chain, that is stored on the self

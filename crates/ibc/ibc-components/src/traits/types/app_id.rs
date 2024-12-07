@@ -2,7 +2,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(AppIdTypeComponent, ProvideAppIdType<Chain>)]
+#[cgp_component {
+  name: AppIdTypeComponent,
+  provider: ProvideAppIdType,
+  context: Chain,
+}]
 pub trait HasAppIdType<Counterparty>: Sized + Async {
     type AppId: Async;
 }

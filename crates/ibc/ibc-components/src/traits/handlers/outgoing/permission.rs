@@ -10,7 +10,11 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
    to send a packet, to ensure that the source application ID matches the calling
    contract.
 */
-#[derive_component(SendPayloadPermissionCheckerComponent, SendPayloadPermissionChecker<Chain>)]
+#[cgp_component {
+  name: SendPayloadPermissionCheckerComponent,
+  provider: SendPayloadPermissionChecker,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanCheckSendPayloadPermission<Counterparty>:
     HasErrorType + HasAddressType + HasPayloadHeaderType<Counterparty>

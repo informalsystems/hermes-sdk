@@ -6,7 +6,11 @@ use crate::traits::types::channel::HasChannelEndType;
 use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofType;
 
-#[derive_component(ChannelEndQuerierComponent, ChannelEndQuerier<Chain>)]
+#[cgp_component {
+  name: ChannelEndQuerierComponent,
+  provider: ChannelEndQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryChannelEnd<Counterparty>:
     HasChannelEndType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
@@ -19,7 +23,11 @@ pub trait CanQueryChannelEnd<Counterparty>:
     ) -> Result<Self::ChannelEnd, Self::Error>;
 }
 
-#[derive_component(ChannelEndWithProofsQuerierComponent, ChannelEndWithProofsQuerier<Chain>)]
+#[cgp_component {
+  name: ChannelEndWithProofsQuerierComponent,
+  provider: ChannelEndWithProofsQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryChannelEndWithProofs<Counterparty>:
     HasChannelEndType<Counterparty>

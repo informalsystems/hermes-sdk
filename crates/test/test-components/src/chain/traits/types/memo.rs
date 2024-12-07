@@ -1,11 +1,19 @@
 use cgp::prelude::*;
 
-#[derive_component(MemoTypeComponent, ProvideMemoType<ChainDriver>)]
+#[cgp_component {
+  name: MemoTypeComponent,
+  provider: ProvideMemoType,
+  context: ChainDriver,
+}]
 pub trait HasMemoType: Async {
     type Memo: Async;
 }
 
-#[derive_component(DefaultMemoGetterComponent, DefaultMemoGetter<ChainDriver>)]
+#[cgp_component {
+  name: DefaultMemoGetterComponent,
+  provider: DefaultMemoGetter,
+  context: ChainDriver,
+}]
 pub trait HasDefaultMemo: HasMemoType {
     fn default_memo(&self) -> Self::Memo;
 }

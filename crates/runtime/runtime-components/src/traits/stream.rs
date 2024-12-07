@@ -1,11 +1,19 @@
 use cgp::prelude::*;
 
-#[derive_component(StreamTypeComponent, ProvideStreamType<Runtime>)]
+#[cgp_component {
+  name: StreamTypeComponent,
+  provider: ProvideStreamType,
+  context: Runtime,
+}]
 pub trait HasStreamType: Async {
     type Stream<Item: Async>: Async;
 }
 
-#[derive_component(StreamMapperComponent, StreamMapper<Runtime>)]
+#[cgp_component {
+  name: StreamMapperComponent,
+  provider: StreamMapper,
+  context: Runtime,
+}]
 pub trait CanMapStream: HasStreamType {
     fn map_stream<T, U, M>(stream: Self::Stream<T>, mapper: M) -> Self::Stream<U>
     where

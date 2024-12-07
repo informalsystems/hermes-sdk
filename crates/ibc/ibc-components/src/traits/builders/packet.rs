@@ -7,7 +7,11 @@ use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::payload::payload::HasPayloadType;
 
-#[derive_component(PacketBuilderComponent, PacketBuilder<Chain>)]
+#[cgp_component {
+  name: PacketBuilderComponent,
+  provider: PacketBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildPacket<Counterparty>:
     HasPacketType<Counterparty>

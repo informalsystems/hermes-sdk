@@ -14,7 +14,11 @@ use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
    [packet relayer]( crate::relay::traits::packet_relayer::CanRelayPacket),
    but also future relayers such as connection and channel handshake relayers.
 */
-#[derive_component(EventRelayerComponent, EventRelayer<Relay>)]
+#[cgp_component {
+  name: EventRelayerComponent,
+  provider: EventRelayer,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanRelayEvent<Target: RelayTarget>:
     HasTargetChainTypes<Target, TargetChain: HasHeightType + HasEventType> + HasErrorType

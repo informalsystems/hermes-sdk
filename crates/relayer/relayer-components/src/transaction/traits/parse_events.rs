@@ -5,7 +5,11 @@ use hermes_chain_type_components::traits::types::message_response::HasMessageRes
 
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
-#[derive_component(TxMessageResponseParserComponent, TxMessageResponseParser<Chain>)]
+#[cgp_component {
+  name: TxMessageResponseParserComponent,
+  provider: TxMessageResponseParser,
+  context: Chain,
+}]
 pub trait CanParseTxMessageResponse:
     HasTxResponseType + HasMessageResponseType + HasErrorType
 {

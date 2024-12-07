@@ -2,7 +2,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(CommitmentProofTypeComponent, ProvideCommitmentProofType<Chain>)]
+#[cgp_component {
+  name: CommitmentProofTypeComponent,
+  provider: ProvideCommitmentProofType,
+  context: Chain,
+}]
 pub trait HasCommitmentProofType<Tag>: Async {
     type CommitmentProof: Async;
 }

@@ -3,7 +3,11 @@ use cgp::prelude::*;
 
 use crate::traits::output::HasOutputType;
 
-#[derive_component(CommandRunnerComponent, CommandRunner<App>)]
+#[cgp_component {
+  name: CommandRunnerComponent,
+  provider: CommandRunner,
+  context: App,
+}]
 #[async_trait]
 pub trait CanRunCommand<Args>: HasOutputType + HasErrorType
 where

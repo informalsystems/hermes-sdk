@@ -5,7 +5,11 @@ use crate::transaction::traits::types::nonce::HasNonceType;
 use crate::transaction::traits::types::signer::HasSignerType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
-#[derive_component(MessagesWithSignerAndNonceSenderComponent, MessagesWithSignerAndNonceSender<TxContext>)]
+#[cgp_component {
+  name: MessagesWithSignerAndNonceSenderComponent,
+  provider: MessagesWithSignerAndNonceSender,
+  context: TxContext,
+}]
 #[async_trait]
 pub trait CanSendMessagesWithSignerAndNonce:
     HasSignerType + HasNonceType + HasMessageType + HasTxResponseType + HasErrorType

@@ -10,7 +10,11 @@ use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::types::aliases::WriteAckEventOf;
 
-#[derive_component(AckPacketsQuerierComponent, AckPacketsQuerier<Chain>)]
+#[cgp_component {
+  name: AckPacketsQuerierComponent,
+  provider: AckPacketsQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryAckPackets<Counterparty>:
     HasHeightType
@@ -46,7 +50,11 @@ where
     >;
 }
 
-#[derive_component(AckPacketQuerierComponent, AckPacketQuerier<Chain>)]
+#[cgp_component {
+  name: AckPacketQuerierComponent,
+  provider: AckPacketQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryAckPacket<Counterparty>:
     HasHeightType

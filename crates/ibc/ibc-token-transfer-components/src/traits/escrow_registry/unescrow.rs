@@ -12,7 +12,11 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
    first check whether the given channel/app pair has sufficient
    amount escrowed. If so, it would decrement the amount escrowed.
 */
-#[derive_component(UnescrowTokenRegistrarComponent, UnescrowTokenRegistrar<Chain>)]
+#[cgp_component {
+  name: UnescrowTokenRegistrarComponent,
+  provider: UnescrowTokenRegistrar,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanRegisterUnescrowToken<Counterparty>:
     HasAmountType + HasChannelIdType<Counterparty> + HasAppIdType<Counterparty> + HasErrorType

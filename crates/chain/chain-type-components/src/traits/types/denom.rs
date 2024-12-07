@@ -4,7 +4,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(DenomTypeComponent, ProvideDenomType<Chain>)]
+#[cgp_component {
+  name: DenomTypeComponent,
+  provider: ProvideDenomType,
+  context: Chain,
+}]
 pub trait HasDenomType: Async {
     type Denom: Display + Async;
 }

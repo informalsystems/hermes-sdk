@@ -4,7 +4,11 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use tendermint_light_client_verifier::types::PeerId;
 
-#[derive_component(PeerIdGetterComponent, PeerIdGetter<Client>)]
+#[cgp_component {
+  name: PeerIdGetterComponent,
+  provider: PeerIdGetter,
+  context: Client,
+}]
 pub trait HasPeerId: Async {
     fn peer_id(&self) -> &PeerId;
 }

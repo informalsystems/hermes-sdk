@@ -4,7 +4,11 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use serde_json::Value;
 
-#[derive_component(CosmosGenesisConfigModifierComponent, CosmosGenesisConfigModifier<Bootstrap>)]
+#[cgp_component {
+  name: CosmosGenesisConfigModifierComponent,
+  provider: CosmosGenesisConfigModifier,
+  context: Bootstrap,
+}]
 pub trait CanModifyCosmosGenesisConfig: HasErrorType {
     fn modify_genesis_config(&self, genesis_config: &mut Value) -> Result<(), Self::Error>;
 }

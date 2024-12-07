@@ -4,7 +4,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(AddressTypeComponent, ProvideAddressType<Chain>)]
+#[cgp_component {
+  name: AddressTypeComponent,
+  provider: ProvideAddressType,
+  context: Chain,
+}]
 pub trait HasAddressType: Async {
     type Address: Display + Async;
 }

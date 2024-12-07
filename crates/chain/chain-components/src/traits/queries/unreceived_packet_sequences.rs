@@ -4,7 +4,11 @@ use cgp::prelude::*;
 
 use crate::traits::types::ibc::HasIbcChainTypes;
 
-#[derive_component(UnreceivedPacketSequencesQuerierComponent, UnreceivedPacketSequencesQuerier<Chain>)]
+#[cgp_component {
+  name: UnreceivedPacketSequencesQuerierComponent,
+  provider: UnreceivedPacketSequencesQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryUnreceivedPacketSequences<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType

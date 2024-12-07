@@ -8,7 +8,11 @@ use hermes_relayer_components::multi::types::tags::{Dst, Src};
 
 use crate::batch::traits::types::{HasMessageBatchChannelTypes, MessageBatchSenderOf};
 
-#[derive_component(RelayWithBatchBuilderComponent, RelayWithBatchBuilder<Build>)]
+#[cgp_component {
+  name: RelayWithBatchBuilderComponent,
+  provider: RelayWithBatchBuilder,
+  context: Build,
+}]
 #[async_trait]
 pub trait CanBuildRelayWithBatch<A: Async, B: Async>: HasErrorType
     + HasChainTypeAt<A, Chain: HasClientIdType<ChainAt<Self, B>>>

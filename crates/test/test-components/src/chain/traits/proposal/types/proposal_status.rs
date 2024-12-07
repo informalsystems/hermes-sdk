@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(ProposalStatusTypeComponent, ProvideProposalStatusType<ChainDriver>)]
+#[cgp_component {
+  name: ProposalStatusTypeComponent,
+  provider: ProvideProposalStatusType,
+  context: ChainDriver,
+}]
 pub trait HasProposalStatusType: Async {
     type ProposalStatus: Async;
 }

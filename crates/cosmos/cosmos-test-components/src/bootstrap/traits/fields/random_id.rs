@@ -3,7 +3,11 @@ use core::marker::PhantomData;
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
 
-#[derive_component(RandomIdFlagGetterComponent, RandomIdFlagGetter<Bootstrap>)]
+#[cgp_component {
+  name: RandomIdFlagGetterComponent,
+  provider: RandomIdFlagGetter,
+  context: Bootstrap,
+}]
 pub trait HasRandomIdFlag: Async {
     fn should_randomize_identifiers(&self) -> bool;
 }

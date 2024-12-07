@@ -6,7 +6,11 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 
-#[derive_component(ChainFullNodeStarterComponent, ChainFullNodeStarter<Bootstrap>)]
+#[cgp_component {
+  name: ChainFullNodeStarterComponent,
+  provider: ChainFullNodeStarter,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanStartChainFullNode:
     HasChainNodeConfigType + HasChainGenesisConfigType + HasRuntime + HasErrorType

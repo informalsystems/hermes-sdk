@@ -2,7 +2,11 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 
-#[derive_component(PollAssertDurationGetterComponent, PollAssertDurationGetter<ChainDriver>)]
+#[cgp_component {
+  name: PollAssertDurationGetterComponent,
+  provider: PollAssertDurationGetter,
+  context: ChainDriver,
+}]
 pub trait HasPollAssertDuration: Async {
     fn poll_assert_interval(&self) -> Duration;
 

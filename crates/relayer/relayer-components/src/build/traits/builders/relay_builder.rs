@@ -7,7 +7,11 @@ use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 
-#[derive_component(RelayBuilderComponent, RelayBuilder<Build>)]
+#[cgp_component {
+  name: RelayBuilderComponent,
+  provider: RelayBuilder,
+  context: Build,
+}]
 #[async_trait]
 pub trait CanBuildRelay<Src: Async, Dst: Async>:
     HasRelayTypeAt<Src, Dst>

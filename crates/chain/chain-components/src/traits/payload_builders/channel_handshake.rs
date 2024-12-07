@@ -6,7 +6,11 @@ use crate::traits::types::channel::{
 use crate::traits::types::client_state::HasClientStateType;
 use crate::traits::types::ibc::HasIbcChainTypes;
 
-#[derive_component(ChannelOpenTryPayloadBuilderComponent, ChannelOpenTryPayloadBuilder<Chain>)]
+#[cgp_component {
+  name: ChannelOpenTryPayloadBuilderComponent,
+  provider: ChannelOpenTryPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildChannelOpenTryPayload<Counterparty>:
     HasIbcChainTypes<Counterparty>
@@ -23,7 +27,11 @@ pub trait CanBuildChannelOpenTryPayload<Counterparty>:
     ) -> Result<Self::ChannelOpenTryPayload, Self::Error>;
 }
 
-#[derive_component(ChannelOpenAckPayloadBuilderComponent, ChannelOpenAckPayloadBuilder<Chain>)]
+#[cgp_component {
+  name: ChannelOpenAckPayloadBuilderComponent,
+  provider: ChannelOpenAckPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildChannelOpenAckPayload<Counterparty>:
     HasIbcChainTypes<Counterparty>
@@ -40,7 +48,11 @@ pub trait CanBuildChannelOpenAckPayload<Counterparty>:
     ) -> Result<Self::ChannelOpenAckPayload, Self::Error>;
 }
 
-#[derive_component(ChannelOpenConfirmPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilder<Chain>)]
+#[cgp_component {
+  name: ChannelOpenConfirmPayloadBuilderComponent,
+  provider: ChannelOpenConfirmPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildChannelOpenConfirmPayload<Counterparty>:
     HasIbcChainTypes<Counterparty>

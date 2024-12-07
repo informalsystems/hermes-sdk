@@ -11,7 +11,11 @@ use crate::traits::types::client_state::{HasClientStateType, HasRawClientStateTy
 use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofType;
 
-#[derive_component(ClientStateQuerierComponent, ClientStateQuerier<Chain>)]
+#[cgp_component {
+  name: ClientStateQuerierComponent,
+  provider: ClientStateQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryClientState<Counterparty>:
     HasClientIdType<Counterparty> + HasHeightType + HasErrorType
@@ -26,7 +30,11 @@ where
     ) -> Result<Counterparty::ClientState, Self::Error>;
 }
 
-#[derive_component(ClientStateWithProofsQuerierComponent, ClientStateWithProofsQuerier<Chain>)]
+#[cgp_component {
+  name: ClientStateWithProofsQuerierComponent,
+  provider: ClientStateWithProofsQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryClientStateWithProofs<Counterparty>:
     HasClientIdType<Counterparty> + HasHeightType + HasCommitmentProofType + HasErrorType
@@ -41,7 +49,11 @@ where
     ) -> Result<(Counterparty::ClientState, Self::CommitmentProof), Self::Error>;
 }
 
-#[derive_component(RawClientStateQuerierComponent, RawClientStateQuerier<Chain>)]
+#[cgp_component {
+  name: RawClientStateQuerierComponent,
+  provider: RawClientStateQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryRawClientState<Counterparty>:
     HasClientIdType<Counterparty> + HasHeightType + HasRawClientStateType + HasErrorType
@@ -53,7 +65,11 @@ pub trait CanQueryRawClientState<Counterparty>:
     ) -> Result<Self::RawClientState, Self::Error>;
 }
 
-#[derive_component(RawClientStateWithProofsQuerierComponent, RawClientStateWithProofsQuerier<Chain>)]
+#[cgp_component {
+  name: RawClientStateWithProofsQuerierComponent,
+  provider: RawClientStateWithProofsQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryRawClientStateWithProofs<Counterparty>:
     HasClientIdType<Counterparty>
@@ -69,7 +85,11 @@ pub trait CanQueryRawClientStateWithProofs<Counterparty>:
     ) -> Result<(Self::RawClientState, Self::CommitmentProof), Self::Error>;
 }
 
-#[derive_component(AllClientStatesQuerierComponent, AllClientStatesQuerier<Chain>)]
+#[cgp_component {
+  name: AllClientStatesQuerierComponent,
+  provider: AllClientStatesQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryAllClientStates<Counterparty>:
     HasClientIdType<Counterparty> + HasHeightType + HasErrorType
@@ -82,7 +102,11 @@ where
     ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
 }
 
-#[derive_component(AllRawClientStatesQuerierComponent, AllRawClientStatesQuerier<Chain>)]
+#[cgp_component {
+  name: AllRawClientStatesQuerierComponent,
+  provider: AllRawClientStatesQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryAllRawClientStates<Counterparty>:
     HasClientIdType<Counterparty> + HasHeightType + HasRawClientStateType + HasErrorType

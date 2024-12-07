@@ -3,7 +3,11 @@ use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketT
 
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 
-#[derive_component(PacketFromWriteAckBuilderComponent, PacketFromWriteAckBuilder<Chain>)]
+#[cgp_component {
+  name: PacketFromWriteAckBuilderComponent,
+  provider: PacketFromWriteAckBuilder,
+  context: Chain,
+}]
 pub trait CanBuildPacketFromWriteAck<Counterparty>: HasWriteAckEvent<Counterparty>
 where
     Counterparty: HasOutgoingPacketType<Self>,

@@ -13,7 +13,11 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
    increase the escrowed amount registered with the given channel/app
    pair.
 */
-#[derive_component(EscrowTokenRegistrarComponent, EscrowTokenRegistrar<Chain>)]
+#[cgp_component {
+  name: EscrowTokenRegistrarComponent,
+  provider: EscrowTokenRegistrar,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanRegisterEscrowToken<Counterparty>:
     HasAmountType

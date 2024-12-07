@@ -8,7 +8,11 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 
-#[derive_component(ChainNodeConfigInitializerComponent, ChainNodeConfigInitializer<Boostrap>)]
+#[cgp_component {
+  name: ChainNodeConfigInitializerComponent,
+  provider: ChainNodeConfigInitializer,
+  context: Boostrap,
+}]
 #[async_trait]
 pub trait CanInitChainNodeConfig:
     HasChainNodeConfigType + HasChainGenesisConfigType + HasChainType + HasRuntimeType + HasErrorType

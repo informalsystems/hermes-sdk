@@ -6,7 +6,11 @@ use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::payload::payload::HasPayloadType;
 
-#[derive_component(PacketSenderComponent, PacketSender<Chain>)]
+#[cgp_component {
+  name: PacketSenderComponent,
+  provider: PacketSender,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanSendPacket<Counterparty>:
     HasPacketHeaderType<Counterparty>

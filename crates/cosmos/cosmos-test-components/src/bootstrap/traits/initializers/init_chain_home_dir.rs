@@ -5,7 +5,11 @@ use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathTy
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-#[derive_component(ChainHomeDirInitializerComponent, ChainHomeDirInitializer<Bootstrap>)]
+#[cgp_component {
+  name: ChainHomeDirInitializerComponent,
+  provider: ChainHomeDirInitializer,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanInitChainHomeDir: HasChainType + HasRuntime + HasErrorType
 where

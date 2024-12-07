@@ -5,7 +5,10 @@ use cgp::prelude::*;
 
 use crate::batch::traits::types::HasMessageBatchChannelTypes;
 
-#[derive_component(MessageBatchSenderGetterComponent<Tag>, MessageBatchSenderGetter<Context>)]
+#[cgp_component {
+  name: MessageBatchSenderGetterComponent<Tag>,
+  provider: MessageBatchSenderGetter,
+}]
 pub trait HasMessageBatchSender<Tag>: HasMessageBatchChannelTypes<Tag> {
     fn get_batch_sender(&self, _tag: PhantomData<Tag>) -> &Self::MessageBatchSender;
 }

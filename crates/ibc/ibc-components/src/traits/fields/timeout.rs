@@ -3,7 +3,11 @@ use hermes_chain_type_components::traits::types::time::HasTimeType;
 
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
 
-#[derive_component(TimeoutTimeComparerComponent, TimeoutTimeComparer<Chain>)]
+#[cgp_component {
+  name: TimeoutTimeComparerComponent,
+  provider: TimeoutTimeComparer,
+  context: Chain,
+}]
 pub trait CanCompareTimeoutTime<Counterparty>:
     HasTimeType + HasPacketTimeoutType<Counterparty>
 {

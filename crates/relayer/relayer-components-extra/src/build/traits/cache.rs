@@ -105,7 +105,11 @@ where
 {
 }
 
-#[derive_component(BatchSenderCacheGetterComponent, BatchSenderCacheGetter<Build>)]
+#[cgp_component {
+  name: BatchSenderCacheGetterComponent,
+  provider: BatchSenderCacheGetter,
+  context: Build,
+}]
 pub trait HasBatchSenderCache<SrcTag: Async, DstTag: Async, Target: RelayTarget>:
     HasBatchSenderCacheType<SrcTag, DstTag, Target>
 {

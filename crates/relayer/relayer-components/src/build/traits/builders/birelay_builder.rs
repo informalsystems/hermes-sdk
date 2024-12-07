@@ -6,7 +6,11 @@ use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 
-#[derive_component(BiRelayBuilderComponent, BiRelayBuilder<Build>)]
+#[cgp_component {
+  name: BiRelayBuilderComponent,
+  provider: BiRelayBuilder,
+  context: Build,
+}]
 #[async_trait]
 pub trait CanBuildBiRelay<A, B>:
     HasBiRelayTypeAt<A, B>

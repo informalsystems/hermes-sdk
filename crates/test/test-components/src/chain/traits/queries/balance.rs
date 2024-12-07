@@ -4,7 +4,11 @@ use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::denom::HasDenomType;
 
-#[derive_component(BalanceQuerierComponent, BalanceQuerier<Chain>)]
+#[cgp_component {
+  name: BalanceQuerierComponent,
+  provider: BalanceQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryBalance: HasAddressType + HasDenomType + HasAmountType + HasErrorType {
     async fn query_balance(

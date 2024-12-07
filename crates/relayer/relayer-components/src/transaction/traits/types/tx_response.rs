@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(TxResponseTypeComponent, ProvideTxResponseType<Chain>)]
+#[cgp_component {
+  name: TxResponseTypeComponent,
+  provider: ProvideTxResponseType,
+  context: Chain,
+}]
 pub trait HasTxResponseType: Async {
     type TxResponse: Async;
 }

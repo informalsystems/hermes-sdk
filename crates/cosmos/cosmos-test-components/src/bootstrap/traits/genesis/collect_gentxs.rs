@@ -2,7 +2,11 @@ use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
-#[derive_component(GenesisTransactionsCollectorComponent, GenesisTransactionsCollector<Bootstrap>)]
+#[cgp_component {
+  name: GenesisTransactionsCollectorComponent,
+  provider: GenesisTransactionsCollector,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanCollectGenesisTransactions: HasRuntime + HasErrorType
 where

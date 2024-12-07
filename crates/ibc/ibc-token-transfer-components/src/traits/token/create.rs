@@ -10,7 +10,11 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
    implemented by deploying a new token contract. Otherwise, the parameters
    may be optionally used to deterministically derive a local denom.
 */
-#[derive_component(TokenCreatorComponent, TokenCreator<Chain>)]
+#[cgp_component {
+  name: TokenCreatorComponent,
+  provider: TokenCreator,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanCreateToken<Counterparty>:
     HasDenomType + HasChannelIdType<Counterparty> + HasAppIdType<Counterparty> + HasErrorType

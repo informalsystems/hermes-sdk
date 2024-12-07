@@ -7,7 +7,11 @@ use tendermint::block::Height;
 
 pub type VerificationTrace = BTreeMap<Height, BTreeSet<Height>>;
 
-#[derive_component(VerificationTraceGetterComponent, VerificationTraceGetter<Client>)]
+#[cgp_component {
+  name: VerificationTraceGetterComponent,
+  provider: VerificationTraceGetter,
+  context: Client,
+}]
 pub trait HasVerificationTrace {
     fn verification_trace(&self) -> &VerificationTrace;
 

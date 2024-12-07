@@ -11,7 +11,11 @@ pub struct DenomForStaking;
 
 pub struct DenomForTransfer;
 
-#[derive_component(GenesisDenomGetterComponent, GenesisDenomGetter<Bootstrap>)]
+#[cgp_component {
+  name: GenesisDenomGetterComponent,
+  provider: GenesisDenomGetter,
+  context: Bootstrap,
+}]
 pub trait HasGenesisDenom<Label>: HasChainGenesisConfigType + HasChainType
 where
     Self::Chain: HasDenomType,
@@ -22,7 +26,11 @@ where
     ) -> &DenomOf<Self::Chain>;
 }
 
-#[derive_component(DenomPrefixGetterComponent, DenomPrefixGetter<Bootstrap>)]
+#[cgp_component {
+  name: DenomPrefixGetterComponent,
+  provider: DenomPrefixGetter,
+  context: Bootstrap,
+}]
 pub trait HasDenomPrefix<Label>: Async {
     fn denom_prefix(&self, label: Label) -> &str;
 }

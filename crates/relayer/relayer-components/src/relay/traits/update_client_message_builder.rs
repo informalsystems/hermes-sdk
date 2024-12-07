@@ -9,7 +9,11 @@ use crate::chain::traits::send_message::CanSendMessages;
 use crate::chain::types::aliases::{HeightOf, MessageOf};
 use crate::relay::traits::target::{HasTargetChainTypes, HasTargetChains, RelayTarget};
 
-#[derive_component(TargetUpdateClientMessageBuilderComponent, TargetUpdateClientMessageBuilder<Relay>)]
+#[cgp_component {
+  name: TargetUpdateClientMessageBuilderComponent,
+  provider: TargetUpdateClientMessageBuilder,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanBuildTargetUpdateClientMessage<Target: RelayTarget>:
     HasTargetChainTypes<Target, TargetChain: HasMessageType, CounterpartyChain: HasHeightType>

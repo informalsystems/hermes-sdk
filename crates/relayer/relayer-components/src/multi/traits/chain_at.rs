@@ -7,12 +7,18 @@ use cgp::prelude::*;
 
 use crate::chain::types::aliases::ChainIdOf;
 
-#[derive_component(ChainTypeAtComponent<Tag>, ProvideChainTypeAt<Context>)]
+#[cgp_component {
+  name: ChainTypeAtComponent<Tag>,
+  provider: ProvideChainTypeAt,
+}]
 pub trait HasChainTypeAt<Tag>: Async {
     type Chain: Async;
 }
 
-#[derive_component(ChainGetterAtComponent<Tag>, ChainGetterAt<Context>)]
+#[cgp_component {
+  name: ChainGetterAtComponent<Tag>,
+  provider: ChainGetterAt,
+}]
 pub trait HasChainAt<Tag>: HasChainTypeAt<Tag> {
     fn chain_at(&self, _tag: PhantomData<Tag>) -> &Self::Chain;
 }

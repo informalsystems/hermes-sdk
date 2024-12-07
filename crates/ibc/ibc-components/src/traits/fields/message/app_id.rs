@@ -7,7 +7,11 @@ use cgp::prelude::*;
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
 
-#[derive_component(IbcMessageAppIdGetterComponent, IbcMessageAppIdGetter<Chain>)]
+#[cgp_component {
+  name: IbcMessageAppIdGetterComponent,
+  provider: IbcMessageAppIdGetter,
+  context: Chain,
+}]
 pub trait HasIbcMessageAppIds<Counterparty>:
     HasIbcMessageHeaderType<Counterparty> + HasAppIdType<Counterparty>
 where

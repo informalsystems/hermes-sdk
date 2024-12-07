@@ -7,7 +7,11 @@ use cgp::prelude::*;
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::payload::HasPayloadType;
 
-#[derive_component(PayloadDataGetterComponent, PayloadDataGetter<Chain>)]
+#[cgp_component {
+  name: PayloadDataGetterComponent,
+  provider: PayloadDataGetter,
+  context: Chain,
+}]
 pub trait HasPayloadData<Counterparty, App>:
     HasPayloadType<Counterparty> + HasPayloadDataType<Counterparty, App>
 {

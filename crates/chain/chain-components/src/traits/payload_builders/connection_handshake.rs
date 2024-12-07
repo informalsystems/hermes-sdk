@@ -7,7 +7,11 @@ use crate::traits::types::connection::{
 };
 use crate::traits::types::ibc::HasIbcChainTypes;
 
-#[derive_component(ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenInitPayloadBuilder<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenInitPayloadBuilderComponent,
+  provider: ConnectionOpenInitPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildConnectionOpenInitPayload<Counterparty>:
     HasConnectionOpenInitPayloadType<Counterparty> + HasClientStateType<Counterparty> + HasErrorType
@@ -18,7 +22,11 @@ pub trait CanBuildConnectionOpenInitPayload<Counterparty>:
     ) -> Result<Self::ConnectionOpenInitPayload, Self::Error>;
 }
 
-#[derive_component(ConnectionOpenTryPayloadBuilderComponent, ConnectionOpenTryPayloadBuilder<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenTryPayloadBuilderComponent,
+  provider: ConnectionOpenTryPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildConnectionOpenTryPayload<Counterparty>:
     HasIbcChainTypes<Counterparty>
@@ -35,7 +43,11 @@ pub trait CanBuildConnectionOpenTryPayload<Counterparty>:
     ) -> Result<Self::ConnectionOpenTryPayload, Self::Error>;
 }
 
-#[derive_component(ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenAckPayloadBuilder<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenAckPayloadBuilderComponent,
+  provider: ConnectionOpenAckPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildConnectionOpenAckPayload<Counterparty>:
     HasIbcChainTypes<Counterparty>
@@ -52,7 +64,11 @@ pub trait CanBuildConnectionOpenAckPayload<Counterparty>:
     ) -> Result<Self::ConnectionOpenAckPayload, Self::Error>;
 }
 
-#[derive_component(ConnectionOpenConfirmPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilder<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenConfirmPayloadBuilderComponent,
+  provider: ConnectionOpenConfirmPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildConnectionOpenConfirmPayload<Counterparty>:
     HasIbcChainTypes<Counterparty>

@@ -5,7 +5,11 @@ use crate::traits::types::client_state::HasClientStateType;
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::packets::ack::{HasAckPacketPayloadType, HasAcknowledgementType};
 
-#[derive_component(AckPacketPayloadBuilderComponent, AckPacketPayloadBuilder<Chain>)]
+#[cgp_component {
+  name: AckPacketPayloadBuilderComponent,
+  provider: AckPacketPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildAckPacketPayload<Counterparty>:
     HasAckPacketPayloadType<Counterparty>

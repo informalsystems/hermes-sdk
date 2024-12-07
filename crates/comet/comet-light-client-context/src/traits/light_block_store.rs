@@ -9,7 +9,11 @@ use tendermint_light_client_verifier::types::LightBlock;
 
 pub type LightBlockStore = BTreeMap<Height, (LightBlock, VerificationStatus)>;
 
-#[derive_component(LightBlockStoreGetterComponent, LightBlockStoreGetter<Client>)]
+#[cgp_component {
+  name: LightBlockStoreGetterComponent,
+  provider: LightBlockStoreGetter,
+  context: Client,
+}]
 pub trait HasLightBlockStore: Async {
     fn light_block_store(&self) -> &LightBlockStore;
 

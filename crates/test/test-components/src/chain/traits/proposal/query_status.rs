@@ -3,7 +3,11 @@ use cgp::prelude::*;
 use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use crate::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 
-#[derive_component(ProposalStatusQuerierComponent, ProposalStatusQuerier<Chain>)]
+#[cgp_component {
+  name: ProposalStatusQuerierComponent,
+  provider: ProposalStatusQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryProposalStatus: HasProposalIdType + HasProposalStatusType + HasErrorType {
     async fn query_proposal_status(

@@ -6,7 +6,11 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
 
-#[derive_component(MessageTransferAddressGetterComponent, MessageTransferAddressGetter<Chain>)]
+#[cgp_component {
+  name: MessageTransferAddressGetterComponent,
+  provider: MessageTransferAddressGetter,
+  context: Chain,
+}]
 pub trait HasMessageTransferReceiver<Counterparty, App>:
     HasIbcMessageType<Counterparty, App>
 where

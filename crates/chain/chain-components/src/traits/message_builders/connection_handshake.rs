@@ -8,7 +8,11 @@ use crate::traits::types::connection::{
 };
 use crate::traits::types::ibc::HasIbcChainTypes;
 
-#[derive_component(ConnectionOpenInitMessageBuilderComponent, ConnectionOpenInitMessageBuilder<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenInitMessageBuilderComponent,
+  provider: ConnectionOpenInitMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildConnectionOpenInitMessage<Counterparty>:
     HasInitConnectionOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
@@ -24,7 +28,11 @@ where
     ) -> Result<Self::Message, Self::Error>;
 }
 
-#[derive_component(ConnectionOpenTryMessageBuilderComponent, ConnectionOpenTryMessageBuilder<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenTryMessageBuilderComponent,
+  provider: ConnectionOpenTryMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildConnectionOpenTryMessage<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
@@ -40,7 +48,11 @@ where
     ) -> Result<Self::Message, Self::Error>;
 }
 
-#[derive_component(ConnectionOpenAckMessageBuilderComponent, ConnectionOpenAckMessageBuilder<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenAckMessageBuilderComponent,
+  provider: ConnectionOpenAckMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildConnectionOpenAckMessage<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
@@ -55,7 +67,11 @@ where
     ) -> Result<Self::Message, Self::Error>;
 }
 
-#[derive_component(ConnectionOpenConfirmMessageBuilderComponent, ConnectionOpenConfirmMessageBuilder<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenConfirmMessageBuilderComponent,
+  provider: ConnectionOpenConfirmMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildConnectionOpenConfirmMessage<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType

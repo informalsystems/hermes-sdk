@@ -2,7 +2,11 @@ use cgp::prelude::*;
 
 use crate::traits::fs::file_path::HasFilePathType;
 
-#[derive_component(StringToFileWriterComponent, StringToFileWriter<Runtime>)]
+#[cgp_component {
+  name: StringToFileWriterComponent,
+  provider: StringToFileWriter,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanWriteStringToFile: HasFilePathType + HasErrorType {
     async fn write_string_to_file(

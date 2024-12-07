@@ -5,7 +5,11 @@ use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
-#[derive_component(ChainCommandPathGetterComponent, ChainCommandPathGetter<Bootstrap>)]
+#[cgp_component {
+  name: ChainCommandPathGetterComponent,
+  provider: ChainCommandPathGetter,
+  context: Bootstrap,
+}]
 pub trait HasChainCommandPath: HasRuntime
 where
     Self::Runtime: HasFilePathType,

@@ -4,7 +4,11 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use tendermint_light_client_verifier::types::Time;
 
-#[derive_component(CurrentTimeGetterComponent, CurrentTimeGetter<Client>)]
+#[cgp_component {
+  name: CurrentTimeGetterComponent,
+  provider: CurrentTimeGetter,
+  context: Client,
+}]
 pub trait HasCurrentTime: Async {
     fn current_time(&self) -> Time;
 }

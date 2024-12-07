@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(SchemaTypeComponent, ProvideSchemaType<Encoding>)]
+#[cgp_component {
+  name: SchemaTypeComponent,
+  provider: ProvideSchemaType,
+  context: Encoding,
+}]
 pub trait HasSchemaType: Async {
     type Schema: Async;
 }

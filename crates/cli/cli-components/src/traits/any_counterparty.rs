@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(AnyCounterpartyComponent, ProvideAnyCounterparty<App>)]
+#[cgp_component {
+  name: AnyCounterpartyComponent,
+  provider: ProvideAnyCounterparty,
+  context: App,
+}]
 pub trait HasAnyCounterparty: Async {
     type AnyCounterparty: Async;
 }

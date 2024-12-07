@@ -4,7 +4,11 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use ibc_relayer::config::compat_mode::CompatMode;
 
-#[derive_component(CompatModeGetterComponent, CompatModeGetter<Bootstrap>)]
+#[cgp_component {
+  name: CompatModeGetterComponent,
+  provider: CompatModeGetter,
+  context: Bootstrap,
+}]
 pub trait HasCompatMode: Async {
     fn compat_mode(&self) -> Option<&CompatMode>;
 }

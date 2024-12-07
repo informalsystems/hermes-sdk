@@ -3,7 +3,11 @@ use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
-#[derive_component(ClientSetupComponent, ClientSetup<Setup>)]
+#[cgp_component {
+  name: ClientSetupComponent,
+  provider: ClientSetup,
+  context: Setup,
+}]
 #[async_trait]
 pub trait CanSetupClients<A: Async, B: Async>:
     HasChainTypeAt<A, Chain: HasClientIdType<ChainAt<Self, B>>>

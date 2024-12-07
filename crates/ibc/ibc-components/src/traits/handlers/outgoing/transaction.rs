@@ -3,7 +3,11 @@ use cgp::prelude::*;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::transaction::HasIbcTransactionType;
 
-#[derive_component(IbcTransactionHandlerComponent, IbcTransactionHandler<Chain>)]
+#[cgp_component {
+  name: IbcTransactionHandlerComponent,
+  provider: IbcTransactionHandler,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanHandleIbcTransaction<Counterparty>:
     HasErrorType + HasIbcTransactionType<Counterparty> + HasPacketType<Counterparty>

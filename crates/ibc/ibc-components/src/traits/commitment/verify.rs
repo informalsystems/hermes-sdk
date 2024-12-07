@@ -6,7 +6,11 @@ use crate::traits::types::commitment::path::HasCommitmentPathType;
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::commitment::value::HasCommitmentValueType;
 
-#[derive_component(CommitmentVerifierComponent, CommitmentVerifier<Chain>)]
+#[cgp_component {
+  name: CommitmentVerifierComponent,
+  provider: CommitmentVerifier,
+  context: Chain,
+}]
 pub trait CanVerifyCommitment<Counterparty, Tag>:
     HasErrorType
     + HasCommitmentPathType<Tag>

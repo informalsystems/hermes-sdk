@@ -7,7 +7,11 @@ use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::memo::HasMemoType;
 use crate::chain::traits::types::wallet::HasWalletType;
 
-#[derive_component(TokenIbcTransferrerComponent, TokenIbcTransferrer<Chain>)]
+#[cgp_component {
+  name: TokenIbcTransferrerComponent,
+  provider: TokenIbcTransferrer,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanIbcTransferToken<Counterparty>:
     HasErrorType

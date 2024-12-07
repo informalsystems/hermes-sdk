@@ -13,7 +13,11 @@ use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 /// This is in contrast when sending e.g. receive packets, which expect to
 /// receive back a `WriteAckEvent` in response to the receive
 /// packet.
-#[derive_component(TimeoutUnorderedPacketRelayerComponent, TimeoutUnorderedPacketRelayer<Relay>)]
+#[cgp_component {
+  name: TimeoutUnorderedPacketRelayerComponent,
+  provider: TimeoutUnorderedPacketRelayer,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanRelayTimeoutUnorderedPacket: HasRelayChains {
     async fn relay_timeout_unordered_packet(

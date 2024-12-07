@@ -3,7 +3,11 @@ use cgp::prelude::*;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use crate::relay::traits::chains::HasRelayChains;
 
-#[derive_component(PacketClearerComponent, PacketClearer<Relay>)]
+#[cgp_component {
+  name: PacketClearerComponent,
+  provider: PacketClearer,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanClearPackets: HasRelayChains {
     async fn clear_packets(

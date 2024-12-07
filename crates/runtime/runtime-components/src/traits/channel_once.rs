@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(ChannelOnceTypeComponent, ProvideChannelOnceType<Runtime>)]
+#[cgp_component {
+  name: ChannelOnceTypeComponent,
+  provider: ProvideChannelOnceType,
+  context: Runtime,
+}]
 pub trait HasChannelOnceTypes {
     type SenderOnce<T>: Async
     where
@@ -15,14 +19,22 @@ pub type SenderOnceOf<Runtime, T> = <Runtime as HasChannelOnceTypes>::SenderOnce
 
 pub type ReceiverOnce<Runtime, T> = <Runtime as HasChannelOnceTypes>::ReceiverOnce<T>;
 
-#[derive_component(ChannelOnceCreatorComponent, ChannelOnceCreator<Runtime>)]
+#[cgp_component {
+  name: ChannelOnceCreatorComponent,
+  provider: ChannelOnceCreator,
+  context: Runtime,
+}]
 pub trait CanCreateChannelsOnce: HasChannelOnceTypes {
     fn new_channel_once<T>() -> (Self::SenderOnce<T>, Self::ReceiverOnce<T>)
     where
         T: Async;
 }
 
-#[derive_component(ChannelOnceUserComponent, ChannelOnceUser<Runtime>)]
+#[cgp_component {
+  name: ChannelOnceUserComponent,
+  provider: ChannelOnceUser,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanUseChannelsOnce: HasChannelOnceTypes + HasErrorType {
     fn send_once<T>(sender: Self::SenderOnce<T>, value: T) -> Result<(), Self::Error>

@@ -7,7 +7,10 @@ use hermes_chain_components::traits::types::ibc::HasClientIdType;
 use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::ClientIdAt;
 
-#[derive_component(ClientIdAtGetterComponent<Chain, Counterparty>, ClientIdAtGetter<Context>)]
+#[cgp_component {
+  name: ClientIdAtGetterComponent<Chain, Counterparty>,
+  provider: ClientIdAtGetter,
+}]
 pub trait HasClientIdAt<Chain, Counterparty>:
     HasChainTypeAt<Chain, Chain: HasClientIdType<ChainAt<Self, Counterparty>>>
     + HasChainTypeAt<Counterparty>

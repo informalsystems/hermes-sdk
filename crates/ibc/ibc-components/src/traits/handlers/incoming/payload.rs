@@ -5,7 +5,11 @@ use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
-#[derive_component(IncomingPayloadHandlerComponent, IncomingPayloadHandler<Chain>)]
+#[cgp_component {
+  name: IncomingPayloadHandlerComponent,
+  provider: IncomingPayloadHandler,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanHandleIncomingPayload<Counterparty, App>: Sized + Async + HasErrorType
 where

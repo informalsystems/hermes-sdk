@@ -3,7 +3,11 @@ use core::marker::PhantomData;
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
 
-#[derive_component(AccountPrefixGetterComponent, AccountPrefixGetter<Bootstrap>)]
+#[cgp_component {
+  name: AccountPrefixGetterComponent,
+  provider: AccountPrefixGetter,
+  context: Bootstrap,
+}]
 pub trait HasAccountPrefix: Async {
     fn account_prefix(&self) -> &str;
 }

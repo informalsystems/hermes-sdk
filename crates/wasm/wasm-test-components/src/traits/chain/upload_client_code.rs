@@ -3,7 +3,11 @@ use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProp
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 
-#[derive_component(WasmClientCodeUploaderComponent, WasmClientCodeUploader<Chain>)]
+#[cgp_component {
+  name: WasmClientCodeUploaderComponent,
+  provider: WasmClientCodeUploader,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanUploadWasmClientCode:
     HasAmountType + HasAddressType + HasProposalIdType + HasErrorType

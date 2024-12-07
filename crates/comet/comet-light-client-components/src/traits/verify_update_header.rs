@@ -3,7 +3,11 @@ use cgp::prelude::*;
 use crate::traits::types::light_block::HasLightBlockType;
 use crate::traits::types::verdict::HasVerdictType;
 
-#[derive_component(UpdateHeaderVerifierComponent, UpdateHeaderVerifier<Client>)]
+#[cgp_component {
+  name: UpdateHeaderVerifierComponent,
+  provider: UpdateHeaderVerifier,
+  context: Client,
+}]
 pub trait CanVerifyUpdateHeader: HasLightBlockType + HasVerdictType + HasErrorType {
     fn verify_update_header(
         &self,

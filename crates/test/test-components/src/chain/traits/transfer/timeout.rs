@@ -2,7 +2,11 @@ use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
 
-#[derive_component(IbcTransferTimeoutCalculatorComponent, IbcTransferTimeoutCalculator<ChainDriver>)]
+#[cgp_component {
+  name: IbcTransferTimeoutCalculatorComponent,
+  provider: IbcTransferTimeoutCalculator,
+  context: ChainDriver,
+}]
 pub trait CanCalculateIbcTransferTimeout: HasTimeoutType + HasHeightType {
     fn ibc_transfer_timeout_time(&self, current_time: &Self::Time) -> Option<Self::Timeout>;
 

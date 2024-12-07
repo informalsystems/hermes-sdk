@@ -7,7 +7,11 @@ use crate::traits::types::status::HasChainStatusType;
    Implemented by a chain context to provide method for querying the
    [current status](HasChainStatusType::ChainStatus) of the blockchain.
 */
-#[derive_component(ChainStatusQuerierComponent, ChainStatusQuerier<Chain>)]
+#[cgp_component {
+  name: ChainStatusQuerierComponent,
+  provider: ChainStatusQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
     /**

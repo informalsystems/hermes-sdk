@@ -4,7 +4,11 @@ use cgp::prelude::*;
 
 use crate::types::with_app_provider::WithAppProvider;
 
-#[derive_component(PayloadDataTypeComponent, ProvidePayloadDataType<Chain>)]
+#[cgp_component {
+  name: PayloadDataTypeComponent,
+  provider: ProvidePayloadDataType,
+  context: Chain,
+}]
 pub trait HasPayloadDataType<Counterparty, App>: Async {
     type PayloadData: Async;
 }

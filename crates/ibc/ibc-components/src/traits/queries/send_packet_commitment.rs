@@ -4,7 +4,11 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::traits::types::packet::packet::HasPacketType;
 
-#[derive_component(SendPacketCommitmentQuerierComponent, SendPacketCommitmentQuerier<Chain>)]
+#[cgp_component {
+  name: SendPacketCommitmentQuerierComponent,
+  provider: SendPacketCommitmentQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQuerySendPacketCommitment<Counterparty>:
     HasPacketType<Counterparty> + HasChannelIdType<Counterparty> + HasErrorType

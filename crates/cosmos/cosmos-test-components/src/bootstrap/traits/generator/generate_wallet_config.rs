@@ -5,7 +5,11 @@ use cgp::prelude::*;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 
-#[derive_component(WalletConfigGeneratorComponent, WalletConfigGenerator<Bootstrap>)]
+#[cgp_component {
+  name: WalletConfigGeneratorComponent,
+  provider: WalletConfigGenerator,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanGenerateWalletConfigs:
     HasChainGenesisConfigType + HasWalletConfigType + HasErrorType

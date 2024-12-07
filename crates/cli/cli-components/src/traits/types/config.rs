@@ -2,7 +2,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(ConfigTypeComponent, ProvideConfigType<App>)]
+#[cgp_component {
+  name: ConfigTypeComponent,
+  provider: ProvideConfigType,
+  context: App,
+}]
 pub trait HasConfigType: Async {
     type Config: Async;
 }

@@ -4,7 +4,11 @@ use crate::traits::types::commitment::value::HasCommitmentValueType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::types::tags::commitment::send::SendPacket;
 
-#[derive_component(SendPacketCommitmentValueBuilderComponent, SendPacketCommitmentValueBuilder<Chain>)]
+#[cgp_component {
+  name: SendPacketCommitmentValueBuilderComponent,
+  provider: SendPacketCommitmentValueBuilder,
+  context: Chain,
+}]
 pub trait CanBuildSendPacketCommitmentValue<Counterparty>:
     HasPacketType<Counterparty> + HasCommitmentValueType<SendPacket> + HasErrorType
 {

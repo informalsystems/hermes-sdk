@@ -2,7 +2,11 @@ use cgp::prelude::*;
 
 use crate::traits::types::time::HasTimeType;
 
-#[derive_component(TimeoutTypeComponent, ProvideTimeoutType<Chain>)]
+#[cgp_component {
+  name: TimeoutTypeComponent,
+  provider: ProvideTimeoutType,
+  context: Chain,
+}]
 pub trait HasTimeoutType: HasTimeType {
     type Timeout: Async;
 

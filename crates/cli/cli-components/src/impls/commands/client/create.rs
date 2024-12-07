@@ -120,7 +120,11 @@ where
     }
 }
 
-#[derive_component(CreateClientOptionsParserComponent, CreateClientOptionsParser<App>)]
+#[cgp_component {
+  name: CreateClientOptionsParserComponent,
+  provider: CreateClientOptionsParser,
+  context: App,
+}]
 #[async_trait]
 pub trait CanParseCreateClientOptions<Args: Async, Target: Async, Counterparty: Async>:
     HasBuilderType<

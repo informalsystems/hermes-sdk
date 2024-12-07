@@ -5,7 +5,11 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
-#[derive_component(ChannelGetterAtComponent, ChannelGetterAt<ChainDriver>)]
+#[cgp_component {
+  name: ChannelGetterAtComponent,
+  provider: ChannelGetterAt,
+  context: ChainDriver,
+}]
 pub trait HasChannelAt<Chain: Async, Counterparty: Async>:
     HasChainTypeAt<Chain> + HasChainTypeAt<Counterparty>
 where

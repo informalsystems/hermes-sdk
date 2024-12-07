@@ -4,7 +4,11 @@ use cgp::prelude::*;
 
 use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
 
-#[derive_component(ChainSetupComponent, ChainSetup<Setup>)]
+#[cgp_component {
+  name: ChainSetupComponent,
+  provider: ChainSetup,
+  context: Setup,
+}]
 #[async_trait]
 pub trait CanSetupChain<Tag: Async>: HasChainDriverTypeAt<Tag> + HasErrorType {
     async fn setup_chain(

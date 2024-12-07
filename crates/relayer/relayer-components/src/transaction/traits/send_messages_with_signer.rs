@@ -6,7 +6,11 @@ use hermes_chain_type_components::traits::types::message_response::HasMessageRes
 use crate::chain::traits::types::message::HasMessageType;
 use crate::transaction::traits::types::signer::HasSignerType;
 
-#[derive_component(MessagesWithSignerSenderComponent, MessagesWithSignerSender<Chain>)]
+#[cgp_component {
+  name: MessagesWithSignerSenderComponent,
+  provider: MessagesWithSignerSender,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanSendMessagesWithSigner:
     HasSignerType + HasMessageType + HasMessageResponseType + HasErrorType

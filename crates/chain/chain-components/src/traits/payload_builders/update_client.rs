@@ -5,7 +5,11 @@ use crate::traits::types::client_state::HasClientStateType;
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::update_client::HasUpdateClientPayloadType;
 
-#[derive_component(UpdateClientPayloadBuilderComponent, UpdateClientPayloadBuilder<Chain>)]
+#[cgp_component {
+  name: UpdateClientPayloadBuilderComponent,
+  provider: UpdateClientPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildUpdateClientPayload<Counterparty>:
     HasUpdateClientPayloadType<Counterparty>

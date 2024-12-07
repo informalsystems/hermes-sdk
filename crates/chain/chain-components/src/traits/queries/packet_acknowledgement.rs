@@ -4,7 +4,11 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::packets::ack::HasAcknowledgementType;
 use crate::traits::types::proof::HasCommitmentProofType;
 
-#[derive_component(PacketAcknowledgementQuerierComponent, PacketAcknowledgementQuerier<Chain>)]
+#[cgp_component {
+  name: PacketAcknowledgementQuerierComponent,
+  provider: PacketAcknowledgementQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryPacketAcknowledgement<Counterparty>:
     HasIbcChainTypes<Counterparty>

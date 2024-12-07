@@ -3,7 +3,11 @@ use core::marker::PhantomData;
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
 
-#[derive_component(WasmClientByteCodeGetterComponent, WasmClientByteCodeGetter<Bootstrap>)]
+#[cgp_component {
+  name: WasmClientByteCodeGetterComponent,
+  provider: WasmClientByteCodeGetter,
+  context: Bootstrap,
+}]
 pub trait HasWasmClientByteCode {
     fn wasm_client_byte_code(&self) -> &Vec<u8>;
 }

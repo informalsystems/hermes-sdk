@@ -2,7 +2,11 @@ use cgp::prelude::*;
 
 use crate::traits::types::ibc::HasIbcChainTypes;
 
-#[derive_component(ReceivedPacketQuerierComponent, ReceivedPacketQuerier<Chain>)]
+#[cgp_component {
+  name: ReceivedPacketQuerierComponent,
+  provider: ReceivedPacketQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryPacketIsReceived<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType

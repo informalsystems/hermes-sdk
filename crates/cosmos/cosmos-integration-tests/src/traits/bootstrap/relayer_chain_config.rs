@@ -8,7 +8,11 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 /**
    Capability for the bootstrap context to build a Hermes v1 relayer chain config.
 */
-#[derive_component(RelayerChainConfigBuilderComponent, RelayerChainConfigBuilder<Bootstrap>)]
+#[cgp_component {
+  name: RelayerChainConfigBuilderComponent,
+  provider: RelayerChainConfigBuilder,
+  context: Bootstrap,
+}]
 pub trait CanBuildRelayerChainConfig:
     HasChainNodeConfigType + HasChainGenesisConfigType + HasChainType + HasErrorType
 where

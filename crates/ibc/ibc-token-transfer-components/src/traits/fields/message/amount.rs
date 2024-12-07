@@ -6,7 +6,11 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
 
-#[derive_component(MessageTransferAmountGetterComponent, MessageTransferAmountGetter<Chain>)]
+#[cgp_component {
+  name: MessageTransferAmountGetterComponent,
+  provider: MessageTransferAmountGetter,
+  context: Chain,
+}]
 pub trait HasMessageTransferAmount<Counterparty, App>:
     HasAmountType + HasIbcMessageType<Counterparty, App>
 {

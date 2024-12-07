@@ -8,7 +8,11 @@ use crate::chain::traits::types::create_client::{
 use crate::chain::types::aliases::ClientIdOf;
 use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
-#[derive_component(ClientCreatorComponent, ClientCreator<Relay>)]
+#[cgp_component {
+  name: ClientCreatorComponent,
+  provider: ClientCreator,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanCreateClient<Target: RelayTarget>:
     HasTargetChainTypes<

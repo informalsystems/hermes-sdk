@@ -7,7 +7,11 @@ use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
-#[derive_component(IbcMessageHandlerComponent, IbcMessageHandler<Chain>)]
+#[cgp_component {
+  name: IbcMessageHandlerComponent,
+  provider: IbcMessageHandler,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanHandleIbcMessage<Counterparty, App>:
     HasErrorType

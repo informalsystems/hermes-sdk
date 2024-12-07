@@ -6,7 +6,11 @@ use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::types::aliases::ChainIdOf;
 use crate::multi::traits::chain_at::HasChainTypeAt;
 
-#[derive_component(ChainBuilderComponent, ChainBuilder<Build>)]
+#[cgp_component {
+  name: ChainBuilderComponent,
+  provider: ChainBuilder,
+  context: Build,
+}]
 #[async_trait]
 pub trait CanBuildChain<I: Async>: HasChainTypeAt<I, Chain: HasChainIdType> + HasErrorType {
     async fn build_chain(

@@ -4,7 +4,11 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use toml::Value;
 
-#[derive_component(CosmosSdkConfigModifierComponent, CosmosSdkConfigModifier<Bootstrap>)]
+#[cgp_component {
+  name: CosmosSdkConfigModifierComponent,
+  provider: CosmosSdkConfigModifier,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanModifyCosmosSdkConfig: HasErrorType {
     fn modify_cosmos_sdk_config(&self, cosmos_sdk_config: &mut Value) -> Result<(), Self::Error>;

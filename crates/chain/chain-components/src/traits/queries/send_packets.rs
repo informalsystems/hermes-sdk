@@ -5,7 +5,11 @@ use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketT
 
 use crate::traits::types::ibc::HasIbcChainTypes;
 
-#[derive_component(SendPacketsQuerierComponent, SendPacketsQuerier<Chain>)]
+#[cgp_component {
+  name: SendPacketsQuerierComponent,
+  provider: SendPacketsQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQuerySendPackets<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasOutgoingPacketType<Counterparty> + HasErrorType
@@ -28,7 +32,11 @@ where
     ) -> Result<Vec<Self::OutgoingPacket>, Self::Error>;
 }
 
-#[derive_component(SendPacketQuerierComponent, SendPacketQuerier<Chain>)]
+#[cgp_component {
+  name: SendPacketQuerierComponent,
+  provider: SendPacketQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQuerySendPacket<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasOutgoingPacketType<Counterparty> + HasErrorType

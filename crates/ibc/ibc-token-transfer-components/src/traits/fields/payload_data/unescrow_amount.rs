@@ -6,7 +6,11 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 
-#[derive_component(PayloadUnescrowAmountGetterComponent, PayloadUnescrowAmountGetter<Chain>)]
+#[cgp_component {
+  name: PayloadUnescrowAmountGetterComponent,
+  provider: PayloadUnescrowAmountGetter,
+  context: Chain,
+}]
 pub trait HasPayloadUnescrowAmount<Counterparty, App>:
     HasPayloadDataType<Counterparty, App>
 where

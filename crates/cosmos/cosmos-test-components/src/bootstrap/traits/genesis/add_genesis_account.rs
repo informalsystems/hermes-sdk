@@ -5,7 +5,11 @@ use hermes_test_components::chain::traits::types::address::{AddressOf, HasAddres
 use hermes_test_components::chain::traits::types::amount::{AmountOf, HasAmountType};
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-#[derive_component(GenesisAccountAdderComponent, GenesisAccountAdder<Bootstrap>)]
+#[cgp_component {
+  name: GenesisAccountAdderComponent,
+  provider: GenesisAccountAdder,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanAddGenesisAccount: HasRuntime + HasChainType + HasErrorType
 where

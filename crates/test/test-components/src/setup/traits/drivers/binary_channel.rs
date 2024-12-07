@@ -9,7 +9,11 @@ use hermes_relayer_components::multi::types::index::Index;
 use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
 use crate::setup::traits::driver::HasTestDriverType;
 
-#[derive_component(BinaryChannelDriverBuilderComponent, BinaryChannelDriverBuilder<Setup>)]
+#[cgp_component {
+  name: BinaryChannelDriverBuilderComponent,
+  provider: BinaryChannelDriverBuilder,
+  context: Setup,
+}]
 #[async_trait]
 pub trait CanBuildTestDriverWithBinaryChannel:
     HasBiRelayTypeAt<Index<0>, Index<1>>

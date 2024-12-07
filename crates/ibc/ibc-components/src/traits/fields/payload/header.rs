@@ -7,7 +7,11 @@ use cgp::prelude::*;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 use crate::traits::types::payload::payload::HasPayloadType;
 
-#[derive_component(PayloadHeaderGetterComponent, PayloadHeaderGetter<Chain>)]
+#[cgp_component {
+  name: PayloadHeaderGetterComponent,
+  provider: PayloadHeaderGetter,
+  context: Chain,
+}]
 pub trait HasPayloadHeader<Counterparty>:
     HasPayloadType<Counterparty> + HasPayloadHeaderType<Counterparty>
 {

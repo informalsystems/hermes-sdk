@@ -2,7 +2,11 @@ use core::fmt::{Debug, Display};
 
 use cgp::prelude::*;
 
-#[derive_component(PortIdTypeComponent, ProvidePortIdType<Chain>)]
+#[cgp_component {
+  name: PortIdTypeComponent,
+  provider: ProvidePortIdType,
+  context: Chain,
+}]
 pub trait HasPortIdType<Counterparty>: Async {
     /**
        The port ID of the counterparty chain, that is stored on the self

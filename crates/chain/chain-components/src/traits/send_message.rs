@@ -41,7 +41,11 @@ use crate::traits::types::message::HasMessageType;
     can then try and match against the error, and split the sent messages into
     smaller batches.
 */
-#[derive_component(MessageSenderComponent, MessageSender<Chain>)]
+#[cgp_component {
+  name: MessageSenderComponent,
+  provider: MessageSender,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanSendMessages: HasMessageType + HasMessageResponseType + HasErrorType {
     /**

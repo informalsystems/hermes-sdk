@@ -2,7 +2,11 @@ use cgp::prelude::*;
 
 use crate::traits::stream::HasStreamType;
 
-#[derive_component(SubscriptionComponent, ProvideSubscription<Runtime>)]
+#[cgp_component {
+  name: SubscriptionComponent,
+  provider: ProvideSubscription,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait HasSubscription: HasStreamType {
     type Subscription<Item: Async>: Async;

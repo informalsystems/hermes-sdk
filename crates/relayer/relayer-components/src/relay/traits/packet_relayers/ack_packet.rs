@@ -4,7 +4,11 @@ use crate::chain::traits::types::packets::ack::{AcknowledgementOf, HasAcknowledg
 use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 
-#[derive_component(AckPacketRelayerComponent, AckPacketRelayer<Relay>)]
+#[cgp_component {
+  name: AckPacketRelayerComponent,
+  provider: AckPacketRelayer,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanRelayAckPacket:
     HasRelayChains<DstChain: HasAcknowledgementType<Self::SrcChain>>

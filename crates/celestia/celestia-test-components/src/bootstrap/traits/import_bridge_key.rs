@@ -6,7 +6,11 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
 /**
    Initialize a new chain with data files stored at the given home directory
 */
-#[derive_component(BridgeKeyImporterComponent, BridgeKeyImporter<Bootstrap>)]
+#[cgp_component {
+  name: BridgeKeyImporterComponent,
+  provider: BridgeKeyImporter,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanImportBridgeKey: HasRuntime + HasChainDriverType + HasErrorType
 where

@@ -3,7 +3,11 @@ use cgp::prelude::*;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 
-#[derive_component(BiRelayFromRelayBuilderComponent, BiRelayFromRelayBuilder<Build>)]
+#[cgp_component {
+  name: BiRelayFromRelayBuilderComponent,
+  provider: BiRelayFromRelayBuilder,
+  context: Build,
+}]
 #[async_trait]
 pub trait CanBuildBiRelayFromRelays<A, B>:
     HasBiRelayTypeAt<A, B> + HasRelayTypeAt<A, B> + HasRelayTypeAt<B, A> + HasErrorType

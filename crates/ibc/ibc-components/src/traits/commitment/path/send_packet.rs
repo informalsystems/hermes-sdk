@@ -5,7 +5,11 @@ use crate::traits::types::commitment::path::HasCommitmentPathType;
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::types::tags::commitment::send::SendPacket;
 
-#[derive_component(SendPacketCommitmentPathBuilderComponent, SendPacketCommitmentPathBuilder<Chain>)]
+#[cgp_component {
+  name: SendPacketCommitmentPathBuilderComponent,
+  provider: SendPacketCommitmentPathBuilder,
+  context: Chain,
+}]
 pub trait CanBuildSendPacketCommitmentPath<Counterparty>:
     HasChannelIdType<Counterparty>
     + HasPacketNonceType<Counterparty>
