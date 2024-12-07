@@ -18,7 +18,7 @@ use cgp::prelude::*;
    they can never be ambiguous.
 */
 #[derive_component(EventTypeComponent, ProvideEventType<Chain>)]
-pub trait HasEventType: Async {
+pub trait HasEventType: Sized + Async {
     /**
        The events that are emitted from a transaction being committed to a
        blockchain.

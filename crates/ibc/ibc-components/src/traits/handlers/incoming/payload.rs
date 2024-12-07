@@ -7,7 +7,7 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
 
 #[derive_component(IncomingPayloadHandlerComponent, IncomingPayloadHandler<Chain>)]
 #[async_trait]
-pub trait CanHandleIncomingPayload<Counterparty, App>: Async + HasErrorType
+pub trait CanHandleIncomingPayload<Counterparty, App>: Sized + Async + HasErrorType
 where
     Counterparty:
         HasPacketHeaderType<Self> + HasPayloadHeaderType<Self> + HasPayloadDataType<Self, App>,

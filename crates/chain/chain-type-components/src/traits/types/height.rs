@@ -5,7 +5,7 @@ use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(HeightTypeComponent, ProvideHeightType<Chain>)]
-pub trait HasHeightType: Async {
+pub trait HasHeightType: Sized + Async {
     /**
        The height of the chain, which should behave like natural numbers.
 

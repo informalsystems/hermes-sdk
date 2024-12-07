@@ -5,7 +5,7 @@ use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(ClientIdTypeComponent, ProvideClientIdType<Chain>)]
-pub trait HasClientIdType<Counterparty>: Async {
+pub trait HasClientIdType<Counterparty>: Sized + Async {
     /**
        The client ID of the counterparty chain, that is stored on the local chain.
     */

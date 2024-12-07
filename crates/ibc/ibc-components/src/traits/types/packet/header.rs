@@ -3,7 +3,7 @@ use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(PacketHeaderTypeComponent, ProvidePacketHeaderType<Chain>)]
-pub trait HasPacketHeaderType<Counterparty>: Async {
+pub trait HasPacketHeaderType<Counterparty>: Sized + Async {
     type PacketHeader: Async;
 }
 
