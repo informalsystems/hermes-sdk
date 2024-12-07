@@ -1,6 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::commitment::path::send_packet::CanBuildSendPacketCommitmentPath;
@@ -16,6 +17,7 @@ use crate::types::tags::commitment::send::SendPacket;
 
 pub struct CommitSendPacket<InHandler>(pub PhantomData<InHandler>);
 
+#[async_trait]
 impl<Chain, Counterparty, InHandler> PacketSender<Chain, Counterparty>
     for CommitSendPacket<InHandler>
 where

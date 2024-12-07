@@ -1,5 +1,6 @@
 use alloc::vec::Vec;
 
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::builders::packet::CanBuildPacket;
@@ -11,6 +12,7 @@ use crate::traits::types::payload::payload::HasPayloadType;
 
 pub struct AllocateNonceAndBuildPacket;
 
+#[async_trait]
 impl<Chain, Counterparty> PacketSender<Chain, Counterparty> for AllocateNonceAndBuildPacket
 where
     Chain: HasPacketChannelIds<Counterparty>

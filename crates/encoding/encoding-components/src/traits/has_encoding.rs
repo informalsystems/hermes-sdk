@@ -11,6 +11,6 @@ pub trait HasEncoding<Kind>: HasEncodingType<Kind> {
 }
 
 #[derive_component(DefaultEncodingGetterComponent, DefaultEncodingGetter<Context>)]
-pub trait HasDefaultEncoding<Kind>: HasEncodingType<Kind> {
+pub trait HasDefaultEncoding<Kind>: HasEncodingType<Kind, Encoding: 'static> {
     fn default_encoding() -> &'static Self::Encoding;
 }

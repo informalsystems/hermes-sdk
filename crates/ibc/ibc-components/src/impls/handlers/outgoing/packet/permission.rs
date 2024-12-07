@@ -1,6 +1,8 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
+
 use crate::traits::fields::caller::HasCaller;
 use crate::traits::fields::payload::header::HasPayloadHeader;
 use crate::traits::handlers::outgoing::packet::PacketSender;
@@ -10,6 +12,7 @@ use crate::traits::types::packet::packet::HasPacketType;
 
 pub struct CheckSendPayloadPermission<InHandler>(pub PhantomData<InHandler>);
 
+#[async_trait]
 impl<Chain, Counterparty, InHandler> PacketSender<Chain, Counterparty>
     for CheckSendPayloadPermission<InHandler>
 where

@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
@@ -12,6 +13,7 @@ use crate::types::tags::commitment::send::SendPacket;
 
 pub struct IgnoreDoubleReceive<InHandler>(pub PhantomData<InHandler>);
 
+#[async_trait]
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for IgnoreDoubleReceive<InHandler>
 where

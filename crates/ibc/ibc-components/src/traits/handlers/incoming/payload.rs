@@ -20,6 +20,7 @@ where
     ) -> Result<(), Self::Error>;
 }
 
+#[async_trait]
 impl<Chain, Counterparty, App, Components> IncomingPayloadHandler<Chain, Counterparty, App>
     for UseDelegate<Components>
 where
@@ -45,6 +46,7 @@ where
     }
 }
 
+#[async_trait]
 impl<Chain, Counterparty, App> IncomingPayloadHandler<Chain, Counterparty, App> for UseContext
 where
     Chain: CanHandleIncomingPayload<Counterparty, App>,

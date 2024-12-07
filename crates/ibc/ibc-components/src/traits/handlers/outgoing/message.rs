@@ -25,6 +25,7 @@ pub trait CanHandleIbcMessage<Counterparty, App>:
     ) -> Result<(Self::PayloadHeader, Self::PayloadData), Self::Error>;
 }
 
+#[async_trait]
 impl<Chain, Counterparty, App> IbcMessageHandler<Chain, Counterparty, App> for UseContext
 where
     Chain: CanHandleIbcMessage<Counterparty, App>,
@@ -41,6 +42,7 @@ where
     }
 }
 
+#[async_trait]
 impl<Chain, Counterparty, App, Components> IbcMessageHandler<Chain, Counterparty, App>
     for UseDelegate<Components>
 where

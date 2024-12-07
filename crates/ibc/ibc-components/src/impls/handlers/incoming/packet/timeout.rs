@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::time::HasTimeType;
 
 use crate::traits::fields::packet::header::timeout::HasPacketTimeout;
@@ -26,6 +26,7 @@ where
     pub packet: &'a Counterparty::Packet,
 }
 
+#[async_trait]
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for DisallowTimedOutIncomingPacket<InHandler>
 where
