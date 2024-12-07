@@ -8,7 +8,6 @@ use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
 use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::transform::Transformer;
-use hermes_encoding_components::HList;
 use prost_types::Any;
 
 use crate::impls::encode_mut::proto_field::bytes::EncodeByteField;
@@ -19,7 +18,7 @@ pub struct EncodeAny;
 delegate_components! {
     EncodeAny {
         MutEncoderComponent:
-            CombineEncoders<HList![
+            CombineEncoders<Product![
                 EncodeFieldWithGetter<
                     Self,
                     symbol!("type_url"),
@@ -33,7 +32,7 @@ delegate_components! {
             ]>,
         MutDecoderComponent: DecodeFrom<
             Self,
-            CombineEncoders<HList![
+            CombineEncoders<Product![
                 EncodeStringField<1>,
                 EncodeByteField<2>,
             ]>
@@ -58,11 +57,11 @@ impl FieldGetter<Any, symbol!("value")> for EncodeAny {
 }
 
 impl Transformer for EncodeAny {
-    type From = HList![String, Vec<u8>];
+    type From = Product![String, Vec<u8>];
 
     type To = Any;
 
-    fn transform(HList![type_url, value]: Self::From) -> Self::To {
+    fn transform(product![type_url, value]: Self::From) -> Self::To {
         Any { type_url, value }
     }
 }
