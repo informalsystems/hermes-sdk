@@ -8,11 +8,8 @@ use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
-use hermes_cosmos_chain_components::components::client::*;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
-use hermes_cosmos_chain_components::traits::eip::eip_query::EipQuerierComponent;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
@@ -26,11 +23,9 @@ use hermes_cosmos_chain_components::types::payloads::client::{
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
-use hermes_cosmos_chain_components::with_cosmos_client_components;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
-use hermes_cosmos_test_components::chain::components::*;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
     HasDefaultEncoding,
@@ -81,7 +76,6 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
-use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
@@ -123,9 +117,9 @@ use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
 
+use crate::components::chain::{CosmosChainWasmPreset, IsCosmosChainWasmPreset};
 use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
-use crate::impls::client_state::ProvideWrappedTendermintClientState;
 use crate::types::client_state::WasmTendermintClientState;
 
 #[derive(Clone)]
@@ -177,48 +171,11 @@ delegate_components! {
     }
 }
 
-delegate_components! {
-    WasmCosmosChainComponents {
-        [
-            ClientStateTypeComponent,
-            ClientStateFieldsComponent,
-        ]:
-            ProvideWrappedTendermintClientState,
-    }
-}
-
-with_cosmos_client_components! {
-    [
-        ClientStateTypeComponent,
-        ClientStateFieldsComponent,
-    ],
-    | Components | {
-        delegate_components! {
-            WasmCosmosChainComponents {
-                Components : CosmosClientComponents,
-            }
-        }
-    }
-}
-
-with_cosmos_tx_components! {
-    | Components | {
-        delegate_components! {
-            WasmCosmosChainComponents {
-                Components : CosmosTxComponents,
-            }
-        }
-    }
-}
-
-with_cosmmos_chain_test_components! {
-    | Components | {
-        delegate_components! {
-            WasmCosmosChainComponents {
-                Components: CosmmosChainTestComponents,
-            }
-        }
-    }
+impl<Component> DelegateComponent<Component> for WasmCosmosChainComponents
+where
+    Self: IsCosmosChainWasmPreset<Component>,
+{
+    type Delegate = CosmosChainWasmPreset;
 }
 
 delegate_components! {
