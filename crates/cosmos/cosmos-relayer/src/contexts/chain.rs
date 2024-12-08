@@ -178,14 +178,11 @@ delegate_components! {
     }
 }
 
-with_cosmos_client_components! {
-    | Components | {
-        delegate_components! {
-            CosmosChainContextComponents {
-                Components: CosmosClientComponents,
-            }
-        }
-    }
+impl<Name> DelegateComponent<Name> for CosmosChainContextComponents
+where
+    Self: IsCosmosClientComponents<Name>,
+{
+    type Delegate = CosmosClientComponents;
 }
 
 with_cosmos_tx_components! {
