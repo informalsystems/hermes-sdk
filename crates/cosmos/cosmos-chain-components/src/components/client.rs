@@ -171,7 +171,7 @@ use crate::impls::unbonding_period::StakingParamsUnbondingPeriod;
 pub use crate::traits::abci_query::AbciQuerierComponent;
 pub use crate::traits::unbonding_period::UnbondingPeriodQuerierComponent;
 
-define_components! {
+cgp_preset! {
     CosmosClientComponents {
         [
             HeightTypeComponent,

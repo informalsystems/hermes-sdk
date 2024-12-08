@@ -54,7 +54,7 @@ use crate::impls::error::RaiseDebugString;
 use crate::impls::tagged::UseTaggedType;
 use crate::types::quantity::MockQuantity;
 
-define_components! {
+cgp_preset! {
     MockChainComponents {
         [
             HeightTypeComponent,

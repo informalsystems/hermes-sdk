@@ -13,7 +13,7 @@ use crate::encoding::convert::SolomachineConverterComponents;
 use crate::encoding::encoder::SolomachineEncoderComponents;
 use crate::encoding::type_url::SolomachineTypeUrlSchemas;
 
-define_components! {
+cgp_preset! {
     SolomachineEncodingComponents {
         EncodedTypeComponent:
             ProvideEncodedBytes,

@@ -59,7 +59,7 @@ use crate::setup::traits::port_id_at::ProvidePortIdAt;
 pub use crate::setup::traits::relay::RelaySetupComponent;
 pub use crate::setup::traits::run_test::TestRunnerComponent;
 
-define_components! {
+cgp_preset! {
     BinaryChannelTestComponents {
         DriverBuilderComponent: SetupBinaryChannelDriver,
         TestRunnerComponent: BuildDriverAndRunTest,

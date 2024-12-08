@@ -66,7 +66,7 @@ use crate::impls::solomachine::timeout_packet_payload::BuildSolomachineTimeoutPa
 use crate::impls::solomachine::types::ProvideSolomachineChainTypes;
 use crate::impls::solomachine::update_client_payload::BuildSolomachineUpdateClientPayload;
 
-define_components! {
+cgp_preset! {
     SolomachineChainComponents {
         [
             HeightTypeComponent,

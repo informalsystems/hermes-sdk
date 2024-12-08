@@ -17,7 +17,7 @@ use crate::bootstrap::traits::init_bridge_data::BridgeDataInitializerComponent;
 use crate::bootstrap::traits::start_bridge::BridgeStarterComponent;
 use crate::bootstrap::traits::types::bridge_config::BridgeConfigTypeComponent;
 
-define_components! {
+cgp_preset! {
     CelestiaBootstrapComponents {
         BridgeDataInitializerComponent:
             InitCelestiaBridgeData,

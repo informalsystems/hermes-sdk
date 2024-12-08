@@ -7,7 +7,7 @@ use hermes_ibc_token_transfer_components::types::tags::{
 
 use crate::types::packet_data::UseMockAnyPayloadData;
 
-define_components! {
+cgp_preset! {
     MockPayloadDataTypes {
         AnyApp: UseMockAnyPayloadData,
         [

@@ -175,21 +175,21 @@ hermes-ibc-token-transfer-components    = { version = "0.1.0" }
 hermes-ibc-mock-chain                   = { version = "0.1.0" }
 
 [patch.crates-io]
-cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
-cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "rename-derive-component" }
+cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
+cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-macros" }
 
 ibc-relayer                     = { git = "https://github.com/informalsystems/hermes.git" }
 ibc-relayer-types               = { git = "https://github.com/informalsystems/hermes.git" }

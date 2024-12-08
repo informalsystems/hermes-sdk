@@ -6,7 +6,7 @@ use crate::impls::handlers::incoming::mint::HandleIncomingMintTransfer;
 use crate::impls::handlers::incoming::unescrow::HandleIncomingUnescrowTransfer;
 use crate::types::tags::{IbcTransferApp, IbcTransferMintApp, IbcTransferUnescrowApp};
 
-define_components! {
+cgp_preset! {
     IbcTransferIncomingPayloadHandlers {
         IbcTransferMintApp: HandleIncomingMintTransfer,
         IbcTransferUnescrowApp: HandleIncomingUnescrowTransfer,
