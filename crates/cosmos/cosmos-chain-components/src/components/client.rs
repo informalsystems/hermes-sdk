@@ -172,7 +172,7 @@ pub use crate::traits::abci_query::AbciQuerierComponent;
 pub use crate::traits::unbonding_period::UnbondingPeriodQuerierComponent;
 
 cgp_preset! {
-    CosmosClientComponents {
+    CosmosChainClientPreset {
         [
             HeightTypeComponent,
             HeightFieldComponent,

@@ -36,7 +36,7 @@ pub use crate::traits::convert_gas_to_fee::GasToFeeConverterComponent;
 pub use crate::traits::eip::eip_query::EipQuerierComponent;
 
 cgp_preset! {
-    CosmosTxComponents {
+    CosmosChainTxPreset {
         [
             SignerTypeComponent,
             NonceTypeComponent,

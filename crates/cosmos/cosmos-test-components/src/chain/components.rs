@@ -47,7 +47,7 @@ use crate::chain::impls::types::proposal::ProvideCosmosProposalTypes;
 use crate::chain::impls::types::wallet::ProvideCosmosTestWallet;
 
 cgp_preset! {
-    CosmmosChainTestComponents {
+    CosmmosChainTestPreset {
         [
             WalletTypeComponent,
             WalletSignerComponent,
