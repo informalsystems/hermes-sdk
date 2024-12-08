@@ -78,9 +78,11 @@ impl HasComponents for CelestiaBootstrap {
 }
 
 with_legacy_cosmos_sdk_bootstrap_components! {
-    delegate_components! {
-        CelestiaBootstrapComponents {
-            @LegacyCosmosSdkBootstrapComponents: LegacyCosmosSdkBootstrapComponents,
+    | Components | {
+        delegate_components! {
+            CelestiaBootstrapComponents {
+                Components: LegacyCosmosSdkBootstrapComponents,
+            }
         }
     }
 }

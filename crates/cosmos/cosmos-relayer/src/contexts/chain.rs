@@ -179,25 +179,31 @@ delegate_components! {
 }
 
 with_cosmos_client_components! {
-    delegate_components! {
-        CosmosChainContextComponents {
-            @CosmosClientComponents: CosmosClientComponents,
+    | Components | {
+        delegate_components! {
+            CosmosChainContextComponents {
+                Components: CosmosClientComponents,
+            }
         }
     }
 }
 
 with_cosmos_tx_components! {
-    delegate_components! {
-        CosmosChainContextComponents {
-            @CosmosTxComponents : CosmosTxComponents,
+    | Components | {
+        delegate_components! {
+            CosmosChainContextComponents {
+                Components : CosmosTxComponents,
+            }
         }
     }
 }
 
 with_cosmmos_chain_test_components! {
-    delegate_components! {
-        CosmosChainContextComponents {
-            @CosmmosChainTestComponents: CosmmosChainTestComponents,
+    | Components | {
+        delegate_components! {
+            CosmosChainContextComponents {
+                Components: CosmmosChainTestComponents,
+            }
         }
     }
 }

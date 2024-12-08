@@ -24,9 +24,11 @@ impl HasComponents for SolomachineEncoding {
 }
 
 with_solomachine_encoding_components! {
-    delegate_components! {
-        SolomachineEncodingComponents2 {
-            @SolomachineEncodingComponents: SolomachineEncodingComponents,
+    | Components | {
+        delegate_components! {
+            SolomachineEncodingComponents2 {
+                Components: SolomachineEncodingComponents,
+            }
         }
     }
 }

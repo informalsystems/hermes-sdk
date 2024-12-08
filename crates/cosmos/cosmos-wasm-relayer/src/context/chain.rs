@@ -450,17 +450,21 @@ delegate_components! {
 }
 
 with_cosmos_tx_components! {
-    delegate_components! {
-        WasmCosmosChainComponents {
-            @CosmosTxComponents : CosmosTxComponents,
+    | Components | {
+        delegate_components! {
+            WasmCosmosChainComponents {
+                Components : CosmosTxComponents,
+            }
         }
     }
 }
 
 with_cosmmos_chain_test_components! {
-    delegate_components! {
-        WasmCosmosChainComponents {
-            @CosmmosChainTestComponents: CosmmosChainTestComponents,
+    | Components | {
+        delegate_components! {
+            WasmCosmosChainComponents {
+                Components: CosmmosChainTestComponents,
+            }
         }
     }
 }

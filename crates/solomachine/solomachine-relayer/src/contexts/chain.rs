@@ -90,9 +90,11 @@ impl DelegateComponent<MockSolomachine> for DelegateCosmosChainComponents {
 }
 
 with_solomachine_chain_components! {
-    delegate_components! {
-        SolomachineChainComponents2 {
-            @SolomachineChainComponents: SolomachineChainComponents,
+    | Components | {
+        delegate_components! {
+            SolomachineChainComponents2 {
+                Components: SolomachineChainComponents,
+            }
         }
     }
 }

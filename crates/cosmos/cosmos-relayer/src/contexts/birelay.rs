@@ -28,9 +28,11 @@ impl HasComponents for CosmosBiRelay {
 }
 
 with_default_bi_relay_components! {
-    delegate_components! {
-        CosmosBiRelayComponents {
-            @DefaultBiRelayComponents: DefaultBiRelayComponents,
+    | Components | {
+        delegate_components! {
+            CosmosBiRelayComponents {
+                Components: DefaultBiRelayComponents,
+            }
         }
     }
 }

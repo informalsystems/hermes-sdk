@@ -92,9 +92,11 @@ impl HasComponents for WasmClientEncoding {
 }
 
 with_wasm_encoding_components! {
-    | Name | {
-        impl DelegateComponent<Name> for WasmClientEncodingComponents {
-            type Delegate = WasmEncodingComponents;
+    | Components | {
+        delegate_components! {
+            WasmClientEncodingComponents {
+                Components: WasmEncodingComponents,
+            }
         }
     }
 }

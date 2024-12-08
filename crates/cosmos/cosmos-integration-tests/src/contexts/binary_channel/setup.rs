@@ -59,9 +59,11 @@ impl<BootstrapA, BootstrapB> HasComponents for CosmosBinaryChannelSetup<Bootstra
 }
 
 with_binary_channel_test_components! {
-    delegate_components! {
-        CosmosBinaryChannelSetupComponents {
-            @BinaryChannelTestComponents: BinaryChannelTestComponents,
+    | Components | {
+        delegate_components! {
+            CosmosBinaryChannelSetupComponents {
+                Components: BinaryChannelTestComponents,
+            }
         }
     }
 }
