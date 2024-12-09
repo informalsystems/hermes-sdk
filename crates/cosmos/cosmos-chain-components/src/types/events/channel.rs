@@ -1,6 +1,5 @@
 use core::str::FromStr;
 
-use eyre::Report;
 use ibc::core::channel::types::channel::Order;
 use ibc::core::channel::types::events::{OpenInit, OpenTry, SendPacket, WriteAcknowledgement};
 use ibc::core::channel::types::packet::Packet;
@@ -19,88 +18,70 @@ pub struct CosmosChannelOpenTryEvent {
     pub channel_id: ChannelId,
 }
 
-pub fn try_chan_open_init_from_abci_event(event: &Event) -> Result<Option<OpenInit>, Report> {
+pub fn try_chan_open_init_from_abci_event(event: &Event) -> Result<Option<OpenInit>, String> {
     if event.kind.as_str() == "channel_open_init" {
         let port_id_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("port_id"))
-            .ok_or_else(|| Report::msg("missing attribute `port_id` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `port_id` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `port_id` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `port_id` attribute value as str. Cause {e}")
             })?;
         let chan_id_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("channel_id"))
-            .ok_or_else(|| Report::msg("missing attribute `channel_id` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `channel_id` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `channel_id` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `channel_id` attribute value as str. Cause {e}")
             })?;
         let port_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("counterparty_port_id"))
-            .ok_or_else(|| Report::msg("missing attribute `counterparty_port_id` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `counterparty_port_id` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
+                format!(
                     "failed to retrieve `counterparty_port_id` attribute value as str. Cause {e}"
-                ))
+                )
             })?;
         let conn_id_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("connection_id"))
-            .ok_or_else(|| Report::msg("missing attribute `connection_id` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `connection_id` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `connection_id` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `connection_id` attribute value as str. Cause {e}")
             })?;
         let version_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("version"))
-            .ok_or_else(|| Report::msg("missing attribute `version` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `version` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `version` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `version` attribute value as str. Cause {e}")
             })?;
         Ok(Some(OpenInit::new(
             PortId::from_str(port_id_on_a_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{port_id_on_a_str}` to PortId. Cause: {e}"
-                ))
+                format!("failed to convert `{port_id_on_a_str}` to PortId. Cause: {e}")
             })?,
             ChannelId::from_str(chan_id_on_a_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{chan_id_on_a_str}` to ChannelId. Cause: {e}"
-                ))
+                format!("failed to convert `{chan_id_on_a_str}` to ChannelId. Cause: {e}")
             })?,
             PortId::from_str(port_id_on_b_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{port_id_on_b_str}` to PortId. Cause: {e}"
-                ))
+                format!("failed to convert `{port_id_on_b_str}` to PortId. Cause: {e}")
             })?,
             ConnectionId::from_str(conn_id_on_a_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{conn_id_on_a_str}` to ConnectionId. Cause: {e}"
-                ))
+                format!("failed to convert `{conn_id_on_a_str}` to ConnectionId. Cause: {e}")
             })?,
             Version::from_str(version_on_a_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{version_on_a_str}` to Version. Cause: {e}"
-                ))
+                format!("failed to convert `{version_on_a_str}` to Version. Cause: {e}")
             })?,
         )))
     } else {
@@ -108,106 +89,84 @@ pub fn try_chan_open_init_from_abci_event(event: &Event) -> Result<Option<OpenIn
     }
 }
 
-pub fn try_chan_open_try_from_abci_event(event: &Event) -> Result<Option<OpenTry>, Report> {
+pub fn try_chan_open_try_from_abci_event(event: &Event) -> Result<Option<OpenTry>, String> {
     if event.kind.as_str() == "channel_open_try" {
         let port_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("port_id"))
-            .ok_or_else(|| Report::msg("missing attribute `port_id` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `port_id` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `port_id` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `port_id` attribute value as str. Cause {e}")
             })?;
         let chan_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("channel_id"))
-            .ok_or_else(|| Report::msg("missing attribute `channel_id` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `channel_id` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `channel_id` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `channel_id` attribute value as str. Cause {e}")
             })?;
         let port_id_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("counterparty_port_id"))
-            .ok_or_else(|| Report::msg("missing attribute `counterparty_port_id` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `counterparty_port_id` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
+                format!(
                     "failed to retrieve `counterparty_port_id` attribute value as str. Cause {e}"
-                ))
+                )
             })?;
         let chan_id_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("counterparty_channel_id"))
-            .ok_or_else(|| {
-                Report::msg("missing attribute `counterparty_channel_id` in ABCI Event")
-            })?
+            .ok_or_else(|| "missing attribute `counterparty_channel_id` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
+                format!(
                     "failed to retrieve `counterparty_channel_id` attribute value as str. Cause {e}"
-                ))
+                )
             })?;
         let conn_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("connection_id"))
-            .ok_or_else(|| Report::msg("missing attribute `connection_id` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `connection_id` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `connection_id` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `connection_id` attribute value as str. Cause {e}")
             })?;
         let version_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("version"))
-            .ok_or_else(|| Report::msg("missing attribute `version` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `version` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `version` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `version` attribute value as str. Cause {e}")
             })?;
         Ok(Some(OpenTry::new(
             PortId::from_str(port_id_on_b_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{port_id_on_b_str}` to PortId. Cause: {e}"
-                ))
+                format!("failed to convert `{port_id_on_b_str}` to PortId. Cause: {e}")
             })?,
             ChannelId::from_str(chan_id_on_b_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{chan_id_on_b_str}` to ChannelId. Cause: {e}"
-                ))
+                format!("failed to convert `{chan_id_on_b_str}` to ChannelId. Cause: {e}")
             })?,
             PortId::from_str(port_id_on_a_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{port_id_on_a_str}` to PortId. Cause: {e}"
-                ))
+                format!("failed to convert `{port_id_on_a_str}` to PortId. Cause: {e}")
             })?,
             ChannelId::from_str(chan_id_on_a_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{chan_id_on_a_str}` to ChannelId. Cause: {e}"
-                ))
+                format!("failed to convert `{chan_id_on_a_str}` to ChannelId. Cause: {e}")
             })?,
             ConnectionId::from_str(conn_id_on_b_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{conn_id_on_b_str}` to ConnectionId. Cause: {e}"
-                ))
+                format!("failed to convert `{conn_id_on_b_str}` to ConnectionId. Cause: {e}")
             })?,
             Version::from_str(version_on_b_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{version_on_b_str}` to Version. Cause: {e}"
-                ))
+                format!("failed to convert `{version_on_b_str}` to Version. Cause: {e}")
             })?,
         )))
     } else {
@@ -217,85 +176,73 @@ pub fn try_chan_open_try_from_abci_event(event: &Event) -> Result<Option<OpenTry
 
 pub fn try_write_acknowledgment_from_abci_event(
     event: &Event,
-) -> Result<Option<WriteAcknowledgement>, Report> {
+) -> Result<Option<WriteAcknowledgement>, String> {
     if event.kind.as_str() == "write_acknowledgement" {
         let seq_on_a = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_sequence"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_sequence` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_sequence` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_sequence` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_sequence` attribute value as str. Cause {e}")
             })?;
         let port_id_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_src_port"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_src_port` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_src_port` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_src_port` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_src_port` attribute value as str. Cause {e}")
             })?;
         let chan_id_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_src_channel"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_src_channel` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_src_channel` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_src_channel` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_src_channel` attribute value as str. Cause {e}")
             })?;
         let port_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_dst_port"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_dst_port` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_dst_port` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_dst_port` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_dst_port` attribute value as str. Cause {e}")
             })?;
         let chan_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_dst_channel"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_dst_channel` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_dst_channel` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_dst_channel` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_dst_channel` attribute value as str. Cause {e}")
             })?;
         let timeout_height_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_timeout_height"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_timeout_height` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_timeout_height` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
+                format!(
                     "failed to retrieve `packet_timeout_height` attribute value as str. Cause {e}"
-                ))
+                )
             })?;
-        let timeout_timestamp_on_b_str = event.attributes.iter().find(|attribute| attribute.key_str().ok() == Some("packet_timeout_timestamp")).ok_or_else(|| Report::msg("missing attribute `packet_timeout_timestamp` in ABCI Event"))?.value_str().map_err(|e| Report::msg(format!("failed to retrieve `packet_timeout_timestamp` attribute value as str. Cause {e}")))?;
+        let timeout_timestamp_on_b_str = event.attributes.iter().find(|attribute| attribute.key_str().ok() == Some("packet_timeout_timestamp")).ok_or_else(|| "missing attribute `packet_timeout_timestamp` in ABCI Event".to_owned())?.value_str().map_err(|e| format!("failed to retrieve `packet_timeout_timestamp` attribute value as str. Cause {e}"))?;
         let conn_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_connection"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_connection` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_connection` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_connection` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_connection` attribute value as str. Cause {e}")
             })?;
 
         let maybe_packet_data_str = event
@@ -319,14 +266,18 @@ pub fn try_write_acknowledgment_from_abci_event(
         let timeout_height_on_b = if timeout_height_on_b_str == "0-0" {
             TimeoutHeight::no_timeout()
         } else {
-            let timeout_height = Height::from_str(timeout_height_on_b_str)?;
+            let timeout_height = Height::from_str(timeout_height_on_b_str)
+                .map_err(|e| format!("failed to convert string to height. Cause: {e}"))?;
             TimeoutHeight::from(timeout_height)
         };
 
         let timeout_timestamp_on_b = if timeout_timestamp_on_b_str == "0" {
             TimeoutTimestamp::no_timeout()
         } else {
-            let timeout_timestamp = Timestamp::from_str(timeout_timestamp_on_b_str)?;
+            let timeout_timestamp =
+                Timestamp::from_str(timeout_timestamp_on_b_str).map_err(|e| {
+                    format!("failed to convert string to timeout timestamp. Cause: {e}")
+                })?;
             TimeoutTimestamp::from(timeout_timestamp)
         };
 
@@ -334,52 +285,47 @@ pub fn try_write_acknowledgment_from_abci_event(
             event_attribute
                 .value_str()
                 .map_err(|e| {
-                    Report::msg(format!(
-                        "failed to retrieve `packet_data` attribute value as str. Cause {e}"
-                    ))
+                    format!("failed to retrieve `packet_data` attribute value as str. Cause {e}")
                 })?
                 .as_bytes()
                 .to_vec()
         } else if let Some(event_attribute) = maybe_packet_data_hex_str {
             hex::decode(event_attribute.value_str().map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_data` attribute value as str. Cause {e}"
-                ))
-            })?)?
+                format!("failed to retrieve `packet_data` attribute value as str. Cause {e}")
+            })?)
+            .map_err(|e| format!("failed to decode packet data from hex string. Cause: {e}"))?
         } else {
-            return Err(Report::msg(
-                "missing `packet_data` and `packet_data_hex` in ABCI Event",
-            ));
+            return Err("missing `packet_data` and `packet_data_hex` in ABCI Event".to_owned());
         };
 
         let acknowledgment = if let Some(event_attribute) = maybe_packet_ack_str {
             event_attribute
                 .value_str()
                 .map_err(|e| {
-                    Report::msg(format!(
-                        "failed to retrieve `packet_ack` attribute value as str. Cause {e}"
-                    ))
+                    format!("failed to retrieve `packet_ack` attribute value as str. Cause {e}")
                 })?
                 .as_bytes()
                 .to_vec()
         } else if let Some(event_attribute) = maybe_packet_ack_hex_str {
             hex::decode(event_attribute.value_str().map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_ack_hex` attribute value as str. Cause {e}"
-                ))
-            })?)?
+                format!("failed to retrieve `packet_ack_hex` attribute value as str. Cause {e}")
+            })?)
+            .map_err(|e| format!("failed to decode acknowledgment from hex string. Cause: {e}"))?
         } else {
-            return Err(Report::msg(
-                "missing `packet_ack` and `packet_ack_hex` in ABCI Event",
-            ));
+            return Err("missing `packet_ack` and `packet_ack_hex` in ABCI Event".to_owned());
         };
 
         let packet = Packet {
-            seq_on_a: Sequence::from_str(seq_on_a)?,
-            port_id_on_a: PortId::from_str(port_id_on_a_str)?,
-            chan_id_on_a: ChannelId::from_str(chan_id_on_a_str)?,
-            port_id_on_b: PortId::from_str(port_id_on_b_str)?,
-            chan_id_on_b: ChannelId::from_str(chan_id_on_b_str)?,
+            seq_on_a: Sequence::from_str(seq_on_a)
+                .map_err(|e| format!("failed to convert string to sequence. Cause: {e}"))?,
+            port_id_on_a: PortId::from_str(port_id_on_a_str)
+                .map_err(|e| format!("failed to convert string to port ID. Cause: {e}"))?,
+            chan_id_on_a: ChannelId::from_str(chan_id_on_a_str)
+                .map_err(|e| format!("failed to convert string to channel ID. Cause: {e}"))?,
+            port_id_on_b: PortId::from_str(port_id_on_b_str)
+                .map_err(|e| format!("failed to convert string to port ID. Cause: {e}"))?,
+            chan_id_on_b: ChannelId::from_str(chan_id_on_b_str)
+                .map_err(|e| format!("failed to convert string to channel ID. Cause: {e}"))?,
             data: packet_data,
             timeout_height_on_b,
             timeout_timestamp_on_b,
@@ -387,11 +333,11 @@ pub fn try_write_acknowledgment_from_abci_event(
 
         Ok(Some(WriteAcknowledgement::new(
             packet,
-            acknowledgment.try_into()?,
+            acknowledgment
+                .try_into()
+                .map_err(|e| format!("failed to convert bytes to acknowledgment. Cause: {e}"))?,
             ConnectionId::from_str(conn_id_on_b_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{conn_id_on_b_str}` to ConnectionId. Cause: {e}"
-                ))
+                format!("failed to convert `{conn_id_on_b_str}` to ConnectionId. Cause: {e}")
             })?,
         )))
     } else {
@@ -399,87 +345,75 @@ pub fn try_write_acknowledgment_from_abci_event(
     }
 }
 
-pub fn try_send_packet_from_abci_event(event: &Event) -> Result<Option<SendPacket>, Report> {
+pub fn try_send_packet_from_abci_event(event: &Event) -> Result<Option<SendPacket>, String> {
     if event.kind.as_str() == "send_packet" {
         let seq_on_a = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_sequence"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_sequence` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_sequence` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_sequence` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_sequence` attribute value as str. Cause {e}")
             })?;
         let port_id_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_src_port"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_src_port` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_src_port` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_src_port` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_src_port` attribute value as str. Cause {e}")
             })?;
         let chan_id_on_a_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_src_channel"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_src_channel` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_src_channel` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_src_channel` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_src_channel` attribute value as str. Cause {e}")
             })?;
         let port_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_dst_port"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_dst_port` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_dst_port` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_dst_port` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_dst_port` attribute value as str. Cause {e}")
             })?;
         let chan_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_dst_channel"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_dst_channel` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_dst_channel` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_dst_channel` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_dst_channel` attribute value as str. Cause {e}")
             })?;
         let timeout_height_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_timeout_height"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_timeout_height` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_timeout_height` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
+                format!(
                     "failed to retrieve `packet_timeout_height` attribute value as str. Cause {e}"
-                ))
+                )
             })?;
-        let timeout_timestamp_on_b_str = event.attributes.iter().find(|attribute| attribute.key_str().ok() == Some("packet_timeout_timestamp")).ok_or_else(|| Report::msg("missing attribute `packet_timeout_timestamp` in ABCI Event"))?.value_str().map_err(|e| Report::msg(format!("failed to retrieve `packet_timeout_timestamp` attribute value as str. Cause {e}")))?;
+        let timeout_timestamp_on_b_str = event.attributes.iter().find(|attribute| attribute.key_str().ok() == Some("packet_timeout_timestamp")).ok_or_else(|| "missing attribute `packet_timeout_timestamp` in ABCI Event".to_owned())?.value_str().map_err(|e| format!("failed to retrieve `packet_timeout_timestamp` attribute value as str. Cause {e}"))?;
         let conn_id_on_b_str = event
             .attributes
             .iter()
             .find(|attribute| attribute.key_str().ok() == Some("packet_connection"))
-            .ok_or_else(|| Report::msg("missing attribute `packet_connection` in ABCI Event"))?
+            .ok_or_else(|| "missing attribute `packet_connection` in ABCI Event".to_owned())?
             .value_str()
             .map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_connection` attribute value as str. Cause {e}"
-                ))
+                format!("failed to retrieve `packet_connection` attribute value as str. Cause {e}")
             })?;
-        let channel_ordering_str = event.attributes.iter().find(|attribute| attribute.key_str().ok() == Some("packet_channel_ordering")).ok_or_else(|| Report::msg("missing attribute `packet_channel_ordering` in ABCI Event"))?.value_str().map_err(|e| Report::msg(format!("failed to retrieve `packet_channel_ordering` attribute value as str. Cause {e}")))?;
+        let channel_ordering_str = event.attributes.iter().find(|attribute| attribute.key_str().ok() == Some("packet_channel_ordering")).ok_or_else(|| "missing attribute `packet_channel_ordering` in ABCI Event".to_owned())?.value_str().map_err(|e| format!("failed to retrieve `packet_channel_ordering` attribute value as str. Cause {e}"))?;
 
         let maybe_packet_data_str = event
             .attributes
@@ -494,14 +428,18 @@ pub fn try_send_packet_from_abci_event(event: &Event) -> Result<Option<SendPacke
         let timeout_height_on_b = if timeout_height_on_b_str == "0-0" {
             TimeoutHeight::no_timeout()
         } else {
-            let timeout_height = Height::from_str(timeout_height_on_b_str)?;
+            let timeout_height = Height::from_str(timeout_height_on_b_str)
+                .map_err(|e| format!("failed to convert string to height. Cause: {e}"))?;
             TimeoutHeight::from(timeout_height)
         };
 
         let timeout_timestamp_on_b = if timeout_timestamp_on_b_str == "0" {
             TimeoutTimestamp::no_timeout()
         } else {
-            let timeout_timestamp = Timestamp::from_str(timeout_timestamp_on_b_str)?;
+            let timeout_timestamp =
+                Timestamp::from_str(timeout_timestamp_on_b_str).map_err(|e| {
+                    format!("failed to convert string to timeout timestamp. Cause: {e}")
+                })?;
             TimeoutTimestamp::from(timeout_timestamp)
         };
 
@@ -509,30 +447,30 @@ pub fn try_send_packet_from_abci_event(event: &Event) -> Result<Option<SendPacke
             event_attribute
                 .value_str()
                 .map_err(|e| {
-                    Report::msg(format!(
-                        "failed to retrieve `packet_data` attribute value as str. Cause {e}"
-                    ))
+                    format!("failed to retrieve `packet_data` attribute value as str. Cause {e}")
                 })?
                 .as_bytes()
                 .to_vec()
         } else if let Some(event_attribute) = maybe_packet_data_hex_str {
             hex::decode(event_attribute.value_str().map_err(|e| {
-                Report::msg(format!(
-                    "failed to retrieve `packet_data_hex` attribute value as str. Cause {e}"
-                ))
-            })?)?
+                format!("failed to retrieve `packet_data_hex` attribute value as str. Cause {e}")
+            })?)
+            .map_err(|e| format!("failed to decode packet data from hex string. Cause: {e}"))?
         } else {
-            return Err(Report::msg(
-                "missing `packet_data` and `packet_data_hex` in ABCI Event",
-            ));
+            return Err("missing `packet_data` and `packet_data_hex` in ABCI Event".to_owned());
         };
 
         let packet = Packet {
-            seq_on_a: Sequence::from_str(seq_on_a)?,
-            port_id_on_a: PortId::from_str(port_id_on_a_str)?,
-            chan_id_on_a: ChannelId::from_str(chan_id_on_a_str)?,
-            port_id_on_b: PortId::from_str(port_id_on_b_str)?,
-            chan_id_on_b: ChannelId::from_str(chan_id_on_b_str)?,
+            seq_on_a: Sequence::from_str(seq_on_a)
+                .map_err(|e| format!("failed to convert string to sequence. Cause: {e}"))?,
+            port_id_on_a: PortId::from_str(port_id_on_a_str)
+                .map_err(|e| format!("failed to convert string to port ID. Cause: {e}"))?,
+            chan_id_on_a: ChannelId::from_str(chan_id_on_a_str)
+                .map_err(|e| format!("failed to convert string to channel ID. Cause: {e}"))?,
+            port_id_on_b: PortId::from_str(port_id_on_b_str)
+                .map_err(|e| format!("failed to convert string to port ID. Cause: {e}"))?,
+            chan_id_on_b: ChannelId::from_str(chan_id_on_b_str)
+                .map_err(|e| format!("failed to convert string to channel ID. Cause: {e}"))?,
             data: packet_data,
             timeout_height_on_b,
             timeout_timestamp_on_b,
@@ -541,14 +479,10 @@ pub fn try_send_packet_from_abci_event(event: &Event) -> Result<Option<SendPacke
         Ok(Some(SendPacket::new(
             packet,
             Order::from_str(channel_ordering_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{channel_ordering_str}` to Order. Cause: {e}"
-                ))
+                format!("failed to convert `{channel_ordering_str}` to Order. Cause: {e}")
             })?,
             ConnectionId::from_str(conn_id_on_b_str).map_err(|e| {
-                Report::msg(format!(
-                    "failed to convert `{conn_id_on_b_str}` to ConnectionId. Cause: {e}"
-                ))
+                format!("failed to convert `{conn_id_on_b_str}` to ConnectionId. Cause: {e}")
             })?,
         )))
     } else {
