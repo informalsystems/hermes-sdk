@@ -8,6 +8,7 @@ use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_cosmos_chain_components::impls::relay::packet_filter::FilterPacketWithConfig;
+use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_logger::{HermesLogger, ProvideHermesLogger};
 use hermes_logging_components::traits::has_logger::{
@@ -38,9 +39,7 @@ use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
-use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
+use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
 
 use crate::context::chain::WasmCosmosChain;
 

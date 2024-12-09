@@ -4,10 +4,10 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ClientId;
 use ibc_proto::ibc::core::client::v1::query_client::QueryClient;
-use ibc_relayer::chain::requests::QueryConsensusStateHeightsRequest;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use ibc_relayer_types::Height;
+use ibc_proto::ibc::core::client::v1::QueryConsensusStateHeightsRequest;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
@@ -37,12 +37,12 @@ where
         .max_decoding_message_size(33554432);
 
         let request = QueryConsensusStateHeightsRequest {
-            client_id: client_id.clone(),
+            client_id: client_id.to_string(),
             pagination: None,
         };
 
         let response = client
-            .consensus_state_heights(tonic::Request::new(request.into()))
+            .consensus_state_heights(tonic::Request::new(request))
             .await
             .map_err(Chain::raise_error)?
             .into_inner();

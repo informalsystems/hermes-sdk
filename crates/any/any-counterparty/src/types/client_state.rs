@@ -1,5 +1,5 @@
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use ibc::core::host::types::identifiers::ChainId;
 use serde::Serialize;
 
 #[derive(Clone, Debug, Serialize)]

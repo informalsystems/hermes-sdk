@@ -22,8 +22,8 @@ use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChainType, ProvideChainType};
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
+use ibc::core::host::types::identifiers::ChainId;
 use ibc_relayer::keyring::errors::Error as KeyringError;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::bootstrap::components::cosmos_sdk::{CosmosSdkBootstrapComponents, *};
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;

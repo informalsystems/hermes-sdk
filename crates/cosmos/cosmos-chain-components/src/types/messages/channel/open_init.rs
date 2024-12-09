@@ -1,6 +1,6 @@
+use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::channel::v1::{Channel, MsgChannelOpenInit as ProtoMsgChannelOpenInit};
-use ibc_relayer_types::signer::Signer;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;

@@ -6,10 +6,10 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::U
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc::clients::wasm_types::client_message::{ClientMessage, WASM_CLIENT_MESSAGE_TYPE_URL};
+use ibc::core::host::types::identifiers::ClientId;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_proto::ibc::lightclients::wasm::v1::ClientMessage as RawClientMessage;
 use ibc_proto::Protobuf;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use prost::Message;
 use prost_types::Any;
 

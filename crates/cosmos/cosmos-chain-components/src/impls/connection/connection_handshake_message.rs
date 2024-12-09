@@ -20,11 +20,11 @@ use hermes_relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };
+use ibc::core::client::types::error::ClientError;
+use ibc::core::client::types::Height;
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
-use ibc_relayer_types::core::ics02_client::height::Height;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 use prost_types::Any;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
@@ -88,7 +88,7 @@ where
         + HasHeightFields
         + HasClientStateType<Counterparty>
         + HasEncoding<AsBytes, Encoding = Encoding>
-        + CanRaiseError<Ics02Error>
+        + CanRaiseError<ClientError>
         + CanRaiseError<Encoding::Error>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasCommitmentProofBytes
@@ -159,8 +159,8 @@ where
         + HasClientStateType<Counterparty>
         + HasHeightFields
         + HasEncoding<AsBytes, Encoding = Encoding>
-        + CanRaiseError<Ics02Error>
         + CanRaiseError<Encoding::Error>
+        + CanRaiseError<ClientError>
         + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentProofBytes
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
@@ -231,7 +231,7 @@ where
 impl<Chain, Counterparty> ConnectionOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
-    Chain: HasIbcChainTypes<Counterparty, ConnectionId = ConnectionId> + CanRaiseError<Ics02Error>,
+    Chain: HasIbcChainTypes<Counterparty, ConnectionId = ConnectionId> + CanRaiseError<ClientError>,
     Counterparty: HasCommitmentProofBytes
         + HasHeightFields
         + HasConnectionOpenConfirmPayloadType<

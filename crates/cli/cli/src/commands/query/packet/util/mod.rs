@@ -1,12 +1,22 @@
 use core::fmt;
 
-pub use ibc_relayer::chain::counterparty::PendingPackets;
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::Sequence;
 use serde::Serialize;
 
 pub mod collate;
 use collate::{Collated, CollatedIterExt};
+
+/// A structure to display pending packet commitment IDs
+/// at one end of a channel.
+#[derive(Debug, Serialize)]
+pub struct PendingPackets {
+    /// Not yet received on the counterparty chain.
+    pub unreceived_packets: Vec<Sequence>,
+    /// Received on the counterparty chain,
+    /// but the acknowledgement is not yet received on the local chain.
+    pub unreceived_acks: Vec<Sequence>,
+}
 
 #[derive(Serialize)]
 pub struct CollatedPendingPackets {

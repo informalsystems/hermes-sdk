@@ -8,6 +8,7 @@ use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_cosmos_chain_components::impls::relay::packet_filter::FilterPacketWithConfig;
+use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -40,8 +41,7 @@ use hermes_relayer_components_extra::components::extra::closures::relay::auto_re
 use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
-use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::error::HandleCosmosError;

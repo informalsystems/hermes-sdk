@@ -1,5 +1,5 @@
+use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
-use ibc_relayer_types::signer::Signer;
 use prost::Message;
 use prost_types::Any;
 

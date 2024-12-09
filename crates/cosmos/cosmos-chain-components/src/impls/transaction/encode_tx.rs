@@ -8,6 +8,8 @@ use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
+use ibc::core::host::types::identifiers::ChainId;
+use ibc::primitives::Signer;
 use ibc_proto::cosmos::tx::v1beta1::mode_info::{Single, Sum};
 use ibc_proto::cosmos::tx::v1beta1::{AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, TxBody};
 use ibc_proto::google::protobuf::Any;
@@ -16,8 +18,6 @@ use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use ibc_relayer::config::types::Memo;
 use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::signer::{Signer, SignerError};
 use prost::{EncodeError, Message};
 
 use crate::traits::message::CosmosMessage;
@@ -35,7 +35,6 @@ where
         + HasTxExtensionOptions
         + HasChainId<ChainId = ChainId>
         + CanRaiseError<EncodeError>
-        + CanRaiseError<SignerError>
         + CanRaiseError<KeyringError>,
 {
     async fn encode_tx(
@@ -45,7 +44,7 @@ where
         fee: &Fee,
         messages: &[CosmosMessage],
     ) -> Result<SignedTx, Chain::Error> {
-        let signer: Signer = key_pair.account().parse().map_err(Chain::raise_error)?;
+        let signer: Signer = key_pair.account().into();
 
         let raw_messages = messages
             .iter()

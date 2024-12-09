@@ -5,8 +5,9 @@ use hermes_relayer_components::chain::traits::packet::fields::CanReadOutgoingPac
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::relay::traits::chains::{HasRelayChainTypes, PacketOf};
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
-use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
+use ibc::core::host::types::identifiers::{ChannelId, PortId};
+
+use crate::types::messages::packet::packet_filter::PacketFilterConfig;
 
 pub struct FilterPacketWithConfig<Tag>(pub PhantomData<Tag>);
 
@@ -22,7 +23,7 @@ where
         relay: &Relay,
         packet: &PacketOf<Relay>,
     ) -> Result<bool, Relay::Error> {
-        Ok(relay.get_field(PhantomData).channel_policy.is_allowed(
+        Ok(relay.get_field(PhantomData).is_allowed(
             SrcChain::outgoing_packet_src_port(packet),
             SrcChain::outgoing_packet_src_channel_id(packet),
         ))

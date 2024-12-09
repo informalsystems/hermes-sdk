@@ -14,9 +14,9 @@ use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBy
 use hermes_relayer_components::chain::types::payloads::packet::{
     AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
 };
-use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::Height;
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::types::error::ClientError;
+use ibc::core::client::types::Height;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
 use crate::types::messages::packet::ack::CosmosAckPacketMessage;
@@ -28,7 +28,7 @@ pub struct BuildCosmosPacketMessages;
 impl<Chain, Counterparty> ReceivePacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosPacketMessages
 where
-    Chain: HasMessageType + CanRaiseError<Ics02Error>,
+    Chain: HasMessageType + CanRaiseError<ClientError>,
     Counterparty: HasReceivePacketPayloadType<
             Chain,
             ReceivePacketPayload = ReceivePacketPayload<Counterparty>,
@@ -65,7 +65,7 @@ impl<Chain, Counterparty> AckPacketMessageBuilder<Chain, Counterparty> for Build
 where
     Chain: HasMessageType
         + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<ClientError>,
     Counterparty: HasAckPacketPayloadType<Chain, AckPacketPayload = AckPacketPayload<Counterparty, Chain>>
         + HasHeightFields
         + HasCommitmentProofBytes
@@ -101,7 +101,7 @@ impl<Chain, Counterparty> TimeoutUnorderedPacketMessageBuilder<Chain, Counterpar
 where
     Chain: HasMessageType
         + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<ClientError>,
     Counterparty: HasTimeoutUnorderedPacketPayloadType<
             Chain,
             TimeoutUnorderedPacketPayload = TimeoutUnorderedPacketPayload<Counterparty>,
@@ -124,7 +124,7 @@ where
             Counterparty::commitment_proof_bytes(&payload.proof_unreceived).into();
 
         let message = CosmosTimeoutPacketMessage {
-            next_sequence_recv: packet.sequence,
+            next_sequence_recv: packet.seq_on_a,
             packet: packet.clone(),
             update_height,
             proof_unreceived,

@@ -108,11 +108,11 @@ use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::Height;
 use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};

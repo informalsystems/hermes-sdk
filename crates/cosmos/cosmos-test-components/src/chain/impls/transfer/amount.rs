@@ -4,7 +4,7 @@ use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverter;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
+use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use sha2::{Digest, Sha256};
 use subtle_encoding::hex;
 

@@ -1,12 +1,11 @@
 use hermes_cosmos_chain_components::methods::encode::encode_to_any;
 use hermes_cosmos_chain_components::traits::message::DynCosmosMessage;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChannelId, PortId};
+use ibc::primitives::{Signer, Timestamp};
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::apps::transfer::v1::MsgTransfer;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc_relayer_types::signer::Signer;
-use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::Height;
 
 use crate::chain::types::amount::Amount;
 
@@ -23,7 +22,10 @@ pub struct TokenTransferMessage {
 
 impl DynCosmosMessage for TokenTransferMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Any {
-        let timeout_timestamp = self.timeout_time.unwrap_or_default().nanoseconds();
+        let timeout_timestamp = self
+            .timeout_time
+            .unwrap_or(Timestamp::from_nanoseconds(0))
+            .nanoseconds();
 
         let message = MsgTransfer {
             source_port: self.port_id.to_string(),

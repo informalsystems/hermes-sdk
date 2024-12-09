@@ -10,9 +10,10 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::impls::use_field::{UseField, WithField};
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
-use eyre::eyre;
+use eyre::{eyre, Report};
 use futures::lock::Mutex;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
+use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
@@ -33,12 +34,10 @@ use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::Re
 use hermes_relayer_components_extra::components::extra::build::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
-use ibc_relayer::config::filter::PacketFilter;
+use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use ibc_relayer::keyring::{
     AnySigningKeyPair, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
 };
-use ibc_relayer::spawn::SpawnError;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
 
@@ -56,7 +55,7 @@ pub struct CosmosBuilder {
 #[derive(HasField)]
 pub struct CosmosBuilderFields {
     pub config_map: HashMap<ChainId, CosmosChainConfig>,
-    pub packet_filter: PacketFilter,
+    pub packet_filter: PacketFilterConfig,
     pub telemetry: CosmosTelemetry,
     pub runtime: HermesRuntime,
     pub batch_config: BatchConfig,
@@ -149,14 +148,14 @@ impl CosmosBuilder {
         chain_configs: Vec<CosmosChainConfig>,
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
-        packet_filter: PacketFilter,
+        packet_filter: PacketFilterConfig,
         batch_config: BatchConfig,
         key_map: HashMap<ChainId, Secp256k1KeyPair>,
     ) -> Self {
         let config_map = HashMap::from_iter(
             chain_configs
                 .into_iter()
-                .map(|config| (ChainId::from_string(&config.id), config)),
+                .map(|config| (ChainId::new(&config.id).unwrap(), config)),
         );
 
         Self {
@@ -175,11 +174,9 @@ impl CosmosBuilder {
     }
 
     pub async fn build_chain(&self, chain_id: &ChainId) -> Result<CosmosChain, Error> {
-        let chain_config = self
-            .config_map
-            .get(chain_id)
-            .cloned()
-            .ok_or_else(|| SpawnError::missing_chain_config(chain_id.clone()))?;
+        let chain_config = self.config_map.get(chain_id).cloned().ok_or_else(|| {
+            Report::msg(format!("missing configuration for chain ID `{chain_id}`"))
+        })?;
 
         self.build_chain_with_config(chain_config, self.key_map.get(chain_id))
             .await

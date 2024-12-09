@@ -1,4 +1,4 @@
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
 pub use tendermint::Time;
 
 pub struct ChainStatus {

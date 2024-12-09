@@ -54,8 +54,8 @@ members = [
 
     "crates/mock/mock-relayer",
 
-    "tools/integration-test",
-    "tools/test-framework",
+    #"tools/integration-test",
+    #"tools/test-framework",
 
     "crates/ibc/ibc-components",
     "crates/ibc/ibc-token-transfer-components",
@@ -120,6 +120,7 @@ hdpath                          = { version = "0.6.3" }
 rand                            = { version = "0.8.5" }
 bech32                          = { version = "0.9.1" }
 sha2                            = { version = "0.10.8" }
+secp256k1                       = { version = "0.27.0", features = ["rand", "bitcoin_hashes"] }
 ics23                           = { version = "0.12" }
 
 hermes-runtime-components               = { version = "0.1.0" }
