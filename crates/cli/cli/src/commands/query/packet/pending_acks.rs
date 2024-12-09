@@ -119,7 +119,7 @@ impl QueryPendingAcks {
         let client_state: TendermintClientState =
             CosmosChain::default_encoding().convert(&any_client_state)?;
 
-        let counterparty_chain_id = client_state.inner().chain_id();
+        let counterparty_chain_id = client_state.chain_id();
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
 
         let (commitment_sequences, _) =

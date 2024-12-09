@@ -25,7 +25,7 @@ where
 {
     fn consensus_state_timestamp(consensus_state: &AnyConsensusState) -> Counterparty::Time {
         match consensus_state {
-            AnyConsensusState::Tendermint(consensus_state) => consensus_state.inner().timestamp,
+            AnyConsensusState::Tendermint(consensus_state) => consensus_state.timestamp,
         }
     }
 }

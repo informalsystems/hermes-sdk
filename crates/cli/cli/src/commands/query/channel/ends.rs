@@ -160,7 +160,7 @@ impl CommandRunner<HermesApp> for QueryChannelEnds {
                     ).into());
         };
 
-        let counterparty_chain_id = client_state.inner().chain_id();
+        let counterparty_chain_id = client_state.chain_id();
 
         let channel_ends_summary = ChannelEndsSummary {
             chain_id,

@@ -12,7 +12,7 @@ pub enum AnyClientState {
 impl AnyClientState {
     pub fn chain_id(&self) -> &ChainId {
         match self {
-            AnyClientState::Tendermint(client_state) => &client_state.inner().chain_id,
+            AnyClientState::Tendermint(client_state) => &client_state.chain_id,
         }
     }
 }

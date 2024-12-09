@@ -26,17 +26,17 @@ where
         + HasHeightType<Height = Height>,
 {
     fn client_state_latest_height(client_state: &WasmTendermintClientState) -> Height {
-        client_state.tendermint_client_state.inner().latest_height
+        client_state.tendermint_client_state.latest_height
     }
 
     fn client_state_is_frozen(client_state: &WasmTendermintClientState) -> bool {
-        client_state.tendermint_client_state.inner().is_frozen()
+        client_state.tendermint_client_state.is_frozen()
     }
 
     fn client_state_has_expired(
         client_state: &WasmTendermintClientState,
         elapsed: Duration,
     ) -> bool {
-        elapsed > client_state.tendermint_client_state.inner().trusting_period
+        elapsed > client_state.tendermint_client_state.trusting_period
     }
 }

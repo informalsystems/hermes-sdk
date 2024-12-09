@@ -80,7 +80,7 @@ impl CommandRunner<HermesApp> for QueryConnections {
 
                 let include = match client_state {
                     Ok(client_state) => {
-                        let counterparty_chain_id = client_state.inner().chain_id();
+                        let counterparty_chain_id = client_state.chain_id();
                         counterparty_chain_id == &filter_chain_id
                     }
                     Err(e) => {

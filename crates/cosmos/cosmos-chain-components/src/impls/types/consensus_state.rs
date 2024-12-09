@@ -26,7 +26,7 @@ where
     Counterparty: HasTimeType<Time = Time>,
 {
     fn consensus_state_timestamp(consensus_state: &TendermintConsensusState) -> Counterparty::Time {
-        consensus_state.inner().timestamp
+        consensus_state.timestamp
     }
 }
 

@@ -57,7 +57,7 @@ impl CommandRunner<HermesApp> for ClientUpdate {
             .query_client_state_with_latest_height(PhantomData::<CosmosChain>, &self.client_id)
             .await?;
 
-        let reference_chain_id = client_state.inner().chain_id.clone();
+        let reference_chain_id = client_state.chain_id.clone();
         let reference_chain = builder.build_chain(&reference_chain_id).await?;
 
         let relayer = builder

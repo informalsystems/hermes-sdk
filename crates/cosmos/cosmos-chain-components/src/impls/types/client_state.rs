@@ -39,14 +39,14 @@ where
         + HasClientStateType<Counterparty, ClientState = TendermintClientState>,
 {
     fn client_state_latest_height(client_state: &TendermintClientState) -> Height {
-        client_state.inner().latest_height
+        client_state.latest_height
     }
 
     fn client_state_is_frozen(client_state: &TendermintClientState) -> bool {
-        client_state.inner().is_frozen()
+        client_state.is_frozen()
     }
 
     fn client_state_has_expired(client_state: &TendermintClientState, elapsed: Duration) -> bool {
-        elapsed > client_state.inner().trusting_period
+        elapsed > client_state.trusting_period
     }
 }

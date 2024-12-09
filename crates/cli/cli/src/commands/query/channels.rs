@@ -124,7 +124,7 @@ impl CommandRunner<HermesApp> for QueryChannels {
 
                 let client_state_chain_id_matches_dst_chain_id = dst_chain_id
                     .as_ref()
-                    .map(|dst_chain_id| dst_chain_id == &client_state.inner().chain_id.clone())
+                    .map(|dst_chain_id| dst_chain_id == &client_state.chain_id.clone())
                     .unwrap_or(true);
 
                 if !client_state_chain_id_matches_dst_chain_id {
@@ -134,7 +134,7 @@ impl CommandRunner<HermesApp> for QueryChannels {
                 let counterparty = channel_end.counterparty();
 
                 Some(Counterparty {
-                    chain_id: client_state.inner().chain_id.clone(),
+                    chain_id: client_state.chain_id.clone(),
                     port_id: counterparty.port_id.clone(),
                     channel_id: counterparty.channel_id.clone(),
                 })

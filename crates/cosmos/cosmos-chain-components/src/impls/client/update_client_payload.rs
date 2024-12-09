@@ -49,7 +49,6 @@ where
         let peer_id = status.node_info.id;
 
         let light_client_options = TendermintClientState::from(client_state)
-            .inner()
             .as_light_client_options()
             .map_err(Chain::raise_error)?;
 

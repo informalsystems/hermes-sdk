@@ -165,19 +165,13 @@ impl fmt::Debug for Pretty<'_, TendermintClientState> {
         let client_state = self.0;
 
         f.debug_struct("ClientState")
-            .field("chain_id", &client_state.inner().chain_id.to_string())
-            .field(
-                "latest_height",
-                &client_state.inner().latest_height.to_string(),
-            )
-            .field(
-                "trust_threshold",
-                &client_state.inner().trust_level.to_string(),
-            )
-            .field("trusting_period", &client_state.inner().trusting_period)
-            .field("unbonding_period", &client_state.inner().unbonding_period)
-            .field("max_clock_drift", &client_state.inner().max_clock_drift)
-            .field("frozen_height", &client_state.inner().frozen_height)
+            .field("chain_id", &client_state.chain_id.to_string())
+            .field("latest_height", &client_state.latest_height.to_string())
+            .field("trust_threshold", &client_state.trust_level.to_string())
+            .field("trusting_period", &client_state.trusting_period)
+            .field("unbonding_period", &client_state.unbonding_period)
+            .field("max_clock_drift", &client_state.max_clock_drift)
+            .field("frozen_height", &client_state.frozen_height)
             .finish()
     }
 }

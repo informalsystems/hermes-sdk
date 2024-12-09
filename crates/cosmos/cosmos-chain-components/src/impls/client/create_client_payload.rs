@@ -92,7 +92,6 @@ where
         let peer_id = status.node_info.id;
 
         let light_client_options = TendermintClientState::from(client_state.clone())
-            .inner()
             .as_light_client_options()
             .map_err(Chain::raise_error)?;
 
@@ -116,8 +115,8 @@ where
 
         // Create client payload
         Ok(CosmosCreateClientPayload {
-            client_state: client_state.into(),
-            consensus_state: consensus_state.into(),
+            client_state,
+            consensus_state,
         })
     }
 }

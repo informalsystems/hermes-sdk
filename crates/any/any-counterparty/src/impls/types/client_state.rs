@@ -28,19 +28,19 @@ where
 {
     fn client_state_latest_height(client_state: &AnyClientState) -> Height {
         match client_state {
-            AnyClientState::Tendermint(cs) => cs.inner().latest_height,
+            AnyClientState::Tendermint(cs) => cs.latest_height,
         }
     }
 
     fn client_state_is_frozen(client_state: &AnyClientState) -> bool {
         match client_state {
-            AnyClientState::Tendermint(cs) => cs.inner().frozen_height.is_some(),
+            AnyClientState::Tendermint(cs) => cs.frozen_height.is_some(),
         }
     }
 
     fn client_state_has_expired(client_state: &AnyClientState, elapsed: Duration) -> bool {
         match client_state {
-            AnyClientState::Tendermint(cs) => cs.inner().trusting_period < elapsed,
+            AnyClientState::Tendermint(cs) => cs.trusting_period < elapsed,
         }
     }
 }
