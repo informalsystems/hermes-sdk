@@ -104,7 +104,10 @@ where
 {
 }
 
-#[derive_component(PacketMutexGetterComponent, PacketMutexGetter<Relay>)]
+#[cgp_component {
+  provider: PacketMutexGetter,
+  context: Relay,
+}]
 pub trait HasPacketMutex: HasPacketMutexType {
     fn packet_mutex(&self) -> &Self::PacketMutex;
 }
@@ -178,7 +181,7 @@ where
 
 impl<Relay, FieldTag> PacketMutexGetter<Relay> for UseField<FieldTag>
 where
-    Relay: HasPacketMutexType + HasField<FieldTag, Field = Relay::PacketMutex>,
+    Relay: HasPacketMutexType + HasField<FieldTag, Value = Relay::PacketMutex>,
 {
     fn packet_mutex(relay: &Relay) -> &Relay::PacketMutex {
         relay.get_field(PhantomData)

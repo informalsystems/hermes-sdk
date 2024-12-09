@@ -5,9 +5,12 @@ use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
-#[derive_component(IncomingPayloadHandlerComponent, IncomingPayloadHandler<Chain>)]
+#[cgp_component {
+  provider: IncomingPayloadHandler,
+  context: Chain,
+}]
 #[async_trait]
-pub trait CanHandleIncomingPayload<Counterparty, App>: Async + HasErrorType
+pub trait CanHandleIncomingPayload<Counterparty, App>: Sized + Async + HasErrorType
 where
     Counterparty:
         HasPacketHeaderType<Self> + HasPayloadHeaderType<Self> + HasPayloadDataType<Self, App>,
@@ -20,6 +23,7 @@ where
     ) -> Result<(), Self::Error>;
 }
 
+#[async_trait]
 impl<Chain, Counterparty, App, Components> IncomingPayloadHandler<Chain, Counterparty, App>
     for UseDelegate<Components>
 where
@@ -45,6 +49,7 @@ where
     }
 }
 
+#[async_trait]
 impl<Chain, Counterparty, App> IncomingPayloadHandler<Chain, Counterparty, App> for UseContext
 where
     Chain: CanHandleIncomingPayload<Counterparty, App>,

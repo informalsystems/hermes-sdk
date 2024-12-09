@@ -2,7 +2,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(PacketTimeoutTypeComponent, ProvidePacketTimeoutType<Chain>)]
+#[cgp_component {
+  name: PacketTimeoutTypeComponent,
+  provider: ProvidePacketTimeoutType,
+  context: Chain,
+}]
 pub trait HasPacketTimeoutType<Counterparty>: Async {
     type PacketTimeout: Async;
 }

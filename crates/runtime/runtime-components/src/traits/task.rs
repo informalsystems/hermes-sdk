@@ -10,7 +10,10 @@ pub trait Task: Async {
     async fn run(self);
 }
 
-#[derive_component(ConcurrentTaskRunnerComponent, ConcurrentTaskRunner<Runtime>)]
+#[cgp_component {
+  provider: ConcurrentTaskRunner,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanRunConcurrentTasks: HasStreamType {
     async fn run_concurrent_tasks<T>(&self, tasks: Vec<Box<T>>)

@@ -2,12 +2,19 @@ use cgp::prelude::*;
 
 use crate::traits::types::encoded::HasEncodedType;
 
-#[derive_component(EncodeBufferTypeComponent, ProvideEncodeBufferType<Encoding>)]
+#[cgp_component {
+  name: EncodeBufferTypeComponent,
+  provider: ProvideEncodeBufferType,
+  context: Encoding,
+}]
 pub trait HasEncodeBufferType {
     type EncodeBuffer: Default;
 }
 
-#[derive_component(EncodeBufferFinalizerComponent, EncodeBufferFinalizer<Encoding>)]
+#[cgp_component {
+  provider: EncodeBufferFinalizer,
+  context: Encoding,
+}]
 pub trait CanFinalizedEncodeBuffer: HasEncodeBufferType + HasEncodedType {
     fn to_encoded(buffer: Self::EncodeBuffer) -> Self::Encoded;
 }

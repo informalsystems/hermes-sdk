@@ -7,7 +7,10 @@ use cgp::prelude::*;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
 
-#[derive_component(PacketTimeoutGetterComponent, PacketTimeoutGetter<Chain>)]
+#[cgp_component {
+  provider: PacketTimeoutGetter,
+  context: Chain,
+}]
 pub trait HasPacketTimeout<Counterparty>: HasPacketHeaderType<Counterparty>
 where
     Counterparty: HasPacketTimeoutType<Self>,
@@ -20,7 +23,7 @@ impl<Chain, Counterparty, Provider> PacketTimeoutGetter<Chain, Counterparty>
 where
     Chain: HasPacketHeaderType<Counterparty>,
     Provider:
-        FieldGetter<Chain::PacketHeader, symbol!("timeout"), Field = Counterparty::PacketTimeout>,
+        FieldGetter<Chain::PacketHeader, symbol!("timeout"), Value = Counterparty::PacketTimeout>,
     Counterparty: HasPacketTimeoutType<Chain>,
 {
     fn packet_timeout(packet_header: &Chain::PacketHeader) -> &Counterparty::PacketTimeout {

@@ -8,7 +8,10 @@ use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use crate::multi::types::tags::{Dst, Src};
 use crate::relay::traits::chains::HasRelayChainTypes;
 
-#[derive_component(RelayTypeAtComponent<SrcTag, DstTag>, ProvideRelayTypeAt<Context>)]
+#[cgp_component {
+  name: RelayTypeAtComponent<SrcTag, DstTag>,
+  provider: ProvideRelayTypeAt,
+}]
 pub trait HasRelayTypeAt<SrcTag, DstTag>: Async {
     type Relay: Async;
 }

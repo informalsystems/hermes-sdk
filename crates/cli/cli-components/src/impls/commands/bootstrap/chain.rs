@@ -45,7 +45,7 @@ where
     UpdateConfig: ConfigUpdater<ChainDriver, App::Config>,
     Chain: HasChainId,
     Runtime: CanWaitChildProcess + HasFilePathType<FilePath = PathBuf>,
-    Args: Async + HasField<symbol!("chain_id"), Field = String>,
+    Args: Async + HasField<symbol!("chain_id"), Value = String>,
     App::Logger: CanLog<LevelInfo>,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {

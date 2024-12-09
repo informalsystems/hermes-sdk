@@ -53,7 +53,11 @@ use crate::traits::stream::HasStreamType;
    which defines abstract one-shot channel types that allow at most one message
    to be sent over.
 */
-#[derive_component(ChannelTypeComponent, ProvideChannelType<Runtime>)]
+#[cgp_component {
+  name: ChannelTypeComponent,
+  provider: ProvideChannelType,
+  context: Runtime,
+}]
 pub trait HasChannelTypes: Async {
     /**
        The sender end of a channel with payload type `T`.
@@ -74,7 +78,10 @@ pub trait HasChannelTypes: Async {
    Allow the creation of new sender-receiver pairs for the channel types
    defined in [`HasChannelTypes`].
 */
-#[derive_component(ChannelCreatorComponent, ChannelCreator<Runtime>)]
+#[cgp_component {
+  provider: ChannelCreator,
+  context: Runtime,
+}]
 pub trait CanCreateChannels: HasChannelTypes {
     /**
        Given a generic payload type `T`, create a
@@ -104,7 +111,10 @@ pub trait CanCreateChannels: HasChannelTypes {
    [`Sender`](HasChannelTypes::Sender<T>) and
    [`Receiver`](HasChannelTypes::Receiver<T>) ends of a channel.
 */
-#[derive_component(ChannelUserComponent, ChannelUser<Runtime>)]
+#[cgp_component {
+  provider: ChannelUser,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanUseChannels: HasChannelTypes + HasErrorType {
     /**
@@ -142,14 +152,20 @@ pub trait CanUseChannels: HasChannelTypes + HasErrorType {
         T: Async;
 }
 
-#[derive_component(ReceiverStreamerComponent, ReceiverStreamer<Runtime>)]
+#[cgp_component {
+  provider: ReceiverStreamer,
+  context: Runtime,
+}]
 pub trait CanStreamReceiver: HasChannelTypes + HasStreamType {
     fn receiver_to_stream<T>(receiver: Self::Receiver<T>) -> Self::Stream<T>
     where
         T: Async;
 }
 
-#[derive_component(SenderClonerComponent, SenderCloner<Runtime>)]
+#[cgp_component {
+  provider: SenderCloner,
+  context: Runtime,
+}]
 pub trait CanCloneSender: HasChannelTypes {
     fn clone_sender<T>(sender: &Self::Sender<T>) -> Self::Sender<T>
     where

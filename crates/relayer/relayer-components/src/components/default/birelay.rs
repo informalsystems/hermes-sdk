@@ -3,7 +3,7 @@ use cgp::prelude::*;
 
 use crate::relay::impls::auto_relayers::both_ways::RelayBothWays;
 
-define_components! {
+cgp_preset! {
     DefaultBiRelayComponents {
         RunnerComponent: RelayBothWays,
     }

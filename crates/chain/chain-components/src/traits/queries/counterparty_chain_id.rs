@@ -3,7 +3,10 @@ use cgp::prelude::*;
 use crate::traits::types::chain_id::HasChainIdType;
 use crate::traits::types::ibc::HasIbcChainTypes;
 
-#[derive_component(CounterpartyChainIdQuerierComponent, CounterpartyChainIdQuerier<Chain>)]
+#[cgp_component {
+  provider: CounterpartyChainIdQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryCounterpartyChainId<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType

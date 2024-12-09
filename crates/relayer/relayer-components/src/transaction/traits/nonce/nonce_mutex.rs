@@ -14,7 +14,11 @@ use crate::transaction::traits::types::signer::HasSignerType;
    the time when the nonce is being allocated and used. Because of this, the naive
    allocator only allows one transaction to be submitted at a time.
 */
-#[derive_component(MutexForNonceAllocationComponent, ProvideMutexForNonceAllocation<Chain>)]
+#[cgp_component {
+  name: MutexForNonceAllocationComponent,
+  provider: ProvideMutexForNonceAllocation,
+  context: Chain,
+}]
 pub trait HasMutexForNonceAllocation:
     HasRuntime<Runtime: HasMutex> + HasNonceGuard + HasSignerType
 {

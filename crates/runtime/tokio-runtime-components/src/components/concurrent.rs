@@ -30,7 +30,7 @@ pub use hermes_runtime_components::traits::time::TimeComponent;
 
 use crate::components::parallel::TokioParallelRuntimeComponents;
 
-define_components! {
+cgp_preset! {
     TokioConcurrentRuntimeComponents {
         ConcurrentTaskRunnerComponent: RunConcurrentTasks,
         [

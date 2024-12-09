@@ -1,6 +1,9 @@
 use cgp::prelude::*;
 
-#[derive_component(TestRunnerComponent, TestRunner<Setup>)]
+#[cgp_component {
+  provider: TestRunner,
+  context: Setup,
+}]
 #[async_trait]
 pub trait CanRunTest<Test>: Async + HasErrorType
 where

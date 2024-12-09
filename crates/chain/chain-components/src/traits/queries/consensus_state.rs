@@ -9,7 +9,10 @@ use crate::traits::types::consensus_state::{HasConsensusStateType, HasRawConsens
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::proof::HasCommitmentProofType;
 
-#[derive_component(ConsensusStateQuerierComponent, ConsensusStateQuerier<Chain>)]
+#[cgp_component {
+  provider: ConsensusStateQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryConsensusState<Counterparty>:
     HasClientIdType<Counterparty> + HasHeightType + HasErrorType
@@ -25,7 +28,10 @@ where
     ) -> Result<Counterparty::ConsensusState, Self::Error>;
 }
 
-#[derive_component(ConsensusStateWithProofsQuerierComponent, ConsensusStateWithProofsQuerier<Chain>)]
+#[cgp_component {
+  provider: ConsensusStateWithProofsQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryConsensusStateWithProofs<Counterparty>:
     HasClientIdType<Counterparty> + HasHeightType + HasCommitmentProofType + HasErrorType
@@ -41,7 +47,10 @@ where
     ) -> Result<(Counterparty::ConsensusState, Self::CommitmentProof), Self::Error>;
 }
 
-#[derive_component(RawConsensusStateQuerierComponent, RawConsensusStateQuerier<Chain>)]
+#[cgp_component {
+  provider: RawConsensusStateQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryRawConsensusState<Counterparty>:
     HasClientIdType<Counterparty> + HasHeightType + HasRawConsensusStateType + HasErrorType
@@ -56,7 +65,10 @@ where
     ) -> Result<Self::RawConsensusState, Self::Error>;
 }
 
-#[derive_component(RawConsensusStateWithProofsQuerierComponent, RawConsensusStateWithProofsQuerier<Chain>)]
+#[cgp_component {
+  provider: RawConsensusStateWithProofsQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryRawConsensusStateWithProofs<Counterparty>:
     HasClientIdType<Counterparty>

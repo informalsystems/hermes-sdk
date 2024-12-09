@@ -1,7 +1,11 @@
 use cgp::prelude::*;
 use hdpath::StandardHDPath;
 
-#[derive_component(WalletHdPathComponent, WalletHdPathGetter<Bootstrap>)]
+#[cgp_component {
+  name: WalletHdPathComponent,
+  provider: WalletHdPathGetter,
+  context: Bootstrap,
+}]
 pub trait HasWalletHdPath: Async {
     fn wallet_hd_path(&self) -> StandardHDPath;
 }

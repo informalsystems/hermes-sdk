@@ -13,10 +13,8 @@ use hermes_async_runtime_components::subscription::traits::subscription::Subscri
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_chain_type_components::traits::types::event::HasEventType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_cosmos_chain_components::components::client::*;
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::impls::types::config::{CosmosChainConfig, EventSourceMode};
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
@@ -32,8 +30,6 @@ use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
-use hermes_cosmos_chain_components::with_cosmos_tx_components;
-use hermes_cosmos_test_components::chain::components::*;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
@@ -113,6 +109,7 @@ use tendermint_rpc::{HttpClient, Url, WebSocketClientUrl};
 use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
 use crate::impls::subscription::CanCreateAbciEventSubscription;
+use crate::presets::chain::*;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(Clone)]
@@ -178,28 +175,11 @@ delegate_components! {
     }
 }
 
-with_cosmos_client_components! {
-    delegate_components! {
-        CosmosChainContextComponents {
-            @CosmosClientComponents: CosmosClientComponents,
-        }
-    }
-}
-
-with_cosmos_tx_components! {
-    delegate_components! {
-        CosmosChainContextComponents {
-            @CosmosTxComponents : CosmosTxComponents,
-        }
-    }
-}
-
-with_cosmmos_chain_test_components! {
-    delegate_components! {
-        CosmosChainContextComponents {
-            @CosmmosChainTestComponents: CosmmosChainTestComponents,
-        }
-    }
+impl<Name> DelegateComponent<Name> for CosmosChainContextComponents
+where
+    Self: IsCosmosChainFullPreset<Name>,
+{
+    type Delegate = CosmosChainFullPreset;
 }
 
 delegate_components! {

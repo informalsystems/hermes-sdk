@@ -7,7 +7,10 @@ use cgp::prelude::*;
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
-#[derive_component(PayloadAppIdGetterComponent, PayloadAppIdGetter<Chain>)]
+#[cgp_component {
+  provider: PayloadAppIdGetter,
+  context: Chain,
+}]
 pub trait HasPayloadAppIds<Counterparty>:
     HasPayloadHeaderType<Counterparty> + HasAppIdType<Counterparty>
 where
@@ -23,8 +26,8 @@ impl<Chain, Counterparty, Provider> PayloadAppIdGetter<Chain, Counterparty>
 where
     Chain: HasPayloadHeaderType<Counterparty> + HasAppIdType<Counterparty>,
     Counterparty: HasAppIdType<Chain>,
-    Provider: FieldGetter<Chain::PayloadHeader, symbol!("src_app_id"), Field = Chain::AppId>
-        + FieldGetter<Chain::PayloadHeader, symbol!("dst_app_id"), Field = Counterparty::AppId>,
+    Provider: FieldGetter<Chain::PayloadHeader, symbol!("src_app_id"), Value = Chain::AppId>
+        + FieldGetter<Chain::PayloadHeader, symbol!("dst_app_id"), Value = Counterparty::AppId>,
 {
     fn payload_src_app_id(packet_header: &Chain::PayloadHeader) -> &Chain::AppId {
         Provider::get_field(packet_header, PhantomData::<symbol!("src_app_id")>)

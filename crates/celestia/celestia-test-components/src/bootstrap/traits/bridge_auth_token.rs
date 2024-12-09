@@ -8,7 +8,10 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use crate::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 use crate::bridge_driver::traits::bridge_auth_token::{BridgeAuthTokenOf, HasBridgeAuthTokenType};
 
-#[derive_component(BridgeAuthTokenGeneratorComponent, BridgeAuthTokenGenerator<Bootstrap>)]
+#[cgp_component {
+  provider: BridgeAuthTokenGenerator,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanGenerateBridgeAuthToken:
     HasRuntimeType + HasChainType + HasBridgeDriverType + HasErrorType

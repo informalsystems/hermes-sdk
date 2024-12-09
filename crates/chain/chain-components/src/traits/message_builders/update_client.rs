@@ -7,7 +7,10 @@ use hermes_chain_type_components::traits::types::message::HasMessageType;
 
 use crate::traits::types::update_client::HasUpdateClientPayloadType;
 
-#[derive_component(UpdateClientMessageBuilderComponent, UpdateClientMessageBuilder<Chain>)]
+#[cgp_component {
+  provider: UpdateClientMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildUpdateClientMessage<Counterparty>:
     HasClientIdType<Counterparty> + HasMessageType + HasErrorType

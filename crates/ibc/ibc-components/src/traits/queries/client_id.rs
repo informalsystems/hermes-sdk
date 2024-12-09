@@ -2,7 +2,10 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
-#[derive_component(ClientIdFromChannelIdQuerierComponent, ClientIdFromChannelIdQuerier<Chain>)]
+#[cgp_component {
+  provider: ClientIdFromChannelIdQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryClientIdFromChannelId<Counterparty>:
     HasChannelIdType<Counterparty> + HasClientIdType<Counterparty> + HasErrorType

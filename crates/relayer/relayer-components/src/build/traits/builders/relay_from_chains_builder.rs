@@ -6,7 +6,10 @@ use hermes_chain_components::traits::types::ibc::HasClientIdType;
 use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 
-#[derive_component(RelayFromChainsBuilderComponent, RelayFromChainsBuilder<Build>)]
+#[cgp_component {
+  provider: RelayFromChainsBuilder,
+  context: Build,
+}]
 #[async_trait]
 pub trait CanBuildRelayFromChains<Src: Async, Dst: Async>:
     HasRelayTypeAt<Src, Dst>

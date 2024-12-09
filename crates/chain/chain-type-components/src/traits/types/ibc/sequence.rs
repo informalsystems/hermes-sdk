@@ -2,7 +2,11 @@ use core::fmt::{Debug, Display};
 
 use cgp::prelude::*;
 
-#[derive_component(SequenceTypeComponent, ProvideSequenceType<Chain>)]
+#[cgp_component {
+  name: SequenceTypeComponent,
+  provider: ProvideSequenceType,
+  context: Chain,
+}]
 pub trait HasSequenceType<Counterparty>: Async {
     /**
        The IBC packet sequence for the packet that is sent from the self chain

@@ -70,7 +70,10 @@ impl<Chain, Counterparty> HasIbcChainTypes<Counterparty> for Chain where
 {
 }
 
-#[derive_component(CounterpartyMessageHeightGetterComponent, CounterpartyMessageHeightGetter<Chain>)]
+#[cgp_component {
+  provider: CounterpartyMessageHeightGetter,
+  context: Chain,
+}]
 pub trait HasCounterpartyMessageHeight<Counterparty>: HasMessageType
 where
     Counterparty: HasHeightType,

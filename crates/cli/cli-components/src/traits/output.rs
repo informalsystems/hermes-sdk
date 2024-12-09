@@ -2,12 +2,19 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(OutputTypeComponent, ProvideOutputType<App>)]
+#[cgp_component {
+  name: OutputTypeComponent,
+  provider: ProvideOutputType,
+  context: App,
+}]
 pub trait HasOutputType: Async {
     type Output: Async;
 }
 
-#[derive_component(OutputProducerComponent, OutputProducer<App>)]
+#[cgp_component {
+  provider: OutputProducer,
+  context: App,
+}]
 pub trait CanProduceOutput<Value>: HasOutputType {
     fn produce_output(&self, value: Value) -> Self::Output;
 }

@@ -4,7 +4,10 @@ use crate::chain::traits::types::channel::{HasInitChannelOptionsType, InitChanne
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::{DstPortId, SrcChannelId, SrcPortId};
 
-#[derive_component(ChannelInitializerComponent, ChannelInitializer<Relay>)]
+#[cgp_component {
+  provider: ChannelInitializer,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanInitChannel: HasRelayChains
 where

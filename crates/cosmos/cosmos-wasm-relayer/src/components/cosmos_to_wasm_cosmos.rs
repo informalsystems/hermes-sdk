@@ -31,7 +31,7 @@ use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
 use crate::impls::update_client_message::BuildUpdateWasmTendermintClientMessage;
 use crate::types::create_client::ProvidCreateWasmTendermintMessageOptionsType;
 
-define_components! {
+cgp_preset! {
     CosmosToWasmCosmosComponents {
         CreateClientMessageBuilderComponent:
             BuildCreateWasmTendermintClientMessage,

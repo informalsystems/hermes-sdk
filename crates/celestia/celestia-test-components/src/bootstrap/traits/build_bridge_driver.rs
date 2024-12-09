@@ -6,7 +6,10 @@ use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;
 use crate::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 use crate::bridge_driver::traits::bridge_auth_token::{BridgeAuthTokenOf, HasBridgeAuthTokenType};
 
-#[derive_component(BridgeDriverBuilderComponent, BridgeDriverBuilder<Bootstrap>)]
+#[cgp_component {
+  provider: BridgeDriverBuilder,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanBuildBridgeDriver:
     HasBridgeDriverType + HasBridgeConfigType + HasRuntimeType + HasErrorType

@@ -20,7 +20,10 @@ impl<BiRelay> HasTwoWayRelayTypes for BiRelay where
 {
 }
 
-#[derive_component(TwoWayRelayGetterComponent, TwoWayRelayGetter<BiRelay>)]
+#[cgp_component {
+  provider: TwoWayRelayGetter,
+  context: BiRelay,
+}]
 pub trait HasTwoWayRelay: HasTwoWayRelayTypes {
     /// Returns a read-only reference to the relay context from chain A
     /// to chain B.

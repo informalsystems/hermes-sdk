@@ -2,7 +2,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(TimeTypeComponent, ProvideTimeType<Chain>)]
+#[cgp_component {
+  name: TimeTypeComponent,
+  provider: ProvideTimeType,
+  context: Chain,
+}]
 pub trait HasTimeType: Async {
     type Time: Async;
 }

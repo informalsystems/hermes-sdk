@@ -14,7 +14,11 @@ use crate::relay::traits::chains::{HasRelayChains, PacketOf};
    packet.
 */
 #[async_trait]
-#[derive_component(PacketLockComponent, ProvidePacketLock<Relay>)]
+#[cgp_component {
+  name: PacketLockComponent,
+  provider: ProvidePacketLock,
+  context: Relay,
+}]
 pub trait HasPacketLock: HasRelayChains {
     /**
        The mutex guard for a locked packet. This should be kept alive while

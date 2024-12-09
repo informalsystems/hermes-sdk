@@ -1,7 +1,6 @@
 use core::fmt::Debug;
 
-use cgp::core::Async;
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 
 use crate::traits::compute_verification_height::CanComputeNextVerificationHeight;
@@ -28,6 +27,7 @@ where
     pub trusted_height: &'a Client::Height,
 }
 
+#[async_trait]
 impl<Client, Mode> TargetHeightVerifier<Client, Mode> for DoVerifyForward
 where
     Client: HasLightBlockHeight

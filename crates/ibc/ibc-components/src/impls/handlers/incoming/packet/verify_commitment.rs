@@ -18,6 +18,7 @@ use crate::types::tags::commitment::send::SendPacket;
 
 pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>);
 
+#[async_trait]
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for VerifySendPacketCommitmentProof<InHandler>
 where

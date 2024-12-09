@@ -47,7 +47,10 @@ where
     }
 }
 
-#[derive_component(PollTimeoutGetterComponent, PollTimeoutGetter<Chain>)]
+#[cgp_component {
+  provider: PollTimeoutGetter,
+  context: Chain,
+}]
 pub trait HasPollTimeout {
     fn poll_timeout(&self) -> Duration;
 

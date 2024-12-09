@@ -2,7 +2,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(IbcMessageHeaderTypeComponent, ProvideIbcMessageHeaderType<Chain>)]
+#[cgp_component {
+  name: IbcMessageHeaderTypeComponent,
+  provider: ProvideIbcMessageHeaderType,
+  context: Chain,
+}]
 pub trait HasIbcMessageHeaderType<Counterparty>: Async {
     type IbcMessageHeader: Async;
 }

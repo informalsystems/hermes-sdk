@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(BridgeAuthTokenTypeComponent, ProvideBridgeAuthTokenType<BridgeDriver>)]
+#[cgp_component {
+  name: BridgeAuthTokenTypeComponent,
+  provider: ProvideBridgeAuthTokenType,
+  context: BridgeDriver,
+}]
 pub trait HasBridgeAuthTokenType: Async {
     type BridgeAuthToken: Async;
 }
@@ -8,7 +12,10 @@ pub trait HasBridgeAuthTokenType: Async {
 pub type BridgeAuthTokenOf<BridgeDriver> =
     <BridgeDriver as HasBridgeAuthTokenType>::BridgeAuthToken;
 
-#[derive_component(BridgeAuthTokenGetterComponent, BridgeAuthTokenGetter<BridgeDriver>)]
+#[cgp_component {
+  provider: BridgeAuthTokenGetter,
+  context: BridgeDriver,
+}]
 pub trait HasBridgeAuthToken: HasBridgeAuthTokenType {
     fn bridge_auth_token(&self) -> &Self::BridgeAuthToken;
 }

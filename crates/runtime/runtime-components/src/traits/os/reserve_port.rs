@@ -1,6 +1,9 @@
 use cgp::prelude::*;
 
-#[derive_component(TcpPortReserverComponent, TcpPortReserver<Runtime>)]
+#[cgp_component {
+  provider: TcpPortReserver,
+  context: Runtime,
+}]
 /// Allocate a TCP port that the full node process use for listening
 #[async_trait]
 pub trait CanReserveTcpPort: Async + HasErrorType {

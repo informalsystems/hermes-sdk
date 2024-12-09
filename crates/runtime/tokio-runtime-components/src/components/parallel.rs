@@ -50,7 +50,7 @@ use crate::impls::sleep::TokioSleep;
 use crate::impls::spawn::TokioSpawnTask;
 use crate::impls::time::ProvideStdTime;
 
-define_components! {
+cgp_preset! {
     TokioParallelRuntimeComponents {
         SleeperComponent: TokioSleep,
         TimeComponent: ProvideStdTime,

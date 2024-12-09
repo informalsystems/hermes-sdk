@@ -34,7 +34,7 @@ use crate::batch::impls::message_sender::SendMessagesToBatchWorker;
 pub use crate::batch::types::sink::BatchWorkerSink;
 use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
-define_components! {
+cgp_preset! {
     ExtraRelayComponents {
         IbcMessageSenderComponent<MainSink>: SendMessagesToBatchWorker,
         IbcMessageSenderComponent<BatchWorkerSink>:

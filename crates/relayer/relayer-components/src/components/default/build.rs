@@ -16,7 +16,7 @@ use crate::multi::traits::chain_at::{ChainAt, ChainIdAt};
 use crate::multi::traits::relay_at::{ClientIdAt, RelayAt};
 use crate::multi::types::index::Index;
 
-define_components! {
+cgp_preset! {
     DefaultBuildComponents<BaseComponents: Async> {
         ChainBuilderComponent: BuildChainWithCache<BaseComponents>,
         RelayBuilderComponent: BuildRelayWithCache<BuildRelayFromChains>,

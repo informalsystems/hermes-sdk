@@ -5,7 +5,11 @@ use crate::chain::traits::types::address::HasAddressType;
 
 pub type Wallet<Chain> = <Chain as HasWalletType>::Wallet;
 
-#[derive_component(WalletTypeComponent, ProvideWalletType<Chain>)]
+#[cgp_component {
+  name: WalletTypeComponent,
+  provider: ProvideWalletType,
+  context: Chain,
+}]
 pub trait HasWalletType: HasAddressType {
     type Wallet: Async;
 
@@ -14,7 +18,11 @@ pub trait HasWalletType: HasAddressType {
 
 pub type WalletOf<ChainDriver> = <ChainDriver as HasWalletType>::Wallet;
 
-#[derive_component(WalletSignerComponent, WalletSignerProvider<Chain>)]
+#[cgp_component {
+  name: WalletSignerComponent,
+  provider: WalletSignerProvider,
+  context: Chain,
+}]
 pub trait HasWalletSigner: HasWalletType + HasSignerType {
     fn wallet_signer(wallet: &Self::Wallet) -> &Self::Signer;
 }

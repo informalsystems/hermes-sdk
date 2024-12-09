@@ -4,7 +4,11 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use tendermint_light_client_verifier::Verifier;
 
-#[derive_component(VerifierComponent, ProvideVerifier<Client>)]
+#[cgp_component {
+  name: VerifierComponent,
+  provider: ProvideVerifier,
+  context: Client,
+}]
 pub trait HasVerifier: Async {
     type Verifier: Verifier;
 
@@ -13,9 +17,9 @@ pub trait HasVerifier: Async {
 
 impl<Client> ProvideVerifier<Client> for UseContext
 where
-    Client: Async + HasField<symbol!("verifier"), Field: Verifier>,
+    Client: Async + HasField<symbol!("verifier"), Value: Verifier>,
 {
-    type Verifier = Client::Field;
+    type Verifier = Client::Value;
 
     fn verifier(client: &Client) -> &Self::Verifier {
         client.get_field(PhantomData)

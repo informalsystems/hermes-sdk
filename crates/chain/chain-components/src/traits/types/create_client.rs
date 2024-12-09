@@ -4,7 +4,11 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
-#[derive_component(CreateClientPayloadOptionsTypeComponent, ProvideCreateClientPayloadOptionsType<Chain>)]
+#[cgp_component {
+  name: CreateClientPayloadOptionsTypeComponent,
+  provider: ProvideCreateClientPayloadOptionsType,
+  context: Chain,
+}]
 pub trait HasCreateClientPayloadOptionsType<Counterparty>: Async {
     type CreateClientPayloadOptions: Async;
 }
@@ -12,7 +16,11 @@ pub trait HasCreateClientPayloadOptionsType<Counterparty>: Async {
 pub type CreateClientPayloadOptionsOf<Chain, Counterparty> =
     <Chain as HasCreateClientPayloadOptionsType<Counterparty>>::CreateClientPayloadOptions;
 
-#[derive_component(CreateClientMessageOptionsTypeComponent, ProvideCreateClientMessageOptionsType<Chain>)]
+#[cgp_component {
+  name: CreateClientMessageOptionsTypeComponent,
+  provider: ProvideCreateClientMessageOptionsType,
+  context: Chain,
+}]
 pub trait HasCreateClientMessageOptionsType<Counterparty>: Async {
     type CreateClientMessageOptions: Async;
 }
@@ -20,12 +28,20 @@ pub trait HasCreateClientMessageOptionsType<Counterparty>: Async {
 pub type CreateClientMessageOptionsOf<Chain, Counterparty> =
     <Chain as HasCreateClientMessageOptionsType<Counterparty>>::CreateClientMessageOptions;
 
-#[derive_component(CreateClientPayloadTypeComponent, ProvideCreateClientPayloadType<Chain>)]
+#[cgp_component {
+  name: CreateClientPayloadTypeComponent,
+  provider: ProvideCreateClientPayloadType,
+  context: Chain,
+}]
 pub trait HasCreateClientPayloadType<Counterparty>: Async {
     type CreateClientPayload: Async;
 }
 
-#[derive_component(CreateClientEventComponent, ProvideCreateClientEvent<Chain>)]
+#[cgp_component {
+  name: CreateClientEventComponent,
+  provider: ProvideCreateClientEvent,
+  context: Chain,
+}]
 pub trait HasCreateClientEvent<Counterparty>:
     HasMessageResponseType + HasClientIdType<Counterparty>
 {

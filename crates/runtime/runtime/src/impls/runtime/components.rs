@@ -11,9 +11,11 @@ impl HasComponents for HermesRuntime {
 }
 
 with_tokio_parallel_runtime_components! {
-    delegate_components! {
-        HermesRuntimeComponents {
-            @TokioParallelRuntimeComponents: TokioParallelRuntimeComponents,
+    | Components | {
+        delegate_components! {
+            HermesRuntimeComponents {
+                Components: TokioParallelRuntimeComponents,
+            }
         }
     }
 }

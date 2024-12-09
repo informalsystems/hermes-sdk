@@ -12,7 +12,11 @@ use crate::traits::types::event::HasEventType;
    [`Event`](crate::traits::types::event::HasEventType::Event)
    type contains a [`SendPacketEvent`](Self::SendPacketEvent) variant.
 */
-#[derive_component(SendPacketEventComponent, ProvideSendPacketEvent<Chain>)]
+#[cgp_component {
+  name: SendPacketEventComponent,
+  provider: ProvideSendPacketEvent,
+  context: Chain,
+}]
 pub trait HasSendPacketEvent<Counterparty>:
     HasOutgoingPacketType<Counterparty> + HasEventType
 {

@@ -35,8 +35,8 @@ use crate::impls::types::transaction::ProvideCosmosTransactionTypes;
 pub use crate::traits::convert_gas_to_fee::GasToFeeConverterComponent;
 pub use crate::traits::eip::eip_query::EipQuerierComponent;
 
-define_components! {
-    CosmosTxComponents {
+cgp_preset! {
+    CosmosChainTxPreset {
         [
             SignerTypeComponent,
             NonceTypeComponent,

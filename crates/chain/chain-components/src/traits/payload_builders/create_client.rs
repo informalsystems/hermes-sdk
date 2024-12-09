@@ -5,7 +5,10 @@ use crate::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 
-#[derive_component(CreateClientPayloadBuilderComponent, CreateClientPayloadBuilder<Chain>)]
+#[cgp_component {
+  provider: CreateClientPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildCreateClientPayload<Counterparty>:
     HasCreateClientPayloadOptionsType<Counterparty>

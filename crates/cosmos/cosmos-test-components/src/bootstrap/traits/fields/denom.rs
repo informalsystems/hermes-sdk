@@ -11,7 +11,10 @@ pub struct DenomForStaking;
 
 pub struct DenomForTransfer;
 
-#[derive_component(GenesisDenomGetterComponent, GenesisDenomGetter<Bootstrap>)]
+#[cgp_component {
+  provider: GenesisDenomGetter,
+  context: Bootstrap,
+}]
 pub trait HasGenesisDenom<Label>: HasChainGenesisConfigType + HasChainType
 where
     Self::Chain: HasDenomType,
@@ -22,14 +25,17 @@ where
     ) -> &DenomOf<Self::Chain>;
 }
 
-#[derive_component(DenomPrefixGetterComponent, DenomPrefixGetter<Bootstrap>)]
+#[cgp_component {
+  provider: DenomPrefixGetter,
+  context: Bootstrap,
+}]
 pub trait HasDenomPrefix<Label>: Async {
     fn denom_prefix(&self, label: Label) -> &str;
 }
 
 impl<Bootstrap> DenomPrefixGetter<Bootstrap, DenomForStaking> for UseContext
 where
-    Bootstrap: Async + HasField<symbol!("staking_denom_prefix"), Field = String>,
+    Bootstrap: Async + HasField<symbol!("staking_denom_prefix"), Value = String>,
 {
     fn denom_prefix(bootstrap: &Bootstrap, _label: DenomForStaking) -> &str {
         bootstrap.get_field(PhantomData)
@@ -38,7 +44,7 @@ where
 
 impl<Bootstrap> DenomPrefixGetter<Bootstrap, DenomForTransfer> for UseContext
 where
-    Bootstrap: Async + HasField<symbol!("transfer_denom_prefix"), Field = String>,
+    Bootstrap: Async + HasField<symbol!("transfer_denom_prefix"), Value = String>,
 {
     fn denom_prefix(bootstrap: &Bootstrap, _label: DenomForTransfer) -> &str {
         bootstrap.get_field(PhantomData)

@@ -3,12 +3,18 @@ pub use hermes_chain_type_components::traits::types::commitment_proof::*;
 
 use crate::traits::types::height::HasHeightType;
 
-#[derive_component(CommitmentProofHeightGetterComponent, CommitmentProofHeightGetter<Chain>)]
+#[cgp_component {
+  provider: CommitmentProofHeightGetter,
+  context: Chain,
+}]
 pub trait HasCommitmentProofHeight: HasCommitmentProofType + HasHeightType {
     fn commitment_proof_height(proof: &Self::CommitmentProof) -> &Self::Height;
 }
 
-#[derive_component(CommitmentProofBytesGetterComponent, CommitmentProofBytesGetter<Chain>)]
+#[cgp_component {
+  provider: CommitmentProofBytesGetter,
+  context: Chain,
+}]
 pub trait HasCommitmentProofBytes: HasCommitmentProofType {
     fn commitment_proof_bytes(proof: &Self::CommitmentProof) -> &[u8];
 }

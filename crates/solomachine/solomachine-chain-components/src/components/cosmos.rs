@@ -21,7 +21,7 @@ use hermes_relayer_components::chain::traits::types::create_client::CreateClient
 use crate::impls::cosmos::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
 use crate::impls::cosmos::create_client_message::BuildCreateSolomachineClientMessage;
 
-define_components! {
+cgp_preset! {
     SolomachineCosmosComponents {
         [
             ClientStateTypeComponent,

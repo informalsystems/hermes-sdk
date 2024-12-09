@@ -1,11 +1,19 @@
 use cgp::prelude::*;
 
-#[derive_component(TimeoutUnorderedPacketPayloadTypeComponent, ProvideTimeoutUnorderedPacketPayloadType<Chain>)]
+#[cgp_component {
+  name: TimeoutUnorderedPacketPayloadTypeComponent,
+  provider: ProvideTimeoutUnorderedPacketPayloadType,
+  context: Chain,
+}]
 pub trait HasTimeoutUnorderedPacketPayloadType<Counterparty>: Async {
     type TimeoutUnorderedPacketPayload: Async;
 }
 
-#[derive_component(PacketReceiptTypeComponent, ProvidePacketReceiptType<Chain>)]
+#[cgp_component {
+  name: PacketReceiptTypeComponent,
+  provider: ProvidePacketReceiptType,
+  context: Chain,
+}]
 pub trait HasPacketReceiptType<Counterparty>: Async {
     type PacketReceipt: Async;
 }

@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::*;
 
 use crate::traits::light_block::height::HasLightBlockHeight;
 use crate::traits::query_light_block::{
@@ -12,6 +12,7 @@ use crate::traits::verify_target_height::{
 
 pub struct DoVerifyToTarget;
 
+#[async_trait]
 impl<Client> TargetHeightVerifier<Client, VerifyToTarget> for DoVerifyToTarget
 where
     Client: HasLightBlockHeight

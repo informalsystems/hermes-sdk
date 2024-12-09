@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(ProposalIdTypeComponent, ProvideProposalIdType<Chain>)]
+#[cgp_component {
+  name: ProposalIdTypeComponent,
+  provider: ProvideProposalIdType,
+  context: Chain,
+}]
 pub trait HasProposalIdType: Async {
     type ProposalId: Async;
 }

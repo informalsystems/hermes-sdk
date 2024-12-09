@@ -4,7 +4,10 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::packets::timeout::HasPacketReceiptType;
 use crate::traits::types::proof::HasCommitmentProofType;
 
-#[derive_component(PacketReceiptQuerierComponent, PacketReceiptQuerier<Chain>)]
+#[cgp_component {
+  provider: PacketReceiptQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryPacketReceipt<Counterparty>:
     HasIbcChainTypes<Counterparty>

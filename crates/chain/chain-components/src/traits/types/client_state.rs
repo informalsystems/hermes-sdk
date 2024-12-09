@@ -6,12 +6,20 @@ pub use hermes_chain_type_components::traits::types::ibc::client_state::*;
 
 use crate::traits::types::height::HasHeightType;
 
-#[derive_component(RawClientStateTypeComponent, ProvideRawClientStateType<Chain>)]
+#[cgp_component {
+  name: RawClientStateTypeComponent,
+  provider: ProvideRawClientStateType,
+  context: Chain,
+}]
 pub trait HasRawClientStateType: Async {
     type RawClientState: Async;
 }
 
-#[derive_component(ClientStateFieldsComponent, ClientStateFieldsGetter<Chain>)]
+#[cgp_component {
+  name: ClientStateFieldsComponent,
+  provider: ClientStateFieldsGetter,
+  context: Chain,
+}]
 pub trait HasClientStateFields<Counterparty>:
     HasHeightType + HasClientStateType<Counterparty>
 {

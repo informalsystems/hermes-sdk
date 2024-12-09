@@ -4,9 +4,12 @@ use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::types::tags::commitment::send::SendPacket;
 
-#[derive_component(IncomingPacketHandlerComponent, IncomingPacketHandler<Chain>)]
+#[cgp_component {
+  provider: IncomingPacketHandler,
+  context: Chain,
+}]
 #[async_trait]
-pub trait CanHandleIncomingPacket<Counterparty>: HasErrorType + Async
+pub trait CanHandleIncomingPacket<Counterparty>: Sized + Async + HasErrorType
 where
     Counterparty: HasCommitmentProofType<SendPacket> + HasPacketType<Self>,
 {

@@ -519,25 +519,30 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
 name = "cgp"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5adf76ce3579324bc8804a03da7e05a5012e4096e295d7ce16073dd0f55e923e"
 dependencies = [
+ "cgp-async",
  "cgp-core",
  "cgp-extra",
 ]
 
 [[package]]
 name = "cgp-async"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0623cc42c39044ad4223a60b58d427fdece736913fa70e0c0b7787b207545886"
 dependencies = [
  "cgp-async-macro",
+ "cgp-sync",
 ]
 
 [[package]]
 name = "cgp-async-macro"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b22933d3a1fb401cc0208e4f8ef16f4c80579701a47b81d2f23ee5b0b697a7b0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -546,17 +551,18 @@ dependencies = [
 
 [[package]]
 name = "cgp-component"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82a567833f055c865fb46258f7c6a511b22a1da6bc22f58b47a5e5e3da7a2dd2"
 dependencies = [
- "cgp-async",
  "cgp-component-macro",
 ]
 
 [[package]]
 name = "cgp-component-macro"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1c4c375220b569b618d6b4ec8793c61bbdd24925786aeb4ea1eac5010916c262"
 dependencies = [
  "cgp-component-macro-lib",
  "proc-macro2",
@@ -564,8 +570,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-component-macro-lib"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f7e9fa127625afac0527a2f1595ba365142d8d875ff04f155cb248aee456d2c0"
 dependencies = [
  "itertools 0.11.0",
  "prettyplease",
@@ -576,8 +583,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-core"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "39951e4828fb216d51bfa42121095654f2adb0e4abbc9d03b011c5b47372a4c1"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -589,8 +597,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-error"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f3866da7384b88d3260e781e60bc9da3a68d5552c33eea56e6780fea8c97d000"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -598,27 +607,19 @@ dependencies = [
 ]
 
 [[package]]
-name = "cgp-error-eyre"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a85dc1bbf5991df1f72742ab8b4496b62c7b2ab4eac54f35856634de0aa9d69"
-dependencies = [
- "cgp-core",
- "eyre",
-]
-
-[[package]]
 name = "cgp-extra"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9f79c15ed0088b1ca06ad58a8f124c1d63f4a554073ed372ff2b488a3fbf6fb9"
 dependencies = [
  "cgp-run",
 ]
 
 [[package]]
 name = "cgp-field"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6956ca07b849e38106ee5b3c71c7e396088619115fe60934fd2598b873a9efac"
 dependencies = [
  "cgp-component",
  "cgp-field-macro",
@@ -627,8 +628,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-field-macro"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2286ec0bd3a48571ee3644e80a52ba029f10c2edd6bc3da4f4ef9279583798d5"
 dependencies = [
  "cgp-field-macro-lib",
  "proc-macro2",
@@ -636,8 +638,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-field-macro-lib"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7e05fc04f941c797c28db9dd9685d779b76784f29bdbe2eb368329abfca14d9a"
 dependencies = [
  "itertools 0.11.0",
  "prettyplease",
@@ -648,17 +651,18 @@ dependencies = [
 
 [[package]]
 name = "cgp-inner"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0cd062e3bef5a8353acdcdae3e04c0012de0b19e9bd02acbccfce09e895814cf"
 dependencies = [
- "cgp-async",
  "cgp-component",
 ]
 
 [[package]]
 name = "cgp-run"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2bf13ddcb395e915d314abf917d86dc7fa461bd73a3da2724b4698d45eaa283e"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -666,9 +670,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "cgp-sync"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3a1c0e460bcccd3e2e39ded6a2078f012d3c00b523caafc05b5bdace9205b0cf"
+dependencies = [
+ "cgp-async-macro",
+]
+
+[[package]]
 name = "cgp-type"
-version = "0.1.0"
-source = "git+https://github.com/contextgeneric/cgp.git#4e2821ebf61358b381f3e1e0f84df56cad7b6145"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5d3c9a9059625de770e4acddff6d5e56c5defd959b010b9643cfcb81832f5bed"
 dependencies = [
  "cgp-component",
 ]
@@ -1527,9 +1541,9 @@ name = "hermes-any-counterparty"
 version = "0.1.0"
 dependencies = [
  "cgp",
- "cgp-error-eyre",
  "hermes-cosmos-chain-components",
  "hermes-encoding-components",
+ "hermes-error",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "ibc-proto",
@@ -1555,7 +1569,6 @@ name = "hermes-celestia-integration-tests"
 version = "0.1.0"
 dependencies = [
  "cgp",
- "cgp-error-eyre",
  "eyre",
  "hermes-async-runtime-components",
  "hermes-celestia-test-components",
@@ -1617,7 +1630,6 @@ name = "hermes-cli"
 version = "0.1.0"
 dependencies = [
  "cgp",
- "cgp-error-eyre",
  "clap",
  "eyre",
  "futures",
@@ -2070,7 +2082,6 @@ version = "0.1.0"
 dependencies = [
  "bytes",
  "cgp",
- "cgp-error-eyre",
  "crypto-hash",
  "eyre",
  "futures",
@@ -2106,7 +2117,6 @@ version = "0.1.0"
 dependencies = [
  "bytes",
  "cgp",
- "cgp-error-eyre",
  "crypto-hash",
  "eyre",
  "futures",
@@ -2176,10 +2186,10 @@ name = "hermes-wasm-client-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
- "cgp-error-eyre",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-encoding-components",
  "hermes-encoding-components",
+ "hermes-error",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-wasm-encoding-components",
@@ -2208,7 +2218,6 @@ name = "hermes-wasm-test-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
- "cgp-error-eyre",
  "hermes-chain-type-components",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
@@ -2939,7 +2948,6 @@ name = "ibc-integration-test"
 version = "0.1.0"
 dependencies = [
  "cgp",
- "cgp-core",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-error",
@@ -3115,7 +3123,6 @@ version = "0.1.0"
 dependencies = [
  "cfg-if",
  "cgp",
- "cgp-core",
  "color-eyre",
  "crossbeam-channel",
  "eyre",

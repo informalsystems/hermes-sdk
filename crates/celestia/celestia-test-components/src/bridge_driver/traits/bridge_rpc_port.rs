@@ -1,6 +1,9 @@
 use cgp::prelude::*;
 
-#[derive_component(BridgeRpcPortGetterComponent, BridgeRpcPortGetter<BridgeDriver>)]
+#[cgp_component {
+  provider: BridgeRpcPortGetter,
+  context: BridgeDriver,
+}]
 pub trait HasBridgeRpcPort: Async {
     fn bridge_rpc_port(&self) -> u16;
 }

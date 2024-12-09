@@ -17,7 +17,7 @@ use crate::encoding::convert::CosmosConverterComponents;
 use crate::encoding::encode::CosmosEncoderComponents;
 use crate::encoding::type_url::CosmosTypeUrlSchemas;
 
-define_components! {
+cgp_preset! {
     CosmosClientEncodingComponents {
         [
             EncodedTypeComponent,

@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::*;
 
 use crate::traits::fields::message::app_id::HasIbcMessageAppIds;
 use crate::traits::fields::payload::app_id::HasPayloadAppIds;
@@ -39,6 +39,7 @@ where
     pub payload_header: &'a Chain::PayloadHeader,
 }
 
+#[async_trait]
 impl<Chain, Counterparty, App, InHandler> IbcMessageHandler<Chain, Counterparty, App>
     for ValidateHeaderAppIds<InHandler>
 where

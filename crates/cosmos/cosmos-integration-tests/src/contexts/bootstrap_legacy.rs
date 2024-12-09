@@ -85,9 +85,11 @@ impl Deref for LegacyCosmosBootstrap {
 }
 
 with_legacy_cosmos_sdk_bootstrap_components! {
-    delegate_components! {
-        LegacyCosmosBootstrapComponents {
-            @LegacyCosmosSdkBootstrapComponents: LegacyCosmosSdkBootstrapComponents,
+    | Components | {
+        delegate_components! {
+            LegacyCosmosBootstrapComponents {
+                Components: LegacyCosmosSdkBootstrapComponents,
+            }
         }
     }
 }

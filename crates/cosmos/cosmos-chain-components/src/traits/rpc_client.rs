@@ -1,7 +1,10 @@
 use cgp::prelude::*;
 use tendermint_rpc::{HttpClient, Url};
 
-#[derive_component(RpcClientGetterComponent, RpcClientGetter<Chain>)]
+#[cgp_component {
+  provider: RpcClientGetter,
+  context: Chain,
+}]
 pub trait HasRpcClient: Async {
     fn rpc_client(&self) -> &HttpClient;
 

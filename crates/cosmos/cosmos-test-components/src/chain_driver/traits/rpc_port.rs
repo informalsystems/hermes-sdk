@@ -1,6 +1,9 @@
 use cgp::prelude::*;
 
-#[derive_component(RpcPortGetterComponent, RpcPortGetter<ChainDriver>)]
+#[cgp_component {
+  provider: RpcPortGetter,
+  context: ChainDriver,
+}]
 pub trait HasRpcPort {
     fn rpc_port(&self) -> u16;
 }

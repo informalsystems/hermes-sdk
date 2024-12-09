@@ -28,7 +28,7 @@ delegate_components! {
 }
 
 impl FieldGetter<WasmClientMessage, symbol!("data")> for EncodeWasmClientMessage {
-    type Field = Vec<u8>;
+    type Value = Vec<u8>;
 
     fn get_field(message: &WasmClientMessage, _tag: PhantomData<symbol!("data")>) -> &Vec<u8> {
         &message.data

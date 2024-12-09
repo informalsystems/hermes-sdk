@@ -121,9 +121,11 @@ delegate_components! {
 }
 
 with_default_relay_components! {
-    delegate_components! {
-        CosmosToWasmCosmosRelayComponents {
-            @DefaultRelayComponents : DefaultRelayComponents,
+    | Components | {
+        delegate_components! {
+            CosmosToWasmCosmosRelayComponents {
+                Components: DefaultRelayComponents,
+            }
         }
     }
 }

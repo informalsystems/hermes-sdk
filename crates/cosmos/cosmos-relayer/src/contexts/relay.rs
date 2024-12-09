@@ -158,9 +158,11 @@ delegate_components! {
 }
 
 with_extra_relay_components! {
-    delegate_components! {
-        CosmosRelayComponents {
-            @ExtraRelayComponents: ExtraRelayComponents,
+    | Components | {
+        delegate_components! {
+            CosmosRelayComponents {
+                Components: ExtraRelayComponents,
+            }
         }
     }
 }

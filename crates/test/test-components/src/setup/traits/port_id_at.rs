@@ -6,7 +6,10 @@ use hermes_relayer_components::chain::traits::types::ibc::HasPortIdType;
 use hermes_relayer_components::chain::types::aliases::PortIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
-#[derive_component(PortIdAtComponent, ProvidePortIdAt<Context>)]
+#[cgp_component {
+  name: PortIdAtComponent,
+  provider: ProvidePortIdAt,
+}]
 pub trait HasPortIdAt<TargetTag: Async, CounterpartyTag: Async>:
     HasChainTypeAt<TargetTag, Chain: HasPortIdType<ChainAt<Self, CounterpartyTag>>>
     + HasChainTypeAt<CounterpartyTag>
@@ -22,7 +25,7 @@ impl<Context, TargetTag: Async, CounterpartyTag: Async, Tag, Chain, Counterparty
 where
     Context: HasChainTypeAt<TargetTag, Chain = Chain>
         + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>
-        + HasField<Tag, Field = PortId>,
+        + HasField<Tag, Value = PortId>,
     Chain: HasPortIdType<Counterparty, PortId = PortId>,
 {
     fn port_id_at(context: &Context, _index: PhantomData<(TargetTag, CounterpartyTag)>) -> &PortId {

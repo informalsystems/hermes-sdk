@@ -4,7 +4,10 @@ use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::SrcConnectionId;
 
-#[derive_component(ConnectionInitializerComponent, ConnectionInitializer<Relay>)]
+#[cgp_component {
+  provider: ConnectionInitializer,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanInitConnection:
     HasRelayChains<SrcChain: HasInitConnectionOptionsType<Self::DstChain>>

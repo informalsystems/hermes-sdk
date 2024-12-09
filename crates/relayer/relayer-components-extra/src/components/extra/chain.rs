@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::Consensu
 use crate::telemetry::components::consensus_state::ConsensusStateTelemetryQuerier;
 use crate::telemetry::components::status::ChainStatusTelemetryQuerier;
 
-define_components! {
+cgp_preset! {
     ExtraChainComponents<BaseComponents: Async> {
         ChainStatusQuerierComponent:
             ChainStatusTelemetryQuerier<BaseComponents>,

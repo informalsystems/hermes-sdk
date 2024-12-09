@@ -9,7 +9,10 @@ use tendermint_light_client_verifier::types::LightBlock;
 
 pub type LightBlockStore = BTreeMap<Height, (LightBlock, VerificationStatus)>;
 
-#[derive_component(LightBlockStoreGetterComponent, LightBlockStoreGetter<Client>)]
+#[cgp_component {
+  provider: LightBlockStoreGetter,
+  context: Client,
+}]
 pub trait HasLightBlockStore: Async {
     fn light_block_store(&self) -> &LightBlockStore;
 
@@ -18,7 +21,7 @@ pub trait HasLightBlockStore: Async {
 
 impl<Client: Async> LightBlockStoreGetter<Client> for UseContext
 where
-    Client: HasFieldMut<symbol!("light_block_store"), Field = LightBlockStore>,
+    Client: HasFieldMut<symbol!("light_block_store"), Value = LightBlockStore>,
 {
     fn light_block_store(client: &Client) -> &LightBlockStore {
         client.get_field(PhantomData)

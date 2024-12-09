@@ -2,7 +2,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(VerdictTypeComponent, ProvideVerdictType<Client>)]
+#[cgp_component {
+  name: VerdictTypeComponent,
+  provider: ProvideVerdictType,
+  context: Client,
+}]
 pub trait HasVerdictType: Async {
     type Verdict: Async;
 }

@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::Async;
-use cgp::prelude::{async_trait, HasErrorType};
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;

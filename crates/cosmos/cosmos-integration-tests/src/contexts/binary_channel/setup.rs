@@ -59,9 +59,11 @@ impl<BootstrapA, BootstrapB> HasComponents for CosmosBinaryChannelSetup<Bootstra
 }
 
 with_binary_channel_test_components! {
-    delegate_components! {
-        CosmosBinaryChannelSetupComponents {
-            @BinaryChannelTestComponents: BinaryChannelTestComponents,
+    | Components | {
+        delegate_components! {
+            CosmosBinaryChannelSetupComponents {
+                Components: BinaryChannelTestComponents,
+            }
         }
     }
 }
@@ -96,7 +98,7 @@ delegate_components! {
 impl<BootstrapA, BootstrapB> HasField<symbol!("create_client_message_options")>
     for CosmosBinaryChannelSetup<BootstrapA, BootstrapB>
 {
-    type Field = ();
+    type Value = ();
 
     fn get_field(&self, _phantom: PhantomData<symbol!("create_client_message_options")>) -> &() {
         &()

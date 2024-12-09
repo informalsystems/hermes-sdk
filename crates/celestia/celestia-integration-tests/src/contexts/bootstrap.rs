@@ -6,8 +6,6 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::impls::use_field::WithField;
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use eyre::Error;
 use hermes_celestia_test_components::bootstrap::components::CelestiaBootstrapComponents as BaseCelestiaBootstrapComponents;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::BridgeBootstrapperComponent;
 use hermes_celestia_test_components::bootstrap::traits::bridge_auth_token::BridgeAuthTokenGeneratorComponent;
@@ -51,6 +49,9 @@ use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
+use hermes_error::types::HermesError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
@@ -77,9 +78,11 @@ impl HasComponents for CelestiaBootstrap {
 }
 
 with_legacy_cosmos_sdk_bootstrap_components! {
-    delegate_components! {
-        CelestiaBootstrapComponents {
-            @LegacyCosmosSdkBootstrapComponents: LegacyCosmosSdkBootstrapComponents,
+    | Components | {
+        delegate_components! {
+            CelestiaBootstrapComponents {
+                Components: LegacyCosmosSdkBootstrapComponents,
+            }
         }
     }
 }
@@ -97,8 +100,8 @@ delegate_components! {
             BridgeStarterComponent,
         ]:
             BaseCelestiaBootstrapComponents,
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
+        ErrorTypeComponent: ProvideHermesError,
+        ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
@@ -147,7 +150,7 @@ impl BridgeDriverBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
         bridge_config: CelestiaBridgeConfig,
         bridge_auth_token: String,
         bridge_process: Child,
-    ) -> Result<CelestiaBridgeDriver, Error> {
+    ) -> Result<CelestiaBridgeDriver, HermesError> {
         Ok(CelestiaBridgeDriver {
             bridge_config,
             bridge_auth_token,

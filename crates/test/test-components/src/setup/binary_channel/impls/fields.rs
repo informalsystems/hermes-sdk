@@ -15,7 +15,7 @@ pub struct UseBinarySetupFields;
 
 impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<0>> for UseBinarySetupFields
 where
-    Setup: HasChainDriverTypeAt<Index<0>> + HasField<symbol!("bootstrap_a"), Field = Bootstrap>,
+    Setup: HasChainDriverTypeAt<Index<0>> + HasField<symbol!("bootstrap_a"), Value = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = Setup::ChainDriver>,
 {
     type Bootstrap = Bootstrap;
@@ -27,7 +27,7 @@ where
 
 impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<1>> for UseBinarySetupFields
 where
-    Setup: HasChainDriverTypeAt<Index<1>> + HasField<symbol!("bootstrap_b"), Field = Bootstrap>,
+    Setup: HasChainDriverTypeAt<Index<1>> + HasField<symbol!("bootstrap_b"), Value = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = Setup::ChainDriver>,
 {
     type Bootstrap = Bootstrap;
@@ -39,7 +39,7 @@ where
 
 impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, Index<0>> for UseBinarySetupFields
 where
-    Setup: Async + HasField<symbol!("bootstrap_a"), Field = Bootstrap>,
+    Setup: Async + HasField<symbol!("bootstrap_a"), Value = Bootstrap>,
     Bootstrap: HasChainType<Chain = Chain>,
     Chain: Async,
 {
@@ -48,7 +48,7 @@ where
 
 impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, Index<1>> for UseBinarySetupFields
 where
-    Setup: Async + HasField<symbol!("bootstrap_b"), Field = Bootstrap>,
+    Setup: Async + HasField<symbol!("bootstrap_b"), Value = Bootstrap>,
     Bootstrap: HasChainType<Chain = Chain>,
     Chain: Async,
 {
@@ -58,7 +58,7 @@ where
 impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, Index<0>>
     for UseBinarySetupFields
 where
-    Setup: Async + HasField<symbol!("bootstrap_a"), Field = Bootstrap>,
+    Setup: Async + HasField<symbol!("bootstrap_a"), Value = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = ChainDriver>,
     ChainDriver: Async,
 {
@@ -68,7 +68,7 @@ where
 impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, Index<1>>
     for UseBinarySetupFields
 where
-    Setup: Async + HasField<symbol!("bootstrap_b"), Field = Bootstrap>,
+    Setup: Async + HasField<symbol!("bootstrap_b"), Value = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = ChainDriver>,
     ChainDriver: Async,
 {

@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(CommitmentPathTypeComponent, ProvideCommitmentPathType<Chain>)]
+#[cgp_component {
+  name: CommitmentPathTypeComponent,
+  provider: ProvideCommitmentPathType,
+  context: Chain,
+}]
 pub trait HasCommitmentPathType<Tag>: Async {
     type CommitmentPath: Async;
 }

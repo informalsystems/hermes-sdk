@@ -2,61 +2,65 @@
 
 ## v0.2.0 (pre-release)
 
+-  Update `cgp` crate to v0.2.0 - [#491](https://github.com/informalsystems/hermes-sdk/pull/491)
+    - For a full list of changes, refer to [contextgeneric/cgp#42](https://github.com/contextgeneric/cgp/pull/42)
+      and the `cgp` [changelog](https://github.com/contextgeneric/cgp/blob/v0.2.0/CHANGELOG.md#v020-2025-12-08).
+
 -  Bootstrap components improvements - [#473](https://github.com/informalsystems/hermes-sdk/pull/473)
-  - Introduce `CosmosSdkConfigModifier` trait, which Cosmos bootstrap contexts now required to implement.
-  - Implement `UseContext` for various accessor traits for the bootstrap context.
-  - Pass `Bootstrap::ChainGenesisConfig` to `build_chain_with_node_config` and `build_relayer_chain_config`.
-  - Rename fields in Cosmos bootstrap contexts.
+    - Introduce `CosmosSdkConfigModifier` trait, which Cosmos bootstrap contexts now required to implement.
+    - Implement `UseContext` for various accessor traits for the bootstrap context.
+    - Pass `Bootstrap::ChainGenesisConfig` to `build_chain_with_node_config` and `build_relayer_chain_config`.
+    - Rename fields in Cosmos bootstrap contexts.
 
 - CLI Components Improvements - [#472](https://github.com/informalsystems/hermes-sdk/pull/472)
-  - Implement `WithProvider` for CLI type traits.
-  - Implement `UseDelegate` for `ArgParser` and `CommandRunner`.
-  - Make `take_chain_process` work with `&mut ChainDriver`
-  - Pass `ConfigUpdater` to `RunBootstrapChainCommand` for non-owned implementation.
+    - Implement `WithProvider` for CLI type traits.
+    - Implement `UseDelegate` for `ArgParser` and `CommandRunner`.
+    - Make `take_chain_process` work with `&mut ChainDriver`
+    - Pass `ConfigUpdater` to `RunBootstrapChainCommand` for non-owned implementation.
 
 -  Delegate all create and update client types and methods based on counterparty - [#468](https://github.com/informalsystems/hermes-sdk/pull/468)
-  - In `CosmosChainClientComponents`, delegate the following components to `UseDelegate<DelegateCosmosChainComponents>`:
-  `CreateClientPayloadTypeComponent`, `UpdateClientPayloadTypeComponent`,
-  `CreateClientPayloadOptionsTypeComponent`, `CreateClientPayloadBuilderComponent`,
-  `UpdateClientPayloadBuilderComponent`.
-    - To use CosmosChain with a concrete counterparty, the respective components need to be implemented in
-      `<DelegateCosmosChainComponents as DelegateComponent<Counterparty>>::Delegate`.
+    - In `CosmosChainClientComponents`, delegate the following components to `UseDelegate<DelegateCosmosChainComponents>`:
+    `CreateClientPayloadTypeComponent`, `UpdateClientPayloadTypeComponent`,
+    `CreateClientPayloadOptionsTypeComponent`, `CreateClientPayloadBuilderComponent`,
+    `UpdateClientPayloadBuilderComponent`.
+        - To use CosmosChain with a concrete counterparty, the respective components need to be implemented in
+          `<DelegateCosmosChainComponents as DelegateComponent<Counterparty>>::Delegate`.
 
 - Make message senders return new `MessageResponse` type instead of `Vec<Chain::Event>` - [#460](https://github.com/informalsystems/hermes-sdk/pull/460)
-  - Introduce `HasMessageResponseType` trait with `Chain::MessageResponse` abstract type,
-    to represent the response returned from the blockchain after processing a `Chain::Message`.
-  - Introduce `HasMessageResponseEvents` trait for extracting `Vec<Chain::Event>` from `Chain::MessageResponse`.
-  - Provide `UseEventsMessageResponse` to implement `Chain::MessageResponse` as `Vec<Chain::Event>`
-    to follow the original behavior.
-  - Change the method `CanSendMessages::send_messages` to return `Vec<Chain::MessageResponse>` instead of
-    `Vec<Vec<Chain::Event>>`.
-  - Change `CanParseTxResponseAsEvents` to `CanParseTxMessageResponse`, to extract message responses from a transaction.
-  - Change the following event extractors to extract from `Chain::MessageResponse` instead of `Chain::Event`:
-    `try_extract_create_client_event`, `try_extract_channel_open_init_event`, `try_extract_channel_open_try_event`,
-    `try_extract_connection_open_init_event`, `try_extract_connection_open_try_event`.
+    - Introduce `HasMessageResponseType` trait with `Chain::MessageResponse` abstract type,
+      to represent the response returned from the blockchain after processing a `Chain::Message`.
+    - Introduce `HasMessageResponseEvents` trait for extracting `Vec<Chain::Event>` from `Chain::MessageResponse`.
+    - Provide `UseEventsMessageResponse` to implement `Chain::MessageResponse` as `Vec<Chain::Event>`
+      to follow the original behavior.
+    - Change the method `CanSendMessages::send_messages` to return `Vec<Chain::MessageResponse>` instead of
+      `Vec<Vec<Chain::Event>>`.
+    - Change `CanParseTxResponseAsEvents` to `CanParseTxMessageResponse`, to extract message responses from a transaction.
+    - Change the following event extractors to extract from `Chain::MessageResponse` instead of `Chain::Event`:
+      `try_extract_create_client_event`, `try_extract_channel_open_init_event`, `try_extract_channel_open_try_event`,
+      `try_extract_connection_open_init_event`, `try_extract_connection_open_try_event`.
 
 - Delegate `ClientState` and `ConsensusState` types based on counterparty - [#459](https://github.com/informalsystems/hermes-sdk/pull/459)
-  - Implement `UseDelegate` for `HasClientStateType`, `HasConsensusStateType`, `HasClientStateFields`, and `HasConsensusStateFields`.
-  - In `CosmosChainClientComponents`, delegate the following components to `UseDelegate<DelegateCosmosChainComponents>`:
-    `ClientStateTypeComponent`, `ConsensusStateTypeComponent`, `ClientStateFieldsComponent`, `ConsensusStateFieldComponent`.
-    - To use CosmosChain with a concrete counterparty, the respective components need to be implemented in
-      `<DelegateCosmosChainComponents as DelegateComponent<Counterparty>>::Delegate`.
-  - Add `PhantomData` tag parameters to `query_client_state` and `query_consensus_state` to help in type inference when used
-    with concrete contexts.
+    - Implement `UseDelegate` for `HasClientStateType`, `HasConsensusStateType`, `HasClientStateFields`, and `HasConsensusStateFields`.
+    - In `CosmosChainClientComponents`, delegate the following components to `UseDelegate<DelegateCosmosChainComponents>`:
+      `ClientStateTypeComponent`, `ConsensusStateTypeComponent`, `ClientStateFieldsComponent`, `ConsensusStateFieldComponent`.
+        - To use CosmosChain with a concrete counterparty, the respective components need to be implemented in
+          `<DelegateCosmosChainComponents as DelegateComponent<Counterparty>>::Delegate`.
+    - Add `PhantomData` tag parameters to `query_client_state` and `query_consensus_state` to help in type inference when used
+      with concrete contexts.
 
 - Improve error messages when submitting Wasm client proposals - [#458](https://github.com/informalsystems/hermes-sdk/pull/458)
-  - Refactor `poll_proposal_status` to accept a list of wanted status.
-  - Make Cosmos implementation of `query_proposal_status` return error if the proposal failed.
-  - Introduce `ProposalFailed` error type that needs to be handled by `ErrorRaiser` implementation.
+    - Refactor `poll_proposal_status` to accept a list of wanted status.
+    - Make Cosmos implementation of `query_proposal_status` return error if the proposal failed.
+    - Introduce `ProposalFailed` error type that needs to be handled by `ErrorRaiser` implementation.
 
 - Minor encoding refactoring - [#453](https://github.com/informalsystems/hermes-sdk/pull/453)
-  - Replace `DelegateEncoding` with `UseDelegate` from `cgp`.
-  - Remove `DecodeViaWasmClientState`.
+    - Replace `DelegateEncoding` with `UseDelegate` from `cgp`.
+    - Remove `DecodeViaWasmClientState`.
 
 -  Implement abstract and mock IBC v2 components - [#445](https://github.com/informalsystems/hermes-sdk/pull/445)
-  - Rename `DelegateTo` to `UseDelegate`.
-  - Move the following chain trait types to `hermes-chain-type-components`: `HasAddressType`, `HasAmountType`,
-    `HasDenomType`, `HasCommitmentPrefixType`.
+    - Rename `DelegateTo` to `UseDelegate`.
+    - Move the following chain trait types to `hermes-chain-type-components`: `HasAddressType`, `HasAmountType`,
+      `HasDenomType`, `HasCommitmentPrefixType`.
 
 -  CGP Refactoring [#440](https://github.com/informalsystems/hermes-sdk/pull/440)
     - Update `cgp` version to include the addition of `cgp-type`. [cgp#23](https://github.com/contextgeneric/cgp/pull/23)

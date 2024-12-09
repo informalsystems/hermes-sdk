@@ -46,8 +46,8 @@ use crate::chain::impls::types::denom::ProvideIbcDenom;
 use crate::chain::impls::types::proposal::ProvideCosmosProposalTypes;
 use crate::chain::impls::types::wallet::ProvideCosmosTestWallet;
 
-define_components! {
-    CosmmosChainTestComponents {
+cgp_preset! {
+    CosmmosChainTestPreset {
         [
             WalletTypeComponent,
             WalletSignerComponent,

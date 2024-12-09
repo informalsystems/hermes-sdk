@@ -3,7 +3,10 @@ use core::marker::PhantomData;
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
-#[derive_component(ArgParserComponent, ArgParser<App>)]
+#[cgp_component {
+  provider: ArgParser,
+  context: App,
+}]
 pub trait CanParseArg<Args, Tag>: HasErrorType {
     type Parsed: Async;
 

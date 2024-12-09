@@ -4,7 +4,10 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Has
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-#[derive_component(ChainBuilderWithNodeConfigComponent, ChainBuilderWithNodeConfig<Bootstrap>)]
+#[cgp_component {
+  provider: ChainBuilderWithNodeConfig,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanBuildChainWithNodeConfig:
     HasChainType + HasChainNodeConfigType + HasChainGenesisConfigType + HasChainType + HasErrorType

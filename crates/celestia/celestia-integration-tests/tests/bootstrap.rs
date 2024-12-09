@@ -3,17 +3,17 @@
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use eyre::Error;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_error::types::HermesError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use tokio::runtime::Builder;
 
 #[test]
-fn test_celestia_bootstrap() -> Result<(), Error> {
+fn test_celestia_bootstrap() -> Result<(), HermesError> {
     let _ = stable_eyre::install();
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
@@ -41,7 +41,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
         let _bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
         let _bridge_driver_b = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
 
-        <Result<(), Error>>::Ok(())
+        <Result<(), HermesError>>::Ok(())
     })?;
 
     Ok(())

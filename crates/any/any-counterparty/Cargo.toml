@@ -14,12 +14,12 @@ description  = """
 [dependencies]
 ibc-proto                               = { workspace = true }
 tendermint-proto                        = { workspace = true }
+hermes-error                            = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
 hermes-encoding-components              = { workspace = true }
 hermes-protobuf-encoding-components     = { workspace = true }
 
 cgp                 = { workspace = true }
-cgp-error-eyre      = { workspace = true }
 ibc-relayer-types   = { workspace = true }
 serde               = { workspace = true, features = ["derive"] }

@@ -15,7 +15,7 @@ impl<Context, Chain, Counterparty, TargetTag: Async, CounterpartyTag: Async>
 where
     Context: HasChainTypeAt<TargetTag, Chain = Chain>
         + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>
-        + HasField<symbol!("init_channel_options"), Field = CosmosInitChannelOptions>,
+        + HasField<symbol!("init_channel_options"), Value = CosmosInitChannelOptions>,
     Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>
         + HasInitChannelOptionsType<Counterparty, InitChannelOptions = CosmosInitChannelOptions>,
     Counterparty: HasConnectionIdType<Chain>,

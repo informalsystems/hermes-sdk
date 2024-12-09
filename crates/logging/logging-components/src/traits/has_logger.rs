@@ -1,16 +1,23 @@
 use cgp::prelude::*;
 
-#[derive_component(LoggerTypeComponent, ProvideLoggerType<Context>)]
+#[cgp_component {
+  name: LoggerTypeComponent,
+  provider: ProvideLoggerType,
+}]
 pub trait HasLoggerType: Async {
     type Logger: Async;
 }
 
-#[derive_component(LoggerGetterComponent, LoggerGetter<Context>)]
+#[cgp_component {
+  provider: LoggerGetter,
+}]
 pub trait HasLogger: HasLoggerType {
     fn logger(&self) -> &Self::Logger;
 }
 
-#[derive_component(GlobalLoggerGetterComponent, GlobalLoggerGetter<Context>)]
+#[cgp_component {
+  provider: GlobalLoggerGetter,
+}]
 pub trait HasGlobalLogger: HasLoggerType {
     fn global_logger() -> &'static Self::Logger;
 }

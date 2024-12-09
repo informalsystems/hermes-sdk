@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(InitConnectionOptionsTypeComponent, ProvideInitConnectionOptionsType<Chain>)]
+#[cgp_component {
+  name: InitConnectionOptionsTypeComponent,
+  provider: ProvideInitConnectionOptionsType,
+  context: Chain,
+}]
 pub trait HasInitConnectionOptionsType<Counterparty>: Async {
     type InitConnectionOptions: Async;
 }
@@ -8,27 +12,47 @@ pub trait HasInitConnectionOptionsType<Counterparty>: Async {
 pub type InitConnectionOptionsOf<Chain, Counterparty> =
     <Chain as HasInitConnectionOptionsType<Counterparty>>::InitConnectionOptions;
 
-#[derive_component(ConnectionOpenInitPayloadTypeComponent, ProvideConnectionOpenInitPayloadType<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenInitPayloadTypeComponent,
+  provider: ProvideConnectionOpenInitPayloadType,
+  context: Chain,
+}]
 pub trait HasConnectionOpenInitPayloadType<Counterparty>: Async {
     type ConnectionOpenInitPayload: Async;
 }
 
-#[derive_component(ConnectionOpenTryPayloadTypeComponent, ProvideConnectionOpenTryPayloadType<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenTryPayloadTypeComponent,
+  provider: ProvideConnectionOpenTryPayloadType,
+  context: Chain,
+}]
 pub trait HasConnectionOpenTryPayloadType<Counterparty>: Async {
     type ConnectionOpenTryPayload: Async;
 }
 
-#[derive_component(ConnectionOpenAckPayloadTypeComponent, ProvideConnectionOpenAckPayloadType<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenAckPayloadTypeComponent,
+  provider: ProvideConnectionOpenAckPayloadType,
+  context: Chain,
+}]
 pub trait HasConnectionOpenAckPayloadType<Counterparty>: Async {
     type ConnectionOpenAckPayload: Async;
 }
 
-#[derive_component(ConnectionOpenConfirmPayloadTypeComponent, ProvideConnectionOpenConfirmPayloadType<Chain>)]
+#[cgp_component {
+  name: ConnectionOpenConfirmPayloadTypeComponent,
+  provider: ProvideConnectionOpenConfirmPayloadType,
+  context: Chain,
+}]
 pub trait HasConnectionOpenConfirmPayloadType<Counterparty>: Async {
     type ConnectionOpenConfirmPayload: Async;
 }
 
-#[derive_component(ConnectionEndTypeComponent, ProvideConnectionEndType<Chain>)]
+#[cgp_component {
+  name: ConnectionEndTypeComponent,
+  provider: ProvideConnectionEndType,
+  context: Chain,
+}]
 pub trait HasConnectionEndType<Counterparty>: Async {
     type ConnectionEnd: Async;
 }

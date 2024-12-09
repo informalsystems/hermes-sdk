@@ -18,7 +18,10 @@ use crate::traits::types::packet::packet::HasPacketType;
    a separate header type that mirrors all fields in the packet header
    except the nonce.
 */
-#[derive_component(PacketNonceGetterComponent, PacketNonceGetter<Chain>)]
+#[cgp_component {
+  provider: PacketNonceGetter,
+  context: Chain,
+}]
 pub trait HasPacketNonce<Counterparty>:
     HasPacketType<Counterparty> + HasPacketNonceType<Counterparty>
 {
@@ -29,7 +32,7 @@ impl<Chain, Counterparty, Provider> PacketNonceGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
     Chain: HasPacketType<Counterparty> + HasPacketNonceType<Counterparty>,
-    Provider: FieldGetter<Chain::Packet, symbol!("nonce"), Field = Chain::PacketNonce>,
+    Provider: FieldGetter<Chain::Packet, symbol!("nonce"), Value = Chain::PacketNonce>,
 {
     fn packet_nonce(packet_header: &Chain::Packet) -> &Chain::PacketNonce {
         Provider::get_field(packet_header, PhantomData)

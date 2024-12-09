@@ -1,8 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::core::Async;
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::*;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::{HasDefaultEncoding, HasEncoding};
 
@@ -13,6 +12,7 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
 
 pub struct ConvertAndHandlePayload<InApp, InHandler>(pub PhantomData<(InApp, InHandler)>);
 
+#[async_trait]
 impl<Chain, Counterparty, App, InApp, InHandler, AnyPacketData, PacketData>
     IncomingPayloadHandler<Chain, Counterparty, App> for ConvertAndHandlePayload<InApp, InHandler>
 where

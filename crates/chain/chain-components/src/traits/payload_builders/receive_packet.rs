@@ -5,7 +5,10 @@ use crate::traits::types::client_state::HasClientStateType;
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::packets::receive::HasReceivePacketPayloadType;
 
-#[derive_component(ReceivePacketPayloadBuilderComponent, ReceivePacketPayloadBuilder<Chain>)]
+#[cgp_component {
+  provider: ReceivePacketPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildReceivePacketPayload<Counterparty>:
     HasReceivePacketPayloadType<Counterparty>

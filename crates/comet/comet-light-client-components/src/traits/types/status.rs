@@ -2,7 +2,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(VerificationStatusTypeComponent, ProvideVerificationStatusType<Client>)]
+#[cgp_component {
+  name: VerificationStatusTypeComponent,
+  provider: ProvideVerificationStatusType,
+  context: Client,
+}]
 pub trait HasVerificationStatusType: Async {
     type VerificationStatus: Async;
 }

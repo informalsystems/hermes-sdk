@@ -1,6 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::builders::payload::CanBuildPayload;
@@ -14,6 +15,7 @@ use crate::traits::types::transaction::HasIbcTransactionType;
 
 pub struct HandleMessagesAndSendPacket<App, InHandler>(pub PhantomData<(App, InHandler)>);
 
+#[async_trait]
 impl<Chain, Counterparty, App, InHandler> IbcTransactionHandler<Chain, Counterparty>
     for HandleMessagesAndSendPacket<App, InHandler>
 where

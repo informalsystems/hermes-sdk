@@ -11,7 +11,11 @@ use cgp::prelude::*;
    - Packet headers, via `HasPacketHeader`
    - Packet payloads, via `HasPacketPayloads`
 */
-#[derive_component(PacketTypeComponent, ProvidePacketType<Chain>)]
+#[cgp_component {
+  name: PacketTypeComponent,
+  provider: ProvidePacketType,
+  context: Chain,
+}]
 pub trait HasPacketType<Counterparty>: Async {
     type Packet: Async;
 }

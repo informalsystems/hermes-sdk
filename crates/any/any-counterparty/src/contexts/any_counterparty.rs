@@ -1,7 +1,6 @@
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
     ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
@@ -27,6 +26,8 @@ pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
 use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
 pub use hermes_encoding_components::traits::types::schema::SchemaTypeComponent;
 use hermes_encoding_components::types::AsBytes;
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
 use hermes_protobuf_encoding_components::traits::length::EncodedLengthGetterComponent;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
@@ -131,8 +132,8 @@ impl HasComponents for AnyClientEncoding {
 
 delegate_components! {
     AnyClientEncodingComponents {
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
+        ErrorTypeComponent: ProvideHermesError,
+        ErrorRaiserComponent: DebugError,
         [
             EncoderComponent,
             DecoderComponent,
