@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use toml::Value;
 
 #[cgp_component {
-  name: CosmosSdkConfigModifierComponent,
   provider: CosmosSdkConfigModifier,
   context: Bootstrap,
 }]

@@ -5,7 +5,6 @@ use crate::traits::types::message::HasMessageType;
 use crate::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 
 #[cgp_component {
-  name: TimeoutUnorderedPacketMessageBuilderComponent,
   provider: TimeoutUnorderedPacketMessageBuilder,
   context: Chain,
 }]

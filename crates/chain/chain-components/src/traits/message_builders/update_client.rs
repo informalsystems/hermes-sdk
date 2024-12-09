@@ -8,7 +8,6 @@ use hermes_chain_type_components::traits::types::message::HasMessageType;
 use crate::traits::types::update_client::HasUpdateClientPayloadType;
 
 #[cgp_component {
-  name: UpdateClientMessageBuilderComponent,
   provider: UpdateClientMessageBuilder,
   context: Chain,
 }]

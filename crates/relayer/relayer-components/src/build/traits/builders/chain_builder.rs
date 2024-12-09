@@ -7,7 +7,6 @@ use crate::chain::types::aliases::ChainIdOf;
 use crate::multi::traits::chain_at::HasChainTypeAt;
 
 #[cgp_component {
-  name: ChainBuilderComponent,
   provider: ChainBuilder,
   context: Build,
 }]

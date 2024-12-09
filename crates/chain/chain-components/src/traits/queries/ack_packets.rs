@@ -11,7 +11,6 @@ use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::types::aliases::WriteAckEventOf;
 
 #[cgp_component {
-  name: AckPacketsQuerierComponent,
   provider: AckPacketsQuerier,
   context: Chain,
 }]
@@ -51,7 +50,6 @@ where
 }
 
 #[cgp_component {
-  name: AckPacketQuerierComponent,
   provider: AckPacketQuerier,
   context: Chain,
 }]

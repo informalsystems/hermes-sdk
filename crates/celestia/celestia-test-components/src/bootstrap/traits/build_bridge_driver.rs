@@ -7,7 +7,6 @@ use crate::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 use crate::bridge_driver::traits::bridge_auth_token::{BridgeAuthTokenOf, HasBridgeAuthTokenType};
 
 #[cgp_component {
-  name: BridgeDriverBuilderComponent,
   provider: BridgeDriverBuilder,
   context: Bootstrap,
 }]

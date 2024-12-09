@@ -14,7 +14,6 @@ pub trait HasRuntimeType: Async {
 }
 
 #[cgp_component {
-  name: RuntimeGetterComponent,
   provider: RuntimeGetter,
 }]
 pub trait HasRuntime: HasRuntimeType {

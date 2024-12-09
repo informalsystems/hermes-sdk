@@ -8,7 +8,6 @@ use crate::traits::types::channel::{
 use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
-  name: ChannelOpenInitMessageBuilderComponent,
   provider: ChannelOpenInitMessageBuilder,
   context: Chain,
 }]
@@ -27,7 +26,6 @@ where
 }
 
 #[cgp_component {
-  name: ChannelOpenTryMessageBuilderComponent,
   provider: ChannelOpenTryMessageBuilder,
   context: Chain,
 }]
@@ -47,7 +45,6 @@ where
 }
 
 #[cgp_component {
-  name: ChannelOpenAckMessageBuilderComponent,
   provider: ChannelOpenAckMessageBuilder,
   context: Chain,
 }]
@@ -67,7 +64,6 @@ where
 }
 
 #[cgp_component {
-  name: ChannelOpenConfirmMessageBuilderComponent,
   provider: ChannelOpenConfirmMessageBuilder,
   context: Chain,
 }]

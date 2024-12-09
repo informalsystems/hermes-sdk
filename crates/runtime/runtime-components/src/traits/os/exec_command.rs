@@ -13,7 +13,6 @@ pub struct ExecOutput {
 /// A context with capability to execute shell commands similar to shell scripts.
 /// The result of a successful execution is stored as string.
 #[cgp_component {
-  name: CommandExecutorComponent,
   provider: CommandExecutor,
   context: Runtime,
 }]
@@ -29,7 +28,6 @@ pub trait CanExecCommand: HasFilePathType + HasErrorType {
 /// A context with capability to execute shell commands similar to shell scripts.
 /// The result of a successful execution is stored as string.
 #[cgp_component {
-  name: CommandWithEnvsExecutorComponent,
   provider: CommandWithEnvsExecutor,
   context: Runtime,
 }]

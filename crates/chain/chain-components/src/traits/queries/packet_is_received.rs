@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
-  name: ReceivedPacketQuerierComponent,
   provider: ReceivedPacketQuerier,
   context: Chain,
 }]

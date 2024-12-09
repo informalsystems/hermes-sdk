@@ -5,7 +5,6 @@ use crate::chain::types::aliases::{HeightOf, WriteAckEventOf};
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 
 #[cgp_component {
-  name: ReceivePacketRelayerComponent,
   provider: ReceivePacketRelayer,
   context: Relay,
 }]

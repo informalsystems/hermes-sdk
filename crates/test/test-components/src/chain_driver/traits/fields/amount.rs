@@ -5,7 +5,6 @@ use crate::chain::traits::types::denom::HasDenomType;
 use crate::chain_driver::traits::types::chain::HasChainType;
 
 #[cgp_component {
-  name: RandomAmountGeneratorComponent,
   provider: RandomAmountGenerator,
   context: Chain,
 }]

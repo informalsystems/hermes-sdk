@@ -7,7 +7,6 @@ use crate::chain::traits::types::message::HasMessageType;
 use crate::transaction::traits::types::signer::HasSignerType;
 
 #[cgp_component {
-  name: MessagesWithSignerSenderComponent,
   provider: MessagesWithSignerSender,
   context: Chain,
 }]

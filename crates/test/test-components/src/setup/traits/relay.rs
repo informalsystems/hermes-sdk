@@ -6,7 +6,6 @@ use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::{HasBoundedRelayTypeAt, RelayAt};
 
 #[cgp_component {
-  name: RelaySetupComponent,
   provider: RelaySetup,
   context: Setup,
 }]

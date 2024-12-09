@@ -8,7 +8,6 @@ use crate::traits::types::connection::{
 use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
-  name: ConnectionOpenInitPayloadBuilderComponent,
   provider: ConnectionOpenInitPayloadBuilder,
   context: Chain,
 }]
@@ -23,7 +22,6 @@ pub trait CanBuildConnectionOpenInitPayload<Counterparty>:
 }
 
 #[cgp_component {
-  name: ConnectionOpenTryPayloadBuilderComponent,
   provider: ConnectionOpenTryPayloadBuilder,
   context: Chain,
 }]
@@ -44,7 +42,6 @@ pub trait CanBuildConnectionOpenTryPayload<Counterparty>:
 }
 
 #[cgp_component {
-  name: ConnectionOpenAckPayloadBuilderComponent,
   provider: ConnectionOpenAckPayloadBuilder,
   context: Chain,
 }]
@@ -65,7 +62,6 @@ pub trait CanBuildConnectionOpenAckPayload<Counterparty>:
 }
 
 #[cgp_component {
-  name: ConnectionOpenConfirmPayloadBuilderComponent,
   provider: ConnectionOpenConfirmPayloadBuilder,
   context: Chain,
 }]

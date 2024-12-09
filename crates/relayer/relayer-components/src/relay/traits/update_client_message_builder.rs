@@ -10,7 +10,6 @@ use crate::chain::types::aliases::{HeightOf, MessageOf};
 use crate::relay::traits::target::{HasTargetChainTypes, HasTargetChains, RelayTarget};
 
 #[cgp_component {
-  name: TargetUpdateClientMessageBuilderComponent,
   provider: TargetUpdateClientMessageBuilder,
   context: Relay,
 }]

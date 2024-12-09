@@ -8,7 +8,6 @@ use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 
 #[cgp_component {
-  name: RelayBuilderComponent,
   provider: RelayBuilder,
   context: Build,
 }]

@@ -5,7 +5,6 @@ use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::denom::HasDenomType;
 
 #[cgp_component {
-  name: BalanceQuerierComponent,
   provider: BalanceQuerier,
   context: Chain,
 }]

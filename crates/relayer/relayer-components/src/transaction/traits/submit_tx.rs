@@ -4,7 +4,6 @@ use crate::transaction::traits::types::transaction::HasTransactionType;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 
 #[cgp_component {
-  name: TxSubmitterComponent,
   provider: TxSubmitter,
   context: TxContext,
 }]

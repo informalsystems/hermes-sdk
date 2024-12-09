@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::transaction::traits::types::fee::HasFeeType;
 
 #[cgp_component {
-  name: FeeForSimulationGetterComponent,
   provider: FeeForSimulationGetter,
   context: Chain,
 }]

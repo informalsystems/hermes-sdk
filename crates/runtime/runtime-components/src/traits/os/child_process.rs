@@ -14,7 +14,6 @@ pub trait HasChildProcessType: Async {
 pub type ChildProcessOf<Runtime> = <Runtime as HasChildProcessType>::ChildProcess;
 
 #[cgp_component {
-  name: ChildProcessStarterComponent,
   provider: ChildProcessStarter,
   context: Runtime,
 }]
@@ -31,7 +30,6 @@ pub trait CanStartChildProcess: HasChildProcessType + HasFilePathType + HasError
 }
 
 #[cgp_component {
-  name: ChildProcessWaiterComponent,
   provider: ChildProcessWaiter,
   context: Runtime,
 }]

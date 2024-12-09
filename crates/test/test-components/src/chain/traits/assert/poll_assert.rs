@@ -3,7 +3,6 @@ use core::time::Duration;
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: PollAssertDurationGetterComponent,
   provider: PollAssertDurationGetter,
   context: ChainDriver,
 }]

@@ -4,7 +4,6 @@ use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 
 #[cgp_component {
-  name: WasmClientCodeUploaderComponent,
   provider: WasmClientCodeUploader,
   context: Chain,
 }]

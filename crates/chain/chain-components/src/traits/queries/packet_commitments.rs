@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
-  name: PacketCommitmentsQuerierComponent,
   provider: PacketCommitmentsQuerier,
   context: Chain,
 }]

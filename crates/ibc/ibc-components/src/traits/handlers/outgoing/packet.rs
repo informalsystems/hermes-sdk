@@ -7,7 +7,6 @@ use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::payload::payload::HasPayloadType;
 
 #[cgp_component {
-  name: PacketSenderComponent,
   provider: PacketSender,
   context: Chain,
 }]

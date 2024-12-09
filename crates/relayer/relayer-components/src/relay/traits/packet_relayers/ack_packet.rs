@@ -5,7 +5,6 @@ use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 
 #[cgp_component {
-  name: AckPacketRelayerComponent,
   provider: AckPacketRelayer,
   context: Relay,
 }]

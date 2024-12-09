@@ -4,7 +4,6 @@ use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
 
 #[cgp_component {
-  name: EventualAmountAsserterComponent,
   provider: EventualAmountAsserter,
   context: Chain,
 }]

@@ -29,7 +29,6 @@ where
 }
 
 #[cgp_component {
-  name: WalletsGetterComponent,
   provider: WalletsGetter,
   context: ChainDriver,
 }]

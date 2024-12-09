@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: RpcPortGetterComponent,
   provider: RpcPortGetter,
   context: ChainDriver,
 }]

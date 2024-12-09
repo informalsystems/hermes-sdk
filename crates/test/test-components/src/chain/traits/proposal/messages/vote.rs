@@ -5,7 +5,6 @@ use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use crate::chain::traits::proposal::types::vote::HasProposalVoteType;
 
 #[cgp_component {
-  name: VoteProposalMessageBuilderComponent,
   provider: VoteProposalMessageBuilder,
   context: Chain,
 }]

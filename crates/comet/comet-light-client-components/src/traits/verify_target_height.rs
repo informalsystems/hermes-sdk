@@ -4,7 +4,6 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
 use crate::traits::types::light_block::HasLightBlockType;
 
 #[cgp_component {
-  name: TargetHeightVerifierComponent,
   provider: TargetHeightVerifier,
   context: Client,
 }]

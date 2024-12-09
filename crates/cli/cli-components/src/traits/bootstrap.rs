@@ -12,7 +12,6 @@ pub trait HasBootstrapType: Async {
 }
 
 #[cgp_component {
-  name: BootstrapLoaderComponent,
   provider: BootstrapLoader,
   context: App,
 }]

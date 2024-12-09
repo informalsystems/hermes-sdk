@@ -4,7 +4,6 @@ use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
 #[cgp_component {
-  name: TxResponsePollerComponent,
   provider: TxResponsePoller,
   context: TxContext,
 }]

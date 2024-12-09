@@ -6,7 +6,6 @@ use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathTy
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
 #[cgp_component {
-  name: ChainCommandPathGetterComponent,
   provider: ChainCommandPathGetter,
   context: Bootstrap,
 }]

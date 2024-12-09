@@ -6,7 +6,6 @@ use crate::traits::types::height::HasHeightType;
 use crate::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 
 #[cgp_component {
-  name: TimeoutUnorderedPacketPayloadBuilderComponent,
   provider: TimeoutUnorderedPacketPayloadBuilder,
   context: Chain,
 }]

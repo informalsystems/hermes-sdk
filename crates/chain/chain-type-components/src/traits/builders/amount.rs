@@ -5,7 +5,6 @@ use crate::traits::types::denom::HasDenomType;
 use crate::traits::types::quantity::HasQuantityType;
 
 #[cgp_component {
-  name: AmountBuilderComponent,
   provider: AmountBuilder,
   context: Chain,
 }]

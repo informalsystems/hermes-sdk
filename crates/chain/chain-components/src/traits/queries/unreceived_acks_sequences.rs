@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
-  name: UnreceivedAcksSequencesQuerierComponent,
   provider: UnreceivedAcksSequencesQuerier,
   context: Chain,
 }]

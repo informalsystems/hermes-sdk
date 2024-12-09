@@ -5,7 +5,6 @@ use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::traits::types::packet::packet::HasPacketType;
 
 #[cgp_component {
-  name: SendPacketCommitmentQuerierComponent,
   provider: SendPacketCommitmentQuerier,
   context: Chain,
 }]

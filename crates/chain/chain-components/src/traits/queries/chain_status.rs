@@ -8,7 +8,6 @@ use crate::traits::types::status::HasChainStatusType;
    [current status](HasChainStatusType::ChainStatus) of the blockchain.
 */
 #[cgp_component {
-  name: ChainStatusQuerierComponent,
   provider: ChainStatusQuerier,
   context: Chain,
 }]

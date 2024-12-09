@@ -8,7 +8,6 @@ use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
 #[cgp_component {
-  name: PayloadAppIdGetterComponent,
   provider: PayloadAppIdGetter,
   context: Chain,
 }]

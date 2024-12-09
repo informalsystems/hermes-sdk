@@ -7,7 +7,6 @@ use crate::traits::types::client_state::HasClientStateType;
 use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
-  name: ChannelOpenTryPayloadBuilderComponent,
   provider: ChannelOpenTryPayloadBuilder,
   context: Chain,
 }]
@@ -28,7 +27,6 @@ pub trait CanBuildChannelOpenTryPayload<Counterparty>:
 }
 
 #[cgp_component {
-  name: ChannelOpenAckPayloadBuilderComponent,
   provider: ChannelOpenAckPayloadBuilder,
   context: Chain,
 }]
@@ -49,7 +47,6 @@ pub trait CanBuildChannelOpenAckPayload<Counterparty>:
 }
 
 #[cgp_component {
-  name: ChannelOpenConfirmPayloadBuilderComponent,
   provider: ChannelOpenConfirmPayloadBuilder,
   context: Chain,
 }]

@@ -4,7 +4,6 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::amount::HasAmountType;
 
 #[cgp_component {
-  name: IbcTransferredAmountConverterComponent,
   provider: IbcTransferredAmountConverter,
   context: Chain,
 }]

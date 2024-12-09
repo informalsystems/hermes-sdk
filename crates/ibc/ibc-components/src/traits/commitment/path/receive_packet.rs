@@ -6,7 +6,6 @@ use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::types::tags::commitment::receive::ReceivePacket;
 
 #[cgp_component {
-  name: ReceivePacketCommitmentPathBuilderComponent,
   provider: ReceivePacketCommitmentPathBuilder,
   context: Chain,
 }]

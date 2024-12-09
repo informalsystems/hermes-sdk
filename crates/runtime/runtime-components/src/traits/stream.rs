@@ -10,7 +10,6 @@ pub trait HasStreamType: Async {
 }
 
 #[cgp_component {
-  name: StreamMapperComponent,
   provider: StreamMapper,
   context: Runtime,
 }]

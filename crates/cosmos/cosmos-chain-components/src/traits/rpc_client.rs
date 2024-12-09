@@ -2,7 +2,6 @@ use cgp::prelude::*;
 use tendermint_rpc::{HttpClient, Url};
 
 #[cgp_component {
-  name: RpcClientGetterComponent,
   provider: RpcClientGetter,
   context: Chain,
 }]

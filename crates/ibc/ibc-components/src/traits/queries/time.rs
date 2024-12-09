@@ -2,7 +2,6 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::time::HasTimeType;
 
 #[cgp_component {
-  name: CurrentTimeQuerierComponent,
   provider: CurrentTimeQuerier,
   context: Chain,
 }]

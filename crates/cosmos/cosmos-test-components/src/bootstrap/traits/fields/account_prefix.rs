@@ -4,7 +4,6 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: AccountPrefixGetterComponent,
   provider: AccountPrefixGetter,
   context: Bootstrap,
 }]

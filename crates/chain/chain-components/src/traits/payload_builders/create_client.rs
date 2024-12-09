@@ -6,7 +6,6 @@ use crate::traits::types::create_client::{
 };
 
 #[cgp_component {
-  name: CreateClientPayloadBuilderComponent,
   provider: CreateClientPayloadBuilder,
   context: Chain,
 }]

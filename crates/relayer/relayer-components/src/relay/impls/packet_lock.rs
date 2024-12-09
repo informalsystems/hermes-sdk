@@ -105,7 +105,6 @@ where
 }
 
 #[cgp_component {
-  name: PacketMutexGetterComponent,
   provider: PacketMutexGetter,
   context: Relay,
 }]

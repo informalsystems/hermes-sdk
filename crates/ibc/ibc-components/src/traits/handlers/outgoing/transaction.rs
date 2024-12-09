@@ -4,7 +4,6 @@ use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::transaction::HasIbcTransactionType;
 
 #[cgp_component {
-  name: IbcTransactionHandlerComponent,
   provider: IbcTransactionHandler,
   context: Chain,
 }]

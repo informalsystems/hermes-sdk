@@ -4,7 +4,6 @@ use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use crate::relay::traits::chains::HasRelayChains;
 
 #[cgp_component {
-  name: PacketClearerComponent,
   provider: PacketClearer,
   context: Relay,
 }]

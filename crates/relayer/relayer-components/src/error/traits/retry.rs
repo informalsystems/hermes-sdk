@@ -9,7 +9,6 @@ pub trait HasRetryableError: HasErrorType {
 }
 
 #[cgp_component {
-  name: MaxErrorRetryGetterComponent,
   provider: MaxErrorRetryGetter,
 }]
 pub trait HasMaxErrorRetry: Async {

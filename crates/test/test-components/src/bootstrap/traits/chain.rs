@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::driver::traits::types::chain_driver::HasChainDriverType;
 
 #[cgp_component {
-  name: ChainBootstrapperComponent,
   provider: ChainBootstrapper,
   context: Bootstrap,
 }]

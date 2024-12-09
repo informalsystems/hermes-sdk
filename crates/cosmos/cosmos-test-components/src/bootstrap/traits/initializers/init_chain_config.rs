@@ -9,7 +9,6 @@ use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 
 #[cgp_component {
-  name: ChainNodeConfigInitializerComponent,
   provider: ChainNodeConfigInitializer,
   context: Boostrap,
 }]

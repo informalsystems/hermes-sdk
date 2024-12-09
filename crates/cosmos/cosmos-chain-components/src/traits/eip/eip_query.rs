@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 
 #[cgp_component {
-  name: EipQuerierComponent,
   provider: EipQuerier,
   context: Chain,
 }]

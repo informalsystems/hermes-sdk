@@ -4,7 +4,6 @@ use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
 #[cgp_component {
-  name: ClientSetupComponent,
   provider: ClientSetup,
   context: Setup,
 }]

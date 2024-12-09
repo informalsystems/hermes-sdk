@@ -7,7 +7,6 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
-  name: ChannelEndQuerierComponent,
   provider: ChannelEndQuerier,
   context: Chain,
 }]
@@ -24,7 +23,6 @@ pub trait CanQueryChannelEnd<Counterparty>:
 }
 
 #[cgp_component {
-  name: ChannelEndWithProofsQuerierComponent,
   provider: ChannelEndWithProofsQuerier,
   context: Chain,
 }]

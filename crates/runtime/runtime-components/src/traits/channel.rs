@@ -79,7 +79,6 @@ pub trait HasChannelTypes: Async {
    defined in [`HasChannelTypes`].
 */
 #[cgp_component {
-  name: ChannelCreatorComponent,
   provider: ChannelCreator,
   context: Runtime,
 }]
@@ -113,7 +112,6 @@ pub trait CanCreateChannels: HasChannelTypes {
    [`Receiver`](HasChannelTypes::Receiver<T>) ends of a channel.
 */
 #[cgp_component {
-  name: ChannelUserComponent,
   provider: ChannelUser,
   context: Runtime,
 }]
@@ -155,7 +153,6 @@ pub trait CanUseChannels: HasChannelTypes + HasErrorType {
 }
 
 #[cgp_component {
-  name: ReceiverStreamerComponent,
   provider: ReceiverStreamer,
   context: Runtime,
 }]
@@ -166,7 +163,6 @@ pub trait CanStreamReceiver: HasChannelTypes + HasStreamType {
 }
 
 #[cgp_component {
-  name: SenderClonerComponent,
   provider: SenderCloner,
   context: Runtime,
 }]

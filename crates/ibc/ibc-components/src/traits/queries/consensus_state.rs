@@ -4,7 +4,6 @@ use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 
 #[cgp_component {
-  name: ConsensusStateQuerierComponent,
   provider: ConsensusStateQuerier,
   context: Chain,
 }]

@@ -3,7 +3,6 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
 #[cgp_component {
-  name: ClientIdFromChannelIdQuerierComponent,
   provider: ClientIdFromChannelIdQuerier,
   context: Chain,
 }]

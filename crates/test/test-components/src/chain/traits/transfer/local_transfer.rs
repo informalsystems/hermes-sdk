@@ -5,7 +5,6 @@ use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::wallet::HasWalletType;
 
 #[cgp_component {
-  name: TokenLocalTransferrerComponent,
   provider: TokenLocalTransferrer,
   context: Chain,
 }]

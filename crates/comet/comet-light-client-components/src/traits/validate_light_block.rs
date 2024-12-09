@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::traits::types::light_block::HasLightBlockType;
 
 #[cgp_component {
-  name: LightBlockValidatorComponent,
   provider: LightBlockValidator,
   context: Client,
 }]

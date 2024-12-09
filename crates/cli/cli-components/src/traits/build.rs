@@ -14,7 +14,6 @@ pub trait HasBuilderType: Async {
 pub type BuilderOf<Context> = <Context as HasBuilderType>::Builder;
 
 #[cgp_component {
-  name: BuilderLoaderComponent,
   provider: BuilderLoader,
   context: App,
 }]

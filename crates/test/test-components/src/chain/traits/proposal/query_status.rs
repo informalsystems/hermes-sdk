@@ -4,7 +4,6 @@ use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use crate::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 
 #[cgp_component {
-  name: ProposalStatusQuerierComponent,
   provider: ProposalStatusQuerier,
   context: Chain,
 }]

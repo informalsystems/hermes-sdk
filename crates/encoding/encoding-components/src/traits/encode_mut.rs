@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::traits::types::encode_buffer::HasEncodeBufferType;
 
 #[cgp_component {
-  name: MutEncoderComponent,
   provider: MutEncoder,
   context: Encoding,
 }]

@@ -6,7 +6,6 @@ use crate::traits::types::height::HasHeightType;
 use crate::traits::types::update_client::HasUpdateClientPayloadType;
 
 #[cgp_component {
-  name: UpdateClientPayloadBuilderComponent,
   provider: UpdateClientPayloadBuilder,
   context: Chain,
 }]

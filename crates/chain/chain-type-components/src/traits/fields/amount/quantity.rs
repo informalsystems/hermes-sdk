@@ -4,7 +4,6 @@ use crate::traits::types::amount::HasAmountType;
 use crate::traits::types::quantity::HasQuantityType;
 
 #[cgp_component {
-  name: AmountQuantityGetterComponent,
   provider: AmountQuantityGetter,
   context: Chain,
 }]

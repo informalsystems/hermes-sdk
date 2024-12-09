@@ -106,7 +106,6 @@ where
 }
 
 #[cgp_component {
-  name: BatchSenderCacheGetterComponent,
   provider: BatchSenderCacheGetter,
   context: Build,
 }]

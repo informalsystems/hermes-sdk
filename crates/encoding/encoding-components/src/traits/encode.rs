@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::traits::types::encoded::HasEncodedType;
 
 #[cgp_component {
-  name: EncoderComponent,
   provider: Encoder,
   context: Encoding,
 }]

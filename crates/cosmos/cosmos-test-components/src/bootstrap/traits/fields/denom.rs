@@ -12,7 +12,6 @@ pub struct DenomForStaking;
 pub struct DenomForTransfer;
 
 #[cgp_component {
-  name: GenesisDenomGetterComponent,
   provider: GenesisDenomGetter,
   context: Bootstrap,
 }]
@@ -27,7 +26,6 @@ where
 }
 
 #[cgp_component {
-  name: DenomPrefixGetterComponent,
   provider: DenomPrefixGetter,
   context: Bootstrap,
 }]

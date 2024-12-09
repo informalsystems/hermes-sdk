@@ -9,7 +9,6 @@ use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use crate::batch::traits::types::{HasMessageBatchChannelTypes, MessageBatchSenderOf};
 
 #[cgp_component {
-  name: RelayWithBatchBuilderComponent,
   provider: RelayWithBatchBuilder,
   context: Build,
 }]

@@ -10,7 +10,6 @@ use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainD
 use crate::setup::traits::driver::HasTestDriverType;
 
 #[cgp_component {
-  name: BinaryChannelDriverBuilderComponent,
   provider: BinaryChannelDriverBuilder,
   context: Setup,
 }]

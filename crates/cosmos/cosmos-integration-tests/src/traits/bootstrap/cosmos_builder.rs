@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 
 #[cgp_component {
-  name: CosmosBuilderGetterComponent,
   provider: CosmosBuilderGetter,
   context: Bootstrap,
 }]

@@ -12,7 +12,6 @@ pub trait HasDecodeBufferType {
 }
 
 #[cgp_component {
-  name: DecodeBufferBuilderComponent,
   provider: DecodeBufferBuilder,
   context: Encoding,
 }]

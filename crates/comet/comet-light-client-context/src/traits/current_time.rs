@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use tendermint_light_client_verifier::types::Time;
 
 #[cgp_component {
-  name: CurrentTimeGetterComponent,
   provider: CurrentTimeGetter,
   context: Client,
 }]

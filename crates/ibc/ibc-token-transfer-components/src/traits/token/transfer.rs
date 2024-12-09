@@ -11,7 +11,6 @@ pub struct Escrow;
 pub struct Unescrow;
 
 #[cgp_component {
-  name: TokenTransfererComponent,
   provider: TokenTransferer,
   context: Chain,
 }]

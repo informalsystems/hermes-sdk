@@ -8,7 +8,6 @@ use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
 
 #[cgp_component {
-  name: PacketTimeoutGetterComponent,
   provider: PacketTimeoutGetter,
   context: Chain,
 }]

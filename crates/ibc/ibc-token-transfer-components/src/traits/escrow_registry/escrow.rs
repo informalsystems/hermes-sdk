@@ -14,7 +14,6 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
    pair.
 */
 #[cgp_component {
-  name: EscrowTokenRegistrarComponent,
   provider: EscrowTokenRegistrar,
   context: Chain,
 }]

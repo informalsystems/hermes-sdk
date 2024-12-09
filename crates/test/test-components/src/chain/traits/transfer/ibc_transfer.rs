@@ -8,7 +8,6 @@ use crate::chain::traits::types::memo::HasMemoType;
 use crate::chain::traits::types::wallet::HasWalletType;
 
 #[cgp_component {
-  name: TokenIbcTransferrerComponent,
   provider: TokenIbcTransferrer,
   context: Chain,
 }]

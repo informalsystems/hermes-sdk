@@ -2,7 +2,6 @@ use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: EncodedLengthGetterComponent,
   provider: EncodedLengthGetter,
   context: Encoding,
 }]

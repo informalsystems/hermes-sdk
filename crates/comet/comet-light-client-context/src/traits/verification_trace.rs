@@ -8,7 +8,6 @@ use tendermint::block::Height;
 pub type VerificationTrace = BTreeMap<Height, BTreeSet<Height>>;
 
 #[cgp_component {
-  name: VerificationTraceGetterComponent,
   provider: VerificationTraceGetter,
   context: Client,
 }]

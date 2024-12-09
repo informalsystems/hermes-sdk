@@ -12,7 +12,6 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
-  name: ClientStateQuerierComponent,
   provider: ClientStateQuerier,
   context: Chain,
 }]
@@ -31,7 +30,6 @@ where
 }
 
 #[cgp_component {
-  name: ClientStateWithProofsQuerierComponent,
   provider: ClientStateWithProofsQuerier,
   context: Chain,
 }]
@@ -50,7 +48,6 @@ where
 }
 
 #[cgp_component {
-  name: RawClientStateQuerierComponent,
   provider: RawClientStateQuerier,
   context: Chain,
 }]
@@ -66,7 +63,6 @@ pub trait CanQueryRawClientState<Counterparty>:
 }
 
 #[cgp_component {
-  name: RawClientStateWithProofsQuerierComponent,
   provider: RawClientStateWithProofsQuerier,
   context: Chain,
 }]
@@ -86,7 +82,6 @@ pub trait CanQueryRawClientStateWithProofs<Counterparty>:
 }
 
 #[cgp_component {
-  name: AllClientStatesQuerierComponent,
   provider: AllClientStatesQuerier,
   context: Chain,
 }]
@@ -103,7 +98,6 @@ where
 }
 
 #[cgp_component {
-  name: AllRawClientStatesQuerierComponent,
   provider: AllRawClientStatesQuerier,
   context: Chain,
 }]

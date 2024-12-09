@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::traits::task::Task;
 
 #[cgp_component {
-  name: TaskSpawnerComponent,
   provider: TaskSpawner,
   context: Runtime,
 }]

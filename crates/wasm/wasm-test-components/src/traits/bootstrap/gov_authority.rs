@@ -6,7 +6,6 @@ use hermes_test_components::chain::traits::types::address::{AddressOf, HasAddres
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 #[cgp_component {
-  name: GovernanceProposalAuthorityGetterComponent,
   provider: GovernanceProposalAuthorityGetter,
   context: Bootstrap,
 }]

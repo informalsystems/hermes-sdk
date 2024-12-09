@@ -4,7 +4,6 @@ use cgp::prelude::*;
 use crate::traits::output::HasOutputType;
 
 #[cgp_component {
-  name: CommandRunnerComponent,
   provider: CommandRunner,
   context: App,
 }]

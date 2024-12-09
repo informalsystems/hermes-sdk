@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use crate::traits::fs::file_path::HasFilePathType;
 
 #[cgp_component {
-  name: FileAsStringReaderComponent,
   provider: FileAsStringReader,
   context: Runtime,
 }]

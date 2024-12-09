@@ -4,7 +4,6 @@ use crate::traits::types::commitment::path::HasCommitmentPathType;
 use crate::traits::types::commitment::value::HasCommitmentValueType;
 
 #[cgp_component {
-  name: CommitmentStorageComponent,
   provider: CommitmentStorage,
   context: Chain,
 }]

@@ -4,7 +4,6 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 
 #[cgp_component {
-  name: IncomingMintedTokenQuerierComponent,
   provider: IncomingMintedTokenQuerier,
   context: Chain,
 }]

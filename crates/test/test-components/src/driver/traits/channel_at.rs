@@ -6,7 +6,6 @@ use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
 #[cgp_component {
-  name: ChannelGetterAtComponent,
   provider: ChannelGetterAt,
   context: ChainDriver,
 }]

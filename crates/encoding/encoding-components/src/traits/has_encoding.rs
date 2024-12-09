@@ -9,7 +9,6 @@ pub trait HasEncodingType<Kind>: Async {
 }
 
 #[cgp_component {
-  name: EncodingGetterComponent,
   provider: EncodingGetter,
 }]
 pub trait HasEncoding<Kind>: HasEncodingType<Kind> {
@@ -17,7 +16,6 @@ pub trait HasEncoding<Kind>: HasEncodingType<Kind> {
 }
 
 #[cgp_component {
-  name: DefaultEncodingGetterComponent,
   provider: DefaultEncodingGetter,
 }]
 pub trait HasDefaultEncoding<Kind>: HasEncodingType<Kind, Encoding: 'static> {

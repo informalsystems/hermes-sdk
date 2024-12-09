@@ -8,7 +8,6 @@ use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
 
 #[cgp_component {
-  name: IbcMessageAppIdGetterComponent,
   provider: IbcMessageAppIdGetter,
   context: Chain,
 }]

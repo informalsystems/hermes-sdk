@@ -2,7 +2,6 @@ use cgp::prelude::*;
 use ibc_proto::google::protobuf::Any;
 
 #[cgp_component {
-  name: TxExtensionOptionsGetterComponent,
   provider: TxExtensionOptionsGetter,
   context: Chain,
 }]

@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use serde_json::Value;
 
 #[cgp_component {
-  name: CosmosGenesisConfigModifierComponent,
   provider: CosmosGenesisConfigModifier,
   context: Bootstrap,
 }]

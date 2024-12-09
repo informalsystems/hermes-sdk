@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::traits::types::config::HasConfigType;
 
 #[cgp_component {
-  name: ConfigLoaderComponent,
   provider: ConfigLoader,
   context: App,
 }]

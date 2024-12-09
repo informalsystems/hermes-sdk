@@ -22,7 +22,6 @@ use crate::transaction::traits::types::signer::HasSignerType;
    transactions or multiple signers.
 */
 #[cgp_component {
-  name: DefaultSignerGetterComponent,
   provider: DefaultSignerGetter,
   context: Chain,
 }]

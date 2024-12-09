@@ -7,7 +7,6 @@ use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::commitment::value::HasCommitmentValueType;
 
 #[cgp_component {
-  name: CommitmentVerifierComponent,
   provider: CommitmentVerifier,
   context: Chain,
 }]

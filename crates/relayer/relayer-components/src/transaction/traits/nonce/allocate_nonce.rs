@@ -4,7 +4,6 @@ use crate::transaction::traits::nonce::nonce_guard::HasNonceGuard;
 use crate::transaction::traits::types::signer::HasSignerType;
 
 #[cgp_component {
-  name: NonceAllocatorComponent,
   provider: NonceAllocator,
   context: TxContext,
 }]

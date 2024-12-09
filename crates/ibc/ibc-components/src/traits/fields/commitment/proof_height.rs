@@ -4,7 +4,6 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
 
 #[cgp_component {
-  name: CommitmentProofHeightGetterComponent,
   provider: CommitmentProofHeightGetter,
   context: Chain,
 }]

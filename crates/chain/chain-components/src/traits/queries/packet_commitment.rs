@@ -5,7 +5,6 @@ use crate::traits::types::packets::receive::HasPacketCommitmentType;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
-  name: PacketCommitmentQuerierComponent,
   provider: PacketCommitmentQuerier,
   context: Chain,
 }]

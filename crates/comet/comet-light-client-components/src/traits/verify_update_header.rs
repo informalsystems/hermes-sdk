@@ -4,7 +4,6 @@ use crate::traits::types::light_block::HasLightBlockType;
 use crate::traits::types::verdict::HasVerdictType;
 
 #[cgp_component {
-  name: UpdateHeaderVerifierComponent,
   provider: UpdateHeaderVerifier,
   context: Client,
 }]

@@ -8,7 +8,6 @@ use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
 #[cgp_component {
-  name: IbcMessageHandlerComponent,
   provider: IbcMessageHandler,
   context: Chain,
 }]

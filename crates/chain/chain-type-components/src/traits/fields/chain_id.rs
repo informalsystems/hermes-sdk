@@ -7,7 +7,6 @@ use crate::traits::types::chain_id::HasChainIdType;
    [chain ID](HasChainIdType::ChainId).
 */
 #[cgp_component {
-  name: ChainIdGetterComponent,
   provider: ChainIdGetter,
   context: Chain,
 }]

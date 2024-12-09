@@ -4,7 +4,6 @@ use crate::traits::types::chain_id::HasChainIdType;
 use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
-  name: CounterpartyChainIdQuerierComponent,
   provider: CounterpartyChainIdQuerier,
   context: Chain,
 }]

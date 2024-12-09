@@ -2,7 +2,6 @@ use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 
 #[cgp_component {
-  name: ChainIdFromStringBuilderComponent,
   provider: ChainIdFromStringBuilder,
   context: Chain,
 }]

@@ -3,7 +3,6 @@ use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasCh
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
 #[cgp_component {
-  name: ChainProcessTakerComponent,
   provider: ChainProcessTaker,
   context: ChainDriver,
 }]

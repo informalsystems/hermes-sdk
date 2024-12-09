@@ -6,7 +6,6 @@ use hermes_chain_type_components::traits::types::message_response::HasMessageRes
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
 #[cgp_component {
-  name: TxMessageResponseParserComponent,
   provider: TxMessageResponseParser,
   context: Chain,
 }]

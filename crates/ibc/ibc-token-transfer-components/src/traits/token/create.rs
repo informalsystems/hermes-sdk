@@ -11,7 +11,6 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
    may be optionally used to deterministically derive a local denom.
 */
 #[cgp_component {
-  name: TokenCreatorComponent,
   provider: TokenCreator,
   context: Chain,
 }]

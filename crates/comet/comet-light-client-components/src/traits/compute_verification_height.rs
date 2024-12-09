@@ -2,7 +2,6 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 
 #[cgp_component {
-  name: NextVerificationHeightComputerComponent,
   provider: NextVerificationHeightComputer,
   context: Client,
 }]

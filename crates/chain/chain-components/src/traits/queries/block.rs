@@ -4,7 +4,6 @@ use crate::traits::types::block::HasBlockType;
 use crate::traits::types::height::HasHeightType;
 
 #[cgp_component {
-  name: BlockQuerierComponent,
   provider: BlockQuerier,
   context: Chain,
 }]

@@ -6,7 +6,6 @@ use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 
 #[cgp_component {
-  name: WalletConfigGeneratorComponent,
   provider: WalletConfigGenerator,
   context: Bootstrap,
 }]

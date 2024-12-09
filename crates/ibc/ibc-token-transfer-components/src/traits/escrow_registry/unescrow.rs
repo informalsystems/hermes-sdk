@@ -13,7 +13,6 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
    amount escrowed. If so, it would decrement the amount escrowed.
 */
 #[cgp_component {
-  name: UnescrowTokenRegistrarComponent,
   provider: UnescrowTokenRegistrar,
   context: Chain,
 }]

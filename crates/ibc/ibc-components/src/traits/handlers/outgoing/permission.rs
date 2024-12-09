@@ -11,7 +11,6 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
    contract.
 */
 #[cgp_component {
-  name: SendPayloadPermissionCheckerComponent,
   provider: SendPayloadPermissionChecker,
   context: Chain,
 }]

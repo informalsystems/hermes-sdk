@@ -6,7 +6,6 @@ use cgp::prelude::*;
 pub use hermes_chain_type_components::traits::types::message::*;
 
 #[cgp_component {
-  name: MessageSizeEstimatorComponent,
   provider: MessageSizeEstimator,
   context: Chain,
 }]

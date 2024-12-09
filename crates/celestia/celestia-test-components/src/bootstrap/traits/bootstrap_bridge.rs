@@ -5,7 +5,6 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
 use crate::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 
 #[cgp_component {
-  name: BridgeBootstrapperComponent,
   provider: BridgeBootstrapper,
   context: Bootstrap,
 }]

@@ -3,7 +3,6 @@ use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathTy
 use hermes_runtime_components::traits::runtime::HasRuntimeType;
 
 #[cgp_component {
-  name: WasmClientCodeUploaderComponent,
   provider: WasmClientCodeUploader,
   context: ChainDriver,
 }]

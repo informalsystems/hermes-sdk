@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
 
 #[cgp_component {
-  name: ChainSetupComponent,
   provider: ChainSetup,
   context: Setup,
 }]

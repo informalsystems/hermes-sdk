@@ -14,7 +14,6 @@ pub trait HasChainDriverTypeAt<Tag>: Async {
 pub type ChainDriverTypeAt<Driver, Tag> = <Driver as HasChainDriverTypeAt<Tag>>::ChainDriver;
 
 #[cgp_component {
-  name: ChainDriverGetterAtComponent,
   provider: ChainDriverGetterAt,
   context: Driver,
 }]

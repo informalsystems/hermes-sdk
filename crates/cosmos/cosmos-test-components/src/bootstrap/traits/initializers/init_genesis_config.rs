@@ -5,7 +5,6 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 
 #[cgp_component {
-  name: ChainGenesisConfigInitializerComponent,
   provider: ChainGenesisConfigInitializer,
   context: Bootstrap,
 }]

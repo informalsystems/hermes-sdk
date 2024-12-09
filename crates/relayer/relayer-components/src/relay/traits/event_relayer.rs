@@ -15,7 +15,6 @@ use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
    but also future relayers such as connection and channel handshake relayers.
 */
 #[cgp_component {
-  name: EventRelayerComponent,
   provider: EventRelayer,
   context: Relay,
 }]

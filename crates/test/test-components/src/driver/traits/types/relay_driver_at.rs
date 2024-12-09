@@ -14,7 +14,6 @@ pub trait HasRelayDriverTypeAt<A: Async, B: Async>: HasBiRelayTypeAt<A, B> {
 }
 
 #[cgp_component {
-  name: RelayDriverGetterAtComponent,
   provider: RelayDriverGetterAt,
   context: Driver,
 }]

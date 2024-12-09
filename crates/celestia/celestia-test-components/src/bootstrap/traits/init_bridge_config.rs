@@ -6,7 +6,6 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
 use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;
 
 #[cgp_component {
-  name: BridgeConfigInitializerComponent,
   provider: BridgeConfigInitializer,
   context: Boostrap,
 }]

@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use tendermint_light_client_verifier::types::PeerId;
 
 #[cgp_component {
-  name: PeerIdGetterComponent,
   provider: PeerIdGetter,
   context: Client,
 }]

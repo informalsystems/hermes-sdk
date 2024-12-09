@@ -18,7 +18,6 @@ pub trait HasHeightFields: HasHeightType {
 }
 
 #[cgp_component {
-  name: GenesisHeightGetterComponent,
   provider: GenesisHeightGetter,
   context: Chain,
 }]

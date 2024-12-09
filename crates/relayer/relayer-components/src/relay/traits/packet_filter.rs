@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::relay::traits::chains::{HasRelayChainTypes, PacketOf};
 
 #[cgp_component {
-  name: PacketFilterComponent,
   provider: PacketFilter,
   context: Relay,
 }]

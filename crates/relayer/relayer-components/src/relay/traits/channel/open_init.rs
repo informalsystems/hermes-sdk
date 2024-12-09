@@ -5,7 +5,6 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::{DstPortId, SrcChannelId, SrcPortId};
 
 #[cgp_component {
-  name: ChannelInitializerComponent,
   provider: ChannelInitializer,
   context: Relay,
 }]

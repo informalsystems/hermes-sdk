@@ -5,7 +5,6 @@ use crate::traits::types::packets::timeout::HasPacketReceiptType;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
-  name: PacketReceiptQuerierComponent,
   provider: PacketReceiptQuerier,
   context: Chain,
 }]

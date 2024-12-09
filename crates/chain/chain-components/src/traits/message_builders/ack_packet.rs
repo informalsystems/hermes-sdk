@@ -5,7 +5,6 @@ use crate::traits::types::message::HasMessageType;
 use crate::traits::types::packets::ack::HasAckPacketPayloadType;
 
 #[cgp_component {
-  name: AckPacketMessageBuilderComponent,
   provider: AckPacketMessageBuilder,
   context: Chain,
 }]

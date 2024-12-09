@@ -7,7 +7,6 @@ use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
 
 #[cgp_component {
-  name: MessageTransferAddressGetterComponent,
   provider: MessageTransferAddressGetter,
   context: Chain,
 }]

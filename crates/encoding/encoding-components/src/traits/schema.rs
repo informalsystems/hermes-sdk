@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use crate::traits::types::schema::HasSchemaType;
 
 #[cgp_component {
-  name: SchemaGetterComponent,
   provider: SchemaGetter,
   context: Encoding,
 }]

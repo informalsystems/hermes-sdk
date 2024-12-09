@@ -5,7 +5,6 @@ use crate::traits::types::packets::ack::HasAcknowledgementType;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
-  name: PacketAcknowledgementQuerierComponent,
   provider: PacketAcknowledgementQuerier,
   context: Chain,
 }]

@@ -6,7 +6,6 @@ use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
 
 #[cgp_component {
-  name: MintPayloadBuilderComponent,
   provider: MintPayloadBuilder,
   context: Chain,
 }]

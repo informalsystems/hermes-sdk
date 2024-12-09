@@ -9,7 +9,6 @@ use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::memo::HasMemoType;
 
 #[cgp_component {
-  name: IbcTokenTransferMessageBuilderComponent,
   provider: IbcTokenTransferMessageBuilder,
   context: ChainDriver,
 }]

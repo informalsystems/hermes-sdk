@@ -2,7 +2,6 @@ use cgp::prelude::*;
 use tendermint_rpc::Url;
 
 #[cgp_component {
-  name: GrpcAddressGetterComponent,
   provider: GrpcAddressGetter,
   context: Chain,
 }]

@@ -7,7 +7,6 @@ use crate::traits::types::create_client::{
 use crate::traits::types::message::HasMessageType;
 
 #[cgp_component {
-  name: CreateClientMessageBuilderComponent,
   provider: CreateClientMessageBuilder,
   context: Chain,
 }]

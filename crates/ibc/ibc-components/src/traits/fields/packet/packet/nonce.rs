@@ -19,7 +19,6 @@ use crate::traits::types::packet::packet::HasPacketType;
    except the nonce.
 */
 #[cgp_component {
-  name: PacketNonceGetterComponent,
   provider: PacketNonceGetter,
   context: Chain,
 }]

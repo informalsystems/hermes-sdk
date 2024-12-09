@@ -7,7 +7,6 @@ use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 
 #[cgp_component {
-  name: OutgoingPacketFieldsReaderComponent,
   provider: OutgoingPacketFieldsReader,
   context: Chain,
 }]

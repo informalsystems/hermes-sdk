@@ -10,7 +10,6 @@ pub trait HasMemoType: Async {
 }
 
 #[cgp_component {
-  name: DefaultMemoGetterComponent,
   provider: DefaultMemoGetter,
   context: ChainDriver,
 }]

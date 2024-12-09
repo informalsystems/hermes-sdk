@@ -7,7 +7,6 @@ use crate::transaction::traits::types::signer::HasSignerType;
 use crate::transaction::traits::types::transaction::HasTransactionType;
 
 #[cgp_component {
-  name: TxEncoderComponent,
   provider: TxEncoder,
   context: TxContext,
 }]

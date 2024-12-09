@@ -4,7 +4,6 @@ use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 
 #[cgp_component {
-  name: BiRelayFromRelayBuilderComponent,
   provider: BiRelayFromRelayBuilder,
   context: Build,
 }]

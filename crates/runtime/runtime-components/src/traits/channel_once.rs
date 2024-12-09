@@ -20,7 +20,6 @@ pub type SenderOnceOf<Runtime, T> = <Runtime as HasChannelOnceTypes>::SenderOnce
 pub type ReceiverOnce<Runtime, T> = <Runtime as HasChannelOnceTypes>::ReceiverOnce<T>;
 
 #[cgp_component {
-  name: ChannelOnceCreatorComponent,
   provider: ChannelOnceCreator,
   context: Runtime,
 }]
@@ -31,7 +30,6 @@ pub trait CanCreateChannelsOnce: HasChannelOnceTypes {
 }
 
 #[cgp_component {
-  name: ChannelOnceUserComponent,
   provider: ChannelOnceUser,
   context: Runtime,
 }]

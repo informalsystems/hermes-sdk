@@ -10,7 +10,6 @@ use crate::traits::types::height::HasHeightType;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
-  name: ConsensusStateQuerierComponent,
   provider: ConsensusStateQuerier,
   context: Chain,
 }]
@@ -30,7 +29,6 @@ where
 }
 
 #[cgp_component {
-  name: ConsensusStateWithProofsQuerierComponent,
   provider: ConsensusStateWithProofsQuerier,
   context: Chain,
 }]
@@ -50,7 +48,6 @@ where
 }
 
 #[cgp_component {
-  name: RawConsensusStateQuerierComponent,
   provider: RawConsensusStateQuerier,
   context: Chain,
 }]
@@ -69,7 +66,6 @@ where
 }
 
 #[cgp_component {
-  name: RawConsensusStateWithProofsQuerierComponent,
   provider: RawConsensusStateWithProofsQuerier,
   context: Chain,
 }]

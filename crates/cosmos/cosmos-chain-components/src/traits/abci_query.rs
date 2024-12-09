@@ -3,7 +3,6 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
-  name: AbciQuerierComponent,
   provider: AbciQuerier,
   context: Chain,
 }]

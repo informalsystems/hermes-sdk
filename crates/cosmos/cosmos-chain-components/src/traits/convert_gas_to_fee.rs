@@ -2,7 +2,6 @@ use cgp::prelude::*;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 
 #[cgp_component {
-  name: GasToFeeConverterComponent,
   provider: GasToFeeConverter,
   context: TxContext,
 }]

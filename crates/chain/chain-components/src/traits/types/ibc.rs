@@ -71,7 +71,6 @@ impl<Chain, Counterparty> HasIbcChainTypes<Counterparty> for Chain where
 }
 
 #[cgp_component {
-  name: CounterpartyMessageHeightGetterComponent,
   provider: CounterpartyMessageHeightGetter,
   context: Chain,
 }]

@@ -4,7 +4,6 @@ use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: ArgParserComponent,
   provider: ArgParser,
   context: App,
 }]

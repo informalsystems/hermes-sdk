@@ -5,7 +5,6 @@ use hermes_test_components::chain::traits::types::wallet::{HasWalletType, Wallet
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 #[cgp_component {
-  name: ChainBuilderWithNodeConfigComponent,
   provider: ChainBuilderWithNodeConfig,
   context: Bootstrap,
 }]

@@ -8,7 +8,6 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
 use crate::traits::types::payload::payload::HasPayloadType;
 
 #[cgp_component {
-  name: PayloadHeaderGetterComponent,
   provider: PayloadHeaderGetter,
   context: Chain,
 }]

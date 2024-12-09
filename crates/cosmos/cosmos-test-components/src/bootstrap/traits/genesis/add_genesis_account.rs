@@ -6,7 +6,6 @@ use hermes_test_components::chain::traits::types::amount::{AmountOf, HasAmountTy
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 #[cgp_component {
-  name: GenesisAccountAdderComponent,
   provider: GenesisAccountAdder,
   context: Bootstrap,
 }]

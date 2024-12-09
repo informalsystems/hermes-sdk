@@ -10,7 +10,6 @@ use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 
 #[cgp_component {
-  name: ChainDriverBuilderComponent,
   provider: ChainDriverBuilder,
   context: Bootstrap,
 }]

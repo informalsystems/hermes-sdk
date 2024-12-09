@@ -5,7 +5,6 @@ use crate::traits::types::packet::packet::HasPacketType;
 use crate::types::tags::commitment::receive::ReceivePacket;
 
 #[cgp_component {
-  name: ReceivePacketCommitmentValueBuilderComponent,
   provider: ReceivePacketCommitmentValueBuilder,
   context: Chain,
 }]

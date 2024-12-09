@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use ibc_relayer::config::compat_mode::CompatMode;
 
 #[cgp_component {
-  name: CompatModeGetterComponent,
   provider: CompatModeGetter,
   context: Bootstrap,
 }]

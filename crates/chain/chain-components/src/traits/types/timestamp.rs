@@ -9,7 +9,6 @@ pub use hermes_chain_type_components::traits::types::time::*;
 pub use hermes_chain_type_components::traits::types::timeout::*;
 
 #[cgp_component {
-  name: TimeMeasurerComponent,
   provider: TimeMeasurer,
   context: Chain,
 }]

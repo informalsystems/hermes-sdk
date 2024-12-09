@@ -6,7 +6,6 @@ use crate::traits::types::height::HasHeightType;
 use crate::traits::types::packets::receive::HasReceivePacketPayloadType;
 
 #[cgp_component {
-  name: ReceivePacketPayloadBuilderComponent,
   provider: ReceivePacketPayloadBuilder,
   context: Chain,
 }]

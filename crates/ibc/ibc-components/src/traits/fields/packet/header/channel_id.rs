@@ -8,7 +8,6 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use crate::traits::types::packet::header::HasPacketHeaderType;
 
 #[cgp_component {
-  name: PacketChannelIdGetterComponent,
   provider: PacketChannelIdGetter,
   context: Chain,
 }]

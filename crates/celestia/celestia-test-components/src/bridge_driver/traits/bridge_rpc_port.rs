@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: BridgeRpcPortGetterComponent,
   provider: BridgeRpcPortGetter,
   context: BridgeDriver,
 }]

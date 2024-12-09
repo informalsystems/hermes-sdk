@@ -7,7 +7,6 @@ use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 
 #[cgp_component {
-  name: PayloadMintAmountGetterComponent,
   provider: PayloadMintAmountGetter,
   context: Chain,
 }]

@@ -4,7 +4,6 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: WasmClientByteCodeGetterComponent,
   provider: WasmClientByteCodeGetter,
   context: Bootstrap,
 }]

@@ -5,7 +5,6 @@ use crate::traits::types::message::HasMessageType;
 use crate::traits::types::packets::receive::HasReceivePacketPayloadType;
 
 #[cgp_component {
-  name: ReceivePacketMessageBuilderComponent,
   provider: ReceivePacketMessageBuilder,
   context: Chain,
 }]

@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::traits::types::height::HasHeightType;
 
 #[cgp_component {
-  name: HeightIncrementerComponent,
   provider: HeightIncrementer,
   context: Chain,
 }]

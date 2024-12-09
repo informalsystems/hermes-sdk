@@ -12,7 +12,6 @@ pub trait HasOutputType: Async {
 }
 
 #[cgp_component {
-  name: OutputProducerComponent,
   provider: OutputProducer,
   context: App,
 }]

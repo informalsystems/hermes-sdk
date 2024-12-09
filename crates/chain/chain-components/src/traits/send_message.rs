@@ -42,7 +42,6 @@ use crate::traits::types::message::HasMessageType;
     smaller batches.
 */
 #[cgp_component {
-  name: MessageSenderComponent,
   provider: MessageSender,
   context: Chain,
 }]

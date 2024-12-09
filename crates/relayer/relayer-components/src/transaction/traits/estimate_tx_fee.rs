@@ -4,7 +4,6 @@ use crate::transaction::traits::types::fee::HasFeeType;
 use crate::transaction::traits::types::transaction::HasTransactionType;
 
 #[cgp_component {
-  name: TxFeeEstimatorComponent,
   provider: TxFeeEstimator,
   context: TxContext,
 }]

@@ -14,7 +14,6 @@ use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 /// receive back a `WriteAckEvent` in response to the receive
 /// packet.
 #[cgp_component {
-  name: TimeoutUnorderedPacketRelayerComponent,
   provider: TimeoutUnorderedPacketRelayer,
   context: Relay,
 }]

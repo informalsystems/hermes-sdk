@@ -12,7 +12,6 @@ pub trait HasEncodeBufferType {
 }
 
 #[cgp_component {
-  name: EncodeBufferFinalizerComponent,
   provider: EncodeBufferFinalizer,
   context: Encoding,
 }]

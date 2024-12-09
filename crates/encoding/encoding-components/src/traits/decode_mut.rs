@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::traits::types::decode_buffer::HasDecodeBufferType;
 
 #[cgp_component {
-  name: MutDecoderComponent,
   provider: MutDecoder,
   context: Encoding,
 }]
@@ -12,7 +11,6 @@ pub trait CanDecodeMut<Strategy, Value>: HasDecodeBufferType + HasErrorType {
 }
 
 #[cgp_component {
-  name: DecodeBufferPeekerComponent,
   provider: DecodeBufferPeeker,
   context: Encoding,
 }]

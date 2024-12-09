@@ -7,7 +7,6 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
    Initialize a new chain with data files stored at the given home directory
 */
 #[cgp_component {
-  name: BridgeKeyImporterComponent,
   provider: BridgeKeyImporter,
   context: Bootstrap,
 }]

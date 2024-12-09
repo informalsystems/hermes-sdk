@@ -5,7 +5,6 @@ use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use crate::chain::traits::types::amount::HasAmountType;
 
 #[cgp_component {
-  name: DepositProposalMessageBuilderComponent,
   provider: DepositProposalMessageBuilder,
   context: Chain,
 }]

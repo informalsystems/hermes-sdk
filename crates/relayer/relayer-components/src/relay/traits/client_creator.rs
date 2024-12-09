@@ -9,7 +9,6 @@ use crate::chain::types::aliases::ClientIdOf;
 use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
 #[cgp_component {
-  name: ClientCreatorComponent,
   provider: ClientCreator,
   context: Relay,
 }]

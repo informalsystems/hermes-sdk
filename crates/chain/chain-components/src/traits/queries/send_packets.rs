@@ -6,7 +6,6 @@ use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketT
 use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
-  name: SendPacketsQuerierComponent,
   provider: SendPacketsQuerier,
   context: Chain,
 }]
@@ -33,7 +32,6 @@ where
 }
 
 #[cgp_component {
-  name: SendPacketQuerierComponent,
   provider: SendPacketQuerier,
   context: Chain,
 }]

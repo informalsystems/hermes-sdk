@@ -7,7 +7,6 @@ use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType
 use crate::traits::types::height::HasHeightType;
 
 #[cgp_component {
-  name: ConsensusStateHeightQuerierComponent,
   provider: ConsensusStateHeightQuerier,
   context: Chain,
 }]
@@ -33,7 +32,6 @@ where
 }
 
 #[cgp_component {
-  name: ConsensusStateHeightsQuerierComponent,
   provider: ConsensusStateHeightsQuerier,
   context: Chain,
 }]

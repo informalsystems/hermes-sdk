@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: RelayerBackgroundRunnerComponent,
   provider: RelayerBackgroundRunner,
   context: RelayDriver,
 }]

@@ -9,7 +9,6 @@ use crate::traits::types::connection::{
 use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
-  name: ConnectionOpenInitMessageBuilderComponent,
   provider: ConnectionOpenInitMessageBuilder,
   context: Chain,
 }]
@@ -29,7 +28,6 @@ where
 }
 
 #[cgp_component {
-  name: ConnectionOpenTryMessageBuilderComponent,
   provider: ConnectionOpenTryMessageBuilder,
   context: Chain,
 }]
@@ -49,7 +47,6 @@ where
 }
 
 #[cgp_component {
-  name: ConnectionOpenAckMessageBuilderComponent,
   provider: ConnectionOpenAckMessageBuilder,
   context: Chain,
 }]
@@ -68,7 +65,6 @@ where
 }
 
 #[cgp_component {
-  name: ConnectionOpenConfirmMessageBuilderComponent,
   provider: ConnectionOpenConfirmMessageBuilder,
   context: Chain,
 }]

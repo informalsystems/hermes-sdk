@@ -21,7 +21,6 @@ impl<BiRelay> HasTwoWayRelayTypes for BiRelay where
 }
 
 #[cgp_component {
-  name: TwoWayRelayGetterComponent,
   provider: TwoWayRelayGetter,
   context: BiRelay,
 }]

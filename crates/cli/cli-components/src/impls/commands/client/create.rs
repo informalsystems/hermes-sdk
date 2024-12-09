@@ -121,7 +121,6 @@ where
 }
 
 #[cgp_component {
-  name: CreateClientOptionsParserComponent,
   provider: CreateClientOptionsParser,
   context: App,
 }]

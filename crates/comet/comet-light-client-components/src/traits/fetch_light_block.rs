@@ -5,7 +5,6 @@ use crate::traits::types::light_block::HasLightBlockType;
 use crate::traits::types::status::HasVerificationStatusType;
 
 #[cgp_component {
-  name: LightBlockFetcherComponent,
   provider: LightBlockFetcher,
   context: Client,
 }]
@@ -18,7 +17,6 @@ pub trait CanFetchLightBlock: HasHeightType + HasLightBlockType + HasErrorType {
 }
 
 #[cgp_component {
-  name: LightBlockWithStatusFetcherComponent,
   provider: LightBlockWithStatusFetcher,
   context: Client,
 }]

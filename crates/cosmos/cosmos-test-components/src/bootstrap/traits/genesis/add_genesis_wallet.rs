@@ -9,7 +9,6 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 
 #[cgp_component {
-  name: GenesisWalletAdderComponent,
   provider: GenesisWalletAdder,
   context: Bootstrap,
 }]

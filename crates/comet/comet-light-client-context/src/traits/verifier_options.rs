@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use tendermint_light_client_verifier::options::Options;
 
 #[cgp_component {
-  name: VerifierOptionsGetterComponent,
   provider: VerifierOptionsGetter,
   context: Client,
 }]

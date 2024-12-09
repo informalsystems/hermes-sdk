@@ -8,7 +8,6 @@ use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::packet::packet::HasPacketType;
 
 #[cgp_component {
-  name: PacketHeaderGetterComponent,
   provider: PacketHeaderGetter,
   context: Chain,
 }]

@@ -12,7 +12,6 @@ pub trait HasTestDriverType: Async {
 }
 
 #[cgp_component {
-  name: DriverBuilderComponent,
   provider: DriverBuilder,
 }]
 #[async_trait]

@@ -6,7 +6,6 @@ use crate::traits::types::message_header::HasIbcMessageHeaderType;
 use crate::traits::types::transaction::HasIbcTransactionType;
 
 #[cgp_component {
-  name: IbcTransactionHeaderGetterComponent,
   provider: IbcTransactionHeaderGetter,
   context: Chain,
 }]

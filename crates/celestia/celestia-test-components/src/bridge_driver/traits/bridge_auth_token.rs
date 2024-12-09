@@ -13,7 +13,6 @@ pub type BridgeAuthTokenOf<BridgeDriver> =
     <BridgeDriver as HasBridgeAuthTokenType>::BridgeAuthToken;
 
 #[cgp_component {
-  name: BridgeAuthTokenGetterComponent,
   provider: BridgeAuthTokenGetter,
   context: BridgeDriver,
 }]

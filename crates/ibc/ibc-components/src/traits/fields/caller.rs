@@ -13,7 +13,6 @@ use hermes_chain_type_components::traits::types::address::HasAddressType;
    the core contract.
 */
 #[cgp_component {
-  name: CallerGetterComponent,
   provider: CallerGetter,
   context: Chain,
 }]

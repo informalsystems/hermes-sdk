@@ -48,7 +48,6 @@ where
 }
 
 #[cgp_component {
-  name: PollTimeoutGetterComponent,
   provider: PollTimeoutGetter,
   context: Chain,
 }]

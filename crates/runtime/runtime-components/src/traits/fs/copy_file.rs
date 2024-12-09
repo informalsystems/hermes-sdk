@@ -3,7 +3,6 @@ use cgp::prelude::*;
 use crate::traits::fs::file_path::HasFilePathType;
 
 #[cgp_component {
-  name: FileCopierComponent,
   provider: FileCopier,
   context: Runtime,
 }]

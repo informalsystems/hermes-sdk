@@ -11,7 +11,6 @@ pub trait Task: Async {
 }
 
 #[cgp_component {
-  name: ConcurrentTaskRunnerComponent,
   provider: ConcurrentTaskRunner,
   context: Runtime,
 }]

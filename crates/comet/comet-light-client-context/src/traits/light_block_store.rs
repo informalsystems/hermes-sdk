@@ -10,7 +10,6 @@ use tendermint_light_client_verifier::types::LightBlock;
 pub type LightBlockStore = BTreeMap<Height, (LightBlock, VerificationStatus)>;
 
 #[cgp_component {
-  name: LightBlockStoreGetterComponent,
   provider: LightBlockStoreGetter,
   context: Client,
 }]

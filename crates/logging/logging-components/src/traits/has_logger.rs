@@ -9,7 +9,6 @@ pub trait HasLoggerType: Async {
 }
 
 #[cgp_component {
-  name: LoggerGetterComponent,
   provider: LoggerGetter,
 }]
 pub trait HasLogger: HasLoggerType {
@@ -17,7 +16,6 @@ pub trait HasLogger: HasLoggerType {
 }
 
 #[cgp_component {
-  name: GlobalLoggerGetterComponent,
   provider: GlobalLoggerGetter,
 }]
 pub trait HasGlobalLogger: HasLoggerType {

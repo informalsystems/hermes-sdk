@@ -3,7 +3,6 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
 
 #[cgp_component {
-  name: IbcTransferTimeoutCalculatorComponent,
   provider: IbcTransferTimeoutCalculator,
   context: ChainDriver,
 }]

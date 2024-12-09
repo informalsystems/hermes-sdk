@@ -4,7 +4,6 @@ use crate::traits::types::amount::HasAmountType;
 use crate::traits::types::denom::HasDenomType;
 
 #[cgp_component {
-  name: AmountDenomGetterComponent,
   provider: AmountDenomGetter,
   context: Chain,
 }]

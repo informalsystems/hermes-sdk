@@ -7,7 +7,6 @@ use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
 
 #[cgp_component {
-  name: MessageTransferAmountGetterComponent,
   provider: MessageTransferAmountGetter,
   context: Chain,
 }]

@@ -10,7 +10,6 @@ pub trait HasChainType: Async {
 }
 
 #[cgp_component {
-  name: ChainGetterComponent,
   provider: ChainGetter,
   context: Driver,
 }]

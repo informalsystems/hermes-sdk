@@ -2,7 +2,6 @@ use cgp::prelude::*;
 pub use hermes_chain_type_components::traits::types::commitment_prefix::*;
 
 #[cgp_component {
-  name: IbcCommitmentPrefixGetterComponent,
   provider: IbcCommitmentPrefixGetter,
   context: Chain,
 }]

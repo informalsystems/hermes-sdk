@@ -6,7 +6,6 @@ use crate::transaction::traits::types::signer::HasSignerType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
 #[cgp_component {
-  name: MessagesWithSignerAndNonceSenderComponent,
   provider: MessagesWithSignerAndNonceSender,
   context: TxContext,
 }]

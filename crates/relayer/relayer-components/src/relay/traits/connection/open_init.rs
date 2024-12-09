@@ -5,7 +5,6 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::SrcConnectionId;
 
 #[cgp_component {
-  name: ConnectionInitializerComponent,
   provider: ConnectionInitializer,
   context: Relay,
 }]
