@@ -7,10 +7,10 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
+use ibc::core::host::types::identifiers::ChainId;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,
 };
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre;
 use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
@@ -128,7 +128,7 @@ pub fn add_key(
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &config.account_prefix,
-        &ChainId::from_string(&config.id),
+        &ChainId::new(&config.id)?.to_string().into(),
         &config.key_store_folder,
     )?;
 
@@ -155,7 +155,7 @@ pub fn restore_key(
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &config.account_prefix,
-        &ChainId::from_string(&config.id),
+        &ChainId::new(&config.id)?.to_string().into(),
         &config.key_store_folder,
     )?;
 

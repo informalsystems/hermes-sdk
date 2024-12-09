@@ -5,17 +5,15 @@ use hermes_relayer_components::chain::traits::queries::send_packets::SendPacketQ
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-use ibc_relayer::chain::cosmos::query::packet_query;
-use ibc_relayer::chain::requests::{Qualified, QueryHeight, QueryPacketEventDataRequest};
-use ibc_relayer_types::core::ics04_channel::events::SendPacket;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc_relayer_types::events::WithBlockDataType;
-use ibc_relayer_types::Height;
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};
 use tendermint::abci::Event as AbciEvent;
+use tendermint_rpc::query::Query;
 use tendermint_rpc::{Client, Error as RpcError, Order};
 
 use crate::traits::rpc_client::HasRpcClient;
+use crate::types::events::send_packet::SendPacketEvent;
 
 pub struct QueryCosmosSendPacket;
 
@@ -29,7 +27,7 @@ where
             Sequence = Sequence,
             Event = Arc<AbciEvent>,
         > + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
-        + HasSendPacketEvent<Counterparty, SendPacketEvent = SendPacket>
+        + HasSendPacketEvent<Counterparty, SendPacketEvent = SendPacketEvent>
         + HasRpcClient
         + CanRaiseError<RpcError>
         + CanRaiseError<&'static str>,
@@ -42,22 +40,32 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_port_id: &PortId,
         sequence: &Sequence,
-        height: &Height,
+        _height: &Height,
     ) -> Result<Packet, Chain::Error> {
         // The unreceived packet are queried from the source chain, so the destination
         // channel id and port id are the counterparty channel id and counterparty port id.
-        let request = QueryPacketEventDataRequest {
-            event_id: WithBlockDataType::SendPacket,
-            source_channel_id: channel_id.clone(),
-            source_port_id: port_id.clone(),
-            destination_channel_id: counterparty_channel_id.clone(),
-            destination_port_id: counterparty_port_id.clone(),
-            sequences: vec![*sequence],
-            height: Qualified::SmallerEqual(QueryHeight::Specific(*height)),
-        };
+        let query = Query::eq(
+            format!("{}.packet_src_channel", "send_packet"),
+            channel_id.to_string(),
+        )
+        .and_eq(
+            format!("{}.packet_src_port", "send_packet"),
+            port_id.to_string(),
+        )
+        .and_eq(
+            format!("{}.packet_dst_channel", "send_packet"),
+            counterparty_channel_id.to_string(),
+        )
+        .and_eq(
+            format!("{}.packet_dst_port", "send_packet"),
+            counterparty_port_id.to_string(),
+        )
+        .and_eq(
+            format!("{}.packet_sequence", "send_packet"),
+            sequence.to_string(),
+        );
 
         let mut events = vec![];
-        let query = packet_query(&request, *sequence);
 
         let response = chain
             .rpc_client()

@@ -10,12 +10,12 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
-use ibc_relayer_types::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState};
-use ibc_relayer_types::clients::ics07_tendermint::consensus_state::ConsensusState;
-use ibc_relayer_types::clients::ics07_tendermint::error::Error as TendermintClientError;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentRoot;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
+use ibc::core::commitment_types::commitment::CommitmentRoot;
+use ibc::core::commitment_types::specs::ProofSpecs;
+use ibc::core::host::types::identifiers::ChainId;
+use ibc_client_tendermint::types::error::TendermintClientError;
+use ibc_client_tendermint::types::{AllowUpdate, ClientState, ConsensusState};
 use tendermint::block::Height as TendermintHeight;
 use tendermint::error::Error as TendermintError;
 use tendermint_rpc::{Client, Error as TendermintRpcError};
@@ -40,9 +40,9 @@ where
         + HasChainId<ChainId = ChainId>
         + CanQueryChainHeight<Height = Height>
         + CanQueryChainStatus<ChainStatus = ChainStatus>
-        + CanRaiseError<TendermintClientError>
         + CanRaiseError<TendermintError>
         + CanRaiseError<TendermintRpcError>
+        + CanRaiseError<TendermintClientError>
         + CanRaiseError<String>
         + CanRaiseError<HermesError>,
 {
@@ -72,7 +72,7 @@ where
             unbonding_period,
             create_client_options.max_clock_drift,
             latest_height,
-            Default::default(),
+            ProofSpecs::cosmos(),
             vec!["upgrade".to_string(), "upgradedIBCState".to_string()],
             AllowUpdate {
                 after_expiry: true,
@@ -91,8 +91,9 @@ where
         let current_time = status.sync_info.latest_block_time;
         let peer_id = status.node_info.id;
 
-        let light_client_options =
-            TendermintClientState::from(client_state.clone()).as_light_client_options();
+        let light_client_options = TendermintClientState::from(client_state.clone())
+            .as_light_client_options()
+            .map_err(Chain::raise_error)?;
 
         let light_client = CometLightClient::new(
             current_time,

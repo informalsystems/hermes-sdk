@@ -6,13 +6,13 @@ use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
-use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
-use ibc_relayer_types::proofs::ProofError;
-use ibc_relayer_types::Height;
 use ics23::CommitmentProof;
 use prost::{DecodeError, Message};
+use tendermint::block::Height as TendermintHeight;
 use tendermint::merkle::proof::ProofOps as TendermintProof;
+use tendermint::Error as TendermintError;
 use tendermint_rpc::endpoint::abci_query::AbciQuery;
 use tendermint_rpc::{Client, Error as RpcError};
 
@@ -35,8 +35,7 @@ where
         + HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>
         + CanRaiseError<RpcError>
         + CanRaiseError<AbciQueryError>
-        + CanRaiseError<Ics23Error>
-        + CanRaiseError<ProofError>
+        + CanRaiseError<TendermintError>
         + CanRaiseError<DecodeError>
         + CanRaiseError<Encoding::Error>
         + CanRaiseError<&'static str>,
@@ -48,9 +47,11 @@ where
         data: &[u8],
         height: &Height,
     ) -> Result<Vec<u8>, Chain::Error> {
+        let tm_height =
+            TendermintHeight::try_from(height.revision_height()).map_err(Chain::raise_error)?;
         let response = chain
             .rpc_client()
-            .abci_query(Some(path.to_owned()), data, Some((*height).into()), false)
+            .abci_query(Some(path.to_owned()), data, Some(tm_height), false)
             .await
             .map_err(Chain::raise_error)?;
 
@@ -67,14 +68,11 @@ where
         data: &[u8],
         query_height: &Height,
     ) -> Result<(Vec<u8>, Chain::CommitmentProof), Chain::Error> {
+        let tm_height = TendermintHeight::try_from(query_height.revision_height())
+            .map_err(Chain::raise_error)?;
         let response = chain
             .rpc_client()
-            .abci_query(
-                Some(path.to_owned()),
-                data,
-                Some((*query_height).into()),
-                true,
-            )
+            .abci_query(Some(path.to_owned()), data, Some(tm_height), true)
             .await
             .map_err(Chain::raise_error)?;
 
@@ -94,7 +92,7 @@ where
             .encode(&merkle_proof)
             .map_err(Chain::raise_error)?;
 
-        let proof_height = *query_height + 1;
+        let proof_height = query_height.add(1);
 
         let commitment_proof = CosmosCommitmentProof {
             merkle_proof,

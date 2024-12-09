@@ -12,8 +12,7 @@ use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_types::core::ics02_client::client_state::ClientState;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use tracing::info;
 
 use crate::contexts::app::HermesApp;
@@ -167,9 +166,8 @@ impl fmt::Debug for Pretty<'_, TendermintClientState> {
 
         f.debug_struct("ClientState")
             .field("chain_id", &client_state.chain_id.to_string())
-            .field("client_type", &client_state.client_type())
             .field("latest_height", &client_state.latest_height.to_string())
-            .field("trust_threshold", &client_state.trust_threshold.to_string())
+            .field("trust_threshold", &client_state.trust_level.to_string())
             .field("trusting_period", &client_state.trusting_period)
             .field("unbonding_period", &client_state.unbonding_period)
             .field("max_clock_drift", &client_state.max_clock_drift)

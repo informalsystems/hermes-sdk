@@ -17,7 +17,7 @@ use hermes_relayer_components::relay::traits::connection::open_init::CanInitConn
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::chain::MockSolomachine;
 

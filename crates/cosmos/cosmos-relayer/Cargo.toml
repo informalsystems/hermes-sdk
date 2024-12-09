@@ -38,7 +38,6 @@ hermes-wasm-test-components             = { workspace = true }
 ibc                                     = { workspace = true }
 ibc-proto                               = { workspace = true }
 ibc-relayer                             = { workspace = true }
-ibc-relayer-types                       = { workspace = true }
 ibc-telemetry                           = { workspace = true }
 tendermint                              = { workspace = true, features = ["secp256k1"] }
 tendermint-proto                        = { workspace = true }
@@ -59,6 +58,7 @@ subtle-encoding = { workspace = true }
 itertools       = { workspace = true }
 futures         = { workspace = true }
 http            = { workspace = true }
+secp256k1       = { workspace = true }
 
 opentelemetry   = { version = "0.17.0", features = ["metrics"] }
 moka            = { version = "0.12", features = ["future"] }

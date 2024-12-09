@@ -31,18 +31,21 @@ hermes-cosmos-relayer           = { workspace = true }
 hermes-cosmos-integration-tests = { workspace = true }
 hermes-cosmos-chain-components  = { workspace = true }
 hermes-cosmos-test-components   = { workspace = true }
+hermes-encoding-components      = { workspace = true }
+hermes-protobuf-encoding-components = { workspace = true }
 
 ibc                             = { workspace = true }
 ibc-relayer                     = { workspace = true }
-ibc-relayer-types               = { workspace = true }
 
 clap                        = { workspace = true, features = ["derive"] }
+dirs-next                   = { workspace = true }
 eyre                        = { workspace = true }
 toml                        = { workspace = true }
 oneline-eyre                = { workspace = true }
 hdpath                      = { workspace = true }
 http                        = { workspace = true }
 humantime                   = { workspace = true }
+prost                       = { workspace = true }
 tracing                     = { workspace = true }
 tonic                       = { workspace = true }
 serde_json                  = { workspace = true }

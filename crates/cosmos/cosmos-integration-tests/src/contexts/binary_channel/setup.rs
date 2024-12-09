@@ -30,7 +30,7 @@ use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChanne
 use hermes_test_components::setup::traits::init_channel_options_at::InitChannelOptionsAtComponent;
 use hermes_test_components::setup::traits::init_connection_options_at::InitConnectionOptionsAtComponent;
 use hermes_test_components::setup::traits::port_id_at::PortIdAtComponent;
-use ibc_relayer_types::core::ics24_host::identifier::PortId;
+use ibc::core::host::types::identifiers::PortId;
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
 use crate::contexts::bootstrap::CosmosBootstrap;

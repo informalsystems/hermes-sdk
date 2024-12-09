@@ -7,9 +7,9 @@ use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
-use ibc_relayer::channel::version::Version;
-use ibc_relayer_types::core::ics04_channel::channel::Ordering;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId, ConnectionId, PortId};
+use ibc::core::channel::types::channel::Order;
+use ibc::core::channel::types::Version;
+use ibc::core::host::types::identifiers::{ChainId, ClientId, ConnectionId, PortId};
 use oneline_eyre::eyre::eyre;
 use tracing::info;
 
@@ -83,15 +83,15 @@ pub struct ChannelCreate {
     #[clap(
         long = "ordering",
         value_name = "ORDERING",
-        default_value_t = Ordering::Unordered,
+        default_value_t = Order::Unordered,
     )]
-    ordering: Ordering,
+    ordering: Order,
 
     /// Version of the channel
     #[clap(
         long = "version",
         value_name = "VERSION",
-        default_value_t = Version::ics20(),
+        default_value_t = Version::new("ics20-1".to_string()),
     )]
     version: Version,
 }

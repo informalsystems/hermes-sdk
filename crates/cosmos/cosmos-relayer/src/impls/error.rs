@@ -53,20 +53,15 @@ use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_wasm_test_components::impls::chain::upload_client_code::ProposalIdNotFound;
 use http::uri::InvalidUri;
+use ibc::clients::tendermint::types::error::TendermintClientError;
+use ibc::core::channel::types::error::ChannelError;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::commitment_types::error::CommitmentError;
-use ibc::core::host::types::error::DecodingError;
+use ibc::core::host::types::error::{DecodingError, IdentifierError};
 use ibc::primitives::TimestampError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::supervisor::Error as SupervisorError;
-use ibc_relayer_types::clients::ics07_tendermint::error::Error as TendermintClientError;
-use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
-use ibc_relayer_types::core::ics03_connection::error::Error as Ics03Error;
-use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
-use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
-use ibc_relayer_types::proofs::ProofError;
-use ibc_relayer_types::signer::SignerError;
 use prost::{DecodeError, EncodeError};
 use tendermint::Error as TendermintError;
 use tendermint_proto::Error as TendermintProtoError;
@@ -119,26 +114,22 @@ delegate_components! {
             Report,
             TokioRuntimeError,
             RelayerError,
-            SignerError,
             KeyringError,
             SupervisorError,
             TendermintError,
+            TendermintClientError,
             TendermintProtoError,
             TendermintRpcError,
-            TendermintClientError,
             TimestampError,
-            Ics02Error,
-            Ics03Error,
-            Ics23Error,
-            Ics24ValidationError,
+            ChannelError,
             DecodingError,
+            IdentifierError,
             ParseIntError,
             ParseFloatError,
             FromUtf8Error,
             EncodeError,
             DecodeError,
             InvalidMetadataValue,
-            ProofError,
             ClientError,
             CommitmentError,
             Utf8Error,

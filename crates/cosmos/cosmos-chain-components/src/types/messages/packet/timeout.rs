@@ -1,8 +1,9 @@
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::Sequence;
+use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::channel::v1::MsgTimeout as ProtoMsgTimeout;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::signer::Signer;
-use ibc_relayer_types::Height;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;

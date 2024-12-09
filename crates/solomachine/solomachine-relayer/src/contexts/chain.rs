@@ -52,13 +52,11 @@ use hermes_solomachine_chain_components::methods::encode::public_key::PublicKey;
 use hermes_solomachine_chain_components::traits::solomachine::Solomachine;
 use hermes_solomachine_chain_components::types::client_state::SolomachineClientState;
 use hermes_solomachine_chain_components::types::consensus_state::SolomachineConsensusState;
+use ibc::core::channel::types::channel::ChannelEnd;
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::types::Height;
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::{
-    ChainId, ChannelId, ClientId, ConnectionId, PortId,
-};
-use ibc_relayer_types::Height;
+use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
 use secp256k1::rand::rngs::OsRng;
 use secp256k1::{Secp256k1, SecretKey};
 
@@ -127,7 +125,7 @@ impl MockSolomachine {
         let (secret_key, secp_public_key) = secp.generate_keypair(&mut OsRng);
         let public_key = PublicKey::from_secp256k1_key(secp_public_key);
         MockSolomachine {
-            chain_id: ChainId::from_string(chain_id),
+            chain_id: ChainId::new(chain_id).unwrap(),
             commitment_prefix,
             public_key,
             secret_key,

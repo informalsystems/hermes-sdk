@@ -7,9 +7,10 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::U
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use ibc_relayer_types::clients::ics07_tendermint::header::Header;
-use ibc_relayer_types::core::ics02_client::error::Error as ClientError;
-use ibc_relayer_types::Height;
+use ibc::clients::tendermint::types::error::TendermintClientError;
+use ibc::clients::tendermint::types::Header;
+use ibc::core::client::types::error::ClientError;
+use ibc::core::client::types::Height;
 use tendermint::block::Height as TmHeight;
 use tendermint_rpc::Client;
 
@@ -27,9 +28,11 @@ where
         + HasRpcClient
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>
         + HasClientStateType<Counterparty>
+        + CanRaiseError<ClientError>
         + CanRaiseError<tendermint::Error>
         + CanRaiseError<tendermint_rpc::Error>
         + CanRaiseError<ClientError>
+        + CanRaiseError<TendermintClientError>
         + CanRaiseError<HermesError>,
     TendermintClientState: From<Chain::ClientState>,
 {
@@ -45,8 +48,9 @@ where
         let current_time = status.sync_info.latest_block_time;
         let peer_id = status.node_info.id;
 
-        let light_client_options =
-            TendermintClientState::from(client_state).as_light_client_options();
+        let light_client_options = TendermintClientState::from(client_state)
+            .as_light_client_options()
+            .map_err(Chain::raise_error)?;
 
         let mut light_client = CometLightClient::new(
             current_time,
@@ -81,7 +85,7 @@ where
                     signed_header: target_block.signed_header.clone(),
                     validator_set: target_block.validators.clone(),
                     trusted_height,
-                    trusted_validator_set: trusted_block.validators.clone(),
+                    trusted_next_validator_set: trusted_block.validators.clone(),
                 })
             })
             .collect::<Result<Vec<_>, Chain::Error>>()?;

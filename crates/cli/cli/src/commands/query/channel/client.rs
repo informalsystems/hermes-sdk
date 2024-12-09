@@ -5,7 +5,7 @@ use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use http::Uri;
 use ibc::core::channel::types::proto::v1::query_client::QueryClient;
 use ibc::core::channel::types::proto::v1::QueryChannelClientStateRequest;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+use ibc::core::host::types::identifiers::{ChainId, ChannelId, PortId};
 
 use crate::contexts::app::HermesApp;
 use crate::Result;

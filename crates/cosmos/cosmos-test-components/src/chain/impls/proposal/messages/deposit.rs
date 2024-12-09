@@ -5,10 +5,10 @@ use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_test_components::chain::traits::proposal::messages::deposit::DepositProposalMessageBuilder;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
+use ibc::primitives::Signer;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::gov::v1::MsgDeposit;
 use ibc_proto::google::protobuf::Any;
-use ibc_relayer_types::signer::Signer;
 use prost::{Message, Name};
 
 use crate::chain::types::amount::Amount;

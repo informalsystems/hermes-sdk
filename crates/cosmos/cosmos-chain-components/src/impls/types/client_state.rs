@@ -6,9 +6,8 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType, ProvideRawClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_types::core::ics02_client::client_state::ClientState;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ChainId;
 use prost_types::Any;
 
 use crate::types::tendermint::TendermintClientState;

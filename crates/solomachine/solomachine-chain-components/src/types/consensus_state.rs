@@ -2,8 +2,6 @@ use hermes_error::types::Error;
 use ibc_proto::google::protobuf::Any;
 pub use ibc_proto::ibc::lightclients::solomachine::v3::ConsensusState as ProtoSolomachineConsensusState;
 use ibc_proto::Protobuf;
-use ibc_relayer_types::keys::ROUTER_KEY;
-use ibc_relayer_types::tx_msg::Msg;
 use prost::Message;
 
 use crate::methods::encode::public_key::{
@@ -20,18 +18,18 @@ pub struct SolomachineConsensusState {
     pub timestamp: u64,
 }
 
-impl Msg for SolomachineConsensusState {
+/*impl Msg for SolomachineConsensusState {
     type ValidationError = Error;
     type Raw = ProtoSolomachineConsensusState;
 
     fn route(&self) -> String {
-        ROUTER_KEY.to_string()
+        "ibc".to_string()
     }
 
     fn type_url(&self) -> String {
         SOLOMACHINE_CONSENSUS_STATE_TYPE_URL.to_string()
     }
-}
+}*/
 
 impl Protobuf<ProtoSolomachineConsensusState> for SolomachineConsensusState {}
 

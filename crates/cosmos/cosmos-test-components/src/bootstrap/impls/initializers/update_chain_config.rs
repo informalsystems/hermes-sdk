@@ -9,7 +9,7 @@ use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use ibc::core::host::types::identifiers::ChainId;
 use toml::Value;
 
 use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializer;

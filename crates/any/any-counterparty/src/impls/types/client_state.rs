@@ -6,9 +6,8 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_types::core::ics02_client::client_state::ClientState;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::Height;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ChainId;
 
 use crate::types::client_state::AnyClientState;
 
@@ -41,7 +40,7 @@ where
 
     fn client_state_has_expired(client_state: &AnyClientState, elapsed: Duration) -> bool {
         match client_state {
-            AnyClientState::Tendermint(cs) => cs.expired(elapsed),
+            AnyClientState::Tendermint(cs) => cs.trusting_period < elapsed,
         }
     }
 }

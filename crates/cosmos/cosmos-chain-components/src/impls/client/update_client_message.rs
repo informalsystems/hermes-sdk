@@ -2,8 +2,8 @@ use cgp::core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use ibc::core::host::types::identifiers::ClientId;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use prost_types::Any;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};

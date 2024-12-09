@@ -6,12 +6,12 @@ use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::error::DecodingError;
+use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};
+use ibc_proto::cosmos::base::query::v1beta1::PageRequest;
 use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;
-use ibc_relayer::chain::requests::{Paginate, QueryPacketAcknowledgementsRequest};
-use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc_relayer_types::Height;
+use ibc_proto::ibc::core::channel::v1::QueryPacketAcknowledgementsRequest;
 use tonic::transport::Error as TransportError;
 use tonic::{Request, Status};
 
@@ -31,8 +31,8 @@ where
         > + HasGrpcAddress
         + CanRaiseError<InvalidUri>
         + CanRaiseError<TransportError>
+        + CanRaiseError<DecodingError>
         + CanRaiseError<Status>
-        + CanRaiseError<Ics02Error>
         + CanRaiseError<eyre::Report>,
     Counterparty: HasIbcChainTypes<Chain, Sequence = Sequence, Height = Height>,
 {
@@ -49,13 +49,19 @@ where
         .map_err(Chain::raise_error)?;
 
         let raw_request = QueryPacketAcknowledgementsRequest {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
-            pagination: Paginate::All,
-            packet_commitment_sequences: sequences.to_vec(),
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            pagination: Some(PageRequest {
+                limit: u32::MAX as u64,
+                ..Default::default()
+            }),
+            packet_commitment_sequences: sequences
+                .iter()
+                .map(|sequence| sequence.value())
+                .collect(),
         };
 
-        let request = Request::new(raw_request.into());
+        let request = Request::new(raw_request);
 
         let response = client
             .packet_acknowledgements(request)

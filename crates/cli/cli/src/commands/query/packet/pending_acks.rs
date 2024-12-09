@@ -5,17 +5,20 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_encoding_components::traits::convert::CanConvert;
+use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
+use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use ibc::clients::tendermint::types::TENDERMINT_CLIENT_STATE_TYPE_URL;
+use ibc::core::channel::types::channel::{ChannelEnd, State};
+use ibc::core::client::types::Height;
 use ibc::core::connection::types::ConnectionEnd;
+use ibc::core::host::types::identifiers::{ChainId, ChannelId, PortId, Sequence};
+use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc::primitives::proto::Protobuf;
-use ibc_relayer::client_state::AnyClientState;
-use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
-use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
-use ibc_relayer_types::Height;
 use oneline_eyre::eyre::eyre;
 
 use crate::commands::query::packet::util::PacketSequences;
@@ -70,7 +73,10 @@ impl QueryPendingAcks {
         let channel_end = ChannelEnd::decode_vec(&channel_end_bytes)?;
 
         // check if channel end is initialized, otherwize return error.
-        if channel_end.state_matches(&State::Uninitialized) {
+        if channel_end
+            .verify_state_matches(&State::Uninitialized)
+            .is_ok()
+        {
             return Err(eyre!("channel with id `{channel_id}` is uninitialized").into());
         }
 
@@ -105,7 +111,13 @@ impl QueryPendingAcks {
             .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), &latest_height)
             .await?;
 
-        let client_state = AnyClientState::decode_vec(&client_state_bytes)?;
+        let any_client_state = Any {
+            type_url: TENDERMINT_CLIENT_STATE_TYPE_URL.to_owned(),
+            value: client_state_bytes,
+        };
+
+        let client_state: TendermintClientState =
+            CosmosChain::default_encoding().convert(&any_client_state)?;
 
         let counterparty_chain_id = client_state.chain_id();
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
