@@ -80,7 +80,6 @@ use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain::types::wallet::CosmosTestWallet;
 
-// Components that will be swapped in `LegacyCosmosSdkBootstrapComponents`
 cgp_preset! {
     CosmosSdkBootstrapComponents {
         GenesisAccountAdderComponent: AddCosmosGenesisAccount,

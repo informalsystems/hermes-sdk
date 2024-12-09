@@ -33,6 +33,9 @@ use hermes_test_components::chain_driver::traits::fields::wallet::{
     RelayerWallet, UserWallet, ValidatorWallet, WalletGetterAt, WalletsGetter,
 };
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
+use hermes_test_components::chain_driver::traits::wait::{
+    CanWaitChainStartup, ChainStartupWaiterComponent,
+};
 use ibc_relayer::config::Config;
 use tokio::process::Child;
 use toml::to_string_pretty;
@@ -67,6 +70,7 @@ delegate_components! {
             ProvideHermesRuntime,
         [
             RandomAmountGeneratorComponent,
+            ChainStartupWaiterComponent,
             ProposalIdTypeComponent,
             ProposalStatusTypeComponent,
         ]:
@@ -200,3 +204,7 @@ impl ConfigUpdater<CosmosChainDriver, Config> for CosmosChainDriverComponents {
         Ok(chain_config_str)
     }
 }
+
+pub trait CanUseCosmosChainDriver: CanWaitChainStartup {}
+
+impl CanUseCosmosChainDriver for CosmosChainDriver {}
