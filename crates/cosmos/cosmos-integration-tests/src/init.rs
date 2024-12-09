@@ -7,13 +7,13 @@ use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::Dyna
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::setup::traits::driver::{CanBuildTestDriver, HasTestDriverType};
+use hermes_test_components::setup::traits::driver::CanBuildTestDriver;
 use ibc::core::host::types::identifiers::PortId;
 use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;
-use tracing::info;
 use tracing::level_filters::LevelFilter;
+use tracing::{info, Subscriber};
 use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{fmt, EnvFilter};
@@ -42,9 +42,7 @@ impl FromStr for TestPreset {
     }
 }
 
-pub fn init_test_runtime() -> HermesRuntime {
-    let _ = stable_eyre::install();
-
+pub fn build_tracing_subscriber() -> impl Subscriber + Send + Sync {
     let env_filter = EnvFilter::builder()
         .with_default_directive(LevelFilter::INFO.into())
         .from_env_lossy();
@@ -52,7 +50,14 @@ pub fn init_test_runtime() -> HermesRuntime {
     tracing_subscriber::registry()
         .with(fmt::layer())
         .with(env_filter)
-        .init();
+}
+
+pub fn init_test_runtime() -> HermesRuntime {
+    let _ = stable_eyre::install();
+
+    let subscriber = build_tracing_subscriber();
+    // Avoid crashing if already initialised
+    let _ = subscriber.try_init();
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build().unwrap());
 
@@ -226,12 +231,9 @@ async fn setup_osmosis_to_gaia(
     setup.build_driver().await
 }
 
-pub async fn init_preset_bootstraps<Setup>(
+pub async fn init_preset_bootstraps(
     runtime: &HermesRuntime,
-) -> Result<Setup::TestDriver, Error>
-where
-    Setup: HasTestDriverType<TestDriver = CosmosBinaryChannelTestDriver>,
-{
+) -> Result<CosmosBinaryChannelTestDriver, Error> {
     let test_preset = env::var("TEST_PRESET")
         .unwrap_or_else(|_| "GaiaToGaia".to_string())
         .parse::<TestPreset>()?;
