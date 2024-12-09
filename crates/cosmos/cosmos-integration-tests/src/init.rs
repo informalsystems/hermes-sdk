@@ -12,8 +12,8 @@ use ibc::core::host::types::identifiers::PortId;
 use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;
-use tracing::info;
 use tracing::level_filters::LevelFilter;
+use tracing::{info, Subscriber};
 use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{fmt, EnvFilter};
@@ -42,9 +42,7 @@ impl FromStr for TestPreset {
     }
 }
 
-pub fn init_test_runtime() -> HermesRuntime {
-    let _ = stable_eyre::install();
-
+pub fn build_tracing_subscriber() -> impl Subscriber + Send + Sync {
     let env_filter = EnvFilter::builder()
         .with_default_directive(LevelFilter::INFO.into())
         .from_env_lossy();
@@ -52,7 +50,14 @@ pub fn init_test_runtime() -> HermesRuntime {
     tracing_subscriber::registry()
         .with(fmt::layer())
         .with(env_filter)
-        .init();
+}
+
+pub fn init_test_runtime() -> HermesRuntime {
+    let _ = stable_eyre::install();
+
+    let subscriber = build_tracing_subscriber();
+    // Avoid crashing if already initialised
+    let _ = subscriber.try_init();
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build().unwrap());
 
