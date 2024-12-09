@@ -7,7 +7,7 @@ use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::Dyna
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::setup::traits::driver::{CanBuildTestDriver, HasTestDriverType};
+use hermes_test_components::setup::traits::driver::CanBuildTestDriver;
 use ibc::core::host::types::identifiers::PortId;
 use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
@@ -231,12 +231,9 @@ async fn setup_osmosis_to_gaia(
     setup.build_driver().await
 }
 
-pub async fn init_preset_bootstraps<Setup>(
+pub async fn init_preset_bootstraps(
     runtime: &HermesRuntime,
-) -> Result<Setup::TestDriver, Error>
-where
-    Setup: HasTestDriverType<TestDriver = CosmosBinaryChannelTestDriver>,
-{
+) -> Result<CosmosBinaryChannelTestDriver, Error> {
     let test_preset = env::var("TEST_PRESET")
         .unwrap_or_else(|_| "GaiaToGaia".to_string())
         .parse::<TestPreset>()?;

@@ -1,8 +1,6 @@
 #![recursion_limit = "256"]
 
-use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::{
     build_tracing_subscriber, init_preset_bootstraps, init_test_runtime,
 };
@@ -25,10 +23,7 @@ fn clear_packet_test() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
     runtime.runtime.clone().block_on(async move {
-        let setup: CosmosBinaryChannelTestDriver = init_preset_bootstraps::<
-            CosmosBinaryChannelSetup<CosmosBootstrap, CosmosBootstrap>,
-        >(&runtime)
-        .await?;
+        let setup: CosmosBinaryChannelTestDriver = init_preset_bootstraps(&runtime).await?;
 
         let balance_a1 = setup
             .chain_driver_a
@@ -94,10 +89,7 @@ fn no_clear_packet_test() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
     runtime.runtime.clone().block_on(async move {
-        let setup: CosmosBinaryChannelTestDriver = init_preset_bootstraps::<
-            CosmosBinaryChannelSetup<CosmosBootstrap, CosmosBootstrap>,
-        >(&runtime)
-        .await?;
+        let setup: CosmosBinaryChannelTestDriver = init_preset_bootstraps(&runtime).await?;
 
         let balance_a1 = setup
             .chain_driver_a
