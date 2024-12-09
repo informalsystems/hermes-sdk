@@ -8,6 +8,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::bootstrap::traits::chain::ChainBootstrapper;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain_driver::traits::wait::CanWaitChainStartup;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::bootstrap::traits::chain::build_chain_driver::CanBuildChainDriver;
@@ -38,9 +39,11 @@ where
         + CanCollectGenesisTransactions
         + CanInitChainNodeConfig
         + CanStartChainFullNode
-        + CanBuildChainDriver,
+        + CanBuildChainDriver
+        + CanRaiseError<ChainDriver::Error>,
     Runtime: HasFilePathType + HasChildProcessType + HasErrorType,
     Chain: HasChainIdType + HasWalletType,
+    ChainDriver: CanWaitChainStartup,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
@@ -93,10 +96,15 @@ where
             .await?;
 
         // Build the chain context from the bootstrap parameters
-        let chain = bootstrap
+        let chain_driver = bootstrap
             .build_chain_driver(genesis_config, chain_config, wallets, chain_process)
             .await?;
 
-        Ok(chain)
+        chain_driver
+            .wait_chain_startup()
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
+        Ok(chain_driver)
     }
 }

@@ -21,6 +21,7 @@ use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChainType, ProvideChainType};
+use hermes_test_components::chain_driver::traits::wait::CanWaitChainStartup;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -101,6 +102,7 @@ where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
         + CanRaiseError<Runtime::Error>
+        + CanRaiseError<ChainDriver::Error>
         + CanRaiseError<&'static str>
         + CanRaiseError<KeyringError>
         + CanRaiseError<serde_json::Error>
@@ -137,7 +139,7 @@ where
         + HasAmountType
         + HasAddressType
         + CanBuildChainIdFromString,
-    ChainDriver: HasChainType<Chain = Chain>,
+    ChainDriver: HasChainType<Chain = Chain> + CanWaitChainStartup,
     Chain::ChainId: Display,
 {
 }
