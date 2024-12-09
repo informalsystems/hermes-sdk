@@ -25,7 +25,7 @@ use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDri
 use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
-use crate::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
+use crate::bootstrap::components::cosmos_sdk::{CosmosSdkBootstrapComponents, *};
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_validator::LegacyAddCosmosGenesisValidator;
 use crate::bootstrap::impls::genesis_legacy::collect_gentxs::LegacyCollectCosmosGentxs;
@@ -70,31 +70,24 @@ use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain::types::wallet::CosmosTestWallet;
 
-cgp_preset! {
-    LegacyCosmosSdkBootstrapComponents {
-        GenesisAccountAdderComponent: LegacyAddCosmosGenesisAccount,
-        GenesisValidatorAdderComponent: LegacyAddCosmosGenesisValidator,
-        GenesisTransactionsCollectorComponent: LegacyCollectCosmosGentxs,
-        WalletInitializerComponent: InitCosmosTestWallet<GetStdOutOrElseStdErr>,
+with_cosmos_sdk_bootstrap_components! {
+    [
+        GenesisAccountAdderComponent,
+        GenesisValidatorAdderComponent,
+        GenesisTransactionsCollectorComponent,
+        WalletInitializerComponent,
+    ],
+    | Components | {
+        cgp_preset! {
+            LegacyCosmosSdkBootstrapComponents {
+                GenesisAccountAdderComponent: LegacyAddCosmosGenesisAccount,
+                GenesisValidatorAdderComponent: LegacyAddCosmosGenesisValidator,
+                GenesisTransactionsCollectorComponent: LegacyCollectCosmosGentxs,
+                WalletInitializerComponent: InitCosmosTestWallet<GetStdOutOrElseStdErr>,
 
-        // Components that are the same as `CosmosSdkBootstrapComponents`
-        [
-            ChainNodeConfigTypeComponent,
-            ChainGenesisConfigTypeComponent,
-            WalletConfigTypeComponent,
-            WalletConfigFieldsComponent,
-            ChainIdGeneratorComponent,
-            ChainHomeDirInitializerComponent,
-            ChainDataInitializerComponent,
-            GenesisDenomGetterComponent,
-            WalletHdPathComponent,
-            ChainNodeConfigInitializerComponent,
-            ChainGenesisConfigInitializerComponent,
-            GenesisWalletAdderComponent,
-            ChainFullNodeStarterComponent,
-            ChainBootstrapperComponent,
-        ]:
-            CosmosSdkBootstrapComponents,
+                Components: CosmosSdkBootstrapComponents,
+            }
+        }
     }
 }
 
