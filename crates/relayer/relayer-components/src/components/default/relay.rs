@@ -50,7 +50,7 @@ pub use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRela
 pub use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 pub use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 
-define_components! {
+cgp_preset! {
     DefaultRelayComponents {
         IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
         TargetUpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,

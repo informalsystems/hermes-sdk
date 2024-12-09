@@ -2,7 +2,10 @@ use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 
-#[derive_component(AbciQuerierComponent, AbciQuerier<Chain>)]
+#[cgp_component {
+  provider: AbciQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryAbci: HasHeightType + HasCommitmentProofType + HasErrorType {
     async fn query_abci(

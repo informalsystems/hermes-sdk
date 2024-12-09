@@ -4,14 +4,17 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use ibc_relayer::config::compat_mode::CompatMode;
 
-#[derive_component(CompatModeGetterComponent, CompatModeGetter<Bootstrap>)]
+#[cgp_component {
+  provider: CompatModeGetter,
+  context: Bootstrap,
+}]
 pub trait HasCompatMode: Async {
     fn compat_mode(&self) -> Option<&CompatMode>;
 }
 
 impl<Bootstrap> CompatModeGetter<Bootstrap> for UseContext
 where
-    Bootstrap: Async + HasField<symbol!("compat_mode"), Field = Option<CompatMode>>,
+    Bootstrap: Async + HasField<symbol!("compat_mode"), Value = Option<CompatMode>>,
 {
     fn compat_mode(bootstrap: &Bootstrap) -> Option<&CompatMode> {
         bootstrap.get_field(PhantomData).as_ref()

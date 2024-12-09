@@ -3,7 +3,10 @@ use cgp::prelude::*;
 use crate::transaction::traits::nonce::nonce_guard::HasNonceGuard;
 use crate::transaction::traits::types::signer::HasSignerType;
 
-#[derive_component(NonceAllocatorComponent, NonceAllocator<TxContext>)]
+#[cgp_component {
+  provider: NonceAllocator,
+  context: TxContext,
+}]
 #[async_trait]
 pub trait CanAllocateNonce: HasNonceGuard + HasSignerType + HasErrorType {
     async fn allocate_nonce<'a>(

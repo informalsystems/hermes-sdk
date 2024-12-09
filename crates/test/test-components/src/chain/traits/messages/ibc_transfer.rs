@@ -8,7 +8,10 @@ use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::memo::HasMemoType;
 
-#[derive_component(IbcTokenTransferMessageBuilderComponent, IbcTokenTransferMessageBuilder<ChainDriver>)]
+#[cgp_component {
+  provider: IbcTokenTransferMessageBuilder,
+  context: ChainDriver,
+}]
 #[async_trait]
 pub trait CanBuildIbcTokenTransferMessage<Counterparty>:
     HasErrorType

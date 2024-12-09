@@ -6,7 +6,10 @@ use crate::traits::types::connection::HasConnectionEndType;
 use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofType;
 
-#[derive_component(ConnectionEndQuerierComponent, ConnectionEndQuerier<Chain>)]
+#[cgp_component {
+  provider: ConnectionEndQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryConnectionEnd<Counterparty>:
     HasConnectionEndType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
@@ -18,7 +21,10 @@ pub trait CanQueryConnectionEnd<Counterparty>:
     ) -> Result<Self::ConnectionEnd, Self::Error>;
 }
 
-#[derive_component(ConnectionEndWithProofsQuerierComponent, ConnectionEndWithProofsQuerier<Chain>)]
+#[cgp_component {
+  provider: ConnectionEndWithProofsQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryConnectionEndWithProofs<Counterparty>:
     HasConnectionEndType<Counterparty>

@@ -2,7 +2,10 @@ use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
 use hermes_runtime_components::traits::runtime::HasRuntimeType;
 
-#[derive_component(WasmClientCodeUploaderComponent, WasmClientCodeUploader<ChainDriver>)]
+#[cgp_component {
+  provider: WasmClientCodeUploader,
+  context: ChainDriver,
+}]
 #[async_trait]
 pub trait CanUploadWasmClientCode: HasRuntimeType + HasErrorType
 where

@@ -3,7 +3,10 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
 
 use crate::traits::types::light_block::HasLightBlockType;
 
-#[derive_component(LightBlocksForUpdateClientBuilderComponent, LightBlocksForUpdateClientBuilder<Client>)]
+#[cgp_component {
+  provider: LightBlocksForUpdateClientBuilder,
+  context: Client,
+}]
 #[async_trait]
 pub trait CanBuildLightBlocksForUpdateClient:
     HasHeightType + HasLightBlockType + HasErrorType

@@ -10,7 +10,10 @@ pub struct Escrow;
 
 pub struct Unescrow;
 
-#[derive_component(TokenTransfererComponent, TokenTransferer<Chain>)]
+#[cgp_component {
+  provider: TokenTransferer,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanTransferToken<Mode: Async>: HasAddressType + HasAmountType + HasErrorType {
     async fn transfer_token(

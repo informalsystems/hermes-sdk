@@ -7,7 +7,11 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
-#[derive_component(InitConnectionOptionsAtComponent, ProvideInitConnectionOptionsAt<Setup>)]
+#[cgp_component {
+  name: InitConnectionOptionsAtComponent,
+  provider: ProvideInitConnectionOptionsAt,
+  context: Setup,
+}]
 pub trait HasInitConnectionOptionsAt<Target: Async, Counterparty: Async>:
     HasChainTypeAt<Target, Chain: HasInitConnectionOptionsType<ChainAt<Self, Counterparty>>>
     + HasChainTypeAt<Counterparty>
@@ -31,7 +35,7 @@ where
         + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>,
     Chain:
         HasInitConnectionOptionsType<Counterparty, InitConnectionOptions = InitConnectionOptions>,
-    Setup: HasField<Tag, Field = InitConnectionOptions>,
+    Setup: HasField<Tag, Value = InitConnectionOptions>,
 {
     fn init_connection_options(
         setup: &Setup,

@@ -3,7 +3,10 @@ use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketT
 
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 
-#[derive_component(WriteAckQuerierComponent, WriteAckQuerier<Chain>)]
+#[cgp_component {
+  provider: WriteAckQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryWriteAck<Counterparty>: HasWriteAckEvent<Counterparty> + HasErrorType
 where

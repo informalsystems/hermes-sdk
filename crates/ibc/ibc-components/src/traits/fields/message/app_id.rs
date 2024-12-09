@@ -7,7 +7,10 @@ use cgp::prelude::*;
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
 
-#[derive_component(IbcMessageAppIdGetterComponent, IbcMessageAppIdGetter<Chain>)]
+#[cgp_component {
+  provider: IbcMessageAppIdGetter,
+  context: Chain,
+}]
 pub trait HasIbcMessageAppIds<Counterparty>:
     HasIbcMessageHeaderType<Counterparty> + HasAppIdType<Counterparty>
 where
@@ -23,8 +26,8 @@ impl<Chain, Counterparty, Provider> IbcMessageAppIdGetter<Chain, Counterparty>
 where
     Chain: HasIbcMessageHeaderType<Counterparty> + HasAppIdType<Counterparty>,
     Counterparty: HasAppIdType<Chain>,
-    Provider: FieldGetter<Chain::IbcMessageHeader, symbol!("src_app_id"), Field = Chain::AppId>
-        + FieldGetter<Chain::IbcMessageHeader, symbol!("dst_app_id"), Field = Counterparty::AppId>,
+    Provider: FieldGetter<Chain::IbcMessageHeader, symbol!("src_app_id"), Value = Chain::AppId>
+        + FieldGetter<Chain::IbcMessageHeader, symbol!("dst_app_id"), Value = Counterparty::AppId>,
 {
     fn ibc_message_src_app_id(packet_header: &Chain::IbcMessageHeader) -> &Chain::AppId {
         Provider::get_field(packet_header, PhantomData::<symbol!("src_app_id")>)

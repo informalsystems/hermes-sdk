@@ -2,7 +2,11 @@ use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(ClientStateTypeComponent, ProvideClientStateType<Chain>)]
+#[cgp_component {
+  name: ClientStateTypeComponent,
+  provider: ProvideClientStateType,
+  context: Chain,
+}]
 pub trait HasClientStateType<Counterparty>: Async {
     /**
         The client state of the `Self` chain's client on the `Counterparty` chain

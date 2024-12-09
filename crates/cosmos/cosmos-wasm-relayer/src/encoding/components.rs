@@ -19,7 +19,7 @@ use crate::encoding::encode::WasmCosmosEncoderComponents;
 use crate::encoding::encode_mut::WasmCosmosEncodeMutComponents;
 use crate::encoding::type_url::WasmCosmosTypeUrlSchemas;
 
-define_components! {
+cgp_preset! {
     WasmCosmosEncodingComponents {
         [
             EncodedTypeComponent,

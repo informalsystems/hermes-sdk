@@ -1,6 +1,5 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
@@ -8,6 +7,8 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_encoding_components::types::AsBytes;
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use hermes_solomachine_chain_components::encoding::components::*;
@@ -23,17 +24,19 @@ impl HasComponents for SolomachineEncoding {
 }
 
 with_solomachine_encoding_components! {
-    delegate_components! {
-        SolomachineEncodingComponents2 {
-            @SolomachineEncodingComponents: SolomachineEncodingComponents,
+    | Components | {
+        delegate_components! {
+            SolomachineEncodingComponents2 {
+                Components: SolomachineEncodingComponents,
+            }
         }
     }
 }
 
 delegate_components! {
     SolomachineEncodingComponents2 {
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
+        ErrorTypeComponent: ProvideHermesError,
+        ErrorRaiserComponent: DebugError,
     }
 }
 

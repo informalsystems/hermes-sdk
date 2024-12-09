@@ -6,14 +6,22 @@ use crate::chain::traits::types::denom::HasDenomType;
 
 pub type AmountOf<Chain> = <Chain as HasAmountType>::Amount;
 
-#[derive_component(AmountTypeComponent, ProvideAmountType<Chain>)]
+#[cgp_component {
+  name: AmountTypeComponent,
+  provider: ProvideAmountType,
+  context: Chain,
+}]
 pub trait HasAmountType: HasDenomType {
     type Amount: Debug + Display + Eq + PartialOrd + Clone + Async;
 
     fn amount_denom(amount: &Self::Amount) -> &Self::Denom;
 }
 
-#[derive_component(AmountMethodsComponent, ProvideAmountMethods<Chain>)]
+#[cgp_component {
+  name: AmountMethodsComponent,
+  provider: ProvideAmountMethods,
+  context: Chain,
+}]
 pub trait HasAmountMethods: HasAmountType + HasErrorType {
     fn add_amount(
         current: &Self::Amount,

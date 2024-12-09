@@ -5,7 +5,10 @@ use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
 use crate::traits::types::transaction::HasIbcTransactionType;
 
-#[derive_component(IbcTransactionHeaderGetterComponent, IbcTransactionHeaderGetter<Chain>)]
+#[cgp_component {
+  provider: IbcTransactionHeaderGetter,
+  context: Chain,
+}]
 pub trait HasIbcTransactionMessages<Counterparty, App>:
     HasIbcTransactionType<Counterparty>
     + HasIbcMessageType<Counterparty, App>

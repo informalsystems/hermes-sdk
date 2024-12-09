@@ -2,7 +2,11 @@ use core::ops::DerefMut;
 
 use cgp::prelude::*;
 
-#[derive_component(MutexComponent, ProvideMutex<Runtime>)]
+#[cgp_component {
+  name: MutexComponent,
+  provider: ProvideMutex,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait HasMutex: Async {
     type Mutex<T: Async>: Async;

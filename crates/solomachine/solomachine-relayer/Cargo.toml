@@ -11,7 +11,6 @@ description  = "An IBC relayer for relaying between Cosmos and Solomachin client
 
 [dependencies]
 cgp                                     = { workspace = true }
-cgp-error-eyre                          = { workspace = true }
 hermes-runtime-components               = { workspace = true }
 hermes-solomachine-chain-components     = { workspace = true }
 hermes-cosmos-relayer                   = { workspace = true }

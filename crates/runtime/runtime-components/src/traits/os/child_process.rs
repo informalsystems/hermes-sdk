@@ -2,14 +2,21 @@ use cgp::prelude::*;
 
 use crate::traits::fs::file_path::HasFilePathType;
 
-#[derive_component(ChildProcessTypeComponent, ProvideChildProcessType<Runtime>)]
+#[cgp_component {
+  name: ChildProcessTypeComponent,
+  provider: ProvideChildProcessType,
+  context: Runtime,
+}]
 pub trait HasChildProcessType: Async {
     type ChildProcess: Async;
 }
 
 pub type ChildProcessOf<Runtime> = <Runtime as HasChildProcessType>::ChildProcess;
 
-#[derive_component(ChildProcessStarterComponent, ChildProcessStarter<Runtime>)]
+#[cgp_component {
+  provider: ChildProcessStarter,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanStartChildProcess: HasChildProcessType + HasFilePathType + HasErrorType {
     async fn start_child_process(
@@ -22,7 +29,10 @@ pub trait CanStartChildProcess: HasChildProcessType + HasFilePathType + HasError
     ) -> Result<Self::ChildProcess, Self::Error>;
 }
 
-#[derive_component(ChildProcessWaiterComponent, ChildProcessWaiter<Runtime>)]
+#[cgp_component {
+  provider: ChildProcessWaiter,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanWaitChildProcess: HasChildProcessType + HasErrorType {
     async fn wait_child_process(child_process: Self::ChildProcess) -> Result<(), Self::Error>;

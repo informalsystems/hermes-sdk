@@ -12,7 +12,7 @@ pub type GetDefaultConfigField = GetConfigField<symbol!("config_path")>;
 
 impl<App, Key, Runtime> ConfigPathGetter<App> for GetConfigField<Key>
 where
-    App: HasRuntime<Runtime = Runtime> + HasField<Key, Field = Runtime::FilePath>,
+    App: HasRuntime<Runtime = Runtime> + HasField<Key, Value = Runtime::FilePath>,
     Runtime: HasFilePathType,
     Key: Async,
 {

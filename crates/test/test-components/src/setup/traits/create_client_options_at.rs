@@ -8,7 +8,11 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
-#[derive_component(CreateClientMessageOptionsAtComponent, ProvideCreateClientMessageOptionsAt<Setup>)]
+#[cgp_component {
+  name: CreateClientMessageOptionsAtComponent,
+  provider: ProvideCreateClientMessageOptionsAt,
+  context: Setup,
+}]
 pub trait HasCreateClientMessageOptionsAt<Target: Async, Counterparty: Async>:
     HasChainTypeAt<Target> + HasChainTypeAt<Counterparty>
 where
@@ -20,7 +24,11 @@ where
     ) -> &CreateClientMessageOptionsOf<ChainAt<Self, Target>, ChainAt<Self, Counterparty>>;
 }
 
-#[derive_component(CreateClientPayloadOptionsAtComponent, ProvideCreateClientPayloadOptionsAt<Setup>)]
+#[cgp_component {
+  name: CreateClientPayloadOptionsAtComponent,
+  provider: ProvideCreateClientPayloadOptionsAt,
+  context: Setup,
+}]
 pub trait HasCreateClientPayloadOptionsAt<Target: Async, Counterparty: Async>:
     HasChainTypeAt<Target> + HasChainTypeAt<Counterparty>
 where
@@ -37,7 +45,7 @@ impl<Setup, Tag, Target: Async, Counterparty: Async, ChainA, ChainB>
 where
     Setup: HasChainTypeAt<Target, Chain = ChainA>
         + HasChainTypeAt<Counterparty, Chain = ChainB>
-        + HasField<Tag, Field = ChainA::CreateClientMessageOptions>,
+        + HasField<Tag, Value = ChainA::CreateClientMessageOptions>,
     ChainA: HasCreateClientPayloadOptionsType<ChainB> + HasCreateClientMessageOptionsType<ChainB>,
 {
     fn create_client_message_options(
@@ -53,7 +61,7 @@ impl<Setup, Tag, Target: Async, Counterparty: Async, ChainA, ChainB>
 where
     Setup: HasChainTypeAt<Target, Chain = ChainA>
         + HasChainTypeAt<Counterparty, Chain = ChainB>
-        + HasField<Tag, Field = ChainA::CreateClientPayloadOptions>,
+        + HasField<Tag, Value = ChainA::CreateClientPayloadOptions>,
     ChainA: HasCreateClientPayloadOptionsType<ChainB> + HasCreateClientMessageOptionsType<ChainB>,
 {
     fn create_client_payload_options(

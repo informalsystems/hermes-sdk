@@ -4,7 +4,10 @@ use crate::traits::types::commitment::value::HasCommitmentValueType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::types::tags::commitment::receive::ReceivePacket;
 
-#[derive_component(ReceivePacketCommitmentValueBuilderComponent, ReceivePacketCommitmentValueBuilder<Chain>)]
+#[cgp_component {
+  provider: ReceivePacketCommitmentValueBuilder,
+  context: Chain,
+}]
 pub trait CanBuildReceivePacketCommitmentValue<Counterparty>:
     HasCommitmentValueType<ReceivePacket> + HasErrorType
 where

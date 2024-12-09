@@ -4,7 +4,10 @@ use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketT
 use crate::traits::types::message::HasMessageType;
 use crate::traits::types::packets::receive::HasReceivePacketPayloadType;
 
-#[derive_component(ReceivePacketMessageBuilderComponent, ReceivePacketMessageBuilder<Chain>)]
+#[cgp_component {
+  provider: ReceivePacketMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildReceivePacketMessage<Counterparty>: HasMessageType + HasErrorType
 where

@@ -33,9 +33,11 @@ pub struct SolomachineRelay {
 pub struct SolomachineRelayComponents;
 
 with_default_relay_components! {
-    delegate_components! {
-        SolomachineRelayComponents {
-            @DefaultRelayComponents : DefaultRelayComponents,
+    | Components | {
+        delegate_components! {
+            SolomachineRelayComponents {
+                Components : DefaultRelayComponents,
+            }
         }
     }
 }

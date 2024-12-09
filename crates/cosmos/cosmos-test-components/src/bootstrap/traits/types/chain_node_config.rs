@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(ChainNodeConfigTypeComponent, ProvideChainNodeConfigType<Bootstrap>)]
+#[cgp_component {
+  name: ChainNodeConfigTypeComponent,
+  provider: ProvideChainNodeConfigType,
+  context: Bootstrap,
+}]
 pub trait HasChainNodeConfigType: Async {
     type ChainNodeConfig: Async;
 }

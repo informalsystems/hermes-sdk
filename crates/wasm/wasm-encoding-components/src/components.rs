@@ -29,7 +29,7 @@ use crate::types::client_message::WasmClientMessage;
 use crate::types::client_state::WasmClientState;
 use crate::types::consensus_state::WasmConsensusState;
 
-define_components! {
+cgp_preset! {
     WasmEncodingComponents {
         [
             EncodedTypeComponent,

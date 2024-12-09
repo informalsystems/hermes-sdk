@@ -5,7 +5,10 @@
 use cgp::prelude::*;
 pub use hermes_chain_type_components::traits::types::message::*;
 
-#[derive_component(MessageSizeEstimatorComponent, MessageSizeEstimator<Chain>)]
+#[cgp_component {
+  provider: MessageSizeEstimator,
+  context: Chain,
+}]
 pub trait CanEstimateMessageSize: HasMessageType + HasErrorType {
     /**
        Estimate the size of a message after it is encoded into raw bytes

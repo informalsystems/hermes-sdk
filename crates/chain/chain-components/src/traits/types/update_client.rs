@@ -2,7 +2,11 @@ use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(UpdateClientPayloadTypeComponent, ProvideUpdateClientPayloadType<Chain>)]
+#[cgp_component {
+  name: UpdateClientPayloadTypeComponent,
+  provider: ProvideUpdateClientPayloadType,
+  context: Chain,
+}]
 pub trait HasUpdateClientPayloadType<Counterparty>: Async {
     type UpdateClientPayload: Async;
 }

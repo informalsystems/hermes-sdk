@@ -12,7 +12,10 @@ use hermes_chain_type_components::traits::types::address::HasAddressType;
    have the caller set to the original caller forwarded from
    the core contract.
 */
-#[derive_component(CallerGetterComponent, CallerGetter<Chain>)]
+#[cgp_component {
+  provider: CallerGetter,
+  context: Chain,
+}]
 pub trait HasCaller: HasAddressType {
     fn caller(&self) -> Self::Address;
 }

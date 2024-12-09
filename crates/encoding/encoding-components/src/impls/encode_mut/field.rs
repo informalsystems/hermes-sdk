@@ -15,7 +15,7 @@ impl<Encoding, Strategy, Value, Getter, Tag, InEncoder> MutEncoder<Encoding, Str
     for EncodeFieldWithGetter<Getter, Tag, InEncoder>
 where
     Encoding: HasEncodeBufferType + HasErrorType,
-    InEncoder: MutEncoder<Encoding, Strategy, Getter::Field>,
+    InEncoder: MutEncoder<Encoding, Strategy, Getter::Value>,
     Getter: FieldGetter<Value, Tag>,
 {
     fn encode_mut(

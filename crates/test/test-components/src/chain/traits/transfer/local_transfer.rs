@@ -4,7 +4,10 @@ use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::wallet::HasWalletType;
 
-#[derive_component(TokenLocalTransferrerComponent, TokenLocalTransferrer<Chain>)]
+#[cgp_component {
+  provider: TokenLocalTransferrer,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanLocalTransferToken:
     HasWalletType + HasAddressType + HasAmountType + HasErrorType

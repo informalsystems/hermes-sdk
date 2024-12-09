@@ -1,11 +1,16 @@
 use cgp::prelude::*;
 
-#[derive_component(RetryableErrorComponent, ProvideRetryableError<Context>)]
+#[cgp_component {
+  name: RetryableErrorComponent,
+  provider: ProvideRetryableError,
+}]
 pub trait HasRetryableError: HasErrorType {
     fn is_retryable_error(e: &Self::Error) -> bool;
 }
 
-#[derive_component(MaxErrorRetryGetterComponent, MaxErrorRetryGetter<Context>)]
+#[cgp_component {
+  provider: MaxErrorRetryGetter,
+}]
 pub trait HasMaxErrorRetry: Async {
     fn max_retry(&self) -> usize;
 }

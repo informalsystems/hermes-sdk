@@ -1,8 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::core::Async;
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::*;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 
@@ -15,6 +14,7 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
 
 pub struct ConvertAndHandleIbcMessage<InApp, InHandler>(pub PhantomData<(InApp, InHandler)>);
 
+#[async_trait]
 impl<
         Chain,
         Counterparty,

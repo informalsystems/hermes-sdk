@@ -2,12 +2,19 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(BootstrapTypeComponent, ProvideBootstrapType<App>)]
+#[cgp_component {
+  name: BootstrapTypeComponent,
+  provider: ProvideBootstrapType,
+  context: App,
+}]
 pub trait HasBootstrapType: Async {
     type Bootstrap: Async;
 }
 
-#[derive_component(BootstrapLoaderComponent, BootstrapLoader<App>)]
+#[cgp_component {
+  provider: BootstrapLoader,
+  context: App,
+}]
 #[async_trait]
 pub trait CanLoadBootstrap<Args: Async>: HasBootstrapType + HasErrorType {
     async fn load_bootstrap(&self, args: &Args) -> Result<Self::Bootstrap, Self::Error>;

@@ -2,12 +2,20 @@ use core::fmt::Display;
 
 use cgp::prelude::*;
 
-#[derive_component(BlockTypeComponent, ProvideBlockType<Chain>)]
+#[cgp_component {
+  name: BlockTypeComponent,
+  provider: ProvideBlockType,
+  context: Chain,
+}]
 pub trait HasBlockType: Async {
     type Block: Async;
 }
 
-#[derive_component(BlockHashComponent, ProvideBlockHash<Chain>)]
+#[cgp_component {
+  name: BlockHashComponent,
+  provider: ProvideBlockHash,
+  context: Chain,
+}]
 pub trait HasBlockHash: HasBlockType {
     type BlockHash: Display + Async;
 

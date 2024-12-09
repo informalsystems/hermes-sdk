@@ -7,7 +7,10 @@ use tendermint::block::Height;
 
 pub type VerificationTrace = BTreeMap<Height, BTreeSet<Height>>;
 
-#[derive_component(VerificationTraceGetterComponent, VerificationTraceGetter<Client>)]
+#[cgp_component {
+  provider: VerificationTraceGetter,
+  context: Client,
+}]
 pub trait HasVerificationTrace {
     fn verification_trace(&self) -> &VerificationTrace;
 
@@ -16,7 +19,7 @@ pub trait HasVerificationTrace {
 
 impl<Client> VerificationTraceGetter<Client> for UseContext
 where
-    Client: HasFieldMut<symbol!("verification_trace"), Field = VerificationTrace>,
+    Client: HasFieldMut<symbol!("verification_trace"), Value = VerificationTrace>,
 {
     fn verification_trace(client: &Client) -> &VerificationTrace {
         client.get_field(PhantomData)

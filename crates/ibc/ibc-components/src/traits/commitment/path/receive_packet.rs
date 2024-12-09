@@ -5,7 +5,10 @@ use crate::traits::types::commitment::path::HasCommitmentPathType;
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::types::tags::commitment::receive::ReceivePacket;
 
-#[derive_component(ReceivePacketCommitmentPathBuilderComponent, ReceivePacketCommitmentPathBuilder<Chain>)]
+#[cgp_component {
+  provider: ReceivePacketCommitmentPathBuilder,
+  context: Chain,
+}]
 pub trait CanBuildReceivePacketCommitmentPath<Counterparty>:
     HasCommitmentPathType<ReceivePacket> + HasChannelIdType<Counterparty> + HasErrorType
 where

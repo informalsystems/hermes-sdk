@@ -5,7 +5,10 @@ use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::{HasBoundedRelayTypeAt, RelayAt};
 
-#[derive_component(RelaySetupComponent, RelaySetup<Setup>)]
+#[cgp_component {
+  provider: RelaySetup,
+  context: Setup,
+}]
 #[async_trait]
 pub trait CanSetupRelays<A: Async, B: Async>:
     HasBoundedRelayTypeAt<A, B> + HasBoundedRelayTypeAt<B, A> + HasErrorType

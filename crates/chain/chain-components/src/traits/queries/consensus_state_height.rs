@@ -6,7 +6,10 @@ use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType
 
 use crate::traits::types::height::HasHeightType;
 
-#[derive_component(ConsensusStateHeightQuerierComponent, ConsensusStateHeightQuerier<Chain>)]
+#[cgp_component {
+  provider: ConsensusStateHeightQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryConsensusStateHeight<Counterparty>:
     HasClientIdType<Counterparty> + HasErrorType
@@ -28,7 +31,10 @@ where
     ) -> Result<Counterparty::Height, Self::Error>;
 }
 
-#[derive_component(ConsensusStateHeightsQuerierComponent, ConsensusStateHeightsQuerier<Chain>)]
+#[cgp_component {
+  provider: ConsensusStateHeightsQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryConsensusStateHeights<Counterparty>:
     HasClientIdType<Counterparty> + HasErrorType

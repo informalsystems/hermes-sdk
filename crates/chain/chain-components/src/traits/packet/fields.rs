@@ -6,7 +6,10 @@ use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 
-#[derive_component(OutgoingPacketFieldsReaderComponent, OutgoingPacketFieldsReader<Chain>)]
+#[cgp_component {
+  provider: OutgoingPacketFieldsReader,
+  context: Chain,
+}]
 pub trait CanReadOutgoingPacketFields<Counterparty>:
     HasOutgoingPacketType<Counterparty>
     + HasChannelIdType<Counterparty>

@@ -49,7 +49,7 @@ use crate::impls::types::create_client_options::{
 };
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 
-define_components! {
+cgp_preset! {
     CosmosToCosmosComponents {
         [
             ClientStateTypeComponent,

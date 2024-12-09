@@ -4,7 +4,10 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 
-#[derive_component(ChainGenesisConfigInitializerComponent, ChainGenesisConfigInitializer<Bootstrap>)]
+#[cgp_component {
+  provider: ChainGenesisConfigInitializer,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanInitChainGenesisConfig: HasRuntime + HasChainGenesisConfigType + HasErrorType
 where

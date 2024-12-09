@@ -3,7 +3,10 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 
-#[derive_component(ConsensusStateQuerierComponent, ConsensusStateQuerier<Chain>)]
+#[cgp_component {
+  provider: ConsensusStateQuerier,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanQueryConsensusState<Counterparty>:
     HasErrorType + HasClientIdType<Counterparty>

@@ -2,7 +2,11 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 
-#[derive_component(TimeComponent, ProvideTime<Runtime>)]
+#[cgp_component {
+  name: TimeComponent,
+  provider: ProvideTime,
+  context: Runtime,
+}]
 pub trait HasTime: Async {
     type Time: Async;
 

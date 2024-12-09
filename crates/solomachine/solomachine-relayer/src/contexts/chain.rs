@@ -8,8 +8,7 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::impls::use_field::WithField;
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use eyre::{eyre, Error};
+use eyre::eyre;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
@@ -20,6 +19,9 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingTypeComponent, HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
+use hermes_error::Error;
 use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
@@ -86,9 +88,11 @@ impl DelegateComponent<MockSolomachine> for DelegateCosmosChainComponents {
 }
 
 with_solomachine_chain_components! {
-    delegate_components! {
-        SolomachineChainComponents2 {
-            @SolomachineChainComponents: SolomachineChainComponents,
+    | Components | {
+        delegate_components! {
+            SolomachineChainComponents2 {
+                Components: SolomachineChainComponents,
+            }
         }
     }
 }
@@ -96,9 +100,9 @@ with_solomachine_chain_components! {
 delegate_components! {
     SolomachineChainComponents2 {
         ErrorTypeComponent:
-            ProvideEyreError,
+            ProvideHermesError,
         ErrorRaiserComponent:
-            RaiseDebugError,
+            DebugError,
         RuntimeTypeComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [

@@ -9,12 +9,20 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
    initial balances the wallet should have in genesis, and whether the wallet
    belongs to a validator and should have an initial staked amount.
 */
-#[derive_component(WalletConfigTypeComponent, ProvideWalletConfigType<Bootstrap>)]
+#[cgp_component {
+  name: WalletConfigTypeComponent,
+  provider: ProvideWalletConfigType,
+  context: Bootstrap,
+}]
 pub trait HasWalletConfigType: Async {
     type WalletConfig: Async;
 }
 
-#[derive_component(WalletConfigFieldsComponent, WalletConfigFieldsGetter<Bootstrap>)]
+#[cgp_component {
+  name: WalletConfigFieldsComponent,
+  provider: WalletConfigFieldsGetter,
+  context: Bootstrap,
+}]
 pub trait HasWalletConfigFields: HasWalletConfigType + HasChainType
 where
     Self::Chain: HasAmountType,

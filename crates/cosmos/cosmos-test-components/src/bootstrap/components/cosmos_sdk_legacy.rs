@@ -70,7 +70,7 @@ use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain::types::wallet::CosmosTestWallet;
 
-define_components! {
+cgp_preset! {
     LegacyCosmosSdkBootstrapComponents {
         GenesisAccountAdderComponent: LegacyAddCosmosGenesisAccount,
         GenesisValidatorAdderComponent: LegacyAddCosmosGenesisValidator,

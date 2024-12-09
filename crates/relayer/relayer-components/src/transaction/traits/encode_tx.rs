@@ -6,7 +6,10 @@ use crate::transaction::traits::types::nonce::HasNonceType;
 use crate::transaction::traits::types::signer::HasSignerType;
 use crate::transaction::traits::types::transaction::HasTransactionType;
 
-#[derive_component(TxEncoderComponent, TxEncoder<TxContext>)]
+#[cgp_component {
+  provider: TxEncoder,
+  context: TxContext,
+}]
 #[async_trait]
 pub trait CanEncodeTx:
     HasSignerType + HasNonceType + HasFeeType + HasMessageType + HasTransactionType + HasErrorType

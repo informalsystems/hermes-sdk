@@ -5,7 +5,10 @@ use crate::traits::types::client_state::HasClientStateType;
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 
-#[derive_component(TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadBuilder<Chain>)]
+#[cgp_component {
+  provider: TimeoutUnorderedPacketPayloadBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildTimeoutUnorderedPacketPayload<Counterparty>:
     HasTimeoutUnorderedPacketPayloadType<Counterparty>

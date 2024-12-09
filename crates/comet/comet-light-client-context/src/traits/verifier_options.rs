@@ -4,14 +4,17 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use tendermint_light_client_verifier::options::Options;
 
-#[derive_component(VerifierOptionsGetterComponent, VerifierOptionsGetter<Client>)]
+#[cgp_component {
+  provider: VerifierOptionsGetter,
+  context: Client,
+}]
 pub trait HasVerifierOptions: Async {
     fn verifier_options(&self) -> &Options;
 }
 
 impl<Client> VerifierOptionsGetter<Client> for UseContext
 where
-    Client: Async + HasField<symbol!("verifier_options"), Field = Options>,
+    Client: Async + HasField<symbol!("verifier_options"), Value = Options>,
 {
     fn verifier_options(client: &Client) -> &Options {
         client.get_field(PhantomData)

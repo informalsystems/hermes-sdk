@@ -32,9 +32,11 @@ impl HasComponents for WasmCosmosEncoding {
 }
 
 with_wasm_cosmos_encoding_components! {
-    delegate_components! {
-        WasmCosmosEncodingContextComponents {
-            @WasmCosmosEncodingComponents: WasmCosmosEncodingComponents,
+    | Components | {
+        delegate_components! {
+            WasmCosmosEncodingContextComponents {
+                Components: WasmCosmosEncodingComponents,
+            }
         }
     }
 }

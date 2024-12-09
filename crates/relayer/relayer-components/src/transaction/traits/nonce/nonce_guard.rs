@@ -4,7 +4,11 @@ use cgp::prelude::*;
 
 use crate::transaction::traits::types::nonce::HasNonceType;
 
-#[derive_component(NonceGuardComponent, ProvideNonceGuard<Chain>)]
+#[cgp_component {
+  name: NonceGuardComponent,
+  provider: ProvideNonceGuard,
+  context: Chain,
+}]
 pub trait HasNonceGuard: HasNonceType {
     type NonceGuard<'a>: Deref<Target = Self::Nonce> + Send + Sync;
 }

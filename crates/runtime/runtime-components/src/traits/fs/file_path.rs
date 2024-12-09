@@ -2,7 +2,11 @@ use alloc::string::String;
 
 use cgp::prelude::*;
 
-#[derive_component(FilePathTypeComponent, ProvideFilePathType<Runtime>)]
+#[cgp_component {
+  name: FilePathTypeComponent,
+  provider: ProvideFilePathType,
+  context: Runtime,
+}]
 pub trait HasFilePathType: Async {
     type FilePath: Async;
 

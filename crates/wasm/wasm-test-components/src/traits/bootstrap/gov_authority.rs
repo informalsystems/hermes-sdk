@@ -5,7 +5,10 @@ use cgp::prelude::*;
 use hermes_test_components::chain::traits::types::address::{AddressOf, HasAddressType};
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-#[derive_component(GovernanceProposalAuthorityGetterComponent, GovernanceProposalAuthorityGetter<Bootstrap>)]
+#[cgp_component {
+  provider: GovernanceProposalAuthorityGetter,
+  context: Bootstrap,
+}]
 pub trait HasGovernanceProposalAuthority: HasChainType<Chain: HasAddressType> {
     fn governance_proposal_authority(&self) -> &AddressOf<Self::Chain>;
 }
@@ -13,7 +16,7 @@ pub trait HasGovernanceProposalAuthority: HasChainType<Chain: HasAddressType> {
 impl<Bootstrap, Chain> GovernanceProposalAuthorityGetter<Bootstrap> for UseContext
 where
     Bootstrap: HasChainType<Chain = Chain>
-        + HasField<symbol!("governance_proposal_authority"), Field = Chain::Address>,
+        + HasField<symbol!("governance_proposal_authority"), Value = Chain::Address>,
     Chain: HasAddressType,
 {
     fn governance_proposal_authority(bootstrap: &Bootstrap) -> &Chain::Address {

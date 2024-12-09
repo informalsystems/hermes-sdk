@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(BridgeConfigTypeComponent, ProvideBridgeConfigType<Bootstrap>)]
+#[cgp_component {
+  name: BridgeConfigTypeComponent,
+  provider: ProvideBridgeConfigType,
+  context: Bootstrap,
+}]
 pub trait HasBridgeConfigType: Async {
     type BridgeConfig: Async;
 }

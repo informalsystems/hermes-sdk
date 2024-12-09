@@ -12,7 +12,10 @@ pub struct ExecOutput {
 
 /// A context with capability to execute shell commands similar to shell scripts.
 /// The result of a successful execution is stored as string.
-#[derive_component(CommandExecutorComponent, CommandExecutor<Runtime>)]
+#[cgp_component {
+  provider: CommandExecutor,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanExecCommand: HasFilePathType + HasErrorType {
     async fn exec_command(
@@ -24,7 +27,10 @@ pub trait CanExecCommand: HasFilePathType + HasErrorType {
 
 /// A context with capability to execute shell commands similar to shell scripts.
 /// The result of a successful execution is stored as string.
-#[derive_component(CommandWithEnvsExecutorComponent, CommandWithEnvsExecutor<Runtime>)]
+#[cgp_component {
+  provider: CommandWithEnvsExecutor,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanExecCommandWithEnvs: HasFilePathType + HasErrorType {
     async fn exec_command_with_envs(

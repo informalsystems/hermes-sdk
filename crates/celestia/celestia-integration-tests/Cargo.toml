@@ -13,7 +13,6 @@ description  = """
 
 [dependencies]
 cgp                                 = { workspace = true }
-cgp-error-eyre                      = { workspace = true }
 hermes-runtime-components           = { workspace = true }
 hermes-error                        = { workspace = true }
 hermes-runtime                      = { workspace = true }

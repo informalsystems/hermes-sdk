@@ -35,9 +35,11 @@ impl HasComponents for CosmosEncoding {
 }
 
 with_cosmos_client_encoding_components! {
-    delegate_components! {
-        CosmosEncodingContextComponents {
-            @CosmosClientEncodingComponents: CosmosClientEncodingComponents,
+    | Components | {
+        delegate_components! {
+            CosmosEncodingContextComponents {
+                Components: CosmosClientEncodingComponents,
+            }
         }
     }
 }

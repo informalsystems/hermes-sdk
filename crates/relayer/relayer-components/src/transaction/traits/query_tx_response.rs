@@ -3,7 +3,10 @@ use cgp::prelude::*;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
-#[derive_component(TxResponseQuerierComponent, TxResponseQuerier<TxContext>)]
+#[cgp_component {
+  provider: TxResponseQuerier,
+  context: TxContext,
+}]
 #[async_trait]
 pub trait CanQueryTxResponse: HasTransactionHashType + HasTxResponseType + HasErrorType {
     async fn query_tx_response(

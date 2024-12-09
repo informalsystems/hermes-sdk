@@ -1,6 +1,9 @@
 use cgp::prelude::*;
 
-#[derive_component(RelayerBackgroundRunnerComponent, RelayerBackgroundRunner<RelayDriver>)]
+#[cgp_component {
+  provider: RelayerBackgroundRunner,
+  context: RelayDriver,
+}]
 #[async_trait]
 pub trait CanRunRelayerInBackground: Async + HasErrorType {
     type RunHandle<'a>: Send + Sync;

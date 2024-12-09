@@ -1,6 +1,9 @@
 use cgp::prelude::*;
 
-#[derive_component(ConverterComponent, Converter<Encoding>)]
+#[cgp_component {
+  provider: Converter,
+  context: Encoding,
+}]
 pub trait CanConvert<From, To>: HasErrorType {
     fn convert(&self, from: &From) -> Result<To, Self::Error>;
 }

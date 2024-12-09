@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp::prelude::{async_trait, HasErrorType};
+use cgp::prelude::*;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 

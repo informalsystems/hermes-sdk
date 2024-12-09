@@ -14,7 +14,11 @@ use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
 pub struct MainSink;
 
-#[derive_component(IbcMessageSenderComponent<Sink>, IbcMessageSender<Relay>)]
+#[cgp_component {
+  name: IbcMessageSenderComponent<Sink>,
+  provider: IbcMessageSender,
+  context: Relay,
+}]
 #[async_trait]
 pub trait CanSendIbcMessages<Sink, Target: RelayTarget>:
     HasTargetChainTypes<Target, TargetChain: HasMessageType + HasMessageResponseType> + HasErrorType

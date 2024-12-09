@@ -6,7 +6,10 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 
-#[derive_component(PayloadMintAmountGetterComponent, PayloadMintAmountGetter<Chain>)]
+#[cgp_component {
+  provider: PayloadMintAmountGetter,
+  context: Chain,
+}]
 pub trait HasPayloadMintAmount<Counterparty, App>:
     HasAmountType + HasPayloadDataType<Counterparty, App>
 {
@@ -19,7 +22,7 @@ impl<Chain, Counterparty, App, Provider> PayloadMintAmountGetter<Chain, Counterp
     for WithProvider<Provider>
 where
     Chain: HasAmountType + HasPayloadDataType<Counterparty, App>,
-    Provider: FieldGetter<Chain::PayloadData, symbol!("amount"), Field = Chain::Amount>,
+    Provider: FieldGetter<Chain::PayloadData, symbol!("amount"), Value = Chain::Amount>,
 {
     fn payload_mint_amount(payload_data: &Chain::PayloadData) -> &Chain::Amount {
         Provider::get_field(payload_data, PhantomData)

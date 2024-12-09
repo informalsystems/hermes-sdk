@@ -1,6 +1,9 @@
 use cgp::prelude::*;
 
-#[derive_component(RandomGeneratorComponent, RandomGenerator<Runtime>)]
+#[cgp_component {
+  provider: RandomGenerator,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanGenerateRandom<T: Async>: Async {
     async fn generate_random(&self) -> T;

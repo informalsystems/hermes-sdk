@@ -4,7 +4,10 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use toml::Value;
 
-#[derive_component(CometConfigModifierComponent, CometConfigModifier<Bootstrap>)]
+#[cgp_component {
+  provider: CometConfigModifier,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanModifyCometConfig: HasErrorType {
     fn modify_comet_config(&self, comet_config: &mut Value) -> Result<(), Self::Error>;
@@ -12,7 +15,7 @@ pub trait CanModifyCometConfig: HasErrorType {
 
 impl<Bootstrap, Modifier> CometConfigModifier<Bootstrap> for UseContext
 where
-    Bootstrap: HasErrorType + HasField<symbol!("comet_config_modifier"), Field = Modifier>,
+    Bootstrap: HasErrorType + HasField<symbol!("comet_config_modifier"), Value = Modifier>,
     Modifier: Fn(&mut Value) -> Result<(), Bootstrap::Error> + Send + Sync + 'static,
 {
     fn modify_comet_config(

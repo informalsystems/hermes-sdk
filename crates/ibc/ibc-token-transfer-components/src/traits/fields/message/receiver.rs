@@ -6,7 +6,10 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
 
-#[derive_component(MessageTransferAddressGetterComponent, MessageTransferAddressGetter<Chain>)]
+#[cgp_component {
+  provider: MessageTransferAddressGetter,
+  context: Chain,
+}]
 pub trait HasMessageTransferReceiver<Counterparty, App>:
     HasIbcMessageType<Counterparty, App>
 where
@@ -20,7 +23,7 @@ impl<Chain, Counterparty, App, Provider> MessageTransferAddressGetter<Chain, Cou
 where
     Chain: HasIbcMessageType<Counterparty, App>,
     Counterparty: HasAddressType,
-    Provider: FieldGetter<Chain::IbcMessage, symbol!("receiver"), Field = Counterparty::Address>,
+    Provider: FieldGetter<Chain::IbcMessage, symbol!("receiver"), Value = Counterparty::Address>,
 {
     fn message_transfer_receiver(message: &Chain::IbcMessage) -> &Counterparty::Address {
         Provider::get_field(message, PhantomData)

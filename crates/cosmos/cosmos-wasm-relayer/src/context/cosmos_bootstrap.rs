@@ -73,9 +73,11 @@ impl HasComponents for CosmosWithWasmClientBootstrap {
 }
 
 with_cosmos_sdk_bootstrap_components! {
-    delegate_components! {
-        CosmosWithWasmClientBootstrapComponents {
-            @CosmosSdkBootstrapComponents: CosmosSdkBootstrapComponents,
+    | Components | {
+        delegate_components! {
+            CosmosWithWasmClientBootstrapComponents {
+                Components: CosmosSdkBootstrapComponents,
+            }
         }
     }
 }

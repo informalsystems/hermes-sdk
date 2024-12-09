@@ -96,9 +96,11 @@ impl HasComponents for CosmosBuildComponents {
 }
 
 with_extra_build_components! {
-    delegate_components! {
-        CosmosBuildComponents {
-            @ExtraBuildComponents: ExtraBuildComponents<CosmosBaseBuildComponents>
+    | Components | {
+        delegate_components! {
+            CosmosBuildComponents {
+                Components: ExtraBuildComponents<CosmosBaseBuildComponents>
+            }
         }
     }
 }

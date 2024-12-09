@@ -4,7 +4,10 @@ use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use crate::chain::traits::proposal::types::vote::HasProposalVoteType;
 
-#[derive_component(VoteProposalMessageBuilderComponent, VoteProposalMessageBuilder<Chain>)]
+#[cgp_component {
+  provider: VoteProposalMessageBuilder,
+  context: Chain,
+}]
 pub trait CanBuildVoteProposalMessage:
     HasProposalIdType + HasProposalVoteType + HasMessageType
 {

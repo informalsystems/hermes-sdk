@@ -15,7 +15,7 @@ use crate::impls::commitment_root::EncodeCommitmentRoot;
 use crate::impls::height::EncodeHeight;
 use crate::impls::timestamp::EncodeTimestamp;
 
-define_components! {
+cgp_preset! {
     CosmosEncodingComponents {
         [
             EncodedTypeComponent,

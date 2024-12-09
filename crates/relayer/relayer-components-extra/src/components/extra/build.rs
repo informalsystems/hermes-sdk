@@ -32,7 +32,7 @@ use crate::build::traits::cache::HasBatchSenderCache;
 use crate::build::traits::relay_with_batch_builder::RelayWithBatchBuilder;
 use crate::components::extra::closures::batch::UseBatchMessageWorkerSpawner;
 
-define_components! {
+cgp_preset! {
     ExtraBuildComponents<BaseComponents: Async> {
         RelayFromChainsBuilderComponent: BuildRelayWithBatchWorker,
         [

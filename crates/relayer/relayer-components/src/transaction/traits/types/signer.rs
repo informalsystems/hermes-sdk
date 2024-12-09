@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(SignerTypeComponent, ProvideSignerType<Chain>)]
+#[cgp_component {
+  name: SignerTypeComponent,
+  provider: ProvideSignerType,
+  context: Chain,
+}]
 pub trait HasSignerType: Async {
     type Signer: Async;
 }

@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(BridgeDriverTypeComponent, ProvideBridgeDriverType<Bootstrap>)]
+#[cgp_component {
+  name: BridgeDriverTypeComponent,
+  provider: ProvideBridgeDriverType,
+  context: Bootstrap,
+}]
 pub trait HasBridgeDriverType: Async {
     type BridgeDriver: Async;
 }

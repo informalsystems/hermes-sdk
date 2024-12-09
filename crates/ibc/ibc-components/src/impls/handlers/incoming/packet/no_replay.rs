@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
@@ -27,6 +27,7 @@ where
     pub packet: &'a Counterparty::Packet,
 }
 
+#[async_trait]
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for DisallowDoubleReceive<InHandler>
 where

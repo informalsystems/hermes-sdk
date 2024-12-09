@@ -9,7 +9,10 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 
-#[derive_component(ChainDriverBuilderComponent, ChainDriverBuilder<Bootstrap>)]
+#[cgp_component {
+  provider: ChainDriverBuilder,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanBuildChainDriver:
     HasRuntimeType

@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(NonceTypeComponent, ProvideNonceType<Chain>)]
+#[cgp_component {
+  name: NonceTypeComponent,
+  provider: ProvideNonceType,
+  context: Chain,
+}]
 pub trait HasNonceType: Async {
     type Nonce: Async;
 }

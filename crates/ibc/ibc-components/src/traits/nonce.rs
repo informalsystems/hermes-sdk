@@ -3,7 +3,10 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 
-#[derive_component(PacketNonceAllocatorComponent, PacketNonceAllocator<Chain>)]
+#[cgp_component {
+  provider: PacketNonceAllocator,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanAllocatePacketNonce<Counterparty>:
     HasPacketNonceType<Counterparty> + HasChannelIdType<Counterparty> + HasErrorType

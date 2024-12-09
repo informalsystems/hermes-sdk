@@ -2,7 +2,11 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-#[derive_component(PacketNonceTypeComponent, ProvidePacketNonceType<Chain>)]
+#[cgp_component {
+  name: PacketNonceTypeComponent,
+  provider: ProvidePacketNonceType,
+  context: Chain,
+}]
 pub trait HasPacketNonceType<Counterparty>: Async {
     type PacketNonce: Async;
 }

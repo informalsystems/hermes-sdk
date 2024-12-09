@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(ProposalVoteTypeComponent, ProvideProposalVoteType<Chain>)]
+#[cgp_component {
+  name: ProposalVoteTypeComponent,
+  provider: ProvideProposalVoteType,
+  context: Chain,
+}]
 pub trait HasProposalVoteType: Async {
     type ProposalVote: Async;
 }

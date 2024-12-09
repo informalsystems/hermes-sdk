@@ -6,7 +6,6 @@ use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
 use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::transform::Transformer;
-use hermes_encoding_components::HList;
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::DecodeRequiredProtoField;
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::encode::EncodeLengthDelimitedProtoField;
@@ -19,7 +18,7 @@ pub struct EncodeWasmClientState;
 delegate_components! {
     EncodeWasmClientState {
         MutEncoderComponent:
-            CombineEncoders<HList![
+            CombineEncoders<Product![
                 EncodeField<
                     symbol!("data"),
                     EncodeByteField<1>,
@@ -35,7 +34,7 @@ delegate_components! {
             ]>,
         MutDecoderComponent: DecodeFrom<
             Self,
-            CombineEncoders<HList![
+            CombineEncoders<Product![
                 EncodeByteField<1>,
                 EncodeByteField<2>,
                 DecodeRequiredProtoField<3, UseContext>,
@@ -45,11 +44,11 @@ delegate_components! {
 }
 
 impl Transformer for EncodeWasmClientState {
-    type From = HList![Vec<u8>, Vec<u8>, Height];
+    type From = Product![Vec<u8>, Vec<u8>, Height];
 
     type To = WasmClientState;
 
-    fn transform(HList![data, checksum, latest_height]: Self::From) -> Self::To {
+    fn transform(product![data, checksum, latest_height]: Self::From) -> Self::To {
         WasmClientState {
             data,
             checksum,

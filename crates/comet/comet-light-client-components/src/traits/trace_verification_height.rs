@@ -1,7 +1,10 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 
-#[derive_component(VerificationHeightTracerComponent, VerificationHeightTracer<Client>)]
+#[cgp_component {
+  provider: VerificationHeightTracer,
+  context: Client,
+}]
 pub trait CanTraceVerificationHeight: HasHeightType {
     fn trace_verification_height(
         &mut self,

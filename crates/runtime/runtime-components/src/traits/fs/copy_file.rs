@@ -2,7 +2,10 @@ use cgp::prelude::*;
 
 use crate::traits::fs::file_path::HasFilePathType;
 
-#[derive_component(FileCopierComponent, FileCopier<Runtime>)]
+#[cgp_component {
+  provider: FileCopier,
+  context: Runtime,
+}]
 #[async_trait]
 pub trait CanCopyFile: HasFilePathType + HasErrorType {
     async fn copy_file(

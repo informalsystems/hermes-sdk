@@ -4,7 +4,10 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, Wallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-#[derive_component(WalletInitializerComponent, WalletInitializer<Bootstrap>)]
+#[cgp_component {
+  provider: WalletInitializer,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanInitWallet: HasRuntime + HasChainType + HasErrorType
 where

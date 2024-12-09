@@ -6,7 +6,10 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 
-#[derive_component(PayloadUnescrowAmountGetterComponent, PayloadUnescrowAmountGetter<Chain>)]
+#[cgp_component {
+  provider: PayloadUnescrowAmountGetter,
+  context: Chain,
+}]
 pub trait HasPayloadUnescrowAmount<Counterparty, App>:
     HasPayloadDataType<Counterparty, App>
 where
@@ -22,7 +25,7 @@ impl<Chain, Counterparty, App, Provider> PayloadUnescrowAmountGetter<Chain, Coun
 where
     Chain: HasPayloadDataType<Counterparty, App>,
     Counterparty: HasAmountType,
-    Provider: FieldGetter<Chain::PayloadData, symbol!("amount"), Field = Counterparty::Amount>,
+    Provider: FieldGetter<Chain::PayloadData, symbol!("amount"), Value = Counterparty::Amount>,
 {
     fn payload_unescrow_amount(payload_data: &Chain::PayloadData) -> &Counterparty::Amount {
         Provider::get_field(payload_data, PhantomData)

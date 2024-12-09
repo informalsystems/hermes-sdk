@@ -3,7 +3,10 @@ use cgp::prelude::*;
 use crate::traits::types::commitment::path::HasCommitmentPathType;
 use crate::traits::types::commitment::value::HasCommitmentValueType;
 
-#[derive_component(CommitmentStorageComponent, CommitmentStorage<Chain>)]
+#[cgp_component {
+  provider: CommitmentStorage,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanStoreCommitment<Tag>:
     HasCommitmentPathType<Tag> + HasCommitmentValueType<Tag> + HasErrorType

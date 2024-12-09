@@ -1,7 +1,11 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
-#[derive_component(IbcMessageTypeComponent, ProvideIbcMessageType<Chain>)]
+#[cgp_component {
+  name: IbcMessageTypeComponent,
+  provider: ProvideIbcMessageType,
+  context: Chain,
+}]
 pub trait HasIbcMessageType<Counterparty, App>: Async {
     type IbcMessage: Async;
 }

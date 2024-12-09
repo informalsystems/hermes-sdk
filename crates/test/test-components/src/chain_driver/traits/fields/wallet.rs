@@ -16,7 +16,11 @@ pub struct RelayerWallet;
 #[derive(Copy, Clone)]
 pub struct ValidatorWallet;
 
-#[derive_component(WalletGetterComponent, WalletGetterAt<ChainDriver>)]
+#[cgp_component {
+  name: WalletGetterComponent,
+  provider: WalletGetterAt,
+  context: ChainDriver,
+}]
 pub trait HasWalletAt<WalletKind, I: Async>: HasChainType
 where
     Self::Chain: HasWalletType,
@@ -24,7 +28,10 @@ where
     fn wallet_at(&self, _kind: WalletKind, _index: PhantomData<I>) -> &WalletOf<Self::Chain>;
 }
 
-#[derive_component(WalletsGetterComponent, WalletsGetter<ChainDriver>)]
+#[cgp_component {
+  provider: WalletsGetter,
+  context: ChainDriver,
+}]
 pub trait HasWallets: HasChainType
 where
     Self::Chain: HasWalletType,

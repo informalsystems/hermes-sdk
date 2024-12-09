@@ -6,7 +6,11 @@ use hermes_relayer_components::chain::traits::types::ibc::HasConnectionIdType;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
-#[derive_component(InitChannelOptionsAtComponent, ProvideInitChannelOptionsAt<Setup>)]
+#[cgp_component {
+  name: InitChannelOptionsAtComponent,
+  provider: ProvideInitChannelOptionsAt,
+  context: Setup,
+}]
 pub trait HasInitChannelOptionsAt<Target: Async, Counterparty: Async>:
     HasChainTypeAt<
         Target,

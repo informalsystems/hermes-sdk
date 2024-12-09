@@ -86,9 +86,11 @@ impl Deref for CosmosBootstrap {
 }
 
 with_cosmos_sdk_bootstrap_components! {
-    delegate_components! {
-        CosmosBootstrapComponents {
-            @CosmosSdkBootstrapComponents: CosmosSdkBootstrapComponents,
+    | Components | {
+        delegate_components! {
+            CosmosBootstrapComponents {
+                Components: CosmosSdkBootstrapComponents,
+            }
         }
     }
 }

@@ -8,7 +8,10 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 
-#[derive_component(GenesisWalletAdderComponent, GenesisWalletAdder<Bootstrap>)]
+#[cgp_component {
+  provider: GenesisWalletAdder,
+  context: Bootstrap,
+}]
 #[async_trait]
 pub trait CanAddWalletToGenesis:
     HasRuntime + HasChainType + HasWalletConfigType + HasErrorType

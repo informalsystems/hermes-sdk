@@ -7,7 +7,10 @@ use crate::traits::types::channel::{
 };
 use crate::traits::types::ibc::HasIbcChainTypes;
 
-#[derive_component(ChannelOpenInitMessageBuilderComponent, ChannelOpenInitMessageBuilder<Chain>)]
+#[cgp_component {
+  provider: ChannelOpenInitMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildChannelOpenInitMessage<Counterparty>:
     HasInitChannelOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
@@ -22,7 +25,10 @@ where
     ) -> Result<Self::Message, Self::Error>;
 }
 
-#[derive_component(ChannelOpenTryMessageBuilderComponent, ChannelOpenTryMessageBuilder<Chain>)]
+#[cgp_component {
+  provider: ChannelOpenTryMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildChannelOpenTryMessage<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
@@ -38,7 +44,10 @@ where
     ) -> Result<Self::Message, Self::Error>;
 }
 
-#[derive_component(ChannelOpenAckMessageBuilderComponent, ChannelOpenAckMessageBuilder<Chain>)]
+#[cgp_component {
+  provider: ChannelOpenAckMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildChannelOpenAckMessage<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
@@ -54,7 +63,10 @@ where
     ) -> Result<Self::Message, Self::Error>;
 }
 
-#[derive_component(ChannelOpenConfirmMessageBuilderComponent, ChannelOpenConfirmMessageBuilder<Chain>)]
+#[cgp_component {
+  provider: ChannelOpenConfirmMessageBuilder,
+  context: Chain,
+}]
 #[async_trait]
 pub trait CanBuildChannelOpenConfirmMessage<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType

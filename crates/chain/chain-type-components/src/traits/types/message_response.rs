@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(MessageResponseTypeComponent, ProvideMessageResponseType<Chain>)]
+#[cgp_component {
+  name: MessageResponseTypeComponent,
+  provider: ProvideMessageResponseType,
+  context: Chain,
+}]
 pub trait HasMessageResponseType: Async {
     type MessageResponse: Async;
 }

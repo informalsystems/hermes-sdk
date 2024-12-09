@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 
-#[derive_component(IbcTransactionTypeComponent, ProvideIbcTransactionType<Chain>)]
+#[cgp_component {
+  name: IbcTransactionTypeComponent,
+  provider: ProvideIbcTransactionType,
+  context: Chain,
+}]
 pub trait HasIbcTransactionType<Counterparty>: Async {
     type IbcTransaction: Async;
 }

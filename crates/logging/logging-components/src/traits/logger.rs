@@ -1,6 +1,9 @@
 use cgp::prelude::*;
 
-#[derive_component(LoggerComponent, Logger<Logging>)]
+#[cgp_component {
+  provider: Logger,
+  context: Logging,
+}]
 #[async_trait]
 pub trait CanLog<Details>: Async
 where

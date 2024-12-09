@@ -29,8 +29,8 @@ where
         + HasConsensusStateType<Chain>
         + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Payload: Async
-        + HasField<symbol!("client_state"), Field = Counterparty::ClientState>
-        + HasField<symbol!("consensus_state"), Field = Counterparty::ConsensusState>,
+        + HasField<symbol!("client_state"), Value = Counterparty::ClientState>
+        + HasField<symbol!("consensus_state"), Value = Counterparty::ConsensusState>,
     Encoding: Async
         + CanConvert<Counterparty::ClientState, Any>
         + CanConvert<Counterparty::ConsensusState, Any>,

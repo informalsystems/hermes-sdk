@@ -22,7 +22,11 @@ use crate::traits::types::timestamp::HasTimeType;
    queries can be cached without needing to know what information is contained
    inside the chain status.
 */
-#[derive_component(ChainStatusTypeComponent, ProvideChainStatusType<Chain>)]
+#[cgp_component {
+  name: ChainStatusTypeComponent,
+  provider: ProvideChainStatusType,
+  context: Chain,
+}]
 pub trait HasChainStatusType: HasHeightType + HasTimeType {
     /**
        Contains information about the current status of the blockchain.
