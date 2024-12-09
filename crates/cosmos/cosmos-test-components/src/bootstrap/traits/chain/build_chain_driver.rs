@@ -15,14 +15,11 @@ use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 }]
 #[async_trait]
 pub trait CanBuildChainDriver:
-    HasRuntimeType
-    + HasChainDriverType
+    HasRuntimeType<Runtime: HasChildProcessType>
+    + HasChainDriverType<Chain: HasWalletType>
     + HasChainGenesisConfigType
     + HasChainNodeConfigType
     + HasErrorType
-where
-    Self::Runtime: HasChildProcessType,
-    Self::Chain: HasWalletType,
 {
     async fn build_chain_driver(
         &self,

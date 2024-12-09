@@ -11,6 +11,7 @@ use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::Dyna
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
+use hermes_cosmos_test_components::bootstrap::impls::chain::build_wait::BuildAndWaitChainDriver;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
@@ -128,7 +129,7 @@ delegate_components! {
         ChainBuilderWithNodeConfigComponent:
             BuildCosmosChainWithNodeConfig,
         ChainDriverBuilderComponent:
-            BuildCosmosChainDriver,
+            BuildAndWaitChainDriver<BuildCosmosChainDriver>,
     }
 }
 
