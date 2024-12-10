@@ -23,7 +23,8 @@ fn clear_packet_test() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
     runtime.runtime.clone().block_on(async move {
-        let setup: CosmosBinaryChannelTestDriver = init_preset_bootstraps(&runtime).await?;
+        let setup: CosmosBinaryChannelTestDriver =
+            init_preset_bootstraps(&runtime, Default::default()).await?;
 
         let balance_a1 = setup
             .chain_driver_a
@@ -89,7 +90,8 @@ fn no_clear_packet_test() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
     runtime.runtime.clone().block_on(async move {
-        let setup: CosmosBinaryChannelTestDriver = init_preset_bootstraps(&runtime).await?;
+        let setup: CosmosBinaryChannelTestDriver =
+            init_preset_bootstraps(&runtime, Default::default()).await?;
 
         let balance_a1 = setup
             .chain_driver_a

@@ -12,7 +12,8 @@ fn cosmos_integration_tests() -> Result<(), Error> {
 
     // TODO: Use a test suite entry point for running multiple tests
     runtime.runtime.clone().block_on(async move {
-        let setup: CosmosBinaryChannelTestDriver = init_preset_bootstraps(&runtime).await?;
+        let setup: CosmosBinaryChannelTestDriver =
+            init_preset_bootstraps(&runtime, Default::default()).await?;
         TestIbcTransfer::run_test(&TestIbcTransfer, &setup).await?;
 
         <Result<(), Error>>::Ok(())

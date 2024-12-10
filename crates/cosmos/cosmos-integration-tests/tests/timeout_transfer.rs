@@ -22,7 +22,8 @@ fn timeout_transfer_test() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
     runtime.runtime.clone().block_on(async move {
-        let setup: CosmosBinaryChannelTestDriver = init_preset_bootstraps(&runtime).await?;
+        let setup: CosmosBinaryChannelTestDriver =
+            init_preset_bootstraps(&runtime, Default::default()).await?;
 
         let balance_a = setup
             .chain_driver_a

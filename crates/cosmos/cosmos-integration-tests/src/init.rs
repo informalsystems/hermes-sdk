@@ -4,6 +4,7 @@ use std::str::FromStr;
 
 use eyre::Report;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -75,10 +76,17 @@ pub fn build_osmosis_bootstrap(
     transfer_denom_prefix: String,
     genesis_modifier: impl Fn(&mut JsonValue) -> Result<(), Error> + Send + Sync + 'static,
     comet_config_modifier: impl Fn(&mut TomlValue) -> Result<(), Error> + Send + Sync + 'static,
+    packet_filter: PacketFilterConfig,
 ) -> LegacyCosmosBootstrap {
     let dynamic_gas_config = Some(DynamicGasConfig::new(1.1, 1.6, "osmosis", "stake"));
-
-    let cosmos_builder = CosmosBuilder::new_with_default(runtime.clone());
+    let cosmos_builder = CosmosBuilder::new(
+        Default::default(),
+        runtime.clone(),
+        Default::default(),
+        packet_filter,
+        Default::default(),
+        Default::default(),
+    );
 
     LegacyCosmosBootstrap {
         fields: Arc::new(LegacyCosmosBootstrapFields {
@@ -105,9 +113,17 @@ pub fn build_gaia_bootstrap(
     transfer_denom_prefix: String,
     genesis_modifier: impl Fn(&mut JsonValue) -> Result<(), Error> + Send + Sync + 'static,
     comet_config_modifier: impl Fn(&mut TomlValue) -> Result<(), Error> + Send + Sync + 'static,
+    packet_filter: PacketFilterConfig,
 ) -> CosmosBootstrap {
     let dynamic_gas_config = Some(DynamicGasConfig::default());
-    let cosmos_builder = CosmosBuilder::new_with_default(runtime.clone());
+    let cosmos_builder = CosmosBuilder::new(
+        Default::default(),
+        runtime.clone(),
+        Default::default(),
+        packet_filter,
+        Default::default(),
+        Default::default(),
+    );
 
     CosmosBootstrap {
         fields: Arc::new(CosmosBootstrapFields {
@@ -129,6 +145,7 @@ pub fn build_gaia_bootstrap(
 async fn setup_gaia_to_gaia(
     runtime: &HermesRuntime,
     builder: CosmosBuilder,
+    packet_filter: PacketFilterConfig,
 ) -> Result<CosmosBinaryChannelTestDriver, Error> {
     let bootstrap_chain_0 = build_gaia_bootstrap(
         runtime.clone(),
@@ -137,6 +154,7 @@ async fn setup_gaia_to_gaia(
         "coin".into(),
         |_| Ok(()),
         |_| Ok(()),
+        packet_filter.clone(),
     );
 
     let bootstrap_chain_1 = build_gaia_bootstrap(
@@ -146,6 +164,7 @@ async fn setup_gaia_to_gaia(
         "coin".into(),
         |_| Ok(()),
         |_| Ok(()),
+        packet_filter,
     );
 
     let setup = CosmosBinaryChannelSetup {
@@ -164,6 +183,7 @@ async fn setup_gaia_to_gaia(
 async fn setup_osmosis_to_osmosis(
     runtime: &HermesRuntime,
     builder: CosmosBuilder,
+    packet_filter: PacketFilterConfig,
 ) -> Result<CosmosBinaryChannelTestDriver, Error> {
     let bootstrap_chain_0 = build_osmosis_bootstrap(
         runtime.clone(),
@@ -172,6 +192,7 @@ async fn setup_osmosis_to_osmosis(
         "coin".into(),
         |_| Ok(()),
         |_| Ok(()),
+        packet_filter.clone(),
     );
 
     let bootstrap_chain_1 = build_osmosis_bootstrap(
@@ -181,6 +202,7 @@ async fn setup_osmosis_to_osmosis(
         "coin".into(),
         |_| Ok(()),
         |_| Ok(()),
+        packet_filter,
     );
 
     let setup = CosmosBinaryChannelSetup {
@@ -199,6 +221,7 @@ async fn setup_osmosis_to_osmosis(
 async fn setup_osmosis_to_gaia(
     runtime: &HermesRuntime,
     builder: CosmosBuilder,
+    packet_filter: PacketFilterConfig,
 ) -> Result<CosmosBinaryChannelTestDriver, Error> {
     let bootstrap_chain_0 = build_osmosis_bootstrap(
         runtime.clone(),
@@ -207,6 +230,7 @@ async fn setup_osmosis_to_gaia(
         "coin".into(),
         |_| Ok(()),
         |_| Ok(()),
+        packet_filter.clone(),
     );
 
     let bootstrap_chain_1 = build_gaia_bootstrap(
@@ -216,6 +240,7 @@ async fn setup_osmosis_to_gaia(
         "coin".into(),
         |_| Ok(()),
         |_| Ok(()),
+        packet_filter,
     );
 
     let setup = CosmosBinaryChannelSetup {
@@ -233,15 +258,26 @@ async fn setup_osmosis_to_gaia(
 
 pub async fn init_preset_bootstraps(
     runtime: &HermesRuntime,
+    packet_filter: PacketFilterConfig,
 ) -> Result<CosmosBinaryChannelTestDriver, Error> {
     let test_preset = env::var("TEST_PRESET")
         .unwrap_or_else(|_| "GaiaToGaia".to_string())
         .parse::<TestPreset>()?;
-    let builder = CosmosBuilder::new_with_default(runtime.clone());
+
+    let builder = CosmosBuilder::new(
+        Default::default(),
+        runtime.clone(),
+        Default::default(),
+        packet_filter.clone(),
+        Default::default(),
+        Default::default(),
+    );
 
     match test_preset {
-        TestPreset::GaiaToGaia => setup_gaia_to_gaia(runtime, builder).await,
-        TestPreset::OsmosisToOsmosis => setup_osmosis_to_osmosis(runtime, builder).await,
-        TestPreset::OsmosisToGaia => setup_osmosis_to_gaia(runtime, builder).await,
+        TestPreset::GaiaToGaia => setup_gaia_to_gaia(runtime, builder, packet_filter).await,
+        TestPreset::OsmosisToOsmosis => {
+            setup_osmosis_to_osmosis(runtime, builder, packet_filter).await
+        }
+        TestPreset::OsmosisToGaia => setup_osmosis_to_gaia(runtime, builder, packet_filter).await,
     }
 }
