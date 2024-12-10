@@ -21,7 +21,7 @@ where
         let runtime = chain_driver.runtime();
         let chain = chain_driver.chain();
 
-        for _ in 0..10 {
+        for _ in 0..30 {
             if let Ok(height) = chain.query_chain_height().await {
                 if Chain::revision_height(&height) >= H {
                     return Ok(());
@@ -32,7 +32,7 @@ where
         }
 
         Err(ChainDriver::raise_error(
-            "chain did not progress to target height within 5 seconds",
+            "chain did not progress to target height within 15 seconds",
         ))
     }
 }
