@@ -50,6 +50,3 @@ where
 pub type SrcChainOf<Relay> = <Relay as HasSrcChainType>::SrcChain;
 
 pub type DstChainOf<Relay> = <Relay as HasDstChainType>::DstChain;
-
-pub type PacketOf<Relay> =
-    <SrcChainOf<Relay> as HasOutgoingPacketType<DstChainOf<Relay>>>::OutgoingPacket;
