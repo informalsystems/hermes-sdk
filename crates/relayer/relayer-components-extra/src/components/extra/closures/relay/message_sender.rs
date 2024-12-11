@@ -12,7 +12,7 @@ use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
 };
 use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilter;
 use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, HasTargetChains,
     SourceTarget,
@@ -73,7 +73,7 @@ where
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, DestinationTarget>>,
     Components: DelegatesToExtraRelayComponents
-        + PacketFilter<Relay>
+        + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
 {

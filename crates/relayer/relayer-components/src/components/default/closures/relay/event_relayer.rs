@@ -14,7 +14,7 @@ use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::event_relayer::CanRelayEvent;
-use crate::relay::traits::packet_filter::PacketFilter;
+use crate::relay::traits::packet_filter::RelayPacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 
@@ -42,7 +42,7 @@ where
         + CanQueryCounterpartyChainId<Relay::SrcChain>
         + CanBuildPacketFromWriteAck<Relay::SrcChain>,
     Components: DelegatesToDefaultRelayComponents
-        + PacketFilter<Relay>
+        + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
     Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,

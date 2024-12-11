@@ -11,7 +11,7 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::full_rela
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::relay::traits::target::{
@@ -47,6 +47,6 @@ where
     Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>,
-    Components: DelegatesToExtraRelayComponents + PacketFilter<Relay>,
+    Components: DelegatesToExtraRelayComponents + RelayPacketFilter<Relay>,
 {
 }

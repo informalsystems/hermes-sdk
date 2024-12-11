@@ -3,13 +3,13 @@ use hermes_chain_components::traits::packet::fields::CanReadOutgoingPacketFields
 use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
-use crate::relay::traits::packet_filter::PacketFilter;
+use crate::relay::traits::packet_filter::RelayPacketFilter;
 
 pub struct MatchPacketSourceChain;
 
 pub struct MatchPacketDestinationChain;
 
-impl<Relay> PacketFilter<Relay> for MatchPacketSourceChain
+impl<Relay> RelayPacketFilter<Relay> for MatchPacketSourceChain
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,
     Relay::DstChain: CanQueryCounterpartyChainId<Relay::SrcChain>,
@@ -34,7 +34,7 @@ where
     }
 }
 
-impl<Relay> PacketFilter<Relay> for MatchPacketDestinationChain
+impl<Relay> RelayPacketFilter<Relay> for MatchPacketDestinationChain
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,
     Relay::SrcChain:

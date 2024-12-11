@@ -4,14 +4,14 @@ use cgp::prelude::HasField;
 use hermes_relayer_components::chain::traits::packet::fields::CanReadOutgoingPacketFields;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::relay::traits::chains::{HasRelayChainTypes, PacketOf};
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilter;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 
 use crate::types::messages::packet::packet_filter::PacketFilterConfig;
 
 pub struct FilterPacketWithConfig<Tag>(pub PhantomData<Tag>);
 
-impl<Relay, Tag, SrcChain, DstChain> PacketFilter<Relay> for FilterPacketWithConfig<Tag>
+impl<Relay, Tag, SrcChain, DstChain> RelayPacketFilter<Relay> for FilterPacketWithConfig<Tag>
 where
     Relay: HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
         + HasField<Tag, Value = PacketFilterConfig>,

@@ -8,7 +8,7 @@ use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
 };
 use hermes_relayer_components::relay::traits::event_relayer::CanRelayEvent;
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
@@ -37,7 +37,7 @@ where
         CanReadOutgoingPacketFields<DstChain> + UseExtraChainComponentsForEventRelayer<DstChain>,
     DstChain: UseExtraChainComponentsForEventRelayer<SrcChain>,
     Components: DelegatesToExtraRelayComponents
-        + PacketFilter<Relay>
+        + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
     Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
