@@ -29,7 +29,6 @@ use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComp
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_components::relay::impls::packet_filters::chain::FilterRelayPacketWithChains;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, ProvidePacketLockWithMutex,
 };
@@ -110,8 +109,6 @@ delegate_components! {
             UseField<symbol!("dst_client_id")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
-        RelayPacketFilterComponent:
-            FilterRelayPacketWithChains,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:

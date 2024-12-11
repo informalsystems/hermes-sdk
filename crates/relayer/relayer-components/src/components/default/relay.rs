@@ -18,6 +18,7 @@ use crate::relay::impls::event_relayers::packet_event::PacketEventRelayer;
 use crate::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use crate::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use crate::relay::impls::packet_clearers::packets::ClearAllPackets;
+use crate::relay::impls::packet_filters::chain::FilterRelayPacketWithChains;
 use crate::relay::impls::packet_relayers::ack::base_ack_packet::BaseAckPacketRelayer;
 use crate::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
 use crate::relay::impls::packet_relayers::general::full_relay::FullCycleRelayer;
@@ -44,6 +45,7 @@ pub use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayerComp
 pub use crate::relay::traits::event_relayer::EventRelayerComponent;
 pub use crate::relay::traits::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
 pub use crate::relay::traits::packet_clearer::PacketClearerComponent;
+pub use crate::relay::traits::packet_filter::RelayPacketFilterComponent;
 pub use crate::relay::traits::packet_relayer::PacketRelayerComponent;
 pub use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
 pub use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponent;
@@ -73,5 +75,6 @@ cgp_preset! {
         ConnectionInitializerComponent: InitializeConnection,
         ConnectionOpenTryRelayerComponent: RelayConnectionOpenTry,
         ConnectionOpenHandshakeRelayerComponent: RelayConnectionOpenHandshake,
+        RelayPacketFilterComponent: FilterRelayPacketWithChains,
     }
 }
