@@ -7,7 +7,6 @@ use cgp::core::types::impls::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_cosmos_chain_components::impls::relay::packet_filter::FilterPacketWithConfig;
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
@@ -30,6 +29,7 @@ use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComp
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
+use hermes_relayer_components::relay::impls::packet_filters::chain::FilterRelayPacketWithChains;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, ProvidePacketLockWithMutex,
 };
@@ -111,7 +111,7 @@ delegate_components! {
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
         RelayPacketFilterComponent:
-            FilterPacketWithConfig<symbol!("packet_filter")>,
+            FilterRelayPacketWithChains,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:

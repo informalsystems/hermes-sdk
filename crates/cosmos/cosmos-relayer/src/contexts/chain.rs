@@ -15,7 +15,6 @@ use hermes_chain_type_components::traits::types::event::HasEventType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_components::impls::relay::packet_filter::FilterPacketWithConfig;
 use hermes_cosmos_chain_components::impls::types::config::{CosmosChainConfig, EventSourceMode};
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
@@ -44,8 +43,7 @@ use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPr
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::packet::filter::{
-    CanFilterIncomingPacket, CanFilterOutgoingPacket, IncomingPacketFilterComponent,
-    OutgoingPacketFilterComponent,
+    CanFilterIncomingPacket, CanFilterOutgoingPacket,
 };
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
@@ -178,11 +176,6 @@ delegate_components! {
             WasmClientCodeUploaderComponent,
         ]:
             WasmChainComponents,
-        [
-            OutgoingPacketFilterComponent,
-            IncomingPacketFilterComponent,
-        ]:
-            FilterPacketWithConfig<symbol!("packet_filter")>,
     }
 }
 
