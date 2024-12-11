@@ -1,9 +1,6 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::{HasErrorType, HasField};
-use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_relayer_components::chain::traits::packet::fields::CanReadOutgoingPacketFields;
 use hermes_relayer_components::chain::traits::packet::filter::OutgoingPacketFilter;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
@@ -43,11 +40,6 @@ where
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
         + HasField<Tag, Value = PacketFilterConfig>
         + HasErrorType,
-    Counterparty: HasHeightType
-        + HasTimeoutType
-        + HasChainIdType
-        + HasChannelIdType<Chain>
-        + HasPortIdType<Chain>,
 {
     async fn should_relay_outgoing_packet(
         chain: &Chain,
