@@ -60,8 +60,8 @@ pub struct CosmosRelayFields {
     pub client_id_a: ClientId,
     pub client_id_b: ClientId,
     pub packet_lock_mutex: PacketMutexOf<CosmosRelay>,
-    pub src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
-    pub dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
+    pub message_batch_sender_a: MessageBatchSenderOf<CosmosRelay, Index<0>>,
+    pub message_batch_sender_b: MessageBatchSenderOf<CosmosRelay, Index<1>>,
 }
 
 pub trait HasCosmosRelayFields: Send + Sync + 'static {
@@ -99,8 +99,8 @@ impl CosmosRelay {
                 chain_b: dst_chain,
                 client_id_a: src_client_id,
                 client_id_b: dst_client_id,
-                src_chain_message_batch_sender,
-                dst_chain_message_batch_sender,
+                message_batch_sender_a: src_chain_message_batch_sender,
+                message_batch_sender_b: dst_chain_message_batch_sender,
                 packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
             }),
         };
@@ -127,13 +127,6 @@ delegate_components! {
         ]:
             WithType<CosmosChain>,
         [
-            ChainTypeAtComponent<Src>,
-            ChainTypeAtComponent<Dst>,
-            ChainGetterAtComponent<Src>,
-            ChainGetterAtComponent<Dst>,
-        ]:
-            SelectRelayAToB,
-        [
             LoggerTypeComponent,
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
@@ -153,10 +146,19 @@ delegate_components! {
             UseField<symbol!("client_id_b")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
-        MessageBatchSenderGetterComponent<Src>:
-            UseField<symbol!("src_chain_message_batch_sender")>,
-        MessageBatchSenderGetterComponent<Dst>:
-            UseField<symbol!("dst_chain_message_batch_sender")>,
+        MessageBatchSenderGetterComponent<Index<0>>:
+            UseField<symbol!("message_batch_sender_a")>,
+        MessageBatchSenderGetterComponent<Index<1>>:
+            UseField<symbol!("message_batch_sender_b")>,
+        [
+            ChainTypeAtComponent<Src>,
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Src>,
+            ChainGetterAtComponent<Dst>,
+            MessageBatchSenderGetterComponent<Src>,
+            MessageBatchSenderGetterComponent<Dst>,
+        ]:
+            SelectRelayAToB,
     }
 }
 
