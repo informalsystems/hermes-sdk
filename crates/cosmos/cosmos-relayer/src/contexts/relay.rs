@@ -28,7 +28,7 @@ use hermes_relayer_components::relay::impls::packet_lock::{
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelay;
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
+use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilterComponent;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
@@ -152,7 +152,7 @@ delegate_components! {
             UseField<symbol!("src_chain_message_batch_sender")>,
         MessageBatchSenderGetterComponent<Dst>:
             UseField<symbol!("dst_chain_message_batch_sender")>,
-        PacketFilterComponent:
+        RelayPacketFilterComponent:
             FilterPacketWithConfig<symbol!("packet_filter")>,
     }
 }

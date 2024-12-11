@@ -18,3 +18,29 @@ pub trait HasOutgoingPacketType<Counterparty>: Async {
     */
     type OutgoingPacket: Async;
 }
+
+pub trait HasIncomingPacketType<Counterparty>: Sized + Async {
+    type IncomingPacket: Async;
+}
+
+impl<Chain, Counterparty> HasIncomingPacketType<Counterparty> for Chain
+where
+    Chain: Async,
+    Counterparty: HasOutgoingPacketType<Chain>,
+{
+    type IncomingPacket = Counterparty::OutgoingPacket;
+}
+
+pub trait CanUseIncomingPacketType<Counterparty>:
+    HasIncomingPacketType<Counterparty, IncomingPacket = Counterparty::OutgoingPacket>
+where
+    Counterparty: HasOutgoingPacketType<Self>,
+{
+}
+
+impl<Chain, Counterparty> CanUseIncomingPacketType<Counterparty> for Chain
+where
+    Chain: Async,
+    Counterparty: HasOutgoingPacketType<Chain>,
+{
+}

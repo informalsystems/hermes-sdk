@@ -34,7 +34,7 @@ use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
+use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilterComponent;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::with_default_relay_components;
@@ -110,7 +110,7 @@ delegate_components! {
             UseField<symbol!("dst_client_id")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
-        PacketFilterComponent:
+        RelayPacketFilterComponent:
             FilterPacketWithConfig<symbol!("packet_filter")>,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
