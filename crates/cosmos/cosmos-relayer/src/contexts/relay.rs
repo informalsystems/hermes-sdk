@@ -7,8 +7,6 @@ use cgp::core::field::impls::use_field::{UseField, WithField};
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_cosmos_chain_components::impls::relay::packet_filter::FilterPacketWithConfig;
-use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -22,6 +20,7 @@ use hermes_relayer_components::multi::traits::chain_at::{
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
+use hermes_relayer_components::relay::impls::packet_filters::chain::FilterRelayPacketWithChains;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, PacketMutexOf, ProvidePacketLockWithMutex,
 };
@@ -58,7 +57,6 @@ pub struct CosmosRelayFields {
     pub dst_chain: CosmosChain,
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
-    pub packet_filter: PacketFilterConfig,
     pub packet_lock_mutex: PacketMutexOf<CosmosRelay>,
     pub src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
     pub dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
@@ -89,7 +87,6 @@ impl CosmosRelay {
         dst_chain: CosmosChain,
         src_client_id: ClientId,
         dst_client_id: ClientId,
-        packet_filter: PacketFilterConfig,
         src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
     ) -> Self {
@@ -100,7 +97,6 @@ impl CosmosRelay {
                 dst_chain,
                 src_client_id,
                 dst_client_id,
-                packet_filter,
                 src_chain_message_batch_sender,
                 dst_chain_message_batch_sender,
                 packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
@@ -153,7 +149,7 @@ delegate_components! {
         MessageBatchSenderGetterComponent<Dst>:
             UseField<symbol!("dst_chain_message_batch_sender")>,
         RelayPacketFilterComponent:
-            FilterPacketWithConfig<symbol!("packet_filter")>,
+            FilterRelayPacketWithChains,
     }
 }
 
