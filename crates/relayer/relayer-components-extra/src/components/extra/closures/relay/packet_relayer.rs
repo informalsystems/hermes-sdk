@@ -20,7 +20,7 @@ use hermes_relayer_components::relay::traits::target::{
 
 use crate::components::extra::closures::chain::packet_relayer::UseExtraChainComponentsForPacketRelayer;
 use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;
-use crate::components::extra::relay::DelegatesToExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayPreset;
 
 pub trait CanUseExtraPacketRelayer: UseExtraPacketRelayer {}
 
@@ -47,6 +47,6 @@ where
     Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>,
-    Components: DelegatesToExtraRelayComponents + RelayPacketFilter<Relay>,
+    Components: DelegatesToExtraRelayPreset + RelayPacketFilter<Relay>,
 {
 }

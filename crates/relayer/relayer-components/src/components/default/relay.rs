@@ -53,7 +53,7 @@ pub use crate::relay::traits::packet_relayers::timeout_unordered_packet::Timeout
 pub use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 
 cgp_preset! {
-    DefaultRelayComponents {
+    DefaultRelayPreset {
         IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
         TargetUpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
         PacketRelayerComponent: LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>,

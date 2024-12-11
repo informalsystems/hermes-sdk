@@ -10,7 +10,7 @@ use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::components::default::closures::relay::ack_packet_relayer::UseDefaultAckPacketRelayer;
 use crate::components::default::closures::relay::packet_relayer::UseDefaultPacketRelayer;
-use crate::components::default::relay::DelegatesToDefaultRelayComponents;
+use crate::components::default::relay::DelegatesToDefaultRelayPreset;
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::event_relayer::CanRelayEvent;
@@ -41,7 +41,7 @@ where
     DstChain: HasChainId
         + CanQueryCounterpartyChainId<Relay::SrcChain>
         + CanBuildPacketFromWriteAck<Relay::SrcChain>,
-    Components: DelegatesToDefaultRelayComponents
+    Components: DelegatesToDefaultRelayPreset
         + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,

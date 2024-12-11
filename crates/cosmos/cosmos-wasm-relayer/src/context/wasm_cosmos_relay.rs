@@ -35,7 +35,7 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::lock::Log
 use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilterComponent;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
-use hermes_relayer_components::with_default_relay_components;
+use hermes_relayer_components::with_default_relay_preset;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
@@ -115,11 +115,11 @@ delegate_components! {
     }
 }
 
-with_default_relay_components! {
+with_default_relay_preset! {
     | Components | {
         delegate_components! {
             WasmCosmosRelayComponents {
-                Components : DefaultRelayComponents,
+                Components : DefaultRelayPreset,
             }
         }
     }

@@ -15,7 +15,7 @@ use hermes_relayer_components::relay::traits::target::{DestinationTarget, Source
 use crate::components::extra::closures::chain::event_relayer::UseExtraChainComponentsForEventRelayer;
 use crate::components::extra::closures::relay::ack_packet_relayer::UseExtraAckPacketRelayer;
 use crate::components::extra::closures::relay::packet_relayer::UseExtraPacketRelayer;
-use crate::components::extra::relay::DelegatesToExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayPreset;
 
 pub trait CanUseExtraEventRelayer: UseExtraEventRelayer {}
 
@@ -36,7 +36,7 @@ where
     SrcChain:
         CanReadOutgoingPacketFields<DstChain> + UseExtraChainComponentsForEventRelayer<DstChain>,
     DstChain: UseExtraChainComponentsForEventRelayer<SrcChain>,
-    Components: DelegatesToExtraRelayComponents
+    Components: DelegatesToExtraRelayPreset
         + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,

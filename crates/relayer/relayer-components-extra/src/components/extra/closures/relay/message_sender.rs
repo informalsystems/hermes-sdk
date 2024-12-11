@@ -26,7 +26,7 @@ use hermes_runtime_components::traits::sleep::CanSleep;
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
-use crate::components::extra::relay::DelegatesToExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayPreset;
 
 pub trait UseExtraIbcMessageSender:
     HasRelayClientIds
@@ -72,7 +72,7 @@ where
         + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, DestinationTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, DestinationTarget>>,
-    Components: DelegatesToExtraRelayComponents
+    Components: DelegatesToExtraRelayPreset
         + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,

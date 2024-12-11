@@ -36,7 +36,7 @@ use hermes_relayer_components_extra::batch::traits::types::{
 };
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::{
-    ExtraRelayComponents, IsExtraRelayComponents,
+    ExtraRelayPreset, IsExtraRelayPreset,
 };
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
@@ -153,9 +153,9 @@ delegate_components! {
 
 impl<Name> DelegateComponent<Name> for CosmosRelayComponents
 where
-    Self: IsExtraRelayComponents<Name>,
+    Self: IsExtraRelayPreset<Name>,
 {
-    type Delegate = ExtraRelayComponents;
+    type Delegate = ExtraRelayPreset;
 }
 
 impl HasComponents for CosmosRelay {

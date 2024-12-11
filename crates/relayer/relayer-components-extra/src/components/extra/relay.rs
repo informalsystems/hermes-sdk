@@ -12,21 +12,21 @@ use crate::batch::impls::message_sender::SendMessagesToBatchWorker;
 pub use crate::batch::types::sink::BatchWorkerSink;
 use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
-with_default_relay_components! {
+with_default_relay_preset! {
     [
         IbcMessageSenderComponent<MainSink>,
         PacketRelayerComponent,
     ],
     | Components | {
         cgp_preset! {
-            ExtraRelayComponents {
+            ExtraRelayPreset {
                 IbcMessageSenderComponent<MainSink>: SendMessagesToBatchWorker,
                 IbcMessageSenderComponent<BatchWorkerSink>:
                     SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
                 PacketRelayerComponent:
                     LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
                 Components:
-                    DefaultRelayComponents,
+                    DefaultRelayPreset,
             }
         }
     }
