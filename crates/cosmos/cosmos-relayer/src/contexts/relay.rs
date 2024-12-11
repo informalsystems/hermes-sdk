@@ -16,9 +16,10 @@ use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
 use hermes_relayer_components::multi::traits::chain_at::{
-    ChainGetterAtComponent, ChainTypeAtComponent,
+    ChainAt, ChainGetterAtComponent, ChainTypeAtComponent,
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
+use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
@@ -41,7 +42,9 @@ use hermes_relayer_components_extra::components::extra::relay::{
     ExtraRelayPreset, IsExtraRelayPreset,
 };
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeOf, RuntimeTypeComponent,
+};
 use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::chain::CosmosChain;
@@ -54,11 +57,11 @@ pub struct CosmosRelay {
 
 #[derive(HasField)]
 pub struct CosmosRelayFields {
-    pub runtime: HermesRuntime,
-    pub chain_a: CosmosChain,
-    pub chain_b: CosmosChain,
-    pub client_id_a: ClientId,
-    pub client_id_b: ClientId,
+    pub runtime: RuntimeOf<CosmosRelay>,
+    pub chain_a: ChainAt<CosmosRelay, Index<0>>,
+    pub chain_b: ChainAt<CosmosRelay, Index<1>>,
+    pub client_id_a: ClientIdAt<CosmosRelay, Index<0>, Index<1>>,
+    pub client_id_b: ClientIdAt<CosmosRelay, Index<1>, Index<0>>,
     pub packet_lock_mutex: PacketMutexOf<CosmosRelay>,
     pub message_batch_sender_a: MessageBatchSenderOf<CosmosRelay, Index<0>>,
     pub message_batch_sender_b: MessageBatchSenderOf<CosmosRelay, Index<1>>,
