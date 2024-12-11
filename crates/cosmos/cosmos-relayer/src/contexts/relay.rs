@@ -37,7 +37,9 @@ use hermes_relayer_components_extra::batch::traits::types::{
     CanUseMessageBatchChannel, MessageBatchSenderOf,
 };
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
-use hermes_relayer_components_extra::components::extra::relay::*;
+use hermes_relayer_components_extra::components::extra::relay::{
+    ExtraRelayComponents, IsExtraRelayComponents,
+};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc::core::host::types::identifiers::ClientId;
@@ -153,14 +155,11 @@ delegate_components! {
     }
 }
 
-with_extra_relay_components! {
-    | Components | {
-        delegate_components! {
-            CosmosRelayComponents {
-                Components: ExtraRelayComponents,
-            }
-        }
-    }
+impl<Name> DelegateComponent<Name> for CosmosRelayComponents
+where
+    Self: IsExtraRelayComponents<Name>,
+{
+    type Delegate = ExtraRelayComponents;
 }
 
 impl HasComponents for CosmosRelay {
