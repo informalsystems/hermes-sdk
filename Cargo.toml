@@ -54,9 +54,6 @@ members = [
 
     "crates/mock/mock-relayer",
 
-    #"tools/integration-test",
-    #"tools/test-framework",
-
     "crates/ibc/ibc-components",
     "crates/ibc/ibc-token-transfer-components",
     "crates/ibc/ibc-mock-chain",
@@ -81,7 +78,6 @@ ibc                             = { version = "0.56.0", default-features = false
 ibc-client-tendermint           = { version = "0.56.0", default-features = false }
 ibc-proto                       = { version = "0.51.1", default-features = false }
 ibc-relayer                     = { version = "0.29.3" }
-ibc-relayer-types               = { version = "0.29.3" }
 ibc-telemetry                   = { version = "0.29.3" }
 tendermint                      = { version = "0.40" }
 tendermint-proto                = { version = "0.40" }
@@ -193,7 +189,6 @@ hermes-ibc-mock-chain                   = { version = "0.1.0" }
 # cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
 
 ibc-relayer                     = { git = "https://github.com/informalsystems/hermes.git" }
-ibc-relayer-types               = { git = "https://github.com/informalsystems/hermes.git" }
 ibc-telemetry                   = { git = "https://github.com/informalsystems/hermes.git" }
 
 hermes-chain-components             = { path = "./crates/chain/chain-components" }
