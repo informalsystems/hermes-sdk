@@ -93,16 +93,16 @@ where
 
 #[async_trait]
 pub trait CanQueryConsensusStateWithLatestHeight<Counterparty>:
-    HasClientIdType<Counterparty> + HasErrorType
-where
-    Counterparty: HasConsensusStateType<Self> + HasHeightType,
+    HasClientIdType<Counterparty>
+    + CanUseCounterparty<Counterparty, Counterparty: HasConsensusStateType<Self> + HasHeightType>
+    + HasErrorType
 {
     async fn query_consensus_state_with_latest_height(
         &self,
         tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
-        consensus_height: &Counterparty::Height,
-    ) -> Result<Counterparty::ConsensusState, Self::Error>;
+        consensus_height: &HeightOf<Counterparty>,
+    ) -> Result<ConsensusStateOf<Counterparty, Self>, Self::Error>;
 }
 
 impl<Chain, Counterparty> CanQueryConsensusStateWithLatestHeight<Counterparty> for Chain
