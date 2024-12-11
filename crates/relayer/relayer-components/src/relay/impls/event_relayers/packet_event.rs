@@ -5,7 +5,7 @@ use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{EventOf, HeightOf};
-use crate::relay::impls::packet_filters::chain::{
+use crate::relay::impls::packet_filters::target::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
