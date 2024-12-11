@@ -11,6 +11,9 @@ pub trait HasUpdateClientPayloadType<Counterparty>: Async {
     type UpdateClientPayload: Async;
 }
 
+pub type UpdateClientPayloadOf<Chain, Counterparty> =
+    <Chain as HasUpdateClientPayloadType<Counterparty>>::UpdateClientPayload;
+
 impl<Chain, Counterparty, Components, Delegate> ProvideUpdateClientPayloadType<Chain, Counterparty>
     for UseDelegate<Components>
 where

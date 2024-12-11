@@ -2,7 +2,7 @@ use crate::components::extra::closures::relay::auto_relayer::UseExtraAutoRelayer
 use crate::components::extra::closures::relay::event_relayer::UseExtraEventRelayer;
 use crate::components::extra::closures::relay::packet_relayer::UseExtraPacketRelayer;
 
-pub trait CanUseExtraRelayComponents:
+pub trait CanUseExtraRelayPreset:
     UseExtraPacketRelayer + UseExtraEventRelayer + UseExtraAutoRelayer
 {
 }

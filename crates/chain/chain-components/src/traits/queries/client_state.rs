@@ -3,8 +3,10 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::ibc::client_state::ClientStateOf;
 
 use crate::traits::queries::chain_status::CanQueryChainStatus;
 use crate::traits::types::client_state::{HasClientStateType, HasRawClientStateType};
@@ -17,16 +19,17 @@ use crate::traits::types::proof::HasCommitmentProofType;
 }]
 #[async_trait]
 pub trait CanQueryClientState<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
-where
-    Counterparty: HasClientStateType<Self>,
+    HasClientIdType<Counterparty>
+    + CanUseCounterparty<Counterparty, Counterparty: HasClientStateType<Self>>
+    + HasHeightType
+    + HasErrorType
 {
     async fn query_client_state(
         &self,
         tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
         height: &Self::Height,
-    ) -> Result<Counterparty::ClientState, Self::Error>;
+    ) -> Result<ClientStateOf<Counterparty, Self>, Self::Error>;
 }
 
 #[cgp_component {

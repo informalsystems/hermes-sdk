@@ -2,10 +2,11 @@ use alloc::vec::Vec;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 
-use crate::traits::types::update_client::HasUpdateClientPayloadType;
+use crate::traits::types::update_client::{HasUpdateClientPayloadType, UpdateClientPayloadOf};
 
 #[cgp_component {
   provider: UpdateClientMessageBuilder,
@@ -13,14 +14,15 @@ use crate::traits::types::update_client::HasUpdateClientPayloadType;
 }]
 #[async_trait]
 pub trait CanBuildUpdateClientMessage<Counterparty>:
-    HasClientIdType<Counterparty> + HasMessageType + HasErrorType
-where
-    Counterparty: HasUpdateClientPayloadType<Self>,
+    HasClientIdType<Counterparty>
+    + CanUseCounterparty<Counterparty, Counterparty: HasUpdateClientPayloadType<Self>>
+    + HasMessageType
+    + HasErrorType
 {
     async fn build_update_client_message(
         &self,
         client_id: &Self::ClientId,
-        payload: Counterparty::UpdateClientPayload,
+        payload: UpdateClientPayloadOf<Counterparty, Self>,
     ) -> Result<Vec<Self::Message>, Self::Error>;
 }
 

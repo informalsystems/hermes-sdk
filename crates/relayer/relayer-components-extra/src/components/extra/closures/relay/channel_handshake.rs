@@ -16,7 +16,7 @@ use hermes_relayer_components::relay::traits::target::{
 
 use crate::components::extra::closures::chain::channel_handshake::UseExtraChainComponentsForChannelHandshake;
 use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;
-use crate::components::extra::relay::DelegatesToExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayPreset;
 
 pub trait UseExtraChannelHandshakeRelayer: CanInitChannel + CanRelayChannelOpenHandshake
 where
@@ -35,7 +35,7 @@ where
         + for<'a> CanRaiseError<MissingChannelInitEventError<'a, Relay>>
         + for<'a> CanRaiseError<MissingChannelTryEventError<'a, Relay>>
         + UseExtraIbcMessageSender,
-    Components: DelegatesToExtraRelayComponents
+    Components: DelegatesToExtraRelayPreset
         + ChannelOpenTryRelayer<Relay>
         + ChannelOpenAckRelayer<Relay>
         + ChannelOpenConfirmRelayer<Relay>

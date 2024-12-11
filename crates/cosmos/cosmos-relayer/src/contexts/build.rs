@@ -211,6 +211,7 @@ impl CosmosBuilder {
             event_source_mode,
             self.runtime.clone(),
             self.telemetry.clone(),
+            self.packet_filter.clone(),
         );
 
         Ok(context)
@@ -231,7 +232,6 @@ impl CosmosBuilder {
             dst_chain,
             src_client_id.clone(),
             dst_client_id.clone(),
-            self.packet_filter.clone(),
             src_batch_sender,
             dst_batch_sender,
         );

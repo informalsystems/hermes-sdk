@@ -20,7 +20,7 @@ use hermes_runtime_components::traits::task::CanRunConcurrentTasks;
 
 use crate::batch::traits::types::CanUseMessageBatchChannel;
 use crate::components::extra::closures::relay::event_relayer::UseExtraEventRelayer;
-use crate::components::extra::relay::DelegatesToExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayPreset;
 
 pub trait CanUseExtraAutoRelayer: UseExtraAutoRelayer {}
 
@@ -55,7 +55,7 @@ where
     Relay::Runtime: CanSpawnTask + CanRunConcurrentTasks,
     SrcChain::Runtime: HasSubscription + CanRunConcurrentTasks + CanMapStream,
     DstChain::Runtime: HasSubscription + CanRunConcurrentTasks + CanMapStream,
-    Components: DelegatesToExtraRelayComponents
+    Components: DelegatesToExtraRelayPreset
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
 {

@@ -5,13 +5,13 @@ use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{EventOf, HeightOf};
-use crate::relay::impls::packet_filters::chain::{
+use crate::relay::impls::packet_filters::target::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayClientIds};
 use crate::relay::traits::event_relayer::EventRelayer;
-use crate::relay::traits::packet_filter::{CanFilterPackets, PacketFilter};
+use crate::relay::traits::packet_filter::{CanFilterRelayPackets, RelayPacketFilter};
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
@@ -40,7 +40,7 @@ impl<Relay> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
     Relay: HasRelayClientIds + CanRelayPacket + CanRaiseRelayChainErrors,
     Relay::SrcChain: HasSendPacketEvent<Relay::DstChain>,
-    MatchPacketDestinationChain: PacketFilter<Relay>,
+    MatchPacketDestinationChain: RelayPacketFilter<Relay>,
 {
     async fn relay_chain_event(
         relay: &Relay,
@@ -63,12 +63,12 @@ impl<Relay> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
     Relay: HasRelayClientIds
         + CanRelayAckPacket
-        + CanFilterPackets
+        + CanFilterRelayPackets
         + HasPacketLock
         + HasLogger
         + CanRaiseRelayChainErrors,
     Relay::DstChain: CanBuildPacketFromWriteAck<Relay::SrcChain>,
-    MatchPacketSourceChain: PacketFilter<Relay>,
+    MatchPacketSourceChain: RelayPacketFilter<Relay>,
     Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
     async fn relay_chain_event(

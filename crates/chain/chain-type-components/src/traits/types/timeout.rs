@@ -12,3 +12,5 @@ pub trait HasTimeoutType: HasTimeType {
 
     fn has_timed_out(time: &Self::Time, timeout: &Self::Timeout) -> bool;
 }
+
+pub type TimeoutOf<Chain> = <Chain as HasTimeoutType>::Timeout;

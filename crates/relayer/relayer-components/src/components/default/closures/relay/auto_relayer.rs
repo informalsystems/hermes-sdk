@@ -8,7 +8,7 @@ use hermes_runtime_components::traits::task::CanRunConcurrentTasks;
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;
-use crate::components::default::relay::DelegatesToDefaultRelayComponents;
+use crate::components::default::relay::DelegatesToDefaultRelayPreset;
 use crate::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, HasTargetChains,
@@ -36,7 +36,7 @@ where
     Relay::Runtime: CanRunConcurrentTasks,
     SrcChain::Runtime: HasSubscription + CanRunConcurrentTasks + CanMapStream,
     DstChain::Runtime: HasSubscription + CanRunConcurrentTasks + CanMapStream,
-    Components: DelegatesToDefaultRelayComponents
+    Components: DelegatesToDefaultRelayPreset
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
 {

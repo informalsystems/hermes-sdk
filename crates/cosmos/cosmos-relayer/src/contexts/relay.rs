@@ -7,8 +7,6 @@ use cgp::core::field::impls::use_field::{UseField, WithField};
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_cosmos_chain_components::impls::relay::packet_filter::FilterPacketWithConfig;
-use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -28,7 +26,6 @@ use hermes_relayer_components::relay::impls::packet_lock::{
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelay;
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
@@ -38,7 +35,9 @@ use hermes_relayer_components_extra::batch::traits::types::{
     CanUseMessageBatchChannel, MessageBatchSenderOf,
 };
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
-use hermes_relayer_components_extra::components::extra::relay::*;
+use hermes_relayer_components_extra::components::extra::relay::{
+    ExtraRelayPreset, IsExtraRelayPreset,
+};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc::core::host::types::identifiers::ClientId;
@@ -58,7 +57,6 @@ pub struct CosmosRelayFields {
     pub dst_chain: CosmosChain,
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
-    pub packet_filter: PacketFilterConfig,
     pub packet_lock_mutex: PacketMutexOf<CosmosRelay>,
     pub src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
     pub dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
@@ -89,7 +87,6 @@ impl CosmosRelay {
         dst_chain: CosmosChain,
         src_client_id: ClientId,
         dst_client_id: ClientId,
-        packet_filter: PacketFilterConfig,
         src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
     ) -> Self {
@@ -100,7 +97,6 @@ impl CosmosRelay {
                 dst_chain,
                 src_client_id,
                 dst_client_id,
-                packet_filter,
                 src_chain_message_batch_sender,
                 dst_chain_message_batch_sender,
                 packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
@@ -152,19 +148,14 @@ delegate_components! {
             UseField<symbol!("src_chain_message_batch_sender")>,
         MessageBatchSenderGetterComponent<Dst>:
             UseField<symbol!("dst_chain_message_batch_sender")>,
-        PacketFilterComponent:
-            FilterPacketWithConfig<symbol!("packet_filter")>,
     }
 }
 
-with_extra_relay_components! {
-    | Components | {
-        delegate_components! {
-            CosmosRelayComponents {
-                Components: ExtraRelayComponents,
-            }
-        }
-    }
+impl<Name> DelegateComponent<Name> for CosmosRelayComponents
+where
+    Self: IsExtraRelayPreset<Name>,
+{
+    type Delegate = ExtraRelayPreset;
 }
 
 impl HasComponents for CosmosRelay {

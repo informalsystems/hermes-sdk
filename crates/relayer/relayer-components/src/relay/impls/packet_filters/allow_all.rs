@@ -1,9 +1,9 @@
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
-use crate::relay::traits::packet_filter::PacketFilter;
+use crate::relay::traits::packet_filter::RelayPacketFilter;
 
 pub struct AllowAll;
 
-impl<Relay> PacketFilter<Relay> for AllowAll
+impl<Relay> RelayPacketFilter<Relay> for AllowAll
 where
     Relay: HasRelayChains,
 {

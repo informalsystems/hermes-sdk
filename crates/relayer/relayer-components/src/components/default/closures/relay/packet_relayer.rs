@@ -28,7 +28,7 @@ use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::components::default::relay::{DelegatesToDefaultRelayComponents, MainSink};
+use crate::components::default::relay::{DelegatesToDefaultRelayPreset, MainSink};
 use crate::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
@@ -36,7 +36,7 @@ use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use crate::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::ibc_message_sender::CanSendSingleIbcMessage;
-use crate::relay::traits::packet_filter::PacketFilter;
+use crate::relay::traits::packet_filter::RelayPacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
 use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
@@ -112,8 +112,8 @@ where
         + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, DestinationTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, DestinationTarget>>,
-    Components: DelegatesToDefaultRelayComponents
-        + PacketFilter<Relay>
+    Components: DelegatesToDefaultRelayPreset
+        + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, EmptyMessageResponse>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
