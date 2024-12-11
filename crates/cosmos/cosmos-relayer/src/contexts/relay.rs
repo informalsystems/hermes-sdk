@@ -55,10 +55,10 @@ pub struct CosmosRelay {
 #[derive(HasField)]
 pub struct CosmosRelayFields {
     pub runtime: HermesRuntime,
-    pub src_chain: CosmosChain,
-    pub dst_chain: CosmosChain,
-    pub src_client_id: ClientId,
-    pub dst_client_id: ClientId,
+    pub chain_a: CosmosChain,
+    pub chain_b: CosmosChain,
+    pub client_id_a: ClientId,
+    pub client_id_b: ClientId,
     pub packet_lock_mutex: PacketMutexOf<CosmosRelay>,
     pub src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
     pub dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
@@ -95,10 +95,10 @@ impl CosmosRelay {
         let relay = Self {
             fields: Arc::new(CosmosRelayFields {
                 runtime,
-                src_chain,
-                dst_chain,
-                src_client_id,
-                dst_client_id,
+                chain_a: src_chain,
+                chain_b: dst_chain,
+                client_id_a: src_client_id,
+                client_id_b: dst_client_id,
                 src_chain_message_batch_sender,
                 dst_chain_message_batch_sender,
                 packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
@@ -144,13 +144,13 @@ delegate_components! {
         PacketLockComponent:
             ProvidePacketLockWithMutex,
         ChainGetterAtComponent<Index<0>>:
-            UseField<symbol!("src_chain")>,
+            UseField<symbol!("chain_a")>,
         ChainGetterAtComponent<Index<1>>:
-            UseField<symbol!("dst_chain")>,
+            UseField<symbol!("chain_b")>,
         ClientIdAtGetterComponent<Src, Dst>:
-            UseField<symbol!("src_client_id")>,
+            UseField<symbol!("client_id_a")>,
         ClientIdAtGetterComponent<Dst, Src>:
-            UseField<symbol!("dst_client_id")>,
+            UseField<symbol!("client_id_b")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
         MessageBatchSenderGetterComponent<Src>:
