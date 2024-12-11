@@ -3,11 +3,11 @@ use core::marker::PhantomData;
 
 use cgp::prelude::CanRaiseError;
 use hermes_chain_components::traits::types::height::HasHeightType;
+use hermes_chain_components::traits::types::message::HasMessageType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::target::{
     CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, RelayTarget,
@@ -44,8 +44,8 @@ where
         + HasTargetChains<Target, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>
         + CanRaiseError<CounterpartyChain::Error>,
     InUpdateClient: TargetUpdateClientMessageBuilder<Relay, Target>,
-    TargetChain: HasIbcChainTypes<CounterpartyChain>,
-    CounterpartyChain: CanWaitChainReachHeight + HasIbcChainTypes<TargetChain>,
+    TargetChain: HasMessageType,
+    CounterpartyChain: CanWaitChainReachHeight + HasHeightType,
     Relay::Logger: for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>,
 {
     async fn build_target_update_client_messages(

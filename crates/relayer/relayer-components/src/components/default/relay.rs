@@ -24,9 +24,7 @@ use crate::relay::impls::packet_relayers::general::default::DefaultPacketRelayer
 use crate::relay::impls::packet_relayers::receive::base_receive_packet::BaseReceivePacketRelayer;
 use crate::relay::impls::packet_relayers::receive::skip_received_packet::SkipReceivedPacketRelayer;
 use crate::relay::impls::packet_relayers::timeout_unordered::timeout_unordered_packet::BaseTimeoutUnorderedPacketRelayer;
-use crate::relay::impls::update_client::build::BuildUpdateClientMessages;
-use crate::relay::impls::update_client::skip::SkipUpdateClient;
-use crate::relay::impls::update_client::wait::WaitUpdateClient;
+use crate::relay::impls::update_client::default::DefaultTargetUpdateClientMessageBuilder;
 pub use crate::relay::traits::auto_relayer::AutoRelayerComponent;
 pub use crate::relay::traits::channel::open_ack::ChannelOpenAckRelayerComponent;
 pub use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerComponent;
@@ -52,7 +50,7 @@ pub use crate::relay::traits::update_client_message_builder::TargetUpdateClientM
 cgp_preset! {
     DefaultRelayPreset {
         IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-        TargetUpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
+        TargetUpdateClientMessageBuilderComponent: DefaultTargetUpdateClientMessageBuilder,
         PacketRelayerComponent: DefaultPacketRelayer,
         ReceivePacketRelayerComponent: SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
         AckPacketRelayerComponent: BaseAckPacketRelayer,
