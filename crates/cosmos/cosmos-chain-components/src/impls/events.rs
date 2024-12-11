@@ -195,6 +195,6 @@ where
     }
 
     fn write_acknowledgement(event: &WriteAckEvent) -> &Vec<u8> {
-        &event.packet.data
+        &event.acknowledgment
     }
 }

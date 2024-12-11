@@ -17,6 +17,7 @@ fn test_cosmos_bootstrap() -> Result<(), Error> {
         "coin".into(),
         |_| Ok(()),
         |_| Ok(()),
+        Default::default(),
     ));
 
     let bootstrap_legacy = Arc::new(build_osmosis_bootstrap(
@@ -26,6 +27,7 @@ fn test_cosmos_bootstrap() -> Result<(), Error> {
         "coin".into(),
         |_| Ok(()),
         |_| Ok(()),
+        Default::default(),
     ));
 
     runtime.runtime.clone().block_on(async move {
