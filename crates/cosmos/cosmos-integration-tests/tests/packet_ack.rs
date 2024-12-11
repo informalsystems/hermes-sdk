@@ -75,6 +75,7 @@ fn packet_ack_test() -> Result<(), Error> {
             )
             .await?;
 
+        // Assert there are no pending packets and tokens have been transferred
         setup
             .chain_driver_b
             .chain
@@ -99,7 +100,6 @@ fn packet_ack_test() -> Result<(), Error> {
         )
         .await?;
 
-        // Assert there are no pending packets and tokens have been transferred
         assert!(unreceived_sequences.is_empty());
 
         // Wait for acknowledgments to be relayed

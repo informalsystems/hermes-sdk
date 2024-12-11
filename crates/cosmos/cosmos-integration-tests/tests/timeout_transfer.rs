@@ -63,7 +63,7 @@ fn timeout_transfer_test() -> Result<(), Error> {
             .await?;
 
         // Wait for timeout before asserting packets are cleared
-        // Timeout for tests is set it crates/cosmos/cosmos-test-components/src/chain/components.rs
+        // Timeout for tests is set in crates/cosmos/cosmos-test-components/src/chain/components.rs
         tokio::time::sleep(core::time::Duration::from_secs(95)).await;
 
         setup
