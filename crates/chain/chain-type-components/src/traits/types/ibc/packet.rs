@@ -4,6 +4,8 @@
 
 use cgp::prelude::*;
 
+use crate::traits::types::counterparty::CanUseCounterparty;
+
 #[cgp_component {
   name: OutgoingPacketTypeComponent,
   provider: ProvideOutgoingPacketType,
@@ -19,7 +21,14 @@ pub trait HasOutgoingPacketType<Counterparty>: Async {
     type OutgoingPacket: Async;
 }
 
-pub trait HasIncomingPacketType<Counterparty>: Sized + Async {
+pub trait HasIncomingPacketType<Counterparty>:
+    Sized
+    + Async
+    + CanUseCounterparty<
+        Counterparty,
+        Counterparty: HasOutgoingPacketType<Self, OutgoingPacket = Self::IncomingPacket>,
+    >
+{
     type IncomingPacket: Async;
 }
 
@@ -29,18 +38,4 @@ where
     Counterparty: HasOutgoingPacketType<Chain>,
 {
     type IncomingPacket = Counterparty::OutgoingPacket;
-}
-
-pub trait CanUseIncomingPacketType<Counterparty>:
-    HasIncomingPacketType<Counterparty, IncomingPacket = Counterparty::OutgoingPacket>
-where
-    Counterparty: HasOutgoingPacketType<Self>,
-{
-}
-
-impl<Chain, Counterparty> CanUseIncomingPacketType<Counterparty> for Chain
-where
-    Chain: Async,
-    Counterparty: HasOutgoingPacketType<Chain>,
-{
 }
