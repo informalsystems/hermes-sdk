@@ -1,7 +1,11 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasField;
+use cgp::prelude::{HasErrorType, HasField};
+use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_relayer_components::chain::traits::packet::fields::CanReadOutgoingPacketFields;
+use hermes_relayer_components::chain::traits::packet::filter::OutgoingPacketFilter;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::relay::traits::chains::{HasRelayChainTypes, HasRelayPacketType};
 use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilter;
@@ -27,6 +31,31 @@ where
         Ok(relay.get_field(PhantomData).is_allowed(
             SrcChain::outgoing_packet_src_port(packet),
             SrcChain::outgoing_packet_src_channel_id(packet),
+        ))
+    }
+}
+
+impl<Chain, Counterparty, Tag> OutgoingPacketFilter<Chain, Counterparty>
+    for FilterPacketWithConfig<Tag>
+where
+    Chain: CanReadOutgoingPacketFields<Counterparty>
+        + HasPortIdType<Counterparty, PortId = PortId>
+        + HasChannelIdType<Counterparty, ChannelId = ChannelId>
+        + HasField<Tag, Value = PacketFilterConfig>
+        + HasErrorType,
+    Counterparty: HasHeightType
+        + HasTimeoutType
+        + HasChainIdType
+        + HasChannelIdType<Chain>
+        + HasPortIdType<Chain>,
+{
+    async fn should_relay_outgoing_packet(
+        chain: &Chain,
+        packet: &Chain::OutgoingPacket,
+    ) -> Result<bool, Chain::Error> {
+        Ok(chain.get_field(PhantomData).is_allowed(
+            Chain::outgoing_packet_src_port(packet),
+            Chain::outgoing_packet_src_channel_id(packet),
         ))
     }
 }
