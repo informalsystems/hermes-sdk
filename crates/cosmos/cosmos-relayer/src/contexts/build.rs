@@ -211,6 +211,7 @@ impl CosmosBuilder {
             event_source_mode,
             self.runtime.clone(),
             self.telemetry.clone(),
+            self.packet_filter.clone(),
         );
 
         Ok(context)

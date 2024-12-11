@@ -25,6 +25,7 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOpt
 use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::commitment_proof::CosmosCommitmentProof;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
@@ -128,6 +129,7 @@ pub struct BaseCosmosChain {
     pub ibc_commitment_prefix: Vec<u8>,
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
+    pub packet_filter: PacketFilterConfig,
     pub nonce_mutex: Mutex<()>,
 }
 
@@ -246,6 +248,7 @@ impl CosmosChain {
         event_source_mode: EventSourceMode,
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
+        packet_filter: PacketFilterConfig,
     ) -> Self {
         let chain_id = ChainId::new(&chain_config.id).unwrap();
         let chain_version = chain_id.revision_number();
@@ -277,6 +280,7 @@ impl CosmosChain {
                 rpc_client,
                 key_entry,
                 nonce_mutex: Mutex::new(()),
+                packet_filter,
             }),
         };
 
