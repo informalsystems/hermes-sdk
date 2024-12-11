@@ -19,10 +19,12 @@ use hermes_relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeAtComponent,
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, PacketMutexOf, ProvidePacketLockWithMutex,
 };
+use hermes_relayer_components::relay::impls::selector::SelectRelayAToB;
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelay;
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
@@ -120,10 +122,17 @@ delegate_components! {
         RuntimeTypeComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
-            ChainTypeAtComponent<Src>,
-            ChainTypeAtComponent<Dst>,
+            ChainTypeAtComponent<Index<0>>,
+            ChainTypeAtComponent<Index<1>>,
         ]:
             WithType<CosmosChain>,
+        [
+            ChainTypeAtComponent<Src>,
+            ChainTypeAtComponent<Dst>,
+            ChainGetterAtComponent<Src>,
+            ChainGetterAtComponent<Dst>,
+        ]:
+            SelectRelayAToB,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,
@@ -134,9 +143,9 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
-        ChainGetterAtComponent<Src>:
+        ChainGetterAtComponent<Index<0>>:
             UseField<symbol!("src_chain")>,
-        ChainGetterAtComponent<Dst>:
+        ChainGetterAtComponent<Index<1>>:
             UseField<symbol!("dst_chain")>,
         ClientIdAtGetterComponent<Src, Dst>:
             UseField<symbol!("src_client_id")>,
