@@ -1,12 +1,11 @@
 use core::time::Duration;
 
-use ibc::core::connection::types::version::Version;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::commitment::v1::MerklePrefix;
 use ibc_proto::ibc::core::connection::v1::{
-    Counterparty, MsgConnectionOpenInit as ProtoMsgConnectionOpenInit,
+    Counterparty, MsgConnectionOpenInit as ProtoMsgConnectionOpenInit, Version,
 };
 
 use crate::methods::encode::encode_to_any;
@@ -36,7 +35,7 @@ impl DynCosmosMessage for CosmosConnectionOpenInitMessage {
         let proto_message = ProtoMsgConnectionOpenInit {
             client_id: self.client_id.as_str().to_string(),
             counterparty: Some(counterparty),
-            version: Some(self.version.clone().into()),
+            version: Some(self.version.clone()),
             delay_period: self.delay_period.as_nanos() as u64,
             signer: signer.to_string(),
         };

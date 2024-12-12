@@ -1,5 +1,7 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::message::HasMessageType;
 
 use crate::traits::types::connection::{
     HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
@@ -14,9 +16,12 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenInitMessage<Counterparty>:
-    HasInitConnectionOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
+    HasInitConnectionOptionsType<Counterparty>
+    + HasClientIdType<Counterparty>
+    + HasMessageType
+    + HasErrorType
 where
-    Counterparty: HasConnectionOpenInitPayloadType<Self> + HasIbcChainTypes<Self>,
+    Counterparty: HasConnectionOpenInitPayloadType<Self> + HasClientIdType<Self>,
 {
     async fn build_connection_open_init_message(
         &self,

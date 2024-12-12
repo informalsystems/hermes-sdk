@@ -1,4 +1,5 @@
 use cgp::core::error::CanRaiseError;
+use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_encoding_components::types::AsBytes;
@@ -14,7 +15,9 @@ use hermes_relayer_components::chain::traits::types::connection::{
     HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    HasClientIdType, HasConnectionIdType, HasIbcChainTypes,
+};
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
@@ -22,9 +25,9 @@ use hermes_relayer_components::chain::types::payloads::connection::{
 };
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
-use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
+use ibc_proto::ibc::core::connection::v1::Version;
 use prost_types::Any;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
@@ -42,7 +45,9 @@ where
     Chain: HasInitConnectionOptionsType<
             Counterparty,
             InitConnectionOptions = CosmosInitConnectionOptions,
-        > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
+        > + HasMessageType
+        + HasClientIdType<Counterparty, ClientId = ClientId>
+        + HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>
         + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
@@ -54,9 +59,9 @@ where
 {
     async fn build_connection_open_init_message(
         _chain: &Chain,
-        client_id: &Chain::ClientId,
-        counterparty_client_id: &Counterparty::ClientId,
-        init_connection_options: &Chain::InitConnectionOptions,
+        client_id: &ClientId,
+        counterparty_client_id: &ClientId,
+        init_connection_options: &CosmosInitConnectionOptions,
         counterparty_payload: ConnectionOpenInitPayload<Counterparty>,
     ) -> Result<Chain::Message, Chain::Error> {
         let client_id = client_id.clone();
@@ -64,10 +69,7 @@ where
         let counterparty_commitment_prefix = counterparty_payload.commitment_prefix;
         let delay_period = init_connection_options.delay_period;
 
-        let version = Version::compatibles()
-            .into_iter()
-            .next()
-            .ok_or_else(|| Chain::raise_error("expect default version to be present"))?;
+        let version = default_connection_version();
 
         let message = CosmosConnectionOpenInitMessage {
             client_id,
@@ -188,8 +190,8 @@ where
             .iter()
             .next()
             .cloned()
-            .or_else(|| Version::compatibles().into_iter().next())
-            .ok_or_else(|| Chain::raise_error("expect default version to be present"))?;
+            .map(Version::from)
+            .unwrap_or_else(default_connection_version);
 
         let client_state_any = chain
             .encoding()
@@ -260,5 +262,12 @@ where
         };
 
         Ok(message.to_cosmos_message().into())
+    }
+}
+
+pub fn default_connection_version() -> Version {
+    Version {
+        identifier: "1".to_string(),
+        features: vec!["ORDER_ORDERED".to_string(), "ORDER_UNORDERED".to_string()],
     }
 }

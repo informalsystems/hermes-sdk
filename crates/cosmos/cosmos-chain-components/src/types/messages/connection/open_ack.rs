@@ -1,9 +1,10 @@
 use ibc::core::client::types::Height;
-use ibc::core::connection::types::version::Version;
 use ibc::core::host::types::identifiers::ConnectionId;
 use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
-use ibc_proto::ibc::core::connection::v1::MsgConnectionOpenAck as ProtoMsgConnectionOpenAck;
+use ibc_proto::ibc::core::connection::v1::{
+    MsgConnectionOpenAck as ProtoMsgConnectionOpenAck, Version,
+};
 use prost_types::Any;
 
 use crate::methods::encode::encode_to_any;
@@ -42,7 +43,7 @@ impl DynCosmosMessage for CosmosConnectionOpenAckMessage {
             proof_client: self.proof_client.clone(),
             proof_consensus: self.proof_consensus.clone(),
             consensus_height: Some(self.proof_consensus_height.into()),
-            version: Some(self.version.clone().into()),
+            version: Some(self.version.clone()),
             signer: signer.to_string(),
             host_consensus_state_proof: Vec::new(),
         };
