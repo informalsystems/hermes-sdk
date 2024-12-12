@@ -18,7 +18,6 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::relay::*;
-use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
@@ -29,9 +28,7 @@ use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComp
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_components::relay::impls::packet_lock::{
-    PacketMutexGetterComponent, ProvidePacketLockWithMutex,
-};
+use hermes_relayer_components::relay::impls::packet_lock::PacketMutexGetterComponent;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilterComponent;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
@@ -109,10 +106,6 @@ delegate_components! {
             UseField<symbol!("dst_client_id")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
-        MaxErrorRetryGetterComponent:
-            ReturnMaxRetry<3>,
-        PacketLockComponent:
-            ProvidePacketLockWithMutex,
     }
 }
 

@@ -1,6 +1,8 @@
 pub use cgp::extra::run::RunnerComponent;
 use cgp::prelude::*;
 
+use crate::error::impls::retry::ReturnMaxRetry;
+pub use crate::error::traits::retry::MaxErrorRetryGetterComponent;
 use crate::relay::impls::auto_relayers::both_targets::RelayBothTargets;
 use crate::relay::impls::auto_relayers::event::RelayEvents;
 use crate::relay::impls::channel::open_ack::RelayChannelOpenAck;
@@ -19,6 +21,7 @@ use crate::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use crate::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use crate::relay::impls::packet_clearers::packets::ClearAllPackets;
 use crate::relay::impls::packet_filters::chain::FilterRelayPacketWithChains;
+use crate::relay::impls::packet_lock::ProvidePacketLockWithMutex;
 use crate::relay::impls::packet_relayers::ack::base_ack_packet::BaseAckPacketRelayer;
 use crate::relay::impls::packet_relayers::general::default::DefaultPacketRelayer;
 use crate::relay::impls::packet_relayers::receive::base_receive_packet::BaseReceivePacketRelayer;
@@ -41,6 +44,7 @@ pub use crate::relay::traits::event_relayer::EventRelayerComponent;
 pub use crate::relay::traits::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
 pub use crate::relay::traits::packet_clearer::PacketClearerComponent;
 pub use crate::relay::traits::packet_filter::RelayPacketFilterComponent;
+pub use crate::relay::traits::packet_lock::PacketLockComponent;
 pub use crate::relay::traits::packet_relayer::PacketRelayerComponent;
 pub use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
 pub use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponent;
@@ -71,5 +75,7 @@ cgp_preset! {
         ConnectionOpenTryRelayerComponent: RelayConnectionOpenTry,
         ConnectionOpenHandshakeRelayerComponent: RelayConnectionOpenHandshake,
         RelayPacketFilterComponent: FilterRelayPacketWithChains,
+        MaxErrorRetryGetterComponent: ReturnMaxRetry<3>,
+        PacketLockComponent: ProvidePacketLockWithMutex,
     }
 }
