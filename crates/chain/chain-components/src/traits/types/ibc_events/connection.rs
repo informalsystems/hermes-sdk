@@ -13,6 +13,7 @@ pub trait HasConnectionOpenTryEvent<Counterparty>:
     type ConnectionOpenTryEvent: Async;
 
     fn try_extract_connection_open_try_event(
+        &self,
         response: &Self::MessageResponse,
     ) -> Option<Self::ConnectionOpenTryEvent>;
 
