@@ -3,13 +3,13 @@ use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQue
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 use http::uri::InvalidUri;
-use http::Uri;
-use ibc_relayer::chain::cosmos::query::account::query_account;
-use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::error::Error as RelayerError;
-use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
+use prost::DecodeError;
+use tonic::transport::Error as TransportError;
+use tonic::Status;
 
 use crate::traits::grpc_address::HasGrpcAddress;
+use crate::types::key_types::secp256k1::Secp256k1KeyPair;
+use crate::types::transaction::account::{query_account, Account};
 
 pub struct QueryCosmosAccount;
 
@@ -18,8 +18,11 @@ where
     Chain: HasSignerType<Signer = Secp256k1KeyPair>
         + HasNonceType<Nonce = Account>
         + HasGrpcAddress
+        + CanRaiseError<DecodeError>
+        + CanRaiseError<TransportError>
         + CanRaiseError<InvalidUri>
-        + CanRaiseError<RelayerError>,
+        + CanRaiseError<Status>
+        + CanRaiseError<String>,
 {
     async fn query_nonce(
         chain: &Chain,
@@ -27,13 +30,6 @@ where
     ) -> Result<Account, Chain::Error> {
         let address = key_pair.account();
 
-        let account = query_account(
-            &Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,
-            &address,
-        )
-        .await
-        .map_err(Chain::raise_error)?;
-
-        Ok(account.into())
+        query_account(chain, address.to_string()).await
     }
 }

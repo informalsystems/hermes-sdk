@@ -12,11 +12,11 @@ use ibc::core::client::types::Height;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc::cosmos_host::IBC_QUERY_PATH;
+use ibc_proto::cosmos::base::query::v1beta1::PageRequest;
 use ibc_proto::ibc::core::client::v1::{
     IdentifiedClientState, QueryClientStatesRequest as ProtoQueryClientStatesRequest,
     QueryClientStatesResponse,
 };
-use ibc_relayer::chain::requests::{PageRequest, QueryClientStatesRequest};
 use prost::{DecodeError, Message};
 use prost_types::Any;
 
@@ -89,12 +89,12 @@ where
         chain: &Chain,
         height: &Height,
     ) -> Result<Vec<(ClientId, Any)>, Chain::Error> {
-        let request = ProtoQueryClientStatesRequest::from(QueryClientStatesRequest {
+        let request = ProtoQueryClientStatesRequest {
             pagination: Some(PageRequest {
                 limit: u32::MAX as u64,
                 ..Default::default()
             }),
-        });
+        };
 
         let data = prost::Message::encode_to_vec(&request);
 

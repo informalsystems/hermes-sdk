@@ -9,14 +9,14 @@ use hermes_relayer_components::transaction::traits::types::transaction::ProvideT
 use hermes_relayer_components::transaction::traits::types::tx_hash::ProvideTransactionHashType;
 use hermes_relayer_components::transaction::traits::types::tx_response::ProvideTxResponseType;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
-use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::chain::cosmos::types::tx::SignedTx;
-use ibc_relayer::keyring::Secp256k1KeyPair;
 use prost::Message as _;
 use tendermint::hash::Hash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
+use crate::types::key_types::secp256k1::Secp256k1KeyPair;
 use crate::types::nonce_guard::NonceGuard;
+use crate::types::transaction::account::Account;
+use crate::types::transaction::signed_tx::SignedTx;
 
 pub struct ProvideCosmosTransactionTypes;
 

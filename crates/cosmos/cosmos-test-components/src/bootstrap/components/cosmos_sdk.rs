@@ -23,7 +23,6 @@ use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChainType, ProvideChainType};
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc::core::host::types::identifiers::ChainId;
-use ibc_relayer::keyring::errors::Error as KeyringError;
 
 use crate::bootstrap::impls::chain::bootstrap_chain::BootstrapCosmosChain;
 use crate::bootstrap::impls::chain::start_chain::StartCosmosChain;
@@ -115,8 +114,8 @@ where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
         + CanRaiseError<Runtime::Error>
+        + CanRaiseError<String>
         + CanRaiseError<&'static str>
-        + CanRaiseError<KeyringError>
         + CanRaiseError<serde_json::Error>
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<toml::de::Error>

@@ -49,4 +49,8 @@ where
     fn client_state_has_expired(client_state: &TendermintClientState, elapsed: Duration) -> bool {
         elapsed > client_state.trusting_period
     }
+
+    fn client_state_chain_id(client_state: &TendermintClientState) -> ChainId {
+        client_state.chain_id.clone()
+    }
 }

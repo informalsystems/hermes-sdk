@@ -1,8 +1,19 @@
 use ibc_proto::cosmos::tx::v1beta1::Fee;
-use ibc_relayer::config::GasPrice;
 use serde::{Deserialize, Serialize};
 
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct GasPrice {
+    pub price: f64,
+    pub denom: String,
+}
+
+impl GasPrice {
+    pub fn new(price: f64, denom: String) -> Self {
+        Self { price, denom }
+    }
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct GasConfig {

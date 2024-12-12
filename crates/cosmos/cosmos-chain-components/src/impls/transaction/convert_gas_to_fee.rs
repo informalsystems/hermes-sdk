@@ -4,7 +4,8 @@ use cgp::prelude::HasErrorType;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
-use ibc_relayer::chain::cosmos::gas::{mul_ceil, mul_floor};
+use num_bigint::BigInt;
+use num_rational::BigRational;
 
 use crate::traits::convert_gas_to_fee::GasToFeeConverter;
 use crate::traits::eip::eip_query::CanQueryEipBaseFee;
@@ -112,4 +113,22 @@ fn adjust_estimated_gas(gas_multiplier: f64, max_gas: u64, gas_amount: u64) -> u
 
     // Bound the gas estimate by the max_gas option
     min(gas, max_gas)
+}
+
+/// Multiply `a` with `f` and round the result up to the nearest integer.
+pub fn mul_ceil(a: u64, f: f64) -> BigInt {
+    assert!(f.is_finite());
+
+    let a = BigInt::from(a);
+    let f = BigRational::from_float(f).expect("f is finite");
+    (f * a).ceil().to_integer()
+}
+
+/// Multiply `a` with `f` and round the result down to the nearest integer.
+pub fn mul_floor(a: u64, f: f64) -> BigInt {
+    assert!(f.is_finite());
+
+    let a = BigInt::from(a);
+    let f = BigRational::from_float(f).expect("f is finite");
+    (f * a).floor().to_integer()
 }

@@ -20,16 +20,16 @@ hermes-runtime-components           = { workspace = true }
 hermes-cosmos-chain-components      = { workspace = true }
 
 ibc                                 = { workspace = true }
-ibc-relayer                         = { workspace = true }
 ibc-proto                           = { workspace = true }
 
 http            = { workspace = true }
 itertools       = { workspace = true }
+prost           = { workspace = true }
+secp256k1       = { workspace = true }
 serde           = { workspace = true }
 serde_json      = { workspace = true }
-toml            = { workspace = true }
-prost           = { workspace = true }
 time            = { workspace = true }
+toml            = { workspace = true }
 tonic           = { workspace = true }
 
 hdpath              = { version = "0.6.3" }

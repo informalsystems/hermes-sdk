@@ -28,7 +28,6 @@ hermes-cosmos-integration-tests     = { workspace = true }
 hermes-celestia-test-components     = { workspace = true }
 
 ibc                                 = { workspace = true }
-ibc-relayer                         = { workspace = true }
 
 eyre            = { workspace = true }
 tokio           = { workspace = true }

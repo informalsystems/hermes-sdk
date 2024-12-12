@@ -1,6 +1,7 @@
 use core::time::Duration;
 
 use cgp::core::Async;
+use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType,
 };
@@ -24,7 +25,8 @@ impl<Chain, Counterparty> ClientStateFieldsGetter<Chain, Counterparty>
     for ProvideSolomachineClientState
 where
     Chain: HasClientStateType<Counterparty, ClientState = SolomachineClientState>
-        + HasHeightType<Height = Height>,
+        + HasHeightType<Height = Height>
+        + HasChainIdType,
 {
     fn client_state_latest_height(client_state: &SolomachineClientState) -> Height {
         Height::new(0, client_state.sequence).unwrap()
@@ -39,5 +41,10 @@ where
         _elapsed: Duration,
     ) -> bool {
         false
+    }
+
+    fn client_state_chain_id(_client_state: &SolomachineClientState) -> Chain::ChainId {
+        // Solomachine client state doesn't contain Chain ID
+        unimplemented!()
     }
 }

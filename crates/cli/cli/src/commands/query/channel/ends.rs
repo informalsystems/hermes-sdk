@@ -94,7 +94,7 @@ impl CommandRunner<HermesApp> for QueryChannelEnds {
         // channel end query path
         let channel_end_path = format!("channelEnds/ports/{port_id}/channels/{channel_id}");
 
-        let channel_end_bytes = chain
+        let channel_end_bytes: Vec<u8> = chain
             .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &query_height)
             .await?;
 

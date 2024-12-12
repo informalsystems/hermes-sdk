@@ -3,7 +3,7 @@ use core::time::Duration;
 
 use cgp::core::error::CanRaiseError;
 use hermes_cosmos_chain_components::impls::types::config::{CosmosChainConfig, EventSourceMode};
-use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::config::gas::gas_config::{GasConfig, GasPrice};
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
@@ -15,7 +15,6 @@ use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
-use ibc_relayer::config::{self, AddressType};
 use tendermint_rpc::{Error as TendermintRpcError, Url};
 
 use crate::traits::bootstrap::compat_mode::HasCompatMode;
@@ -61,7 +60,7 @@ where
             default_gas: 400_000,
             max_gas,
             gas_multiplier,
-            gas_price: config::GasPrice::new(1.0, chain_genesis_config.staking_denom.to_string()),
+            gas_price: GasPrice::new(1.0, chain_genesis_config.staking_denom.to_string()),
             max_fee,
             fee_granter,
             dynamic_gas_config: bootstrap.dynamic_gas().clone(),
@@ -76,7 +75,7 @@ where
             event_source: EventSourceMode::Push {
                 url: format!("ws://localhost:{}/websocket", chain_node_config.rpc_port),
             },
-            rpc_timeout: config::default::rpc_timeout(),
+            rpc_timeout: Duration::from_secs(10),
             account_prefix: bootstrap.account_prefix().into(),
             key_name: relayer_wallet.id.clone(),
             key_store_folder: Some(chain_node_config.chain_home_dir.join("hermes_keyring")),
@@ -86,7 +85,7 @@ where
             max_block_time: Duration::from_secs(30),
             clock_drift: Duration::from_secs(5),
             gas_config,
-            address_type: AddressType::Cosmos.to_string(),
+            address_type: "cosmos".to_string(),
             extension_options: Default::default(),
             compat_mode: bootstrap
                 .compat_mode()

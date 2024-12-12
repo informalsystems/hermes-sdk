@@ -2,9 +2,9 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
+use hermes_cosmos_chain_components::types::key_types::keyring::KeyRing;
 use ibc::core::host::types::identifiers::ChainId;
-use ibc_relayer::keyring::{KeyRing, Store};
-use oneline_eyre::eyre::{eyre, Context};
+use oneline_eyre::eyre::eyre;
 use tracing::warn;
 
 use crate::contexts::app::HermesApp;
@@ -120,28 +120,24 @@ impl CommandRunner<HermesApp> for KeysDeleteCmd {
 
 fn delete_key(config: &CosmosChainConfig, key_name: &str) -> eyre::Result<()> {
     let mut keyring = KeyRing::new_secp256k1(
-        Store::Test,
         &config.account_prefix,
-        &ChainId::new(&config.id)?.to_string().into(),
+        &ChainId::new(&config.id)?,
         &config.key_store_folder,
-    )?;
+    );
 
-    keyring.remove_key(key_name)?;
+    keyring.remove_key(key_name).map_err(|e| eyre!("{e}"))?;
 
     Ok(())
 }
 
 fn delete_all_keys(config: &CosmosChainConfig) -> eyre::Result<()> {
     let mut keyring = KeyRing::new_secp256k1(
-        Store::Test,
         &config.account_prefix,
-        &ChainId::new(&config.id)?.to_string().into(),
+        &ChainId::new(&config.id)?,
         &config.key_store_folder,
-    )?;
+    );
 
-    let keys = keyring
-        .keys()
-        .wrap_err("failed to fetch keys from keyring")?;
+    let keys = keyring.keys().map_err(|e| eyre!("{e}"))?;
 
     for (key_name, _) in keys {
         if let Err(e) = keyring.remove_key(&key_name) {

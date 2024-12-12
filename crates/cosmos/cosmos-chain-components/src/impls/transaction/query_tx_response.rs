@@ -2,10 +2,10 @@ use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerier;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
-use ibc_relayer::chain::cosmos::query::tx::query_tx_response;
-use ibc_relayer::error::Error as RelayerError;
 use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
+use tendermint_rpc::query::Query;
+use tendermint_rpc::{Client, Error as TendermintRpcError, Order};
 
 use crate::traits::rpc_client::HasRpcClient;
 
@@ -16,16 +16,26 @@ where
     Chain: HasTransactionHashType<TxHash = TxHash>
         + HasTxResponseType<TxResponse = TxResponse>
         + HasRpcClient
-        + CanRaiseError<RelayerError>,
+        + CanRaiseError<TendermintRpcError>,
 {
     async fn query_tx_response(
         chain: &Chain,
         tx_hash: &TxHash,
     ) -> Result<Option<TxResponse>, Chain::Error> {
-        let response = query_tx_response(chain.rpc_client(), chain.rpc_address(), tx_hash)
+        let query = Query::eq("tx.hash", tx_hash.to_string());
+
+        let response = chain
+            .rpc_client()
+            .tx_search(
+                query,
+                false,
+                1,
+                1, // get only the first Tx matching the query
+                Order::Ascending,
+            )
             .await
             .map_err(Chain::raise_error)?;
 
-        Ok(response)
+        Ok(response.txs.into_iter().next())
     }
 }

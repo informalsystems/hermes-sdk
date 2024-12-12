@@ -4,8 +4,8 @@ use std::collections::BTreeMap;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
+use hermes_cosmos_chain_components::types::key_types::keyring::KeyRing;
 use ibc::core::host::types::identifiers::ChainId;
-use ibc_relayer::keyring::{KeyRing, SigningKeyPair, Store};
 use oneline_eyre::eyre::eyre;
 
 use crate::contexts::app::HermesApp;
@@ -32,18 +32,21 @@ impl CommandRunner<HermesApp> for KeysListCmd {
             .ok_or_else(|| eyre!("chain `{}` not found in configuration file", self.chain_id))?;
 
         let keyring = KeyRing::new_secp256k1(
-            Store::Test,
             &chain_config.account_prefix,
-            &ChainId::new(&chain_config.id)?.to_string().into(),
+            &ChainId::new(&chain_config.id)?,
             &chain_config.key_store_folder,
-        )?;
+        );
 
         if json() {
-            let keys = keyring.keys()?.into_iter().collect::<BTreeMap<_, _>>();
+            let keys = keyring
+                .keys()
+                .map_err(|e| eyre!("{e}"))?
+                .into_iter()
+                .collect::<BTreeMap<_, _>>();
             Output::success(keys).exit()
         } else {
             let mut msg = String::new();
-            for (name, key) in keyring.keys()? {
+            for (name, key) in keyring.keys().map_err(|e| eyre!("{e}"))? {
                 let _ = write!(msg, "\n- {} ({})", name, key.account());
             }
             Output::success_msg(msg).exit()

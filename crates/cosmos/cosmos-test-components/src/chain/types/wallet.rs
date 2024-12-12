@@ -1,4 +1,4 @@
-use ibc_relayer::keyring::Secp256k1KeyPair;
+use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 
 #[derive(Clone)]
 pub struct CosmosTestWallet {

@@ -23,7 +23,6 @@ use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChainType, ProvideChainType};
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc::core::host::types::identifiers::ChainId;
-use ibc_relayer::keyring::errors::Error as KeyringError;
 
 use crate::bootstrap::components::cosmos_sdk::{CosmosSdkBootstrapComponents, *};
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
@@ -100,9 +99,9 @@ impl<Bootstrap, Runtime, Chain, ChainDriver, Components> UseLegacyCosmosSdkChain
 where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
+        + CanRaiseError<String>
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
-        + CanRaiseError<KeyringError>
         + CanRaiseError<serde_json::Error>
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<toml::de::Error>

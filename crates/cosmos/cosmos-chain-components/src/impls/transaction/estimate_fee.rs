@@ -7,10 +7,7 @@ use http::uri::InvalidUri;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::service_client::ServiceClient;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, SimulateRequest, SimulateResponse, Tx};
-use ibc_relayer::chain::cosmos::types::tx::SignedTx;
-use ibc_relayer::config::default::max_grpc_decoding_size;
-use ibc_relayer::error::Error as RelayerError;
-use prost::Message;
+use prost::{EncodeError, Message};
 use tonic::codegen::http::Uri;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
@@ -19,6 +16,7 @@ use crate::traits::convert_gas_to_fee::CanConvertGasToFee;
 use crate::traits::gas_config::HasGasConfig;
 use crate::traits::grpc_address::HasGrpcAddress;
 use crate::traits::rpc_client::HasRpcClient;
+use crate::types::transaction::signed_tx::SignedTx;
 
 pub struct EstimateCosmosTxFee;
 
@@ -55,7 +53,7 @@ where
         )
         .await
         .map_err(Chain::raise_error)?
-        .max_decoding_message_size(max_grpc_decoding_size().get_bytes() as usize);
+        .max_decoding_message_size(33554432);
 
         let response = client
             .simulate(request)
@@ -73,13 +71,15 @@ where
     }
 }
 
-pub async fn send_tx_simulate(
+pub async fn send_tx_simulate<Chain>(
     grpc_address: &Uri,
     tx: Tx,
-) -> Result<SimulateResponse, RelayerError> {
+) -> Result<SimulateResponse, Chain::Error>
+where
+    Chain: CanRaiseError<EncodeError> + CanRaiseError<TransportError> + CanRaiseError<Status>,
+{
     let mut tx_bytes = vec![];
-    prost::Message::encode(&tx, &mut tx_bytes)
-        .map_err(|e| RelayerError::protobuf_encode(String::from("Transaction"), e))?;
+    prost::Message::encode(&tx, &mut tx_bytes).map_err(Chain::raise_error)?;
 
     let req = SimulateRequest {
         tx_bytes,
@@ -88,15 +88,14 @@ pub async fn send_tx_simulate(
 
     let mut client = ServiceClient::connect(grpc_address.clone())
         .await
-        .map_err(RelayerError::grpc_transport)?;
-
-    client = client.max_decoding_message_size(max_grpc_decoding_size().get_bytes() as usize);
+        .map_err(Chain::raise_error)?
+        .max_decoding_message_size(33554432);
 
     let request = tonic::Request::new(req);
     let response = client
         .simulate(request)
         .await
-        .map_err(|e| RelayerError::grpc_status(e, "send_tx_simulate".to_owned()))?
+        .map_err(Chain::raise_error)?
         .into_inner();
 
     Ok(response)

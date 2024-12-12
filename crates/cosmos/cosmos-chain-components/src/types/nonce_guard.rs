@@ -1,7 +1,8 @@
 use core::ops::Deref;
 
 use futures::lock::MutexGuard;
-use ibc_relayer::chain::cosmos::types::account::Account;
+
+use crate::types::transaction::account::Account;
 
 pub struct NonceGuard<'a> {
     pub mutex_guard: MutexGuard<'a, ()>,

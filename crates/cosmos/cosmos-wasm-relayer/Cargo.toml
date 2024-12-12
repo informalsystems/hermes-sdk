@@ -39,8 +39,6 @@ hermes-wasm-test-components             = { workspace = true }
 
 ibc                                     = { workspace = true }
 ibc-proto                               = { workspace = true }
-ibc-relayer                             = { workspace = true }
-ibc-telemetry                           = { workspace = true }
 tendermint                              = { workspace = true, features = ["secp256k1"] }
 tendermint-proto                        = { workspace = true }
 tendermint-rpc                          = { workspace = true, features = ["http-client", "websocket-client"] }
