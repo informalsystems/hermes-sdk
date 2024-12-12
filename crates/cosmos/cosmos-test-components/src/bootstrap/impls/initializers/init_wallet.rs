@@ -1,14 +1,13 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::{Async, CanRaiseError};
+use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::exec_command::{CanExecCommand, ExecOutput};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use ibc_relayer::keyring::errors::Error as KeyringError;
-use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
 use serde_json as json;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
@@ -49,10 +48,10 @@ where
         + HasChainType<Chain = Chain>
         + HasWalletHdPath
         + HasChainCommandPath
+        + CanRaiseError<String>
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
-        + CanRaiseError<json::Error>
-        + CanRaiseError<KeyringError>,
+        + CanRaiseError<json::Error>,
     Runtime: HasFilePathType + CanExecCommand + CanWriteStringToFile,
     Chain: HasWalletType<Wallet = CosmosTestWallet>,
     OutputGetter: ExecOutputGetter,

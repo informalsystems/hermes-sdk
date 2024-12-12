@@ -1,11 +1,13 @@
 use core::time::Duration;
 
 use cgp::core::Async;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ChainId;
 
 use crate::types::client_state::WasmTendermintClientState;
 
@@ -23,7 +25,8 @@ impl<Chain, Counterparty> ClientStateFieldsGetter<Chain, Counterparty>
     for ProvideWrappedTendermintClientState
 where
     Chain: HasClientStateType<Counterparty, ClientState = WasmTendermintClientState>
-        + HasHeightType<Height = Height>,
+        + HasHeightType<Height = Height>
+        + HasChainIdType<ChainId = ChainId>,
 {
     fn client_state_latest_height(client_state: &WasmTendermintClientState) -> Height {
         client_state.tendermint_client_state.latest_height
@@ -38,5 +41,9 @@ where
         elapsed: Duration,
     ) -> bool {
         elapsed > client_state.tendermint_client_state.trusting_period
+    }
+
+    fn client_state_chain_id(client_state: &WasmTendermintClientState) -> ChainId {
+        client_state.tendermint_client_state.chain_id.clone()
     }
 }

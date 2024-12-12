@@ -7,10 +7,9 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
+use hermes_cosmos_chain_components::types::key_types::keyring::KeyRing;
+use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use ibc::core::host::types::identifiers::ChainId;
-use ibc_relayer::keyring::{
-    AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,
-};
 use oneline_eyre::eyre;
 use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
@@ -124,22 +123,24 @@ pub fn add_key(
     file: &Path,
     hd_path: &StandardHDPath,
     overwrite: bool,
-) -> eyre::Result<AnySigningKeyPair> {
-    let mut keyring = KeyRing::new_secp256k1(
-        Store::Test,
+) -> eyre::Result<Secp256k1KeyPair> {
+    let keyring = KeyRing::new_secp256k1(
         &config.account_prefix,
-        &ChainId::new(&config.id)?.to_string().into(),
+        &ChainId::new(&config.id)?,
         &config.key_store_folder,
-    )?;
+    );
 
     check_key_exists(&keyring, key_name, overwrite);
 
     let key_contents = fs::read_to_string(file).wrap_err("error reading the key file")?;
-    let key_pair = Secp256k1KeyPair::from_seed_file(&key_contents, hd_path)?;
+    let key_pair =
+        Secp256k1KeyPair::from_seed_file(&key_contents, hd_path).map_err(|e| eyre!("{e}"))?;
 
-    keyring.add_key(key_name, key_pair.clone())?;
+    keyring
+        .add_key(key_name, key_pair.clone())
+        .map_err(|e| eyre!("{e}"))?;
 
-    Ok(key_pair.into())
+    Ok(key_pair)
 }
 
 pub fn restore_key(
@@ -148,35 +149,33 @@ pub fn restore_key(
     hdpath: &StandardHDPath,
     config: &CosmosChainConfig,
     overwrite: bool,
-) -> eyre::Result<AnySigningKeyPair> {
+) -> eyre::Result<Secp256k1KeyPair> {
     let mnemonic_content =
         fs::read_to_string(mnemonic).wrap_err("error reading the mnemonic file")?;
 
-    let mut keyring = KeyRing::new_secp256k1(
-        Store::Test,
+    let keyring = KeyRing::new_secp256k1(
         &config.account_prefix,
-        &ChainId::new(&config.id)?.to_string().into(),
+        &ChainId::new(&config.id)?,
         &config.key_store_folder,
-    )?;
+    );
 
     check_key_exists(&keyring, key_name, overwrite);
 
-    let key_pair = Secp256k1KeyPair::from_mnemonic(
-        &mnemonic_content,
-        hdpath,
-        &ibc_relayer::config::AddressType::Cosmos,
-        keyring.account_prefix(),
-    )?;
+    let key_pair =
+        Secp256k1KeyPair::from_mnemonic(&mnemonic_content, hdpath, keyring.account_prefix())
+            .map_err(|e| eyre!("{e}"))?;
 
-    keyring.add_key(key_name, key_pair.clone())?;
+    keyring
+        .add_key(key_name, key_pair.clone())
+        .map_err(|e| eyre!("{e}"))?;
 
-    Ok(key_pair.into())
+    Ok(key_pair)
 }
 
 /// Check if the key with the given key name already exists.
 /// If it already exists and overwrite is false, abort the command with an error.
 /// If overwrite is true, output a warning message informing the key will be overwritten.
-fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str, overwrite: bool) {
+fn check_key_exists(keyring: &KeyRing, key_name: &str, overwrite: bool) {
     if keyring.get_key(key_name).is_ok() {
         if overwrite {
             warn!("key {} will be overwritten", key_name);

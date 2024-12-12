@@ -25,11 +25,13 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOpt
 use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::commitment_proof::CosmosCommitmentProof;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_chain_components::types::transaction::account::Account;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
@@ -98,12 +100,10 @@ use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
-use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::event::source::queries::all as all_queries;
-use ibc_relayer::keyring::Secp256k1KeyPair;
 use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
+use tendermint_rpc::query::{EventType, Query};
 use tendermint_rpc::{HttpClient, Url, WebSocketClientUrl};
 
 use crate::contexts::encoding::ProvideCosmosEncoding;
@@ -255,7 +255,13 @@ impl CosmosChain {
                 chain_version,
                 WebSocketClientUrl::from_str(&url).unwrap(),
                 compat_mode,
-                all_queries(),
+                vec![
+                    Query::from(EventType::NewBlock),
+                    Query::eq("message.module", "ibc_client"),
+                    Query::eq("message.module", "ibc_connection"),
+                    Query::eq("message.module", "ibc_channel"),
+                    Query::eq("message.module", "interchainquery"),
+                ],
             ),
             EventSourceMode::Pull { .. } => {
                 // TODO: implement pull-based event source

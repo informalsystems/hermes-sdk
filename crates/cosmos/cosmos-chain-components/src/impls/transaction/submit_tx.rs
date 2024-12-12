@@ -5,13 +5,13 @@ use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitter;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use ibc_proto::cosmos::tx::v1beta1::TxRaw;
-use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use prost::Message;
 use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::broadcast::tx_sync::Response;
 use tendermint_rpc::{Client, Error as RpcError};
 
 use crate::traits::rpc_client::HasRpcClient;
+use crate::types::transaction::signed_tx::SignedTx;
 
 pub struct BroadcastCosmosTx;
 
