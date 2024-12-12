@@ -143,9 +143,9 @@ delegate_components! {
             UseField<symbol!("chain_a")>,
         ChainGetterAtComponent<Index<1>>:
             UseField<symbol!("chain_b")>,
-        ClientIdAtGetterComponent<Src, Dst>:
+        ClientIdAtGetterComponent<Index<0>, Index<1>>:
             UseField<symbol!("client_id_a")>,
-        ClientIdAtGetterComponent<Dst, Src>:
+        ClientIdAtGetterComponent<Index<1>, Index<0>>:
             UseField<symbol!("client_id_b")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
@@ -158,6 +158,8 @@ delegate_components! {
             ChainTypeAtComponent<Dst>,
             ChainGetterAtComponent<Src>,
             ChainGetterAtComponent<Dst>,
+            ClientIdAtGetterComponent<Src, Dst>,
+            ClientIdAtGetterComponent<Dst, Src>,
             MessageBatchSenderGetterComponent<Src>,
             MessageBatchSenderGetterComponent<Dst>,
         ]:
