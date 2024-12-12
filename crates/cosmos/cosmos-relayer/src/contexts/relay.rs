@@ -11,10 +11,7 @@ use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
-use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
-use hermes_relayer_components::error::traits::retry::{
-    MaxErrorRetryGetterComponent, RetryableErrorComponent,
-};
+use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainAt, ChainGetterAtComponent, ChainTypeAtComponent,
 };
@@ -23,13 +20,12 @@ use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
-    PacketMutexGetterComponent, PacketMutexOf, ProvidePacketLockWithMutex,
+    PacketMutexGetterComponent, PacketMutexOf,
 };
 use hermes_relayer_components::relay::impls::selector::SelectRelayAToB;
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelay;
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
 };
@@ -135,17 +131,13 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             ProvideHermesLogger,
-        MaxErrorRetryGetterComponent:
-            ReturnMaxRetry<3>,
-        PacketLockComponent:
-            ProvidePacketLockWithMutex,
         ChainGetterAtComponent<Index<0>>:
             UseField<symbol!("chain_a")>,
         ChainGetterAtComponent<Index<1>>:
             UseField<symbol!("chain_b")>,
-        ClientIdAtGetterComponent<Src, Dst>:
+        ClientIdAtGetterComponent<Index<0>, Index<1>>:
             UseField<symbol!("client_id_a")>,
-        ClientIdAtGetterComponent<Dst, Src>:
+        ClientIdAtGetterComponent<Index<1>, Index<0>>:
             UseField<symbol!("client_id_b")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
@@ -158,6 +150,8 @@ delegate_components! {
             ChainTypeAtComponent<Dst>,
             ChainGetterAtComponent<Src>,
             ChainGetterAtComponent<Dst>,
+            ClientIdAtGetterComponent<Src, Dst>,
+            ClientIdAtGetterComponent<Dst, Src>,
             MessageBatchSenderGetterComponent<Src>,
             MessageBatchSenderGetterComponent<Dst>,
         ]:
