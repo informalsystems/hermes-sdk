@@ -102,6 +102,7 @@ where
     type ConnectionOpenTryEvent = CosmosConnectionOpenTryEvent;
 
     fn try_extract_connection_open_try_event(
+        _chain: &Chain,
         events: &Vec<Arc<AbciEvent>>,
     ) -> Option<CosmosConnectionOpenTryEvent> {
         events.iter().find_map(|event| {
