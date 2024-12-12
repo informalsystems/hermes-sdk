@@ -7,7 +7,6 @@ use cgp::core::types::impls::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_cosmos_chain_components::impls::relay::packet_filter::FilterPacketWithConfig;
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
@@ -34,10 +33,10 @@ use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
+use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilterComponent;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
-use hermes_relayer_components::with_default_relay_components;
+use hermes_relayer_components::with_default_relay_preset;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
@@ -110,8 +109,6 @@ delegate_components! {
             UseField<symbol!("dst_client_id")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
-        PacketFilterComponent:
-            FilterPacketWithConfig<symbol!("packet_filter")>,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:
@@ -119,11 +116,11 @@ delegate_components! {
     }
 }
 
-with_default_relay_components! {
+with_default_relay_preset! {
     | Components | {
         delegate_components! {
             CosmosToWasmCosmosRelayComponents {
-                Components: DefaultRelayComponents,
+                Components: DefaultRelayPreset,
             }
         }
     }

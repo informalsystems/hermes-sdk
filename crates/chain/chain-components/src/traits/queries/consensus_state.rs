@@ -2,12 +2,15 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::ibc::consensus_state::ConsensusStateOf;
 
 use super::chain_status::CanQueryChainStatus;
 use crate::traits::types::consensus_state::{HasConsensusStateType, HasRawConsensusStateType};
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::proof::HasCommitmentProofType;
+use crate::types::aliases::HeightOf;
 
 #[cgp_component {
   provider: ConsensusStateQuerier,
@@ -15,17 +18,18 @@ use crate::traits::types::proof::HasCommitmentProofType;
 }]
 #[async_trait]
 pub trait CanQueryConsensusState<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
-where
-    Counterparty: HasConsensusStateType<Self> + HasHeightType,
+    HasClientIdType<Counterparty>
+    + CanUseCounterparty<Counterparty, Counterparty: HasConsensusStateType<Self> + HasHeightType>
+    + HasHeightType
+    + HasErrorType
 {
     async fn query_consensus_state(
         &self,
         tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
-        consensus_height: &Counterparty::Height,
+        consensus_height: &HeightOf<Counterparty>,
         query_height: &Self::Height,
-    ) -> Result<Counterparty::ConsensusState, Self::Error>;
+    ) -> Result<ConsensusStateOf<Counterparty, Self>, Self::Error>;
 }
 
 #[cgp_component {
@@ -89,16 +93,16 @@ where
 
 #[async_trait]
 pub trait CanQueryConsensusStateWithLatestHeight<Counterparty>:
-    HasClientIdType<Counterparty> + HasErrorType
-where
-    Counterparty: HasConsensusStateType<Self> + HasHeightType,
+    HasClientIdType<Counterparty>
+    + CanUseCounterparty<Counterparty, Counterparty: HasConsensusStateType<Self> + HasHeightType>
+    + HasErrorType
 {
     async fn query_consensus_state_with_latest_height(
         &self,
         tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
-        consensus_height: &Counterparty::Height,
-    ) -> Result<Counterparty::ConsensusState, Self::Error>;
+        consensus_height: &HeightOf<Counterparty>,
+    ) -> Result<ConsensusStateOf<Counterparty, Self>, Self::Error>;
 }
 
 impl<Chain, Counterparty> CanQueryConsensusStateWithLatestHeight<Counterparty> for Chain

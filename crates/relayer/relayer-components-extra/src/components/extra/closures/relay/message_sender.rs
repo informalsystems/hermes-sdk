@@ -12,7 +12,7 @@ use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
 };
 use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
-use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::packet_filter::RelayPacketFilter;
 use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, HasTargetChains,
     SourceTarget,
@@ -26,7 +26,7 @@ use hermes_runtime_components::traits::sleep::CanSleep;
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
-use crate::components::extra::relay::DelegatesToExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayPreset;
 
 pub trait UseExtraIbcMessageSender:
     HasRelayClientIds
@@ -72,8 +72,8 @@ where
         + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, DestinationTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, DestinationTarget>>,
-    Components: DelegatesToExtraRelayComponents
-        + PacketFilter<Relay>
+    Components: DelegatesToExtraRelayPreset
+        + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
 {

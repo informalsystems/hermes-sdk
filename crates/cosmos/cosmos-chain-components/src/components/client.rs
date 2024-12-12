@@ -22,6 +22,9 @@ pub use hermes_relayer_components::chain::traits::message_builders::receive_pack
 pub use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReaderComponent;
+pub use hermes_relayer_components::chain::traits::packet::filter::{
+    IncomingPacketFilterComponent, OutgoingPacketFilterComponent,
+};
 pub use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
@@ -163,6 +166,7 @@ use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
 use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryCosmosWriteAckEvent;
+use crate::impls::relay::packet_filter::FilterPacketWithConfig;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::ProvideAnyRawClientState;
 use crate::impls::types::consensus_state::ProvideAnyRawConsensusState;
@@ -332,7 +336,11 @@ cgp_preset! {
             ChannelEndWithProofsQuerierComponent,
         ]:
             QueryCosmosChannelEndFromAbci,
-
+        [
+            OutgoingPacketFilterComponent,
+            IncomingPacketFilterComponent,
+        ]:
+            FilterPacketWithConfig<symbol!("packet_filter")>,
         [
             ClientStateTypeComponent,
             ClientStateFieldsComponent,

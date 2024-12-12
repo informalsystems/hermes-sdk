@@ -26,6 +26,7 @@ use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingP
 use hermes_cosmos_chain_components::types::commitment_proof::CosmosCommitmentProof;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
+use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
@@ -43,6 +44,9 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::packet::filter::{
+    CanFilterIncomingPacket, CanFilterOutgoingPacket,
+};
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     CanQueryChannelEnd, CanQueryChannelEndWithProofs,
@@ -128,6 +132,7 @@ pub struct BaseCosmosChain {
     pub ibc_commitment_prefix: Vec<u8>,
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
+    pub packet_filter: PacketFilterConfig,
     pub nonce_mutex: Mutex<()>,
 }
 
@@ -246,6 +251,7 @@ impl CosmosChain {
         event_source_mode: EventSourceMode,
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
+        packet_filter: PacketFilterConfig,
     ) -> Self {
         let chain_id = ChainId::new(&chain_config.id).unwrap();
         let chain_version = chain_id.revision_number();
@@ -283,6 +289,7 @@ impl CosmosChain {
                 rpc_client,
                 key_entry,
                 nonce_mutex: Mutex::new(()),
+                packet_filter,
             }),
         };
 
@@ -372,6 +379,8 @@ pub trait CanUseCosmosChain:
     + HasMessageResponseEvents
     + HasSendPacketEvent<CosmosChain>
     + CanBuildCreateClientPayload<CosmosChain>
+    + CanFilterIncomingPacket<CosmosChain>
+    + CanFilterOutgoingPacket<CosmosChain>
 where
     CosmosChain: HasClientStateType<Self>
         + HasConsensusStateType<Self>

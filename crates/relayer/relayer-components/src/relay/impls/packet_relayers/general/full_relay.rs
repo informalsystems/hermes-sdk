@@ -7,7 +7,7 @@ use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::relay::traits::chains::{HasRelayChains, PacketOf};
+use crate::relay::traits::chains::{HasRelayChains, HasRelayPacketType, PacketOf};
 use crate::relay::traits::packet_relayer::PacketRelayer;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
@@ -37,6 +37,7 @@ where
     Relay: CanRelayAckPacket
         + CanRelayReceivePacket
         + CanRelayTimeoutUnorderedPacket
+        + HasRelayPacketType
         + HasLogger
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanRaiseError<SrcChain::Error>
@@ -49,7 +50,7 @@ where
         + HasTimeoutType,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
-    async fn relay_packet(relay: &Relay, packet: &PacketOf<Relay>) -> Result<(), Relay::Error> {
+    async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
         let logger = relay.logger();

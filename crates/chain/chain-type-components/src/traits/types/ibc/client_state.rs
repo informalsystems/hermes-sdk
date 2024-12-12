@@ -14,6 +14,9 @@ pub trait HasClientStateType<Counterparty>: Async {
     type ClientState: Async;
 }
 
+pub type ClientStateOf<Chain, Counterparty> =
+    <Chain as HasClientStateType<Counterparty>>::ClientState;
+
 impl<Chain, Counterparty, Components, Delegate> ProvideClientStateType<Chain, Counterparty>
     for UseDelegate<Components>
 where

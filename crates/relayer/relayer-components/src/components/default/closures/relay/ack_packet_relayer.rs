@@ -25,7 +25,7 @@ use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::components::default::relay::{DelegatesToDefaultRelayComponents, MainSink};
+use crate::components::default::relay::{DelegatesToDefaultRelayPreset, MainSink};
 use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use crate::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
@@ -81,7 +81,7 @@ where
     DstChain::Runtime: CanSleep,
     Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>,
-    Components: DelegatesToDefaultRelayComponents
+    Components: DelegatesToDefaultRelayPreset
         + ErrorRaiser<Relay, EmptyMessageResponse>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,

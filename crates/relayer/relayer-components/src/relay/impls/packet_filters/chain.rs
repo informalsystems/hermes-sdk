@@ -1,61 +1,39 @@
-use hermes_chain_components::traits::packet::fields::CanReadOutgoingPacketFields;
+use hermes_chain_components::traits::packet::filter::{
+    CanFilterIncomingPacket, CanFilterOutgoingPacket,
+};
 
-use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
-use crate::chain::traits::types::chain_id::HasChainId;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
-use crate::relay::traits::packet_filter::PacketFilter;
+use crate::relay::traits::packet_filter::RelayPacketFilter;
 
-pub struct MatchPacketSourceChain;
+pub struct FilterRelayPacketWithChains;
 
-pub struct MatchPacketDestinationChain;
-
-impl<Relay> PacketFilter<Relay> for MatchPacketSourceChain
+impl<Relay> RelayPacketFilter<Relay> for FilterRelayPacketWithChains
 where
-    Relay: HasRelayChains + CanRaiseRelayChainErrors,
-    Relay::DstChain: CanQueryCounterpartyChainId<Relay::SrcChain>,
-    Relay::SrcChain: HasChainId + CanReadOutgoingPacketFields<Relay::DstChain>,
+    Relay: HasRelayChains<
+            SrcChain: CanFilterOutgoingPacket<Relay::DstChain>,
+            DstChain: CanFilterIncomingPacket<Relay::SrcChain>,
+        > + CanRaiseRelayChainErrors,
 {
     async fn should_relay_packet(
         relay: &Relay,
         packet: &PacketOf<Relay>,
     ) -> Result<bool, Relay::Error> {
-        let dst_channel_id = Relay::SrcChain::outgoing_packet_dst_channel_id(packet);
-        let dst_port = Relay::SrcChain::outgoing_packet_dst_port(packet);
-
-        let src_chain_id = relay
-            .dst_chain()
-            .query_counterparty_chain_id_from_channel_id(dst_channel_id, dst_port)
-            .await
-            .map_err(Relay::raise_error)?;
-
-        let same_chain = &src_chain_id == relay.src_chain().chain_id();
-
-        Ok(same_chain)
-    }
-}
-
-impl<Relay> PacketFilter<Relay> for MatchPacketDestinationChain
-where
-    Relay: HasRelayChains + CanRaiseRelayChainErrors,
-    Relay::SrcChain:
-        CanQueryCounterpartyChainId<Relay::DstChain> + CanReadOutgoingPacketFields<Relay::DstChain>,
-    Relay::DstChain: HasChainId,
-{
-    async fn should_relay_packet(
-        relay: &Relay,
-        packet: &PacketOf<Relay>,
-    ) -> Result<bool, Relay::Error> {
-        let src_channel_id = Relay::SrcChain::outgoing_packet_src_channel_id(packet);
-        let src_port = Relay::SrcChain::outgoing_packet_src_port(packet);
-
-        let dst_chain_id = relay
+        let should_relay_src = relay
             .src_chain()
-            .query_counterparty_chain_id_from_channel_id(src_channel_id, src_port)
+            .should_relay_outgoing_packet(packet)
             .await
             .map_err(Relay::raise_error)?;
 
-        let same_chain = &dst_chain_id == relay.dst_chain().chain_id();
+        let should_relay = if should_relay_src {
+            relay
+                .dst_chain()
+                .should_relay_incoming_packet(packet)
+                .await
+                .map_err(Relay::raise_error)?
+        } else {
+            false
+        };
 
-        Ok(same_chain)
+        Ok(should_relay)
     }
 }

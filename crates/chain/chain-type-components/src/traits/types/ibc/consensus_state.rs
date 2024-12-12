@@ -14,6 +14,9 @@ pub trait HasConsensusStateType<Counterparty>: Async {
     type ConsensusState: Async;
 }
 
+pub type ConsensusStateOf<Chain, Counterparty> =
+    <Chain as HasConsensusStateType<Counterparty>>::ConsensusState;
+
 impl<Chain, Counterparty, Components, Delegate> ProvideConsensusStateType<Chain, Counterparty>
     for UseDelegate<Components>
 where

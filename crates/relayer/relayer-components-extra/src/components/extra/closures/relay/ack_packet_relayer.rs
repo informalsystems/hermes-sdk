@@ -35,7 +35,7 @@ use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, Can
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
-use crate::components::extra::relay::DelegatesToExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayPreset;
 
 pub trait CanUseExtraAckPacketRelayer: UseExtraAckPacketRelayer
 where
@@ -90,7 +90,7 @@ where
     DstChain::Runtime: CanSleep,
     Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>,
-    Components: DelegatesToExtraRelayComponents
+    Components: DelegatesToExtraRelayPreset
         + ErrorRaiser<Relay, EmptyMessageResponse>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,

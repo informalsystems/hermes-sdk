@@ -1,12 +1,12 @@
 use cgp::prelude::*;
 
-use crate::relay::traits::chains::{HasRelayChainTypes, PacketOf};
+use crate::relay::traits::chains::HasRelayPacketType;
 
 #[cgp_component {
-  provider: PacketFilter,
+  provider: RelayPacketFilter,
   context: Relay,
 }]
 #[async_trait]
-pub trait CanFilterPackets: HasRelayChainTypes {
-    async fn should_relay_packet(&self, packet: &PacketOf<Self>) -> Result<bool, Self::Error>;
+pub trait CanFilterRelayPackets: HasRelayPacketType {
+    async fn should_relay_packet(&self, packet: &Self::Packet) -> Result<bool, Self::Error>;
 }
