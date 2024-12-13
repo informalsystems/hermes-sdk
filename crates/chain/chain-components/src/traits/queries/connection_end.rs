@@ -1,6 +1,8 @@
 use core::fmt::Debug;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
 
 use crate::traits::types::connection::HasConnectionEndType;
 use crate::traits::types::ibc::HasIbcChainTypes;
@@ -12,7 +14,10 @@ use crate::traits::types::proof::HasCommitmentProofType;
 }]
 #[async_trait]
 pub trait CanQueryConnectionEnd<Counterparty>:
-    HasConnectionEndType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
+    HasHeightType
+    + HasConnectionIdType<Counterparty>
+    + HasConnectionEndType<Counterparty>
+    + HasErrorType
 {
     async fn query_connection_end(
         &self,
@@ -27,8 +32,9 @@ pub trait CanQueryConnectionEnd<Counterparty>:
 }]
 #[async_trait]
 pub trait CanQueryConnectionEndWithProofs<Counterparty>:
-    HasConnectionEndType<Counterparty>
-    + HasIbcChainTypes<Counterparty>
+    HasHeightType
+    + HasConnectionIdType<Counterparty>
+    + HasConnectionEndType<Counterparty>
     + HasCommitmentProofType
     + HasErrorType
 {

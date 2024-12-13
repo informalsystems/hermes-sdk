@@ -1,6 +1,9 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::HasErrorType;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
 
 use crate::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use crate::traits::payload_builders::connection_handshake::{
@@ -16,7 +19,6 @@ use crate::traits::types::connection::{
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
 };
 use crate::traits::types::consensus_state::HasConsensusStateType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofHeight;
 use crate::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
@@ -176,7 +178,9 @@ where
     Chain: HasConnectionOpenConfirmPayloadType<
             Counterparty,
             ConnectionOpenConfirmPayload = ConnectionOpenConfirmPayload<Chain>,
-        > + HasIbcChainTypes<Counterparty>
+        > + HasHeightType
+        + HasClientIdType<Counterparty>
+        + HasConnectionIdType<Counterparty>
         + HasClientStateType<Counterparty>
         + HasCommitmentProofHeight
         + CanQueryConnectionEndWithProofs<Counterparty>,
