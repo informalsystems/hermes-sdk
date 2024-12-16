@@ -13,15 +13,14 @@ use ibc::primitives::Signer;
 use ibc_proto::cosmos::tx::v1beta1::mode_info::{Single, Sum};
 use ibc_proto::cosmos::tx::v1beta1::{AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, TxBody};
 use ibc_proto::google::protobuf::Any;
-use ibc_relayer::chain::cosmos::types::account::{Account, AccountNumber, AccountSequence};
-use ibc_relayer::chain::cosmos::types::tx::SignedTx;
-use ibc_relayer::config::types::Memo;
-use ibc_relayer::keyring::errors::Error as KeyringError;
-use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
 use prost::{EncodeError, Message};
 
 use crate::traits::message::CosmosMessage;
 use crate::traits::tx_extension_options::HasTxExtensionOptions;
+use crate::types::key_types::secp256k1::Secp256k1KeyPair;
+use crate::types::transaction::account::Account;
+use crate::types::transaction::memo::Memo;
+use crate::types::transaction::signed_tx::SignedTx;
 
 pub struct EncodeCosmosTx;
 
@@ -35,7 +34,7 @@ where
         + HasTxExtensionOptions
         + HasChainId<ChainId = ChainId>
         + CanRaiseError<EncodeError>
-        + CanRaiseError<KeyringError>,
+        + CanRaiseError<String>,
 {
     async fn encode_tx(
         chain: &Chain,
@@ -55,7 +54,7 @@ where
         let chain_id = chain.chain_id();
         let extension_options = chain.tx_extension_options();
 
-        let signed_tx = sign_tx(
+        let signed_tx = sign_tx::<Chain>(
             chain_id,
             key_pair,
             account,
@@ -63,14 +62,13 @@ where
             &raw_messages,
             fee,
             extension_options,
-        )
-        .map_err(Chain::raise_error)?;
+        )?;
 
         Ok(signed_tx)
     }
 }
 
-pub fn sign_tx(
+pub fn sign_tx<Chain>(
     chain_id: &ChainId,
     key_pair: &Secp256k1KeyPair,
     account: &Account,
@@ -78,7 +76,10 @@ pub fn sign_tx(
     messages: &[Any],
     fee: &Fee,
     extension_options: &Vec<Any>,
-) -> Result<SignedTx, KeyringError> {
+) -> Result<SignedTx, Chain::Error>
+where
+    Chain: CanRaiseError<String>,
+{
     let key_bytes = Message::encode_to_vec(&key_pair.public_key.serialize().to_vec());
 
     let signer = encode_signer_info(account.sequence, key_bytes);
@@ -87,7 +88,7 @@ pub fn sign_tx(
 
     let (auth_info, auth_info_bytes) = auth_info_and_bytes(signer, fee.clone());
 
-    let signed_doc = encode_sign_doc(
+    let signed_doc = encode_sign_doc::<Chain>(
         chain_id,
         key_pair,
         account.number,
@@ -104,28 +105,31 @@ pub fn sign_tx(
     })
 }
 
-pub fn encode_sign_doc(
+pub fn encode_sign_doc<Chain>(
     chain_id: &ChainId,
     key_pair: &Secp256k1KeyPair,
-    account_number: AccountNumber,
+    account_number: u64,
     auth_info_bytes: Vec<u8>,
     body_bytes: Vec<u8>,
-) -> Result<Vec<u8>, KeyringError> {
+) -> Result<Vec<u8>, Chain::Error>
+where
+    Chain: CanRaiseError<String>,
+{
     let sign_doc = SignDoc {
         body_bytes,
         auth_info_bytes,
         chain_id: chain_id.to_string(),
-        account_number: account_number.to_u64(),
+        account_number,
     };
 
     let signdoc_buf = Message::encode_to_vec(&sign_doc);
 
-    let signed = key_pair.sign(&signdoc_buf)?;
+    let signed = key_pair.sign(&signdoc_buf).map_err(Chain::raise_error)?;
 
     Ok(signed)
 }
 
-pub fn encode_signer_info(sequence: AccountSequence, key_bytes: Vec<u8>) -> SignerInfo {
+pub fn encode_signer_info(sequence: u64, key_bytes: Vec<u8>) -> SignerInfo {
     let pk_any = Any {
         type_url: "/cosmos.crypto.secp256k1.PubKey".to_string(),
         value: key_bytes,
@@ -138,7 +142,7 @@ pub fn encode_signer_info(sequence: AccountSequence, key_bytes: Vec<u8>) -> Sign
     SignerInfo {
         public_key: Some(pk_any),
         mode_info: mode,
-        sequence: sequence.to_u64(),
+        sequence,
     }
 }
 

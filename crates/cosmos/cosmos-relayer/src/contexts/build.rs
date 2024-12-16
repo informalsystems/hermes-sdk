@@ -13,6 +13,9 @@ use cgp::prelude::*;
 use eyre::{eyre, Report};
 use futures::lock::Mutex;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
+use hermes_cosmos_chain_components::types::key_types::secp256k1::{
+    Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
+};
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
@@ -35,9 +38,6 @@ use hermes_relayer_components_extra::components::extra::build::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc::core::host::types::identifiers::{ChainId, ClientId};
-use ibc_relayer::keyring::{
-    AnySigningKeyPair, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
-};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
 
@@ -263,7 +263,7 @@ pub fn get_keypair(
     let file = File::create(filename.clone())?;
 
     if let Some(keypair) = m_keypair {
-        serde_json::to_writer_pretty(file, &AnySigningKeyPair::Secp256k1(keypair.clone()))?;
+        serde_json::to_writer_pretty(file, &keypair)?;
     }
 
     let file = File::open(&filename)?;

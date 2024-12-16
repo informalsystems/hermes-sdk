@@ -3,8 +3,6 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::Consensu
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use ibc_relayer_types::Height;
 
 use crate::traits::solomachine::Solomachine;
 

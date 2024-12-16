@@ -35,7 +35,6 @@ hermes-encoding-components      = { workspace = true }
 hermes-protobuf-encoding-components = { workspace = true }
 
 ibc                             = { workspace = true }
-ibc-relayer                     = { workspace = true }
 
 clap                        = { workspace = true, features = ["derive"] }
 dirs-next                   = { workspace = true }

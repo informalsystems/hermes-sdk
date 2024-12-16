@@ -59,9 +59,6 @@ use ibc::core::client::types::error::ClientError;
 use ibc::core::commitment_types::error::CommitmentError;
 use ibc::core::host::types::error::{DecodingError, IdentifierError};
 use ibc::primitives::TimestampError;
-use ibc_relayer::error::Error as RelayerError;
-use ibc_relayer::keyring::errors::Error as KeyringError;
-use ibc_relayer::supervisor::Error as SupervisorError;
 use prost::{DecodeError, EncodeError};
 use tendermint::Error as TendermintError;
 use tendermint_proto::Error as TendermintProtoError;
@@ -113,9 +110,6 @@ delegate_components! {
         [
             Report,
             TokioRuntimeError,
-            RelayerError,
-            KeyringError,
-            SupervisorError,
             TendermintError,
             TendermintClientError,
             TendermintProtoError,

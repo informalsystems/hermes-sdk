@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
-use ibc_relayer::config::compat_mode::CompatMode;
+use tendermint_rpc::client::CompatMode;
 
 #[cgp_component {
   provider: CompatModeGetter,
