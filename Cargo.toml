@@ -91,7 +91,7 @@ dirs-next                       = { version = "2.0.0" }
 num-bigint                      = { version = "0.4" }
 num-rational                    = { version = "0.4.1" }
 oneline-eyre                    = { version = "0.1.0" }
-prost                           = { version = "0.13.3" }
+prost                           = { version = "0.13.4" }
 prost-types                     = { version = "0.13.3" }
 reqwest                         = { version = "0.12.9", features = ["json"] }
 ripemd                          = { version =  "0.1.3" }
