@@ -100,7 +100,7 @@ serde_derive                    = { version = "1.0.104" }
 serde_json                      = { version = "1.0" }
 subtle-encoding                 = { version = "0.5.1" }
 tiny-bip39                      = { version = "1.0.0" }
-tokio                           = { version = "1.40" }
+tokio                           = { version = "1.42" }
 tracing                         = { version = "0.1.40" }
 tracing-subscriber              = { version = "0.3.18" }
 time                            = { version = "0.3.36" }
