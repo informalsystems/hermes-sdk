@@ -98,7 +98,8 @@ where
             .send_message(DestinationTarget, open_try_message)
             .await?;
 
-        let open_try_event = DstChain::try_extract_connection_open_try_event(&response)
+        let open_try_event = dst_chain
+            .try_extract_connection_open_try_event(&response)
             .ok_or_else(|| {
                 Relay::raise_error(MissingConnectionTryEventError {
                     relay,

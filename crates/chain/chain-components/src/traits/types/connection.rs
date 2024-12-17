@@ -1,3 +1,5 @@
+use cgp::core::component::WithProvider;
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_component {
@@ -55,4 +57,14 @@ pub trait HasConnectionOpenConfirmPayloadType<Counterparty>: Async {
 }]
 pub trait HasConnectionEndType<Counterparty>: Async {
     type ConnectionEnd: Async;
+}
+
+impl<Chain, Counterparty, Provider, ConnectionEnd> ProvideConnectionEndType<Chain, Counterparty>
+    for WithProvider<Provider>
+where
+    Provider: ProvideType<Chain, ConnectionEndTypeComponent, Type = ConnectionEnd>,
+    Chain: Async,
+    ConnectionEnd: Async,
+{
+    type ConnectionEnd = ConnectionEnd;
 }

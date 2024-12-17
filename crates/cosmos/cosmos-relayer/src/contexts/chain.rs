@@ -41,7 +41,9 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
+use hermes_relayer_components::chain::traits::commitment_prefix::{
+    HasCommitmentPrefixType, HasIbcCommitmentPrefix, IbcCommitmentPrefixGetter,
+};
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::packet::filter::{
@@ -345,6 +347,7 @@ pub trait CanUseCosmosChain:
         CosmosChain,
         CreateClientPayloadOptions = CosmosCreateClientOptions,
     > + CanQueryBalance
+    + HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
     + CanIbcTransferToken<CosmosChain>
     + CanConvertGasToFee
     + CanQueryEipBaseFee
@@ -377,6 +380,7 @@ pub trait CanUseCosmosChain:
     + CanBuildDepositProposalMessage
     + CanBuildVoteProposalMessage
     + HasMessageResponseEvents
+    + HasIbcCommitmentPrefix
     + HasSendPacketEvent<CosmosChain>
     + CanBuildCreateClientPayload<CosmosChain>
     + CanFilterIncomingPacket<CosmosChain>

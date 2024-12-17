@@ -8,7 +8,6 @@ use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnec
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::connection::open_init::ConnectionInitializer;
@@ -36,7 +35,7 @@ where
         + CanBuildConnectionOpenInitMessage<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
         + HasConnectionOpenInitEvent<DstChain>,
-    DstChain: HasIbcChainTypes<SrcChain> + CanBuildConnectionOpenInitPayload<SrcChain>,
+    DstChain: CanBuildConnectionOpenInitPayload<SrcChain>,
     SrcChain::ConnectionId: Clone,
 {
     async fn init_connection(

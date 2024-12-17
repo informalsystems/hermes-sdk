@@ -1,11 +1,13 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
 
 use crate::traits::types::client_state::HasClientStateType;
 use crate::traits::types::connection::{
     HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
 };
-use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
   provider: ConnectionOpenInitPayloadBuilder,
@@ -27,7 +29,9 @@ pub trait CanBuildConnectionOpenInitPayload<Counterparty>:
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenTryPayload<Counterparty>:
-    HasIbcChainTypes<Counterparty>
+    HasHeightType
+    + HasClientIdType<Counterparty>
+    + HasConnectionIdType<Counterparty>
     + HasConnectionOpenTryPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasErrorType
@@ -47,7 +51,9 @@ pub trait CanBuildConnectionOpenTryPayload<Counterparty>:
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenAckPayload<Counterparty>:
-    HasIbcChainTypes<Counterparty>
+    HasHeightType
+    + HasClientIdType<Counterparty>
+    + HasConnectionIdType<Counterparty>
     + HasConnectionOpenAckPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasErrorType
@@ -67,7 +73,9 @@ pub trait CanBuildConnectionOpenAckPayload<Counterparty>:
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenConfirmPayload<Counterparty>:
-    HasIbcChainTypes<Counterparty>
+    HasHeightType
+    + HasClientIdType<Counterparty>
+    + HasConnectionIdType<Counterparty>
     + HasConnectionOpenConfirmPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasErrorType

@@ -257,7 +257,6 @@ cgp_preset! {
             QueryCosmosConsensusStateFromAbci,
         CounterpartyChainIdQuerierComponent:
             QueryChainIdFromAbci,
-
         [
             ConnectionOpenInitPayloadBuilderComponent,
             ConnectionOpenTryPayloadBuilderComponent,

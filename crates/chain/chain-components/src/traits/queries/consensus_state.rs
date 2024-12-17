@@ -38,17 +38,19 @@ pub trait CanQueryConsensusState<Counterparty>:
 }]
 #[async_trait]
 pub trait CanQueryConsensusStateWithProofs<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasCommitmentProofType + HasErrorType
-where
-    Counterparty: HasConsensusStateType<Self> + HasHeightType,
+    HasClientIdType<Counterparty>
+    + HasHeightType
+    + HasCommitmentProofType
+    + HasErrorType
+    + CanUseCounterparty<Counterparty, Counterparty: HasConsensusStateType<Self> + HasHeightType>
 {
     async fn query_consensus_state_with_proofs(
         &self,
         tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
-        consensus_height: &Counterparty::Height,
+        consensus_height: &HeightOf<Counterparty>,
         query_height: &Self::Height,
-    ) -> Result<(Counterparty::ConsensusState, Self::CommitmentProof), Self::Error>;
+    ) -> Result<(ConsensusStateOf<Counterparty, Self>, Self::CommitmentProof), Self::Error>;
 }
 
 #[cgp_component {

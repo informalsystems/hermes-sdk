@@ -1,9 +1,9 @@
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::ibc::HasConnectionIdType;
 
 use crate::chain::traits::types::connection::{
     HasInitConnectionOptionsType, InitConnectionOptionsOf,
 };
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::connection::open_handshake::CanRelayConnectionOpenHandshake;
 use crate::relay::traits::connection::open_init::CanInitConnection;
@@ -37,8 +37,8 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanInitConnection
         + CanRelayConnectionOpenHandshake,
-    SrcChain: HasInitConnectionOptionsType<DstChain> + HasIbcChainTypes<DstChain> + HasErrorType,
-    DstChain: HasIbcChainTypes<SrcChain> + HasErrorType,
+    SrcChain: HasInitConnectionOptionsType<DstChain> + HasConnectionIdType<DstChain> + HasErrorType,
+    DstChain: HasConnectionIdType<SrcChain> + HasErrorType,
 {
     async fn bootstrap_connection(
         &self,

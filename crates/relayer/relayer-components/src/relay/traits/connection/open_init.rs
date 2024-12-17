@@ -1,4 +1,5 @@
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::connection::InitConnectionOptionsOf;
 
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::relay::traits::chains::HasRelayChains;
@@ -14,8 +15,6 @@ pub trait CanInitConnection:
 {
     async fn init_connection(
         &self,
-        init_connection_options: &<Self::SrcChain as HasInitConnectionOptionsType<
-            Self::DstChain,
-        >>::InitConnectionOptions,
+        init_connection_options: &InitConnectionOptionsOf<Self::SrcChain, Self::DstChain>,
     ) -> Result<SrcConnectionId<Self>, Self::Error>;
 }

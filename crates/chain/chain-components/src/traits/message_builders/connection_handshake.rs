@@ -1,12 +1,14 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
+use hermes_chain_type_components::traits::types::message::HasMessageType;
 
 use crate::traits::types::connection::{
     HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
     HasInitConnectionOptionsType,
 };
-use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
   provider: ConnectionOpenInitMessageBuilder,
@@ -14,9 +16,12 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenInitMessage<Counterparty>:
-    HasInitConnectionOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
+    HasInitConnectionOptionsType<Counterparty>
+    + HasClientIdType<Counterparty>
+    + HasMessageType
+    + HasErrorType
 where
-    Counterparty: HasConnectionOpenInitPayloadType<Self> + HasIbcChainTypes<Self>,
+    Counterparty: HasConnectionOpenInitPayloadType<Self> + HasClientIdType<Self>,
 {
     async fn build_connection_open_init_message(
         &self,
@@ -33,9 +38,10 @@ where
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenTryMessage<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasMessageType + HasClientIdType<Counterparty> + HasErrorType
 where
-    Counterparty: HasConnectionOpenTryPayloadType<Self> + HasIbcChainTypes<Self>,
+    Counterparty:
+        HasConnectionOpenTryPayloadType<Self> + HasClientIdType<Self> + HasConnectionIdType<Self>,
 {
     async fn build_connection_open_try_message(
         &self,
@@ -52,9 +58,9 @@ where
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenAckMessage<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasMessageType + HasConnectionIdType<Counterparty> + HasErrorType
 where
-    Counterparty: HasConnectionOpenAckPayloadType<Self> + HasIbcChainTypes<Self>,
+    Counterparty: HasConnectionOpenAckPayloadType<Self> + HasConnectionIdType<Self>,
 {
     async fn build_connection_open_ack_message(
         &self,
@@ -70,7 +76,7 @@ where
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenConfirmMessage<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasMessageType + HasConnectionIdType<Counterparty> + HasErrorType
 where
     Counterparty: HasConnectionOpenConfirmPayloadType<Self>,
 {
@@ -84,9 +90,11 @@ where
 impl<Chain, Counterparty, Components, Delegate>
     ConnectionOpenInitMessageBuilder<Chain, Counterparty> for UseDelegate<Components>
 where
-    Chain:
-        HasInitConnectionOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType,
-    Counterparty: HasConnectionOpenInitPayloadType<Chain> + HasIbcChainTypes<Chain>,
+    Chain: HasInitConnectionOptionsType<Counterparty>
+        + HasClientIdType<Counterparty>
+        + HasMessageType
+        + HasErrorType,
+    Counterparty: HasConnectionOpenInitPayloadType<Chain> + HasClientIdType<Chain>,
     Delegate: ConnectionOpenInitMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
 {
@@ -111,8 +119,10 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
-    Counterparty: HasConnectionOpenTryPayloadType<Chain> + HasIbcChainTypes<Chain>,
+    Chain: HasMessageType + HasClientIdType<Counterparty> + HasErrorType,
+    Counterparty: HasConnectionOpenTryPayloadType<Chain>
+        + HasClientIdType<Chain>
+        + HasConnectionIdType<Chain>,
     Delegate: ConnectionOpenTryMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
 {
@@ -137,8 +147,8 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
-    Counterparty: HasConnectionOpenAckPayloadType<Chain> + HasIbcChainTypes<Chain>,
+    Chain: HasMessageType + HasConnectionIdType<Counterparty> + HasErrorType,
+    Counterparty: HasConnectionOpenAckPayloadType<Chain> + HasConnectionIdType<Chain>,
     Delegate: ConnectionOpenAckMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
 {
@@ -161,8 +171,8 @@ where
 impl<Chain, Counterparty, Components, Delegate>
     ConnectionOpenConfirmMessageBuilder<Chain, Counterparty> for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
-    Counterparty: HasConnectionOpenConfirmPayloadType<Chain> + HasIbcChainTypes<Chain>,
+    Chain: HasMessageType + HasConnectionIdType<Counterparty> + HasErrorType,
+    Counterparty: HasConnectionOpenConfirmPayloadType<Chain>,
     Delegate: ConnectionOpenConfirmMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
 {
