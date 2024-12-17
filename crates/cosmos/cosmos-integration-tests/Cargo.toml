@@ -30,7 +30,6 @@ hermes-logging-components           = { workspace = true }
 
 ibc                                 = { workspace = true }
 ibc-proto                           = { workspace = true }
-ibc-relayer                         = { workspace = true }
 tendermint-rpc                      = { workspace = true }
 
 eyre                = { workspace = true }
@@ -39,6 +38,6 @@ toml                = { workspace = true }
 serde_json          = { workspace = true }
 prost               = { workspace = true }
 tracing             = { workspace = true }
-tracing-subscriber  = { workspace = true }
+tracing-subscriber  = { workspace = true, features = ["env-filter"] }
 
 stable-eyre         = { version = "0.2.2" }

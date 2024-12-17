@@ -31,7 +31,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
-use ibc_relayer::config::compat_mode::CompatMode;
+use tendermint_rpc::client::CompatMode;
 
 use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use crate::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;

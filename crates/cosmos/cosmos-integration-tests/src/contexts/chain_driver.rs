@@ -4,6 +4,7 @@ use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
+use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
@@ -36,7 +37,6 @@ use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, Pr
 use hermes_test_components::chain_driver::traits::wait::{
     CanWaitChainStartup, ChainStartupWaiterComponent,
 };
-use ibc_relayer::config::Config;
 use tokio::process::Child;
 use toml::to_string_pretty;
 
@@ -190,10 +190,10 @@ impl ChainProcessTaker<CosmosChainDriver> for CosmosChainDriverComponents {
     }
 }
 
-impl ConfigUpdater<CosmosChainDriver, Config> for CosmosChainDriverComponents {
+impl ConfigUpdater<CosmosChainDriver, RelayerConfig> for CosmosChainDriverComponents {
     fn update_config(
         chain_driver: &CosmosChainDriver,
-        _config: &mut Config,
+        _config: &mut RelayerConfig,
     ) -> Result<String, Error> {
         let chain_config_str = to_string_pretty(&chain_driver.chain.chain_config)?;
 

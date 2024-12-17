@@ -24,8 +24,6 @@ hermes-protobuf-encoding-components     = { workspace = true }
 
 ibc                                     = { workspace = true }
 ibc-proto                               = { workspace = true }
-ibc-relayer                             = { workspace = true }
-ibc-telemetry                           = { workspace = true }
 tendermint                              = { workspace = true, features = ["secp256k1"] }
 
 serde           = { workspace = true }
@@ -36,7 +34,7 @@ tokio           = { workspace = true }
 itertools       = { workspace = true }
 futures         = { workspace = true }
 tracing         = { workspace = true }
-secp256k1       = { workspace = true }
+secp256k1       = { workspace = true, features = ["rand"] }
 
 sha2            = "0.10.7"
 crypto-hash     = "0.3.4"
