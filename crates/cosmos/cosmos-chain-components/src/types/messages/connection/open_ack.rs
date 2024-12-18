@@ -1,5 +1,4 @@
 use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::ConnectionId;
 use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_proto::ibc::core::connection::v1::{
@@ -14,8 +13,8 @@ const TYPE_URL: &str = "/ibc.core.connection.v1.MsgConnectionOpenAck";
 
 #[derive(Debug)]
 pub struct CosmosConnectionOpenAckMessage {
-    pub connection_id: ConnectionId,
-    pub counterparty_connection_id: ConnectionId,
+    pub connection_id: String,
+    pub counterparty_connection_id: String,
     pub version: Version,
     pub client_state: Any,
     pub update_height: Height,
@@ -32,8 +31,8 @@ impl DynCosmosMessage for CosmosConnectionOpenAckMessage {
 
     fn encode_protobuf(&self, signer: &Signer) -> IbcProtoAny {
         let proto_message = ProtoMsgConnectionOpenAck {
-            connection_id: self.connection_id.as_str().to_string(),
-            counterparty_connection_id: self.counterparty_connection_id.as_str().to_string(),
+            connection_id: self.connection_id.clone(),
+            counterparty_connection_id: self.counterparty_connection_id.clone(),
             client_state: Some(IbcProtoAny {
                 type_url: self.client_state.type_url.clone(),
                 value: self.client_state.value.clone(),

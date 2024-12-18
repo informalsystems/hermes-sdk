@@ -1,6 +1,5 @@
 use core::time::Duration;
 
-use ibc::core::host::types::identifiers::ClientId;
 use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::commitment::v1::MerklePrefix;
@@ -15,8 +14,8 @@ const TYPE_URL: &str = "/ibc.core.connection.v1.MsgConnectionOpenInit";
 
 #[derive(Debug)]
 pub struct CosmosConnectionOpenInitMessage {
-    pub client_id: ClientId,
-    pub counterparty_client_id: ClientId,
+    pub client_id: String,
+    pub counterparty_client_id: String,
     pub counterparty_commitment_prefix: Vec<u8>,
     pub version: Version,
     pub delay_period: Duration,

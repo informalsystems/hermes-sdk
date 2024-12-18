@@ -1,5 +1,4 @@
 use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::ConnectionId;
 use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::connection::v1::MsgConnectionOpenConfirm as ProtoMsgConnectionOpenConfirm;
@@ -11,7 +10,7 @@ const TYPE_URL: &str = "/ibc.core.connection.v1.MsgConnectionOpenConfirm";
 
 #[derive(Debug)]
 pub struct CosmosConnectionOpenConfirmMessage {
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     pub update_height: Height,
     pub proof_ack: Vec<u8>,
 }
@@ -23,7 +22,7 @@ impl DynCosmosMessage for CosmosConnectionOpenConfirmMessage {
 
     fn encode_protobuf(&self, signer: &Signer) -> Any {
         let proto_message = ProtoMsgConnectionOpenConfirm {
-            connection_id: self.connection_id.as_str().to_string(),
+            connection_id: self.connection_id.clone(),
             proof_height: Some(self.update_height.into()),
             proof_ack: self.proof_ack.clone(),
             signer: signer.to_string(),
