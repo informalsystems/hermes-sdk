@@ -1,3 +1,5 @@
+use cgp::core::component::WithProvider;
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_component {
@@ -59,4 +61,14 @@ pub type ChannelOpenConfirmPayloadOf<Chain, Counterparty> =
 }]
 pub trait HasChannelEndType<Counterparty>: Async {
     type ChannelEnd: Async;
+}
+
+impl<Chain, Counterparty, Provider, ChannelEnd> ProvideChannelEndType<Chain, Counterparty>
+    for WithProvider<Provider>
+where
+    Provider: ProvideType<Chain, ChannelEndTypeComponent, Type = ChannelEnd>,
+    Chain: Async,
+    ChannelEnd: Async,
+{
+    type ChannelEnd = ChannelEnd;
 }

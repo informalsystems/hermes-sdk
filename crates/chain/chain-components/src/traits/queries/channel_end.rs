@@ -1,6 +1,9 @@
 use core::fmt::Debug;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 
 use crate::traits::types::channel::HasChannelEndType;
 use crate::traits::types::ibc::HasIbcChainTypes;
@@ -12,7 +15,11 @@ use crate::traits::types::proof::HasCommitmentProofType;
 }]
 #[async_trait]
 pub trait CanQueryChannelEnd<Counterparty>:
-    HasChannelEndType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
+    HasHeightType
+    + HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
+    + HasChannelEndType<Counterparty>
+    + HasErrorType
 {
     async fn query_channel_end(
         &self,
@@ -28,8 +35,10 @@ pub trait CanQueryChannelEnd<Counterparty>:
 }]
 #[async_trait]
 pub trait CanQueryChannelEndWithProofs<Counterparty>:
-    HasChannelEndType<Counterparty>
-    + HasIbcChainTypes<Counterparty>
+    HasHeightType
+    + HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
+    + HasChannelEndType<Counterparty>
     + HasCommitmentProofType
     + HasErrorType
 {
