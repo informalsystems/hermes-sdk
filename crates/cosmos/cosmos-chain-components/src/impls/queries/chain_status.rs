@@ -10,9 +10,9 @@ use tendermint_rpc::{Client, Error as TendermintRpcError};
 use crate::traits::rpc_client::HasRpcClient;
 use crate::types::status::ChainStatus;
 
-pub struct QueryChainStatusWithChainHandle;
+pub struct QueryCosmosChainStatus;
 
-impl<Chain> ChainStatusQuerier<Chain> for QueryChainStatusWithChainHandle
+impl<Chain> ChainStatusQuerier<Chain> for QueryCosmosChainStatus
 where
     Chain: HasErrorType
         + HasChainStatusType<ChainStatus = ChainStatus>
@@ -21,7 +21,7 @@ where
         + CanRaiseError<ClientError>
         + CanRaiseError<IdentifierError>,
 {
-    async fn query_chain_status(chain: &Chain) -> Result<Chain::ChainStatus, Chain::Error> {
+    async fn query_chain_status(chain: &Chain) -> Result<ChainStatus, Chain::Error> {
         let rpc_client = chain.rpc_client();
 
         let abci_info = rpc_client.abci_info().await.map_err(Chain::raise_error)?;
