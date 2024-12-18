@@ -70,7 +70,6 @@ use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
@@ -385,11 +384,6 @@ pub trait CanUseCosmosChain:
     + CanBuildCreateClientPayload<CosmosChain>
     + CanFilterIncomingPacket<CosmosChain>
     + CanFilterOutgoingPacket<CosmosChain>
-where
-    CosmosChain: HasClientStateType<Self>
-        + HasConsensusStateType<Self>
-        + HasCreateClientPayloadType<Self>
-        + HasUpdateClientPayloadType<Self>,
 {
 }
 
