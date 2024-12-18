@@ -1,4 +1,7 @@
+use core::fmt::Display;
+
 use cgp::core::error::{CanRaiseError, HasErrorType};
+use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
     ChannelOpenTryMessageBuilder,
@@ -8,7 +11,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelOpenTryPayloadType, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
@@ -16,7 +19,6 @@ use hermes_relayer_components::chain::types::payloads::channel::{
 use ibc::core::channel::types::channel::{ChannelEnd, State};
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use ibc_proto::ibc::core::channel::v1::{Channel, Counterparty as ChannelCounterparty};
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
@@ -31,10 +33,12 @@ pub struct BuildCosmosChannelHandshakeMessage;
 impl<Chain, Counterparty> ChannelOpenInitMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
-    Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
+    Chain: HasMessageType
+        + HasChannelIdType<Counterparty, ChannelId: Display>
+        + HasPortIdType<Counterparty, PortId: Display>
         + HasInitChannelOptionsType<Counterparty, InitChannelOptions = CosmosInitChannelOptions>
         + HasErrorType,
-    Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
+    Counterparty: HasPortIdType<Chain, PortId: Display>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_channel_open_init_message(
@@ -43,7 +47,6 @@ where
         counterparty_port_id: &Counterparty::PortId,
         init_channel_options: &CosmosInitChannelOptions,
     ) -> Result<Chain::Message, Chain::Error> {
-        let port_id = port_id.clone();
         let ordering = init_channel_options.ordering;
 
         let connection_hops = init_channel_options
@@ -78,9 +81,12 @@ where
 impl<Chain, Counterparty> ChannelOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
-    Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
+    Chain: HasMessageType
+        + HasChannelIdType<Counterparty, ChannelId: Display>
+        + HasPortIdType<Counterparty, PortId: Display>
         + CanRaiseError<ClientError>,
-    Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
+    Counterparty: HasChannelIdType<Chain, ChannelId: Display>
+        + HasPortIdType<Chain, PortId: Display>
         + HasChannelOpenTryPayloadType<
             Chain,
             ChannelOpenTryPayload = ChannelOpenTryPayload<Counterparty, Chain>,
@@ -142,9 +148,12 @@ where
 impl<Chain, Counterparty> ChannelOpenAckMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
-    Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
+    Chain: HasMessageType
+        + HasChannelIdType<Counterparty, ChannelId: Display>
+        + HasPortIdType<Counterparty, PortId: Display>
         + CanRaiseError<ClientError>,
-    Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
+    Counterparty: HasChannelIdType<Chain, ChannelId: Display>
+        + HasPortIdType<Chain, PortId: Display>
         + HasChannelOpenAckPayloadType<
             Chain,
             ChannelOpenAckPayload = ChannelOpenAckPayload<Counterparty, Chain>,
@@ -184,10 +193,11 @@ where
 impl<Chain, Counterparty> ChannelOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
-    Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
+    Chain: HasMessageType
+        + HasChannelIdType<Counterparty, ChannelId: Display>
+        + HasPortIdType<Counterparty, PortId: Display>
         + CanRaiseError<ClientError>,
-    Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
-        + HasChannelOpenConfirmPayloadType<
+    Counterparty: HasChannelOpenConfirmPayloadType<
             Chain,
             ChannelOpenConfirmPayload = ChannelOpenConfirmPayload<Counterparty>,
         > + HasCommitmentProofBytes
@@ -209,8 +219,8 @@ where
         let proof_ack = Counterparty::commitment_proof_bytes(&payload.proof_ack).into();
 
         let message = CosmosChannelOpenConfirmMessage {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
             update_height,
             proof_ack,
         };

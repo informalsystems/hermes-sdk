@@ -150,7 +150,7 @@ use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
 use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdFromAbci;
-use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
+use crate::impls::queries::chain_status::QueryCosmosChainStatus;
 use crate::impls::queries::channel_end::QueryCosmosChannelEndFromAbci;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromAbci;
@@ -314,7 +314,7 @@ cgp_preset! {
         PacketFromWriteAckBuilderComponent:
             BuildCosmosPacketFromWriteAck,
         ChainStatusQuerierComponent:
-            QueryChainStatusWithChainHandle,
+            QueryCosmosChainStatus,
         InitConnectionOptionsTypeComponent:
             ProvideCosmosInitConnectionOptionsType,
         InitChannelOptionsTypeComponent:

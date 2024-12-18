@@ -177,8 +177,8 @@ where
         let proof_ack = Vec::from(counterparty_payload.proof_ack.serialize_compact());
 
         let message = CosmosChannelOpenConfirmMessage {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
             update_height: counterparty_payload.update_height,
             proof_ack,
         };

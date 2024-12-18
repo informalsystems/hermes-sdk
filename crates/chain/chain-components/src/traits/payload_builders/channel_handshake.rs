@@ -1,10 +1,12 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 
 use crate::traits::types::channel::{
     HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
 };
 use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
   provider: ChannelOpenTryPayloadBuilder,
@@ -12,7 +14,9 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 }]
 #[async_trait]
 pub trait CanBuildChannelOpenTryPayload<Counterparty>:
-    HasIbcChainTypes<Counterparty>
+    HasHeightType
+    + HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
     + HasChannelOpenTryPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasErrorType
@@ -32,7 +36,9 @@ pub trait CanBuildChannelOpenTryPayload<Counterparty>:
 }]
 #[async_trait]
 pub trait CanBuildChannelOpenAckPayload<Counterparty>:
-    HasIbcChainTypes<Counterparty>
+    HasHeightType
+    + HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
     + HasChannelOpenAckPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasErrorType
@@ -52,7 +58,9 @@ pub trait CanBuildChannelOpenAckPayload<Counterparty>:
 }]
 #[async_trait]
 pub trait CanBuildChannelOpenConfirmPayload<Counterparty>:
-    HasIbcChainTypes<Counterparty>
+    HasHeightType
+    + HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
     + HasChannelOpenConfirmPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasErrorType

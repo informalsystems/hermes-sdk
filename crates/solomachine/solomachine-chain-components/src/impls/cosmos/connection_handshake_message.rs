@@ -81,9 +81,9 @@ where
         let client_state_any = IbcProtoAny::from(payload.client_state);
 
         let message = CosmosConnectionOpenTryMessage {
-            client_id: client_id.clone(),
-            counterparty_client_id: counterparty_client_id.clone(),
-            counterparty_connection_id: counterparty_connection_id.clone(),
+            client_id: client_id.to_string(),
+            counterparty_client_id: counterparty_client_id.to_string(),
+            counterparty_connection_id: counterparty_connection_id.to_string(),
             counterparty_commitment_prefix,
             counterparty_versions: payload.versions,
             delay_period: payload.delay_period,

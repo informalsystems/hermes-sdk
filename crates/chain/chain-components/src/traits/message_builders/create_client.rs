@@ -1,8 +1,9 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
 
 use crate::traits::types::create_client::{
-    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+    CreateClientPayloadOf, HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
 };
 use crate::traits::types::message::HasMessageType;
 
@@ -12,14 +13,15 @@ use crate::traits::types::message::HasMessageType;
 }]
 #[async_trait]
 pub trait CanBuildCreateClientMessage<Counterparty>:
-    HasCreateClientMessageOptionsType<Counterparty> + HasMessageType + HasErrorType
-where
-    Counterparty: HasCreateClientPayloadType<Self>,
+    HasCreateClientMessageOptionsType<Counterparty>
+    + HasMessageType
+    + HasErrorType
+    + CanUseCounterparty<Counterparty, Counterparty: HasCreateClientPayloadType<Self>>
 {
     async fn build_create_client_message(
         &self,
         create_client_options: &Self::CreateClientMessageOptions,
-        counterparty_payload: Counterparty::CreateClientPayload,
+        counterparty_payload: CreateClientPayloadOf<Counterparty, Self>,
     ) -> Result<Self::Message, Self::Error>;
 }
 

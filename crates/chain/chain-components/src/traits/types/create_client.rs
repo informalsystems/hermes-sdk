@@ -37,6 +37,9 @@ pub trait HasCreateClientPayloadType<Counterparty>: Async {
     type CreateClientPayload: Async;
 }
 
+pub type CreateClientPayloadOf<Chain, Counterparty> =
+    <Chain as HasCreateClientPayloadType<Counterparty>>::CreateClientPayload;
+
 #[cgp_component {
   name: CreateClientEventComponent,
   provider: ProvideCreateClientEvent,

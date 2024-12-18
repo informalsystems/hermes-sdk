@@ -2,7 +2,6 @@ use core::time::Duration;
 
 use ibc::core::client::types::Height;
 use ibc::core::connection::types::version::Version;
-use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_proto::ibc::core::commitment::v1::MerklePrefix;
@@ -18,9 +17,9 @@ const TYPE_URL: &str = "/ibc.core.connection.v1.MsgConnectionOpenTry";
 
 #[derive(Debug)]
 pub struct CosmosConnectionOpenTryMessage {
-    pub client_id: ClientId,
-    pub counterparty_client_id: ClientId,
-    pub counterparty_connection_id: ConnectionId,
+    pub client_id: String,
+    pub counterparty_client_id: String,
+    pub counterparty_connection_id: String,
     pub counterparty_commitment_prefix: Vec<u8>,
     pub counterparty_versions: Vec<Version>,
     pub client_state: Any,
@@ -39,16 +38,16 @@ impl DynCosmosMessage for CosmosConnectionOpenTryMessage {
 
     fn encode_protobuf(&self, signer: &Signer) -> IbcProtoAny {
         let counterparty = Counterparty {
-            client_id: self.counterparty_client_id.as_str().to_string(),
+            client_id: self.counterparty_client_id.clone(),
             prefix: Some(MerklePrefix {
                 key_prefix: self.counterparty_commitment_prefix.clone(),
             }),
-            connection_id: self.counterparty_connection_id.as_str().to_string(),
+            connection_id: self.counterparty_connection_id.clone(),
         };
 
         #[allow(deprecated)]
         let proto_message = ProtoMsgConnectionOpenTry {
-            client_id: self.client_id.as_str().to_string(),
+            client_id: self.client_id.clone(),
             counterparty: Some(counterparty),
             counterparty_versions: self
                 .counterparty_versions
