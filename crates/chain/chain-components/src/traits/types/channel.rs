@@ -25,6 +25,9 @@ pub trait HasChannelOpenTryPayloadType<Counterparty> {
     type ChannelOpenTryPayload: Async;
 }
 
+pub type ChannelOpenTryPayloadOf<Chain, Counterparty> =
+    <Chain as HasChannelOpenTryPayloadType<Counterparty>>::ChannelOpenTryPayload;
+
 #[cgp_component {
   name: ChannelOpenAckPayloadTypeComponent,
   provider: ProvideChannelOpenAckPayloadType,
@@ -34,6 +37,9 @@ pub trait HasChannelOpenAckPayloadType<Counterparty> {
     type ChannelOpenAckPayload: Async;
 }
 
+pub type ChannelOpenAckPayloadOf<Chain, Counterparty> =
+    <Chain as HasChannelOpenAckPayloadType<Counterparty>>::ChannelOpenAckPayload;
+
 #[cgp_component {
   name: ChannelOpenConfirmPayloadTypeComponent,
   provider: ProvideChannelOpenConfirmPayloadType,
@@ -42,6 +48,9 @@ pub trait HasChannelOpenAckPayloadType<Counterparty> {
 pub trait HasChannelOpenConfirmPayloadType<Counterparty> {
     type ChannelOpenConfirmPayload: Async;
 }
+
+pub type ChannelOpenConfirmPayloadOf<Chain, Counterparty> =
+    <Chain as HasChannelOpenConfirmPayloadType<Counterparty>>::ChannelOpenConfirmPayload;
 
 #[cgp_component {
   name: ChannelEndTypeComponent,
