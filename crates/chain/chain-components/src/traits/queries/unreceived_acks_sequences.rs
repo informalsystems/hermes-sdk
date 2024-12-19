@@ -1,8 +1,9 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-
-use crate::traits::types::ibc::HasIbcChainTypes;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 
 #[cgp_component {
   provider: UnreceivedAcksSequencesQuerier,
@@ -10,9 +11,10 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 }]
 #[async_trait]
 pub trait CanQueryUnreceivedAcksSequences<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
-where
-    Counterparty: HasIbcChainTypes<Self>,
+    HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
+    + HasSequenceType<Counterparty>
+    + HasErrorType
 {
     /// Performs a query about which IBC packets in the specified list has not
     /// been acknowledged. Returns the sequence numbers of the packets that were not
