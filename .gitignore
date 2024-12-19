@@ -33,3 +33,6 @@ mc.log
 /result*
 
 config.toml
+
+rust-toolchain.toml
+rustc-ice-*.txt

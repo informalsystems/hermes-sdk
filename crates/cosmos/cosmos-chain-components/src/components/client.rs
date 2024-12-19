@@ -281,7 +281,7 @@ cgp_preset! {
         [
             ReceivePacketMessageBuilderComponent,
             AckPacketMessageBuilderComponent,
-        TimeoutUnorderedPacketMessageBuilderComponent,
+            TimeoutUnorderedPacketMessageBuilderComponent,
         ]:
             BuildCosmosPacketMessages,
 
