@@ -10,7 +10,6 @@ use hermes_chain_type_components::traits::types::ibc::client_state::ClientStateO
 
 use crate::traits::queries::chain_status::CanQueryChainStatus;
 use crate::traits::types::client_state::{HasClientStateType, HasRawClientStateType};
-use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
@@ -38,7 +37,7 @@ pub trait CanQueryClientState<Counterparty>:
 }]
 #[async_trait]
 pub trait CanQueryClientStateWithProofs<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasCommitmentProofType + HasErrorType
+    HasHeightType + HasClientIdType<Counterparty> + HasCommitmentProofType + HasErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
@@ -173,7 +172,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ClientStateQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
+    Chain: HasHeightType + HasClientIdType<Counterparty> + HasErrorType,
     Counterparty: HasClientStateType<Chain>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
     Delegate: ClientStateQuerier<Chain, Counterparty>,
@@ -191,7 +190,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ClientStateWithProofsQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasCommitmentProofType + HasErrorType,
+    Chain: HasHeightType + HasClientIdType<Counterparty> + HasCommitmentProofType + HasErrorType,
     Counterparty: HasClientStateType<Chain>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
     Delegate: ClientStateWithProofsQuerier<Chain, Counterparty>,
@@ -209,7 +208,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> AllClientStatesQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
+    Chain: HasClientIdType<Counterparty> + HasHeightType + HasErrorType,
     Counterparty: HasClientStateType<Chain>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
     Delegate: AllClientStatesQuerier<Chain, Counterparty>,
