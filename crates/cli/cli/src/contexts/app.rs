@@ -11,6 +11,9 @@ use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainC
 use hermes_cli_components::impls::commands::client::create::{
     CreateClientOptionsParser, RunCreateClientCommand,
 };
+use hermes_cli_components::impls::commands::client::update::{
+    RunUpdateClientCommand, UpdateClientArgs,
+};
 use hermes_cli_components::impls::commands::queries::client::{
     QueryClientSubCommand, RunQueryClientSubCommand,
 };
@@ -156,6 +159,11 @@ delegate_components! {
 
         (CreateClientArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateClientArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
+
+        (UpdateClientArgs, symbol!("host_chain_id")): ParseFromString<ChainId>,
+        (UpdateClientArgs, symbol!("client_id")): ParseFromString<ClientId>,
+        (UpdateClientArgs, symbol!("counterparty_client_id")): ParseFromString<ClientId>,
+        (UpdateClientArgs, symbol!("target_height")): ParseFromOptionalString<Height>,
     }
 }
 
@@ -169,6 +177,7 @@ delegate_components! {
         QueryConsensusStateArgs: RunQueryConsensusStateCommand,
 
         CreateClientArgs: RunCreateClientCommand,
+        UpdateClientArgs: RunUpdateClientCommand,
 
         BootstrapSubCommand: RunBootstrapSubCommand,
         BootstrapChainArgs: RunBootstrapChainCommand<UseContext>,
@@ -236,6 +245,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<QueryConsensusStateArgs>
     + CanRunCommand<QueryClientStatusArgs>
     + CanRunCommand<CreateClientArgs>
+    + CanRunCommand<UpdateClientArgs>
     + CanRunCommand<BootstrapChainArgs>
     + CanProduceOutput<&'static str>
     + CanProduceOutput<ClientId>
