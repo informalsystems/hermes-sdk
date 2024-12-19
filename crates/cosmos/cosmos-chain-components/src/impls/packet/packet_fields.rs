@@ -63,7 +63,7 @@ where
         + HasSequenceType<Counterparty, Sequence = Sequence>,
 {
     fn packet_sequence(packet: &Packet) -> Sequence {
-        packet.seq_on_a.clone()
+        packet.seq_on_a
     }
 }
 

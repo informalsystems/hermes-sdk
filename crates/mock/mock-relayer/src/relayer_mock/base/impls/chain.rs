@@ -177,7 +177,7 @@ impl PacketDstChannelIdGetter<MockChainContext, MockChainContext> for MockChainC
 
 impl PacketSequenceGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn packet_sequence(packet: &Packet) -> Sequence {
-        packet.sequence.clone()
+        packet.sequence
     }
 }
 
