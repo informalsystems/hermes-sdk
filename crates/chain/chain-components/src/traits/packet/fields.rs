@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::component::WithProvider;
+use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::field::FieldGetter;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
@@ -13,33 +13,26 @@ use hermes_chain_type_components::traits::types::timeout::{HasTimeoutType, Timeo
 
 use crate::types::aliases::{ChannelIdOf, HeightOf, PortIdOf};
 
-#[cgp_component {
-    provider: PacketFieldsReader,
-    context: Chain,
-}]
 pub trait CanReadPacketFields<Counterparty>:
-    HasOutgoingPacketType<Counterparty>
-    + HasChannelIdType<Counterparty>
-    + HasPortIdType<Counterparty>
-    + HasSequenceType<Counterparty>
-    + CanUseCounterparty<
-        Counterparty,
-        Counterparty: HasHeightType + HasTimeoutType + HasChannelIdType<Self> + HasPortIdType<Self>,
-    >
+    HasPacketSrcChannelId<Counterparty>
+    + HasPacketSrcPortId<Counterparty>
+    + HasPacketDstChannelId<Counterparty>
+    + HasPacketDstPortId<Counterparty>
+    + HasPacketSequence<Counterparty>
+    + HasPacketTimeoutHeight<Counterparty>
+    + HasPacketTimeoutTimestamp<Counterparty>
 {
-    fn packet_src_channel_id(packet: &Self::OutgoingPacket) -> &Self::ChannelId;
+}
 
-    fn packet_dst_channel_id(packet: &Self::OutgoingPacket) -> &ChannelIdOf<Counterparty, Self>;
-
-    fn packet_src_port(packet: &Self::OutgoingPacket) -> &Self::PortId;
-
-    fn packet_dst_port(packet: &Self::OutgoingPacket) -> &PortIdOf<Counterparty, Self>;
-
-    fn packet_sequence(packet: &Self::OutgoingPacket) -> &Self::Sequence;
-
-    fn packet_timeout_height(packet: &Self::OutgoingPacket) -> Option<HeightOf<Counterparty>>;
-
-    fn packet_timeout_timestamp(packet: &Self::OutgoingPacket) -> Option<TimeoutOf<Counterparty>>;
+impl<Chain, Counterparty> CanReadPacketFields<Counterparty> for Chain where
+    Chain: HasPacketSrcChannelId<Counterparty>
+        + HasPacketSrcPortId<Counterparty>
+        + HasPacketDstChannelId<Counterparty>
+        + HasPacketDstPortId<Counterparty>
+        + HasPacketSequence<Counterparty>
+        + HasPacketTimeoutHeight<Counterparty>
+        + HasPacketTimeoutTimestamp<Counterparty>
+{
 }
 
 #[cgp_component {
@@ -220,5 +213,93 @@ where
 {
     fn packet_timeout_timestamp(packet: &Chain::OutgoingPacket) -> Option<Counterparty::Timeout> {
         Provider::get_field(packet, PhantomData).clone()
+    }
+}
+
+impl<Chain, Counterparty, Components> PacketSrcChannelIdGetter<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: HasOutgoingPacketType<Counterparty> + HasChannelIdType<Counterparty>,
+    Components: DelegateComponent<Counterparty>,
+    Components::Delegate: PacketSrcChannelIdGetter<Chain, Counterparty>,
+{
+    fn packet_src_channel_id(packet: &Chain::OutgoingPacket) -> Chain::ChannelId {
+        Components::Delegate::packet_src_channel_id(packet)
+    }
+}
+
+impl<Chain, Counterparty, Components> PacketSrcPortIdGetter<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: HasOutgoingPacketType<Counterparty> + HasPortIdType<Counterparty>,
+    Components: DelegateComponent<Counterparty>,
+    Components::Delegate: PacketSrcPortIdGetter<Chain, Counterparty>,
+{
+    fn packet_src_port_id(packet: &Chain::OutgoingPacket) -> Chain::PortId {
+        Components::Delegate::packet_src_port_id(packet)
+    }
+}
+
+impl<Chain, Counterparty, Components> PacketDstChannelIdGetter<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: HasOutgoingPacketType<Counterparty>,
+    Counterparty: HasChannelIdType<Chain>,
+    Components: DelegateComponent<Counterparty>,
+    Components::Delegate: PacketDstChannelIdGetter<Chain, Counterparty>,
+{
+    fn packet_dst_channel_id(packet: &Chain::OutgoingPacket) -> Counterparty::ChannelId {
+        Components::Delegate::packet_dst_channel_id(packet)
+    }
+}
+
+impl<Chain, Counterparty, Components> PacketDstPortIdGetter<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: HasOutgoingPacketType<Counterparty>,
+    Counterparty: HasPortIdType<Chain>,
+    Components: DelegateComponent<Counterparty>,
+    Components::Delegate: PacketDstPortIdGetter<Chain, Counterparty>,
+{
+    fn packet_dst_port_id(packet: &Chain::OutgoingPacket) -> Counterparty::PortId {
+        Components::Delegate::packet_dst_port_id(packet)
+    }
+}
+
+impl<Chain, Counterparty, Components> PacketSequenceGetter<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: HasOutgoingPacketType<Counterparty> + HasSequenceType<Counterparty>,
+    Components: DelegateComponent<Counterparty>,
+    Components::Delegate: PacketSequenceGetter<Chain, Counterparty>,
+{
+    fn packet_sequence(packet: &Chain::OutgoingPacket) -> Chain::Sequence {
+        Components::Delegate::packet_sequence(packet)
+    }
+}
+
+impl<Chain, Counterparty, Components> PacketTimeoutHeightGetter<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: HasOutgoingPacketType<Counterparty>,
+    Counterparty: HasHeightType,
+    Components: DelegateComponent<Counterparty>,
+    Components::Delegate: PacketTimeoutHeightGetter<Chain, Counterparty>,
+{
+    fn packet_timeout_height(packet: &Chain::OutgoingPacket) -> Option<Counterparty::Height> {
+        Components::Delegate::packet_timeout_height(packet)
+    }
+}
+
+impl<Chain, Counterparty, Components> PacketTimeoutTimestampGetter<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: HasOutgoingPacketType<Counterparty>,
+    Counterparty: HasTimeoutType,
+    Components: DelegateComponent<Counterparty>,
+    Components::Delegate: PacketTimeoutTimestampGetter<Chain, Counterparty>,
+{
+    fn packet_timeout_timestamp(packet: &Chain::OutgoingPacket) -> Option<Counterparty::Timeout> {
+        Components::Delegate::packet_timeout_timestamp(packet)
     }
 }

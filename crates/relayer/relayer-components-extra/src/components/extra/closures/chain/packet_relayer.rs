@@ -8,9 +8,7 @@ use hermes_relayer_components::chain::traits::message_builders::receive_packet::
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, TimeoutUnorderedPacketMessageBuilder,
 };
-use hermes_relayer_components::chain::traits::packet::fields::{
-    CanReadPacketFields, PacketFieldsReader,
-};
+use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
     AckPacketPayloadBuilder, CanBuildAckPacketPayload,
 };
@@ -65,6 +63,7 @@ where
         + HasReceivePacketPayloadType<Counterparty>
         + HasWriteAckEvent<Counterparty>
         + HasAckPacketPayloadType<Counterparty>
+        + CanReadPacketFields<Counterparty>
         + HasTimeoutUnorderedPacketPayloadType<Counterparty>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
         + HasComponents<Components = Components>,
@@ -76,8 +75,7 @@ where
         + HasAckPacketPayloadType<Chain>
         + HasTimeoutUnorderedPacketPayloadType<Chain>
         + HasReceivePacketPayloadType<Chain>,
-    Components: PacketFieldsReader<Chain, Counterparty>
-        + ReceivedPacketQuerier<Chain, Counterparty>
+    Components: ReceivedPacketQuerier<Chain, Counterparty>
         + ReceivePacketPayloadBuilder<Chain, Counterparty>
         + ReceivePacketMessageBuilder<Chain, Counterparty>
         + AckPacketPayloadBuilder<Chain, Counterparty>

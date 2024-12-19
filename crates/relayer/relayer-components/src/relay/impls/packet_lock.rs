@@ -4,6 +4,10 @@ use core::marker::PhantomData;
 
 use cgp::core::field::impls::use_field::UseField;
 use cgp::prelude::*;
+use hermes_chain_components::traits::packet::fields::{
+    HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence, HasPacketSrcChannelId,
+    HasPacketSrcPortId,
+};
 use hermes_chain_components::traits::types::ibc::{
     HasChannelIdType, HasPortIdType, HasSequenceType,
 };
@@ -15,7 +19,6 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
 
-use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf, SequenceOf};
 use crate::relay::traits::chains::{HasRelayChainTypes, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_lock::ProvidePacketLock;
@@ -137,7 +140,11 @@ impl<Relay> ProvidePacketLock<Relay> for ProvidePacketLockWithMutex
 where
     Relay: CanUsePacketMutex + HasPacketMutex + HasRelayChains,
     Relay::Runtime: CanUseChannelsOnce + CanCreateChannelsOnce + CanSpawnTask,
-    Relay::SrcChain: CanReadPacketFields<Relay::DstChain>,
+    Relay::SrcChain: HasPacketSrcChannelId<Relay::DstChain>
+        + HasPacketSrcPortId<Relay::DstChain>
+        + HasPacketDstChannelId<Relay::DstChain>
+        + HasPacketDstPortId<Relay::DstChain>
+        + HasPacketSequence<Relay::DstChain>,
 {
     type PacketLock<'a> = PacketLock<Relay>;
 
@@ -146,11 +153,11 @@ where
         packet: &'a PacketOf<Relay>,
     ) -> Option<PacketLock<Relay>> {
         let packet_key = (
-            Relay::SrcChain::packet_src_channel_id(packet).clone(),
-            Relay::SrcChain::packet_src_port(packet).clone(),
-            Relay::SrcChain::packet_dst_channel_id(packet).clone(),
-            Relay::SrcChain::packet_dst_port(packet).clone(),
-            Relay::SrcChain::packet_sequence(packet).clone(),
+            Relay::SrcChain::packet_src_channel_id(packet),
+            Relay::SrcChain::packet_src_port_id(packet),
+            Relay::SrcChain::packet_dst_channel_id(packet),
+            Relay::SrcChain::packet_dst_port_id(packet),
+            Relay::SrcChain::packet_sequence(packet),
         );
 
         let packet_mutex = relay.packet_mutex();

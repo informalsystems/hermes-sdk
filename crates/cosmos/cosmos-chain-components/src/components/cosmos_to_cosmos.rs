@@ -11,7 +11,7 @@ pub use hermes_relayer_components::chain::traits::message_builders::connection_h
 };
 pub use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::packet::fields::{
+pub use hermes_relayer_components::chain::traits::packet::fields::{
     PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
     PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
     PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,

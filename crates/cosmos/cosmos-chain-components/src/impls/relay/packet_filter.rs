@@ -2,7 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::core::Async;
 use cgp::prelude::{HasErrorType, HasField};
-use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
+use hermes_relayer_components::chain::traits::packet::fields::{
+    HasPacketDstChannelId, HasPacketDstPortId, HasPacketSrcChannelId, HasPacketSrcPortId,
+};
 use hermes_relayer_components::chain::traits::packet::filter::{
     IncomingPacketFilter, OutgoingPacketFilter,
 };
@@ -16,7 +18,8 @@ pub struct FilterPacketWithConfig<Tag>(pub PhantomData<Tag>);
 impl<Chain, Counterparty, Tag> OutgoingPacketFilter<Chain, Counterparty>
     for FilterPacketWithConfig<Tag>
 where
-    Chain: CanReadPacketFields<Counterparty>
+    Chain: HasPacketSrcChannelId<Counterparty>
+        + HasPacketSrcPortId<Counterparty>
         + HasPortIdType<Counterparty, PortId = PortId>
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
         + HasField<Tag, Value = PacketFilterConfig>
@@ -27,8 +30,8 @@ where
         packet: &Chain::OutgoingPacket,
     ) -> Result<bool, Chain::Error> {
         Ok(chain.get_field(PhantomData).is_allowed(
-            Chain::packet_src_port(packet),
-            Chain::packet_src_channel_id(packet),
+            &Chain::packet_src_port_id(packet),
+            &Chain::packet_src_channel_id(packet),
         ))
     }
 }
@@ -41,15 +44,15 @@ where
         + HasPortIdType<Counterparty, PortId = PortId>
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
         + HasErrorType,
-    Counterparty: CanReadPacketFields<Chain>,
+    Counterparty: HasPacketDstChannelId<Chain> + HasPacketDstPortId<Chain>,
 {
     async fn should_relay_incoming_packet(
         chain: &Chain,
         packet: &Counterparty::OutgoingPacket,
     ) -> Result<bool, Chain::Error> {
         Ok(chain.get_field(PhantomData).is_allowed(
-            Counterparty::packet_dst_port(packet),
-            Counterparty::packet_dst_channel_id(packet),
+            &Counterparty::packet_dst_port_id(packet),
+            &Counterparty::packet_dst_channel_id(packet),
         ))
     }
 }
