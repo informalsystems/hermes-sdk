@@ -7,7 +7,6 @@ use crate::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerier,
 };
 use crate::traits::types::height::HasHeightType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 
 pub struct QueryConsensusStateHeightsAndFindHeightBefore;
 
@@ -58,7 +57,7 @@ where
 
 impl<Chain, Counterparty> Debug for NoConsensusStateAtLessThanHeight<'_, Chain, Counterparty>
 where
-    Chain: HasIbcChainTypes<Counterparty>,
+    Chain: HasClientIdType<Counterparty>,
     Counterparty: HasHeightType,
 {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {

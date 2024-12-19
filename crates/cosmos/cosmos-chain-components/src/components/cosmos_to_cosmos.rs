@@ -11,6 +11,12 @@ pub use hermes_relayer_components::chain::traits::message_builders::connection_h
 };
 pub use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+pub use hermes_relayer_components::chain::traits::packet::fields::{
+    PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
+    PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
+    PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,
+    PacketTimeoutTimestampGetterComponent,
+};
 pub use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::queries::client_state::{
@@ -41,6 +47,7 @@ use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::client::update_client_payload::BuildTendermintUpdateClientPayload;
 use crate::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::message_height::GetCosmosCounterpartyMessageHeight;
+use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
 use crate::impls::types::client_state::ProvideTendermintClientState;
 use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
@@ -107,5 +114,15 @@ cgp_preset! {
             QueryConsensusStateHeightsFromGrpc,
         CounterpartyMessageHeightGetterComponent:
             GetCosmosCounterpartyMessageHeight,
+        [
+            PacketSrcChannelIdGetterComponent,
+            PacketSrcPortIdGetterComponent,
+            PacketDstChannelIdGetterComponent,
+            PacketDstPortIdGetterComponent,
+            PacketSequenceGetterComponent,
+            PacketTimeoutHeightGetterComponent,
+            PacketTimeoutTimestampGetterComponent,
+        ]:
+            CosmosPacketFieldReader,
     }
 }

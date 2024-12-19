@@ -5,7 +5,6 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
 
 use crate::traits::types::connection::HasConnectionEndType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
@@ -47,7 +46,7 @@ pub trait CanQueryConnectionEndWithProofs<Counterparty>:
 
 pub struct ConnectionNotFoundError<'a, Chain, Counterparty>
 where
-    Chain: HasIbcChainTypes<Counterparty>,
+    Chain: HasHeightType + HasConnectionIdType<Counterparty>,
 {
     pub chain: &'a Chain,
     pub connection_id: &'a Chain::ConnectionId,
@@ -56,7 +55,7 @@ where
 
 impl<Chain, Counterparty> Debug for ConnectionNotFoundError<'_, Chain, Counterparty>
 where
-    Chain: HasIbcChainTypes<Counterparty>,
+    Chain: HasHeightType + HasConnectionIdType<Counterparty>,
 {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         writeln!(

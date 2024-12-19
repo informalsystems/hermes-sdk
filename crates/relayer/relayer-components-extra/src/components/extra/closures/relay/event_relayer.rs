@@ -2,7 +2,7 @@ use cgp::core::component::HasComponents;
 use cgp::core::error::ErrorRaiser;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_relayer_components::chain::traits::packet::fields::CanReadOutgoingPacketFields;
+use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
@@ -33,8 +33,7 @@ where
         + UseExtraAckPacketRelayer
         + UseExtraPacketRelayer
         + HasComponents<Components = Components>,
-    SrcChain:
-        CanReadOutgoingPacketFields<DstChain> + UseExtraChainComponentsForEventRelayer<DstChain>,
+    SrcChain: CanReadPacketFields<DstChain> + UseExtraChainComponentsForEventRelayer<DstChain>,
     DstChain: UseExtraChainComponentsForEventRelayer<SrcChain>,
     Components: DelegatesToExtraRelayPreset
         + RelayPacketFilter<Relay>

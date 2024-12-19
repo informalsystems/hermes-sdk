@@ -12,7 +12,7 @@ use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
 use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use crate::chain::traits::packet::fields::CanReadOutgoingPacketFields;
+use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
 use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
@@ -71,7 +71,7 @@ where
         + HasClientStateFields<DstChain>
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>
-        + CanReadOutgoingPacketFields<DstChain>
+        + CanReadPacketFields<DstChain>
         + CanQueryClientState<DstChain>
         + CanQueryConsensusState<DstChain>
         + CanQueryConsensusStateHeight<DstChain>
@@ -90,7 +90,7 @@ where
         + HasConsensusStateType<SrcChain>
         + HasCounterpartyMessageHeight<SrcChain>
         + HasWriteAckEvent<SrcChain>
-        + CanReadOutgoingPacketFields<SrcChain>
+        + CanReadPacketFields<SrcChain>
         + CanQueryClientState<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>
         + CanQueryConsensusState<SrcChain>
@@ -102,7 +102,6 @@ where
         + CanBuildReceivePacketMessage<SrcChain>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
-    DstChain::Timeout: Ord,
     SrcChain::Runtime: CanSleep,
     DstChain::Runtime: CanSleep,
     Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>

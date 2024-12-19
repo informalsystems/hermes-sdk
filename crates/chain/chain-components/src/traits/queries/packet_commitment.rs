@@ -1,6 +1,9 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 
-use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::packets::receive::HasPacketCommitmentType;
 use crate::traits::types::proof::HasCommitmentProofType;
 
@@ -10,7 +13,10 @@ use crate::traits::types::proof::HasCommitmentProofType;
 }]
 #[async_trait]
 pub trait CanQueryPacketCommitment<Counterparty>:
-    HasIbcChainTypes<Counterparty>
+    HasHeightType
+    + HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
+    + HasSequenceType<Counterparty>
     + HasPacketCommitmentType<Counterparty>
     + HasCommitmentProofType
     + HasErrorType

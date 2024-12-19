@@ -1,3 +1,7 @@
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+
 use crate::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
 };
@@ -6,7 +10,6 @@ use crate::traits::types::channel::{
     HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
 };
 use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofHeight;
 use crate::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
@@ -17,7 +20,9 @@ pub struct BuildChannelHandshakePayload;
 impl<Chain, Counterparty> ChannelOpenTryPayloadBuilder<Chain, Counterparty>
     for BuildChannelHandshakePayload
 where
-    Chain: HasIbcChainTypes<Counterparty>
+    Chain: HasHeightType
+        + HasChannelIdType<Counterparty>
+        + HasPortIdType<Counterparty>
         + HasChannelOpenTryPayloadType<
             Counterparty,
             ChannelOpenTryPayload = ChannelOpenTryPayload<Chain, Counterparty>,
@@ -54,7 +59,9 @@ where
 impl<Chain, Counterparty> ChannelOpenAckPayloadBuilder<Chain, Counterparty>
     for BuildChannelHandshakePayload
 where
-    Chain: HasIbcChainTypes<Counterparty>
+    Chain: HasHeightType
+        + HasChannelIdType<Counterparty>
+        + HasPortIdType<Counterparty>
         + HasChannelOpenAckPayloadType<
             Counterparty,
             ChannelOpenAckPayload = ChannelOpenAckPayload<Chain, Counterparty>,
@@ -91,7 +98,9 @@ where
 impl<Chain, Counterparty> ChannelOpenConfirmPayloadBuilder<Chain, Counterparty>
     for BuildChannelHandshakePayload
 where
-    Chain: HasIbcChainTypes<Counterparty>
+    Chain: HasHeightType
+        + HasChannelIdType<Counterparty>
+        + HasPortIdType<Counterparty>
         + HasChannelOpenConfirmPayloadType<
             Counterparty,
             ChannelOpenConfirmPayload = ChannelOpenConfirmPayload<Chain>,

@@ -10,14 +10,19 @@ pub use hermes_cosmos_chain_components::components::client::{
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     CreateClientPayloadTypeComponent, InitChannelOptionsTypeComponent,
     InitConnectionOptionsTypeComponent, MessageResponseEventsGetterComponent,
-    MessageResponseTypeComponent, OutgoingPacketFieldsReaderComponent, OutgoingPacketTypeComponent,
-    PortIdTypeComponent, ReceivePacketPayloadTypeComponent, SequenceTypeComponent,
-    TimeTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
-    UpdateClientPayloadTypeComponent,
+    MessageResponseTypeComponent, OutgoingPacketTypeComponent, PortIdTypeComponent,
+    ReceivePacketPayloadTypeComponent, SequenceTypeComponent, TimeTypeComponent,
+    TimeoutUnorderedPacketPayloadTypeComponent, UpdateClientPayloadTypeComponent,
 };
 pub use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 pub use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 pub use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
+pub use hermes_cosmos_relayer::presets::chain::{
+    PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
+    PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
+    PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,
+    PacketTimeoutTimestampGetterComponent,
+};
 pub use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 pub use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
 pub use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
@@ -119,7 +124,15 @@ cgp_preset! {
             ProvideSolomachineClientState,
         ConsensusStateTypeComponent:
             ProvideSolomachineConsensusState,
-        OutgoingPacketFieldsReaderComponent:
+        [
+            PacketSrcChannelIdGetterComponent,
+            PacketSrcPortIdGetterComponent,
+            PacketDstChannelIdGetterComponent,
+            PacketDstPortIdGetterComponent,
+            PacketSequenceGetterComponent,
+            PacketTimeoutHeightGetterComponent,
+            PacketTimeoutTimestampGetterComponent,
+        ]:
             CosmosPacketFieldReader,
         MessageSenderComponent:
             ProcessSolomachineMessages,

@@ -22,7 +22,11 @@ use hermes_cosmos_chain_components::components::client::{
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
-use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReader;
+use hermes_relayer_components::chain::traits::packet::fields::{
+    PacketDstChannelIdGetter, PacketDstPortIdGetter, PacketSequenceGetter,
+    PacketSrcChannelIdGetter, PacketSrcPortIdGetter, PacketTimeoutHeightGetter,
+    PacketTimeoutTimestampGetter,
+};
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -147,32 +151,44 @@ impl ProvideOutgoingPacketType<MockChainContext, MockChainContext> for MockChain
     type OutgoingPacket = Packet;
 }
 
-impl OutgoingPacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
-    fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
-        &packet.src_channel_id
+impl PacketSrcChannelIdGetter<MockChainContext, MockChainContext> for MockChainComponents {
+    fn packet_src_channel_id(packet: &Packet) -> ChannelId {
+        packet.src_channel_id.clone()
     }
+}
 
-    fn outgoing_packet_src_port(packet: &Packet) -> &PortId {
-        &packet.src_port_id
+impl PacketSrcPortIdGetter<MockChainContext, MockChainContext> for MockChainComponents {
+    fn packet_src_port_id(packet: &Packet) -> PortId {
+        packet.src_port_id.clone()
     }
+}
 
-    fn outgoing_packet_dst_port(packet: &Packet) -> &PortId {
-        &packet.dst_port_id
+impl PacketDstPortIdGetter<MockChainContext, MockChainContext> for MockChainComponents {
+    fn packet_dst_port_id(packet: &Packet) -> PortId {
+        packet.dst_port_id.clone()
     }
+}
 
-    fn outgoing_packet_dst_channel_id(packet: &Packet) -> &ChannelId {
-        &packet.dst_channel_id
+impl PacketDstChannelIdGetter<MockChainContext, MockChainContext> for MockChainComponents {
+    fn packet_dst_channel_id(packet: &Packet) -> ChannelId {
+        packet.dst_channel_id.clone()
     }
+}
 
-    fn outgoing_packet_sequence(packet: &Packet) -> &Sequence {
-        &packet.sequence
+impl PacketSequenceGetter<MockChainContext, MockChainContext> for MockChainComponents {
+    fn packet_sequence(packet: &Packet) -> Sequence {
+        packet.sequence
     }
+}
 
-    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<MockHeight> {
+impl PacketTimeoutHeightGetter<MockChainContext, MockChainContext> for MockChainComponents {
+    fn packet_timeout_height(packet: &Packet) -> Option<MockHeight> {
         Some(packet.timeout_height)
     }
+}
 
-    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<MockTimestamp> {
+impl PacketTimeoutTimestampGetter<MockChainContext, MockChainContext> for MockChainComponents {
+    fn packet_timeout_timestamp(packet: &Packet) -> Option<MockTimestamp> {
         Some(packet.timeout_timestamp.clone())
     }
 }

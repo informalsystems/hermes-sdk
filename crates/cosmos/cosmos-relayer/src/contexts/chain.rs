@@ -46,6 +46,7 @@ use hermes_relayer_components::chain::traits::commitment_prefix::{
 };
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::packet::fields::HasPacketSrcChannelId;
 use hermes_relayer_components::chain::traits::packet::filter::{
     CanFilterIncomingPacket, CanFilterOutgoingPacket,
 };
@@ -384,6 +385,7 @@ pub trait CanUseCosmosChain:
     + CanBuildCreateClientPayload<CosmosChain>
     + CanFilterIncomingPacket<CosmosChain>
     + CanFilterOutgoingPacket<CosmosChain>
+    + HasPacketSrcChannelId<CosmosChain>
 {
 }
 
