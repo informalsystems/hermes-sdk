@@ -27,8 +27,8 @@ where
         packet: &Chain::OutgoingPacket,
     ) -> Result<bool, Chain::Error> {
         Ok(chain.get_field(PhantomData).is_allowed(
-            Chain::outgoing_packet_src_port(packet),
-            Chain::outgoing_packet_src_channel_id(packet),
+            Chain::packet_src_port(packet),
+            Chain::packet_src_channel_id(packet),
         ))
     }
 }
@@ -48,8 +48,8 @@ where
         packet: &Counterparty::OutgoingPacket,
     ) -> Result<bool, Chain::Error> {
         Ok(chain.get_field(PhantomData).is_allowed(
-            Counterparty::outgoing_packet_dst_port(packet),
-            Counterparty::outgoing_packet_dst_channel_id(packet),
+            Counterparty::packet_dst_port(packet),
+            Counterparty::packet_dst_channel_id(packet),
         ))
     }
 }

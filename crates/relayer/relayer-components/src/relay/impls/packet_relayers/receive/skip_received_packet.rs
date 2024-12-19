@@ -28,9 +28,9 @@ where
         let is_packet_received = relay
             .dst_chain()
             .query_packet_is_received(
-                Relay::SrcChain::outgoing_packet_dst_port(packet),
-                Relay::SrcChain::outgoing_packet_dst_channel_id(packet),
-                Relay::SrcChain::outgoing_packet_sequence(packet),
+                Relay::SrcChain::packet_dst_port(packet),
+                Relay::SrcChain::packet_dst_channel_id(packet),
+                Relay::SrcChain::packet_sequence(packet),
             )
             .await
             .map_err(Relay::raise_error)?;

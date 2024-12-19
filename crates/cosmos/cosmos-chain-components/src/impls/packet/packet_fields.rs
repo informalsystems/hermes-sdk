@@ -30,34 +30,34 @@ where
     Chain::Height: From<Height>,
     Counterparty::Height: From<Height>,
 {
-    fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
+    fn packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.chan_id_on_a
     }
 
-    fn outgoing_packet_dst_channel_id(packet: &Packet) -> &ChannelId {
+    fn packet_dst_channel_id(packet: &Packet) -> &ChannelId {
         &packet.chan_id_on_b
     }
 
-    fn outgoing_packet_src_port(packet: &Packet) -> &PortId {
+    fn packet_src_port(packet: &Packet) -> &PortId {
         &packet.port_id_on_a
     }
 
-    fn outgoing_packet_dst_port(packet: &Packet) -> &PortId {
+    fn packet_dst_port(packet: &Packet) -> &PortId {
         &packet.port_id_on_b
     }
 
-    fn outgoing_packet_sequence(packet: &Packet) -> &Sequence {
+    fn packet_sequence(packet: &Packet) -> &Sequence {
         &packet.seq_on_a
     }
 
-    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<Counterparty::Height> {
+    fn packet_timeout_height(packet: &Packet) -> Option<Counterparty::Height> {
         match &packet.timeout_height_on_b {
             TimeoutHeight::Never => None,
             TimeoutHeight::At(h) => Some((*h).into()),
         }
     }
 
-    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
+    fn packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
         match &packet.timeout_timestamp_on_b {
             TimeoutTimestamp::Never => None,
             TimeoutTimestamp::At(timestamp) => Some(*timestamp),

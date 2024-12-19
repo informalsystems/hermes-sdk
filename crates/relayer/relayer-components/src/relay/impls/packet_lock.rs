@@ -146,11 +146,11 @@ where
         packet: &'a PacketOf<Relay>,
     ) -> Option<PacketLock<Relay>> {
         let packet_key = (
-            Relay::SrcChain::outgoing_packet_src_channel_id(packet).clone(),
-            Relay::SrcChain::outgoing_packet_src_port(packet).clone(),
-            Relay::SrcChain::outgoing_packet_dst_channel_id(packet).clone(),
-            Relay::SrcChain::outgoing_packet_dst_port(packet).clone(),
-            Relay::SrcChain::outgoing_packet_sequence(packet).clone(),
+            Relay::SrcChain::packet_src_channel_id(packet).clone(),
+            Relay::SrcChain::packet_src_port(packet).clone(),
+            Relay::SrcChain::packet_dst_channel_id(packet).clone(),
+            Relay::SrcChain::packet_dst_port(packet).clone(),
+            Relay::SrcChain::packet_sequence(packet).clone(),
         );
 
         let packet_mutex = relay.packet_mutex();

@@ -19,8 +19,8 @@ where
         relay: &Relay,
         packet: &PacketOf<Relay>,
     ) -> Result<bool, Relay::Error> {
-        let dst_channel_id = Relay::SrcChain::outgoing_packet_dst_channel_id(packet);
-        let dst_port = Relay::SrcChain::outgoing_packet_dst_port(packet);
+        let dst_channel_id = Relay::SrcChain::packet_dst_channel_id(packet);
+        let dst_port = Relay::SrcChain::packet_dst_port(packet);
 
         let src_chain_id = relay
             .dst_chain()
@@ -45,8 +45,8 @@ where
         relay: &Relay,
         packet: &PacketOf<Relay>,
     ) -> Result<bool, Relay::Error> {
-        let src_channel_id = Relay::SrcChain::outgoing_packet_src_channel_id(packet);
-        let src_port = Relay::SrcChain::outgoing_packet_src_port(packet);
+        let src_channel_id = Relay::SrcChain::packet_src_channel_id(packet);
+        let src_port = Relay::SrcChain::packet_src_port(packet);
 
         let dst_chain_id = relay
             .src_chain()

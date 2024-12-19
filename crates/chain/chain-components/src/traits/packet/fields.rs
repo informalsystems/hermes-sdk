@@ -23,25 +23,19 @@ pub trait CanReadOutgoingPacketFields<Counterparty>:
         Counterparty: HasHeightType + HasTimeoutType + HasChannelIdType<Self> + HasPortIdType<Self>,
     >
 {
-    fn outgoing_packet_src_channel_id(packet: &Self::OutgoingPacket) -> &Self::ChannelId;
+    fn packet_src_channel_id(packet: &Self::OutgoingPacket) -> &Self::ChannelId;
 
-    fn outgoing_packet_dst_channel_id(
-        packet: &Self::OutgoingPacket,
-    ) -> &ChannelIdOf<Counterparty, Self>;
+    fn packet_dst_channel_id(packet: &Self::OutgoingPacket) -> &ChannelIdOf<Counterparty, Self>;
 
-    fn outgoing_packet_src_port(packet: &Self::OutgoingPacket) -> &Self::PortId;
+    fn packet_src_port(packet: &Self::OutgoingPacket) -> &Self::PortId;
 
-    fn outgoing_packet_dst_port(packet: &Self::OutgoingPacket) -> &PortIdOf<Counterparty, Self>;
+    fn packet_dst_port(packet: &Self::OutgoingPacket) -> &PortIdOf<Counterparty, Self>;
 
-    fn outgoing_packet_sequence(packet: &Self::OutgoingPacket) -> &Self::Sequence;
+    fn packet_sequence(packet: &Self::OutgoingPacket) -> &Self::Sequence;
 
-    fn outgoing_packet_timeout_height(
-        packet: &Self::OutgoingPacket,
-    ) -> Option<HeightOf<Counterparty>>;
+    fn packet_timeout_height(packet: &Self::OutgoingPacket) -> Option<HeightOf<Counterparty>>;
 
-    fn outgoing_packet_timeout_timestamp(
-        packet: &Self::OutgoingPacket,
-    ) -> Option<TimeoutOf<Counterparty>>;
+    fn packet_timeout_timestamp(packet: &Self::OutgoingPacket) -> Option<TimeoutOf<Counterparty>>;
 }
 
 pub trait HasPacketSrcChannelId<Counterparty>:

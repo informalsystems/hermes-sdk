@@ -63,8 +63,8 @@ where
         let destination_height = DstChain::chain_status_height(&destination_status);
         let destination_timestamp = DstChain::chain_status_time(&destination_status);
 
-        let packet_timeout_height = SrcChain::outgoing_packet_timeout_height(packet);
-        let packet_timeout_timestamp = SrcChain::outgoing_packet_timeout_timestamp(packet);
+        let packet_timeout_height = SrcChain::packet_timeout_height(packet);
+        let packet_timeout_timestamp = SrcChain::packet_timeout_timestamp(packet);
 
         let has_packet_timed_out = match (packet_timeout_height, packet_timeout_timestamp) {
             (Some(height), Some(timestamp)) => {

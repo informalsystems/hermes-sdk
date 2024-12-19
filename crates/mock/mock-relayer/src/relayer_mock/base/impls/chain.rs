@@ -148,31 +148,31 @@ impl ProvideOutgoingPacketType<MockChainContext, MockChainContext> for MockChain
 }
 
 impl OutgoingPacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
-    fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
+    fn packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.src_channel_id
     }
 
-    fn outgoing_packet_src_port(packet: &Packet) -> &PortId {
+    fn packet_src_port(packet: &Packet) -> &PortId {
         &packet.src_port_id
     }
 
-    fn outgoing_packet_dst_port(packet: &Packet) -> &PortId {
+    fn packet_dst_port(packet: &Packet) -> &PortId {
         &packet.dst_port_id
     }
 
-    fn outgoing_packet_dst_channel_id(packet: &Packet) -> &ChannelId {
+    fn packet_dst_channel_id(packet: &Packet) -> &ChannelId {
         &packet.dst_channel_id
     }
 
-    fn outgoing_packet_sequence(packet: &Packet) -> &Sequence {
+    fn packet_sequence(packet: &Packet) -> &Sequence {
         &packet.sequence
     }
 
-    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<MockHeight> {
+    fn packet_timeout_height(packet: &Packet) -> Option<MockHeight> {
         Some(packet.timeout_height)
     }
 
-    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<MockTimestamp> {
+    fn packet_timeout_timestamp(packet: &Packet) -> Option<MockTimestamp> {
         Some(packet.timeout_timestamp.clone())
     }
 }

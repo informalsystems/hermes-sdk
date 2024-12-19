@@ -40,9 +40,9 @@ where
     ) -> Result<Chain::ReceivePacketPayload, Chain::Error> {
         let (_, proof_commitment) = chain
             .query_packet_commitment(
-                Chain::outgoing_packet_src_channel_id(packet),
-                Chain::outgoing_packet_src_port(packet),
-                Chain::outgoing_packet_sequence(packet),
+                Chain::packet_src_channel_id(packet),
+                Chain::packet_src_port(packet),
+                Chain::packet_sequence(packet),
                 height,
             )
             .await?;
@@ -84,9 +84,9 @@ where
     ) -> Result<Chain::AckPacketPayload, Chain::Error> {
         let (_, proof_ack) = chain
             .query_packet_acknowledgement(
-                Counterparty::outgoing_packet_dst_channel_id(packet),
-                Counterparty::outgoing_packet_dst_port(packet),
-                Counterparty::outgoing_packet_sequence(packet),
+                Counterparty::packet_dst_channel_id(packet),
+                Counterparty::packet_dst_port(packet),
+                Counterparty::packet_sequence(packet),
                 height,
             )
             .await?;
@@ -127,9 +127,9 @@ where
     ) -> Result<TimeoutUnorderedPacketPayload<Chain>, Chain::Error> {
         let (_, proof_unreceived) = chain
             .query_packet_receipt(
-                Counterparty::outgoing_packet_dst_channel_id(packet),
-                Counterparty::outgoing_packet_dst_port(packet),
-                Counterparty::outgoing_packet_sequence(packet),
+                Counterparty::packet_dst_channel_id(packet),
+                Counterparty::packet_dst_port(packet),
+                Counterparty::packet_sequence(packet),
                 height,
             )
             .await?;
