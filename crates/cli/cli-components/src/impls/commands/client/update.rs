@@ -24,8 +24,8 @@ use crate::traits::command::CommandRunner;
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
-#[derive(Debug, clap::Parser)]
-pub struct ClientUpdateArgs {
+#[derive(Debug, clap::Parser, HasField)]
+pub struct UpdateClientArgs {
     #[clap(
         long = "host-chain",
         required = true,
