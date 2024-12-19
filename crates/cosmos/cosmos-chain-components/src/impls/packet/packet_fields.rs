@@ -33,9 +33,8 @@ where
         ChannelId = ChannelId,
         PortId = PortId,
         Sequence = Sequence,
+        Height = Height,
     >,
-    Chain::Height: From<Height>,
-    Counterparty::Height: From<Height>,
 {
     fn packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.chan_id_on_a
