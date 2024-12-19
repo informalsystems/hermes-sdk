@@ -5,7 +5,7 @@ use hermes_cosmos_chain_components::components::client::{
     CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
     UpdateClientPayloadBuilderComponent, UpdateClientPayloadTypeComponent,
 };
-use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
+use hermes_cosmos_chain_components::components::cosmos_to_cosmos::*;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
     ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
@@ -31,40 +31,24 @@ use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
 use crate::impls::update_client_message::BuildUpdateWasmTendermintClientMessage;
 use crate::types::create_client::ProvidCreateWasmTendermintMessageOptionsType;
 
-cgp_preset! {
-    CosmosToWasmCosmosComponents {
-        CreateClientMessageBuilderComponent:
-            BuildCreateWasmTendermintClientMessage,
-        CreateClientMessageOptionsTypeComponent:
-            ProvidCreateWasmTendermintMessageOptionsType,
-        UpdateClientMessageBuilderComponent:
-            BuildUpdateWasmTendermintClientMessage,
-        [
-            ClientStateTypeComponent,
-            ClientStateFieldsComponent,
-            ConsensusStateTypeComponent,
-            ConsensusStateFieldComponent,
-            CreateClientPayloadTypeComponent,
-            UpdateClientPayloadTypeComponent,
-            CreateClientPayloadOptionsTypeComponent,
-            ClientStateQuerierComponent,
-            ClientStateWithProofsQuerierComponent,
-            AllClientStatesQuerierComponent,
-            CreateClientPayloadBuilderComponent,
-            UpdateClientPayloadBuilderComponent,
-            ConsensusStateQuerierComponent,
-            ConsensusStateWithProofsQuerierComponent,
-            ConnectionOpenInitMessageBuilderComponent,
-            ConnectionOpenTryMessageBuilderComponent,
-            ConnectionOpenAckMessageBuilderComponent,
-            ConnectionOpenConfirmMessageBuilderComponent,
-            ChannelOpenInitMessageBuilderComponent,
-            ChannelOpenTryMessageBuilderComponent,
-            ChannelOpenAckMessageBuilderComponent,
-            ChannelOpenConfirmMessageBuilderComponent,
-            ConsensusStateHeightsQuerierComponent,
-            CounterpartyMessageHeightGetterComponent,
-        ]:
-            CosmosToCosmosComponents,
+with_cosmos_to_cosmos_components! {
+    [
+        CreateClientMessageBuilderComponent,
+        CreateClientMessageOptionsTypeComponent,
+        UpdateClientMessageBuilderComponent,
+    ],
+    | Components | {
+        cgp_preset! {
+            CosmosToWasmCosmosComponents {
+                CreateClientMessageBuilderComponent:
+                    BuildCreateWasmTendermintClientMessage,
+                CreateClientMessageOptionsTypeComponent:
+                    ProvidCreateWasmTendermintMessageOptionsType,
+                UpdateClientMessageBuilderComponent:
+                    BuildUpdateWasmTendermintClientMessage,
+                Components:
+                    CosmosToCosmosComponents,
+            }
+        }
     }
 }

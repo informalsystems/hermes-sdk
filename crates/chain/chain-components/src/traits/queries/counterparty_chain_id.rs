@@ -1,7 +1,8 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 
 use crate::traits::types::chain_id::HasChainIdType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[cgp_component {
   provider: CounterpartyChainIdQuerier,
@@ -9,7 +10,7 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 }]
 #[async_trait]
 pub trait CanQueryCounterpartyChainId<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasErrorType
 where
     Counterparty: HasChainIdType,
 {

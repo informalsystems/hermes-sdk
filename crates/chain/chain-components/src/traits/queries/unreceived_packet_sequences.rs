@@ -1,8 +1,12 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 
-use crate::traits::types::ibc::HasIbcChainTypes;
+use crate::types::aliases::SequenceOf;
 
 #[cgp_component {
   provider: UnreceivedPacketSequencesQuerier,
@@ -10,9 +14,10 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 }]
 #[async_trait]
 pub trait CanQueryUnreceivedPacketSequences<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
-where
-    Counterparty: HasIbcChainTypes<Self>,
+    HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
+    + HasErrorType
+    + CanUseCounterparty<Counterparty, Counterparty: HasSequenceType<Self>>
 {
     /// Given a list of counterparty commitment sequences,
     /// return a filtered list of sequences which the chain
@@ -21,6 +26,6 @@ where
         &self,
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,
-        sequences: &[Counterparty::Sequence],
-    ) -> Result<Vec<Counterparty::Sequence>, Self::Error>;
+        sequences: &[SequenceOf<Counterparty, Self>],
+    ) -> Result<Vec<SequenceOf<Counterparty, Self>>, Self::Error>;
 }

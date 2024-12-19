@@ -1,6 +1,7 @@
 use cgp::prelude::*;
-
-use crate::traits::types::ibc::HasIbcChainTypes;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 
 #[cgp_component {
   provider: ReceivedPacketQuerier,
@@ -8,9 +9,9 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 }]
 #[async_trait]
 pub trait CanQueryPacketIsReceived<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasErrorType
 where
-    Counterparty: HasIbcChainTypes<Self>,
+    Counterparty: HasSequenceType<Self>,
 {
     async fn query_packet_is_received(
         &self,

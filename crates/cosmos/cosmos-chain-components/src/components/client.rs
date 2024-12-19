@@ -21,7 +21,12 @@ pub use hermes_relayer_components::chain::traits::message_builders::create_clien
 pub use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-pub use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReaderComponent;
+pub use hermes_relayer_components::chain::traits::packet::fields::{
+    PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
+    PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
+    PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,
+    PacketTimeoutTimestampGetterComponent,
+};
 pub use hermes_relayer_components::chain::traits::packet::filter::{
     IncomingPacketFilterComponent, OutgoingPacketFilterComponent,
 };
@@ -142,7 +147,6 @@ use crate::components::delegate::DelegateCosmosChainComponents;
 use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
 use crate::impls::events::ProvideCosmosEvents;
-use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
 use crate::impls::packet::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
 use crate::impls::queries::abci::QueryAbci;
@@ -238,8 +242,6 @@ cgp_preset! {
             ProvideAnyRawClientState,
         RawConsensusStateTypeComponent:
             ProvideAnyRawConsensusState,
-        OutgoingPacketFieldsReaderComponent:
-            CosmosPacketFieldReader,
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightsAndFindHeightBefore,
         WriteAckQuerierComponent:
@@ -281,7 +283,7 @@ cgp_preset! {
         [
             ReceivePacketMessageBuilderComponent,
             AckPacketMessageBuilderComponent,
-        TimeoutUnorderedPacketMessageBuilderComponent,
+            TimeoutUnorderedPacketMessageBuilderComponent,
         ]:
             BuildCosmosPacketMessages,
 
@@ -378,6 +380,14 @@ cgp_preset! {
             ChannelOpenTryMessageBuilderComponent,
             ChannelOpenAckMessageBuilderComponent,
             ChannelOpenConfirmMessageBuilderComponent,
+
+            PacketSrcChannelIdGetterComponent,
+            PacketSrcPortIdGetterComponent,
+            PacketDstChannelIdGetterComponent,
+            PacketDstPortIdGetterComponent,
+            PacketSequenceGetterComponent,
+            PacketTimeoutHeightGetterComponent,
+            PacketTimeoutTimestampGetterComponent,
         ]:
             UseDelegate<DelegateCosmosChainComponents>,
     }

@@ -1,5 +1,5 @@
 use cgp::prelude::CanRaiseError;
-use hermes_chain_components::traits::packet::fields::CanReadOutgoingPacketFields;
+use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
 use hermes_logging_components::traits::has_logger::HasLogger;
@@ -37,7 +37,7 @@ where
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanRaiseError<SrcChain::Error>
         + CanRaiseError<DstChain::Error>,
-    SrcChain: CanQueryChainStatus + CanReadOutgoingPacketFields<DstChain>,
+    SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
         + HasWriteAckEvent<Relay::SrcChain>
         + HasChannelIdType<SrcChain>

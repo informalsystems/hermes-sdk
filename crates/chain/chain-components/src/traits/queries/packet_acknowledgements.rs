@@ -1,8 +1,10 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-
-use crate::traits::types::ibc::HasIbcChainTypes;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 
 #[cgp_component {
   provider: PacketAcknowledgementsQuerier,
@@ -10,9 +12,9 @@ use crate::traits::types::ibc::HasIbcChainTypes;
 }]
 #[async_trait]
 pub trait CanQueryPacketAcknowledgements<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasHeightType + HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasErrorType
 where
-    Counterparty: HasIbcChainTypes<Self>,
+    Counterparty: HasSequenceType<Self>,
 {
     /// Query the sequences of the packets that the chain has committed to be
     /// sent to the counterparty chain, of which the full packet relaying is not

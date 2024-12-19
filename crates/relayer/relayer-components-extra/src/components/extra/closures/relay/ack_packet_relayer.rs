@@ -4,7 +4,7 @@ use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use hermes_relayer_components::chain::traits::packet::fields::CanReadOutgoingPacketFields;
+use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -66,7 +66,7 @@ where
         + HasIbcChainTypes<DstChain>
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>
-        + CanReadOutgoingPacketFields<DstChain>
+        + CanReadPacketFields<DstChain>
         + CanQueryClientState<DstChain>
         + CanQueryConsensusState<DstChain>
         + CanQueryConsensusStateHeight<DstChain>

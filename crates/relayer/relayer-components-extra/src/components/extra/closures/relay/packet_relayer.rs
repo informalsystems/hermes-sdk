@@ -43,7 +43,6 @@ where
     DstChain: UseExtraChainComponentsForPacketRelayer<SrcChain>
         + HasMessageResponseEvents
         + HasWriteAckEvent<SrcChain>,
-    DstChain::Timeout: Ord,
     Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>,

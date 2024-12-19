@@ -1,5 +1,13 @@
-use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReader;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
+use hermes_relayer_components::chain::traits::packet::fields::{
+    PacketDstChannelIdGetter, PacketDstPortIdGetter, PacketSequenceGetter,
+    PacketSrcChannelIdGetter, PacketSrcPortIdGetter, PacketTimeoutHeightGetter,
+    PacketTimeoutTimestampGetter,
+};
+use hermes_relayer_components::chain::traits::types::ibc::{
+    HasChannelIdType, HasPortIdType, HasSequenceType,
+};
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::channel::types::timeout::{TimeoutHeight, TimeoutTimestamp};
@@ -9,55 +17,76 @@ use ibc::primitives::Timestamp;
 
 pub struct CosmosPacketFieldReader;
 
-impl<Chain, Counterparty> OutgoingPacketFieldsReader<Chain, Counterparty>
-    for CosmosPacketFieldReader
+impl<Chain, Counterparty> PacketSrcChannelIdGetter<Chain, Counterparty> for CosmosPacketFieldReader
 where
     Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
-        + HasIbcChainTypes<
-            Counterparty,
-            Timeout = Timestamp,
-            ChannelId = ChannelId,
-            PortId = PortId,
-            Sequence = Sequence,
-        >,
-    Counterparty: HasIbcChainTypes<
-        Chain,
-        Timeout = Timestamp,
-        ChannelId = ChannelId,
-        PortId = PortId,
-        Sequence = Sequence,
-    >,
-    Chain::Height: From<Height>,
-    Counterparty::Height: From<Height>,
+        + HasChannelIdType<Counterparty, ChannelId = ChannelId>,
 {
-    fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
-        &packet.chan_id_on_a
+    fn packet_src_channel_id(packet: &Packet) -> ChannelId {
+        packet.chan_id_on_a.clone()
     }
+}
 
-    fn outgoing_packet_dst_channel_id(packet: &Packet) -> &ChannelId {
-        &packet.chan_id_on_b
+impl<Chain, Counterparty> PacketSrcPortIdGetter<Chain, Counterparty> for CosmosPacketFieldReader
+where
+    Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
+        + HasPortIdType<Counterparty, PortId = PortId>,
+{
+    fn packet_src_port_id(packet: &Packet) -> PortId {
+        packet.port_id_on_a.clone()
     }
+}
 
-    fn outgoing_packet_src_port(packet: &Packet) -> &PortId {
-        &packet.port_id_on_a
+impl<Chain, Counterparty> PacketDstChannelIdGetter<Chain, Counterparty> for CosmosPacketFieldReader
+where
+    Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>,
+    Counterparty: HasChannelIdType<Chain, ChannelId = ChannelId>,
+{
+    fn packet_dst_channel_id(packet: &Packet) -> ChannelId {
+        packet.chan_id_on_b.clone()
     }
+}
 
-    fn outgoing_packet_dst_port(packet: &Packet) -> &PortId {
-        &packet.port_id_on_b
+impl<Chain, Counterparty> PacketDstPortIdGetter<Chain, Counterparty> for CosmosPacketFieldReader
+where
+    Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>,
+    Counterparty: HasPortIdType<Chain, PortId = PortId>,
+{
+    fn packet_dst_port_id(packet: &Packet) -> PortId {
+        packet.port_id_on_b.clone()
     }
+}
 
-    fn outgoing_packet_sequence(packet: &Packet) -> &Sequence {
-        &packet.seq_on_a
+impl<Chain, Counterparty> PacketSequenceGetter<Chain, Counterparty> for CosmosPacketFieldReader
+where
+    Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
+        + HasSequenceType<Counterparty, Sequence = Sequence>,
+{
+    fn packet_sequence(packet: &Packet) -> Sequence {
+        packet.seq_on_a
     }
+}
 
-    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<Counterparty::Height> {
+impl<Chain, Counterparty> PacketTimeoutHeightGetter<Chain, Counterparty> for CosmosPacketFieldReader
+where
+    Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>,
+    Counterparty: HasHeightType<Height = Height>,
+{
+    fn packet_timeout_height(packet: &Packet) -> Option<Height> {
         match &packet.timeout_height_on_b {
             TimeoutHeight::Never => None,
-            TimeoutHeight::At(h) => Some((*h).into()),
+            TimeoutHeight::At(h) => Some(*h),
         }
     }
+}
 
-    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
+impl<Chain, Counterparty> PacketTimeoutTimestampGetter<Chain, Counterparty>
+    for CosmosPacketFieldReader
+where
+    Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>,
+    Counterparty: HasTimeoutType<Timeout = Timestamp>,
+{
+    fn packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
         match &packet.timeout_timestamp_on_b {
             TimeoutTimestamp::Never => None,
             TimeoutTimestamp::At(timestamp) => Some(*timestamp),

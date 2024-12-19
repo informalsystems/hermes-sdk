@@ -6,7 +6,6 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 
 use crate::traits::types::channel::HasChannelEndType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[cgp_component {
@@ -52,7 +51,7 @@ pub trait CanQueryChannelEndWithProofs<Counterparty>:
 
 pub struct ChannelNotFoundError<'a, Chain, Counterparty>
 where
-    Chain: HasIbcChainTypes<Counterparty>,
+    Chain: HasHeightType + HasChannelIdType<Counterparty> + HasPortIdType<Counterparty>,
 {
     pub chain: &'a Chain,
     pub channel_id: &'a Chain::ChannelId,
@@ -62,7 +61,7 @@ where
 
 impl<Chain, Counterparty> Debug for ChannelNotFoundError<'_, Chain, Counterparty>
 where
-    Chain: HasIbcChainTypes<Counterparty>,
+    Chain: HasHeightType + HasChannelIdType<Counterparty> + HasPortIdType<Counterparty>,
 {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         writeln!(
