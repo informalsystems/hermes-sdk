@@ -10,10 +10,10 @@ use hermes_chain_type_components::traits::types::timeout::{HasTimeoutType, Timeo
 use crate::types::aliases::{ChannelIdOf, HeightOf, PortIdOf};
 
 #[cgp_component {
-  provider: OutgoingPacketFieldsReader,
-  context: Chain,
+    provider: PacketFieldsReader,
+    context: Chain,
 }]
-pub trait CanReadOutgoingPacketFields<Counterparty>:
+pub trait CanReadPacketFields<Counterparty>:
     HasOutgoingPacketType<Counterparty>
     + HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
@@ -64,6 +64,12 @@ pub trait HasPacketDstPortId<Counterparty>:
     + CanUseCounterparty<Counterparty, Counterparty: HasPortIdType<Self>>
 {
     fn packet_dst_port_id(packet: &Self::OutgoingPacket) -> PortIdOf<Counterparty, Self>;
+}
+
+pub trait HasPacketSequence<Counterparty>:
+    HasOutgoingPacketType<Counterparty> + HasSequenceType<Counterparty>
+{
+    fn packet_sequence(packet: &Self::OutgoingPacket) -> Self::Sequence;
 }
 
 pub trait HasPacketTimeoutHeight<Counterparty>:

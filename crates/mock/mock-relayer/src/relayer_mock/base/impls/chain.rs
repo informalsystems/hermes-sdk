@@ -22,7 +22,7 @@ use hermes_cosmos_chain_components::components::client::{
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
-use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReader;
+use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReader;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -147,7 +147,7 @@ impl ProvideOutgoingPacketType<MockChainContext, MockChainContext> for MockChain
     type OutgoingPacket = Packet;
 }
 
-impl OutgoingPacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
+impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
     fn packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.src_channel_id
     }

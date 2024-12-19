@@ -1,4 +1,4 @@
-use hermes_chain_components::traits::packet::fields::CanReadOutgoingPacketFields;
+use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 
 use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
@@ -13,7 +13,7 @@ impl<Relay> RelayPacketFilter<Relay> for MatchPacketSourceChain
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,
     Relay::DstChain: CanQueryCounterpartyChainId<Relay::SrcChain>,
-    Relay::SrcChain: HasChainId + CanReadOutgoingPacketFields<Relay::DstChain>,
+    Relay::SrcChain: HasChainId + CanReadPacketFields<Relay::DstChain>,
 {
     async fn should_relay_packet(
         relay: &Relay,
@@ -38,7 +38,7 @@ impl<Relay> RelayPacketFilter<Relay> for MatchPacketDestinationChain
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,
     Relay::SrcChain:
-        CanQueryCounterpartyChainId<Relay::DstChain> + CanReadOutgoingPacketFields<Relay::DstChain>,
+        CanQueryCounterpartyChainId<Relay::DstChain> + CanReadPacketFields<Relay::DstChain>,
     Relay::DstChain: HasChainId,
 {
     async fn should_relay_packet(

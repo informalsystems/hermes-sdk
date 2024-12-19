@@ -1,4 +1,4 @@
-use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReader;
+use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReader;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use ibc::core::channel::types::packet::Packet;
@@ -9,8 +9,7 @@ use ibc::primitives::Timestamp;
 
 pub struct CosmosPacketFieldReader;
 
-impl<Chain, Counterparty> OutgoingPacketFieldsReader<Chain, Counterparty>
-    for CosmosPacketFieldReader
+impl<Chain, Counterparty> PacketFieldsReader<Chain, Counterparty> for CosmosPacketFieldReader
 where
     Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
         + HasIbcChainTypes<

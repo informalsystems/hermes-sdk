@@ -15,7 +15,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
 
-use crate::chain::traits::packet::fields::CanReadOutgoingPacketFields;
+use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf, SequenceOf};
 use crate::relay::traits::chains::{HasRelayChainTypes, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_lock::ProvidePacketLock;
@@ -137,7 +137,7 @@ impl<Relay> ProvidePacketLock<Relay> for ProvidePacketLockWithMutex
 where
     Relay: CanUsePacketMutex + HasPacketMutex + HasRelayChains,
     Relay::Runtime: CanUseChannelsOnce + CanCreateChannelsOnce + CanSpawnTask,
-    Relay::SrcChain: CanReadOutgoingPacketFields<Relay::DstChain>,
+    Relay::SrcChain: CanReadPacketFields<Relay::DstChain>,
 {
     type PacketLock<'a> = PacketLock<Relay>;
 

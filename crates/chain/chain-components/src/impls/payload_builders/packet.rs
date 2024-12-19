@@ -1,7 +1,7 @@
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
 
-use crate::traits::packet::fields::CanReadOutgoingPacketFields;
+use crate::traits::packet::fields::CanReadPacketFields;
 use crate::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use crate::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use crate::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -25,7 +25,7 @@ where
     Chain: HasReceivePacketPayloadType<
             Counterparty,
             ReceivePacketPayload = ReceivePacketPayload<Chain>,
-        > + CanReadOutgoingPacketFields<Counterparty>
+        > + CanReadPacketFields<Counterparty>
         + HasClientStateType<Counterparty>
         + CanQueryPacketCommitment<Counterparty>
         + HasCommitmentProofHeight
@@ -72,7 +72,7 @@ where
         + CanIncrementHeight
         + HasCommitmentProofHeight
         + HasErrorType,
-    Counterparty: HasIbcChainTypes<Chain> + CanReadOutgoingPacketFields<Chain>,
+    Counterparty: HasIbcChainTypes<Chain> + CanReadPacketFields<Chain>,
     Chain::Acknowledgement: Clone,
 {
     async fn build_ack_packet_payload(
@@ -117,7 +117,7 @@ where
         + HasCommitmentProofHeight
         + HasCommitmentProofType
         + HasErrorType,
-    Counterparty: HasIbcChainTypes<Chain> + CanReadOutgoingPacketFields<Chain>,
+    Counterparty: HasIbcChainTypes<Chain> + CanReadPacketFields<Chain>,
 {
     async fn build_timeout_unordered_packet_payload(
         chain: &Chain,

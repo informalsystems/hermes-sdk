@@ -10,7 +10,7 @@ pub use hermes_cosmos_chain_components::components::client::{
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     CreateClientPayloadTypeComponent, InitChannelOptionsTypeComponent,
     InitConnectionOptionsTypeComponent, MessageResponseEventsGetterComponent,
-    MessageResponseTypeComponent, OutgoingPacketFieldsReaderComponent, OutgoingPacketTypeComponent,
+    MessageResponseTypeComponent, OutgoingPacketTypeComponent, PacketFieldsReaderComponent,
     PortIdTypeComponent, ReceivePacketPayloadTypeComponent, SequenceTypeComponent,
     TimeTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
     UpdateClientPayloadTypeComponent,
@@ -119,7 +119,7 @@ cgp_preset! {
             ProvideSolomachineClientState,
         ConsensusStateTypeComponent:
             ProvideSolomachineConsensusState,
-        OutgoingPacketFieldsReaderComponent:
+        PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         MessageSenderComponent:
             ProcessSolomachineMessages,

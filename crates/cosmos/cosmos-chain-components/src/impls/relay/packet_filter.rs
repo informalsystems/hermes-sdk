@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::Async;
 use cgp::prelude::{HasErrorType, HasField};
-use hermes_relayer_components::chain::traits::packet::fields::CanReadOutgoingPacketFields;
+use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
 use hermes_relayer_components::chain::traits::packet::filter::{
     IncomingPacketFilter, OutgoingPacketFilter,
 };
@@ -16,7 +16,7 @@ pub struct FilterPacketWithConfig<Tag>(pub PhantomData<Tag>);
 impl<Chain, Counterparty, Tag> OutgoingPacketFilter<Chain, Counterparty>
     for FilterPacketWithConfig<Tag>
 where
-    Chain: CanReadOutgoingPacketFields<Counterparty>
+    Chain: CanReadPacketFields<Counterparty>
         + HasPortIdType<Counterparty, PortId = PortId>
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
         + HasField<Tag, Value = PacketFilterConfig>
@@ -41,7 +41,7 @@ where
         + HasPortIdType<Counterparty, PortId = PortId>
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
         + HasErrorType,
-    Counterparty: CanReadOutgoingPacketFields<Chain>,
+    Counterparty: CanReadPacketFields<Chain>,
 {
     async fn should_relay_incoming_packet(
         chain: &Chain,

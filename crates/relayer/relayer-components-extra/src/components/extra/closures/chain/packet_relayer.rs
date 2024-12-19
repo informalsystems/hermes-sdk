@@ -9,7 +9,7 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
     CanBuildTimeoutUnorderedPacketMessage, TimeoutUnorderedPacketMessageBuilder,
 };
 use hermes_relayer_components::chain::traits::packet::fields::{
-    CanReadOutgoingPacketFields, OutgoingPacketFieldsReader,
+    CanReadPacketFields, PacketFieldsReader,
 };
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
     AckPacketPayloadBuilder, CanBuildAckPacketPayload,
@@ -37,7 +37,7 @@ use crate::components::extra::closures::chain::message_sender::UseExtraChainComp
 
 pub trait UseExtraChainComponentsForPacketRelayer<Counterparty>:
     CanQueryPacketIsReceived<Counterparty>
-    + CanReadOutgoingPacketFields<Counterparty>
+    + CanReadPacketFields<Counterparty>
     + CanBuildReceivePacketPayload<Counterparty>
     + CanBuildReceivePacketMessage<Counterparty>
     + CanBuildAckPacketPayload<Counterparty>
@@ -76,7 +76,7 @@ where
         + HasAckPacketPayloadType<Chain>
         + HasTimeoutUnorderedPacketPayloadType<Chain>
         + HasReceivePacketPayloadType<Chain>,
-    Components: OutgoingPacketFieldsReader<Chain, Counterparty>
+    Components: PacketFieldsReader<Chain, Counterparty>
         + ReceivedPacketQuerier<Chain, Counterparty>
         + ReceivePacketPayloadBuilder<Chain, Counterparty>
         + ReceivePacketMessageBuilder<Chain, Counterparty>

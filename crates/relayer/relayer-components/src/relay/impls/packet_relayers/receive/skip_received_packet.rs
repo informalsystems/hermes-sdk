@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use hermes_chain_components::traits::packet::fields::CanReadOutgoingPacketFields;
+use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 
 use crate::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -16,7 +16,7 @@ impl<Relay, Relayer> ReceivePacketRelayer<Relay> for SkipReceivedPacketRelayer<R
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,
     Relayer: ReceivePacketRelayer<Relay>,
-    Relay::SrcChain: CanReadOutgoingPacketFields<Relay::DstChain>,
+    Relay::SrcChain: CanReadPacketFields<Relay::DstChain>,
     Relay::DstChain: HasWriteAckEvent<Relay::SrcChain>,
     Relay::DstChain: CanQueryPacketIsReceived<Relay::SrcChain>,
 {

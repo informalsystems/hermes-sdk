@@ -12,7 +12,7 @@ use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use crate::chain::traits::packet::fields::CanReadOutgoingPacketFields;
+use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -55,10 +55,10 @@ where
         + CanQueryChainStatus
         + HasOutgoingPacketType<DstChain>
         + HasIbcChainTypes<DstChain>
-        + CanReadOutgoingPacketFields<DstChain>
+        + CanReadPacketFields<DstChain>
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>
-        + CanReadOutgoingPacketFields<DstChain>
+        + CanReadPacketFields<DstChain>
         + CanQueryClientState<DstChain>
         + CanQueryConsensusState<DstChain>
         + CanQueryConsensusStateHeight<DstChain>
@@ -72,7 +72,7 @@ where
         + HasIbcChainTypes<SrcChain>
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>
-        + CanReadOutgoingPacketFields<SrcChain>
+        + CanReadPacketFields<SrcChain>
         + CanBuildAckPacketPayload<SrcChain>
         + CanBuildUpdateClientPayload<SrcChain>
         + HasWriteAckEvent<SrcChain>,
