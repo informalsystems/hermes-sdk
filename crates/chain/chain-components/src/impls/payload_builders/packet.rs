@@ -1,7 +1,10 @@
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
 
-use crate::traits::packet::fields::CanReadPacketFields;
+use crate::traits::packet::fields::{
+    HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence, HasPacketSrcChannelId,
+    HasPacketSrcPortId,
+};
 use crate::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use crate::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use crate::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -9,7 +12,6 @@ use crate::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgemen
 use crate::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use crate::traits::queries::packet_receipt::CanQueryPacketReceipt;
 use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::packets::ack::{HasAckPacketPayloadType, HasAcknowledgementType};
 use crate::traits::types::packets::receive::HasReceivePacketPayloadType;
 use crate::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
@@ -25,12 +27,13 @@ where
     Chain: HasReceivePacketPayloadType<
             Counterparty,
             ReceivePacketPayload = ReceivePacketPayload<Chain>,
-        > + CanReadPacketFields<Counterparty>
+        > + HasPacketSrcChannelId<Counterparty>
+        + HasPacketSrcPortId<Counterparty>
+        + HasPacketSequence<Counterparty>
         + HasClientStateType<Counterparty>
         + CanQueryPacketCommitment<Counterparty>
         + HasCommitmentProofHeight
         + HasErrorType,
-    Counterparty: HasIbcChainTypes<Chain>,
 {
     async fn build_receive_packet_payload(
         chain: &Chain,
@@ -72,7 +75,8 @@ where
         + CanIncrementHeight
         + HasCommitmentProofHeight
         + HasErrorType,
-    Counterparty: HasIbcChainTypes<Chain> + CanReadPacketFields<Chain>,
+    Counterparty:
+        HasPacketDstChannelId<Chain> + HasPacketDstPortId<Chain> + HasPacketSequence<Chain>,
     Chain::Acknowledgement: Clone,
 {
     async fn build_ack_packet_payload(
@@ -117,7 +121,8 @@ where
         + HasCommitmentProofHeight
         + HasCommitmentProofType
         + HasErrorType,
-    Counterparty: HasIbcChainTypes<Chain> + CanReadPacketFields<Chain>,
+    Counterparty:
+        HasPacketDstChannelId<Chain> + HasPacketDstPortId<Chain> + HasPacketSequence<Chain>,
 {
     async fn build_timeout_unordered_packet_payload(
         chain: &Chain,
