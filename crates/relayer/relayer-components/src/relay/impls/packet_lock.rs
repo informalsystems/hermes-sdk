@@ -15,7 +15,7 @@ use hermes_runtime_components::traits::channel_once::{
     CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes, ReceiverOnce, SenderOnceOf,
 };
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::{HasRuntime, HasRuntimeType};
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
 
@@ -27,7 +27,7 @@ pub struct ProvidePacketLockWithMutex;
 
 pub struct PacketLock<Relay>
 where
-    Relay: HasRuntime<Runtime: CanUseChannelsOnce>,
+    Relay: HasRuntimeType<Runtime: CanUseChannelsOnce>,
 {
     pub release_sender: Option<SenderOnceOf<Relay::Runtime, ()>>,
 }
@@ -42,7 +42,7 @@ pub type PacketMutexOf<Relay> = <Relay as HasPacketMutexType>::PacketMutex;
 
 impl<Relay, Runtime, SrcChain, DstChain> HasPacketMutexType for Relay
 where
-    Relay: HasRuntime<Runtime = Runtime>
+    Relay: HasRuntimeType<Runtime = Runtime>
         + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>,
     SrcChain: HasChannelIdType<DstChain, ChannelId: Ord + Clone>
         + HasPortIdType<DstChain, PortId: Ord + Clone>
@@ -63,7 +63,7 @@ where
 }
 
 pub trait CanUsePacketMutex:
-    HasRuntime<Runtime: HasMutex>
+    HasRuntimeType<Runtime: HasMutex>
     + HasRelayChainTypes<
         SrcChain: HasChannelIdType<Self::DstChain, ChannelId: Ord + Clone>
                       + HasPortIdType<Self::DstChain, PortId: Ord + Clone>
@@ -96,7 +96,7 @@ pub trait CanUsePacketMutex:
 
 impl<Relay, Runtime, SrcChain, DstChain> CanUsePacketMutex for Relay
 where
-    Relay: HasRuntime<Runtime = Runtime>
+    Relay: HasRuntimeType<Runtime = Runtime>
         + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>,
     SrcChain: HasChannelIdType<DstChain, ChannelId: Ord + Clone>
         + HasPortIdType<DstChain, PortId: Ord + Clone>
@@ -117,7 +117,7 @@ pub trait HasPacketMutex: HasPacketMutexType {
 
 pub struct ReleasePacketLockTask<Relay>
 where
-    Relay: HasPacketMutexType + HasRuntime<Runtime: HasChannelOnceTypes>,
+    Relay: HasPacketMutexType + HasRuntimeType<Runtime: HasChannelOnceTypes>,
 {
     pub release_receiver: ReceiverOnce<Relay::Runtime, ()>,
     pub packet_mutex: Relay::PacketMutex,
@@ -138,7 +138,7 @@ where
 
 impl<Relay> ProvidePacketLock<Relay> for ProvidePacketLockWithMutex
 where
-    Relay: CanUsePacketMutex + HasPacketMutex + HasRelayChains,
+    Relay: HasRuntime + CanUsePacketMutex + HasPacketMutex + HasRelayChains,
     Relay::Runtime: CanUseChannelsOnce + CanCreateChannelsOnce + CanSpawnTask,
     Relay::SrcChain: HasPacketSrcChannelId<Relay::DstChain>
         + HasPacketSrcPortId<Relay::DstChain>
@@ -197,7 +197,7 @@ where
 
 impl<Relay> Drop for PacketLock<Relay>
 where
-    Relay: HasRuntime<Runtime: CanUseChannelsOnce>,
+    Relay: HasRuntimeType<Runtime: CanUseChannelsOnce>,
 {
     fn drop(&mut self) {
         if let Some(sender) = self.release_sender.take() {
