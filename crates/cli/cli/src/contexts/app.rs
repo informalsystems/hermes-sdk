@@ -14,6 +14,9 @@ use hermes_cli_components::impls::commands::client::create::{
 use hermes_cli_components::impls::commands::client::update::{
     RunUpdateClientCommand, UpdateClientArgs,
 };
+use hermes_cli_components::impls::commands::queries::balance::{
+    QueryBalanceArgs, RunQueryBalanceCommand,
+};
 use hermes_cli_components::impls::commands::queries::chain::{
     QueryChainSubCommand, RunQueryChainSubCommand,
 };
@@ -37,6 +40,9 @@ use hermes_cli_components::impls::commands::queries::connection_end::{
 };
 use hermes_cli_components::impls::commands::queries::consensus_state::{
     QueryConsensusStateArgs, RunQueryConsensusStateCommand,
+};
+use hermes_cli_components::impls::commands::queries::wallet::{
+    QueryWalletSubCommand, RunQueryWalletSubCommand,
 };
 use hermes_cli_components::impls::commands::start::{RunStartRelayerCommand, StartRelayerArgs};
 use hermes_cli_components::impls::config::get_config_path::GetDefaultConfigField;
@@ -63,6 +69,7 @@ use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientO
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_error::traits::wrap::WrapError;
 use hermes_error::types::{Error, HermesError};
 use hermes_logger::ProvideHermesLogger;
@@ -157,6 +164,10 @@ delegate_components! {
 
         (QueryChainStatusArgs, symbol!("chain_id")): ParseFromString<ChainId>,
 
+        (QueryBalanceArgs, symbol!("chain_id")): ParseFromString<ChainId>,
+        (QueryBalanceArgs, symbol!("address")): ParseFromString<String>,
+        (QueryBalanceArgs, symbol!("denom")): ParseFromString<Denom>,
+
         (StartRelayerArgs, symbol!("chain_id_a")): ParseFromString<ChainId>,
         (StartRelayerArgs, symbol!("client_id_a")): ParseFromString<ClientId>,
         (StartRelayerArgs, symbol!("chain_id_b")): ParseFromString<ChainId>,
@@ -195,6 +206,9 @@ delegate_components! {
 
         QueryConnectionSubCommand: RunQueryConnectionSubCommand,
         QueryConnectionEndArgs: RunQueryConnectionEndCommand,
+
+        QueryWalletSubCommand: RunQueryWalletSubCommand,
+        QueryBalanceArgs: RunQueryBalanceCommand,
     }
 }
 
@@ -256,6 +270,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<QueryConsensusStateArgs>
     + CanRunCommand<QueryClientStatusArgs>
     + CanRunCommand<QueryChainStatusArgs>
+    + CanRunCommand<QueryBalanceArgs>
     + CanRunCommand<CreateClientArgs>
     + CanRunCommand<UpdateClientArgs>
     + CanRunCommand<BootstrapChainArgs>

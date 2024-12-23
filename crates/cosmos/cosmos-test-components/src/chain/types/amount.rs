@@ -1,9 +1,11 @@
 use core::cmp::Ordering;
 use core::fmt::{self, Display};
 
+use serde::Serialize;
+
 use crate::chain::types::denom::Denom;
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Serialize)]
 pub struct Amount {
     pub quantity: u128,
     pub denom: Denom,
