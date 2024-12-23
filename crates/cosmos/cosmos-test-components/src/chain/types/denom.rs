@@ -1,6 +1,9 @@
 use core::fmt::{self, Display};
+use std::str::FromStr;
 
-#[derive(Debug, Clone)]
+use serde::Serialize;
+
+#[derive(Debug, Clone, Serialize)]
 pub enum Denom {
     Base(String),
     Ibc {
@@ -19,6 +22,24 @@ impl Display for Denom {
             Denom::Ibc { hashed, .. } => {
                 write!(f, "{hashed}")
             }
+        }
+    }
+}
+
+impl FromStr for Denom {
+    type Err = String;
+
+    // TODO: Correctly parse Ibc denom
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if let Some(index) = s.find('/') {
+            let (before, after) = s.split_at(index);
+            Ok(Denom::Ibc {
+                path: before.to_owned(),
+                denom: "TBD".to_owned(),
+                hashed: after[1..].to_owned(),
+            })
+        } else {
+            Ok(Denom::Base(s.to_string()))
         }
     }
 }
