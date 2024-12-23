@@ -1,3 +1,5 @@
+pub mod chain;
+pub mod chain_status;
 pub mod client;
 pub mod client_state;
 pub mod client_status;
