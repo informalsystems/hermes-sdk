@@ -29,6 +29,7 @@ impl Display for Denom {
 impl FromStr for Denom {
     type Err = String;
 
+    // TODO: Correctly parse Ibc denom
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if let Some(index) = s.find('/') {
             let (before, after) = s.split_at(index);
