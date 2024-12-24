@@ -23,6 +23,12 @@ use hermes_cli_components::impls::commands::queries::chain::{
 use hermes_cli_components::impls::commands::queries::chain_status::{
     QueryChainStatusArgs, RunQueryChainStatusCommand,
 };
+use hermes_cli_components::impls::commands::queries::channel::{
+    QueryChannelSubCommand, RunQueryChannelSubCommand,
+};
+use hermes_cli_components::impls::commands::queries::channel_end::{
+    QueryChannelEndArgs, RunQueryChannelEndCommand,
+};
 use hermes_cli_components::impls::commands::queries::client::{
     QueryClientSubCommand, RunQueryClientSubCommand,
 };
@@ -81,7 +87,7 @@ use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::{ChainId, ClientId, ConnectionId};
+use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
 use serde::Serialize;
 
 use crate::commands::bootstrap::chain::{BootstrapChainArgs, LoadCosmosBootstrap};
@@ -153,6 +159,11 @@ delegate_components! {
         (QueryConnectionEndArgs, symbol!("connection_id")): ParseFromString<ConnectionId>,
         (QueryConnectionEndArgs, symbol!("height")): ParseFromOptionalString<Height>,
 
+        (QueryChannelEndArgs, symbol!("chain_id")): ParseFromString<ChainId>,
+        (QueryChannelEndArgs, symbol!("port_id")): ParseFromString<PortId>,
+        (QueryChannelEndArgs, symbol!("channel_id")): ParseFromString<ChannelId>,
+        (QueryChannelEndArgs, symbol!("height")): ParseFromOptionalString<Height>,
+
         (QueryClientStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryClientStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
         (QueryClientStateArgs, symbol!("height")): ParseFromOptionalString<Height>,
@@ -206,6 +217,9 @@ delegate_components! {
 
         QueryConnectionSubCommand: RunQueryConnectionSubCommand,
         QueryConnectionEndArgs: RunQueryConnectionEndCommand,
+
+        QueryChannelSubCommand: RunQueryChannelSubCommand,
+        QueryChannelEndArgs: RunQueryChannelEndCommand,
 
         QueryWalletSubCommand: RunQueryWalletSubCommand,
         QueryBalanceArgs: RunQueryBalanceCommand,
@@ -274,6 +288,8 @@ pub trait CanUseHermesApp:
     + CanRunCommand<CreateClientArgs>
     + CanRunCommand<UpdateClientArgs>
     + CanRunCommand<BootstrapChainArgs>
+    + CanRunCommand<QueryChannelSubCommand>
+    + CanRunCommand<QueryChannelEndArgs>
     + CanProduceOutput<&'static str>
     + CanProduceOutput<ClientId>
     + CanRaiseError<HermesError>
