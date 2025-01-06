@@ -5,7 +5,7 @@ pub struct RunQueryChannelSubCommand;
 
 #[derive(Debug, clap::Subcommand)]
 pub enum QueryChannelSubCommand {
-    /// Query the connection end
+    /// Query the channel end
     End(QueryChannelEndArgs),
 }
 
