@@ -58,6 +58,7 @@ where
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
         let builder = app.load_builder().await?;
+        let logger = app.logger();
 
         let host_chain_id = app.parse_arg(args, PhantomData::<symbol!("host_chain_id")>)?;
         let reference_chain_id =
@@ -71,6 +72,20 @@ where
         let clients =
             query_all_client_states::<Chain, Counterparty>(&host_chain_id, &reference_chain_id)
                 .await?;
+
+        for client in clients.iter() {
+            logger
+                .log(
+                    &format!(
+                        "- {}: {} -> {}",
+                        client.client_id,
+                        &host_chain_id,
+                        client.client_state.chain_id()
+                    ),
+                    &LevelInfo,
+                )
+                .await;
+        }
 
         Ok(app.produce_output(clients))
     }
