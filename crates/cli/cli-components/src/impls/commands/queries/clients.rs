@@ -1,4 +1,4 @@
-use core::fmt::Display;
+use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -7,8 +7,10 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStates;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
 
@@ -38,23 +40,22 @@ pub struct QueryClients {
     reference_chain_id: Option<String>,
 }
 
-impl<App, Args, Build, Chain, ClientId, Counterparty> CommandRunner<App, Args>
-    for RunQueryClientsCommand
+impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientsCommand
 where
     App: CanLoadBuilder<Builder = Build>
         + HasOutputType
         + HasLogger
-        + CanProduceOutput<Vec<ClientId>>
+        + CanProduceOutput<Vec<Chain::ClientId>>
         + CanParseArg<Args, symbol!("host_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("reference_chain_id"), Parsed = Chain::ChainId>
         + CanRaiseError<Build::Error>
         + CanRaiseError<Chain::Error>,
     Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
-    Chain: HasChainIdType + HasErrorType,
-    Counterparty: HasClientStateType<Counterparty> + CanQueryAllClientStates<Counterparty>,
+    Chain: HasChainIdType + HasErrorType + HasComponents + HasClientIdType<Counterparty>,
+    Counterparty:
+        HasClientStateType<Counterparty> + CanQueryAllClientStates<Counterparty> + HasComponents,
     Args: Async,
     App::Logger: CanLog<LevelInfo>,
-    ClientId: Display,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
         let builder = app.load_builder().await?;
@@ -69,9 +70,12 @@ where
             .await
             .map_err(App::raise_error)?;
 
-        let clients =
-            query_all_client_states::<Chain, Counterparty>(&host_chain_id, &reference_chain_id)
-                .await?;
+        let clients = query_all_client_states::<Chain, Counterparty>(
+            &chain,
+            &host_chain_id,
+            &reference_chain_id,
+        )
+        .await?;
 
         for client in clients.iter() {
             logger
@@ -89,4 +93,38 @@ where
 
         Ok(app.produce_output(clients))
     }
+}
+
+async fn query_all_client_states<Chain, Counterparty>(
+    chain: &Chain,
+    host_chain_id: &Chain::ChainId,
+    reference_chain_id: Option<&Counterparty::ChainId>,
+) -> Result<Vec<Chain::ClientId>, Chain::Error>
+where
+    Chain: CanQueryAllClientStatesWithLatestHeight<Counterparty> + HasChainIdType + HasErrorType,
+    Counterparty: HasClientIdType<Counterparty> + HasChainIdType + HasClientStateType<Chain>,
+{
+    let mut clients = chain
+        .query_all_client_states_with_latest_height()
+        .await
+        .map_error(Chain::Error)?
+        .into_iter()
+        .map(|(client_id, client_state)| Client::<Chain, Counterparty> {
+            client_id,
+            client_state,
+        })
+        .collect::<Vec<_>>();
+
+    // info!("Found {} clients on chain `{host_chain_id}`", clients.len());
+
+    if let Some(reference_chain_id) = reference_chain_id {
+        clients.retain(|client| client.client_state.chain_id() == reference_chain_id);
+
+        // info!(
+        //     "Found {} clients that reference `{reference_chain_id}`",
+        //     clients.len()
+        // );
+    }
+
+    Ok(clients)
 }
