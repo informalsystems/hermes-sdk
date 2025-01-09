@@ -22,7 +22,7 @@ use crate::traits::parse::CanParseArg;
 pub struct RunQueryClientsCommand;
 
 #[derive(Debug, clap::Parser, HasField)]
-pub struct QueryClients {
+pub struct QueryClientsArgs {
     #[clap(
         long = "host-chain",
         required = true,
