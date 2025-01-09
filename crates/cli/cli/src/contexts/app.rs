@@ -38,6 +38,9 @@ use hermes_cli_components::impls::commands::queries::client_state::{
 use hermes_cli_components::impls::commands::queries::client_status::{
     QueryClientStatusArgs, RunQueryClientStatusCommand,
 };
+use hermes_cli_components::impls::commands::queries::clients::{
+    QueryClientsArgs, RunQueryClientsCommand,
+};
 use hermes_cli_components::impls::commands::queries::connection::{
     QueryConnectionSubCommand, RunQueryConnectionSubCommand,
 };
@@ -164,6 +167,9 @@ delegate_components! {
         (QueryChannelEndArgs, symbol!("channel_id")): ParseFromString<ChannelId>,
         (QueryChannelEndArgs, symbol!("height")): ParseFromOptionalString<Height>,
 
+        (QueryClientsArgs, symbol!("host_chain_id")): ParseFromString<ChainId>,
+        (QueryClientsArgs, symbol!("reference_chain_id")): ParseFromOptionalString<ChainId>,
+
         (QueryClientStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryClientStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
         (QueryClientStateArgs, symbol!("height")): ParseFromOptionalString<Height>,
@@ -204,6 +210,7 @@ delegate_components! {
         QueryChainSubCommand: RunQueryChainSubCommand,
         QueryChainStatusArgs: RunQueryChainStatusCommand,
 
+        QueryClientsArgs: RunQueryClientsCommand,
         QueryClientSubCommand: RunQueryClientSubCommand,
         QueryClientStateArgs: RunQueryClientStateCommand,
         QueryClientStatusArgs: RunQueryClientStatusCommand,
@@ -280,6 +287,7 @@ pub trait CanUseHermesApp:
     + CanLoadBuilder
     + CanRunCommand<StartRelayerArgs>
     + CanRunCommand<QueryClientSubCommand>
+    + CanRunCommand<QueryClientsArgs>
     + CanRunCommand<QueryClientStateArgs>
     + CanRunCommand<QueryConsensusStateArgs>
     + CanRunCommand<QueryClientStatusArgs>

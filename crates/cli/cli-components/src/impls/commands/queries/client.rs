@@ -1,6 +1,5 @@
 use crate::impls::commands::queries::client_state::QueryClientStateArgs;
 use crate::impls::commands::queries::client_status::QueryClientStatusArgs;
-use crate::impls::commands::queries::clients::QueryClientsArgs;
 use crate::impls::commands::queries::consensus_state::QueryConsensusStateArgs;
 use crate::traits::command::{CanRunCommand, CommandRunner};
 
@@ -16,17 +15,13 @@ pub enum QueryClientSubCommand {
 
     /// Query the consensus state of a client
     Consensus(QueryConsensusStateArgs),
-
-    /// Query all clients for a chain
-    Clients(QueryClientsArgs),
 }
 
 impl<App> CommandRunner<App, QueryClientSubCommand> for RunQueryClientSubCommand
 where
     App: CanRunCommand<QueryClientStateArgs>
         + CanRunCommand<QueryClientStatusArgs>
-        + CanRunCommand<QueryConsensusStateArgs>
-        + CanRunCommand<QueryClientsArgs>,
+        + CanRunCommand<QueryConsensusStateArgs>,
 {
     async fn run_command(
         app: &App,
@@ -36,7 +31,6 @@ where
             QueryClientSubCommand::State(args) => app.run_command(args).await,
             QueryClientSubCommand::Status(args) => app.run_command(args).await,
             QueryClientSubCommand::Consensus(args) => app.run_command(args).await,
-            QueryClientSubCommand::Clients(args) => app.run_command(args).await,
         }
     }
 }
