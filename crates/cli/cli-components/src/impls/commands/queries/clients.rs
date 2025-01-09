@@ -8,6 +8,7 @@ use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStates;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
@@ -43,17 +44,21 @@ pub struct QueryClientsArgs {
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientsCommand
 where
     App: CanLoadBuilder<Builder = Build>
-        + HasOutputType
         + HasLogger
         + CanProduceOutput<Vec<Chain::ClientId>>
         + CanParseArg<Args, symbol!("host_chain_id"), Parsed = Chain::ChainId>
-        + CanParseArg<Args, symbol!("reference_chain_id"), Parsed = Chain::ChainId>
+        + CanParseArg<Args, symbol!("reference_chain_id"), Parsed = Option<Chain::ChainId>>
         + CanRaiseError<Build::Error>
         + CanRaiseError<Chain::Error>,
     Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
-    Chain: HasChainIdType + HasErrorType + HasComponents + HasClientIdType<Counterparty>,
+    Chain: HasChainIdType
+        + HasErrorType
+        + HasComponents
+        + HasClientIdType<Counterparty>
+        + CanQueryAllClientStatesWithLatestHeight<Counterparty>,
     Counterparty:
-        HasClientStateType<Counterparty> + CanQueryAllClientStates<Counterparty> + HasComponents,
+        HasClientIdType<Counterparty> + HasClientStateType<Chain> + HasComponents + HasChainIdType,
+    Counterparty::ClientState: HasChainIdType<ChainId = Counterparty::ChainId> + HasChainId,
     Args: Async,
     App::Logger: CanLog<LevelInfo>,
 {
@@ -70,12 +75,8 @@ where
             .await
             .map_err(App::raise_error)?;
 
-        let clients = query_all_client_states::<Chain, Counterparty>(
-            &chain,
-            &host_chain_id,
-            &reference_chain_id,
-        )
-        .await?;
+        let clients =
+            query_all_client_states::<Chain, Counterparty>(&chain, &reference_chain_id).await?;
 
         for client in clients.iter() {
             logger
@@ -97,28 +98,24 @@ where
 
 async fn query_all_client_states<Chain, Counterparty>(
     chain: &Chain,
-    host_chain_id: &Chain::ChainId,
-    reference_chain_id: Option<&Counterparty::ChainId>,
+    reference_chain_id: &Option<Counterparty::ChainId>,
 ) -> Result<Vec<Chain::ClientId>, Chain::Error>
 where
-    Chain: CanQueryAllClientStatesWithLatestHeight<Counterparty> + HasChainIdType + HasErrorType,
+    Chain: CanQueryAllClientStatesWithLatestHeight<Counterparty> + HasErrorType + HasChainIdType,
     Counterparty: HasClientIdType<Counterparty> + HasChainIdType + HasClientStateType<Chain>,
+    Counterparty::ClientState: HasChainIdType<ChainId = Counterparty::ChainId> + HasChainId,
 {
-    let mut clients = chain
+    let mut client_info = chain
         .query_all_client_states_with_latest_height()
-        .await
-        .map_error(Chain::Error)?
+        .await?
         .into_iter()
-        .map(|(client_id, client_state)| Client::<Chain, Counterparty> {
-            client_id,
-            client_state,
-        })
+        .map(|(client_id, client_state)| (client_id, client_state))
         .collect::<Vec<_>>();
 
     // info!("Found {} clients on chain `{host_chain_id}`", clients.len());
 
     if let Some(reference_chain_id) = reference_chain_id {
-        clients.retain(|client| client.client_state.chain_id() == reference_chain_id);
+        client_info.retain(|info| info.1.chain_id() == reference_chain_id);
 
         // info!(
         //     "Found {} clients that reference `{reference_chain_id}`",
@@ -126,5 +123,10 @@ where
         // );
     }
 
-    Ok(clients)
+    let client_ids = client_info
+        .into_iter()
+        .map(|(client_id, _)| client_id)
+        .collect::<Vec<_>>();
+
+    Ok(client_ids)
 }
