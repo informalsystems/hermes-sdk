@@ -63,7 +63,9 @@ use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, Bootstr
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, BuilderTypeComponent, CanLoadBuilder,
 };
-use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
+use hermes_cli_components::traits::command::{
+    CanRunCommand, CommandRunner, CommandRunnerComponent,
+};
 use hermes_cli_components::traits::config::config_path::ConfigPathGetterComponent;
 use hermes_cli_components::traits::config::load_config::{CanLoadConfig, ConfigLoaderComponent};
 use hermes_cli_components::traits::config::write_config::{CanWriteConfig, ConfigWriterComponent};
@@ -309,3 +311,7 @@ pub trait CanUseHermesApp:
 }
 
 impl CanUseHermesApp for HermesApp {}
+
+pub trait CanRunQueryClientsCommand: CommandRunner<HermesApp, QueryClientsArgs> {}
+
+impl CanRunQueryClientsCommand for RunQueryClientsCommand {}
