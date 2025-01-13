@@ -7,16 +7,14 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
 
 use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::CanRunCommand;
-use crate::traits::command::CommandRunner;
+use crate::traits::command::{CanRunCommand, CommandRunner};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 

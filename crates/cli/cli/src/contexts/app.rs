@@ -39,10 +39,7 @@ use hermes_cli_components::impls::commands::queries::client_status::{
     QueryClientStatusArgs, RunQueryClientStatusCommand,
 };
 use hermes_cli_components::impls::commands::queries::clients::{
-    QueryClientsArgs, RunQueryClientsCommand,
-};
-use hermes_cli_components::impls::commands::queries::clients::{
-    QueryClientsSubCommand, RunQueryClientsSubCommand,
+    QueryClientsArgs, QueryClientsSubCommand, RunQueryClientsCommand, RunQueryClientsSubCommand,
 };
 use hermes_cli_components::impls::commands::queries::connection::{
     QueryConnectionSubCommand, RunQueryConnectionSubCommand,
