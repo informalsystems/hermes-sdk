@@ -41,6 +41,9 @@ use hermes_cli_components::impls::commands::queries::client_status::{
 use hermes_cli_components::impls::commands::queries::clients::{
     QueryClientsArgs, RunQueryClientsCommand,
 };
+use hermes_cli_components::impls::commands::queries::clients::{
+    QueryClientsSubCommand, RunQueryClientsSubCommand,
+};
 use hermes_cli_components::impls::commands::queries::connection::{
     QueryConnectionSubCommand, RunQueryConnectionSubCommand,
 };
@@ -210,7 +213,6 @@ delegate_components! {
         QueryChainSubCommand: RunQueryChainSubCommand,
         QueryChainStatusArgs: RunQueryChainStatusCommand,
 
-        QueryClientsArgs: RunQueryClientsCommand,
         QueryClientSubCommand: RunQueryClientSubCommand,
         QueryClientStateArgs: RunQueryClientStateCommand,
         QueryClientStatusArgs: RunQueryClientStatusCommand,
@@ -221,6 +223,9 @@ delegate_components! {
 
         BootstrapSubCommand: RunBootstrapSubCommand,
         BootstrapChainArgs: RunBootstrapChainCommand<UseContext>,
+
+        QueryClientsSubCommand: RunQueryClientsSubCommand,
+        QueryClientsArgs: RunQueryClientsCommand,
 
         QueryConnectionSubCommand: RunQueryConnectionSubCommand,
         QueryConnectionEndArgs: RunQueryConnectionEndCommand,
@@ -287,6 +292,7 @@ pub trait CanUseHermesApp:
     + CanLoadBuilder
     + CanRunCommand<StartRelayerArgs>
     + CanRunCommand<QueryClientSubCommand>
+    + CanRunCommand<QueryClientsSubCommand>
     + CanRunCommand<QueryClientsArgs>
     + CanRunCommand<QueryClientStateArgs>
     + CanRunCommand<QueryConsensusStateArgs>

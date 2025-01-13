@@ -15,9 +15,32 @@ use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
 
 use crate::traits::build::CanLoadBuilder;
+use crate::traits::command::CanRunCommand;
 use crate::traits::command::CommandRunner;
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
+
+pub struct RunQueryClientsSubCommand;
+
+#[derive(Debug, clap::Subcommand)]
+pub enum QueryClientsSubCommand {
+    /// Query all clients
+    Clients(QueryClientsArgs),
+}
+
+impl<App> CommandRunner<App, QueryClientsSubCommand> for RunQueryClientsSubCommand
+where
+    App: CanRunCommand<QueryClientsArgs>,
+{
+    async fn run_command(
+        app: &App,
+        subcommand: &QueryClientsSubCommand,
+    ) -> Result<App::Output, App::Error> {
+        match subcommand {
+            QueryClientsSubCommand::Clients(args) => app.run_command(args).await,
+        }
+    }
+}
 
 pub struct RunQueryClientsCommand;
 
