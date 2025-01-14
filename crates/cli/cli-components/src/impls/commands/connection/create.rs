@@ -12,6 +12,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 
 use crate::traits::build::CanLoadBuilder;
@@ -80,7 +81,7 @@ where
     Counterparty::ChainId: Display,
     Counterparty::ClientId: Display,
     Counterparty: HasChainIdType + HasClientIdType<Chain>,
-    Relay: HasRelayChains<SrcChain = Chain, DstChain = Counterparty>,
+    Relay: CanBootstrapConnection + HasRelayChains<SrcChain = Chain, DstChain = Counterparty>,
     Args: Async,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
@@ -119,14 +120,16 @@ where
             .map_err(App::raise_error)?;
 
         let (target_connection_id, counterparty_connection_id) = relay
-            .bootstrap_connection(&Chain::InitConnectionOptions)
+            .bootstrap_connection(&Default::default())
             .await
             .map_err(App::raise_error)?;
 
         logger
             .log(
                 &format!(
-                    "Connection successfully created between {}:{} and {}:{}",
+                    "Connection {}:{} successfully created between {}:{} and {}:{}",
+                    target_connection_id,
+                    counterparty_connection_id,
                     target_chain_id,
                     target_client_id,
                     counterparty_chain_id,
