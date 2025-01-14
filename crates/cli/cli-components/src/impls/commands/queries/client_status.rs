@@ -202,9 +202,8 @@ where
 
         let elapsed = Self::duration_since(&latest_consensus_state_timestamp, current_network_time);
 
-        let has_expired = elapsed.map_or(false, |elapsed| {
-            Counterparty::client_state_has_expired(&client_state, elapsed)
-        });
+        let has_expired = elapsed
+            .is_some_and(|elapsed| Counterparty::client_state_has_expired(&client_state, elapsed));
 
         if has_expired {
             Ok(ClientStatus::Expired)
