@@ -1,6 +1,3 @@
-mod clients;
-pub use clients::QueryClients;
-
 mod connections;
 pub use connections::QueryConnections;
 
@@ -13,6 +10,7 @@ pub use channels::QueryChannels;
 mod packet;
 use hermes_cli_components::impls::commands::queries::chain::QueryChainSubCommand;
 use hermes_cli_components::impls::commands::queries::client::QueryClientSubCommand;
+use hermes_cli_components::impls::commands::queries::clients::QueryClientsArgs;
 use hermes_cli_components::impls::commands::queries::connection::QueryConnectionSubCommand;
 use hermes_cli_components::impls::commands::queries::wallet::QueryWalletSubCommand;
 use hermes_cli_components::traits::command::CanRunCommand;
@@ -27,7 +25,7 @@ use crate::Result;
 #[derive(Debug, clap::Subcommand)]
 pub enum QueryCommands {
     /// Query all clients
-    Clients(QueryClients),
+    Clients(QueryClientsArgs),
 
     /// Query all connections
     Connections(QueryConnections),
@@ -66,7 +64,7 @@ impl CommandRunner<HermesApp> for QueryCommands {
             Self::Wallet(cmd) => app.run_command(cmd).await,
             Self::Chain(cmd) => app.run_command(cmd).await,
             Self::Client(cmd) => app.run_command(cmd).await,
-            Self::Clients(cmd) => cmd.run(app).await,
+            Self::Clients(cmd) => app.run_command(cmd).await,
             Self::Connection(cmd) => app.run_command(cmd).await,
             Self::Connections(cmd) => cmd.run(app).await,
             Self::Channels(cmd) => cmd.run(app).await,

@@ -38,6 +38,9 @@ use hermes_cli_components::impls::commands::queries::client_state::{
 use hermes_cli_components::impls::commands::queries::client_status::{
     QueryClientStatusArgs, RunQueryClientStatusCommand,
 };
+use hermes_cli_components::impls::commands::queries::clients::{
+    QueryClientsArgs, RunQueryClientsCommand,
+};
 use hermes_cli_components::impls::commands::queries::connection::{
     QueryConnectionSubCommand, RunQueryConnectionSubCommand,
 };
@@ -60,7 +63,9 @@ use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, Bootstr
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, BuilderTypeComponent, CanLoadBuilder,
 };
-use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
+use hermes_cli_components::traits::command::{
+    CanRunCommand, CommandRunner, CommandRunnerComponent,
+};
 use hermes_cli_components::traits::config::config_path::ConfigPathGetterComponent;
 use hermes_cli_components::traits::config::load_config::{CanLoadConfig, ConfigLoaderComponent};
 use hermes_cli_components::traits::config::write_config::{CanWriteConfig, ConfigWriterComponent};
@@ -164,6 +169,9 @@ delegate_components! {
         (QueryChannelEndArgs, symbol!("channel_id")): ParseFromString<ChannelId>,
         (QueryChannelEndArgs, symbol!("height")): ParseFromOptionalString<Height>,
 
+        (QueryClientsArgs, symbol!("host_chain_id")): ParseFromString<ChainId>,
+        (QueryClientsArgs, symbol!("reference_chain_id")): ParseFromOptionalString<ChainId>,
+
         (QueryClientStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryClientStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
         (QueryClientStateArgs, symbol!("height")): ParseFromOptionalString<Height>,
@@ -214,6 +222,8 @@ delegate_components! {
 
         BootstrapSubCommand: RunBootstrapSubCommand,
         BootstrapChainArgs: RunBootstrapChainCommand<UseContext>,
+
+        QueryClientsArgs: RunQueryClientsCommand,
 
         QueryConnectionSubCommand: RunQueryConnectionSubCommand,
         QueryConnectionEndArgs: RunQueryConnectionEndCommand,
@@ -280,6 +290,7 @@ pub trait CanUseHermesApp:
     + CanLoadBuilder
     + CanRunCommand<StartRelayerArgs>
     + CanRunCommand<QueryClientSubCommand>
+    + CanRunCommand<QueryClientsArgs>
     + CanRunCommand<QueryClientStateArgs>
     + CanRunCommand<QueryConsensusStateArgs>
     + CanRunCommand<QueryClientStatusArgs>
@@ -298,3 +309,7 @@ pub trait CanUseHermesApp:
 }
 
 impl CanUseHermesApp for HermesApp {}
+
+pub trait CanRunQueryClientsCommand: CommandRunner<HermesApp, QueryClientsArgs> {}
+
+impl CanRunQueryClientsCommand for RunQueryClientsCommand {}
