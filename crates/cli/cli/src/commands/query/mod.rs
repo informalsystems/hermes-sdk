@@ -10,7 +10,7 @@ pub use channels::QueryChannels;
 mod packet;
 use hermes_cli_components::impls::commands::queries::chain::QueryChainSubCommand;
 use hermes_cli_components::impls::commands::queries::client::QueryClientSubCommand;
-use hermes_cli_components::impls::commands::queries::clients::QueryClientsSubCommand;
+use hermes_cli_components::impls::commands::queries::clients::QueryClientsArgs;
 use hermes_cli_components::impls::commands::queries::connection::QueryConnectionSubCommand;
 use hermes_cli_components::impls::commands::queries::wallet::QueryWalletSubCommand;
 use hermes_cli_components::traits::command::CanRunCommand;
@@ -25,8 +25,7 @@ use crate::Result;
 #[derive(Debug, clap::Subcommand)]
 pub enum QueryCommands {
     /// Query all clients
-    #[clap(subcommand)]
-    Clients(QueryClientsSubCommand),
+    Clients(QueryClientsArgs),
 
     /// Query all connections
     Connections(QueryConnections),
