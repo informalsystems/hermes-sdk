@@ -1,7 +1,6 @@
 use core::fmt::Display;
 use core::marker::PhantomData;
 
-use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -12,12 +11,13 @@ use hermes_relayer_components::chain::traits::types::connection::HasInitConnecti
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::CommandRunner;
-use crate::traits::output::CanProduceOutput;
+use crate::traits::output::{CanProduceOutput, HasOutputType};
 use crate::traits::parse::CanParseArg;
 
 pub struct RunCreateConnectionCommand;
@@ -60,6 +60,7 @@ pub struct CreateConnectionArgs {
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
     for RunCreateConnectionCommand
 where
+    App: HasOutputType + HasErrorType,
     App: CanLoadBuilder<Builder = Builder>
         + HasLogger
         + CanProduceOutput<&'static str>
@@ -70,18 +71,18 @@ where
         + CanParseArg<Args, symbol!("target_client_id"), Parsed = Chain::ClientId>
         + CanParseArg<Args, symbol!("counterparty_client_id"), Parsed = Counterparty::ClientId>,
     App::Logger: CanLog<LevelInfo>,
-    Builder: CanBuildRelay<Index<0>, Index<1>, Relay = Relay>
-        + HasChainTypeAt<Index<0>, Chain = Chain>
+    Builder: HasChainTypeAt<Index<0>, Chain = Chain>
         + HasChainTypeAt<Index<1>, Chain = Counterparty>
+        + CanBuildRelay<Index<0>, Index<1>, Relay = Relay>
         + HasRelayTypeAt<Index<0>, Index<1>>,
     Chain:
         HasChainIdType + HasClientIdType<Counterparty> + HasInitConnectionOptionsType<Counterparty>,
+    Counterparty: HasChainIdType + HasClientIdType<Chain>,
     Chain::InitConnectionOptions: Default,
     Chain::ChainId: Display,
     Chain::ClientId: Display,
     Counterparty::ChainId: Display,
     Counterparty::ClientId: Display,
-    Counterparty: HasChainIdType + HasClientIdType<Chain>,
     Relay: CanBootstrapConnection + HasRelayChains<SrcChain = Chain, DstChain = Counterparty>,
     Args: Async,
 {
