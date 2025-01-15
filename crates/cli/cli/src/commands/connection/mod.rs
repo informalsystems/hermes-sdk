@@ -1,5 +1,8 @@
-mod create;
-pub use create::ConnectionCreate;
+// mod create;
+// pub use create::ConnectionCreate;
+
+use hermes_cli_components::impls::commands::connection::create::CreateConnectionArgs;
+use hermes_cli_components::traits::command::CanRunCommand;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
@@ -9,13 +12,13 @@ use crate::Result;
 #[derive(Debug, clap::Subcommand)]
 pub enum ConnectionCommands {
     /// Create a new connection
-    Create(ConnectionCreate),
+    Create(CreateConnectionArgs),
 }
 
 impl CommandRunner<HermesApp> for ConnectionCommands {
     async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {
-            Self::Create(cmd) => cmd.run(app).await,
+            Self::Create(cmd) => app.run_command(cmd).await,
         }
     }
 }

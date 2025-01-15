@@ -19,8 +19,10 @@ use crate::traits::command::CommandRunner;
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
+pub struct RunCreateConnectionCommand;
+
 #[derive(Debug, clap::Parser, HasField)]
-pub struct ConnectionCreateArgs {
+pub struct CreateConnectionArgs {
     #[clap(
         long = "target-chain-id",
         required = true,
@@ -53,8 +55,6 @@ pub struct ConnectionCreateArgs {
     )]
     counterparty_client_id: String,
 }
-
-pub struct RunCreateConnectionCommand;
 
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
     for RunCreateConnectionCommand

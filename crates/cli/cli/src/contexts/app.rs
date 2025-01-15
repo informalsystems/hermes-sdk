@@ -14,6 +14,9 @@ use hermes_cli_components::impls::commands::client::create::{
 use hermes_cli_components::impls::commands::client::update::{
     RunUpdateClientCommand, UpdateClientArgs,
 };
+use hermes_cli_components::impls::commands::connection::create::{
+    CreateConnectionArgs, RunCreateConnectionCommand,
+};
 use hermes_cli_components::impls::commands::queries::balance::{
     QueryBalanceArgs, RunQueryBalanceCommand,
 };
@@ -198,6 +201,11 @@ delegate_components! {
         (CreateClientArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateClientArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
 
+        (CreateConnectionArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
+        (CreateConnectionArgs, symbol!("target_client_id")): ParseFromString<ClientId>,
+        (CreateConnectionArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
+        (CreateConnectionArgs, symbol!("counterparty_client_id")): ParseFromString<ClientId>,
+
         (UpdateClientArgs, symbol!("host_chain_id")): ParseFromString<ChainId>,
         (UpdateClientArgs, symbol!("client_id")): ParseFromString<ClientId>,
         (UpdateClientArgs, symbol!("counterparty_client_id")): ParseFromString<ClientId>,
@@ -218,6 +226,7 @@ delegate_components! {
         QueryConsensusStateArgs: RunQueryConsensusStateCommand,
 
         CreateClientArgs: RunCreateClientCommand,
+        CreateConnectionArgs: RunCreateConnectionCommand,
         UpdateClientArgs: RunUpdateClientCommand,
 
         BootstrapSubCommand: RunBootstrapSubCommand,
@@ -297,6 +306,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<QueryChainStatusArgs>
     + CanRunCommand<QueryBalanceArgs>
     + CanRunCommand<CreateClientArgs>
+    + CanRunCommand<CreateConnectionArgs>
     + CanRunCommand<UpdateClientArgs>
     + CanRunCommand<BootstrapChainArgs>
     + CanRunCommand<QueryChannelSubCommand>
