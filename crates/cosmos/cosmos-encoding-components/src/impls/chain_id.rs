@@ -34,7 +34,7 @@ where
 {
     fn decode_mut<'a>(
         encoding: &Encoding,
-        buffer: &mut Encoding::DecodeBuffer<'a>,
+        buffer: &mut Encoding::DecodeBuffer<'_>,
     ) -> Result<ChainId, Encoding::Error> {
         let chain_id_str = <EncodeStringField<TAG>>::decode_mut(encoding, buffer)?;
 
