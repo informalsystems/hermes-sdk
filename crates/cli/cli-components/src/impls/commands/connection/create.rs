@@ -11,6 +11,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 
@@ -71,7 +72,8 @@ where
     App::Logger: CanLog<LevelInfo>,
     Builder: CanBuildRelay<Index<0>, Index<1>, Relay = Relay>
         + HasChainTypeAt<Index<0>, Chain = Chain>
-        + HasChainTypeAt<Index<1>, Chain = Counterparty>,
+        + HasChainTypeAt<Index<1>, Chain = Counterparty>
+        + HasRelayTypeAt<Index<0>, Index<1>>,
     Chain:
         HasChainIdType + HasClientIdType<Counterparty> + HasInitConnectionOptionsType<Counterparty>,
     Chain::InitConnectionOptions: Default,
