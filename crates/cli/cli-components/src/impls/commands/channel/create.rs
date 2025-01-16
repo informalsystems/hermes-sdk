@@ -86,10 +86,10 @@ where
         + CanParseArg<Args, symbol!("target_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("target_client_id"), Parsed = Chain::ClientId>
         + CanParseArg<Args, symbol!("target_connection_id"), Parsed = Chain::ConnectionId>
-        + CanParseArg<Args, symbol!("target_port_id"), Parsed = Chain::PortId>
+        + CanParseArg<Args, symbol!("target_port_id"), Parsed = Option<Chain::PortId>>
         + CanParseArg<Args, symbol!("counterparty_chain_id"), Parsed = Counterparty::ChainId>
         + CanParseArg<Args, symbol!("counterparty_client_id"), Parsed = Counterparty::ClientId>
-        + CanParseArg<Args, symbol!("counterparty_port_id"), Parsed = Counterparty::PortId>,
+        + CanParseArg<Args, symbol!("counterparty_port_id"), Parsed = Option<Counterparty::PortId>>,
     App::Logger: CanLog<LevelInfo>,
     Args: Async,
     Builder: CanBuildRelay<Index<0>, Index<1>, Relay = Relay>

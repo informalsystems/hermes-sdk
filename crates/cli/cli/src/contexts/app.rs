@@ -204,11 +204,11 @@ delegate_components! {
 
         (CreateChannelArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateChannelArgs, symbol!("target_client_id")): ParseFromString<ClientId>,
-        (CreateChannelArgs, symbol!("target_port_id")): ParseFromString<PortId>,
+        (CreateChannelArgs, symbol!("target_port_id")): ParseFromOptionalString<PortId>,
         (CreateChannelArgs, symbol!("target_connection_id")): ParseFromString<ConnectionId>,
         (CreateChannelArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
         (CreateChannelArgs, symbol!("counterparty_client_id")): ParseFromString<ClientId>,
-        (CreateChannelArgs, symbol!("counterparty_port_id")): ParseFromString<PortId>,
+        (CreateChannelArgs, symbol!("counterparty_port_id")): ParseFromOptionalString<PortId>,
 
         (CreateConnectionArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateConnectionArgs, symbol!("target_client_id")): ParseFromString<ClientId>,
