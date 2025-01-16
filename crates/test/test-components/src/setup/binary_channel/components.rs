@@ -102,11 +102,11 @@ where
         + HasCreateClientPayloadOptionsAt<Index<1>, Index<0>>
         + HasCreateClientMessageOptionsAt<Index<1>, Index<0>>
         + HasTestDriverType
-        + CanRaiseError<Relay::Error>
+        + CanRaiseAsyncError<Relay::Error>
         + CanBuildTestDriverWithBinaryChannel
         + HasComponents<Components = Components>
         + CanBuildTestDriverWithBinaryChannel
-        + CanRaiseError<Relay::Error>,
+        + CanRaiseAsyncError<Relay::Error>,
     Components: DelegatesToBinaryChannelTestComponents
         + BinaryChannelDriverBuilder<Setup>
         + ProvideBootstrapAt<Setup, Index<0>, Bootstrap = BootstrapA>
@@ -132,12 +132,12 @@ where
         + HasCreateClientMessageOptionsType<ChainB>
         + HasInitConnectionOptionsType<ChainB>
         + HasInitChannelOptionsType<ChainB>
-        + HasErrorType
+        + HasAsyncErrorType
         + Clone,
     ChainB: HasIbcChainTypes<ChainA>
         + HasCreateClientPayloadOptionsType<ChainA>
         + HasCreateClientMessageOptionsType<ChainA>
-        + HasErrorType
+        + HasAsyncErrorType
         + Clone,
     Relay: HasRelayChainTypes<SrcChain = ChainA, DstChain = ChainB>
         + HasTargetChains<SourceTarget>
@@ -149,8 +149,8 @@ where
         + CanCreateClient<DestinationTarget>
         + CanBootstrapConnection
         + CanBootstrapChannel
-        + CanRaiseError<ChainA::Error>
-        + CanRaiseError<ChainB::Error>,
+        + CanRaiseAsyncError<ChainA::Error>
+        + CanRaiseAsyncError<ChainB::Error>,
     BootstrapA: CanBootstrapChain,
     BootstrapB: CanBootstrapChain,
     Build: HasBiRelayTypeAt<Index<0>, Index<1>, BiRelay = Setup::BiRelay>

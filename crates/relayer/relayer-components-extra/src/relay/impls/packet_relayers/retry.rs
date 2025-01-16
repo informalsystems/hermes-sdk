@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
 use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, PacketOf};
@@ -15,7 +15,7 @@ where
     Relay: HasRelayChains
         + HasRetryableError
         + HasMaxErrorRetry
-        + for<'a> CanRaiseError<MaxRetryExceededError<'a, Relay>>,
+        + for<'a> CanRaiseAsyncError<MaxRetryExceededError<'a, Relay>>,
     InRelayer: PacketRelayer<Relay>,
 {
     async fn relay_packet(relay: &Relay, packet: &PacketOf<Relay>) -> Result<(), Relay::Error> {

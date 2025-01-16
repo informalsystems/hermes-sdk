@@ -9,7 +9,7 @@ use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainD
   context: Setup,
 }]
 #[async_trait]
-pub trait CanSetupChain<Tag: Async>: HasChainDriverTypeAt<Tag> + HasErrorType {
+pub trait CanSetupChain<Tag: Async>: HasChainDriverTypeAt<Tag> + HasAsyncErrorType {
     async fn setup_chain(
         &self,
         _tag: PhantomData<Tag>,

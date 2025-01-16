@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use prost::bytes::BufMut;
@@ -13,7 +13,7 @@ pub struct EncodeProtoFieldWithKnownLength<const TAG: u32, InEncoder>(pub Phanto
 impl<Encoding, Strategy, Value, InEncoder, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
     for EncodeProtoFieldWithKnownLength<TAG, InEncoder>
 where
-    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasErrorType,
+    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasAsyncErrorType,
     Encoding::EncodeBuffer: BufMut,
     InEncoder:
         MutEncoder<Encoding, Strategy, Value> + EncodedLengthGetter<Encoding, Strategy, Value>,

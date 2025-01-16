@@ -1,6 +1,6 @@
 use core::cmp::min;
 
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
@@ -15,7 +15,7 @@ pub struct StaticConvertCosmosGasToFee;
 
 impl<Chain> GasToFeeConverter<Chain> for StaticConvertCosmosGasToFee
 where
-    Chain: HasFeeType<Fee = Fee> + HasGasConfig + HasErrorType,
+    Chain: HasFeeType<Fee = Fee> + HasGasConfig + HasAsyncErrorType,
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
         let gas_config = chain.gas_config();

@@ -1,7 +1,7 @@
 use std::io::Error as IoError;
 use std::path::PathBuf;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::fs::copy_file::CanCopyFile;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
@@ -19,8 +19,8 @@ impl<Bootstrap, Chain, ChainDriver, Runtime> BridgeKeyImporter<Bootstrap> for Co
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainDriverType<ChainDriver = ChainDriver>
-        + CanRaiseError<Runtime::Error>
-        + CanRaiseError<IoError>,
+        + CanRaiseAsyncError<Runtime::Error>
+        + CanRaiseAsyncError<IoError>,
     Runtime: HasFilePathType<FilePath = PathBuf> + CanCopyFile,
     ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime> + HasChainHomeDir,
     Chain: HasChainId,

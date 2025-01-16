@@ -27,7 +27,7 @@ where
 
 pub struct LogRetryQueryTxResponse<'a, Chain>
 where
-    Chain: HasTransactionHashType + HasErrorType,
+    Chain: HasTransactionHashType + HasAsyncErrorType,
 {
     pub chain: &'a Chain,
     pub tx_hash: &'a Chain::TxHash,
@@ -64,7 +64,7 @@ where
         + HasRuntime
         + HasLogger
         + HasRetryableError
-        + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>,
+        + for<'a> CanRaiseAsyncError<TxNoResponseError<'a, Chain>>,
     Chain::Runtime: HasTime + CanSleep,
     Chain::Logger: for<'a> CanLog<TxNoResponseError<'a, Chain>>
         + for<'a> CanLog<LogRetryQueryTxResponse<'a, Chain>>,

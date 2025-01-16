@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{CanRaiseError, ErrorOf};
+use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
 use cgp::core::Async;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
@@ -28,7 +28,7 @@ where
         + HasInitChannelOptionsAt<A, B>
         + HasPortIdAt<A, B>
         + HasPortIdAt<B, A>
-        + CanRaiseError<ErrorOf<RelayAt<Setup, A, B>>>,
+        + CanRaiseAsyncError<ErrorOf<RelayAt<Setup, A, B>>>,
     ChainAt<Setup, A>:
         HasIbcChainTypes<ChainAt<Setup, B>> + HasInitChannelOptionsType<ChainAt<Setup, B>>,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,

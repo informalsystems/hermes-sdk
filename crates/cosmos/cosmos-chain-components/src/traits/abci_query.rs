@@ -7,7 +7,7 @@ use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofTy
   context: Chain,
 }]
 #[async_trait]
-pub trait CanQueryAbci: HasHeightType + HasCommitmentProofType + HasErrorType {
+pub trait CanQueryAbci: HasHeightType + HasCommitmentProofType + HasAsyncErrorType {
     async fn query_abci(
         &self,
         path: &str,

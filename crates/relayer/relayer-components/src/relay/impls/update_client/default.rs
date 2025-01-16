@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_chain_components::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use hermes_chain_components::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
 use hermes_logging_components::traits::has_logger::HasLogger;
@@ -32,8 +32,8 @@ where
             CounterpartyChain = CounterpartyChain,
         > + HasTargetChains<Target>
         + HasTargetClientIds<Target>
-        + CanRaiseError<TargetChain::Error>
-        + CanRaiseError<CounterpartyChain::Error>,
+        + CanRaiseAsyncError<TargetChain::Error>
+        + CanRaiseAsyncError<CounterpartyChain::Error>,
     TargetChain: CanQueryClientStateWithLatestHeight<CounterpartyChain>
         + CanBuildUpdateClientMessage<CounterpartyChain>
         + CanQueryConsensusStateHeight<CounterpartyChain>

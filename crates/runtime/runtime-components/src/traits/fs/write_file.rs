@@ -7,7 +7,7 @@ use crate::traits::fs::file_path::HasFilePathType;
   context: Runtime,
 }]
 #[async_trait]
-pub trait CanWriteStringToFile: HasFilePathType + HasErrorType {
+pub trait CanWriteStringToFile: HasFilePathType + HasAsyncErrorType {
     async fn write_string_to_file(
         &self,
         path: &Self::FilePath,

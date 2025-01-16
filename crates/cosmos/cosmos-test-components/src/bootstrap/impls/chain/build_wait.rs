@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 use std::collections::BTreeMap;
 
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasChildProcessType};
 use hermes_runtime_components::traits::runtime::HasRuntimeType;
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, Wallet};
@@ -23,7 +23,7 @@ where
         + HasChainDriverType<ChainDriver = ChainDriver>
         + HasChainGenesisConfigType
         + HasChainNodeConfigType
-        + CanRaiseError<ChainDriver::Error>,
+        + CanRaiseAsyncError<ChainDriver::Error>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
     ChainDriver: CanWaitChainStartup,
 {

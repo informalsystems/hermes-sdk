@@ -53,8 +53,8 @@ where
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("connection_id"), Parsed = Chain::ConnectionId>
         + CanParseArg<Args, symbol!("height"), Parsed = Option<Chain::Height>>
-        + CanRaiseError<Build::Error>
-        + CanRaiseError<Chain::Error>,
+        + CanRaiseAsyncError<Build::Error>
+        + CanRaiseAsyncError<Chain::Error>,
     Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
     Chain: HasChainIdType + CanQueryChainHeight + CanQueryConnectionEnd<Counterparty>,
     Args: Async,

@@ -31,8 +31,8 @@ where
     App: CanLoadBuilder<Builder = Build>
         + CanProduceOutput<Chain::ChainStatus>
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
-        + CanRaiseError<Build::Error>
-        + CanRaiseError<Chain::Error>,
+        + CanRaiseAsyncError<Build::Error>
+        + CanRaiseAsyncError<Chain::Error>,
     Build: CanBuildChain<Index<0>, Chain = Chain>,
     Chain: HasChainIdType + CanQueryChainStatus,
     Args: Async,

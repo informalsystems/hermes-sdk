@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
@@ -18,7 +18,7 @@ where
     Chain: HasRuntime
         + HasPollAssertDuration
         + CanQueryBalance
-        + for<'a> CanRaiseError<EventualAmountTimeoutError<'a, Chain>>,
+        + for<'a> CanRaiseAsyncError<EventualAmountTimeoutError<'a, Chain>>,
     Chain::Runtime: CanSleep,
 {
     async fn assert_eventual_amount(

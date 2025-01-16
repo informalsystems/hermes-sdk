@@ -13,7 +13,7 @@ use crate::batch::traits::types::{HasMessageBatchChannelTypes, MessageBatchSende
   context: Build,
 }]
 #[async_trait]
-pub trait CanBuildRelayWithBatch<A: Async, B: Async>: HasErrorType
+pub trait CanBuildRelayWithBatch<A: Async, B: Async>: HasAsyncErrorType
     + HasChainTypeAt<A, Chain: HasClientIdType<ChainAt<Self, B>>>
     + HasChainTypeAt<B, Chain: HasClientIdType<ChainAt<Self, A>>>
     + HasRelayTypeAt<A, B, Relay: HasMessageBatchChannelTypes<Src> + HasMessageBatchChannelTypes<Dst>>

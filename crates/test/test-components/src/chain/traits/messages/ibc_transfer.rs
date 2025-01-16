@@ -14,7 +14,7 @@ use crate::chain::traits::types::memo::HasMemoType;
 }]
 #[async_trait]
 pub trait CanBuildIbcTokenTransferMessage<Counterparty>:
-    HasErrorType
+    HasAsyncErrorType
     + HasAmountType
     + HasMemoType
     + HasMessageType

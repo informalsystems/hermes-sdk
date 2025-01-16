@@ -27,7 +27,7 @@ impl<
         PayloadData,
     > IbcMessageHandler<Chain, Counterparty, App> for ConvertAndHandleIbcMessage<InApp, InHandler>
 where
-    Chain: HasErrorType
+    Chain: HasAsyncErrorType
         + HasPacketHeaderType<Counterparty>
         + HasIbcMessageHeaderType<Counterparty>
         + HasIbcMessageType<Counterparty, App, IbcMessage = AnyMessage>
@@ -36,7 +36,7 @@ where
         + HasPayloadDataType<Counterparty, InApp, PayloadData = PayloadData>
         + HasPayloadHeaderType<Counterparty>
         + HasEncoding<App>
-        + CanRaiseError<ErrorOf<Chain::Encoding>>,
+        + CanRaiseAsyncError<ErrorOf<Chain::Encoding>>,
     InHandler: IbcMessageHandler<Chain, Counterparty, InApp>,
     Chain::Encoding:
         CanConvert<AnyMessage, Message> + CanConvert<PayloadData, AnyPayloadData> + Clone,

@@ -6,7 +6,7 @@ use crate::traits::types::light_block::HasLightBlockType;
   provider: LightBlockValidator,
   context: Client,
 }]
-pub trait CanValidateLightBlock<Mode>: HasLightBlockType + HasErrorType {
+pub trait CanValidateLightBlock<Mode>: HasLightBlockType + HasAsyncErrorType {
     fn validate_light_block(
         &self,
         _mode: Mode,

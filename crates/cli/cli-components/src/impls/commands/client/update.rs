@@ -74,21 +74,21 @@ where
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
         + CanParseArg<Args, symbol!("counterparty_client_id"), Parsed = Counterparty::ClientId>
         + CanParseArg<Args, symbol!("target_height"), Parsed = Option<Counterparty::Height>>
-        + CanRaiseError<Builder::Error>
-        + CanRaiseError<Chain::Error>
-        + CanRaiseError<Counterparty::Error>
-        + CanRaiseError<Relay::Error>,
+        + CanRaiseAsyncError<Builder::Error>
+        + CanRaiseAsyncError<Chain::Error>
+        + CanRaiseAsyncError<Counterparty::Error>
+        + CanRaiseAsyncError<Relay::Error>,
     Builder: CanBuildChain<Index<0>, Chain = Chain>
         + CanBuildChain<Index<1>, Chain = Counterparty>
         + CanBuildRelay<Index<0>, Index<1>, Relay = Relay>,
-    Chain: HasChainIdType + CanQueryClientStateWithLatestHeight<Counterparty> + HasErrorType,
+    Chain: HasChainIdType + CanQueryClientStateWithLatestHeight<Counterparty> + HasAsyncErrorType,
     Counterparty: HasChainIdType
         + HasClientStateType<Chain>
         + HasClientIdType<Chain>
         + HasHeightType
         + HasClientStateFields<Chain>
         + CanQueryChainHeight
-        + HasErrorType,
+        + HasAsyncErrorType,
     Relay: HasRelayChains<SrcChain = Chain, DstChain = Counterparty>
         + HasSourceTargetChainTypes
         + HasRelayClientIds

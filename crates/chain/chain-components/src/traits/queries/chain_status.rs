@@ -12,7 +12,7 @@ use crate::traits::types::status::HasChainStatusType;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
+pub trait CanQueryChainStatus: HasChainStatusType + HasAsyncErrorType {
     /**
         Query the current status of the blockchain. The returned
         [status](HasChainStatusType::ChainStatus) is required to have the same
@@ -33,7 +33,7 @@ pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
 }
 
 #[async_trait]
-pub trait CanQueryChainHeight: HasHeightType + HasErrorType {
+pub trait CanQueryChainHeight: HasHeightType + HasAsyncErrorType {
     async fn query_chain_height(&self) -> Result<Self::Height, Self::Error>;
 }
 

@@ -16,7 +16,7 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
 }]
 #[async_trait]
 pub trait CanCheckSendPayloadPermission<Counterparty>:
-    HasErrorType + HasAddressType + HasPayloadHeaderType<Counterparty>
+    HasAsyncErrorType + HasAddressType + HasPayloadHeaderType<Counterparty>
 {
     async fn check_send_payload_permission(
         &self,

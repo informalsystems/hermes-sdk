@@ -63,9 +63,9 @@ where
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
         + CanParseArg<Args, symbol!("query_height"), Parsed = Option<Chain::Height>>
         + CanParseArg<Args, symbol!("consensus_height"), Parsed = Option<Counterparty::Height>>
-        + CanRaiseError<Build::Error>
-        + CanRaiseError<Chain::Error>
-        + CanRaiseError<String>,
+        + CanRaiseAsyncError<Build::Error>
+        + CanRaiseAsyncError<Chain::Error>
+        + CanRaiseAsyncError<String>,
     Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
     Chain: CanQueryChainHeight
         + HasChainIdType

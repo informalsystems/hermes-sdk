@@ -9,7 +9,7 @@ use hermes_test_components::chain::traits::types::amount::HasAmountType;
 }]
 #[async_trait]
 pub trait CanUploadWasmClientCode:
-    HasAmountType + HasAddressType + HasProposalIdType + HasErrorType
+    HasAmountType + HasAddressType + HasProposalIdType + HasAsyncErrorType
 {
     async fn upload_wasm_client_code(
         &self,

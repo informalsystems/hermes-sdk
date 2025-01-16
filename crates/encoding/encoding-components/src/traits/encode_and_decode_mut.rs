@@ -1,4 +1,4 @@
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 
 use crate::traits::decode_mut::{CanDecodeMut, MutDecoder};
 use crate::traits::encode_mut::{CanEncodeMut, MutEncoder};
@@ -18,7 +18,7 @@ impl<Encoding, Strategy, Value> CanEncodeAndDecodeMut<Strategy, Value> for Encod
 pub trait MutEncoderAndDecoder<Encoding, Strategy, Value>:
     MutEncoder<Encoding, Strategy, Value> + MutDecoder<Encoding, Strategy, Value>
 where
-    Encoding: HasEncodeBufferType + HasDecodeBufferType + HasErrorType,
+    Encoding: HasEncodeBufferType + HasDecodeBufferType + HasAsyncErrorType,
 {
 }
 
@@ -26,6 +26,6 @@ impl<Component, Encoding, Strategy, Value> MutEncoderAndDecoder<Encoding, Strate
     for Component
 where
     Component: MutEncoder<Encoding, Strategy, Value> + MutDecoder<Encoding, Strategy, Value>,
-    Encoding: HasEncodeBufferType + HasDecodeBufferType + HasErrorType,
+    Encoding: HasEncodeBufferType + HasDecodeBufferType + HasAsyncErrorType,
 {
 }

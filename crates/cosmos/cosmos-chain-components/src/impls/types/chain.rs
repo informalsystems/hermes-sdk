@@ -1,8 +1,8 @@
 use alloc::sync::Arc;
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseError;
-use cgp::core::types::impls::WithType;
+use cgp::core::error::CanRaiseAsyncError;
+use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::fields::height::HeightIncrementer;
@@ -108,7 +108,7 @@ where
 
 impl<Chain> HeightIncrementer<Chain> for ProvideCosmosChainTypes
 where
-    Chain: HasHeightType<Height = Height> + HasErrorType,
+    Chain: HasHeightType<Height = Height> + HasAsyncErrorType,
 {
     fn increment_height(height: &Height) -> Result<Height, Chain::Error> {
         Ok(height.increment())
@@ -117,7 +117,7 @@ where
 
 impl<Chain> GenesisHeightGetter<Chain> for ProvideCosmosChainTypes
 where
-    Chain: HasHeightType<Height = Height> + HasChainId<ChainId = ChainId> + HasErrorType,
+    Chain: HasHeightType<Height = Height> + HasChainId<ChainId = ChainId> + HasAsyncErrorType,
 {
     fn genesis_height(chain: &Chain) -> Height {
         Height::new(chain.chain_id().revision_number(), 1).unwrap()
@@ -153,7 +153,7 @@ where
 
 impl<Chain> MessageSizeEstimator<Chain> for ProvideCosmosChainTypes
 where
-    Chain: HasMessageType<Message = CosmosMessage> + CanRaiseError<EncodeError>,
+    Chain: HasMessageType<Message = CosmosMessage> + CanRaiseAsyncError<EncodeError>,
 {
     fn estimate_message_size(message: &CosmosMessage) -> Result<usize, Chain::Error> {
         let raw = message.message.encode_protobuf(&Signer::from(

@@ -8,7 +8,7 @@ use crate::chain::traits::types::amount::HasAmountType;
   context: Chain,
 }]
 pub trait CanConvertIbcTransferredAmount<Counterparty>:
-    HasAmountType + HasIbcChainTypes<Counterparty> + HasErrorType
+    HasAmountType + HasIbcChainTypes<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasAmountType,
 {

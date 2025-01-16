@@ -22,7 +22,7 @@ pub trait HasAmountType: HasDenomType {
   provider: ProvideAmountMethods,
   context: Chain,
 }]
-pub trait HasAmountMethods: HasAmountType + HasErrorType {
+pub trait HasAmountMethods: HasAmountType + HasAsyncErrorType {
     fn add_amount(
         current: &Self::Amount,
         amount: &Self::Amount,

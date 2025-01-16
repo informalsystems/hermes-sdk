@@ -1,6 +1,7 @@
 use core::fmt::Debug;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::HasAsyncErrorType;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
 use crate::chain::traits::send_message::CanSendSingleMessage;
@@ -25,13 +26,13 @@ pub struct MissingChannelInitEventError<'a, Relay> {
 impl<Relay, SrcChain, DstChain> ChannelInitializer<Relay> for InitializeChannel
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + for<'a> CanRaiseError<MissingChannelInitEventError<'a, Relay>>
-        + CanRaiseError<SrcChain::Error>,
+        + for<'a> CanRaiseAsyncError<MissingChannelInitEventError<'a, Relay>>
+        + CanRaiseAsyncError<SrcChain::Error>,
     SrcChain: CanSendSingleMessage
         + HasInitChannelOptionsType<DstChain>
         + CanBuildChannelOpenInitMessage<DstChain>
         + HasChannelOpenInitEvent<DstChain>,
-    DstChain: HasIbcChainTypes<SrcChain>,
+    DstChain: HasIbcChainTypes<SrcChain> + HasAsyncErrorType,
     SrcChain::ChannelId: Clone,
 {
     async fn init_channel(

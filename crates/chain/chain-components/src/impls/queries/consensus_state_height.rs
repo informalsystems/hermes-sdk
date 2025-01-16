@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
 use crate::traits::queries::consensus_state_height::{
@@ -24,7 +24,7 @@ impl<Chain, Counterparty> ConsensusStateHeightQuerier<Chain, Counterparty>
     for QueryConsensusStateHeightsAndFindHeightBefore
 where
     Chain: CanQueryConsensusStateHeights<Counterparty>
-        + for<'a> CanRaiseError<NoConsensusStateAtLessThanHeight<'a, Chain, Counterparty>>,
+        + for<'a> CanRaiseAsyncError<NoConsensusStateAtLessThanHeight<'a, Chain, Counterparty>>,
     Counterparty: HasHeightType,
 {
     async fn find_consensus_state_height_before(

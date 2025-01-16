@@ -1,7 +1,7 @@
 use core::iter::Iterator;
 use core::str::FromStr;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllRawClientStatesQuerier, RawClientStateQuerier, RawClientStateWithProofsQuerier,
@@ -30,7 +30,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + HasRawClientStateType<RawClientState = Any>
         + CanQueryAbci
-        + CanRaiseError<DecodeError>,
+        + CanRaiseAsyncError<DecodeError>,
 {
     async fn query_raw_client_state(
         chain: &Chain,
@@ -56,7 +56,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + HasRawClientStateType<RawClientState = Any>
         + CanQueryAbci
-        + CanRaiseError<DecodeError>,
+        + CanRaiseAsyncError<DecodeError>,
 {
     async fn query_raw_client_state_with_proofs(
         chain: &Chain,
@@ -82,7 +82,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + CanQueryAbci
         + HasRawClientStateType<RawClientState = Any>
-        + CanRaiseError<DecodeError>
+        + CanRaiseAsyncError<DecodeError>
         + CanParseClientStateEntryToAny<Counterparty>,
 {
     async fn query_all_raw_client_states(
@@ -116,7 +116,7 @@ where
 }
 
 pub trait CanParseClientStateEntryToAny<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasIbcChainTypes<Counterparty> + HasAsyncErrorType
 {
     fn parse_client_state_entry_to_any(
         entry: IdentifiedClientState,
@@ -126,8 +126,8 @@ pub trait CanParseClientStateEntryToAny<Counterparty>:
 impl<Chain, Counterparty> CanParseClientStateEntryToAny<Counterparty> for Chain
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
-        + CanRaiseError<IdentifierError>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<IdentifierError>
+        + CanRaiseAsyncError<&'static str>,
 {
     fn parse_client_state_entry_to_any(
         entry: IdentifiedClientState,

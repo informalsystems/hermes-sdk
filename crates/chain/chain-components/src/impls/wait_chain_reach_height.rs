@@ -8,7 +8,7 @@ use crate::traits::queries::chain_status::CanQueryChainHeight;
 use crate::traits::types::height::HasHeightType;
 
 #[async_trait]
-pub trait CanWaitChainReachHeight: HasHeightType + HasErrorType {
+pub trait CanWaitChainReachHeight: HasHeightType + HasAsyncErrorType {
     async fn wait_chain_reach_height(
         &self,
         height: &Self::Height,

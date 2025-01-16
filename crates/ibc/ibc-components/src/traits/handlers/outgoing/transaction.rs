@@ -9,7 +9,7 @@ use crate::traits::types::transaction::HasIbcTransactionType;
 }]
 #[async_trait]
 pub trait CanHandleIbcTransaction<Counterparty>:
-    HasErrorType + HasIbcTransactionType<Counterparty> + HasPacketType<Counterparty>
+    HasAsyncErrorType + HasIbcTransactionType<Counterparty> + HasPacketType<Counterparty>
 {
     async fn handle_ibc_transaction(
         &mut self,

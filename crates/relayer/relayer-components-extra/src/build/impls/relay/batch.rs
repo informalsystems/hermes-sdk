@@ -41,7 +41,7 @@ where
         + HasRelayTypeAt<SrcTag, DstTag, Relay = Relay>
         + HasChainTypeAt<SrcTag, Chain = SrcChain>
         + HasChainTypeAt<DstTag, Chain = DstChain>
-        + HasErrorType
+        + HasAsyncErrorType
         + CanBuildRelayWithBatch<SrcTag, DstTag>
         + CanBuildBatchChannel<SrcTag, DstTag, SourceTarget>
         + CanBuildBatchChannel<SrcTag, DstTag, DestinationTarget>,
@@ -57,12 +57,12 @@ where
         + HasClientIdType<DstChain>
         + HasMessageType
         + HasMessageResponseType
-        + HasErrorType,
+        + HasAsyncErrorType,
     DstChain: HasChainId
         + HasClientIdType<SrcChain>
         + HasMessageType
         + HasMessageResponseType
-        + HasErrorType,
+        + HasAsyncErrorType,
     Relay::Runtime: HasChannelTypes + HasChannelOnceTypes,
 {
     async fn build_relay_from_chains(
@@ -130,7 +130,7 @@ where
 
 #[async_trait]
 pub trait CanBuildBatchChannel<SrcTag: Async, DstTag: Async, Target: RelayTarget>:
-    HasErrorType + CanUseBatchSenderCache<SrcTag, DstTag, Target>
+    HasAsyncErrorType + CanUseBatchSenderCache<SrcTag, DstTag, Target>
 {
     async fn build_batch_channel(
         &self,
@@ -167,7 +167,7 @@ where
     Build: CanUseBatchSenderCache<SrcTag, DstTag, Target>
         + HasBatchSenderCache<SrcTag, DstTag, Target>
         + HasRelayTypeAt<SrcTag, DstTag, Relay = Relay>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Relay: HasTargetChainTypes<
             Target,
             TargetChain = TargetChain,

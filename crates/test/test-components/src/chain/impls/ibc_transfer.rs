@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -30,7 +30,7 @@ where
         + CanBuildIbcTokenTransferMessage<Counterparty>
         + HasIbcChainTypes<Counterparty>
         + HasSendPacketEvent<Counterparty>
-        + CanRaiseError<MissingSendPacketEventError>
+        + CanRaiseAsyncError<MissingSendPacketEventError>
         + CanSendSingleMessageWithSigner,
     Counterparty: HasAddressType,
 {

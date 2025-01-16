@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerier;
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
@@ -18,11 +18,11 @@ where
     Chain: HasSignerType<Signer = Secp256k1KeyPair>
         + HasNonceType<Nonce = Account>
         + HasGrpcAddress
-        + CanRaiseError<DecodeError>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<Status>
-        + CanRaiseError<String>,
+        + CanRaiseAsyncError<DecodeError>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<Status>
+        + CanRaiseAsyncError<String>,
 {
     async fn query_nonce(
         chain: &Chain,

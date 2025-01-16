@@ -17,7 +17,7 @@ pub struct ExecOutput {
   context: Runtime,
 }]
 #[async_trait]
-pub trait CanExecCommand: HasFilePathType + HasErrorType {
+pub trait CanExecCommand: HasFilePathType + HasAsyncErrorType {
     async fn exec_command(
         &self,
         command_path: &Self::FilePath,
@@ -32,7 +32,7 @@ pub trait CanExecCommand: HasFilePathType + HasErrorType {
   context: Runtime,
 }]
 #[async_trait]
-pub trait CanExecCommandWithEnvs: HasFilePathType + HasErrorType {
+pub trait CanExecCommandWithEnvs: HasFilePathType + HasAsyncErrorType {
     async fn exec_command_with_envs(
         &self,
         command_path: &Self::FilePath,

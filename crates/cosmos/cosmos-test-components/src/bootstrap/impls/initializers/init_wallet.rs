@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::{Async, CanRaiseError};
+use cgp::prelude::{Async, CanRaiseAsyncError};
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
@@ -48,10 +48,10 @@ where
         + HasChainType<Chain = Chain>
         + HasWalletHdPath
         + HasChainCommandPath
-        + CanRaiseError<String>
-        + CanRaiseError<Runtime::Error>
-        + CanRaiseError<&'static str>
-        + CanRaiseError<json::Error>,
+        + CanRaiseAsyncError<String>
+        + CanRaiseAsyncError<Runtime::Error>
+        + CanRaiseAsyncError<&'static str>
+        + CanRaiseAsyncError<json::Error>,
     Runtime: HasFilePathType + CanExecCommand + CanWriteStringToFile,
     Chain: HasWalletType<Wallet = CosmosTestWallet>,
     OutputGetter: ExecOutputGetter,

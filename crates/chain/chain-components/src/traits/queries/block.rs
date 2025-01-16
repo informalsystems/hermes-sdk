@@ -8,6 +8,6 @@ use crate::traits::types::height::HasHeightType;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanQueryBlock: HasHeightType + HasBlockType + HasErrorType {
+pub trait CanQueryBlock: HasHeightType + HasBlockType + HasAsyncErrorType {
     async fn query_block(&self, height: &Self::Height) -> Result<Self::Block, Self::Error>;
 }

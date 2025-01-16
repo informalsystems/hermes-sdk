@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -42,9 +42,9 @@ where
         + HasPacketLock
         + HasMaxErrorRetry
         + HasRetryableError
-        + CanRaiseError<SrcChain::Error>
-        + CanRaiseError<DstChain::Error>
-        + for<'a> CanRaiseError<MaxRetryExceededError<'a, Relay>>,
+        + CanRaiseAsyncError<SrcChain::Error>
+        + CanRaiseAsyncError<DstChain::Error>
+        + for<'a> CanRaiseAsyncError<MaxRetryExceededError<'a, Relay>>,
     SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
         + HasWriteAckEvent<Relay::SrcChain>

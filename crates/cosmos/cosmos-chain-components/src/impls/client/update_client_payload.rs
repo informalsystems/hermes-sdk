@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_comet_light_client_components::traits::update_client::CanBuildLightBlocksForUpdateClient;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
@@ -28,12 +28,12 @@ where
         + HasRpcClient
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>
         + HasClientStateType<Counterparty>
-        + CanRaiseError<ClientError>
-        + CanRaiseError<tendermint::Error>
-        + CanRaiseError<tendermint_rpc::Error>
-        + CanRaiseError<ClientError>
-        + CanRaiseError<TendermintClientError>
-        + CanRaiseError<HermesError>,
+        + CanRaiseAsyncError<ClientError>
+        + CanRaiseAsyncError<tendermint::Error>
+        + CanRaiseAsyncError<tendermint_rpc::Error>
+        + CanRaiseAsyncError<ClientError>
+        + CanRaiseAsyncError<TendermintClientError>
+        + CanRaiseAsyncError<HermesError>,
     TendermintClientState: From<Chain::ClientState>,
 {
     async fn build_update_client_payload(

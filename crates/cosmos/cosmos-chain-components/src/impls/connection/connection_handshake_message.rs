@@ -1,7 +1,7 @@
 use core::fmt::Display;
 
-use cgp::core::error::CanRaiseError;
-use cgp::prelude::HasErrorType;
+use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
@@ -47,7 +47,7 @@ where
             InitConnectionOptions = CosmosInitConnectionOptions,
         > + HasMessageType
         + HasClientIdType<Counterparty, ClientId: Display>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasClientIdType<Chain, ClientId: Display>
         + HasConnectionOpenInitPayloadType<
@@ -88,8 +88,8 @@ where
         + HasClientIdType<Counterparty, ClientId: Display>
         + HasClientStateType<Counterparty>
         + HasEncoding<AsBytes, Encoding = Encoding>
-        + CanRaiseError<ClientError>
-        + CanRaiseError<Encoding::Error>,
+        + CanRaiseAsyncError<ClientError>
+        + CanRaiseAsyncError<Encoding::Error>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasCommitmentProofBytes
         + HasHeightFields
@@ -162,9 +162,9 @@ where
         + HasClientIdType<Counterparty, ClientId: Display>
         + HasConnectionIdType<Counterparty, ConnectionId: Display>
         + HasEncoding<AsBytes, Encoding = Encoding>
-        + CanRaiseError<Encoding::Error>
-        + CanRaiseError<ClientError>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<Encoding::Error>
+        + CanRaiseAsyncError<ClientError>
+        + CanRaiseAsyncError<&'static str>,
     Counterparty: HasCommitmentProofBytes
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
         + HasClientIdType<Chain, ClientId: Display>
@@ -234,7 +234,7 @@ impl<Chain, Counterparty> ConnectionOpenConfirmMessageBuilder<Chain, Counterpart
 where
     Chain: HasMessageType
         + HasConnectionIdType<Counterparty, ConnectionId: Display>
-        + CanRaiseError<ClientError>,
+        + CanRaiseAsyncError<ClientError>,
     Counterparty: HasCommitmentProofBytes
         + HasHeightFields
         + HasConnectionOpenConfirmPayloadType<

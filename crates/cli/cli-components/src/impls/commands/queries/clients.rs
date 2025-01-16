@@ -47,8 +47,8 @@ where
         + CanProduceOutput<Vec<(Chain::ClientId, Counterparty::ClientState)>>
         + CanParseArg<Args, symbol!("host_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("reference_chain_id"), Parsed = Option<Counterparty::ChainId>>
-        + CanRaiseError<Build::Error>
-        + CanRaiseError<Chain::Error>,
+        + CanRaiseAsyncError<Build::Error>
+        + CanRaiseAsyncError<Chain::Error>,
     Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
     Chain: HasChainIdType
         + HasClientIdType<Counterparty>

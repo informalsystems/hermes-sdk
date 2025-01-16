@@ -9,7 +9,7 @@ use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsen
 }]
 #[async_trait]
 pub trait CanQueryConsensusState<Counterparty>:
-    HasErrorType + HasClientIdType<Counterparty>
+    HasAsyncErrorType + HasClientIdType<Counterparty>
 where
     Counterparty: HasHeightType + HasConsensusStateType<Self>,
 {

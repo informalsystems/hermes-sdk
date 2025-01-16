@@ -1,6 +1,6 @@
 use core::fmt::{Debug, Display};
 
-use cgp::prelude::{Async, HasErrorType};
+use cgp::prelude::{Async, HasAsyncErrorType};
 use hermes_logging_components::traits::logger::Logger;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
@@ -57,7 +57,7 @@ where
 impl<'a, Logging, Chain> Logger<Logging, LogRetryQueryTxResponse<'a, Chain>> for TracingLogger
 where
     Logging: Async,
-    Chain: HasTransactionHashType + HasChainId + HasErrorType,
+    Chain: HasTransactionHashType + HasChainId + HasAsyncErrorType,
     Chain::TxHash: Display,
     Chain::Error: Debug,
 {

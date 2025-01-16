@@ -50,7 +50,7 @@ where
         + BiRelayFromRelayBuilder<Build, Index<0>, Index<1>>
         + RelayFromChainsBuilder<Build, Index<0>, Index<1>>
         + RelayFromChainsBuilder<Build, Index<1>, Index<0>>
-        + ProvideErrorType<Build>,
+        + ProvideErrorType<Build, Error: Async>,
     BaseComponents: Async + ChainBuilder<Build, Index<0>> + ChainBuilder<Build, Index<1>>,
 {
 }

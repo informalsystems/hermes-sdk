@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -27,11 +27,11 @@ where
             ChannelId = ChannelId,
             Sequence = Sequence,
         > + HasGrpcAddress
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<Status>
-        + CanRaiseError<DecodingError>
-        + CanRaiseError<eyre::Report>,
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<Status>
+        + CanRaiseAsyncError<DecodingError>
+        + CanRaiseAsyncError<eyre::Report>,
 {
     async fn query_packet_commitments(
         chain: &Chain,

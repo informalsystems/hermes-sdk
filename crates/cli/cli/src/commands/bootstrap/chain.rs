@@ -38,7 +38,7 @@ impl<App> BootstrapLoader<App, BootstrapChainArgs> for LoadCosmosBootstrap
 where
     App: HasBootstrapType<Bootstrap = CosmosBootstrap>
         + HasRuntime<Runtime = HermesRuntime>
-        + CanRaiseError<HermesError>,
+        + CanRaiseAsyncError<HermesError>,
 {
     async fn load_bootstrap(
         app: &App,

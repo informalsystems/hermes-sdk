@@ -14,7 +14,7 @@ use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 }]
 #[async_trait]
 pub trait CanAddWalletToGenesis:
-    HasRuntime + HasChainType + HasWalletConfigType + HasErrorType
+    HasRuntime + HasChainType + HasWalletConfigType + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
     Self::Chain: HasChainIdType + HasWalletType,

@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerier;
 use hermes_relayer_components::chain::traits::types::block::HasBlockType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -15,8 +15,8 @@ impl<Chain> BlockQuerier<Chain> for QueryCometBlock
 where
     Chain: HasBlockType<Block = (BlockId, Block)>
         + HasHeightType<Height = Height>
-        + CanRaiseError<RpcError>
-        + CanRaiseError<TendermintError>
+        + CanRaiseAsyncError<RpcError>
+        + CanRaiseAsyncError<TendermintError>
         + HasRpcClient,
     Chain::Height: Clone,
 {

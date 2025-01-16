@@ -1,6 +1,6 @@
 use core::str::FromStr;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use prost::DecodeError;
 use subtle_encoding::base64;
 
@@ -16,13 +16,13 @@ pub struct QueryEipFromFeeMarket;
 impl<Chain> EipQuerier<Chain> for QueryEipFromFeeMarket
 where
     Chain: HasRpcClient
-        + CanRaiseError<reqwest::Error>
-        + CanRaiseError<subtle_encoding::Error>
-        + CanRaiseError<DecodeError>
-        + CanRaiseError<core::num::ParseIntError>
-        + CanRaiseError<core::num::ParseFloatError>
-        + CanRaiseError<&'static str>
-        + CanRaiseError<EipQueryError>,
+        + CanRaiseAsyncError<reqwest::Error>
+        + CanRaiseAsyncError<subtle_encoding::Error>
+        + CanRaiseAsyncError<DecodeError>
+        + CanRaiseAsyncError<core::num::ParseIntError>
+        + CanRaiseAsyncError<core::num::ParseFloatError>
+        + CanRaiseAsyncError<&'static str>
+        + CanRaiseAsyncError<EipQueryError>,
 {
     async fn query_eip_base_fee(
         chain: &Chain,

@@ -25,7 +25,7 @@ pub struct BootstrapCosmosChain;
 
 impl<Bootstrap, Runtime, Chain, ChainDriver> ChainBootstrapper<Bootstrap> for BootstrapCosmosChain
 where
-    Bootstrap: HasErrorType
+    Bootstrap: HasAsyncErrorType
         + HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
         + HasChainDriverType<ChainDriver = ChainDriver>
@@ -39,7 +39,7 @@ where
         + CanInitChainNodeConfig
         + CanStartChainFullNode
         + CanBuildChainDriver,
-    Runtime: HasFilePathType + HasChildProcessType + HasErrorType,
+    Runtime: HasFilePathType + HasChildProcessType + HasAsyncErrorType,
     Chain: HasChainIdType + HasWalletType,
 {
     async fn bootstrap_chain(

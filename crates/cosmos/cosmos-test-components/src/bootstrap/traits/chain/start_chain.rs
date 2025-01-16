@@ -15,7 +15,7 @@ pub trait CanStartChainFullNode:
     HasChainNodeConfigType
     + HasChainGenesisConfigType
     + HasRuntime<Runtime: HasChildProcessType + HasFilePathType>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn start_chain_full_node(
         &self,

@@ -15,7 +15,9 @@ pub struct Unescrow;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanTransferToken<Mode: Async>: HasAddressType + HasAmountType + HasErrorType {
+pub trait CanTransferToken<Mode: Async>:
+    HasAddressType + HasAmountType + HasAsyncErrorType
+{
     async fn transfer_token(
         &mut self,
         mode: Mode,

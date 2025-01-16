@@ -1,7 +1,7 @@
 use alloc::collections::BTreeMap;
 use std::path::PathBuf;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
@@ -36,7 +36,7 @@ where
         + HasGenesisDenom<DenomForStaking>
         + HasGenesisDenom<DenomForTransfer>
         + HasChainCommandPath
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<&'static str>,
     Runtime: HasFilePathType<FilePath = PathBuf> + HasChildProcessType<ChildProcess = Child>,
 {
     async fn build_chain_driver(

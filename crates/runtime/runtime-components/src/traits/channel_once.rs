@@ -34,7 +34,7 @@ pub trait CanCreateChannelsOnce: HasChannelOnceTypes {
   context: Runtime,
 }]
 #[async_trait]
-pub trait CanUseChannelsOnce: HasChannelOnceTypes + HasErrorType {
+pub trait CanUseChannelsOnce: HasChannelOnceTypes + HasAsyncErrorType {
     fn send_once<T>(sender: Self::SenderOnce<T>, value: T) -> Result<(), Self::Error>
     where
         T: Async;

@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     RawConsensusStateQuerier, RawConsensusStateWithProofsQuerier,
 };
@@ -22,7 +22,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + HasRawConsensusStateType<RawConsensusState = Any>
         + CanQueryAbci
-        + CanRaiseError<DecodeError>,
+        + CanRaiseAsyncError<DecodeError>,
     Counterparty: HasHeightFields,
 {
     async fn query_raw_consensus_state(
@@ -59,7 +59,7 @@ where
         + HasRawConsensusStateType<RawConsensusState = Any>
         + HasCommitmentProofType
         + CanQueryAbci
-        + CanRaiseError<DecodeError>,
+        + CanRaiseAsyncError<DecodeError>,
     Counterparty: HasHeightFields,
 {
     async fn query_raw_consensus_state_with_proofs(

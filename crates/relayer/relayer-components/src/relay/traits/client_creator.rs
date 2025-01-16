@@ -19,7 +19,7 @@ pub trait CanCreateClient<Target: RelayTarget>:
         TargetChain: HasClientIdType<Self::CounterpartyChain>
                          + HasCreateClientMessageOptionsType<Self::CounterpartyChain>,
         CounterpartyChain: HasCreateClientPayloadOptionsType<Self::TargetChain>,
-    > + HasErrorType
+    > + HasAsyncErrorType
 {
     /**
        Create a new IBC client on the target chain.

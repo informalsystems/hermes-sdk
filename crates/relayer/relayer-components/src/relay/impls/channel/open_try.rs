@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenTryMessage;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenTryPayload;
@@ -43,7 +43,7 @@ where
         + HasDestinationTargetChainTypes
         + HasRelayClientIds
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
-        + for<'a> CanRaiseError<MissingChannelTryEventError<'a, Relay>>
+        + for<'a> CanRaiseAsyncError<MissingChannelTryEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildChannelOpenTryPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>

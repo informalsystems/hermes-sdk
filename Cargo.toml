@@ -85,7 +85,7 @@ tendermint-light-client-verifier = { version = "0.40" }
 tendermint-light-client         = { version = "0.40" }
 basecoin                        = { version = "0.2.0" }
 bitcoin                         = { version = "0.31.2" }
-cgp                             = { version = "0.2.0", default-features = false }
+cgp                             = { version = "0.3.1", default-features = false }
 clap                            = { version = "4.5.20" }
 dirs-next                       = { version = "2.0.0" }
 num-bigint                      = { version = "0.4" }
@@ -177,8 +177,8 @@ hermes-ibc-token-transfer-components    = { version = "0.1.0" }
 hermes-ibc-mock-chain                   = { version = "0.1.0" }
 
 [patch.crates-io]
-# cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
-# cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
@@ -189,7 +189,7 @@ hermes-ibc-mock-chain                   = { version = "0.1.0" }
 # cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git" }
-# cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
 

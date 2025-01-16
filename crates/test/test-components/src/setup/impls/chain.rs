@@ -2,7 +2,7 @@ use alloc::format;
 use core::fmt::Display;
 use core::marker::PhantomData;
 
-use cgp::core::error::{CanRaiseError, ErrorOf};
+use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
 use cgp::core::Async;
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
@@ -14,7 +14,7 @@ pub struct SetupChainWithBootstrap;
 
 impl<Setup, I> ChainSetup<Setup, I> for SetupChainWithBootstrap
 where
-    Setup: HasBootstrapAt<I> + CanRaiseError<ErrorOf<Setup::Bootstrap>>,
+    Setup: HasBootstrapAt<I> + CanRaiseAsyncError<ErrorOf<Setup::Bootstrap>>,
     Setup::Bootstrap: CanBootstrapChain,
     I: Async + Default + Display,
 {

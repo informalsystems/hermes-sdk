@@ -12,7 +12,7 @@ use crate::transaction::traits::types::transaction::HasTransactionType;
 }]
 #[async_trait]
 pub trait CanEncodeTx:
-    HasSignerType + HasNonceType + HasFeeType + HasMessageType + HasTransactionType + HasErrorType
+    HasSignerType + HasNonceType + HasFeeType + HasMessageType + HasTransactionType + HasAsyncErrorType
 {
     async fn encode_tx(
         &self,

@@ -3,8 +3,8 @@ use std::path::PathBuf;
 
 use cgp::core::component::{UseContext, UseDelegate};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::impls::use_field::WithField;
-use cgp::core::types::impls::WithType;
+use cgp::core::field::WithField;
+use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainCommand;
@@ -311,8 +311,8 @@ pub trait CanUseHermesApp:
     + CanRunCommand<QueryChannelEndArgs>
     + CanProduceOutput<&'static str>
     + CanProduceOutput<ClientId>
-    + CanRaiseError<HermesError>
-    + CanRaiseError<WrapError<&'static str, HermesError>>
+    + CanRaiseAsyncError<HermesError>
+    + CanRaiseAsyncError<WrapError<&'static str, HermesError>>
 {
 }
 

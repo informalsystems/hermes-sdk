@@ -21,7 +21,7 @@ pub trait CanBuildTestDriverWithBinaryChannel:
     + HasChainDriverTypeAt<Index<0>>
     + HasChainDriverTypeAt<Index<1>>
     + HasTestDriverType
-    + HasErrorType
+    + HasAsyncErrorType
 where
     ChainAt<Self, Index<0>>: HasIbcChainTypes<ChainAt<Self, Index<1>>>,
     ChainAt<Self, Index<1>>: HasIbcChainTypes<ChainAt<Self, Index<0>>>,

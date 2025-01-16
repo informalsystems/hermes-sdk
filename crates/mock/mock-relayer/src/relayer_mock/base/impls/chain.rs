@@ -11,8 +11,8 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::impls::use_field::WithField;
-use cgp::core::types::impls::WithType;
+use cgp::core::field::WithField;
+use cgp::core::types::WithType;
 use cgp::prelude::*;
 use eyre::eyre;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;

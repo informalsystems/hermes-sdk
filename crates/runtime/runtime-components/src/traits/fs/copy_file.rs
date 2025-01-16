@@ -7,7 +7,7 @@ use crate::traits::fs::file_path::HasFilePathType;
   context: Runtime,
 }]
 #[async_trait]
-pub trait CanCopyFile: HasFilePathType + HasErrorType {
+pub trait CanCopyFile: HasFilePathType + HasAsyncErrorType {
     async fn copy_file(
         &self,
         source_path: &Self::FilePath,

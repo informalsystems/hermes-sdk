@@ -1,4 +1,4 @@
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
@@ -28,7 +28,7 @@ where
         > + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
         + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + HasHeightType<Height = Height>
-        + HasErrorType,
+        + HasAsyncErrorType,
 {
     async fn build_receive_packet_payload(
         chain: &Chain,

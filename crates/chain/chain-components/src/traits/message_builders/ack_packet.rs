@@ -10,7 +10,7 @@ use crate::traits::types::packets::ack::HasAckPacketPayloadType;
 }]
 #[async_trait]
 pub trait CanBuildAckPacketMessage<Counterparty>:
-    HasMessageType + HasOutgoingPacketType<Counterparty> + HasErrorType
+    HasMessageType + HasOutgoingPacketType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasAckPacketPayloadType<Self>,
 {

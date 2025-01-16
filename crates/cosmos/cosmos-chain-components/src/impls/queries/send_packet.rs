@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::queries::send_packets::SendPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
@@ -29,8 +29,8 @@ where
         > + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
         + HasSendPacketEvent<Counterparty, SendPacketEvent = SendPacketEvent>
         + HasRpcClient
-        + CanRaiseError<RpcError>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<RpcError>
+        + CanRaiseAsyncError<&'static str>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
 {
     async fn query_send_packet_from_sequence(

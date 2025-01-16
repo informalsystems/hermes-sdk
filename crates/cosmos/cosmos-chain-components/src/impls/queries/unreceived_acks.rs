@@ -1,4 +1,4 @@
-use cgp::core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
@@ -17,12 +17,12 @@ impl<Chain, Counterparty> UnreceivedAcksSequencesQuerier<Chain, Counterparty>
     for QueryUnreceivedCosmosAcksSequences
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId, Sequence = Sequence>
-        + HasErrorType
+        + HasAsyncErrorType
         + HasGrpcAddress
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<Status>
-        + CanRaiseError<eyre::Report>,
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<Status>
+        + CanRaiseAsyncError<eyre::Report>,
     Counterparty: HasIbcChainTypes<Chain, Sequence = Sequence>,
 {
     async fn query_unreceived_acknowledgments_sequences(

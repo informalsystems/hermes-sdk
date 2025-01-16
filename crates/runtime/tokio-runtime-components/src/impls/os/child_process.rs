@@ -39,8 +39,8 @@ where
         + CanSleep
         + CanPipeReaderToFile
         + CanReadFileAsString
-        + CanRaiseError<IoError>
-        + CanRaiseError<PrematureChildProcessExitError>,
+        + CanRaiseAsyncError<IoError>
+        + CanRaiseAsyncError<PrematureChildProcessExitError>,
     Runtime::FilePath: AsRef<Path>,
 {
     async fn start_child_process(
@@ -108,8 +108,8 @@ pub struct WaitChildProcess;
 impl<Runtime> ChildProcessWaiter<Runtime> for WaitChildProcess
 where
     Runtime: HasChildProcessType<ChildProcess = Child>
-        + CanRaiseError<IoError>
-        + CanRaiseError<ExitStatus>,
+        + CanRaiseAsyncError<IoError>
+        + CanRaiseAsyncError<ExitStatus>,
 {
     async fn wait_child_process(
         mut child_process: Runtime::ChildProcess,
@@ -125,7 +125,7 @@ where
 }
 
 #[async_trait]
-pub trait CanPipeReaderToFile: HasFilePathType + HasErrorType {
+pub trait CanPipeReaderToFile: HasFilePathType + HasAsyncErrorType {
     async fn pipe_reader_to_file(
         &self,
         reader: impl AsyncRead + Unpin + Send + Sync + 'static,
@@ -135,7 +135,7 @@ pub trait CanPipeReaderToFile: HasFilePathType + HasErrorType {
 
 impl<Runtime> CanPipeReaderToFile for Runtime
 where
-    Runtime: HasFilePathType + CanSpawnTask + CanRaiseError<IoError>,
+    Runtime: HasFilePathType + CanSpawnTask + CanRaiseAsyncError<IoError>,
     Runtime::FilePath: AsRef<Path>,
 {
     async fn pipe_reader_to_file(

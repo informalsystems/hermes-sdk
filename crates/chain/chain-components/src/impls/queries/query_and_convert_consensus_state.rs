@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use cgp::core::Async;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
@@ -18,7 +18,7 @@ pub struct QueryAndConvertRawConsensusState;
 impl<Chain, Counterparty, Encoding> ConsensusStateQuerier<Chain, Counterparty>
     for QueryAndConvertRawConsensusState
 where
-    Chain: CanQueryRawConsensusState<Counterparty> + CanRaiseError<Encoding::Error>,
+    Chain: CanQueryRawConsensusState<Counterparty> + CanRaiseAsyncError<Encoding::Error>,
     Counterparty: HasConsensusStateType<Chain>
         + HasDefaultEncoding<AsBytes, Encoding = Encoding>
         + HasHeightType,
@@ -46,7 +46,7 @@ where
 impl<Chain, Counterparty, Encoding> ConsensusStateWithProofsQuerier<Chain, Counterparty>
     for QueryAndConvertRawConsensusState
 where
-    Chain: CanQueryRawConsensusStateWithProofs<Counterparty> + CanRaiseError<Encoding::Error>,
+    Chain: CanQueryRawConsensusStateWithProofs<Counterparty> + CanRaiseAsyncError<Encoding::Error>,
     Counterparty: HasConsensusStateType<Chain>
         + HasDefaultEncoding<AsBytes, Encoding = Encoding>
         + HasHeightType,

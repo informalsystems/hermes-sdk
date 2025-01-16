@@ -1,7 +1,7 @@
 use core::str::FromStr;
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_chain_components::impls::types::config::{CosmosChainConfig, EventSourceMode};
 use hermes_cosmos_chain_components::types::config::gas::gas_config::{GasConfig, GasPrice};
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
@@ -30,7 +30,7 @@ where
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
         + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasChainType<Chain = Chain>
-        + CanRaiseError<TendermintRpcError>,
+        + CanRaiseAsyncError<TendermintRpcError>,
     Chain: HasWalletType<Wallet = CosmosTestWallet>,
 {
     fn build_relayer_chain_config(

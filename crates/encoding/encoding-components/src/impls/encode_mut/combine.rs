@@ -12,7 +12,7 @@ pub struct CombineEncoders<Encoders>(pub PhantomData<Encoders>);
 impl<Encoding, Strategy, Encoder, InEncoders, Value> MutEncoder<Encoding, Strategy, Value>
     for CombineEncoders<Cons<Encoder, InEncoders>>
 where
-    Encoding: HasEncodeBufferType + HasErrorType,
+    Encoding: HasEncodeBufferType + HasAsyncErrorType,
     Encoder: MutEncoder<Encoding, Strategy, Value>,
     CombineEncoders<InEncoders>: MutEncoder<Encoding, Strategy, Value>,
 {
@@ -30,7 +30,7 @@ where
 
 impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Value> for CombineEncoders<Nil>
 where
-    Encoding: HasEncodeBufferType + HasErrorType,
+    Encoding: HasEncodeBufferType + HasAsyncErrorType,
 {
     fn encode_mut(
         _encoding: &Encoding,
@@ -45,7 +45,7 @@ impl<Encoding, Strategy, Encoder, InEncoders, ValueA, ValueB>
     MutDecoder<Encoding, Strategy, Cons<ValueA, ValueB>>
     for CombineEncoders<Cons<Encoder, InEncoders>>
 where
-    Encoding: HasDecodeBufferType + HasErrorType,
+    Encoding: HasDecodeBufferType + HasAsyncErrorType,
     Encoder: MutDecoder<Encoding, Strategy, ValueA>,
     CombineEncoders<InEncoders>: MutDecoder<Encoding, Strategy, ValueB>,
 {
@@ -62,7 +62,7 @@ where
 
 impl<Encoding, Strategy> MutDecoder<Encoding, Strategy, Nil> for CombineEncoders<Nil>
 where
-    Encoding: HasDecodeBufferType + HasErrorType,
+    Encoding: HasDecodeBufferType + HasAsyncErrorType,
 {
     fn decode_mut(
         _encoding: &Encoding,

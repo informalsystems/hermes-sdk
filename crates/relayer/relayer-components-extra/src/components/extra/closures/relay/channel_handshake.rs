@@ -1,4 +1,4 @@
-use cgp::prelude::{CanRaiseError, HasComponents};
+use cgp::prelude::{CanRaiseAsyncError, HasComponents};
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
 use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
@@ -30,10 +30,10 @@ where
         + HasSourceTargetChainTypes
         + HasDestinationTargetChainTypes
         + HasComponents<Components = Components>
-        + CanRaiseError<SrcChain::Error>
-        + CanRaiseError<DstChain::Error>
-        + for<'a> CanRaiseError<MissingChannelInitEventError<'a, Relay>>
-        + for<'a> CanRaiseError<MissingChannelTryEventError<'a, Relay>>
+        + CanRaiseAsyncError<SrcChain::Error>
+        + CanRaiseAsyncError<DstChain::Error>
+        + for<'a> CanRaiseAsyncError<MissingChannelInitEventError<'a, Relay>>
+        + for<'a> CanRaiseAsyncError<MissingChannelTryEventError<'a, Relay>>
         + UseExtraIbcMessageSender,
     Components: DelegatesToExtraRelayPreset
         + ChannelOpenTryRelayer<Relay>

@@ -60,12 +60,12 @@ pub struct CreateConnectionArgs {
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
     for RunCreateConnectionCommand
 where
-    App: HasOutputType + HasErrorType,
+    App: HasOutputType + HasAsyncErrorType,
     App: CanLoadBuilder<Builder = Builder>
         + HasLogger
         + CanProduceOutput<&'static str>
-        + CanRaiseError<Builder::Error>
-        + CanRaiseError<Relay::Error>
+        + CanRaiseAsyncError<Builder::Error>
+        + CanRaiseAsyncError<Relay::Error>
         + CanParseArg<Args, symbol!("target_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("counterparty_chain_id"), Parsed = Counterparty::ChainId>
         + CanParseArg<Args, symbol!("target_client_id"), Parsed = Chain::ClientId>
@@ -75,9 +75,11 @@ where
         + HasChainTypeAt<Index<1>, Chain = Counterparty>
         + CanBuildRelay<Index<0>, Index<1>, Relay = Relay>
         + HasRelayTypeAt<Index<0>, Index<1>>,
-    Chain:
-        HasChainIdType + HasClientIdType<Counterparty> + HasInitConnectionOptionsType<Counterparty>,
-    Counterparty: HasChainIdType + HasClientIdType<Chain>,
+    Chain: HasChainIdType
+        + HasClientIdType<Counterparty>
+        + HasInitConnectionOptionsType<Counterparty>
+        + HasAsyncErrorType,
+    Counterparty: HasChainIdType + HasClientIdType<Chain> + HasAsyncErrorType,
     Chain::InitConnectionOptions: Default,
     Chain::ChainId: Display,
     Chain::ClientId: Display,

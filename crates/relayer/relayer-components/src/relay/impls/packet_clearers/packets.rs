@@ -1,6 +1,7 @@
 use alloc::boxed::Box;
 use alloc::vec;
 
+use cgp::prelude::HasAsyncErrorType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
@@ -65,8 +66,8 @@ where
 impl<Relay, SrcChain, DstChain> PacketClearer<Relay> for ClearAllPackets
 where
     Relay: Clone + HasRuntime + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>,
-    SrcChain: HasIbcChainTypes<DstChain>,
-    DstChain: HasIbcChainTypes<SrcChain>,
+    SrcChain: HasIbcChainTypes<DstChain> + HasAsyncErrorType,
+    DstChain: HasIbcChainTypes<SrcChain> + HasAsyncErrorType,
     Relay::Runtime: CanRunConcurrentTasks,
     SrcChain::ChannelId: Clone,
     SrcChain::PortId: Clone,

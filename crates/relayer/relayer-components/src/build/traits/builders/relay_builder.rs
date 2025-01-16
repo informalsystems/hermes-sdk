@@ -16,7 +16,7 @@ pub trait CanBuildRelay<Src: Async, Dst: Async>:
     HasRelayTypeAt<Src, Dst>
     + HasChainTypeAt<Src, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, Dst>>>
     + HasChainTypeAt<Dst, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, Src>>>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_relay(
         &self,

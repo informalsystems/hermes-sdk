@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
 use hermes_comet_light_client_components::traits::validate_light_block::LightBlockValidator;
 use tendermint::Time;
@@ -22,7 +22,7 @@ where
     Client: HasLightBlockType<LightBlock = LightBlock>
         + HasVerifierOptions
         + HasCurrentTime
-        + for<'a> CanRaiseError<TrustedStateOutsideTrustingPeriod<'a>>,
+        + for<'a> CanRaiseAsyncError<TrustedStateOutsideTrustingPeriod<'a>>,
 {
     fn validate_light_block(
         client: &Client,

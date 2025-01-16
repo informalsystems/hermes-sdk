@@ -1,5 +1,5 @@
 use cgp::core::component::WithProvider;
-use cgp::core::types::traits::ProvideType;
+use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_component {
@@ -15,7 +15,7 @@ pub trait HasTestDriverType: Async {
   provider: DriverBuilder,
 }]
 #[async_trait]
-pub trait CanBuildTestDriver: HasTestDriverType + HasErrorType {
+pub trait CanBuildTestDriver: HasTestDriverType + HasAsyncErrorType {
     async fn build_driver(&self) -> Result<Self::TestDriver, Self::Error>;
 }
 

@@ -13,7 +13,7 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
 }]
 #[async_trait]
 pub trait CanHandleIbcMessage<Counterparty, App>:
-    HasErrorType
+    HasAsyncErrorType
     + HasPacketHeaderType<Counterparty>
     + HasIbcMessageHeaderType<Counterparty>
     + HasIbcMessageType<Counterparty, App>
@@ -49,7 +49,7 @@ where
 impl<Chain, Counterparty, App, Components> IbcMessageHandler<Chain, Counterparty, App>
     for UseDelegate<Components>
 where
-    Chain: HasErrorType
+    Chain: HasAsyncErrorType
         + HasPacketHeaderType<Counterparty>
         + HasIbcMessageHeaderType<Counterparty>
         + HasIbcMessageType<Counterparty, App>

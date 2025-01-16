@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use toml::Value;
 
@@ -8,7 +8,7 @@ pub struct ModifyWasmNodeConfig<InModifier>(pub PhantomData<InModifier>);
 
 impl<Bootstrap, InModifier> CometConfigModifier<Bootstrap> for ModifyWasmNodeConfig<InModifier>
 where
-    Bootstrap: CanRaiseError<&'static str>,
+    Bootstrap: CanRaiseAsyncError<&'static str>,
     InModifier: CometConfigModifier<Bootstrap>,
 {
     fn modify_comet_config(

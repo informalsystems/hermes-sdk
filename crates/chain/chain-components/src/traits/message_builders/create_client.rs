@@ -15,7 +15,7 @@ use crate::traits::types::message::HasMessageType;
 pub trait CanBuildCreateClientMessage<Counterparty>:
     HasCreateClientMessageOptionsType<Counterparty>
     + HasMessageType
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasCreateClientPayloadType<Self>>
 {
     async fn build_create_client_message(
@@ -28,7 +28,7 @@ pub trait CanBuildCreateClientMessage<Counterparty>:
 impl<Chain, Counterparty, Components, Delegate> CreateClientMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasCreateClientMessageOptionsType<Counterparty> + HasMessageType + HasErrorType,
+    Chain: HasCreateClientMessageOptionsType<Counterparty> + HasMessageType + HasAsyncErrorType,
     Counterparty: HasCreateClientPayloadType<Chain>,
     Delegate: CreateClientMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,

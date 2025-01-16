@@ -51,8 +51,8 @@ where
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("address"), Parsed = Chain::Address>
         + CanParseArg<Args, symbol!("denom"), Parsed = Chain::Denom>
-        + CanRaiseError<Build::Error>
-        + CanRaiseError<Chain::Error>,
+        + CanRaiseAsyncError<Build::Error>
+        + CanRaiseAsyncError<Chain::Error>,
     Build: CanBuildChain<Index<0>, Chain = Chain>,
     Chain: HasChainIdType + CanQueryBalance,
     Args: Async,

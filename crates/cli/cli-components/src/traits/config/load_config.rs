@@ -7,6 +7,6 @@ use crate::traits::types::config::HasConfigType;
   context: App,
 }]
 #[async_trait]
-pub trait CanLoadConfig: HasConfigType + HasErrorType {
+pub trait CanLoadConfig: HasConfigType + HasAsyncErrorType {
     async fn load_config(&self) -> Result<Self::Config, Self::Error>;
 }

@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_relayer_components::transaction::traits::parse_events::TxMessageResponseParser;
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
@@ -13,7 +13,7 @@ impl<Chain> TxMessageResponseParser<Chain> for ParseCosmosTxResponseAsEvents
 where
     Chain: HasTxResponseType<TxResponse = TxResponse>
         + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>
-        + HasErrorType,
+        + HasAsyncErrorType,
 {
     fn parse_tx_message_response(
         response: TxResponse,

@@ -32,7 +32,7 @@ impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
 where
     Chain: CanQueryCurrentTime
         + CanCompareTimeoutTime<Counterparty>
-        + for<'a> CanRaiseError<PacketTimedOut<'a, Chain, Counterparty>>,
+        + for<'a> CanRaiseAsyncError<PacketTimedOut<'a, Chain, Counterparty>>,
     Counterparty:
         HasCommitmentProofType<SendPacket> + HasPacketHeader<Chain> + HasPacketTimeout<Chain>,
     InHandler: IncomingPacketHandler<Chain, Counterparty>,

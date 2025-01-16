@@ -1,4 +1,4 @@
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
@@ -19,7 +19,7 @@ where
         + HasCreateClientPayloadType<
             Counterparty,
             CreateClientPayload = SolomachineCreateClientPayload,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
 {
     async fn build_create_client_payload(
         chain: &Chain,

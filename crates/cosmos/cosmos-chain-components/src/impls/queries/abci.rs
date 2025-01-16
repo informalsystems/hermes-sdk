@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
@@ -33,12 +33,12 @@ where
         + HasHeightType<Height = Height>
         + HasEncoding<AsBytes, Encoding = Encoding>
         + HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>
-        + CanRaiseError<RpcError>
-        + CanRaiseError<AbciQueryError>
-        + CanRaiseError<TendermintError>
-        + CanRaiseError<DecodeError>
-        + CanRaiseError<Encoding::Error>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<RpcError>
+        + CanRaiseAsyncError<AbciQueryError>
+        + CanRaiseAsyncError<TendermintError>
+        + CanRaiseAsyncError<DecodeError>
+        + CanRaiseAsyncError<Encoding::Error>
+        + CanRaiseAsyncError<&'static str>,
     Encoding: HasEncodedType<Encoded = Vec<u8>> + CanEncode<ViaProtobuf, MerkleProof>,
 {
     async fn query_abci(

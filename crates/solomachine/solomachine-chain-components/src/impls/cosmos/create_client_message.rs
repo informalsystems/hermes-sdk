@@ -1,4 +1,4 @@
-use cgp::prelude::{Async, CanRaiseError, HasErrorType};
+use cgp::prelude::{Async, CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
 use hermes_encoding_components::traits::convert::CanConvert;
@@ -32,8 +32,8 @@ impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterpar
 where
     Chain: HasMessageType<Message = CosmosMessage>
         + HasCreateClientMessageOptionsType<Counterparty>
-        + HasErrorType
-        + CanRaiseError<Encoding::Error>,
+        + HasAsyncErrorType
+        + CanRaiseAsyncError<Encoding::Error>,
     Counterparty: HasCreateClientPayloadType<Chain, CreateClientPayload = SolomachineCreateClientPayload>
         + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Encoding: HasEncodedType<Encoded = Vec<u8>>

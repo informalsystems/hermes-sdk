@@ -10,7 +10,7 @@ use secp256k1::SecretKey;
 use crate::methods::encode::public_key::PublicKey;
 
 #[async_trait]
-pub trait Solomachine: HasErrorType {
+pub trait Solomachine: HasAsyncErrorType {
     fn public_key(&self) -> &PublicKey;
 
     // TODO: remove secret key accessor and provide sign methods instead.

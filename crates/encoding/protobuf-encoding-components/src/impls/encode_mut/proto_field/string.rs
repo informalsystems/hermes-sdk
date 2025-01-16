@@ -19,7 +19,7 @@ delegate_components! {
 impl<Encoding, Strategy, const TAG: u32> MutDecoder<Encoding, Strategy, String>
     for EncodeStringField<TAG>
 where
-    Encoding: HasDecodeBufferType + HasErrorType,
+    Encoding: HasDecodeBufferType + HasAsyncErrorType,
     EncodeByteField<TAG>: MutDecoder<Encoding, Strategy, Utf8String>,
 {
     fn decode_mut(

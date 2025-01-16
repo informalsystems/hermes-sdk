@@ -10,7 +10,7 @@ pub struct TokioReadFileAsString;
 
 impl<Runtime> FileAsStringReader<Runtime> for TokioReadFileAsString
 where
-    Runtime: HasFilePathType + CanRaiseError<IoError>,
+    Runtime: HasFilePathType + CanRaiseAsyncError<IoError>,
     Runtime::FilePath: AsRef<Path>,
 {
     async fn read_file_as_string(

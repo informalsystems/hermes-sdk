@@ -1,7 +1,7 @@
 use core::array::TryFromSliceError;
 use std::collections::BTreeMap;
 
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 use prost::bytes::Buf;
 use prost::encoding::{decode_key, decode_varint, WireType};
@@ -28,11 +28,11 @@ pub struct InvalidWireType {
     pub actual: WireType,
 }
 
-pub trait CanDecodeProtoChunks: HasErrorType {
+pub trait CanDecodeProtoChunks: HasAsyncErrorType {
     fn decode_protochunks<'a>(buffer: &mut &'a [u8]) -> Result<ProtoChunks<'a>, Self::Error>;
 }
 
-pub trait CanDecodeProtoChunk: HasErrorType {
+pub trait CanDecodeProtoChunk: HasAsyncErrorType {
     fn decode_protochunk<'a>(buffer: &mut &'a [u8]) -> Result<(u32, ProtoChunk<'a>), Self::Error>;
 }
 
@@ -85,9 +85,9 @@ where
 
 impl<Encoding> CanDecodeProtoChunk for Encoding
 where
-    Encoding: CanRaiseError<DecodeError>
-        + CanRaiseError<UnsupportedWireType>
-        + CanRaiseError<TryFromSliceError>,
+    Encoding: CanRaiseAsyncError<DecodeError>
+        + CanRaiseAsyncError<UnsupportedWireType>
+        + CanRaiseAsyncError<TryFromSliceError>,
 {
     fn decode_protochunk<'a>(
         buffer: &mut &'a [u8],

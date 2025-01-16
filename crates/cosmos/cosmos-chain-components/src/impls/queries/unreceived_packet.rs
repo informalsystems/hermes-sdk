@@ -1,4 +1,4 @@
-use cgp::core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
@@ -17,12 +17,12 @@ impl<Chain, Counterparty> UnreceivedPacketSequencesQuerier<Chain, Counterparty>
     for QueryUnreceivedCosmosPacketSequences
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
-        + HasErrorType
+        + HasAsyncErrorType
         + HasGrpcAddress
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<Status>
-        + CanRaiseError<eyre::Report>,
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<Status>
+        + CanRaiseAsyncError<eyre::Report>,
     Counterparty: HasIbcChainTypes<Chain, Sequence = Sequence>,
 {
     async fn query_unreceived_packet_sequences(

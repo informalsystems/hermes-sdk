@@ -6,6 +6,6 @@ use crate::traits::types::encoded::HasEncodedType;
   provider: Decoder,
   context: Encoding,
 }]
-pub trait CanDecode<Strategy, Value>: HasEncodedType + HasErrorType {
+pub trait CanDecode<Strategy, Value>: HasEncodedType + HasAsyncErrorType {
     fn decode(&self, encoded: &Self::Encoded) -> Result<Value, Self::Error>;
 }

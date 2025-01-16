@@ -1,4 +1,4 @@
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
@@ -27,7 +27,7 @@ where
         + HasChainDriverTypeAt<Index<0>, ChainDriver = CosmosChainDriver>
         + HasChainDriverTypeAt<Index<1>, ChainDriver = CosmosChainDriver>
         + HasTestDriverType<TestDriver = CosmosBinaryChannelTestDriver>
-        + HasErrorType,
+        + HasAsyncErrorType,
 {
     async fn build_driver_with_binary_channel(
         _setup: &Setup,

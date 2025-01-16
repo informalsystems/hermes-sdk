@@ -1,5 +1,5 @@
 use cgp::core::component::WithProvider;
-use cgp::core::types::traits::ProvideType;
+use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_component {

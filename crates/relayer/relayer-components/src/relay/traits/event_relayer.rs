@@ -20,7 +20,7 @@ use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 }]
 #[async_trait]
 pub trait CanRelayEvent<Target: RelayTarget>:
-    HasTargetChainTypes<Target, TargetChain: HasHeightType + HasEventType> + HasErrorType
+    HasTargetChainTypes<Target, TargetChain: HasHeightType + HasEventType> + HasAsyncErrorType
 {
     /**
        Relay a chain event which is emitted from the target chain at a given

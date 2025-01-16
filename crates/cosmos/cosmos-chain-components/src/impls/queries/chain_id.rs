@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerier;
@@ -26,10 +26,10 @@ where
         + CanQueryChainHeight
         + CanQueryAbci
         + CanQueryClientState<Counterparty>
-        + CanRaiseError<ChannelError>
-        + CanRaiseError<IdentifierError>
-        + CanRaiseError<TendermintProtoError>
-        + CanRaiseError<String>,
+        + CanRaiseAsyncError<ChannelError>
+        + CanRaiseAsyncError<IdentifierError>
+        + CanRaiseAsyncError<TendermintProtoError>
+        + CanRaiseAsyncError<String>,
     Counterparty: HasChainIdType<ChainId = ChainId> + HasClientStateFields<Chain>,
 {
     async fn query_counterparty_chain_id_from_channel_id(

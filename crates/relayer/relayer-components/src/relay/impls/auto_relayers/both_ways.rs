@@ -1,7 +1,7 @@
 use alloc::boxed::Box;
 use alloc::vec;
 
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use cgp::extra::run::{CanRun, Runner};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
@@ -45,7 +45,7 @@ where
 
 impl<BiRelay> Runner<BiRelay> for RelayBothWays
 where
-    BiRelay: HasTwoWayRelay + HasRuntime + HasErrorType,
+    BiRelay: HasTwoWayRelay + HasRuntime + HasAsyncErrorType,
     RelayAt<BiRelay, Index<0>, Index<1>>: Clone + CanRun,
     RelayAt<BiRelay, Index<1>, Index<0>>: Clone + CanRun,
     BiRelay::Runtime: CanRunConcurrentTasks,

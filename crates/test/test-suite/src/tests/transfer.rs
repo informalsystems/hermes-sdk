@@ -30,7 +30,7 @@ pub struct TestIbcTransfer;
 impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB, RelayDriver, Logger> TestCase<Driver>
     for TestIbcTransfer
 where
-    Driver: HasErrorType
+    Driver: HasAsyncErrorType
         + HasLogger<Logger = Logger>
         + HasChainTypeAt<Index<0>, Chain = ChainA>
         + HasChainTypeAt<Index<1>, Chain = ChainB>

@@ -66,8 +66,8 @@ where
         + CanParseArg<Args, symbol!("client_id_a"), Parsed = ChainA::ClientId>
         + CanParseArg<Args, symbol!("chain_id_b"), Parsed = ChainB::ChainId>
         + CanParseArg<Args, symbol!("client_id_b"), Parsed = ChainB::ClientId>
-        + CanRaiseError<Build::Error>
-        + CanRaiseError<BiRelay::Error>
+        + CanRaiseAsyncError<Build::Error>
+        + CanRaiseAsyncError<BiRelay::Error>
         + CanWrapError<&'static str>,
     Args: Async,
     App::Logger: CanLog<LevelInfo>,

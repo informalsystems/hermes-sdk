@@ -11,7 +11,7 @@ use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;
 }]
 #[async_trait]
 pub trait CanInitBridgeConfig:
-    HasRuntimeType + HasChainDriverType + HasBridgeConfigType + HasErrorType
+    HasRuntimeType + HasChainDriverType + HasBridgeConfigType + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
 {

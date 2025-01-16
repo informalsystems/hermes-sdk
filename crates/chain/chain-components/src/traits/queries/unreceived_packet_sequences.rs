@@ -16,7 +16,7 @@ use crate::types::aliases::SequenceOf;
 pub trait CanQueryUnreceivedPacketSequences<Counterparty>:
     HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasSequenceType<Self>>
 {
     /// Given a list of counterparty commitment sequences,

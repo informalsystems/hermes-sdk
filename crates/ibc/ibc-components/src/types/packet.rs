@@ -38,7 +38,7 @@ where
         + HasPacketNonceType<Counterparty>
         + HasPayloadType<Counterparty>
         + HasPacketType<Counterparty, Packet = IbcPacket<Chain, Counterparty>>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: Async,
 {
     fn build_packet(

@@ -5,6 +5,6 @@ use cgp::prelude::*;
     provider: ChainStartupWaiter,
 }]
 #[async_trait]
-pub trait CanWaitChainStartup: Async + HasErrorType {
+pub trait CanWaitChainStartup: Async + HasAsyncErrorType {
     async fn wait_chain_startup(&self) -> Result<(), Self::Error>;
 }

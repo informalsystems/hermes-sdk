@@ -7,7 +7,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
   context: Bootstrap,
 }]
 #[async_trait]
-pub trait CanCollectGenesisTransactions: HasRuntime + HasErrorType
+pub trait CanCollectGenesisTransactions: HasRuntime + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
 {

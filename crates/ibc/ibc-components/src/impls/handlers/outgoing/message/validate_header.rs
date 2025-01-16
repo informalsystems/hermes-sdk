@@ -43,7 +43,7 @@ where
 impl<Chain, Counterparty, App, InHandler> IbcMessageHandler<Chain, Counterparty, App>
     for ValidateHeaderAppIds<InHandler>
 where
-    Chain: HasErrorType
+    Chain: HasAsyncErrorType
         + HasPacketHeaderType<Counterparty>
         + HasIbcMessageHeaderType<Counterparty>
         + HasIbcMessageType<Counterparty, App>
@@ -51,8 +51,8 @@ where
         + HasPayloadDataType<Counterparty, App>
         + HasIbcMessageAppIds<Counterparty>
         + HasPayloadAppIds<Counterparty>
-        + for<'a> CanRaiseError<MismatchSrcAppId<'a, Chain, Counterparty>>
-        + for<'a> CanRaiseError<MismatchDstAppId<'a, Chain, Counterparty>>,
+        + for<'a> CanRaiseAsyncError<MismatchSrcAppId<'a, Chain, Counterparty>>
+        + for<'a> CanRaiseAsyncError<MismatchDstAppId<'a, Chain, Counterparty>>,
     Counterparty: HasAppIdType<Chain>,
     InHandler: IbcMessageHandler<Chain, Counterparty, App>,
     Chain::AppId: Eq,

@@ -1,4 +1,4 @@
-use cgp::core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
 use cgp::core::Async;
 
 use crate::setup::traits::driver::CanBuildTestDriver;
@@ -12,8 +12,8 @@ pub struct BuildDriverAndRunTest;
 
 impl<Setup, Driver, Test> TestRunner<Setup, Test> for BuildDriverAndRunTest
 where
-    Setup: CanBuildTestDriver<TestDriver = Driver> + CanRaiseError<Driver::Error>,
-    Driver: Async + HasErrorType,
+    Setup: CanBuildTestDriver<TestDriver = Driver> + CanRaiseAsyncError<Driver::Error>,
+    Driver: Async + HasAsyncErrorType,
     Test: TestCase<Driver>,
 {
     async fn run_test(setup: &Setup, test: &Test) -> Result<(), Setup::Error> {

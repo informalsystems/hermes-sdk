@@ -5,7 +5,7 @@ use cgp::prelude::*;
   context: RelayDriver,
 }]
 #[async_trait]
-pub trait CanRunRelayerInBackground: Async + HasErrorType {
+pub trait CanRunRelayerInBackground: Async + HasAsyncErrorType {
     type RunHandle<'a>: Send + Sync;
 
     /**

@@ -13,7 +13,7 @@ use crate::chain::traits::types::wallet::HasWalletType;
 }]
 #[async_trait]
 pub trait CanIbcTransferToken<Counterparty>:
-    HasErrorType
+    HasAsyncErrorType
     + HasWalletType
     + HasAmountType
     + HasIbcChainTypes<Counterparty>

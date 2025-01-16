@@ -24,12 +24,12 @@ pub struct CliErrorHandlers;
 
 pub trait CanHandleCliError<Context>: ErrorRaiser<Context, TokioRuntimeError>
 where
-    Context: HasErrorType<Error = Error>,
+    Context: HasAsyncErrorType<Error = Error>,
 {
 }
 
 impl<Context> CanHandleCliError<Context> for ProvideCliError where
-    Context: HasErrorType<Error = Error>
+    Context: HasAsyncErrorType<Error = Error>
 {
 }
 

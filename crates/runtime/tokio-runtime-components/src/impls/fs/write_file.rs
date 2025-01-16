@@ -10,9 +10,9 @@ pub struct TokioWriteStringToFile;
 
 impl<Runtime> StringToFileWriter<Runtime> for TokioWriteStringToFile
 where
-    Runtime: HasFilePathType + HasErrorType,
+    Runtime: HasFilePathType + HasAsyncErrorType,
     Runtime::FilePath: AsRef<Path>,
-    Runtime: CanRaiseError<IoError>,
+    Runtime: CanRaiseAsyncError<IoError>,
 {
     async fn write_string_to_file(
         _runtime: &Runtime,

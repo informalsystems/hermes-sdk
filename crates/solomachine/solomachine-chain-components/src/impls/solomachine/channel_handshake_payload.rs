@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
@@ -35,7 +35,7 @@ where
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<&'static str>,
 {
     async fn build_channel_open_try_payload(
         chain: &Chain,
@@ -86,7 +86,7 @@ where
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<&'static str>,
 {
     async fn build_channel_open_ack_payload(
         chain: &Chain,
@@ -135,7 +135,7 @@ where
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<&'static str>,
 {
     async fn build_channel_open_confirm_payload(
         chain: &Chain,

@@ -36,16 +36,16 @@ where
         + CanParseCreateClientOptions<Args, Index<0>, Index<1>>
         + CanParseArg<Args, symbol!("target_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("counterparty_chain_id"), Parsed = Counterparty::ChainId>
-        + CanRaiseError<Relay::Error>
-        + CanRaiseError<Builder::Error>
+        + CanRaiseAsyncError<Relay::Error>
+        + CanRaiseAsyncError<Builder::Error>
         + CanWrapError<String>,
     Builder: CanBuildChain<Index<0>, Chain = Chain>
         + CanBuildChain<Index<1>, Chain = Counterparty>
         + CanBuildRelay<Index<0>, Index<1>, Relay = Relay>,
     Chain: HasIbcChainTypes<Counterparty>
         + HasCreateClientMessageOptionsType<Counterparty>
-        + HasErrorType,
-    Counterparty: HasChainIdType + HasCreateClientPayloadOptionsType<Chain> + HasErrorType,
+        + HasAsyncErrorType,
+    Counterparty: HasChainIdType + HasCreateClientPayloadOptionsType<Chain> + HasAsyncErrorType,
     Relay: HasRelayChains<SrcChain = Chain, DstChain = Counterparty>
         + HasSourceTargetChainTypes
         + HasRelayClientIds
@@ -134,7 +134,7 @@ pub trait CanParseCreateClientOptions<Args: Async, Target: Async, Counterparty: 
             Counterparty,
             Chain: HasCreateClientPayloadOptionsType<ChainAt<BuilderOf<Self>, Target>>,
         >,
-    > + HasErrorType
+    > + HasAsyncErrorType
 {
     async fn parse_create_client_options(
         &self,

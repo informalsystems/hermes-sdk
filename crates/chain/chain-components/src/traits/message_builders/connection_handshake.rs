@@ -19,7 +19,7 @@ pub trait CanBuildConnectionOpenInitMessage<Counterparty>:
     HasInitConnectionOptionsType<Counterparty>
     + HasClientIdType<Counterparty>
     + HasMessageType
-    + HasErrorType
+    + HasAsyncErrorType
 where
     Counterparty: HasConnectionOpenInitPayloadType<Self> + HasClientIdType<Self>,
 {
@@ -38,7 +38,7 @@ where
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenTryMessage<Counterparty>:
-    HasMessageType + HasClientIdType<Counterparty> + HasErrorType
+    HasMessageType + HasClientIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty:
         HasConnectionOpenTryPayloadType<Self> + HasClientIdType<Self> + HasConnectionIdType<Self>,
@@ -58,7 +58,7 @@ where
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenAckMessage<Counterparty>:
-    HasMessageType + HasConnectionIdType<Counterparty> + HasErrorType
+    HasMessageType + HasConnectionIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasConnectionOpenAckPayloadType<Self> + HasConnectionIdType<Self>,
 {
@@ -76,7 +76,7 @@ where
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenConfirmMessage<Counterparty>:
-    HasMessageType + HasConnectionIdType<Counterparty> + HasErrorType
+    HasMessageType + HasConnectionIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasConnectionOpenConfirmPayloadType<Self>,
 {
@@ -93,7 +93,7 @@ where
     Chain: HasInitConnectionOptionsType<Counterparty>
         + HasClientIdType<Counterparty>
         + HasMessageType
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasConnectionOpenInitPayloadType<Chain> + HasClientIdType<Chain>,
     Delegate: ConnectionOpenInitMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
@@ -119,7 +119,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasMessageType + HasClientIdType<Counterparty> + HasErrorType,
+    Chain: HasMessageType + HasClientIdType<Counterparty> + HasAsyncErrorType,
     Counterparty: HasConnectionOpenTryPayloadType<Chain>
         + HasClientIdType<Chain>
         + HasConnectionIdType<Chain>,
@@ -147,7 +147,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasMessageType + HasConnectionIdType<Counterparty> + HasErrorType,
+    Chain: HasMessageType + HasConnectionIdType<Counterparty> + HasAsyncErrorType,
     Counterparty: HasConnectionOpenAckPayloadType<Chain> + HasConnectionIdType<Chain>,
     Delegate: ConnectionOpenAckMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
@@ -171,7 +171,7 @@ where
 impl<Chain, Counterparty, Components, Delegate>
     ConnectionOpenConfirmMessageBuilder<Chain, Counterparty> for UseDelegate<Components>
 where
-    Chain: HasMessageType + HasConnectionIdType<Counterparty> + HasErrorType,
+    Chain: HasMessageType + HasConnectionIdType<Counterparty> + HasAsyncErrorType,
     Counterparty: HasConnectionOpenConfirmPayloadType<Chain>,
     Delegate: ConnectionOpenConfirmMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,

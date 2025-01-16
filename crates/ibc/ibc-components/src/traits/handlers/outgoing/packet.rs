@@ -15,7 +15,7 @@ pub trait CanSendPacket<Counterparty>:
     HasPacketHeaderType<Counterparty>
     + HasPayloadType<Counterparty>
     + HasPacketType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn send_packet(
         &mut self,

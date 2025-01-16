@@ -8,6 +8,6 @@ use crate::transaction::traits::types::transaction::HasTransactionType;
   context: TxContext,
 }]
 #[async_trait]
-pub trait CanEstimateTxFee: HasTransactionType + HasFeeType + HasErrorType {
+pub trait CanEstimateTxFee: HasTransactionType + HasFeeType + HasAsyncErrorType {
     async fn estimate_tx_fee(&self, tx: &Self::Transaction) -> Result<Self::Fee, Self::Error>;
 }

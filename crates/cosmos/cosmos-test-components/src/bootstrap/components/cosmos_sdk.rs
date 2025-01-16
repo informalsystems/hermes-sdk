@@ -1,7 +1,7 @@
 use core::fmt::Display;
 use std::path::PathBuf;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
@@ -113,12 +113,12 @@ impl<Bootstrap, Runtime, Chain, ChainDriver, Components> UseCosmosSdkChainBootst
 where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
-        + CanRaiseError<Runtime::Error>
-        + CanRaiseError<String>
-        + CanRaiseError<&'static str>
-        + CanRaiseError<serde_json::Error>
-        + CanRaiseError<toml::ser::Error>
-        + CanRaiseError<toml::de::Error>
+        + CanRaiseAsyncError<Runtime::Error>
+        + CanRaiseAsyncError<String>
+        + CanRaiseAsyncError<&'static str>
+        + CanRaiseAsyncError<serde_json::Error>
+        + CanRaiseAsyncError<toml::ser::Error>
+        + CanRaiseAsyncError<toml::de::Error>
         + HasDynamicGas,
     Components: DelegatesToCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>

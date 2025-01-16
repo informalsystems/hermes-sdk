@@ -11,7 +11,7 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
   context: Bootstrap,
 }]
 #[async_trait]
-pub trait CanImportBridgeKey: HasRuntime + HasChainDriverType + HasErrorType
+pub trait CanImportBridgeKey: HasRuntime + HasChainDriverType + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
 {

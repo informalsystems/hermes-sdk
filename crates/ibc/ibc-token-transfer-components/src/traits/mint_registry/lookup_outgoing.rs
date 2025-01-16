@@ -9,7 +9,7 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 }]
 #[async_trait]
 pub trait CanLookupOutgoingBurnToken<Counterparty>:
-    HasDenomType + HasChannelIdType<Counterparty> + HasAppIdType<Counterparty> + HasErrorType
+    HasDenomType + HasChannelIdType<Counterparty> + HasAppIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasDenomType + HasChannelIdType<Self> + HasAppIdType<Self>,
 {

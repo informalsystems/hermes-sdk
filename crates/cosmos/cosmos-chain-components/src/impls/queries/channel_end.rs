@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerier, ChannelEndWithProofsQuerier,
 };
@@ -21,7 +21,7 @@ where
     Chain: HasChannelEndType<Counterparty, ChannelEnd = ChannelEnd>
         + HasIbcChainTypes<Counterparty, Height = Height, ChannelId = ChannelId, PortId = PortId>
         + CanQueryAbci
-        + CanRaiseError<TendermintProtoError>,
+        + CanRaiseAsyncError<TendermintProtoError>,
 {
     async fn query_channel_end(
         chain: &Chain,
@@ -48,7 +48,7 @@ where
         + HasIbcChainTypes<Counterparty, Height = Height, ChannelId = ChannelId, PortId = PortId>
         + HasCommitmentProofType
         + CanQueryAbci
-        + CanRaiseError<TendermintProtoError>,
+        + CanRaiseAsyncError<TendermintProtoError>,
 {
     async fn query_channel_end_with_proofs(
         chain: &Chain,

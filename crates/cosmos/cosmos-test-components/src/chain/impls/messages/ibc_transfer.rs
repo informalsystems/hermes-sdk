@@ -1,4 +1,4 @@
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilder;
@@ -17,7 +17,7 @@ pub struct BuildCosmosIbcTransferMessage;
 impl<Chain, Counterparty> IbcTokenTransferMessageBuilder<Chain, Counterparty>
     for BuildCosmosIbcTransferMessage
 where
-    Chain: HasErrorType
+    Chain: HasAsyncErrorType
         + HasAddressType
         + HasAmountType<Amount = Amount>
         + HasMemoType<Memo = Option<String>>

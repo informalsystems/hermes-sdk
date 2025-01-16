@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 
 use cgp::core::Async;
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_chain_type_components::traits::types::message_response::{
     HasMessageResponseType, MessageResponseOf,
@@ -28,7 +28,8 @@ pub type MessageBatchReceiverOf<Context, Tag> =
 
 impl<Context, Tag, Chain, Runtime> HasMessageBatchChannelTypes<Tag> for Context
 where
-    Context: HasChainTypeAt<Tag, Chain = Chain> + HasRuntimeType<Runtime = Runtime> + HasErrorType,
+    Context:
+        HasChainTypeAt<Tag, Chain = Chain> + HasRuntimeType<Runtime = Runtime> + HasAsyncErrorType,
     Chain: HasMessageType + HasMessageResponseType,
     Runtime: HasChannelTypes + HasChannelOnceTypes,
 {
@@ -45,7 +46,7 @@ where
 pub trait CanUseMessageBatchChannel<Tag>:
     HasChainTypeAt<Tag, Chain: HasMessageType + HasMessageResponseType>
     + HasRuntimeType<Runtime: HasChannelTypes + HasChannelOnceTypes>
-    + HasErrorType
+    + HasAsyncErrorType
     + HasMessageBatchChannelTypes<
         Tag,
         BatchSubmission = (
@@ -78,7 +79,8 @@ pub trait CanUseMessageBatchChannel<Tag>:
 
 impl<Context, Tag, Chain, Runtime> CanUseMessageBatchChannel<Tag> for Context
 where
-    Context: HasChainTypeAt<Tag, Chain = Chain> + HasRuntimeType<Runtime = Runtime> + HasErrorType,
+    Context:
+        HasChainTypeAt<Tag, Chain = Chain> + HasRuntimeType<Runtime = Runtime> + HasAsyncErrorType,
     Chain: HasMessageType + HasMessageResponseType,
     Runtime: HasChannelTypes + HasChannelOnceTypes,
 {

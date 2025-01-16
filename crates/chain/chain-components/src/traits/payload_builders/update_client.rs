@@ -14,7 +14,7 @@ pub trait CanBuildUpdateClientPayload<Counterparty>:
     HasUpdateClientPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasHeightType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_update_client_payload(
         &self,
@@ -30,7 +30,7 @@ where
     Chain: HasUpdateClientPayloadType<Counterparty>
         + HasClientStateType<Counterparty>
         + HasHeightType
-        + HasErrorType,
+        + HasAsyncErrorType,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
     Delegate: UpdateClientPayloadBuilder<Chain, Counterparty>,
 {

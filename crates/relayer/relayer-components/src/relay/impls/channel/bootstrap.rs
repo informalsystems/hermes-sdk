@@ -38,8 +38,8 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanInitChannel
         + CanRelayChannelOpenHandshake,
-    SrcChain: HasInitChannelOptionsType<DstChain> + HasIbcChainTypes<DstChain> + HasErrorType,
-    DstChain: HasIbcChainTypes<SrcChain> + HasErrorType,
+    SrcChain: HasInitChannelOptionsType<DstChain> + HasIbcChainTypes<DstChain> + HasAsyncErrorType,
+    DstChain: HasIbcChainTypes<SrcChain> + HasAsyncErrorType,
 {
     async fn bootstrap_channel(
         &self,

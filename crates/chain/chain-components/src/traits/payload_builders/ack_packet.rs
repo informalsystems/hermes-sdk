@@ -15,7 +15,7 @@ pub trait CanBuildAckPacketPayload<Counterparty>:
     + HasAcknowledgementType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasHeightType
-    + HasErrorType
+    + HasAsyncErrorType
 where
     Counterparty: HasOutgoingPacketType<Self>,
 {

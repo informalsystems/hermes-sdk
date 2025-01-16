@@ -74,7 +74,7 @@ pub trait UseDefaultTxComponents:
 
 impl<Chain, Components, Logger> UseDefaultTxComponents for Chain
 where
-    Chain: HasErrorType
+    Chain: HasAsyncErrorType
         + HasMessageType
         + HasEventType
         + HasTransactionType
@@ -93,7 +93,7 @@ where
         + HasRetryableError
         + HasLogger<Logger = Logger>
         + CanParseTxMessageResponse
-        + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>
+        + for<'a> CanRaiseAsyncError<TxNoResponseError<'a, Chain>>
         + HasComponents<Components = Components>,
     Chain::Runtime: HasTime + CanSleep,
     Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>

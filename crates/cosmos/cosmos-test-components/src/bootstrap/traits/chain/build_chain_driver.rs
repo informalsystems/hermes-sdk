@@ -19,7 +19,7 @@ pub trait CanBuildChainDriver:
     + HasChainDriverType<Chain: HasWalletType>
     + HasChainGenesisConfigType
     + HasChainNodeConfigType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_chain_driver(
         &self,

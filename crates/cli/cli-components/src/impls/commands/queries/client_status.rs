@@ -70,8 +70,8 @@ where
         // + HasAnyCounterparty<AnyCounterparty = Counterparty>
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
-        + CanRaiseError<Build::Error>
-        + CanRaiseError<Chain::Error>,
+        + CanRaiseAsyncError<Build::Error>
+        + CanRaiseAsyncError<Chain::Error>,
     Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
     Chain: HasIbcChainTypes<Counterparty> + CanQueryClientStatus<Counterparty>,
     Counterparty: HasIbcChainTypes<Chain>
@@ -125,7 +125,7 @@ where
 #[async_trait]
 pub trait CanQueryClientStatus<Counterparty>:
     HasIbcChainTypes<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
     + CanQueryClientState<Counterparty>
     + CanQueryClientStateWithLatestHeight<Counterparty>
     + CanQueryChainStatus
@@ -146,7 +146,7 @@ where
 impl<Chain, Counterparty> CanQueryClientStatus<Counterparty> for Chain
 where
     Chain: HasIbcChainTypes<Counterparty>
-        + HasErrorType
+        + HasAsyncErrorType
         + CanQueryClientState<Counterparty>
         + CanQueryClientStateWithLatestHeight<Counterparty>
         + CanQueryChainStatus

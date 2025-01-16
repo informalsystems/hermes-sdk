@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
 use cgp::core::field::FieldGetter;
-use cgp::core::types::traits::ProvideType;
+use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_component {
@@ -10,7 +10,7 @@ use cgp::prelude::*;
   provider: ProvideRuntimeType,
 }]
 pub trait HasRuntimeType: Async {
-    type Runtime: Async + HasErrorType;
+    type Runtime: Async + HasAsyncErrorType;
 }
 
 #[cgp_component {
@@ -26,7 +26,7 @@ impl<Context, Provider, Runtime> ProvideRuntimeType<Context> for WithProvider<Pr
 where
     Context: Async,
     Provider: ProvideType<Context, RuntimeTypeComponent, Type = Runtime>,
-    Runtime: Async + HasErrorType,
+    Runtime: Async + HasAsyncErrorType,
 {
     type Runtime = Runtime;
 }

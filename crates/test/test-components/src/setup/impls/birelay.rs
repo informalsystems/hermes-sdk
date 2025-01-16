@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{CanRaiseError, ErrorOf};
+use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
 use cgp::core::Async;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -25,7 +25,7 @@ where
         + CanSetupRelays<A, B>
         + HasBoundedRelayTypeAt<A, B>
         + HasBoundedRelayTypeAt<B, A>
-        + CanRaiseError<ErrorOf<Setup::Builder>>,
+        + CanRaiseAsyncError<ErrorOf<Setup::Builder>>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>> + Clone,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>> + Clone,
     Setup::Builder: CanBuildBiRelayFromRelays<Index<0>, Index<1>, BiRelay = Setup::BiRelay>

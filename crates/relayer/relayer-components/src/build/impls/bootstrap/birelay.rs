@@ -29,7 +29,7 @@ pub trait CanBootstrapBiRelay<A, B>:
         Chain: HasChainIdType
                    + HasCreateClientPayloadOptionsType<ChainAt<Self, A>>
                    + HasCreateClientMessageOptionsType<ChainAt<Self, A>>,
-    > + HasErrorType
+    > + HasAsyncErrorType
 {
     async fn bootstrap_birelay(
         &self,
@@ -57,13 +57,13 @@ where
         + HasCreateClientPayloadOptionsType<ChainB>
         + HasCreateClientMessageOptionsType<ChainB>
         + HasIbcChainTypes<ChainB>
-        + HasErrorType,
+        + HasAsyncErrorType,
     ChainB: Async
         + HasChainIdType
         + HasCreateClientPayloadOptionsType<ChainA>
         + HasCreateClientMessageOptionsType<ChainA>
         + HasIbcChainTypes<ChainA>
-        + HasErrorType,
+        + HasAsyncErrorType,
 {
     async fn bootstrap_birelay(
         &self,

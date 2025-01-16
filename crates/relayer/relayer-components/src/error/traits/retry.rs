@@ -4,7 +4,7 @@ use cgp::prelude::*;
   name: RetryableErrorComponent,
   provider: ProvideRetryableError,
 }]
-pub trait HasRetryableError: HasErrorType {
+pub trait HasRetryableError: HasAsyncErrorType {
     fn is_retryable_error(e: &Self::Error) -> bool;
 }
 

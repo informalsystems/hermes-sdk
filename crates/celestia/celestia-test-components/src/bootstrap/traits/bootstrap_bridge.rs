@@ -10,7 +10,7 @@ use crate::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 }]
 #[async_trait]
 pub trait CanBootstrapBridge:
-    HasChainDriverType + HasBridgeDriverType + HasRuntime + HasErrorType
+    HasChainDriverType + HasBridgeDriverType + HasRuntime + HasAsyncErrorType
 {
     async fn bootstrap_bridge(
         &self,

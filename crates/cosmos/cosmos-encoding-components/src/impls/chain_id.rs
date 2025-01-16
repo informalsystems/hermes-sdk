@@ -1,4 +1,4 @@
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
@@ -12,7 +12,7 @@ pub struct EncodeChainIdField<const TAG: u32>;
 impl<Encoding, Strategy, const TAG: u32> MutEncoder<Encoding, Strategy, ChainId>
     for EncodeChainIdField<TAG>
 where
-    Encoding: HasEncodeBufferType + HasErrorType,
+    Encoding: HasEncodeBufferType + HasAsyncErrorType,
     EncodeStringField<TAG>: MutEncoder<Encoding, Strategy, String>,
 {
     fn encode_mut(
@@ -29,7 +29,7 @@ where
 impl<Encoding, Strategy, const TAG: u32> MutDecoder<Encoding, Strategy, ChainId>
     for EncodeChainIdField<TAG>
 where
-    Encoding: HasDecodeBufferType + CanRaiseError<IdentifierError>,
+    Encoding: HasDecodeBufferType + CanRaiseAsyncError<IdentifierError>,
     EncodeStringField<TAG>: MutDecoder<Encoding, Strategy, String>,
 {
     fn decode_mut<'a>(

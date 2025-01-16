@@ -17,7 +17,7 @@ pub trait CanBuildUpdateClientMessage<Counterparty>:
     HasClientIdType<Counterparty>
     + CanUseCounterparty<Counterparty, Counterparty: HasUpdateClientPayloadType<Self>>
     + HasMessageType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_update_client_message(
         &self,
@@ -29,7 +29,7 @@ pub trait CanBuildUpdateClientMessage<Counterparty>:
 impl<Chain, Counterparty, Components, Delegate> UpdateClientMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasClientIdType<Counterparty> + HasMessageType + HasErrorType,
+    Chain: HasClientIdType<Counterparty> + HasMessageType + HasAsyncErrorType,
     Counterparty: HasUpdateClientPayloadType<Chain>,
     Delegate: UpdateClientMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,

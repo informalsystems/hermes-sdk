@@ -1,5 +1,5 @@
 use cgp::core::component::HasComponents;
-use cgp::core::error::{CanRaiseError, ErrorOf, ErrorRaiser, HasErrorType};
+use cgp::core::error::{CanRaiseAsyncError, ErrorOf, ErrorRaiser, HasAsyncErrorType};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
@@ -58,7 +58,7 @@ where
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
         + HasLogger<Logger = Logger>
         + HasComponents<Components = Components>,
-    SrcChain: HasErrorType
+    SrcChain: HasAsyncErrorType
         + HasRuntime
         + HasChainId
         + CanSendMessages
@@ -72,8 +72,8 @@ where
         + CanQueryConsensusStateHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
         + CanBuildUpdateClientMessage<DstChain>
-        + CanRaiseError<ErrorOf<SrcChain::Runtime>>,
-    DstChain: HasErrorType
+        + CanRaiseAsyncError<ErrorOf<SrcChain::Runtime>>,
+    DstChain: HasAsyncErrorType
         + HasRuntime
         + HasChainId
         + CanQueryChainStatus
@@ -83,7 +83,7 @@ where
         + HasWriteAckEvent<SrcChain>
         + CanBuildAckPacketPayload<SrcChain>
         + CanBuildUpdateClientPayload<SrcChain>
-        + CanRaiseError<ErrorOf<DstChain>>,
+        + CanRaiseAsyncError<ErrorOf<DstChain>>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     SrcChain::Runtime: CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
