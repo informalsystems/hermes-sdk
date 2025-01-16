@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
@@ -25,7 +25,7 @@ where
         + HasSchemaType<Schema = &'static str>
         + CanDecode<ViaProtobuf, TendermintClientState>
         + HasSchema<TendermintClientState>
-        + CanRaiseError<UnknownClientStateType>,
+        + CanRaiseAsyncError<UnknownClientStateType>,
     ClientState: From<AnyClientState>,
 {
     fn convert(encoding: &Encoding, any: &Any) -> Result<ClientState, Encoding::Error> {
@@ -50,7 +50,7 @@ where
         + CanDecode<Strategy, TendermintClientState>
         + CanDecode<Strategy, Any>
         + HasSchema<TendermintClientState>
-        + CanRaiseError<UnknownClientStateType>,
+        + CanRaiseAsyncError<UnknownClientStateType>,
     ClientState: From<AnyClientState>,
 {
     fn decode(encoding: &Encoding, encoded: &Vec<u8>) -> Result<ClientState, Encoding::Error> {

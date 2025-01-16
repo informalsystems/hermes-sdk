@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
@@ -24,7 +24,7 @@ where
         + HasCosmosBuilder
         + HasRuntime
         + HasDynamicGas
-        + CanRaiseError<HermesError>,
+        + CanRaiseAsyncError<HermesError>,
     Bootstrap::Runtime: CanSleep,
 {
     async fn build_chain_with_node_config(

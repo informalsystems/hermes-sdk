@@ -116,7 +116,7 @@ pub trait CanCreateChannels: HasChannelTypes {
   context: Runtime,
 }]
 #[async_trait]
-pub trait CanUseChannels: HasChannelTypes + HasErrorType {
+pub trait CanUseChannels: HasChannelTypes + HasAsyncErrorType {
     /**
        Given a reference to [`Sender<T>`](HasChannelTypes::Sender<T>),
        send a message payload of type `T` over the sender.

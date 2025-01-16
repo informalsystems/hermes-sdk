@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 
 use crate::traits::decode_mut::MutDecoder;
 use crate::traits::transform::Transformer;
@@ -11,7 +11,7 @@ pub struct DecodeFrom<Transform, InDecoder>(pub PhantomData<(Transform, InDecode
 impl<Encoding, Strategy, Transform, Source, Target, InDecoder>
     MutDecoder<Encoding, Strategy, Target> for DecodeFrom<Transform, InDecoder>
 where
-    Encoding: HasDecodeBufferType + HasErrorType,
+    Encoding: HasDecodeBufferType + HasAsyncErrorType,
     InDecoder: MutDecoder<Encoding, Strategy, Source>,
     Transform: Transformer<From = Source, To = Target>,
 {

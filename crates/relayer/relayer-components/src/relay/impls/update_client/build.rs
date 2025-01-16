@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
@@ -25,8 +25,8 @@ where
             CounterpartyChain = CounterpartyChain,
         > + HasTargetChains<Target>
         + HasTargetClientIds<Target>
-        + CanRaiseError<TargetChain::Error>
-        + CanRaiseError<CounterpartyChain::Error>,
+        + CanRaiseAsyncError<TargetChain::Error>
+        + CanRaiseAsyncError<CounterpartyChain::Error>,
     TargetChain: CanQueryClientStateWithLatestHeight<CounterpartyChain>
         + CanBuildUpdateClientMessage<CounterpartyChain>
         + CanQueryConsensusStateHeight<CounterpartyChain>,

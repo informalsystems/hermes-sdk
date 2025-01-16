@@ -1,9 +1,8 @@
 use alloc::format;
-use core::fmt::Display;
 use core::marker::PhantomData;
 
-use cgp::core::error::{CanRaiseError, ErrorOf};
-use cgp::core::Async;
+use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
+use cgp::core::field::Index;
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
@@ -12,19 +11,18 @@ use crate::setup::traits::chain::ChainSetup;
 
 pub struct SetupChainWithBootstrap;
 
-impl<Setup, I> ChainSetup<Setup, I> for SetupChainWithBootstrap
+impl<Setup, const I: usize> ChainSetup<Setup, Index<I>> for SetupChainWithBootstrap
 where
-    Setup: HasBootstrapAt<I> + CanRaiseError<ErrorOf<Setup::Bootstrap>>,
+    Setup: HasBootstrapAt<Index<I>> + CanRaiseAsyncError<ErrorOf<Setup::Bootstrap>>,
     Setup::Bootstrap: CanBootstrapChain,
-    I: Async + Default + Display,
 {
     async fn setup_chain(
         setup: &Setup,
-        _index: PhantomData<I>,
-    ) -> Result<ChainDriverTypeAt<Setup, I>, Setup::Error> {
+        _index: PhantomData<Index<I>>,
+    ) -> Result<ChainDriverTypeAt<Setup, Index<I>>, Setup::Error> {
         let bootstrap = setup.chain_bootstrap(PhantomData);
 
-        let chain_name = format!("chain-{}", I::default());
+        let chain_name = format!("chain-{}", I);
 
         let chain = bootstrap
             .bootstrap_chain(&chain_name)

@@ -1,5 +1,5 @@
 use cgp::core::component::WithProvider;
-use cgp::core::types::traits::ProvideType;
+use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -31,8 +31,8 @@ pub trait HasBoundedRelayTypeAt<SrcTag, DstTag>:
             SrcChain = ChainAt<Self, SrcTag>,
             DstChain = ChainAt<Self, DstTag>,
         >,
-    > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>>>
-    + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>>>
+    > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>> + HasAsyncErrorType>
+    + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>> + HasAsyncErrorType>
 {
 }
 
@@ -44,8 +44,8 @@ impl<Context, SrcTag, DstTag> HasBoundedRelayTypeAt<SrcTag, DstTag> for Context 
                 SrcChain = ChainAt<Self, SrcTag>,
                 DstChain = ChainAt<Self, DstTag>,
             >,
-        > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>>>
-        + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>>>
+        > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>> + HasAsyncErrorType>
+        + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>> + HasAsyncErrorType>
 {
 }
 

@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommandWithEnvs;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -16,7 +16,7 @@ where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
         + HasBridgeDriverType<BridgeDriver = BridgeDriver>
-        + CanRaiseError<Runtime::Error>,
+        + CanRaiseAsyncError<Runtime::Error>,
     Runtime: CanExecCommandWithEnvs,
     Chain: HasChainIdType,
     BridgeDriver: HasBridgeAuthTokenType<BridgeAuthToken = String>,

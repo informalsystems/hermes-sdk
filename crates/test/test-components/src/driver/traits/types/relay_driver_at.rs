@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 
 #[cgp_component {
   name: RelayDriverTypeAtComponent,

@@ -1,4 +1,4 @@
-use cgp::prelude::{HasComponents, HasErrorType};
+use cgp::prelude::{HasAsyncErrorType, HasComponents};
 use hermes_relayer_components::chain::traits::packet::from_write_ack::{
     CanBuildPacketFromWriteAck, PacketFromWriteAckBuilder,
 };
@@ -24,7 +24,7 @@ where
 
 impl<Chain, Counterparty, Components> UseExtraChainComponentsForEventRelayer<Counterparty> for Chain
 where
-    Chain: HasErrorType
+    Chain: HasAsyncErrorType
         + HasChainId
         + HasSendPacketEvent<Counterparty>
         + HasIbcChainTypes<Counterparty>

@@ -9,7 +9,7 @@ use crate::types::tags::commitment::send::SendPacket;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanHandleIncomingPacket<Counterparty>: Sized + Async + HasErrorType
+pub trait CanHandleIncomingPacket<Counterparty>: Sized + Async + HasAsyncErrorType
 where
     Counterparty: HasCommitmentProofType<SendPacket> + HasPacketType<Self>,
 {

@@ -1,4 +1,4 @@
-use cgp::prelude::{Async, HasErrorType};
+use cgp::prelude::{Async, HasAsyncErrorType};
 
 use crate::error::traits::retry::{MaxErrorRetryGetter, ProvideRetryableError};
 
@@ -6,7 +6,7 @@ pub struct ReturnRetryable<const RETRYABLE: bool>;
 
 impl<Context, const RETRYABLE: bool> ProvideRetryableError<Context> for ReturnRetryable<RETRYABLE>
 where
-    Context: HasErrorType,
+    Context: HasAsyncErrorType,
 {
     fn is_retryable_error(_e: &Context::Error) -> bool {
         RETRYABLE

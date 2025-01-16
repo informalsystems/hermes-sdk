@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use cgp::core::Async;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
@@ -14,7 +14,7 @@ impl<InBuilder, Build, Chain, I: Async> ChainBuilder<Build, I> for BuildChainWit
 where
     Chain: HasChainIdType + Clone,
     Chain::ChainId: Ord + Clone,
-    Build: HasChainCache<I, Chain = Chain> + HasErrorType,
+    Build: HasChainCache<I, Chain = Chain> + HasAsyncErrorType,
     InBuilder: ChainBuilder<Build, I>,
 {
     async fn build_chain(

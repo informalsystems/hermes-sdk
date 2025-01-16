@@ -15,7 +15,7 @@ pub trait CanBuildReceivePacketPayload<Counterparty>:
     + HasOutgoingPacketType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasHeightType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_receive_packet_payload(
         &self,

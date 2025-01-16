@@ -9,7 +9,7 @@ use crate::traits::types::light_block::HasLightBlockType;
 }]
 #[async_trait]
 pub trait CanVerifyTargetHeight<Mode: Async>:
-    HasHeightType + HasLightBlockType + HasErrorType
+    HasHeightType + HasLightBlockType + HasAsyncErrorType
 {
     async fn verify_target_height(
         &mut self,

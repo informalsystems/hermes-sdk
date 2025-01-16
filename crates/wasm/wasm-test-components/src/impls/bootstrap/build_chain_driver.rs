@@ -2,7 +2,8 @@ use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
+use cgp::core::field::Index;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
@@ -10,7 +11,6 @@ use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus;
 use hermes_cosmos_test_components::chain::types::proposal_vote::ProposalVote;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
@@ -44,7 +44,7 @@ where
         + HasChainNodeConfigType
         + HasWasmClientByteCode
         + HasGovernanceProposalAuthority
-        + CanRaiseError<Chain::Error>,
+        + CanRaiseAsyncError<Chain::Error>,
     Runtime: HasChildProcessType + HasFilePathType + CanSleep,
     Chain: HasWalletSigner
         + HasProposalIdType

@@ -9,7 +9,7 @@ use crate::traits::types::light_block::HasLightBlockType;
 }]
 #[async_trait]
 pub trait CanBuildLightBlocksForUpdateClient:
-    HasHeightType + HasLightBlockType + HasErrorType
+    HasHeightType + HasLightBlockType + HasAsyncErrorType
 {
     async fn build_light_blocks_for_update_client(
         &mut self,

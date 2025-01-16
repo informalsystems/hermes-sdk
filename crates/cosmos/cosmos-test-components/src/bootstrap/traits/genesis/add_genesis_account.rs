@@ -10,7 +10,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
   context: Bootstrap,
 }]
 #[async_trait]
-pub trait CanAddGenesisAccount: HasRuntime + HasChainType + HasErrorType
+pub trait CanAddGenesisAccount: HasRuntime + HasChainType + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
     Self::Chain: HasAmountType + HasAddressType,

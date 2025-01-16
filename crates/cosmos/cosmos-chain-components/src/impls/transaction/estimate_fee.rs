@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimator;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
@@ -28,11 +28,11 @@ where
         + HasGasConfig
         + HasRpcClient
         + HasChainId<ChainId = ChainId>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<Status>
-        + CanRaiseError<InvalidUri>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<Status>
+        + CanRaiseAsyncError<InvalidUri>
         + CanConvertGasToFee
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<&'static str>,
 {
     async fn estimate_tx_fee(chain: &Chain, tx: &SignedTx) -> Result<Fee, Chain::Error> {
         let tx = Tx {
@@ -76,7 +76,9 @@ pub async fn send_tx_simulate<Chain>(
     tx: Tx,
 ) -> Result<SimulateResponse, Chain::Error>
 where
-    Chain: CanRaiseError<EncodeError> + CanRaiseError<TransportError> + CanRaiseError<Status>,
+    Chain: CanRaiseAsyncError<EncodeError>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<Status>,
 {
     let mut tx_bytes = vec![];
     prost::Message::encode(&tx, &mut tx_bytes).map_err(Chain::raise_error)?;

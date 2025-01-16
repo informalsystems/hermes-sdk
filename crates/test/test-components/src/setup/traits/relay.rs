@@ -11,7 +11,7 @@ use hermes_relayer_components::multi::traits::relay_at::{HasBoundedRelayTypeAt, 
 }]
 #[async_trait]
 pub trait CanSetupRelays<A: Async, B: Async>:
-    HasBoundedRelayTypeAt<A, B> + HasBoundedRelayTypeAt<B, A> + HasErrorType
+    HasBoundedRelayTypeAt<A, B> + HasBoundedRelayTypeAt<B, A> + HasAsyncErrorType
 {
     async fn setup_relays(
         &self,

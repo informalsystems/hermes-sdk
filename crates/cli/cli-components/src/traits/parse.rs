@@ -7,7 +7,7 @@ use cgp::prelude::*;
   provider: ArgParser,
   context: App,
 }]
-pub trait CanParseArg<Args, Tag>: HasErrorType {
+pub trait CanParseArg<Args, Tag>: HasAsyncErrorType {
     type Parsed: Async;
 
     fn parse_arg(&self, args: &Args, tag: PhantomData<Tag>) -> Result<Self::Parsed, Self::Error>;
@@ -15,7 +15,7 @@ pub trait CanParseArg<Args, Tag>: HasErrorType {
 
 impl<App, Args, Tag, Components, Delegate> ArgParser<App, Args, Tag> for UseDelegate<Components>
 where
-    App: HasErrorType,
+    App: HasAsyncErrorType,
     Components: DelegateComponent<(Args, Tag), Delegate = Delegate>,
     Delegate: ArgParser<App, Args, Tag>,
 {

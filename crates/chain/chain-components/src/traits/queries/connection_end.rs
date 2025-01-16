@@ -16,7 +16,7 @@ pub trait CanQueryConnectionEnd<Counterparty>:
     HasHeightType
     + HasConnectionIdType<Counterparty>
     + HasConnectionEndType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn query_connection_end(
         &self,
@@ -35,7 +35,7 @@ pub trait CanQueryConnectionEndWithProofs<Counterparty>:
     + HasConnectionIdType<Counterparty>
     + HasConnectionEndType<Counterparty>
     + HasCommitmentProofType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn query_connection_end_with_proofs(
         &self,

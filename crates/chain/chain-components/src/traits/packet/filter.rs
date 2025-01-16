@@ -9,7 +9,7 @@ use hermes_chain_type_components::traits::types::ibc::packet::{
 }]
 #[async_trait]
 pub trait CanFilterOutgoingPacket<Counterparty>:
-    HasOutgoingPacketType<Counterparty> + HasErrorType
+    HasOutgoingPacketType<Counterparty> + HasAsyncErrorType
 {
     async fn should_relay_outgoing_packet(
         &self,
@@ -23,7 +23,7 @@ pub trait CanFilterOutgoingPacket<Counterparty>:
 }]
 #[async_trait]
 pub trait CanFilterIncomingPacket<Counterparty>:
-    HasIncomingPacketType<Counterparty> + HasErrorType
+    HasIncomingPacketType<Counterparty> + HasAsyncErrorType
 {
     async fn should_relay_incoming_packet(
         &self,

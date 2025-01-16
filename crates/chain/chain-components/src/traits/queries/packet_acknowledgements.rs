@@ -12,7 +12,7 @@ use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 }]
 #[async_trait]
 pub trait CanQueryPacketAcknowledgements<Counterparty>:
-    HasHeightType + HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasErrorType
+    HasHeightType + HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasSequenceType<Self>,
 {

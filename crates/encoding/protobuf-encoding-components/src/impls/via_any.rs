@@ -13,7 +13,7 @@ pub struct EncodeViaAny<InStrategy>(pub PhantomData<InStrategy>);
 impl<Encoding, Strategy, InStrategy, Value> Encoder<Encoding, Strategy, Value>
     for EncodeViaAny<InStrategy>
 where
-    Encoding: HasEncodedType + HasErrorType,
+    Encoding: HasEncodedType + HasAsyncErrorType,
     EncodeAsAnyProtobuf<InStrategy, UseContext>: Encoder<Encoding, Strategy, Value>,
     InStrategy: Async,
 {
@@ -25,7 +25,7 @@ where
 impl<Encoding, Strategy, InStrategy, Value> Decoder<Encoding, Strategy, Value>
     for EncodeViaAny<InStrategy>
 where
-    Encoding: HasEncodedType + HasErrorType,
+    Encoding: HasEncodedType + HasAsyncErrorType,
     DecodeAsAnyProtobuf<InStrategy, UseContext>: Decoder<Encoding, InStrategy, Value>,
     InStrategy: Async,
 {

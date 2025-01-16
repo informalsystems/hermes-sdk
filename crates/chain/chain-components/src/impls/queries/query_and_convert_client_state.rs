@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use cgp::core::Async;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
@@ -18,7 +18,7 @@ pub struct QueryAndConvertRawClientState;
 impl<Chain, Counterparty, Encoding> ClientStateQuerier<Chain, Counterparty>
     for QueryAndConvertRawClientState
 where
-    Chain: CanQueryRawClientState<Counterparty> + CanRaiseError<Encoding::Error>,
+    Chain: CanQueryRawClientState<Counterparty> + CanRaiseAsyncError<Encoding::Error>,
     Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Encoding: Async + CanConvert<Chain::RawClientState, Counterparty::ClientState>,
 {
@@ -41,7 +41,7 @@ where
 impl<Chain, Counterparty, Encoding> ClientStateWithProofsQuerier<Chain, Counterparty>
     for QueryAndConvertRawClientState
 where
-    Chain: CanQueryRawClientStateWithProofs<Counterparty> + CanRaiseError<Encoding::Error>,
+    Chain: CanQueryRawClientStateWithProofs<Counterparty> + CanRaiseAsyncError<Encoding::Error>,
     Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Encoding: Async + CanConvert<Chain::RawClientState, Counterparty::ClientState>,
 {

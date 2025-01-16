@@ -21,7 +21,7 @@ pub trait CanQueryConsensusState<Counterparty>:
     HasClientIdType<Counterparty>
     + CanUseCounterparty<Counterparty, Counterparty: HasConsensusStateType<Self> + HasHeightType>
     + HasHeightType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn query_consensus_state(
         &self,
@@ -41,7 +41,7 @@ pub trait CanQueryConsensusStateWithProofs<Counterparty>:
     HasClientIdType<Counterparty>
     + HasHeightType
     + HasCommitmentProofType
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasConsensusStateType<Self> + HasHeightType>
 {
     async fn query_consensus_state_with_proofs(
@@ -59,7 +59,7 @@ pub trait CanQueryConsensusStateWithProofs<Counterparty>:
 }]
 #[async_trait]
 pub trait CanQueryRawConsensusState<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasRawConsensusStateType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasRawConsensusStateType + HasAsyncErrorType
 where
     Counterparty: HasHeightType,
 {
@@ -81,7 +81,7 @@ pub trait CanQueryRawConsensusStateWithProofs<Counterparty>:
     + HasHeightType
     + HasRawConsensusStateType
     + HasCommitmentProofType
-    + HasErrorType
+    + HasAsyncErrorType
 where
     Counterparty: HasHeightType,
 {
@@ -97,7 +97,7 @@ where
 pub trait CanQueryConsensusStateWithLatestHeight<Counterparty>:
     HasClientIdType<Counterparty>
     + CanUseCounterparty<Counterparty, Counterparty: HasConsensusStateType<Self> + HasHeightType>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn query_consensus_state_with_latest_height(
         &self,
@@ -133,7 +133,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasClientIdType<Counterparty> + HasHeightType + HasErrorType,
+    Chain: HasClientIdType<Counterparty> + HasHeightType + HasAsyncErrorType,
     Counterparty: HasConsensusStateType<Chain> + HasHeightType,
     Delegate: ConsensusStateQuerier<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
@@ -152,7 +152,8 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateWithProofsQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasClientIdType<Counterparty> + HasHeightType + HasCommitmentProofType + HasErrorType,
+    Chain:
+        HasClientIdType<Counterparty> + HasHeightType + HasCommitmentProofType + HasAsyncErrorType,
     Counterparty: HasConsensusStateType<Chain> + HasHeightType,
     Delegate: ConsensusStateWithProofsQuerier<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,

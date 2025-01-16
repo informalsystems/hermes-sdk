@@ -23,7 +23,7 @@ pub struct DecodeAsAnyProtobuf<InStrategy, InEncoder>(pub PhantomData<(InStrateg
 impl<InEncoder, Encoding, Strategy, InStrategy, Value> Encoder<Encoding, Strategy, Value>
     for EncodeAsAnyProtobuf<InStrategy, InEncoder>
 where
-    Encoding: HasEncodedType<Encoded = Vec<u8>> + HasSchema<Value> + HasErrorType,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + HasSchema<Value> + HasAsyncErrorType,
     InEncoder: Encoder<Encoding, InStrategy, Value>,
     Encoding::Schema: Display,
     Self: Converter<Encoding, Value, Any>,
@@ -38,7 +38,7 @@ where
 impl<InEncoder, Encoding, InStrategy, Value> Converter<Encoding, Value, Any>
     for EncodeAsAnyProtobuf<InStrategy, InEncoder>
 where
-    Encoding: HasEncodedType<Encoded = Vec<u8>> + HasSchema<Value> + HasErrorType,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + HasSchema<Value> + HasAsyncErrorType,
     InEncoder: Encoder<Encoding, InStrategy, Value>,
     Encoding::Schema: Display,
     InStrategy: Async,
@@ -59,7 +59,7 @@ where
 impl<InEncoder, Encoding, Strategy, InStrategy, Value> Decoder<Encoding, Strategy, Value>
     for DecodeAsAnyProtobuf<InStrategy, InEncoder>
 where
-    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanRaiseError<DecodeError>,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanRaiseAsyncError<DecodeError>,
     Self: Converter<Encoding, Any, Value>,
 {
     fn decode(encoding: &Encoding, encoded: &Vec<u8>) -> Result<Value, Encoding::Error> {
@@ -72,8 +72,9 @@ where
 impl<InEncoder, Encoding, InStrategy, Value> Converter<Encoding, Any, Value>
     for DecodeAsAnyProtobuf<InStrategy, InEncoder>
 where
-    Encoding:
-        HasEncodedType<Encoded = Vec<u8>> + HasSchema<Value> + CanRaiseError<TypeUrlMismatchError>,
+    Encoding: HasEncodedType<Encoded = Vec<u8>>
+        + HasSchema<Value>
+        + CanRaiseAsyncError<TypeUrlMismatchError>,
     InEncoder: Decoder<Encoding, InStrategy, Value>,
     Encoding::Schema: Display,
     InStrategy: Async,

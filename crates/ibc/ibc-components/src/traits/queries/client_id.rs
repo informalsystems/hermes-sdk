@@ -8,7 +8,7 @@ use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType
 }]
 #[async_trait]
 pub trait CanQueryClientIdFromChannelId<Counterparty>:
-    HasChannelIdType<Counterparty> + HasClientIdType<Counterparty> + HasErrorType
+    HasChannelIdType<Counterparty> + HasClientIdType<Counterparty> + HasAsyncErrorType
 {
     async fn query_client_id_from_channel_id(
         &self,

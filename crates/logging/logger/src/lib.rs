@@ -57,7 +57,7 @@ delegate_components! {
                 LogSendMessagesWithSignerAndNonce<'a, Chain>,
             <'a, Chain: HasTransactionHashType>
                 TxNoResponseError<'a, Chain>,
-            <'a, Chain: HasTransactionHashType + HasErrorType>
+            <'a, Chain: HasTransactionHashType + HasAsyncErrorType>
                 LogRetryQueryTxResponse<'a, Chain>,
             <'a, Relay: HasRelayChains>
                 LogSkipRelayLockedPacket<'a, Relay>,

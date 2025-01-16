@@ -1,4 +1,4 @@
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
@@ -8,7 +8,7 @@ pub trait CanBuildPayload<Counterparty, App>:
     HasPayloadType<Counterparty>
     + HasPayloadHeaderType<Counterparty>
     + HasPayloadDataType<Counterparty, App>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     fn build_payload(
         header: Self::PayloadHeader,

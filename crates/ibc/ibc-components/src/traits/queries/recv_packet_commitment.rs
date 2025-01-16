@@ -9,7 +9,7 @@ use crate::traits::types::packet::nonce::HasPacketNonceType;
 }]
 #[async_trait]
 pub trait CanQueryHasPacketReceived<Counterparty>:
-    HasChannelIdType<Counterparty> + HasErrorType
+    HasChannelIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasChannelIdType<Self> + HasPacketNonceType<Self>,
 {

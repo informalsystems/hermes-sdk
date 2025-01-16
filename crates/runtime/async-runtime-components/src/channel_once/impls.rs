@@ -76,7 +76,7 @@ where
 
 impl<Runtime> ChannelOnceUser<Runtime> for ProvideOneShotChannelType
 where
-    Runtime: HasOneShotChannelType + CanRaiseError<ChannelClosedError>,
+    Runtime: HasOneShotChannelType + CanRaiseAsyncError<ChannelClosedError>,
 {
     fn send_once<T>(sender: Runtime::SenderOnce<T>, value: T) -> Result<(), Runtime::Error>
     where

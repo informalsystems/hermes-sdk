@@ -2,7 +2,7 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::types::message_response::MessageResponseOf;
 use hermes_relayer_components::chain::types::aliases::MessageOf;
 use hermes_relayer_components::relay::traits::ibc_message_sender::{
@@ -25,7 +25,7 @@ where
         + CanSendIbcMessages<BatchWorkerSink, Target>
         + CanUseMessageBatchChannel<Target::Chain>
         + HasMessageBatchSender<Target::Chain>
-        + CanRaiseError<ErrorOf<Relay::Runtime>>,
+        + CanRaiseAsyncError<ErrorOf<Relay::Runtime>>,
     Relay::Runtime: CanCreateChannelsOnce + CanUseChannelsOnce + CanUseChannels,
 {
     async fn send_messages(

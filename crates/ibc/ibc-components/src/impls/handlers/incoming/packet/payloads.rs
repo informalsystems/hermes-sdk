@@ -18,7 +18,7 @@ pub struct HandleIncomingPacketPayloads<App>(pub PhantomData<App>);
 impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, Counterparty>
     for HandleIncomingPacketPayloads<App>
 where
-    Chain: HasErrorType + CanHandleIncomingPayload<Counterparty, App>,
+    Chain: HasAsyncErrorType + CanHandleIncomingPayload<Counterparty, App>,
     Counterparty: HasCommitmentProofType<SendPacket>
         + HasPacketType<Chain>
         + HasPacketHeader<Chain>

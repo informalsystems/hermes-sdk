@@ -1,7 +1,7 @@
 use core::time::Duration;
 use std::path::PathBuf;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
@@ -32,10 +32,10 @@ where
         + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + CanModifyCometConfig
         + CanModifyCosmosSdkConfig
-        + CanRaiseError<Runtime::Error>
-        + CanRaiseError<&'static str>
-        + CanRaiseError<toml::de::Error>
-        + CanRaiseError<toml::ser::Error>,
+        + CanRaiseAsyncError<Runtime::Error>
+        + CanRaiseAsyncError<&'static str>
+        + CanRaiseAsyncError<toml::de::Error>
+        + CanRaiseAsyncError<toml::ser::Error>,
     Runtime: HasFilePathType<FilePath = PathBuf>
         + CanReadFileAsString
         + CanWriteStringToFile

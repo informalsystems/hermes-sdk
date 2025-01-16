@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitter;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
@@ -34,8 +34,8 @@ where
     Chain: HasTransactionType<Transaction = SignedTx>
         + HasTransactionHashType<TxHash = TxHash>
         + HasRpcClient
-        + CanRaiseError<RpcError>
-        + for<'a> CanRaiseError<BroadcastTxError<'a, Chain>>,
+        + CanRaiseAsyncError<RpcError>
+        + for<'a> CanRaiseAsyncError<BroadcastTxError<'a, Chain>>,
 {
     async fn submit_tx(chain: &Chain, tx: &SignedTx) -> Result<TxHash, Chain::Error> {
         let tx_raw = TxRaw {

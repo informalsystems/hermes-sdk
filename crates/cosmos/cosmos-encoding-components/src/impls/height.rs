@@ -1,4 +1,4 @@
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_encoding_components::impls::encode_mut::pair::EncoderPair;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
@@ -12,7 +12,7 @@ pub struct EncodeHeight;
 
 impl<Encoding, Strategy> MutEncoder<Encoding, Strategy, Height> for EncodeHeight
 where
-    Encoding: HasEncodeBufferType + HasErrorType,
+    Encoding: HasEncodeBufferType + HasAsyncErrorType,
     EncoderPair<EncodeU64ProtoField<1>, EncodeU64ProtoField<2>>:
         MutEncoder<Encoding, Strategy, (u64, u64)>,
 {
@@ -33,7 +33,7 @@ where
 
 impl<Encoding, Strategy> MutDecoder<Encoding, Strategy, Height> for EncodeHeight
 where
-    Encoding: HasDecodeBufferType + CanRaiseError<ClientError>,
+    Encoding: HasDecodeBufferType + CanRaiseAsyncError<ClientError>,
     EncoderPair<EncodeU64ProtoField<1>, EncodeU64ProtoField<2>>:
         MutDecoder<Encoding, Strategy, (u64, u64)>,
 {

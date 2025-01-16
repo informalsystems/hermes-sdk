@@ -1,4 +1,4 @@
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -31,7 +31,7 @@ where
             Message = SolomachineMessage,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
     Counterparty: HasConnectionOpenInitPayloadType<
             Chain,
             ConnectionOpenInitPayload = ConnectionOpenInitPayload<Counterparty>,
@@ -62,7 +62,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
         > + HasClientStateType<Counterparty>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasCommitmentPrefixType
         + HasCommitmentProofType
         + HasConnectionEndType<Chain>
@@ -94,7 +94,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
         > + HasClientStateType<Counterparty>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasCommitmentProofType
         + HasConnectionEndType<Chain>
         + HasConnectionOpenAckPayloadType<
@@ -123,7 +123,7 @@ where
             Message = SolomachineMessage,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
     Counterparty: HasCommitmentProofType
         + HasConnectionOpenConfirmPayloadType<
             Chain,

@@ -16,7 +16,7 @@ pub trait CanQueryPacketCommitments<Counterparty>:
     + HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
     + HasSequenceType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     /// Query the sequences of the packets that the chain has committed to be
     /// sent to the counterparty chain, of which the full packet relaying is not

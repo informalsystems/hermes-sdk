@@ -21,7 +21,7 @@ where
         + CanQueryLightBlock<GetTrustedOrVerified>
         + CanQueryLightBlock<GetHighestTrustedOrVerifiedBefore>
         + CanQueryLightBlock<GetLowestTrustedOrVerified>
-        + CanRaiseError<NoInitialTrustedState>,
+        + CanRaiseAsyncError<NoInitialTrustedState>,
 {
     async fn verify_target_height(
         client: &mut Client,

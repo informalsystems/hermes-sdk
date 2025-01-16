@@ -32,7 +32,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
     Counterparty: HasConnectionOpenInitPayloadType<
             Chain,
             ConnectionOpenInitPayload = SolomachineConnectionOpenInitPayload,
@@ -57,7 +57,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
     Counterparty: HasConnectionOpenTryPayloadType<
             Chain,
             ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload,
@@ -110,7 +110,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
     Counterparty: HasConnectionOpenAckPayloadType<
             Chain,
             ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload,
@@ -134,7 +134,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
     Counterparty: HasConnectionOpenConfirmPayloadType<
             Chain,
             ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload,

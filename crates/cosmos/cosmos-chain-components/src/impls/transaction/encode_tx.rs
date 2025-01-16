@@ -1,6 +1,6 @@
 #![allow(clippy::ptr_arg)]
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoder;
@@ -33,8 +33,8 @@ where
         + HasTransactionType<Transaction = SignedTx>
         + HasTxExtensionOptions
         + HasChainId<ChainId = ChainId>
-        + CanRaiseError<EncodeError>
-        + CanRaiseError<String>,
+        + CanRaiseAsyncError<EncodeError>
+        + CanRaiseAsyncError<String>,
 {
     async fn encode_tx(
         chain: &Chain,
@@ -78,7 +78,7 @@ pub fn sign_tx<Chain>(
     extension_options: &Vec<Any>,
 ) -> Result<SignedTx, Chain::Error>
 where
-    Chain: CanRaiseError<String>,
+    Chain: CanRaiseAsyncError<String>,
 {
     let key_bytes = Message::encode_to_vec(&key_pair.public_key.serialize().to_vec());
 
@@ -113,7 +113,7 @@ pub fn encode_sign_doc<Chain>(
     body_bytes: Vec<u8>,
 ) -> Result<Vec<u8>, Chain::Error>
 where
-    Chain: CanRaiseError<String>,
+    Chain: CanRaiseAsyncError<String>,
 {
     let sign_doc = SignDoc {
         body_bytes,

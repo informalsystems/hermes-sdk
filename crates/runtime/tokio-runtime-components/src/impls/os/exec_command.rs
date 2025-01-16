@@ -24,10 +24,10 @@ pub struct CommandNotFound {
 impl<Runtime> CommandWithEnvsExecutor<Runtime> for TokioExecCommand
 where
     Runtime: HasFilePathType
-        + CanRaiseError<IoError>
-        + CanRaiseError<Utf8Error>
-        + CanRaiseError<CommandNotFound>
-        + CanRaiseError<ExecCommandFailure>,
+        + CanRaiseAsyncError<IoError>
+        + CanRaiseAsyncError<Utf8Error>
+        + CanRaiseAsyncError<CommandNotFound>
+        + CanRaiseAsyncError<ExecCommandFailure>,
     Runtime::FilePath: AsRef<OsStr>,
 {
     async fn exec_command_with_envs(

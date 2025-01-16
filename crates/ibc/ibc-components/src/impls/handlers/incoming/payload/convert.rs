@@ -16,7 +16,7 @@ pub struct ConvertAndHandlePayload<InApp, InHandler>(pub PhantomData<(InApp, InH
 impl<Chain, Counterparty, App, InApp, InHandler, AnyPacketData, PacketData>
     IncomingPayloadHandler<Chain, Counterparty, App> for ConvertAndHandlePayload<InApp, InHandler>
 where
-    Chain: HasEncoding<App> + CanRaiseError<ErrorOf<Counterparty::Encoding>>,
+    Chain: HasEncoding<App> + CanRaiseAsyncError<ErrorOf<Counterparty::Encoding>>,
     Counterparty: HasPacketHeaderType<Chain>
         + HasPayloadHeaderType<Chain>
         + HasPayloadDataType<Chain, App, PayloadData = AnyPacketData>

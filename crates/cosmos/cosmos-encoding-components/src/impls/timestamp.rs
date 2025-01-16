@@ -1,6 +1,6 @@
 use core::num::TryFromIntError;
 
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_encoding_components::impls::encode_mut::pair::EncoderPair;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
@@ -14,7 +14,7 @@ pub struct EncodeTimestamp;
 
 impl<Encoding, Strategy> MutEncoder<Encoding, Strategy, Timestamp> for EncodeTimestamp
 where
-    Encoding: HasEncodeBufferType + HasErrorType,
+    Encoding: HasEncodeBufferType + HasAsyncErrorType,
     EncoderPair<EncodeU64ProtoField<1>, EncodeU64ProtoField<2>>:
         MutEncoder<Encoding, Strategy, (i64, i32)>,
 {
@@ -42,7 +42,9 @@ where
 
 impl<Encoding, Strategy> MutDecoder<Encoding, Strategy, Timestamp> for EncodeTimestamp
 where
-    Encoding: HasDecodeBufferType + CanRaiseError<TryFromIntError> + CanRaiseError<TimestampError>,
+    Encoding: HasDecodeBufferType
+        + CanRaiseAsyncError<TryFromIntError>
+        + CanRaiseAsyncError<TimestampError>,
     EncoderPair<EncodeU64ProtoField<1>, EncodeU64ProtoField<2>>:
         MutDecoder<Encoding, Strategy, (i64, i32)>,
 {

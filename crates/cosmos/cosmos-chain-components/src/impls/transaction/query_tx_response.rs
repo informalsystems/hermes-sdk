@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerier;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
@@ -16,7 +16,7 @@ where
     Chain: HasTransactionHashType<TxHash = TxHash>
         + HasTxResponseType<TxResponse = TxResponse>
         + HasRpcClient
-        + CanRaiseError<TendermintRpcError>,
+        + CanRaiseAsyncError<TendermintRpcError>,
 {
     async fn query_tx_response(
         chain: &Chain,

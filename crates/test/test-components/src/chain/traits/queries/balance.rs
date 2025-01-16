@@ -9,7 +9,9 @@ use crate::chain::traits::types::denom::HasDenomType;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanQueryBalance: HasAddressType + HasDenomType + HasAmountType + HasErrorType {
+pub trait CanQueryBalance:
+    HasAddressType + HasDenomType + HasAmountType + HasAsyncErrorType
+{
     async fn query_balance(
         &self,
         address: &Self::Address,

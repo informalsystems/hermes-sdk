@@ -20,7 +20,7 @@ delegate_components! {
 
 impl<Encoding, Strategy> MutEncoder<Encoding, Strategy, CommitmentRoot> for EncodeCommitmentRoot
 where
-    Encoding: HasEncodeBufferType + HasErrorType,
+    Encoding: HasEncodeBufferType + HasAsyncErrorType,
     EncodeByteField<1>: for<'a> MutEncoder<Encoding, Strategy, &'a [u8]>,
 {
     fn encode_mut(

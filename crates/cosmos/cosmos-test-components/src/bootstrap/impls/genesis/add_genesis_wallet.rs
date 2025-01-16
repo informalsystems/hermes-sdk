@@ -23,11 +23,11 @@ where
         + HasChainType<Chain = Chain>
         + HasChainDriverType<ChainDriver = ChainDriver>
         + HasWalletConfigFields
-        + HasErrorType
+        + HasAsyncErrorType
         + CanInitWallet
         + CanAddGenesisAccount
         + CanAddGenesisValidator,
-    Runtime: HasFilePathType + HasErrorType,
+    Runtime: HasFilePathType + HasAsyncErrorType,
     Chain: HasChainIdType + HasWalletType + HasAmountType + HasAddressType,
 {
     async fn add_wallet_to_genesis(

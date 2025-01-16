@@ -8,6 +8,6 @@ use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
   context: TxContext,
 }]
 #[async_trait]
-pub trait CanSubmitTx: HasTransactionType + HasTransactionHashType + HasErrorType {
+pub trait CanSubmitTx: HasTransactionType + HasTransactionHashType + HasAsyncErrorType {
     async fn submit_tx(&self, tx: &Self::Transaction) -> Result<Self::TxHash, Self::Error>;
 }

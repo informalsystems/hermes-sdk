@@ -10,7 +10,7 @@ use crate::traits::types::packet::packet::HasPacketType;
 }]
 #[async_trait]
 pub trait CanQuerySendPacketCommitment<Counterparty>:
-    HasPacketType<Counterparty> + HasChannelIdType<Counterparty> + HasErrorType
+    HasPacketType<Counterparty> + HasChannelIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasChannelIdType<Self> + HasPacketNonceType<Self>,
 {

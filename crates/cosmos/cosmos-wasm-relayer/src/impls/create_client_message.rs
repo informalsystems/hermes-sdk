@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
 use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientPayload;
@@ -32,7 +32,7 @@ where
         + HasCreateClientMessageOptionsType<
             Counterparty,
             CreateClientMessageOptions = CreateWasmTendermintMessageOptions,
-        > + CanRaiseError<Encoding::Error>,
+        > + CanRaiseAsyncError<Encoding::Error>,
     Counterparty: HasCreateClientPayloadType<Chain, CreateClientPayload = CosmosCreateClientPayload>
         + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Encoding: HasEncodedType<Encoded = Vec<u8>>

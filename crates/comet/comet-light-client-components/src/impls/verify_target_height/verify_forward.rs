@@ -40,8 +40,8 @@ where
         + CanUpdateVerificationStatus<VerifiedStatus>
         + CanValidateLightBlock<IsWithinTrustingPeriod>
         + CanQueryLightBlock<GetHighestTrustedOrVerifiedBefore>
-        + CanRaiseError<NoInitialTrustedState>
-        + for<'a> CanRaiseError<TargetLowerThanTrustedHeight<'a, Client>>,
+        + CanRaiseAsyncError<NoInitialTrustedState>
+        + for<'a> CanRaiseAsyncError<TargetLowerThanTrustedHeight<'a, Client>>,
     Mode: Async,
 {
     async fn verify_target_height(

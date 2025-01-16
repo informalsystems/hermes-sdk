@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -27,8 +27,8 @@ where
             Event = Arc<AbciEvent>,
         > + HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAckEvent>
         + HasRpcClient
-        + CanRaiseError<RpcError>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<RpcError>
+        + CanRaiseAsyncError<&'static str>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId, Sequence = Sequence>
         + HasOutgoingPacketType<Chain, OutgoingPacket = Packet>
         + HasWriteAckEvent<Chain>,

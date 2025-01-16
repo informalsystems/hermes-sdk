@@ -1,7 +1,7 @@
 use alloc::boxed::Box;
 use core::marker::PhantomData;
 
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_chain_components::types::aliases::{EventOf, HeightOf};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::stream::CanMapStream;
@@ -49,7 +49,7 @@ where
     Target: RelayTarget,
     Relay: HasTargetChains<Target> + CanRelayEvent<Target> + HasRuntime + Clone,
     Relay::TargetChain: HasEventSubscription<Runtime = Runtime>,
-    Runtime: HasSubscription + CanMapStream + CanRunConcurrentTasks + HasErrorType,
+    Runtime: HasSubscription + CanMapStream + CanRunConcurrentTasks + HasAsyncErrorType,
 {
     async fn auto_relay(relay: &Relay, _target: Target) -> Result<(), Relay::Error> {
         let target_chain = relay.target_chain();

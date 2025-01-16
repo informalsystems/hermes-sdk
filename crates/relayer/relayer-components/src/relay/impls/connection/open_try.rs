@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenTryMessage;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenTryPayload;
@@ -46,7 +46,7 @@ where
         + HasRelayClientIds
         + CanSendTargetUpdateClientMessage<SourceTarget>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
-        + for<'a> CanRaiseError<MissingConnectionTryEventError<'a, Relay>>
+        + for<'a> CanRaiseAsyncError<MissingConnectionTryEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildConnectionOpenTryPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>

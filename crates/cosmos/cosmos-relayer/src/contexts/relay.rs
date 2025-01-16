@@ -3,8 +3,8 @@ use alloc::sync::Arc;
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::impls::use_field::{UseField, WithField};
-use cgp::core::types::impls::WithType;
+use cgp::core::field::{Index, UseField, WithField};
+use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_logger::ProvideHermesLogger;
@@ -17,7 +17,6 @@ use hermes_relayer_components::multi::traits::chain_at::{
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, PacketMutexOf,

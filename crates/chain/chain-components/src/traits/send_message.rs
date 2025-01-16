@@ -46,7 +46,7 @@ use crate::traits::types::message::HasMessageType;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanSendMessages: HasMessageType + HasMessageResponseType + HasErrorType {
+pub trait CanSendMessages: HasMessageType + HasMessageResponseType + HasAsyncErrorType {
     /**
         Given a list of [messages](HasMessageType::Message), submit the messages
         atomically to the chain.
@@ -58,7 +58,7 @@ pub trait CanSendMessages: HasMessageType + HasMessageResponseType + HasErrorTyp
         the message at the same position in the input message list.
 
         On failure, the method returns an
-        [error](cgp_core::error::HasErrorType::Error).
+        [error](cgp_core::error::HasAsyncErrorType::Error).
         Note that since the message sending must be atomic, the sending of
         messages must either all succeed or all failed. i.e. partial failure
         is forbidden.
@@ -70,7 +70,9 @@ pub trait CanSendMessages: HasMessageType + HasMessageResponseType + HasErrorTyp
 }
 
 #[async_trait]
-pub trait CanSendSingleMessage: HasMessageType + HasMessageResponseType + HasErrorType {
+pub trait CanSendSingleMessage:
+    HasMessageType + HasMessageResponseType + HasAsyncErrorType
+{
     async fn send_message(
         &self,
         message: Self::Message,
@@ -82,7 +84,7 @@ pub struct EmptyMessageResponse;
 
 impl<Chain> CanSendSingleMessage for Chain
 where
-    Chain: CanSendMessages + CanRaiseError<EmptyMessageResponse>,
+    Chain: CanSendMessages + CanRaiseAsyncError<EmptyMessageResponse>,
 {
     async fn send_message(
         &self,

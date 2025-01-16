@@ -15,7 +15,7 @@ pub trait CanBuildMintPayload<Counterparty, App>:
     + HasIbcMessageHeaderType<Counterparty>
     + HasIbcMessageType<Counterparty, App>
     + HasAmountType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     fn build_outgoing_mint_payload(
         &self,

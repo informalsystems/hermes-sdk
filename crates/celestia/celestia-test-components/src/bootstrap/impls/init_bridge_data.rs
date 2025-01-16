@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
@@ -12,8 +12,9 @@ pub struct InitCelestiaBridgeData;
 
 impl<Bootstrap, Runtime, Chain> BridgeDataInitializer<Bootstrap> for InitCelestiaBridgeData
 where
-    Bootstrap:
-        HasChainType<Chain = Chain> + HasRuntime<Runtime = Runtime> + CanRaiseError<Runtime::Error>,
+    Bootstrap: HasChainType<Chain = Chain>
+        + HasRuntime<Runtime = Runtime>
+        + CanRaiseAsyncError<Runtime::Error>,
     Runtime: HasFilePathType + CanExecCommandWithEnvs + CanCreateDir,
     Chain: HasChainIdType,
 {

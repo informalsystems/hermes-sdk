@@ -23,7 +23,7 @@ pub trait CanRegisterEscrowToken<Counterparty>:
     + HasQuantityType
     + HasChannelIdType<Counterparty>
     + HasAppIdType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 where
     Counterparty: HasChannelIdType<Self> + HasAppIdType<Self>,
 {

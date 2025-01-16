@@ -1,7 +1,7 @@
 use core::fmt::{Debug, Display};
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::error::traits::retry::HasRetryableError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
@@ -12,7 +12,7 @@ pub struct PollProposalStatus;
 
 impl<Chain> ProposalStatusPoller<Chain> for PollProposalStatus
 where
-    Chain: CanQueryProposalStatus + HasRuntime + HasRetryableError + CanRaiseError<String>,
+    Chain: CanQueryProposalStatus + HasRuntime + HasRetryableError + CanRaiseAsyncError<String>,
     Chain::Runtime: CanSleep,
     Chain::ProposalId: Display,
     Chain::ProposalStatus: Eq + Debug,

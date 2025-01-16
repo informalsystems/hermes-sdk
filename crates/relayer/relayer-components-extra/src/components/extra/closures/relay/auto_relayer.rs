@@ -1,7 +1,7 @@
 use cgp::core::component::HasComponents;
 use cgp::core::error::ErrorRaiser;
 use cgp::extra::run::CanRun;
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
@@ -40,13 +40,13 @@ where
         + CanUseMessageBatchChannel<Dst>
         + UseExtraEventRelayer
         + HasComponents<Components = Components>,
-    SrcChain: HasErrorType
+    SrcChain: HasAsyncErrorType
         + HasRuntime
         + HasChainId
         + HasMessageType
         + HasMessageResponseType
         + HasEventSubscription,
-    DstChain: HasErrorType
+    DstChain: HasAsyncErrorType
         + HasRuntime
         + HasChainId
         + HasMessageType

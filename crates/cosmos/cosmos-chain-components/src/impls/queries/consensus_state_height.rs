@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerier;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -20,9 +20,9 @@ impl<Chain, Counterparty> ConsensusStateHeightsQuerier<Chain, Counterparty>
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
         + HasGrpcAddress
-        + CanRaiseError<TransportError>
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<Status>,
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<Status>,
     Counterparty: HasHeightType<Height = Height>,
 {
     async fn query_consensus_state_heights(

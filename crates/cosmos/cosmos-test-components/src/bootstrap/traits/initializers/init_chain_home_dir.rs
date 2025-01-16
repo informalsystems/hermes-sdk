@@ -10,7 +10,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
   context: Bootstrap,
 }]
 #[async_trait]
-pub trait CanInitChainHomeDir: HasChainType + HasRuntime + HasErrorType
+pub trait CanInitChainHomeDir: HasChainType + HasRuntime + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
     Self::Chain: HasChainIdType,

@@ -20,7 +20,7 @@ pub trait CanQueryAckPackets<Counterparty>:
     + HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
     + HasWriteAckEvent<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 where
     Counterparty: HasOutgoingPacketType<Self>
         + HasChannelIdType<Self>
@@ -59,7 +59,7 @@ pub trait CanQueryAckPacket<Counterparty>:
     + HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
     + HasWriteAckEvent<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 where
     Counterparty: HasOutgoingPacketType<Self>
         + HasChannelIdType<Self>

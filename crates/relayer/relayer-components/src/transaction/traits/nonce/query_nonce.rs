@@ -8,6 +8,6 @@ use crate::transaction::traits::types::signer::HasSignerType;
   context: TxContext,
 }]
 #[async_trait]
-pub trait CanQueryNonce: HasSignerType + HasNonceType + HasErrorType {
+pub trait CanQueryNonce: HasSignerType + HasNonceType + HasAsyncErrorType {
     async fn query_nonce(&self, signer: &Self::Signer) -> Result<Self::Nonce, Self::Error>;
 }

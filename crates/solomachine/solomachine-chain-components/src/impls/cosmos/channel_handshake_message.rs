@@ -1,5 +1,5 @@
-use cgp::core::error::HasErrorType;
-use cgp::prelude::CanRaiseError;
+use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
@@ -35,8 +35,8 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType
-        + CanRaiseError<ChannelError>,
+        > + HasAsyncErrorType
+        + CanRaiseAsyncError<ChannelError>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
 {
     async fn build_channel_open_init_message(
@@ -76,8 +76,8 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType
-        + CanRaiseError<ChannelError>,
+        > + HasAsyncErrorType
+        + CanRaiseAsyncError<ChannelError>,
     Counterparty: HasChannelOpenTryPayloadType<
             Chain,
             ChannelOpenTryPayload = SolomachineChannelOpenTryPayload,
@@ -126,7 +126,7 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
     Counterparty: HasChannelOpenAckPayloadType<
             Chain,
             ChannelOpenAckPayload = SolomachineChannelOpenAckPayload,
@@ -162,7 +162,7 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
     Counterparty: HasChannelOpenConfirmPayloadType<
             Chain,
             ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload,

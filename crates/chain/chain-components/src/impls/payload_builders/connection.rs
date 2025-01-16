@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
@@ -35,7 +35,7 @@ where
         + HasConnectionOpenInitPayloadType<
             Counterparty,
             ConnectionOpenInitPayload = ConnectionOpenInitPayload<Chain>,
-        > + HasErrorType,
+        > + HasAsyncErrorType,
     Chain::CommitmentPrefix: Clone,
 {
     async fn build_connection_open_init_payload(
@@ -59,7 +59,7 @@ where
         > + CanQueryConnectionEndWithProofs<Counterparty>
         + CanQueryClientStateWithProofs<Counterparty>
         + CanQueryConsensusStateWithProofs<Counterparty>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Chain::CommitmentPrefix: Clone,
     Counterparty: HasClientStateFields<Chain> + HasConsensusStateType<Chain>,
 {
@@ -123,7 +123,7 @@ where
         > + CanQueryConnectionEndWithProofs<Counterparty>
         + CanQueryClientStateWithProofs<Counterparty>
         + CanQueryConsensusStateWithProofs<Counterparty>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Chain::CommitmentPrefix: Clone,
     Counterparty: HasClientStateFields<Chain> + HasConsensusStateType<Chain>,
 {

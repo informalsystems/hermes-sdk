@@ -1,4 +1,4 @@
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use hermes_cosmos_chain_components::types::status::ChainStatus;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
@@ -9,7 +9,7 @@ pub struct QuerySolomachineStatus;
 
 impl<Chain> ChainStatusQuerier<Chain> for QuerySolomachineStatus
 where
-    Chain: HasChainStatusType<ChainStatus = ChainStatus> + HasErrorType,
+    Chain: HasChainStatusType<ChainStatus = ChainStatus> + HasAsyncErrorType,
 {
     async fn query_chain_status(_chain: &Chain) -> Result<ChainStatus, Chain::Error> {
         // stub

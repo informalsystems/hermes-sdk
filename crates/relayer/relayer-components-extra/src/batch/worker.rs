@@ -36,7 +36,7 @@ pub struct LogBatchWorker<'a, Relay, Tag> {
 
 #[async_trait]
 pub trait CanSpawnBatchMessageWorker<Target: RelayTarget>:
-    HasMessageBatchChannelTypes<Target::Chain> + HasErrorType
+    HasMessageBatchChannelTypes<Target::Chain> + HasAsyncErrorType
 {
     fn spawn_batch_message_worker(
         &self,
@@ -192,7 +192,8 @@ where
         + CanUseMessageBatchChannel<Target::Chain>
         + CanPartitionMessageBatches<Target>
         + HasLogger,
-    Relay::Runtime: HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes + HasErrorType,
+    Relay::Runtime:
+        HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes + HasAsyncErrorType,
     Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
     SendReadyBatchTask<Relay, Target>: Task,
 {

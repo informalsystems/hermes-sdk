@@ -7,6 +7,6 @@ use crate::traits::types::config::HasConfigType;
   context: App,
 }]
 #[async_trait]
-pub trait CanWriteConfig: HasConfigType + HasErrorType {
+pub trait CanWriteConfig: HasConfigType + HasAsyncErrorType {
     async fn write_config(&self, config: &Self::Config) -> Result<(), Self::Error>;
 }

@@ -37,8 +37,9 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanInitConnection
         + CanRelayConnectionOpenHandshake,
-    SrcChain: HasInitConnectionOptionsType<DstChain> + HasConnectionIdType<DstChain> + HasErrorType,
-    DstChain: HasConnectionIdType<SrcChain> + HasErrorType,
+    SrcChain:
+        HasInitConnectionOptionsType<DstChain> + HasConnectionIdType<DstChain> + HasAsyncErrorType,
+    DstChain: HasConnectionIdType<SrcChain> + HasAsyncErrorType,
 {
     async fn bootstrap_connection(
         &self,

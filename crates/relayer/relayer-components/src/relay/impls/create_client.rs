@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 
 use crate::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
@@ -52,9 +52,10 @@ where
             Target,
             TargetChain = TargetChain,
             CounterpartyChain = CounterpartyChain,
-        > + for<'a> CanRaiseError<MissingCreateClientEventError<'a, TargetChain, CounterpartyChain>>
-        + CanRaiseError<TargetChain::Error>
-        + CanRaiseError<CounterpartyChain::Error>,
+        > + for<'a> CanRaiseAsyncError<
+            MissingCreateClientEventError<'a, TargetChain, CounterpartyChain>,
+        > + CanRaiseAsyncError<TargetChain::Error>
+        + CanRaiseAsyncError<CounterpartyChain::Error>,
     TargetChain: CanSendSingleMessage
         + HasChainId
         + CanBuildCreateClientMessage<CounterpartyChain>

@@ -9,7 +9,7 @@ use crate::traits::types::packets::receive::HasReceivePacketPayloadType;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanBuildReceivePacketMessage<Counterparty>: HasMessageType + HasErrorType
+pub trait CanBuildReceivePacketMessage<Counterparty>: HasMessageType + HasAsyncErrorType
 where
     Counterparty: HasOutgoingPacketType<Self> + HasReceivePacketPayloadType<Self>,
 {

@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use cgp::core::error::{ErrorRaiser, HasErrorType};
+use cgp::core::error::{ErrorRaiser, HasAsyncErrorType};
 use eyre::Report;
 
 use crate::types::{Error, ErrorDetail};
@@ -12,7 +12,7 @@ pub type ReportError = ReportErrorWithRetry<false>;
 
 impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for ReportErrorWithRetry<RETRYABLE>
 where
-    Context: HasErrorType<Error = Error>,
+    Context: HasAsyncErrorType<Error = Error>,
     Report: From<E>,
 {
     fn raise_error(e: E) -> Error {

@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -21,9 +21,9 @@ where
     Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAckEvent>
         + HasRpcClient
         + CanQueryChainHeight<Height = Height>
-        + CanRaiseError<TendermintRpcError>
-        + CanRaiseError<TendermintError>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<TendermintRpcError>
+        + CanRaiseAsyncError<TendermintError>
+        + CanRaiseAsyncError<&'static str>,
     Counterparty: HasOutgoingPacketType<Chain, OutgoingPacket = Packet>,
 {
     async fn query_write_ack_event(

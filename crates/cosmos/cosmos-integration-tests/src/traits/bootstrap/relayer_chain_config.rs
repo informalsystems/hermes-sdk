@@ -13,7 +13,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
   context: Bootstrap,
 }]
 pub trait CanBuildRelayerChainConfig:
-    HasChainNodeConfigType + HasChainGenesisConfigType + HasChainType + HasErrorType
+    HasChainNodeConfigType + HasChainGenesisConfigType + HasChainType + HasAsyncErrorType
 where
     Self::Chain: HasWalletType,
 {

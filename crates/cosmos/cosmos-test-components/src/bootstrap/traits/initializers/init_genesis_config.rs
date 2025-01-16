@@ -9,7 +9,8 @@ use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
   context: Bootstrap,
 }]
 #[async_trait]
-pub trait CanInitChainGenesisConfig: HasRuntime + HasChainGenesisConfigType + HasErrorType
+pub trait CanInitChainGenesisConfig:
+    HasRuntime + HasChainGenesisConfigType + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
 {

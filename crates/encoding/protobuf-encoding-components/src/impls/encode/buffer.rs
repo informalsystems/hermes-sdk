@@ -1,4 +1,3 @@
-use cgp::prelude::HasErrorType;
 use hermes_encoding_components::traits::decode::Decoder;
 use hermes_encoding_components::traits::decode_mut::CanDecodeMut;
 use hermes_encoding_components::traits::encode::Encoder;
@@ -32,10 +31,7 @@ where
         + HasProtoChunksDecodeBuffer
         + CanDecodeMut<Strategy, Value>,
 {
-    fn decode(
-        encoding: &Encoding,
-        buffer: &Vec<u8>,
-    ) -> Result<Value, <Encoding as HasErrorType>::Error> {
+    fn decode(encoding: &Encoding, buffer: &Vec<u8>) -> Result<Value, Encoding::Error> {
         let mut chunks = Encoding::decode_protochunks(&mut buffer.as_ref())?;
 
         encoding.decode_mut(&mut chunks)

@@ -4,7 +4,7 @@ use cgp::prelude::*;
   provider: Converter,
   context: Encoding,
 }]
-pub trait CanConvert<From, To>: HasErrorType {
+pub trait CanConvert<From, To>: HasAsyncErrorType {
     fn convert(&self, from: &From) -> Result<To, Self::Error>;
 }
 

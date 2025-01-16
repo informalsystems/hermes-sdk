@@ -7,7 +7,7 @@ use crate::driver::traits::types::chain_driver::HasChainDriverType;
   context: Bootstrap,
 }]
 #[async_trait]
-pub trait CanBootstrapChain: HasChainDriverType + HasErrorType {
+pub trait CanBootstrapChain: HasChainDriverType + HasAsyncErrorType {
     async fn bootstrap_chain(
         &self,
         chain_id_prefix: &str,

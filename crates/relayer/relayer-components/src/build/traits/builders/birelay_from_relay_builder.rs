@@ -9,7 +9,7 @@ use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 }]
 #[async_trait]
 pub trait CanBuildBiRelayFromRelays<A, B>:
-    HasBiRelayTypeAt<A, B> + HasRelayTypeAt<A, B> + HasRelayTypeAt<B, A> + HasErrorType
+    HasBiRelayTypeAt<A, B> + HasRelayTypeAt<A, B> + HasRelayTypeAt<B, A> + HasAsyncErrorType
 {
     async fn build_birelay_from_relays(
         &self,

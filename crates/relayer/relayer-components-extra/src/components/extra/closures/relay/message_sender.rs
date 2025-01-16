@@ -1,5 +1,5 @@
 use cgp::core::component::HasComponents;
-use cgp::core::error::{CanRaiseError, ErrorOf, ErrorRaiser};
+use cgp::core::error::{CanRaiseAsyncError, ErrorOf, ErrorRaiser};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
@@ -52,19 +52,19 @@ where
         + HasTargetChains<DestinationTarget>
         + CanBuildTargetUpdateClientMessage<SourceTarget>
         + CanBuildTargetUpdateClientMessage<DestinationTarget>
-        + CanRaiseError<SrcChain::Error>
-        + CanRaiseError<DstChain::Error>
-        + CanRaiseError<ErrorOf<Relay::Runtime>>
+        + CanRaiseAsyncError<SrcChain::Error>
+        + CanRaiseAsyncError<DstChain::Error>
+        + CanRaiseAsyncError<ErrorOf<Relay::Runtime>>
         + HasComponents<Components = Components>,
     SrcChain: HasIbcChainTypes<DstChain>
         + HasOutgoingPacketType<DstChain>
         + CanSendMessages
         + UseExtraChainComponentsForIbcMessageSender<DstChain>
-        + CanRaiseError<ErrorOf<SrcChain::Runtime>>,
+        + CanRaiseAsyncError<ErrorOf<SrcChain::Runtime>>,
     DstChain: HasIbcChainTypes<SrcChain>
         + CanSendMessages
         + UseExtraChainComponentsForIbcMessageSender<SrcChain>
-        + CanRaiseError<ErrorOf<DstChain::Runtime>>,
+        + CanRaiseAsyncError<ErrorOf<DstChain::Runtime>>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     Relay::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,

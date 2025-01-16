@@ -19,7 +19,7 @@ pub trait CanQueryPacketCommitment<Counterparty>:
     + HasSequenceType<Counterparty>
     + HasPacketCommitmentType<Counterparty>
     + HasCommitmentProofType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn query_packet_commitment(
         &self,

@@ -9,7 +9,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
   context: Bootstrap,
 }]
 #[async_trait]
-pub trait CanInitWallet: HasRuntime + HasChainType + HasErrorType
+pub trait CanInitWallet: HasRuntime + HasChainType + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
     Self::Chain: HasWalletType,

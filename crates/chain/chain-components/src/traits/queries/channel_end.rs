@@ -18,7 +18,7 @@ pub trait CanQueryChannelEnd<Counterparty>:
     + HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
     + HasChannelEndType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn query_channel_end(
         &self,
@@ -39,7 +39,7 @@ pub trait CanQueryChannelEndWithProofs<Counterparty>:
     + HasPortIdType<Counterparty>
     + HasChannelEndType<Counterparty>
     + HasCommitmentProofType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn query_channel_end_with_proofs(
         &self,

@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 
 use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
 use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
@@ -22,8 +22,8 @@ where
     Relay: HasSourceTargetChainTypes
         + HasRelayChains
         + HasSrcClientId
-        + CanRaiseError<ErrorOf<Relay::SrcChain>>
-        + CanRaiseError<ErrorOf<Relay::DstChain>>,
+        + CanRaiseAsyncError<ErrorOf<Relay::SrcChain>>
+        + CanRaiseAsyncError<ErrorOf<Relay::DstChain>>,
     Relay: CanSendSingleIbcMessage<MainSink, SourceTarget>,
     Relay::SrcChain: CanQueryClientStateWithLatestHeight<Relay::DstChain>
         + CanBuildTimeoutUnorderedPacketMessage<Relay::DstChain>,

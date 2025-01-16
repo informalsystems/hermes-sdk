@@ -1,4 +1,5 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::field::Index;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use hermes_async_runtime_components::task::types::future_task::FutureTask;
@@ -11,7 +12,6 @@ use hermes_error::types::Error;
 use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_test_components::relay_driver::run::RelayerBackgroundRunner;
 

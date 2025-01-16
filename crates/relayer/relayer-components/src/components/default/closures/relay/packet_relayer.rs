@@ -1,5 +1,5 @@
 use cgp::core::component::HasComponents;
-use cgp::core::error::{ErrorRaiser, HasErrorType};
+use cgp::core::error::{ErrorRaiser, HasAsyncErrorType};
 use hermes_chain_components::traits::send_message::EmptyMessageResponse;
 use hermes_chain_components::traits::types::ibc::HasIbcChainTypes;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
@@ -61,7 +61,7 @@ where
         + HasLogger<Logger = Logger>
         + HasPacketLock
         + HasComponents<Components = Components>,
-    SrcChain: HasErrorType
+    SrcChain: HasAsyncErrorType
         + HasRuntime
         + HasChainId
         + CanSendMessages
@@ -80,7 +80,7 @@ where
         + CanBuildAckPacketMessage<DstChain>
         + CanBuildUpdateClientMessage<DstChain>
         + CanBuildTimeoutUnorderedPacketMessage<DstChain>,
-    DstChain: HasErrorType
+    DstChain: HasAsyncErrorType
         + HasRuntime
         + HasChainId
         + CanSendMessages

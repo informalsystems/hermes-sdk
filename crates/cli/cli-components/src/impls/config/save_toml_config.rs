@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use cgp::core::Async;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -15,8 +15,8 @@ where
     App: HasRuntime<Runtime = Runtime>
         + HasConfigType<Config = Config>
         + HasConfigPath
-        + CanRaiseError<Runtime::Error>
-        + CanRaiseError<toml::ser::Error>,
+        + CanRaiseAsyncError<Runtime::Error>
+        + CanRaiseAsyncError<toml::ser::Error>,
     Runtime: CanWriteStringToFile,
     Config: Async + Serialize,
 {

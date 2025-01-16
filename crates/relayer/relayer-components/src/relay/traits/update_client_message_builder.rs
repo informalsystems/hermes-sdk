@@ -16,7 +16,7 @@ use crate::relay::traits::target::{HasTargetChainTypes, HasTargetChains, RelayTa
 #[async_trait]
 pub trait CanBuildTargetUpdateClientMessage<Target: RelayTarget>:
     HasTargetChainTypes<Target, TargetChain: HasMessageType, CounterpartyChain: HasHeightType>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_target_update_client_messages(
         &self,
@@ -27,7 +27,7 @@ pub trait CanBuildTargetUpdateClientMessage<Target: RelayTarget>:
 
 #[async_trait]
 pub trait CanSendTargetUpdateClientMessage<Target: RelayTarget>:
-    HasTargetChainTypes<Target, CounterpartyChain: HasHeightType> + HasErrorType
+    HasTargetChainTypes<Target, CounterpartyChain: HasHeightType> + HasAsyncErrorType
 {
     async fn send_target_update_client_messages(
         &self,
@@ -40,7 +40,7 @@ impl<Relay, Target> CanSendTargetUpdateClientMessage<Target> for Relay
 where
     Relay: HasTargetChains<Target>
         + CanBuildTargetUpdateClientMessage<Target>
-        + CanRaiseError<ErrorOf<Relay::TargetChain>>,
+        + CanRaiseAsyncError<ErrorOf<Relay::TargetChain>>,
     Target: RelayTarget,
     Relay::TargetChain: CanSendMessages,
 {

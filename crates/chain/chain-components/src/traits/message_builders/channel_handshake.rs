@@ -22,7 +22,7 @@ pub trait CanBuildChannelOpenInitMessage<Counterparty>:
     + HasMessageType
     + HasPortIdType<Counterparty>
     + HasInitChannelOptionsType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasPortIdType<Self>>
 {
     async fn build_channel_open_init_message(
@@ -41,7 +41,7 @@ pub trait CanBuildChannelOpenInitMessage<Counterparty>:
 pub trait CanBuildChannelOpenTryMessage<Counterparty>:
     HasMessageType
     + HasPortIdType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<
         Counterparty,
         Counterparty: HasChannelIdType<Self>
@@ -67,7 +67,7 @@ pub trait CanBuildChannelOpenAckMessage<Counterparty>:
     HasMessageType
     + HasPortIdType<Counterparty>
     + HasChannelIdType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<
         Counterparty,
         Counterparty: HasChannelIdType<Self>
@@ -93,7 +93,7 @@ pub trait CanBuildChannelOpenConfirmMessage<Counterparty>:
     HasMessageType
     + HasPortIdType<Counterparty>
     + HasChannelIdType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasChannelOpenConfirmPayloadType<Self>>
 {
     async fn build_channel_open_confirm_message(
@@ -110,7 +110,7 @@ where
     Chain: HasMessageType
         + HasPortIdType<Counterparty>
         + HasInitChannelOptionsType<Counterparty>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasPortIdType<Chain>,
     Delegate: ChannelOpenInitMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
@@ -134,7 +134,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ChannelOpenTryMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasMessageType + HasPortIdType<Counterparty> + HasErrorType,
+    Chain: HasMessageType + HasPortIdType<Counterparty> + HasAsyncErrorType,
     Counterparty:
         HasChannelIdType<Chain> + HasPortIdType<Chain> + HasChannelOpenTryPayloadType<Chain>,
     Delegate: ChannelOpenTryMessageBuilder<Chain, Counterparty>,
@@ -164,7 +164,7 @@ where
     Chain: HasMessageType
         + HasPortIdType<Counterparty>
         + HasChannelIdType<Counterparty>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty:
         HasChannelIdType<Chain> + HasPortIdType<Chain> + HasChannelOpenAckPayloadType<Chain>,
     Delegate: ChannelOpenAckMessageBuilder<Chain, Counterparty>,
@@ -194,7 +194,7 @@ where
     Chain: HasMessageType
         + HasPortIdType<Counterparty>
         + HasChannelIdType<Counterparty>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasChannelOpenConfirmPayloadType<Chain>,
     Delegate: ChannelOpenConfirmMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,

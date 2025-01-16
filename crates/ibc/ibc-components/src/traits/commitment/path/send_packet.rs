@@ -13,7 +13,7 @@ pub trait CanBuildSendPacketCommitmentPath<Counterparty>:
     HasChannelIdType<Counterparty>
     + HasPacketNonceType<Counterparty>
     + HasCommitmentPathType<SendPacket>
-    + HasErrorType
+    + HasAsyncErrorType
 where
     Counterparty: HasChannelIdType<Self>,
 {

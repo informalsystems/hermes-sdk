@@ -32,7 +32,7 @@ impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for DisallowDoubleReceive<InHandler>
 where
     Chain: CanQueryHasPacketReceived<Counterparty>
-        + for<'a> CanRaiseError<DoublePacketReceive<'a, Chain, Counterparty>>,
+        + for<'a> CanRaiseAsyncError<DoublePacketReceive<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType<SendPacket>
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>

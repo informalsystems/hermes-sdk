@@ -1,5 +1,5 @@
 use cgp::core::component::HasComponents;
-use cgp::core::error::{ErrorRaiser, HasErrorType};
+use cgp::core::error::{ErrorRaiser, HasAsyncErrorType};
 use hermes_chain_components::traits::send_message::EmptyMessageResponse;
 use hermes_chain_components::traits::types::ibc::HasIbcChainTypes;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
@@ -48,7 +48,7 @@ where
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
         + HasLogger<Logger = Logger>
         + HasComponents<Components = Components>,
-    SrcChain: HasErrorType
+    SrcChain: HasAsyncErrorType
         + HasChainId
         + CanSendMessages
         + HasMessageResponseEvents
@@ -63,7 +63,7 @@ where
         + CanQueryConsensusStateHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
         + CanBuildUpdateClientMessage<DstChain>,
-    DstChain: HasErrorType
+    DstChain: HasAsyncErrorType
         + HasRuntime
         + HasChainId
         + CanQueryChainStatus

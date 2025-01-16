@@ -9,7 +9,7 @@ pub struct RaiseDebugString;
 
 impl<Context, Error> ErrorRaiser<Context, Error> for RaiseDebugString
 where
-    Context: HasErrorType,
+    Context: HasAsyncErrorType,
     Error: Debug,
     Context::Error: From<String>,
 {

@@ -18,7 +18,7 @@ pub type ChildProcessOf<Runtime> = <Runtime as HasChildProcessType>::ChildProces
   context: Runtime,
 }]
 #[async_trait]
-pub trait CanStartChildProcess: HasChildProcessType + HasFilePathType + HasErrorType {
+pub trait CanStartChildProcess: HasChildProcessType + HasFilePathType + HasAsyncErrorType {
     async fn start_child_process(
         &self,
         command_path: &Self::FilePath,
@@ -34,6 +34,6 @@ pub trait CanStartChildProcess: HasChildProcessType + HasFilePathType + HasError
   context: Runtime,
 }]
 #[async_trait]
-pub trait CanWaitChildProcess: HasChildProcessType + HasErrorType {
+pub trait CanWaitChildProcess: HasChildProcessType + HasAsyncErrorType {
     async fn wait_child_process(child_process: Self::ChildProcess) -> Result<(), Self::Error>;
 }

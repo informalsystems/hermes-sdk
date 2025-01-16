@@ -8,7 +8,9 @@ use crate::transaction::traits::types::tx_response::HasTxResponseType;
   context: TxContext,
 }]
 #[async_trait]
-pub trait CanQueryTxResponse: HasTransactionHashType + HasTxResponseType + HasErrorType {
+pub trait CanQueryTxResponse:
+    HasTransactionHashType + HasTxResponseType + HasAsyncErrorType
+{
     async fn query_tx_response(
         &self,
         tx_hash: &Self::TxHash,

@@ -19,7 +19,7 @@ pub trait CanBuildChannelOpenTryPayload<Counterparty>:
     + HasPortIdType<Counterparty>
     + HasChannelOpenTryPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_channel_open_try_payload(
         &self,
@@ -41,7 +41,7 @@ pub trait CanBuildChannelOpenAckPayload<Counterparty>:
     + HasPortIdType<Counterparty>
     + HasChannelOpenAckPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_channel_open_ack_payload(
         &self,
@@ -63,7 +63,7 @@ pub trait CanBuildChannelOpenConfirmPayload<Counterparty>:
     + HasPortIdType<Counterparty>
     + HasChannelOpenConfirmPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_channel_open_confirm_payload(
         &self,

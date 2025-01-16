@@ -5,6 +5,6 @@ use cgp::prelude::*;
   context: Relay,
 }]
 #[async_trait]
-pub trait CanAutoRelay<Target: Async>: Async + HasErrorType {
+pub trait CanAutoRelay<Target: Async>: Async + HasAsyncErrorType {
     async fn auto_relay(&self, target: Target) -> Result<(), Self::Error>;
 }

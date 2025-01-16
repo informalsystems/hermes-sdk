@@ -12,7 +12,7 @@ use crate::traits::types::height::HasHeightType;
 }]
 #[async_trait]
 pub trait CanQueryConsensusStateHeight<Counterparty>:
-    HasClientIdType<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasHeightType,
 {
@@ -37,7 +37,7 @@ where
 }]
 #[async_trait]
 pub trait CanQueryConsensusStateHeights<Counterparty>:
-    HasClientIdType<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasHeightType,
 {
@@ -50,7 +50,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateHeightsQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasClientIdType<Counterparty> + HasErrorType,
+    Chain: HasClientIdType<Counterparty> + HasAsyncErrorType,
     Counterparty: HasHeightType,
     Delegate: ConsensusStateHeightsQuerier<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
