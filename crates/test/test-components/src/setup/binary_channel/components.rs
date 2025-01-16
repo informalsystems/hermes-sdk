@@ -1,4 +1,5 @@
 use cgp::core::error::ErrorRaiser;
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
@@ -12,7 +13,6 @@ use hermes_relayer_components::chain::types::aliases::PortIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::chains::{HasRelayChainTypes, HasRelayClientIds};
@@ -35,6 +35,7 @@ use crate::setup::impls::connection::SetupConnectionHandshake;
 use crate::setup::impls::relay::SetupRelayWithBuilder;
 use crate::setup::impls::run_test::BuildDriverAndRunTest;
 pub use crate::setup::traits::birelay::BiRelaySetupComponent;
+use crate::setup::traits::birelay::CanSetupBiRelay;
 use crate::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use crate::setup::traits::builder_at::ProvideBuilderAt;
 pub use crate::setup::traits::chain::ChainSetupComponent;
@@ -75,9 +76,9 @@ cgp_preset! {
 pub trait CanUseBinaryChannelTestSetup: UseBinaryChannelTestSetup {}
 
 pub trait UseBinaryChannelTestSetup:
-    // CanBuildTestDriver
-    CanSetupClients<Index<0>, Index<1>>
-    {}
+    CanSetupClients<Index<0>, Index<1>> + CanSetupBiRelay<Index<0>, Index<1>>
+{
+}
 
 impl<
         Setup,

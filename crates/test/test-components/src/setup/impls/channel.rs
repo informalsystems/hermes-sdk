@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
+use cgp::core::field::Index;
 use cgp::core::Async;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
@@ -11,7 +12,6 @@ use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::{
     HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
 };
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 
 use crate::setup::traits::channel::ChannelSetup;

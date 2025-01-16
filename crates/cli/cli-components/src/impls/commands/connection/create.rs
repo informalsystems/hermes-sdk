@@ -1,6 +1,7 @@
 use core::fmt::Display;
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -11,7 +12,6 @@ use hermes_relayer_components::chain::traits::types::connection::HasInitConnecti
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 

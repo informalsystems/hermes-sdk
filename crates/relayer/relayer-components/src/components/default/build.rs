@@ -1,4 +1,5 @@
 use cgp::core::error::ProvideErrorType;
+use cgp::core::field::Index;
 use cgp::prelude::*;
 
 use crate::build::components::birelay::BuildBiRelayFromRelays;
@@ -14,7 +15,6 @@ use crate::build::traits::cache::{HasChainCache, HasRelayCache};
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt};
 use crate::multi::traits::relay_at::{ClientIdAt, RelayAt};
-use crate::multi::types::index::Index;
 
 cgp_preset! {
     DefaultBuildComponents<BaseComponents: Async> {

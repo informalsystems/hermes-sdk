@@ -1,4 +1,5 @@
 use cgp::core::error::ProvideErrorType;
+use cgp::core::field::Index;
 use cgp::prelude::*;
 pub use hermes_relayer_components::build::traits::builders::birelay_builder::{
     BiRelayBuilderComponent, CanBuildBiRelay,
@@ -17,7 +18,6 @@ use hermes_relayer_components::components::default::build::DefaultBuildComponent
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
 };

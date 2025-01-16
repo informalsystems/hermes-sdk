@@ -1,6 +1,7 @@
 use core::fmt::Display;
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -10,7 +11,6 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::multi::types::index::Index;
 
 use crate::traits::any_counterparty::HasAnyCounterparty;
 use crate::traits::build::{CanLoadBuilder, HasBuilderType};

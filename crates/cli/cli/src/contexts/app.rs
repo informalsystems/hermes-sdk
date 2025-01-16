@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 use cgp::core::component::{UseContext, UseDelegate};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::WithField;
+use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
@@ -89,7 +89,6 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc::core::client::types::Height;

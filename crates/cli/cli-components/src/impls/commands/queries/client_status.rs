@@ -1,6 +1,7 @@
 use core::fmt::Display;
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_error::traits::wrap::CanWrapError;
 use hermes_logging_components::traits::has_logger::HasLogger;
@@ -23,7 +24,6 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::timestamp::CanMeasureTime;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 use serde::Serialize;
 
 use crate::traits::build::CanLoadBuilder;

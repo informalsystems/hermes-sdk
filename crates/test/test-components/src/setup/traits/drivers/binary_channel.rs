@@ -1,10 +1,10 @@
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::HasBoundedRelayTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 
 use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
 use crate::setup::traits::driver::HasTestDriverType;

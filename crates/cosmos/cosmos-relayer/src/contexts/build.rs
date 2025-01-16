@@ -7,7 +7,7 @@ use std::fs::{self, File};
 use std::str::FromStr;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::{UseField, WithField};
+use cgp::core::field::{Index, UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use eyre::{eyre, Report};
@@ -24,7 +24,6 @@ use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCac
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAtComponent, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAtComponent};
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;

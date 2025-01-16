@@ -1,5 +1,6 @@
 use std::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use hermes_error::traits::wrap::CanWrapError;
@@ -9,7 +10,6 @@ use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::CommandRunner;

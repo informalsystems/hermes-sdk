@@ -1,11 +1,11 @@
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use ibc::core::channel::types::channel::Order;
 use ibc::core::channel::types::Version;

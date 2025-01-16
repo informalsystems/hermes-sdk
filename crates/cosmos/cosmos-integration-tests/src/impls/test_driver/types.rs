@@ -1,3 +1,4 @@
+use cgp::core::field::Index;
 use cgp::prelude::Async;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -7,7 +8,6 @@ use hermes_relayer_components::multi::traits::birelay_at::{
 };
 use hermes_relayer_components::multi::traits::chain_at::{HasChainTypeAt, ProvideChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, ProvideRelayTypeAt};
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use hermes_test_components::driver::traits::types::relay_driver_at::ProvideRelayDriverTypeAt;
 
