@@ -14,6 +14,9 @@ use hermes_cli_components::impls::commands::client::create::{
 use hermes_cli_components::impls::commands::client::update::{
     RunUpdateClientCommand, UpdateClientArgs,
 };
+use hermes_cli_components::impls::commands::connection::create::{
+    CreateConnectionArgs, RunCreateConnectionCommand,
+};
 use hermes_cli_components::impls::commands::queries::balance::{
     QueryBalanceArgs, RunQueryBalanceCommand,
 };
@@ -63,9 +66,7 @@ use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, Bootstr
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, BuilderTypeComponent, CanLoadBuilder,
 };
-use hermes_cli_components::traits::command::{
-    CanRunCommand, CommandRunner, CommandRunnerComponent,
-};
+use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_components::traits::config::config_path::ConfigPathGetterComponent;
 use hermes_cli_components::traits::config::load_config::{CanLoadConfig, ConfigLoaderComponent};
 use hermes_cli_components::traits::config::write_config::{CanWriteConfig, ConfigWriterComponent};
@@ -198,6 +199,11 @@ delegate_components! {
         (CreateClientArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateClientArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
 
+        (CreateConnectionArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
+        (CreateConnectionArgs, symbol!("target_client_id")): ParseFromString<ClientId>,
+        (CreateConnectionArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
+        (CreateConnectionArgs, symbol!("counterparty_client_id")): ParseFromString<ClientId>,
+
         (UpdateClientArgs, symbol!("host_chain_id")): ParseFromString<ChainId>,
         (UpdateClientArgs, symbol!("client_id")): ParseFromString<ClientId>,
         (UpdateClientArgs, symbol!("counterparty_client_id")): ParseFromString<ClientId>,
@@ -218,6 +224,7 @@ delegate_components! {
         QueryConsensusStateArgs: RunQueryConsensusStateCommand,
 
         CreateClientArgs: RunCreateClientCommand,
+        CreateConnectionArgs: RunCreateConnectionCommand,
         UpdateClientArgs: RunUpdateClientCommand,
 
         BootstrapSubCommand: RunBootstrapSubCommand,
@@ -297,6 +304,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<QueryChainStatusArgs>
     + CanRunCommand<QueryBalanceArgs>
     + CanRunCommand<CreateClientArgs>
+    + CanRunCommand<CreateConnectionArgs>
     + CanRunCommand<UpdateClientArgs>
     + CanRunCommand<BootstrapChainArgs>
     + CanRunCommand<QueryChannelSubCommand>
@@ -309,7 +317,3 @@ pub trait CanUseHermesApp:
 }
 
 impl CanUseHermesApp for HermesApp {}
-
-pub trait CanRunQueryClientsCommand: CommandRunner<HermesApp, QueryClientsArgs> {}
-
-impl CanRunQueryClientsCommand for RunQueryClientsCommand {}
