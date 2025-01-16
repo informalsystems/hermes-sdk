@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_chain_components::traits::types::message::HasMessageType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -33,7 +33,7 @@ where
     Relay: HasLogger
         + HasTargetChains<Target, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>
         + HasTargetClientIds<Target>
-        + HasErrorType,
+        + HasAsyncErrorType,
     InUpdateClient: TargetUpdateClientMessageBuilder<Relay, Target>,
     CounterpartyChain: HasConsensusStateType<TargetChain> + HasHeightType,
     TargetChain: CanQueryConsensusStateWithLatestHeight<CounterpartyChain> + HasMessageType,

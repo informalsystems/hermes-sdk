@@ -11,7 +11,7 @@ use crate::traits::types::commitment::value::HasCommitmentValueType;
   context: Chain,
 }]
 pub trait CanVerifyCommitment<Counterparty, Tag>:
-    HasErrorType
+    HasAsyncErrorType
     + HasCommitmentPathType<Tag>
     + HasCommitmentValueType<Tag>
     + HasCommitmentProofType<Tag>

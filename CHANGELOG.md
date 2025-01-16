@@ -2,6 +2,10 @@
 
 ## v0.2.0 (pre-release)
 
+- Update `cgp` to v0.3.1 - [#527](https://github.com/informalsystems/hermes-sdk/pull/527)
+  - The default `Async` bound in `HasErrorType::Error` has been removed. To work with async code, all occurances of `HasErrorType` and `CanRaiseError` inside Hermes SDK is replaced with `HasAsyncErrorType` and `CanRaiseAsyncError`.
+  - The `Index` type in Hermes SDK is replaced with the same `Index` type provided from `cgp`.
+
 -  Update `cgp` crate to v0.2.0 - [#491](https://github.com/informalsystems/hermes-sdk/pull/491)
     - For a full list of changes, refer to [contextgeneric/cgp#42](https://github.com/contextgeneric/cgp/pull/42)
       and the `cgp` [changelog](https://github.com/contextgeneric/cgp/blob/v0.2.0/CHANGELOG.md#v020-2025-12-08).

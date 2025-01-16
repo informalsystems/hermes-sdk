@@ -1,6 +1,6 @@
 use core::fmt::Display;
 
-use cgp::core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
@@ -37,7 +37,7 @@ where
         + HasChannelIdType<Counterparty, ChannelId: Display>
         + HasPortIdType<Counterparty, PortId: Display>
         + HasInitChannelOptionsType<Counterparty, InitChannelOptions = CosmosInitChannelOptions>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasPortIdType<Chain, PortId: Display>,
     Chain::Message: From<CosmosMessage>,
 {
@@ -84,7 +84,7 @@ where
     Chain: HasMessageType
         + HasChannelIdType<Counterparty, ChannelId: Display>
         + HasPortIdType<Counterparty, PortId: Display>
-        + CanRaiseError<ClientError>,
+        + CanRaiseAsyncError<ClientError>,
     Counterparty: HasChannelIdType<Chain, ChannelId: Display>
         + HasPortIdType<Chain, PortId: Display>
         + HasChannelOpenTryPayloadType<
@@ -151,7 +151,7 @@ where
     Chain: HasMessageType
         + HasChannelIdType<Counterparty, ChannelId: Display>
         + HasPortIdType<Counterparty, PortId: Display>
-        + CanRaiseError<ClientError>,
+        + CanRaiseAsyncError<ClientError>,
     Counterparty: HasChannelIdType<Chain, ChannelId: Display>
         + HasPortIdType<Chain, PortId: Display>
         + HasChannelOpenAckPayloadType<
@@ -196,7 +196,7 @@ where
     Chain: HasMessageType
         + HasChannelIdType<Counterparty, ChannelId: Display>
         + HasPortIdType<Counterparty, PortId: Display>
-        + CanRaiseError<ClientError>,
+        + CanRaiseAsyncError<ClientError>,
     Counterparty: HasChannelOpenConfirmPayloadType<
             Chain,
             ChannelOpenConfirmPayload = ChannelOpenConfirmPayload<Counterparty>,

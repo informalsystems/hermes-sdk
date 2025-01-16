@@ -1,7 +1,7 @@
 use core::str::FromStr;
 use core::time::Duration;
 
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_relayer_components::chain::traits::send_message::MessageSender;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
@@ -22,7 +22,7 @@ where
     Chain: Solomachine
         + HasMessageType<Message = SolomachineMessage>
         + HasMessageResponseType<MessageResponse = Vec<SolomachineEvent>>
-        + HasErrorType,
+        + HasAsyncErrorType,
 {
     async fn send_messages(
         chain: &Chain,

@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_test_components::chain::traits::types::amount::{
     HasAmountType, ProvideAmountMethods, ProvideAmountType,
 };
@@ -22,7 +22,7 @@ where
 
 impl<ChainDriver> ProvideAmountMethods<ChainDriver> for ProvideU128AmountWithDenom
 where
-    ChainDriver: HasAmountType<Amount = Amount> + CanRaiseError<&'static str>,
+    ChainDriver: HasAmountType<Amount = Amount> + CanRaiseAsyncError<&'static str>,
 {
     fn add_amount(current: &Amount, amount: &Amount) -> Result<Amount, ChainDriver::Error> {
         if current.denom != amount.denom {

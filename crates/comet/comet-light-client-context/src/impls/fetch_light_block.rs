@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_comet_light_client_components::traits::fetch_light_block::LightBlockFetcher;
 use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
@@ -16,8 +16,8 @@ where
         + HasLightBlockType<LightBlock = LightBlock>
         + HasRpcClient
         + HasPeerId
-        + CanRaiseError<tendermint::Error>
-        + CanRaiseError<RpcError>,
+        + CanRaiseAsyncError<tendermint::Error>
+        + CanRaiseAsyncError<RpcError>,
 {
     async fn fetch_light_block(
         client: &Client,

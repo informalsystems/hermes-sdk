@@ -14,7 +14,7 @@ pub trait CanBuildUnescrowPayload<Counterparty, App>:
     + HasPayloadDataType<Counterparty, App>
     + HasIbcMessageHeaderType<Counterparty>
     + HasIbcMessageType<Counterparty, App>
-    + HasErrorType
+    + HasAsyncErrorType
 where
     Counterparty: HasAmountType,
 {

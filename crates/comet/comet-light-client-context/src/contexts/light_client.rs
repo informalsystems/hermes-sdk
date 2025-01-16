@@ -1,6 +1,6 @@
 use cgp::core::component::{UseContext, UseDelegate};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::types::impls::WithDelegatedType;
+use cgp::core::types::WithDelegatedType;
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::height::{HasHeightType, HeightTypeComponent};
 use hermes_comet_light_client_components::impls::verify_target_height::verify_forward::DoVerifyForward;

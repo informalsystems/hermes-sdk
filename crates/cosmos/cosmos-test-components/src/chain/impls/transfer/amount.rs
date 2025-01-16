@@ -1,6 +1,6 @@
 use std::string::FromUtf8Error;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverter;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
@@ -17,7 +17,7 @@ impl<Chain, Counterparty> IbcTransferredAmountConverter<Chain, Counterparty>
     for ConvertCosmosIbcAmount
 where
     Chain: HasAmountType<Amount = Amount, Denom = Denom>
-        + CanRaiseError<FromUtf8Error>
+        + CanRaiseAsyncError<FromUtf8Error>
         + HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>,
     Counterparty: HasAmountType<Amount = Amount>,
 {

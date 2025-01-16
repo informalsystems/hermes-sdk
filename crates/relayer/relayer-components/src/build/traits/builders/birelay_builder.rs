@@ -17,7 +17,7 @@ pub trait CanBuildBiRelay<A, B>:
     + HasChainTypeAt<B, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, A>>>
     + HasRelayTypeAt<A, B>
     + HasRelayTypeAt<B, A>
-    + HasErrorType
+    + HasAsyncErrorType
 where
     ChainAt<Self, A>: HasClientIdType<ChainAt<Self, B>>,
     ChainAt<Self, B>: HasClientIdType<ChainAt<Self, A>>,

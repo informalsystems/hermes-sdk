@@ -11,7 +11,7 @@ use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 }]
 #[async_trait]
 pub trait CanGenerateWalletConfigs:
-    HasChainGenesisConfigType + HasWalletConfigType + HasErrorType
+    HasChainGenesisConfigType + HasWalletConfigType + HasAsyncErrorType
 {
     async fn generate_wallet_configs(
         &self,

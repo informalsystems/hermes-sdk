@@ -8,7 +8,7 @@ use crate::transaction::traits::types::signer::HasSignerType;
   context: TxContext,
 }]
 #[async_trait]
-pub trait CanAllocateNonce: HasNonceGuard + HasSignerType + HasErrorType {
+pub trait CanAllocateNonce: HasNonceGuard + HasSignerType + HasAsyncErrorType {
     async fn allocate_nonce<'a>(
         &'a self,
         signer: &'a Self::Signer,

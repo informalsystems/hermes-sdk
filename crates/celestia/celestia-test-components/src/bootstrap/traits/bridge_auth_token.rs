@@ -14,7 +14,7 @@ use crate::bridge_driver::traits::bridge_auth_token::{BridgeAuthTokenOf, HasBrid
 }]
 #[async_trait]
 pub trait CanGenerateBridgeAuthToken:
-    HasRuntimeType + HasChainType + HasBridgeDriverType + HasErrorType
+    HasRuntimeType + HasChainType + HasBridgeDriverType + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
     Self::Chain: HasChainIdType,

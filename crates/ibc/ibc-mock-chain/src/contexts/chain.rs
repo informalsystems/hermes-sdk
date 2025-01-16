@@ -227,7 +227,7 @@ impl<Chain: Async, Counterparty: Async> Default for MockChainState<Chain, Counte
 pub type MockChainA = MockChain<ChainA, ChainB>;
 pub type MockChainB = MockChain<ChainB, ChainA>;
 
-pub trait CanUseMockChain: HasErrorType<Error = String>
+pub trait CanUseMockChain: HasAsyncErrorType<Error = String>
     + HasHeightType<Height = Tagged<ChainA, ChainB, MockHeight>>
     + HasTimeType<Time = Tagged<ChainA, ChainB, MockHeight>>
     + HasAddressType<Address = Tagged<ChainA, ChainB, MockAddress>>

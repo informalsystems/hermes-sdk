@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
@@ -28,7 +28,7 @@ pub struct BuildCosmosPacketMessages;
 impl<Chain, Counterparty> ReceivePacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosPacketMessages
 where
-    Chain: HasMessageType + CanRaiseError<ClientError>,
+    Chain: HasMessageType + CanRaiseAsyncError<ClientError>,
     Counterparty: HasReceivePacketPayloadType<
             Chain,
             ReceivePacketPayload = ReceivePacketPayload<Counterparty>,
@@ -65,7 +65,7 @@ impl<Chain, Counterparty> AckPacketMessageBuilder<Chain, Counterparty> for Build
 where
     Chain: HasMessageType
         + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
-        + CanRaiseError<ClientError>,
+        + CanRaiseAsyncError<ClientError>,
     Counterparty: HasAckPacketPayloadType<Chain, AckPacketPayload = AckPacketPayload<Counterparty, Chain>>
         + HasHeightFields
         + HasCommitmentProofBytes
@@ -101,7 +101,7 @@ impl<Chain, Counterparty> TimeoutUnorderedPacketMessageBuilder<Chain, Counterpar
 where
     Chain: HasMessageType
         + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
-        + CanRaiseError<ClientError>,
+        + CanRaiseAsyncError<ClientError>,
     Counterparty: HasTimeoutUnorderedPacketPayloadType<
             Chain,
             TimeoutUnorderedPacketPayload = TimeoutUnorderedPacketPayload<Counterparty>,

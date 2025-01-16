@@ -10,7 +10,7 @@ use crate::chain::traits::types::wallet::HasWalletType;
 }]
 #[async_trait]
 pub trait CanLocalTransferToken:
-    HasWalletType + HasAddressType + HasAmountType + HasErrorType
+    HasWalletType + HasAddressType + HasAmountType + HasAsyncErrorType
 {
     async fn local_transfer_token(
         &self,

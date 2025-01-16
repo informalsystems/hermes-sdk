@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
@@ -25,7 +25,7 @@ where
         + HasSchemaType<Schema = &'static str>
         + CanDecode<ViaProtobuf, TendermintConsensusState>
         + HasSchema<TendermintConsensusState>
-        + CanRaiseError<UnknownConsensusStateType>,
+        + CanRaiseAsyncError<UnknownConsensusStateType>,
     ConsensusState: From<AnyConsensusState>,
 {
     fn convert(encoding: &Encoding, any: &Any) -> Result<ConsensusState, Encoding::Error> {
@@ -50,7 +50,7 @@ where
         + CanDecode<Strategy, TendermintConsensusState>
         + CanDecode<Strategy, Any>
         + HasSchema<TendermintConsensusState>
-        + CanRaiseError<UnknownConsensusStateType>,
+        + CanRaiseAsyncError<UnknownConsensusStateType>,
     ConsensusState: From<AnyConsensusState>,
 {
     fn decode(encoding: &Encoding, encoded: &Vec<u8>) -> Result<ConsensusState, Encoding::Error> {

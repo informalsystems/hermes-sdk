@@ -21,7 +21,7 @@ pub trait CanQueryClientState<Counterparty>:
     HasClientIdType<Counterparty>
     + CanUseCounterparty<Counterparty, Counterparty: HasClientStateType<Self>>
     + HasHeightType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn query_client_state(
         &self,
@@ -37,7 +37,7 @@ pub trait CanQueryClientState<Counterparty>:
 }]
 #[async_trait]
 pub trait CanQueryClientStateWithProofs<Counterparty>:
-    HasHeightType + HasClientIdType<Counterparty> + HasCommitmentProofType + HasErrorType
+    HasHeightType + HasClientIdType<Counterparty> + HasCommitmentProofType + HasAsyncErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
@@ -55,7 +55,7 @@ where
 }]
 #[async_trait]
 pub trait CanQueryRawClientState<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasRawClientStateType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasRawClientStateType + HasAsyncErrorType
 {
     async fn query_raw_client_state(
         &self,
@@ -74,7 +74,7 @@ pub trait CanQueryRawClientStateWithProofs<Counterparty>:
     + HasHeightType
     + HasRawClientStateType
     + HasCommitmentProofType
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn query_raw_client_state_with_proofs(
         &self,
@@ -89,7 +89,7 @@ pub trait CanQueryRawClientStateWithProofs<Counterparty>:
 }]
 #[async_trait]
 pub trait CanQueryAllClientStates<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasAsyncErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
@@ -105,7 +105,7 @@ where
 }]
 #[async_trait]
 pub trait CanQueryAllRawClientStates<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasRawClientStateType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasRawClientStateType + HasAsyncErrorType
 {
     async fn query_all_raw_client_states(
         &self,
@@ -115,7 +115,7 @@ pub trait CanQueryAllRawClientStates<Counterparty>:
 
 #[async_trait]
 pub trait CanQueryClientStateWithLatestHeight<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasAsyncErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
@@ -145,7 +145,7 @@ where
 
 #[async_trait]
 pub trait CanQueryAllClientStatesWithLatestHeight<Counterparty>:
-    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasAsyncErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
@@ -172,7 +172,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ClientStateQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasHeightType + HasClientIdType<Counterparty> + HasErrorType,
+    Chain: HasHeightType + HasClientIdType<Counterparty> + HasAsyncErrorType,
     Counterparty: HasClientStateType<Chain>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
     Delegate: ClientStateQuerier<Chain, Counterparty>,
@@ -190,7 +190,8 @@ where
 impl<Chain, Counterparty, Components, Delegate> ClientStateWithProofsQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasHeightType + HasClientIdType<Counterparty> + HasCommitmentProofType + HasErrorType,
+    Chain:
+        HasHeightType + HasClientIdType<Counterparty> + HasCommitmentProofType + HasAsyncErrorType,
     Counterparty: HasClientStateType<Chain>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
     Delegate: ClientStateWithProofsQuerier<Chain, Counterparty>,
@@ -208,7 +209,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> AllClientStatesQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasClientIdType<Counterparty> + HasHeightType + HasErrorType,
+    Chain: HasClientIdType<Counterparty> + HasHeightType + HasAsyncErrorType,
     Counterparty: HasClientStateType<Chain>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
     Delegate: AllClientStatesQuerier<Chain, Counterparty>,

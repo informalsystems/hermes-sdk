@@ -10,7 +10,7 @@ use crate::transaction::traits::types::tx_response::HasTxResponseType;
   context: Chain,
 }]
 pub trait CanParseTxMessageResponse:
-    HasTxResponseType + HasMessageResponseType + HasErrorType
+    HasTxResponseType + HasMessageResponseType + HasAsyncErrorType
 {
     fn parse_tx_message_response(
         response: Self::TxResponse,

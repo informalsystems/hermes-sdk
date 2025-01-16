@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
@@ -12,7 +12,7 @@ pub struct EncodeU64ProtoField<const TAG: u32>;
 impl<Encoding, Strategy, Value, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
     for EncodeU64ProtoField<TAG>
 where
-    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + CanRaiseError<Value::Error>,
+    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + CanRaiseAsyncError<Value::Error>,
     Value: Clone + TryInto<u64>,
 {
     fn encode_mut(
@@ -34,8 +34,9 @@ where
 impl<Encoding, Strategy, Value, const TAG: u32> MutDecoder<Encoding, Strategy, Value>
     for EncodeU64ProtoField<TAG>
 where
-    Encoding:
-        HasProtoChunksDecodeBuffer + CanRaiseError<InvalidWireType> + CanRaiseError<Value::Error>,
+    Encoding: HasProtoChunksDecodeBuffer
+        + CanRaiseAsyncError<InvalidWireType>
+        + CanRaiseAsyncError<Value::Error>,
     Value: TryFrom<u64>,
 {
     fn decode_mut(

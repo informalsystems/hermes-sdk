@@ -1,4 +1,4 @@
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use hermes_cosmos_chain_components::types::payloads::client::CosmosUpdateClientPayload;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -15,7 +15,7 @@ impl<Chain, Counterparty> UpdateClientMessageBuilder<Chain, Counterparty>
 where
     Chain: HasMessageType<Message = SolomachineMessage>
         + HasIbcChainTypes<Counterparty, ClientId = ClientId>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty:
         HasUpdateClientPayloadType<Chain, UpdateClientPayload = CosmosUpdateClientPayload>,
 {

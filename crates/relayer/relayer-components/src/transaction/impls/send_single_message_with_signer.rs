@@ -8,7 +8,7 @@ use crate::transaction::traits::types::signer::HasSignerType;
 
 #[async_trait]
 pub trait CanSendSingleMessageWithSigner:
-    HasSignerType + HasMessageType + HasMessageResponseType + HasErrorType
+    HasSignerType + HasMessageType + HasMessageResponseType + HasAsyncErrorType
 {
     async fn send_message_with_signer(
         &self,
@@ -19,7 +19,7 @@ pub trait CanSendSingleMessageWithSigner:
 
 impl<Chain> CanSendSingleMessageWithSigner for Chain
 where
-    Chain: CanSendMessagesWithSigner + CanRaiseError<EmptyMessageResponse>,
+    Chain: CanSendMessagesWithSigner + CanRaiseAsyncError<EmptyMessageResponse>,
 {
     async fn send_message_with_signer(
         &self,

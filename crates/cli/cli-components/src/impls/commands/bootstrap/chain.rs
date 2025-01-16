@@ -33,15 +33,15 @@ where
         + HasConfigPath
         + CanLoadConfig
         + CanWriteConfig
-        + CanRaiseError<Bootstrap::Error>
-        + CanRaiseError<Runtime::Error>
-        + CanRaiseError<ChainDriver::Error>
+        + CanRaiseAsyncError<Bootstrap::Error>
+        + CanRaiseAsyncError<Runtime::Error>
+        + CanRaiseAsyncError<ChainDriver::Error>
         + CanWrapError<&'static str>,
     Bootstrap: CanBootstrapChain<ChainDriver = ChainDriver>,
     ChainDriver: HasChain<Chain = Chain>
         + HasRuntime<Runtime = Runtime>
         + CanTakeChainProcess
-        + HasErrorType,
+        + HasAsyncErrorType,
     UpdateConfig: ConfigUpdater<ChainDriver, App::Config>,
     Chain: HasChainId,
     Runtime: CanWaitChildProcess + HasFilePathType<FilePath = PathBuf>,

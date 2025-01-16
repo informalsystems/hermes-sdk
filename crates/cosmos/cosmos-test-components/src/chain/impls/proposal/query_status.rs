@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerier;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
@@ -26,11 +26,11 @@ where
     Chain: HasProposalIdType<ProposalId = u64>
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasGrpcAddress
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<Status>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<String>
-        + for<'a> CanRaiseError<ProposalFailed<'a, Chain>>,
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<Status>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<String>
+        + for<'a> CanRaiseAsyncError<ProposalFailed<'a, Chain>>,
 {
     async fn query_proposal_status(
         chain: &Chain,

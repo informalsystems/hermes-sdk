@@ -1,7 +1,7 @@
 use core::str::{from_utf8, FromStr, Utf8Error};
 use std::num::ParseIntError;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_cosmos_chain_components::types::event::AbciEvent;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
@@ -21,9 +21,9 @@ where
         + CanSendSingleMessage
         + HasMessageResponseEvents
         + HasProposalIdType<ProposalId = u64>
-        + CanRaiseError<Utf8Error>
-        + CanRaiseError<ParseIntError>
-        + CanRaiseError<ProposalIdNotFound>,
+        + CanRaiseAsyncError<Utf8Error>
+        + CanRaiseAsyncError<ParseIntError>
+        + CanRaiseAsyncError<ProposalIdNotFound>,
     Chain::Event: AsRef<AbciEvent>,
 {
     async fn upload_wasm_client_code(

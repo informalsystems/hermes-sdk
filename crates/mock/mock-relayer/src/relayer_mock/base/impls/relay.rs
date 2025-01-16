@@ -2,8 +2,8 @@ use alloc::vec::Vec;
 use std::vec;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::impls::use_field::{UseField, WithField};
-use cgp::core::types::impls::WithType;
+use cgp::core::field::{UseField, WithField};
+use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeAtComponent,

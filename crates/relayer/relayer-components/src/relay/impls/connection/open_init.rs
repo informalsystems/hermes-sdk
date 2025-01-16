@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenInitPayload;
@@ -28,7 +28,7 @@ impl<Relay, SrcChain, DstChain> ConnectionInitializer<Relay> for InitializeConne
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasRelayClientIds
-        + for<'a> CanRaiseError<MissingConnectionInitEventError<'a, Relay>>
+        + for<'a> CanRaiseAsyncError<MissingConnectionInitEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
     SrcChain: CanSendSingleMessage
         + HasInitConnectionOptionsType<DstChain>

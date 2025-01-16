@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 
 use crate::impls::encode_mut::chunk::{
@@ -19,8 +19,8 @@ impl<Encoding, Strategy, Value, InEncoder, const TAG: u32> MutDecoder<Encoding, 
 where
     Encoding: CanDecodeProtoChunks
         + HasProtoChunksDecodeBuffer
-        + CanRaiseError<RequiredFieldTagNotFound>
-        + CanRaiseError<InvalidWireType>,
+        + CanRaiseAsyncError<RequiredFieldTagNotFound>
+        + CanRaiseAsyncError<InvalidWireType>,
     InEncoder: MutDecoder<Encoding, Strategy, Value>,
 {
     fn decode_mut(

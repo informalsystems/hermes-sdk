@@ -13,7 +13,7 @@ use crate::traits::types::create_client::{
 pub trait CanBuildCreateClientPayload<Counterparty>:
     HasCreateClientPayloadOptionsType<Counterparty>
     + HasCreateClientPayloadType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_create_client_payload(
         &self,
@@ -26,7 +26,7 @@ impl<Chain, Counterparty, Components, Delegate> CreateClientPayloadBuilder<Chain
 where
     Chain: HasCreateClientPayloadOptionsType<Counterparty>
         + HasCreateClientPayloadType<Counterparty>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
     Delegate: CreateClientPayloadBuilder<Chain, Counterparty>,
 {

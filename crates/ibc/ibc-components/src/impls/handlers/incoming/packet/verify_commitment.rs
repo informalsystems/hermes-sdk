@@ -23,7 +23,7 @@ impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for VerifySendPacketCommitmentProof<InHandler>
 where
     Chain: CanQueryConsensusState<Counterparty>
-        + CanRaiseError<Counterparty::Error>
+        + CanRaiseAsyncError<Counterparty::Error>
         + CanQueryClientIdFromChannelId<Counterparty>,
     Counterparty: HasHeightType
         + HasCommitmentProofHeight<SendPacket>

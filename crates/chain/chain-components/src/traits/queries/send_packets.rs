@@ -21,7 +21,7 @@ pub trait CanQuerySendPackets<Counterparty>:
     + HasPortIdType<Counterparty>
     + HasSequenceType<Counterparty>
     + HasOutgoingPacketType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasChannelIdType<Self> + HasPortIdType<Self>>
 {
     /// Given a list of sequences, a channel and port will query a list of outgoing
@@ -51,7 +51,7 @@ pub trait CanQuerySendPacket<Counterparty>:
     + HasPortIdType<Counterparty>
     + HasSequenceType<Counterparty>
     + HasOutgoingPacketType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasChannelIdType<Self> + HasPortIdType<Self>>
 {
     /// Given a list of sequences, a channel and port will query a list of outgoing

@@ -5,7 +5,7 @@ use cgp::prelude::*;
   context: Setup,
 }]
 #[async_trait]
-pub trait CanRunTest<Test>: Async + HasErrorType
+pub trait CanRunTest<Test>: Async + HasAsyncErrorType
 where
     Test: Async,
 {

@@ -4,13 +4,15 @@ use cgp::prelude::*;
 use crate::relay::traits::chains::types::HasRelayChainTypes;
 
 pub trait CanRaiseRelayChainErrors:
-    HasRelayChainTypes + CanRaiseError<ErrorOf<Self::SrcChain>> + CanRaiseError<ErrorOf<Self::DstChain>>
+    HasRelayChainTypes
+    + CanRaiseAsyncError<ErrorOf<Self::SrcChain>>
+    + CanRaiseAsyncError<ErrorOf<Self::DstChain>>
 {
 }
 
 impl<Relay> CanRaiseRelayChainErrors for Relay where
     Relay: HasRelayChainTypes
-        + CanRaiseError<ErrorOf<Self::SrcChain>>
-        + CanRaiseError<ErrorOf<Self::DstChain>>
+        + CanRaiseAsyncError<ErrorOf<Self::SrcChain>>
+        + CanRaiseAsyncError<ErrorOf<Self::DstChain>>
 {
 }

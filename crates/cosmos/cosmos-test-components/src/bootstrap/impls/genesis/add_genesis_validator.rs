@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
@@ -20,7 +20,7 @@ impl<Bootstrap, Runtime, Chain> GenesisValidatorAdder<Bootstrap> for AddCosmosGe
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
-        + CanRaiseError<Runtime::Error>
+        + CanRaiseAsyncError<Runtime::Error>
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
     Chain: HasChainIdType + HasAmountType,

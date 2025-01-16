@@ -90,7 +90,7 @@ where
 
 impl<Runtime> ChannelUser<Runtime> for ProvideUnboundedChannelType
 where
-    Runtime: HasUnboundedChannelType + CanRaiseError<ChannelClosedError>,
+    Runtime: HasUnboundedChannelType + CanRaiseAsyncError<ChannelClosedError>,
 {
     async fn send<T>(sender: &Runtime::Sender<T>, value: T) -> Result<(), Runtime::Error>
     where

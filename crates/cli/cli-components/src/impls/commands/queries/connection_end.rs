@@ -1,12 +1,12 @@
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::CommandRunner;
@@ -53,8 +53,8 @@ where
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("connection_id"), Parsed = Chain::ConnectionId>
         + CanParseArg<Args, symbol!("height"), Parsed = Option<Chain::Height>>
-        + CanRaiseError<Build::Error>
-        + CanRaiseError<Chain::Error>,
+        + CanRaiseAsyncError<Build::Error>
+        + CanRaiseAsyncError<Chain::Error>,
     Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
     Chain: HasChainIdType + CanQueryChainHeight + CanQueryConnectionEnd<Counterparty>,
     Args: Async,

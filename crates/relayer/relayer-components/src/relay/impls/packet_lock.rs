@@ -2,7 +2,7 @@ use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
-use cgp::core::field::impls::use_field::UseField;
+use cgp::core::field::UseField;
 use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence, HasPacketSrcChannelId,
@@ -46,9 +46,11 @@ where
         + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>,
     SrcChain: HasChannelIdType<DstChain, ChannelId: Ord + Clone>
         + HasPortIdType<DstChain, PortId: Ord + Clone>
-        + HasSequenceType<DstChain, Sequence: Ord + Clone>,
+        + HasSequenceType<DstChain, Sequence: Ord + Clone>
+        + HasAsyncErrorType,
     DstChain: HasChannelIdType<SrcChain, ChannelId: Ord + Clone>
-        + HasPortIdType<SrcChain, PortId: Ord + Clone>,
+        + HasPortIdType<SrcChain, PortId: Ord + Clone>
+        + HasAsyncErrorType,
     Runtime: HasMutex,
 {
     type PacketKey = (
@@ -100,9 +102,11 @@ where
         + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>,
     SrcChain: HasChannelIdType<DstChain, ChannelId: Ord + Clone>
         + HasPortIdType<DstChain, PortId: Ord + Clone>
-        + HasSequenceType<DstChain, Sequence: Ord + Clone>,
+        + HasSequenceType<DstChain, Sequence: Ord + Clone>
+        + HasAsyncErrorType,
     DstChain: HasChannelIdType<SrcChain, ChannelId: Ord + Clone>
-        + HasPortIdType<SrcChain, PortId: Ord + Clone>,
+        + HasPortIdType<SrcChain, PortId: Ord + Clone>
+        + HasAsyncErrorType,
     Runtime: HasMutex,
 {
 }

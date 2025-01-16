@@ -1,7 +1,7 @@
+use cgp::core::field::Index;
 use cgp::prelude::*;
 
 use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
-use crate::multi::types::index::Index;
 
 /// Trait for types that have a two-way relay context, i.e.,
 /// those that can relay in both directions between two connected

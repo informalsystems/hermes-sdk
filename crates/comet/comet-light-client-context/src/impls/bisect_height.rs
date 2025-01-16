@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_comet_light_client_components::traits::compute_verification_height::NextVerificationHeightComputer;
 use hermes_comet_light_client_components::traits::light_block::height::HasLightBlockHeight;
@@ -15,8 +15,8 @@ where
     Client: HasHeightType<Height = Height>
         + HasLightBlockHeight
         + CanQueryLightBlock<GetHighestTrustedOrVerifiedBefore>
-        + CanRaiseError<NoInitialTrustedState>
-        + CanRaiseError<tendermint::Error>,
+        + CanRaiseAsyncError<NoInitialTrustedState>
+        + CanRaiseAsyncError<tendermint::Error>,
 {
     fn compute_next_verification_height(
         client: &Client,

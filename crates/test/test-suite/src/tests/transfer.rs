@@ -1,6 +1,7 @@
 use alloc::format;
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
@@ -8,7 +9,6 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
@@ -30,7 +30,7 @@ pub struct TestIbcTransfer;
 impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB, RelayDriver, Logger> TestCase<Driver>
     for TestIbcTransfer
 where
-    Driver: HasErrorType
+    Driver: HasAsyncErrorType
         + HasLogger<Logger = Logger>
         + HasChainTypeAt<Index<0>, Chain = ChainA>
         + HasChainTypeAt<Index<1>, Chain = ChainB>

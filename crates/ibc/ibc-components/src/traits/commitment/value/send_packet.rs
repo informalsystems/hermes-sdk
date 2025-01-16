@@ -9,7 +9,7 @@ use crate::types::tags::commitment::send::SendPacket;
   context: Chain,
 }]
 pub trait CanBuildSendPacketCommitmentValue<Counterparty>:
-    HasPacketType<Counterparty> + HasCommitmentValueType<SendPacket> + HasErrorType
+    HasPacketType<Counterparty> + HasCommitmentValueType<SendPacket> + HasAsyncErrorType
 {
     // Note: this may be called by the counterparty chain, thus the lack of access to &self.
     fn build_send_packet_commitment_value(

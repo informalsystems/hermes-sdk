@@ -1,4 +1,4 @@
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
 
 use crate::traits::packet::fields::{
@@ -33,7 +33,7 @@ where
         + HasClientStateType<Counterparty>
         + CanQueryPacketCommitment<Counterparty>
         + HasCommitmentProofHeight
-        + HasErrorType,
+        + HasAsyncErrorType,
 {
     async fn build_receive_packet_payload(
         chain: &Chain,
@@ -74,7 +74,7 @@ where
         + CanQueryPacketAcknowledgement<Counterparty>
         + CanIncrementHeight
         + HasCommitmentProofHeight
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty:
         HasPacketDstChannelId<Chain> + HasPacketDstPortId<Chain> + HasPacketSequence<Chain>,
     Chain::Acknowledgement: Clone,
@@ -120,7 +120,7 @@ where
         + CanQueryPacketReceipt<Counterparty>
         + HasCommitmentProofHeight
         + HasCommitmentProofType
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty:
         HasPacketDstChannelId<Chain> + HasPacketDstPortId<Chain> + HasPacketSequence<Chain>,
 {

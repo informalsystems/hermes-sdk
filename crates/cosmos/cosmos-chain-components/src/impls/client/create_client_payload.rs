@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
 use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
@@ -40,11 +40,11 @@ where
         + HasChainId<ChainId = ChainId>
         + CanQueryChainHeight<Height = Height>
         + CanQueryChainStatus<ChainStatus = ChainStatus>
-        + CanRaiseError<TendermintError>
-        + CanRaiseError<TendermintRpcError>
-        + CanRaiseError<TendermintClientError>
-        + CanRaiseError<String>
-        + CanRaiseError<HermesError>,
+        + CanRaiseAsyncError<TendermintError>
+        + CanRaiseAsyncError<TendermintRpcError>
+        + CanRaiseAsyncError<TendermintClientError>
+        + CanRaiseAsyncError<String>
+        + CanRaiseAsyncError<HermesError>,
 {
     async fn build_create_client_payload(
         chain: &Chain,

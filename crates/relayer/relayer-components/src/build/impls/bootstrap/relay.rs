@@ -34,7 +34,7 @@ pub trait CanBootstrapRelay<Src, Dst>:
         Chain: HasChainIdType
                    + HasCreateClientPayloadOptionsType<ChainAt<Self, Src>>
                    + HasCreateClientMessageOptionsType<ChainAt<Self, Src>>,
-    > + HasErrorType
+    > + HasAsyncErrorType
 {
     async fn bootstrap_relay(
         &self,
@@ -53,7 +53,7 @@ where
     Build: CanBuildRelay<Src, Dst, Relay = Relay>
         + CanBuildChain<Src, Chain = SrcChain>
         + CanBuildChain<Dst, Chain = DstChain>
-        + CanRaiseError<Relay::Error>,
+        + CanRaiseAsyncError<Relay::Error>,
     Relay: HasRelayClientIds
         + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
         + HasSourceTargetChainTypes
@@ -64,11 +64,11 @@ where
     SrcChain: HasCreateClientPayloadOptionsType<DstChain>
         + HasCreateClientMessageOptionsType<DstChain>
         + HasIbcChainTypes<DstChain>
-        + HasErrorType,
+        + HasAsyncErrorType,
     DstChain: HasCreateClientPayloadOptionsType<SrcChain>
         + HasCreateClientMessageOptionsType<SrcChain>
         + HasIbcChainTypes<SrcChain>
-        + HasErrorType,
+        + HasAsyncErrorType,
 {
     async fn bootstrap_relay(
         &self,

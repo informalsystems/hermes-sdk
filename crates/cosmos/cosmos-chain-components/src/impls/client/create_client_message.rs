@@ -23,7 +23,7 @@ impl<Chain, Counterparty, Encoding, Payload> CreateClientMessageBuilder<Chain, C
 where
     Chain: HasMessageType<Message = CosmosMessage>
         + HasCreateClientMessageOptionsType<Counterparty>
-        + CanRaiseError<Encoding::Error>,
+        + CanRaiseAsyncError<Encoding::Error>,
     Counterparty: HasCreateClientPayloadType<Chain, CreateClientPayload = Payload>
         + HasClientStateType<Chain>
         + HasConsensusStateType<Chain>

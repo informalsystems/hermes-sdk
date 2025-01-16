@@ -8,7 +8,7 @@ use crate::traits::output::HasOutputType;
   context: App,
 }]
 #[async_trait]
-pub trait CanRunCommand<Args>: HasOutputType + HasErrorType
+pub trait CanRunCommand<Args>: HasOutputType + HasAsyncErrorType
 where
     Args: Async,
 {
@@ -17,7 +17,7 @@ where
 
 impl<App, Args, Components, Delegate> CommandRunner<App, Args> for UseDelegate<Components>
 where
-    App: HasOutputType + HasErrorType,
+    App: HasOutputType + HasAsyncErrorType,
     Components: DelegateComponent<Args, Delegate = Delegate>,
     Delegate: CommandRunner<App, Args>,
     Args: Async,

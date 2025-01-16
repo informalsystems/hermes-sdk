@@ -10,7 +10,7 @@ use crate::traits::types::chain_id::HasChainIdType;
 }]
 #[async_trait]
 pub trait CanQueryCounterpartyChainId<Counterparty>:
-    HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasErrorType
+    HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasChainIdType,
 {

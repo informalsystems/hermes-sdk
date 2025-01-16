@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
@@ -22,9 +22,9 @@ impl<Bootstrap, Runtime, Chain> GenesisAccountAdder<Bootstrap> for LegacyAddCosm
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
-        + HasErrorType
+        + HasAsyncErrorType
         + HasChainCommandPath
-        + CanRaiseError<Runtime::Error>,
+        + CanRaiseAsyncError<Runtime::Error>,
     Runtime: HasFilePathType + CanExecCommand,
     Chain: HasAmountType + HasAddressType,
 {

@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
@@ -22,7 +22,7 @@ where
         + HasChainDriverType<ChainDriver = ChainDriver>
         + HasBridgeConfigType<BridgeConfig = CelestiaBridgeConfig>
         + HasRuntime<Runtime = Runtime>
-        + CanRaiseError<Runtime::Error>,
+        + CanRaiseAsyncError<Runtime::Error>,
     ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime>,
     Chain: HasChainId<ChainId = ChainId>,
     Runtime: HasFilePathType + CanStartChildProcess + CanSleep,

@@ -11,7 +11,10 @@ use hermes_relayer_components::multi::traits::relay_at::HasBoundedRelayTypeAt;
 }]
 #[async_trait]
 pub trait CanSetupChannel<A: Async, B: Async>:
-    HasBiRelayTypeAt<A, B> + HasBoundedRelayTypeAt<A, B> + HasBoundedRelayTypeAt<B, A> + HasErrorType
+    HasBiRelayTypeAt<A, B>
+    + HasBoundedRelayTypeAt<A, B>
+    + HasBoundedRelayTypeAt<B, A>
+    + HasAsyncErrorType
 where
     ChainAt<Self, A>: HasIbcChainTypes<ChainAt<Self, B>>,
     ChainAt<Self, B>: HasIbcChainTypes<ChainAt<Self, A>>,

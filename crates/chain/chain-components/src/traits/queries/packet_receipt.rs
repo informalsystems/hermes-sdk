@@ -20,7 +20,7 @@ pub trait CanQueryPacketReceipt<Counterparty>:
     + HasPortIdType<Counterparty>
     + HasPacketReceiptType<Counterparty>
     + HasCommitmentProofType
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasSequenceType<Self>>
 {
     async fn query_packet_receipt(

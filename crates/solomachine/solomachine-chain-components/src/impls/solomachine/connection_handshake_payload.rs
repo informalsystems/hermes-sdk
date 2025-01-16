@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
@@ -46,7 +46,7 @@ where
             ConnectionOpenInitPayload = SolomachineConnectionOpenInitPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + HasErrorType,
+        + HasAsyncErrorType,
 {
     async fn build_connection_open_init_payload(
         chain: &Chain,
@@ -79,7 +79,7 @@ where
         + CanQueryConsensusState<Counterparty>
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + CanRaiseError<String>,
+        + CanRaiseAsyncError<String>,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>
         + HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
         + HasHeightType<Height = Height>,
@@ -177,7 +177,7 @@ where
         + CanQueryConsensusState<Counterparty>
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + CanRaiseError<String>,
+        + CanRaiseAsyncError<String>,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>
         + HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
         + HasHeightType<Height = Height>,
@@ -277,7 +277,7 @@ where
         > + CanQueryClientState<Counterparty>
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
 {
     async fn build_connection_open_confirm_payload(

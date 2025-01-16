@@ -21,7 +21,7 @@ impl<Chain, Counterparty, App, MintHandler, UnescrowHandler>
     IncomingPayloadHandler<Chain, Counterparty, App>
     for DispatchMintOrUnescrow<MintHandler, UnescrowHandler>
 where
-    Chain: HasErrorType + HasAmountType + HasAddressType,
+    Chain: HasAsyncErrorType + HasAmountType + HasAddressType,
     Counterparty: HasAmountType
         + HasPacketHeaderType<Chain>
         + HasPayloadHeaderType<Chain>

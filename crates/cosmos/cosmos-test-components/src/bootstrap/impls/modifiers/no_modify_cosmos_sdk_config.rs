@@ -1,4 +1,4 @@
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use toml::Value;
 
 use crate::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifier;
@@ -7,7 +7,7 @@ pub struct NoModifyCosmosSdkConfig;
 
 impl<Bootstrap> CosmosSdkConfigModifier<Bootstrap> for NoModifyCosmosSdkConfig
 where
-    Bootstrap: HasErrorType,
+    Bootstrap: HasAsyncErrorType,
 {
     fn modify_cosmos_sdk_config(
         _bootstrap: &Bootstrap,

@@ -6,6 +6,6 @@ use crate::traits::types::height::HasHeightType;
   provider: HeightIncrementer,
   context: Chain,
 }]
-pub trait CanIncrementHeight: HasHeightType + HasErrorType {
+pub trait CanIncrementHeight: HasHeightType + HasAsyncErrorType {
     fn increment_height(height: &Self::Height) -> Result<Self::Height, Self::Error>;
 }

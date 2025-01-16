@@ -1,5 +1,5 @@
 use cgp::core::Async;
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 
 use crate::impls::queries::eip::feemarket::QueryEipFromFeeMarket;
 use crate::impls::queries::eip::osmosis::OsmosisQueryEip;
@@ -13,7 +13,7 @@ impl<Chain> EipQuerier<Chain> for DispatchQueryEip
 where
     QueryEipFromFeeMarket: EipQuerier<Chain>,
     OsmosisQueryEip: EipQuerier<Chain>,
-    Chain: HasErrorType + Async,
+    Chain: HasAsyncErrorType + Async,
 {
     async fn query_eip_base_fee(
         chain: &Chain,

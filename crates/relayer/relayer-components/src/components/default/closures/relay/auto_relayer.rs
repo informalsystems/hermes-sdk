@@ -1,5 +1,5 @@
 use cgp::core::component::HasComponents;
-use cgp::core::error::{ErrorRaiser, HasErrorType};
+use cgp::core::error::{ErrorRaiser, HasAsyncErrorType};
 use cgp::extra::run::CanRun;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::stream::CanMapStream;
@@ -31,8 +31,8 @@ where
         + HasTargetChains<DestinationTarget>
         + UseDefaultEventRelayer
         + HasComponents<Components = Components>,
-    SrcChain: HasEventSubscription + HasErrorType,
-    DstChain: HasEventSubscription + HasErrorType,
+    SrcChain: HasEventSubscription + HasAsyncErrorType,
+    DstChain: HasEventSubscription + HasAsyncErrorType,
     Relay::Runtime: CanRunConcurrentTasks,
     SrcChain::Runtime: HasSubscription + CanRunConcurrentTasks + CanMapStream,
     DstChain::Runtime: HasSubscription + CanRunConcurrentTasks + CanMapStream,

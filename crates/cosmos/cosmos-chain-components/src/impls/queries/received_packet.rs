@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseAsyncError;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -15,8 +15,8 @@ where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
         + HasGrpcAddress
         + CanQueryUnreceivedPacketSequences<Counterparty>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<Status>,
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<Status>,
     Counterparty: HasIbcChainTypes<Chain, Sequence = Sequence>,
 {
     async fn query_packet_is_received(

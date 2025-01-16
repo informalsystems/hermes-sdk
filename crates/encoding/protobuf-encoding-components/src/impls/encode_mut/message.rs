@@ -1,4 +1,4 @@
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
@@ -16,7 +16,7 @@ pub struct EncodeProstMessage;
 impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Value> for EncodeProstMessage
 where
     Value: Message,
-    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasErrorType,
+    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasAsyncErrorType,
 {
     fn encode_mut(
         _encoding: &Encoding,
@@ -32,7 +32,7 @@ where
 impl<Encoding, Strategy, Value> MutDecoder<Encoding, Strategy, Value> for EncodeProstMessage
 where
     Value: Message + Default,
-    Encoding: CanDecodeProtoChunks + HasProtoChunksDecodeBuffer + CanRaiseError<DecodeError>,
+    Encoding: CanDecodeProtoChunks + HasProtoChunksDecodeBuffer + CanRaiseAsyncError<DecodeError>,
 {
     fn decode_mut(
         _encoding: &Encoding,

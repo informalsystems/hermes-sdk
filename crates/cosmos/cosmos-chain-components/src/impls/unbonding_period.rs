@@ -17,8 +17,8 @@ where
     Chain: CanQueryChainHeight
         + CanQueryAbci
         + HasHeightType<Height = Height>
-        + CanRaiseError<&'static str>
-        + CanRaiseError<DecodeError>,
+        + CanRaiseAsyncError<&'static str>
+        + CanRaiseAsyncError<DecodeError>,
 {
     async fn query_unbonding_period(chain: &Chain) -> Result<Duration, Chain::Error> {
         let latest_height = chain.query_chain_height().await?;

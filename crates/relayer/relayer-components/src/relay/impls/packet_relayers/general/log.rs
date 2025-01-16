@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -20,7 +20,7 @@ where
 
 pub enum RelayPacketStatus<'a, Relay>
 where
-    Relay: HasErrorType,
+    Relay: HasAsyncErrorType,
 {
     Start,
     Successful,

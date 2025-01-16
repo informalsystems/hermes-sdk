@@ -9,7 +9,7 @@ pub struct ParseFromString<Parsed>(pub PhantomData<Parsed>);
 
 impl<App, Args, Tag, Parsed> ArgParser<App, Args, Tag> for ParseFromString<Parsed>
 where
-    App: CanRaiseError<Parsed::Err>,
+    App: CanRaiseAsyncError<Parsed::Err>,
     Args: HasField<Tag, Value = String>,
     Parsed: Async + FromStr,
 {
@@ -26,7 +26,7 @@ pub struct ParseFromOptionalString<Parsed>(pub PhantomData<Parsed>);
 
 impl<App, Args, Tag, Parsed> ArgParser<App, Args, Tag> for ParseFromOptionalString<Parsed>
 where
-    App: CanRaiseError<Parsed::Err>,
+    App: CanRaiseAsyncError<Parsed::Err>,
     Args: HasField<Tag, Value = Option<String>>,
     Parsed: Async + FromStr,
 {

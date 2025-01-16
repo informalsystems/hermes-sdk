@@ -1,4 +1,4 @@
-use cgp::prelude::{CanRaiseError, HasComponents};
+use cgp::prelude::{CanRaiseAsyncError, HasComponents};
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -36,8 +36,8 @@ where
         + UseExtraIbcMessageSender
         + HasRetryableError
         + HasMaxErrorRetry
-        + CanRaiseError<EmptyMessageResponse>
-        + for<'a> CanRaiseError<MaxRetryExceededError<'a, Relay>>
+        + CanRaiseAsyncError<EmptyMessageResponse>
+        + for<'a> CanRaiseAsyncError<MaxRetryExceededError<'a, Relay>>
         + HasComponents<Components = Components>,
     SrcChain: HasOutgoingPacketType<DstChain> + UseExtraChainComponentsForPacketRelayer<DstChain>,
     DstChain: UseExtraChainComponentsForPacketRelayer<SrcChain>

@@ -1,4 +1,4 @@
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
@@ -15,8 +15,8 @@ pub struct BuildCosmosUpdateClientMessage;
 impl<Chain, Counterparty> UpdateClientMessageBuilder<Chain, Counterparty>
     for BuildCosmosUpdateClientMessage
 where
-    Chain:
-        HasIbcChainTypes<Counterparty, ClientId = ClientId, Message = CosmosMessage> + HasErrorType,
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Message = CosmosMessage>
+        + HasAsyncErrorType,
     Counterparty:
         HasUpdateClientPayloadType<Chain, UpdateClientPayload = CosmosUpdateClientPayload>,
 {

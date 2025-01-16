@@ -1,6 +1,6 @@
 use core::num::ParseIntError;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerier;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
@@ -22,12 +22,12 @@ where
     Chain: HasAddressType
         + HasAmountType<Amount = Amount, Denom = Denom>
         + HasGrpcAddress
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<ParseIntError>
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<Status>
-        + CanRaiseError<String>,
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<ParseIntError>
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<Status>
+        + CanRaiseAsyncError<String>,
 {
     async fn query_balance(
         chain: &Chain,

@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::Async;
-use cgp::prelude::{HasErrorType, HasField};
+use cgp::prelude::{HasAsyncErrorType, HasField};
 use hermes_relayer_components::chain::traits::packet::fields::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSrcChannelId, HasPacketSrcPortId,
 };
@@ -23,7 +23,7 @@ where
         + HasPortIdType<Counterparty, PortId = PortId>
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
         + HasField<Tag, Value = PacketFilterConfig>
-        + HasErrorType,
+        + HasAsyncErrorType,
 {
     async fn should_relay_outgoing_packet(
         chain: &Chain,
@@ -43,7 +43,7 @@ where
         + HasField<Tag, Value = PacketFilterConfig>
         + HasPortIdType<Counterparty, PortId = PortId>
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasPacketDstChannelId<Chain> + HasPacketDstPortId<Chain>,
 {
     async fn should_relay_incoming_packet(

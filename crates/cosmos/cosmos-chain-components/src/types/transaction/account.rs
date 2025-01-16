@@ -25,11 +25,11 @@ pub async fn query_account<Chain>(
 ) -> Result<Account, Chain::Error>
 where
     Chain: HasGrpcAddress
-        + CanRaiseError<DecodeError>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<Status>
-        + CanRaiseError<String>,
+        + CanRaiseAsyncError<DecodeError>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<Status>
+        + CanRaiseAsyncError<String>,
 {
     let mut client = QueryClient::connect(
         Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,

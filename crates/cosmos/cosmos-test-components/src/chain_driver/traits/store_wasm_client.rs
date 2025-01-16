@@ -7,7 +7,7 @@ use hermes_runtime_components::traits::runtime::HasRuntimeType;
   context: ChainDriver,
 }]
 #[async_trait]
-pub trait CanUploadWasmClientCode: HasRuntimeType + HasErrorType
+pub trait CanUploadWasmClientCode: HasRuntimeType + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
 {

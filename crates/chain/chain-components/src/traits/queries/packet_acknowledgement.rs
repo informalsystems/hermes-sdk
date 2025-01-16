@@ -20,7 +20,7 @@ pub trait CanQueryPacketAcknowledgement<Counterparty>:
     + HasPortIdType<Counterparty>
     + HasAcknowledgementType<Counterparty>
     + HasCommitmentProofType
-    + HasErrorType
+    + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasSequenceType<Self>>
 {
     async fn query_packet_acknowledgement(

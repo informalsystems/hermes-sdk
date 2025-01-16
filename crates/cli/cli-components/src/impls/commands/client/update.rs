@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -14,7 +15,6 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
 use hermes_relayer_components::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
@@ -74,21 +74,21 @@ where
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
         + CanParseArg<Args, symbol!("counterparty_client_id"), Parsed = Counterparty::ClientId>
         + CanParseArg<Args, symbol!("target_height"), Parsed = Option<Counterparty::Height>>
-        + CanRaiseError<Builder::Error>
-        + CanRaiseError<Chain::Error>
-        + CanRaiseError<Counterparty::Error>
-        + CanRaiseError<Relay::Error>,
+        + CanRaiseAsyncError<Builder::Error>
+        + CanRaiseAsyncError<Chain::Error>
+        + CanRaiseAsyncError<Counterparty::Error>
+        + CanRaiseAsyncError<Relay::Error>,
     Builder: CanBuildChain<Index<0>, Chain = Chain>
         + CanBuildChain<Index<1>, Chain = Counterparty>
         + CanBuildRelay<Index<0>, Index<1>, Relay = Relay>,
-    Chain: HasChainIdType + CanQueryClientStateWithLatestHeight<Counterparty> + HasErrorType,
+    Chain: HasChainIdType + CanQueryClientStateWithLatestHeight<Counterparty> + HasAsyncErrorType,
     Counterparty: HasChainIdType
         + HasClientStateType<Chain>
         + HasClientIdType<Chain>
         + HasHeightType
         + HasClientStateFields<Chain>
         + CanQueryChainHeight
-        + HasErrorType,
+        + HasAsyncErrorType,
     Relay: HasRelayChains<SrcChain = Chain, DstChain = Counterparty>
         + HasSourceTargetChainTypes
         + HasRelayClientIds

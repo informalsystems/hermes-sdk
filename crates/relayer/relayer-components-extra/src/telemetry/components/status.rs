@@ -1,4 +1,4 @@
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_relayer_components::chain::traits::queries::chain_status::*;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 
@@ -13,7 +13,7 @@ impl<InQuerier, Chain, Telemetry> ChainStatusQuerier<Chain>
     for ChainStatusTelemetryQuerier<InQuerier>
 where
     InQuerier: ChainStatusQuerier<Chain>,
-    Chain: HasChainStatusType + HasTelemetry<Telemetry = Telemetry> + HasErrorType,
+    Chain: HasChainStatusType + HasTelemetry<Telemetry = Telemetry> + HasAsyncErrorType,
     Telemetry: HasMetric<TelemetryCounter>,
     Telemetry::Value: From<u64>,
 {

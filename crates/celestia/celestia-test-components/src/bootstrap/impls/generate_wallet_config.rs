@@ -20,7 +20,7 @@ where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>
         + HasChainType<Chain = Chain>
         + HasChainGenesisConfigType
-        + HasErrorType
+        + HasAsyncErrorType
         + HasGenesisDenom<DenomForStaking>
         + HasGenesisDenom<DenomForTransfer>,
     Chain: HasDenomType<Denom = Denom>,

@@ -1,11 +1,12 @@
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
+
 use crate::multi::traits::chain_at::{
     ChainGetterAt, HasChainAt, HasChainTypeAt, ProvideChainTypeAt,
 };
 use crate::multi::traits::client_id_at::{ClientIdAtGetter, HasClientIdAt};
 use crate::multi::traits::relay_at::ClientIdAt;
-use crate::multi::types::index::Index;
 use crate::multi::types::tags::{Dst, Src};
 
 pub struct SelectRelayChains<SrcTag, DstTag>(pub PhantomData<(SrcTag, DstTag)>);

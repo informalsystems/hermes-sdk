@@ -1,5 +1,5 @@
 use cgp::core::component::WithProvider;
-use cgp::core::types::traits::ProvideType;
+use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_component {
@@ -18,7 +18,7 @@ pub type BuilderOf<Context> = <Context as HasBuilderType>::Builder;
   context: App,
 }]
 #[async_trait]
-pub trait CanLoadBuilder: HasBuilderType + HasErrorType {
+pub trait CanLoadBuilder: HasBuilderType + HasAsyncErrorType {
     async fn load_builder(&self) -> Result<Self::Builder, Self::Error>;
 }
 

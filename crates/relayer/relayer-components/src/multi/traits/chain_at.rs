@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
-use cgp::core::field::impls::use_field::UseField;
-use cgp::core::types::traits::ProvideType;
+use cgp::core::field::UseField;
+use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 use crate::chain::types::aliases::ChainIdOf;

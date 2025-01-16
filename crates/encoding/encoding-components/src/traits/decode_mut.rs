@@ -6,7 +6,7 @@ use crate::traits::types::decode_buffer::HasDecodeBufferType;
   provider: MutDecoder,
   context: Encoding,
 }]
-pub trait CanDecodeMut<Strategy, Value>: HasDecodeBufferType + HasErrorType {
+pub trait CanDecodeMut<Strategy, Value>: HasDecodeBufferType + HasAsyncErrorType {
     fn decode_mut<'a>(&self, buffer: &mut Self::DecodeBuffer<'a>) -> Result<Value, Self::Error>;
 }
 

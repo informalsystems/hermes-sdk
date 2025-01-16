@@ -14,7 +14,7 @@ pub trait CanBuildTimeoutUnorderedPacketPayload<Counterparty>:
     HasTimeoutUnorderedPacketPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasHeightType
-    + HasErrorType
+    + HasAsyncErrorType
 where
     Counterparty: HasOutgoingPacketType<Self>,
 {

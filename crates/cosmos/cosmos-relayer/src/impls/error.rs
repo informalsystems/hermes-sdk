@@ -83,12 +83,12 @@ pub trait CanHandleCosmosError<Context>:
     + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, MaxRetryExceededError<'a, Context>>
 where
-    Context: HasErrorType<Error = Error>,
+    Context: HasAsyncErrorType<Error = Error>,
 {
 }
 
 impl<Context> CanHandleCosmosError<Context> for HandleCosmosError where
-    Context: HasErrorType<Error = Error>
+    Context: HasAsyncErrorType<Error = Error>
 {
 }
 
@@ -183,7 +183,7 @@ delegate_components! {
             WrapError<String, Error>,
         ]:
             WrapErrorDetail,
-        <'a, Context: HasErrorType> MaxRetryExceededError<'a, Context>:
+        <'a, Context: HasAsyncErrorType> MaxRetryExceededError<'a, Context>:
             UnwrapMaxRetryExceededError,
     }
 }

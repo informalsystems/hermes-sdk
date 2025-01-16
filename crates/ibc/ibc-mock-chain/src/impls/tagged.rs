@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::types::traits::ProvideType;
+use cgp::core::types::ProvideType;
 use cgp::core::Async;
 
 use crate::contexts::chain::MockChain;

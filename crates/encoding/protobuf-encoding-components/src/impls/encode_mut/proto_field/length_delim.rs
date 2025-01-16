@@ -1,4 +1,4 @@
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use prost::bytes::BufMut;
@@ -9,7 +9,7 @@ pub struct EncodeLengthDelimitedHeader<const TAG: u32>;
 impl<Encoding, Strategy, const TAG: u32> MutEncoder<Encoding, Strategy, u64>
     for EncodeLengthDelimitedHeader<TAG>
 where
-    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasErrorType,
+    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasAsyncErrorType,
 {
     fn encode_mut(
         _encoding: &Encoding,

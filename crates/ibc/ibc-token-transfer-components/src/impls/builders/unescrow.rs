@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasErrorType;
+use cgp::prelude::HasAsyncErrorType;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
@@ -22,7 +22,7 @@ where
         + HasIbcMessageHeaderType<Counterparty, IbcMessageHeader: Clone>
         + HasIbcMessageType<Counterparty, App>
         + HasMessageTransferReceiver<Counterparty, App>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Counterparty: HasAmountType<Amount: Clone> + HasAddressType<Address: Clone>,
     Chain::PayloadHeader: From<Chain::IbcMessageHeader>,
     Chain::PayloadData: From<IbcTransferUnescrowPayloadData<Chain, Counterparty>>,

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 use serde_json::Value;
 
@@ -9,7 +9,7 @@ pub struct ModifyWasmGenesisConfig<InModifier>(pub PhantomData<InModifier>);
 impl<Bootstrap, InModifier> CosmosGenesisConfigModifier<Bootstrap>
     for ModifyWasmGenesisConfig<InModifier>
 where
-    Bootstrap: CanRaiseError<&'static str>,
+    Bootstrap: CanRaiseAsyncError<&'static str>,
     InModifier: CosmosGenesisConfigModifier<Bootstrap>,
 {
     fn modify_genesis_config(

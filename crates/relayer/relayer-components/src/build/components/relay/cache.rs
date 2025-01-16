@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::HasErrorType;
+use cgp::core::error::HasAsyncErrorType;
 use cgp::core::Async;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
@@ -18,7 +18,7 @@ where
     ChainIdAt<Build, Dst>: Ord + Clone,
     ClientIdAt<Build, Src, Dst>: Ord + Clone,
     ClientIdAt<Build, Dst, Src>: Ord + Clone,
-    Build: HasRelayCache<Src, Dst> + HasErrorType,
+    Build: HasRelayCache<Src, Dst> + HasAsyncErrorType,
     InBuilder: RelayBuilder<Build, Src, Dst>,
     Build::Relay: Clone,
 {

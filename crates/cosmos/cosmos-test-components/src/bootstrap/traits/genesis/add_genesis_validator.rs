@@ -11,7 +11,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
   context: Bootstrap,
 }]
 #[async_trait]
-pub trait CanAddGenesisValidator: HasRuntime + HasChainType + HasErrorType
+pub trait CanAddGenesisValidator: HasRuntime + HasChainType + HasAsyncErrorType
 where
     Self::Runtime: HasFilePathType,
     Self::Chain: HasChainIdType + HasAmountType,

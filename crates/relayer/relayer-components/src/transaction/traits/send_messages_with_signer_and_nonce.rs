@@ -11,7 +11,7 @@ use crate::transaction::traits::types::tx_response::HasTxResponseType;
 }]
 #[async_trait]
 pub trait CanSendMessagesWithSignerAndNonce:
-    HasSignerType + HasNonceType + HasMessageType + HasTxResponseType + HasErrorType
+    HasSignerType + HasNonceType + HasMessageType + HasTxResponseType + HasAsyncErrorType
 {
     async fn send_messages_with_signer_and_nonce(
         &self,

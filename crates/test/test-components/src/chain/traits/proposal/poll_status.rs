@@ -8,7 +8,9 @@ use crate::chain::traits::proposal::types::proposal_status::HasProposalStatusTyp
   context: Chain,
 }]
 #[async_trait]
-pub trait CanPollProposalStatus: HasProposalIdType + HasProposalStatusType + HasErrorType {
+pub trait CanPollProposalStatus:
+    HasProposalIdType + HasProposalStatusType + HasAsyncErrorType
+{
     async fn poll_proposal_status(
         &self,
         proposal_id: &Self::ProposalId,

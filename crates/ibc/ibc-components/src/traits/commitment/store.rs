@@ -9,7 +9,7 @@ use crate::traits::types::commitment::value::HasCommitmentValueType;
 }]
 #[async_trait]
 pub trait CanStoreCommitment<Tag>:
-    HasCommitmentPathType<Tag> + HasCommitmentValueType<Tag> + HasErrorType
+    HasCommitmentPathType<Tag> + HasCommitmentValueType<Tag> + HasAsyncErrorType
 {
     async fn store_commitment(
         &mut self,

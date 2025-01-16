@@ -9,7 +9,7 @@ use crate::types::tags::commitment::receive::ReceivePacket;
   context: Chain,
 }]
 pub trait CanBuildReceivePacketCommitmentValue<Counterparty>:
-    HasCommitmentValueType<ReceivePacket> + HasErrorType
+    HasCommitmentValueType<ReceivePacket> + HasAsyncErrorType
 where
     Counterparty: HasPacketType<Self>,
 {

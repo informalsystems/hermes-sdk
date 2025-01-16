@@ -1,4 +1,5 @@
 use cgp::core::error::ProvideErrorType;
+use cgp::core::field::Index;
 use cgp::prelude::*;
 pub use hermes_relayer_components::build::traits::builders::birelay_builder::{
     BiRelayBuilderComponent, CanBuildBiRelay,
@@ -17,7 +18,6 @@ use hermes_relayer_components::components::default::build::DefaultBuildComponent
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds,
 };
@@ -71,20 +71,20 @@ where
         + HasComponents<Components = Components>,
     RelayAToB: Clone
         + HasRuntimeType
-        + HasErrorType<Error = Error>
+        + HasAsyncErrorType<Error = Error>
         + HasRelayChains<SrcChain = ChainA, DstChain = ChainB>
         + HasRelayClientIds
         + UseBatchMessageWorkerSpawner
         + CanRaiseRelayChainErrors,
     RelayBToA: Clone
         + HasRuntimeType
-        + HasErrorType<Error = Error>
+        + HasAsyncErrorType<Error = Error>
         + HasRelayChains<SrcChain = ChainB, DstChain = ChainA>
         + HasRelayClientIds
         + UseBatchMessageWorkerSpawner
         + CanRaiseRelayChainErrors,
-    ChainA: Clone + HasErrorType + HasRuntime + HasChainId + HasIbcChainTypes<ChainB>,
-    ChainB: Clone + HasErrorType + HasRuntime + HasChainId + HasIbcChainTypes<ChainA>,
+    ChainA: Clone + HasAsyncErrorType + HasRuntime + HasChainId + HasIbcChainTypes<ChainB>,
+    ChainB: Clone + HasAsyncErrorType + HasRuntime + HasChainId + HasIbcChainTypes<ChainA>,
     Error: Async,
     ChainA::ChainId: Ord + Clone,
     ChainB::ChainId: Ord + Clone,
@@ -97,7 +97,7 @@ where
         + BiRelayFromRelayBuilder<Build, Index<0>, Index<1>>
         + RelayWithBatchBuilder<Build, Index<0>, Index<1>>
         + RelayWithBatchBuilder<Build, Index<1>, Index<0>>
-        + ProvideErrorType<Build>,
+        + ProvideErrorType<Build, Error: Async>,
     BaseComponents: Async + ChainBuilder<Build, Index<0>> + ChainBuilder<Build, Index<1>>,
 {
 }

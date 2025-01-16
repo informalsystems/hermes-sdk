@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
@@ -32,23 +32,23 @@ where
         + HasCreateClientPayloadOptionsAt<B, A>
         + HasCreateClientMessageOptionsAt<A, B>
         + HasCreateClientMessageOptionsAt<B, A>
-        + CanRaiseError<Relay::Error>,
+        + CanRaiseAsyncError<Relay::Error>,
     SrcChain: HasClientIdType<DstChain>
         + HasCreateClientPayloadOptionsType<DstChain>
         + HasCreateClientMessageOptionsType<DstChain>
-        + HasErrorType,
+        + HasAsyncErrorType,
     DstChain: HasClientIdType<SrcChain>
         + HasCreateClientPayloadOptionsType<SrcChain>
         + HasCreateClientMessageOptionsType<SrcChain>
-        + HasErrorType,
+        + HasAsyncErrorType,
     Relay: HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
         + HasRelayClientIds
         + HasSourceTargetChainTypes
         + HasDestinationTargetChainTypes
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
-        + CanRaiseError<SrcChain::Error>
-        + CanRaiseError<DstChain::Error>,
+        + CanRaiseAsyncError<SrcChain::Error>
+        + CanRaiseAsyncError<DstChain::Error>,
 {
     async fn setup_clients(
         setup: &Setup,

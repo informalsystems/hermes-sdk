@@ -7,6 +7,6 @@ use cgp::prelude::*;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanQueryUnbondingPeriod: HasErrorType + Async {
+pub trait CanQueryUnbondingPeriod: HasAsyncErrorType + Async {
     async fn query_unbonding_period(&self) -> Result<Duration, Self::Error>;
 }

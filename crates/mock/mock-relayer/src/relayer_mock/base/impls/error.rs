@@ -1,4 +1,4 @@
-use cgp::core::error::{ErrorRaiser, HasErrorType, ProvideErrorType};
+use cgp::core::error::{ErrorRaiser, HasAsyncErrorType, ProvideErrorType};
 use cgp::core::Async;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::send_message::EmptyMessageResponse;
@@ -17,7 +17,7 @@ where
 
 impl<Context> ErrorRaiser<Context, Error> for HandleMockError
 where
-    Context: HasErrorType<Error = Error>,
+    Context: HasAsyncErrorType<Error = Error>,
 {
     fn raise_error(e: Error) -> Error {
         e
@@ -26,7 +26,7 @@ where
 
 impl<Context> ErrorRaiser<Context, EmptyMessageResponse> for HandleMockError
 where
-    Context: HasErrorType<Error = Error>,
+    Context: HasAsyncErrorType<Error = Error>,
 {
     fn raise_error(_e: EmptyMessageResponse) -> Error {
         BaseError::generic(eyre!("empty message response")).into()
@@ -35,7 +35,7 @@ where
 
 impl<Context> ErrorRaiser<Context, TokioRuntimeError> for HandleMockError
 where
-    Context: HasErrorType<Error = Error>,
+    Context: HasAsyncErrorType<Error = Error>,
 {
     fn raise_error(e: TokioRuntimeError) -> Error {
         BaseError::tokio(e).into()

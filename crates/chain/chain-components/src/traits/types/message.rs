@@ -9,7 +9,7 @@ pub use hermes_chain_type_components::traits::types::message::*;
   provider: MessageSizeEstimator,
   context: Chain,
 }]
-pub trait CanEstimateMessageSize: HasMessageType + HasErrorType {
+pub trait CanEstimateMessageSize: HasMessageType + HasAsyncErrorType {
     /**
        Estimate the size of a message after it is encoded into raw bytes
        inside a transaction.

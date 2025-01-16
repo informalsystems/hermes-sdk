@@ -1,12 +1,11 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::field::impls::use_field::WithField;
-use cgp::core::types::impls::WithType;
+use cgp::core::field::{Index, WithField};
+use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_relayer_components::birelay::traits::two_way::TwoWayRelayGetter;
 use hermes_relayer_components::components::default::birelay::*;
 use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 

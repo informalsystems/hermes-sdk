@@ -15,7 +15,9 @@ use crate::traits::types::connection::{
 }]
 #[async_trait]
 pub trait CanBuildConnectionOpenInitPayload<Counterparty>:
-    HasConnectionOpenInitPayloadType<Counterparty> + HasClientStateType<Counterparty> + HasErrorType
+    HasConnectionOpenInitPayloadType<Counterparty>
+    + HasClientStateType<Counterparty>
+    + HasAsyncErrorType
 {
     async fn build_connection_open_init_payload(
         &self,
@@ -34,7 +36,7 @@ pub trait CanBuildConnectionOpenTryPayload<Counterparty>:
     + HasConnectionIdType<Counterparty>
     + HasConnectionOpenTryPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_connection_open_try_payload(
         &self,
@@ -56,7 +58,7 @@ pub trait CanBuildConnectionOpenAckPayload<Counterparty>:
     + HasConnectionIdType<Counterparty>
     + HasConnectionOpenAckPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_connection_open_ack_payload(
         &self,
@@ -78,7 +80,7 @@ pub trait CanBuildConnectionOpenConfirmPayload<Counterparty>:
     + HasConnectionIdType<Counterparty>
     + HasConnectionOpenConfirmPayloadType<Counterparty>
     + HasClientStateType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     async fn build_connection_open_confirm_payload(
         &self,

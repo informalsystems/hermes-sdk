@@ -21,7 +21,8 @@ pub struct MainSink;
 }]
 #[async_trait]
 pub trait CanSendIbcMessages<Sink, Target: RelayTarget>:
-    HasTargetChainTypes<Target, TargetChain: HasMessageType + HasMessageResponseType> + HasErrorType
+    HasTargetChainTypes<Target, TargetChain: HasMessageType + HasMessageResponseType>
+    + HasAsyncErrorType
 {
     async fn send_messages(
         &self,
@@ -32,7 +33,8 @@ pub trait CanSendIbcMessages<Sink, Target: RelayTarget>:
 
 #[async_trait]
 pub trait CanSendSingleIbcMessage<Sink, Target: RelayTarget>:
-    HasTargetChainTypes<Target, TargetChain: HasMessageType + HasMessageResponseType> + HasErrorType
+    HasTargetChainTypes<Target, TargetChain: HasMessageType + HasMessageResponseType>
+    + HasAsyncErrorType
 {
     async fn send_message(
         &self,
@@ -45,9 +47,9 @@ impl<Relay, Sink, Target, TargetChain> CanSendSingleIbcMessage<Sink, Target> for
 where
     Relay: HasTargetChainTypes<Target, TargetChain = TargetChain>
         + CanSendIbcMessages<Sink, Target>
-        + CanRaiseError<EmptyMessageResponse>,
+        + CanRaiseAsyncError<EmptyMessageResponse>,
     Target: RelayTarget,
-    TargetChain: HasIbcChainTypes<Relay::CounterpartyChain> + HasErrorType,
+    TargetChain: HasIbcChainTypes<Relay::CounterpartyChain> + HasAsyncErrorType,
 {
     async fn send_message(
         &self,

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::field::impls::use_field::UseField;
+use cgp::core::field::UseField;
 use cgp::prelude::*;
 
 use crate::driver::traits::types::builder_at::{BuilderTypeAt, HasBuilderTypeAt};

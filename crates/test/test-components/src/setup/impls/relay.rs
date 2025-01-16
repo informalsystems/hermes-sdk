@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{CanRaiseError, ErrorOf};
+use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
+use cgp::core::field::Index;
 use cgp::core::Async;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -9,7 +10,6 @@ use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt
 use hermes_relayer_components::multi::traits::relay_at::{
     HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
 };
-use hermes_relayer_components::multi::types::index::Index;
 
 use crate::setup::traits::builder_at::HasBuilderAt;
 use crate::setup::traits::relay::RelaySetup;
@@ -21,7 +21,7 @@ where
     Setup: HasBoundedRelayTypeAt<A, B>
         + HasBoundedRelayTypeAt<B, A>
         + HasBuilderAt<A, B>
-        + CanRaiseError<ErrorOf<Setup::Builder>>,
+        + CanRaiseAsyncError<ErrorOf<Setup::Builder>>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>> + Clone,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>> + Clone,
     Setup::Builder: CanBuildRelayFromChains<Index<0>, Index<1>>

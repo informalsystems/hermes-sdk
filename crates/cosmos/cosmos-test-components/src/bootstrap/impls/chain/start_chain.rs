@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
@@ -16,11 +16,11 @@ pub struct StartCosmosChain;
 impl<Bootstrap, Runtime> ChainFullNodeStarter<Bootstrap> for StartCosmosChain
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasErrorType
+        + HasAsyncErrorType
         + HasChainCommandPath
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
         + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
-        + CanRaiseError<Runtime::Error>,
+        + CanRaiseAsyncError<Runtime::Error>,
     Runtime: HasFilePathType + CanStartChildProcess,
 {
     async fn start_chain_full_node(

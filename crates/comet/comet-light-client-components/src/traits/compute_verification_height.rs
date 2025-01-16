@@ -5,7 +5,7 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
   provider: NextVerificationHeightComputer,
   context: Client,
 }]
-pub trait CanComputeNextVerificationHeight: HasHeightType + HasErrorType {
+pub trait CanComputeNextVerificationHeight: HasHeightType + HasAsyncErrorType {
     fn compute_next_verification_height(
         &self,
         current_height: &Self::Height,

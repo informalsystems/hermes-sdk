@@ -7,7 +7,7 @@ use cgp::prelude::*;
   provider: ConfigUpdater,
   context: ChainDriver,
 }]
-pub trait CanUpdateConfig<Config>: HasErrorType {
+pub trait CanUpdateConfig<Config>: HasAsyncErrorType {
     fn update_config(&self, config: &mut Config) -> Result<String, Self::Error>;
 }
 

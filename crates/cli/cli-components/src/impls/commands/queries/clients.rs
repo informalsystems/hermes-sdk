@@ -1,6 +1,7 @@
 use core::fmt::Display;
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -11,7 +12,6 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::CommandRunner;
@@ -47,8 +47,8 @@ where
         + CanProduceOutput<Vec<(Chain::ClientId, Counterparty::ClientState)>>
         + CanParseArg<Args, symbol!("host_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("reference_chain_id"), Parsed = Option<Counterparty::ChainId>>
-        + CanRaiseError<Build::Error>
-        + CanRaiseError<Chain::Error>,
+        + CanRaiseAsyncError<Build::Error>
+        + CanRaiseAsyncError<Chain::Error>,
     Build: CanBuildChain<Index<0>, Chain = Chain> + HasChainTypeAt<Index<1>, Chain = Counterparty>,
     Chain: HasChainIdType
         + HasClientIdType<Counterparty>

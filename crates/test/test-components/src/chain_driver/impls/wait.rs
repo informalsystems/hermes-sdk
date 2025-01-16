@@ -14,7 +14,7 @@ pub struct WaitChainReachHeight<const H: u64>;
 impl<ChainDriver, Chain, const H: u64> ChainStartupWaiter<ChainDriver> for WaitChainReachHeight<H>
 where
     ChainDriver:
-        HasChain<Chain = Chain> + HasRuntime<Runtime: CanSleep> + CanRaiseError<&'static str>,
+        HasChain<Chain = Chain> + HasRuntime<Runtime: CanSleep> + CanRaiseAsyncError<&'static str>,
     Chain: CanQueryChainHeight + HasHeightFields,
 {
     async fn wait_chain_startup(chain_driver: &ChainDriver) -> Result<(), ChainDriver::Error> {
@@ -41,7 +41,7 @@ pub struct NoWaitChainStartup;
 
 impl<ChainDriver> ChainStartupWaiter<ChainDriver> for NoWaitChainStartup
 where
-    ChainDriver: Async + HasErrorType,
+    ChainDriver: Async + HasAsyncErrorType,
 {
     async fn wait_chain_startup(_chain_driver: &ChainDriver) -> Result<(), ChainDriver::Error> {
         Ok(())

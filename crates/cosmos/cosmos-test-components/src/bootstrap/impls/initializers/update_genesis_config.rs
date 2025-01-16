@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
@@ -23,10 +23,10 @@ where
         + CanModifyCosmosGenesisConfig
         + HasDenomPrefix<DenomForStaking>
         + HasDenomPrefix<DenomForTransfer>
-        + CanRaiseError<Runtime::Error>
-        + CanRaiseError<JsonError>
+        + CanRaiseAsyncError<Runtime::Error>
+        + CanRaiseAsyncError<JsonError>
         + HasDynamicGas
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<&'static str>,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile,
     Bootstrap::ChainGenesisConfig: From<CosmosGenesisConfig>,
 {

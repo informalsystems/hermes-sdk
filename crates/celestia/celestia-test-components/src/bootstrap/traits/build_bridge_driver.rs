@@ -12,7 +12,7 @@ use crate::bridge_driver::traits::bridge_auth_token::{BridgeAuthTokenOf, HasBrid
 }]
 #[async_trait]
 pub trait CanBuildBridgeDriver:
-    HasBridgeDriverType + HasBridgeConfigType + HasRuntimeType + HasErrorType
+    HasBridgeDriverType + HasBridgeConfigType + HasRuntimeType + HasAsyncErrorType
 where
     Self::Runtime: HasChildProcessType,
     Self::BridgeDriver: HasBridgeAuthTokenType,

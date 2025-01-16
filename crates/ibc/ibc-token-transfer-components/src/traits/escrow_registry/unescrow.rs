@@ -18,7 +18,7 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 }]
 #[async_trait]
 pub trait CanRegisterUnescrowToken<Counterparty>:
-    HasAmountType + HasChannelIdType<Counterparty> + HasAppIdType<Counterparty> + HasErrorType
+    HasAmountType + HasChannelIdType<Counterparty> + HasAppIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasChannelIdType<Self> + HasAppIdType<Self>,
 {

@@ -12,7 +12,7 @@ pub struct EncodeByteField<const TAG: u32>;
 impl<Encoding, Strategy, Value, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
     for EncodeByteField<TAG>
 where
-    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasErrorType,
+    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasAsyncErrorType,
     EncodeLengthDelimitedHeader<TAG>: MutEncoder<Encoding, Strategy, u64>,
     Value: AsRef<[u8]>,
 {
@@ -39,8 +39,8 @@ impl<Encoding, Strategy, Value, const TAG: u32> MutDecoder<Encoding, Strategy, V
     for EncodeByteField<TAG>
 where
     Encoding: HasProtoChunksDecodeBuffer
-        + CanRaiseError<InvalidWireType>
-        + for<'a> CanRaiseError<<Value as TryFrom<&'a [u8]>>::Error>,
+        + CanRaiseAsyncError<InvalidWireType>
+        + for<'a> CanRaiseAsyncError<<Value as TryFrom<&'a [u8]>>::Error>,
     Value: Default + for<'a> TryFrom<&'a [u8]>,
 {
     fn decode_mut(

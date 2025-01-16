@@ -7,7 +7,7 @@
 
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 
 use crate::chain::traits::types::message::HasMessageType;
 use crate::transaction::traits::encode_tx::TxEncoder;
@@ -22,7 +22,7 @@ pub struct MaxTxSizeExceededError {
     pub given_tx_size: usize,
 }
 
-pub trait HasMaxTxSizeExceededError: CanRaiseError<MaxTxSizeExceededError> {
+pub trait HasMaxTxSizeExceededError: CanRaiseAsyncError<MaxTxSizeExceededError> {
     fn try_extract_max_tx_size_exceeded_error(e: Self::Error) -> Option<MaxTxSizeExceededError>;
 }
 

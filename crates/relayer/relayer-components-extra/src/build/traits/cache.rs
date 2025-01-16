@@ -2,7 +2,7 @@ use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
-use cgp::core::field::impls::use_field::UseField;
+use cgp::core::field::UseField;
 use cgp::core::Async;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;

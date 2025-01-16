@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -17,7 +18,6 @@ use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};

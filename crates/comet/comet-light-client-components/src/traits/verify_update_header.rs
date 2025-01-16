@@ -7,7 +7,7 @@ use crate::traits::types::verdict::HasVerdictType;
   provider: UpdateHeaderVerifier,
   context: Client,
 }]
-pub trait CanVerifyUpdateHeader: HasLightBlockType + HasVerdictType + HasErrorType {
+pub trait CanVerifyUpdateHeader: HasLightBlockType + HasVerdictType + HasAsyncErrorType {
     fn verify_update_header(
         &self,
         untrusted_block: &Self::LightBlock,

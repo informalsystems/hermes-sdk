@@ -1,4 +1,4 @@
-use cgp::core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc::core::client::types::error::ClientError;
@@ -14,12 +14,12 @@ pub struct QueryCosmosChainStatus;
 
 impl<Chain> ChainStatusQuerier<Chain> for QueryCosmosChainStatus
 where
-    Chain: HasErrorType
+    Chain: HasAsyncErrorType
         + HasChainStatusType<ChainStatus = ChainStatus>
         + HasRpcClient
-        + CanRaiseError<TendermintRpcError>
-        + CanRaiseError<ClientError>
-        + CanRaiseError<IdentifierError>,
+        + CanRaiseAsyncError<TendermintRpcError>
+        + CanRaiseAsyncError<ClientError>
+        + CanRaiseAsyncError<IdentifierError>,
 {
     async fn query_chain_status(chain: &Chain) -> Result<ChainStatus, Chain::Error> {
         let rpc_client = chain.rpc_client();

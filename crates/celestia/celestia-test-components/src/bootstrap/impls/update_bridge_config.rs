@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::HasGrpcPort;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;
 use hermes_relayer_components::chain::traits::queries::block::CanQueryBlock;
@@ -26,11 +26,11 @@ where
         + HasChainType<Chain = Chain>
         + HasChainDriverType<ChainDriver = ChainDriver>
         + HasBridgeConfigType
-        + CanRaiseError<Chain::Error>
-        + CanRaiseError<Runtime::Error>
-        + CanRaiseError<toml::de::Error>
-        + CanRaiseError<toml::ser::Error>
-        + CanRaiseError<&'static str>,
+        + CanRaiseAsyncError<Chain::Error>
+        + CanRaiseAsyncError<Runtime::Error>
+        + CanRaiseAsyncError<toml::de::Error>
+        + CanRaiseAsyncError<toml::ser::Error>
+        + CanRaiseAsyncError<&'static str>,
     Runtime: CanReadFileAsString + CanWriteStringToFile + CanReserveTcpPort,
     Chain: HasChainId + HasGenesisHeight + CanQueryBlock + HasBlockHash,
     ChainDriver: HasChain<Chain = Chain> + HasRpcPort + HasGrpcPort,

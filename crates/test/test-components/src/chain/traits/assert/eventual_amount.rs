@@ -8,7 +8,7 @@ use crate::chain::traits::types::amount::HasAmountType;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanAssertEventualAmount: HasAddressType + HasAmountType + HasErrorType {
+pub trait CanAssertEventualAmount: HasAddressType + HasAmountType + HasAsyncErrorType {
     async fn assert_eventual_amount(
         &self,
         address: &Self::Address,

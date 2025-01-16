@@ -28,8 +28,8 @@ where
         + CanRelayConnectionOpenTry
         + CanRelayConnectionOpenAck
         + CanRelayConnectionOpenConfirm,
-    SrcChain: HasIbcChainTypes<DstChain> + HasErrorType,
-    DstChain: HasIbcChainTypes<SrcChain> + HasErrorType,
+    SrcChain: HasIbcChainTypes<DstChain> + HasAsyncErrorType,
+    DstChain: HasIbcChainTypes<SrcChain> + HasAsyncErrorType,
 {
     async fn relay_connection_open_handshake(
         relay: &Relay,

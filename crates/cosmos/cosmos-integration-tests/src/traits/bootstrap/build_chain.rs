@@ -10,7 +10,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 }]
 #[async_trait]
 pub trait CanBuildChainWithNodeConfig:
-    HasChainType + HasChainNodeConfigType + HasChainGenesisConfigType + HasChainType + HasErrorType
+    HasChainType + HasChainNodeConfigType + HasChainGenesisConfigType + HasChainType + HasAsyncErrorType
 where
     Self::Chain: HasWalletType,
 {

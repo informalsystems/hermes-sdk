@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
-use cgp::prelude::{DelegateComponent, HasErrorType};
+use cgp::prelude::{DelegateComponent, HasAsyncErrorType};
 
 use crate::traits::convert::Converter;
 use crate::traits::decode::Decoder;
@@ -17,7 +17,7 @@ use crate::traits::types::schema::HasSchemaType;
 impl<Encoding, Strategy, Value, Components, Delegate> Encoder<Encoding, Strategy, Value>
     for UseDelegate<Components>
 where
-    Encoding: HasEncodedType + HasErrorType,
+    Encoding: HasEncodedType + HasAsyncErrorType,
     Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,
     Delegate: Encoder<Encoding, Strategy, Value>,
 {
@@ -29,7 +29,7 @@ where
 impl<Encoding, Strategy, Value, Components, Delegate> Decoder<Encoding, Strategy, Value>
     for UseDelegate<Components>
 where
-    Encoding: HasEncodedType + HasErrorType,
+    Encoding: HasEncodedType + HasAsyncErrorType,
     Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,
     Delegate: Decoder<Encoding, Strategy, Value>,
 {
@@ -41,7 +41,7 @@ where
 impl<Encoding, From, To, Components, Delegate> Converter<Encoding, From, To>
     for UseDelegate<Components>
 where
-    Encoding: HasErrorType,
+    Encoding: HasAsyncErrorType,
     Components: DelegateComponent<(From, To), Delegate = Delegate>,
     Delegate: Converter<Encoding, From, To>,
 {
@@ -65,7 +65,7 @@ where
 impl<Encoding, Strategy, Value, Components, Delegate> MutEncoder<Encoding, Strategy, Value>
     for UseDelegate<Components>
 where
-    Encoding: HasEncodeBufferType + HasErrorType,
+    Encoding: HasEncodeBufferType + HasAsyncErrorType,
     Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,
     Delegate: MutEncoder<Encoding, Strategy, Value>,
 {
@@ -81,7 +81,7 @@ where
 impl<Encoding, Strategy, Value, Components, Delegate> MutDecoder<Encoding, Strategy, Value>
     for UseDelegate<Components>
 where
-    Encoding: HasDecodeBufferType + HasErrorType,
+    Encoding: HasDecodeBufferType + HasAsyncErrorType,
     Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,
     Delegate: MutDecoder<Encoding, Strategy, Value>,
 {

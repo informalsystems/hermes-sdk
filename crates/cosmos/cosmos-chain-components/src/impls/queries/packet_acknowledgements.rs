@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -29,11 +29,11 @@ where
             ChannelId = ChannelId,
             Sequence = Sequence,
         > + HasGrpcAddress
-        + CanRaiseError<InvalidUri>
-        + CanRaiseError<TransportError>
-        + CanRaiseError<DecodingError>
-        + CanRaiseError<Status>
-        + CanRaiseError<eyre::Report>,
+        + CanRaiseAsyncError<InvalidUri>
+        + CanRaiseAsyncError<TransportError>
+        + CanRaiseAsyncError<DecodingError>
+        + CanRaiseAsyncError<Status>
+        + CanRaiseAsyncError<eyre::Report>,
     Counterparty: HasIbcChainTypes<Chain, Sequence = Sequence, Height = Height>,
 {
     async fn query_packet_acknowlegements(

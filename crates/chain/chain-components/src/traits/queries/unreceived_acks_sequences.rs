@@ -14,7 +14,7 @@ pub trait CanQueryUnreceivedAcksSequences<Counterparty>:
     HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
     + HasSequenceType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     /// Performs a query about which IBC packets in the specified list has not
     /// been acknowledged. Returns the sequence numbers of the packets that were not

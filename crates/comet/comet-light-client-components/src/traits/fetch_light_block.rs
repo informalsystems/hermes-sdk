@@ -9,7 +9,7 @@ use crate::traits::types::status::HasVerificationStatusType;
   context: Client,
 }]
 #[async_trait]
-pub trait CanFetchLightBlock: HasHeightType + HasLightBlockType + HasErrorType {
+pub trait CanFetchLightBlock: HasHeightType + HasLightBlockType + HasAsyncErrorType {
     async fn fetch_light_block(
         &self,
         height: &Self::Height,
@@ -22,7 +22,7 @@ pub trait CanFetchLightBlock: HasHeightType + HasLightBlockType + HasErrorType {
 }]
 #[async_trait]
 pub trait CanFetchLightBlockWithStatus:
-    HasHeightType + HasLightBlockType + HasVerificationStatusType + HasErrorType
+    HasHeightType + HasLightBlockType + HasVerificationStatusType + HasAsyncErrorType
 {
     async fn fetch_light_block_with_status(
         &mut self,

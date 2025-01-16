@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseError;
+use cgp::core::error::CanRaiseAsyncError;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use serde::de::DeserializeOwned;
@@ -14,8 +14,8 @@ where
     App: HasRuntime<Runtime = Runtime>
         + HasConfigType<Config = Config>
         + HasConfigPath
-        + CanRaiseError<Runtime::Error>
-        + CanRaiseError<toml::de::Error>,
+        + CanRaiseAsyncError<Runtime::Error>
+        + CanRaiseAsyncError<toml::de::Error>,
     Runtime: CanReadFileAsString,
     Config: DeserializeOwned,
 {

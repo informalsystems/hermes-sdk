@@ -10,7 +10,7 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanHandleIncomingPayload<Counterparty, App>: Sized + Async + HasErrorType
+pub trait CanHandleIncomingPayload<Counterparty, App>: Sized + Async + HasAsyncErrorType
 where
     Counterparty:
         HasPacketHeaderType<Self> + HasPayloadHeaderType<Self> + HasPayloadDataType<Self, App>,
@@ -27,7 +27,7 @@ where
 impl<Chain, Counterparty, App, Components> IncomingPayloadHandler<Chain, Counterparty, App>
     for UseDelegate<Components>
 where
-    Chain: Async + HasErrorType,
+    Chain: Async + HasAsyncErrorType,
     Counterparty:
         HasPacketHeaderType<Chain> + HasPayloadHeaderType<Chain> + HasPayloadDataType<Chain, App>,
     Components: DelegateComponent<App>,

@@ -11,7 +11,9 @@ use crate::multi::traits::chain_at::HasChainTypeAt;
   context: Build,
 }]
 #[async_trait]
-pub trait CanBuildChain<I: Async>: HasChainTypeAt<I, Chain: HasChainIdType> + HasErrorType {
+pub trait CanBuildChain<I: Async>:
+    HasChainTypeAt<I, Chain: HasChainIdType> + HasAsyncErrorType
+{
     async fn build_chain(
         &self,
         _tag: PhantomData<I>,

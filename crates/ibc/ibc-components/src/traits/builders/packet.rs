@@ -17,7 +17,7 @@ pub trait CanBuildPacket<Counterparty>:
     + HasPacketHeaderType<Counterparty>
     + HasPacketNonceType<Counterparty>
     + HasPayloadType<Counterparty>
-    + HasErrorType
+    + HasAsyncErrorType
 {
     fn build_packet(
         packet_header: &Self::PacketHeader,
