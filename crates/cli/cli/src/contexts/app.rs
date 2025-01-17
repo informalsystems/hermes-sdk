@@ -8,6 +8,9 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainCommand;
+use hermes_cli_components::impls::commands::channel::create::{
+    CreateChannelArgs, RunCreateChannelCommand,
+};
 use hermes_cli_components::impls::commands::client::create::{
     CreateClientOptionsParser, RunCreateClientCommand,
 };
@@ -60,6 +63,7 @@ use hermes_cli_components::impls::commands::start::{RunStartRelayerCommand, Star
 use hermes_cli_components::impls::config::get_config_path::GetDefaultConfigField;
 use hermes_cli_components::impls::config::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
+use hermes_cli_components::impls::parse::identifier::{ParseInitCosmosChannelOptions, ParsePortId};
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
 use hermes_cli_components::traits::any_counterparty::ProvideAnyCounterparty;
 use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, BootstrapTypeComponent};
@@ -198,6 +202,14 @@ delegate_components! {
         (CreateClientArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateClientArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
 
+        (CreateChannelArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
+        (CreateChannelArgs, symbol!("target_client_id")): ParseFromString<ClientId>,
+        (CreateChannelArgs, symbol!("target_port_id")): ParsePortId,
+        (CreateChannelArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
+        (CreateChannelArgs, symbol!("counterparty_client_id")): ParseFromString<ClientId>,
+        (CreateChannelArgs, symbol!("counterparty_port_id")): ParsePortId,
+        (CreateChannelArgs, symbol!("init_channel_options")): ParseInitCosmosChannelOptions,
+
         (CreateConnectionArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateConnectionArgs, symbol!("target_client_id")): ParseFromString<ClientId>,
         (CreateConnectionArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
@@ -224,6 +236,7 @@ delegate_components! {
 
         CreateClientArgs: RunCreateClientCommand,
         CreateConnectionArgs: RunCreateConnectionCommand,
+        CreateChannelArgs: RunCreateChannelCommand,
         UpdateClientArgs: RunUpdateClientCommand,
 
         BootstrapSubCommand: RunBootstrapSubCommand,
@@ -304,6 +317,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<QueryBalanceArgs>
     + CanRunCommand<CreateClientArgs>
     + CanRunCommand<CreateConnectionArgs>
+    // + CanRunCommand<CreateChannelArgs>
     + CanRunCommand<UpdateClientArgs>
     + CanRunCommand<BootstrapChainArgs>
     + CanRunCommand<QueryChannelSubCommand>

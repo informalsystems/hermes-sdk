@@ -1,6 +1,3 @@
-// mod create;
-// pub use create::ConnectionCreate;
-
 use hermes_cli_components::impls::commands::connection::create::CreateConnectionArgs;
 use hermes_cli_components::traits::command::CanRunCommand;
 use hermes_cli_framework::command::CommandRunner;
