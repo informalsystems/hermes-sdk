@@ -21,6 +21,7 @@ hermes-test-components                  = { workspace = true }
 
 cgp                 = { workspace = true }
 http                = { workspace = true }
+ibc                 = { workspace = true }
 serde               = { workspace = true, features = ["derive"] }
 toml                = { workspace = true }
 clap                = { workspace = true, features = ["derive"] }
