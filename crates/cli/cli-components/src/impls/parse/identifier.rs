@@ -25,7 +25,7 @@ where
             .map_err(App::raise_error)?;
 
         if port_id.validate().is_err() {
-            Ok(PortId::new(TRANSFER_PORT_ID.to_string()))
+            PortId::new(TRANSFER_PORT_ID.to_string())
         } else {
             Ok(port_id)
         }
