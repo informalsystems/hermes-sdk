@@ -5,8 +5,7 @@ use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use ibc::core::channel::types::channel::Order;
 use ibc::core::channel::types::Version;
 use ibc::core::host::types::error::IdentifierError;
-use ibc::core::host::types::identifiers::ConnectionId;
-use ibc::core::host::types::identifiers::PortId;
+use ibc::core::host::types::identifiers::{ConnectionId, PortId};
 
 use crate::traits::parse::ArgParser;
 
@@ -38,7 +37,7 @@ pub struct ParseInitCosmosChannelOptions;
 
 impl<App, Args, Tag> ArgParser<App, Args, Tag> for ParseInitCosmosChannelOptions
 where
-    App: CanRaiseAsyncError<IdentifierError>,
+    App: HasAsyncErrorType,
     Args: HasField<symbol!("target_connection_id"), Value = String>
         + HasField<symbol!("version"), Value = String>
         + HasField<symbol!("ordering"), Value = String>,

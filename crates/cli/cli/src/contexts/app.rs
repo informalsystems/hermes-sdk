@@ -317,7 +317,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<QueryBalanceArgs>
     + CanRunCommand<CreateClientArgs>
     + CanRunCommand<CreateConnectionArgs>
-    + CanRunCommand<CreateChannelArgs>
+    // + CanRunCommand<CreateChannelArgs>
     + CanRunCommand<UpdateClientArgs>
     + CanRunCommand<BootstrapChainArgs>
     + CanRunCommand<QueryChannelSubCommand>
