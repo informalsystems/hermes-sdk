@@ -126,16 +126,13 @@ where
         let target_client_id = app.parse_arg(args, PhantomData::<symbol!("target_client_id")>)?;
         let target_connection_id =
             app.parse_arg(args, PhantomData::<symbol!("target_connection_id")>)?;
-        let target_port_id = app
-            .parse_arg(args, PhantomData::<symbol!("target_port_id")>)?
-            .unwrap_or_default();
+        let target_port_id = app.parse_arg(args, PhantomData::<symbol!("target_port_id")>)?;
         let counterparty_chain_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_chain_id")>)?;
         let counterparty_client_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_client_id")>)?;
-        let counterparty_port_id = app
-            .parse_arg(args, PhantomData::<symbol!("counterparty_port_id")>)?
-            .unwrap_or_default();
+        let counterparty_port_id =
+            app.parse_arg(args, PhantomData::<symbol!("counterparty_port_id")>)?;
 
         let relay = builder
             .build_relay(
