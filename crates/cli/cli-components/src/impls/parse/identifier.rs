@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use ibc::core::channel::types::channel::Order;
-use ibc::core::channel::types::error::ChannelError;
 use ibc::core::channel::types::Version;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::ConnectionId;
@@ -39,7 +38,7 @@ pub struct ParseInitCosmosChannelOptions;
 
 impl<App, Args, Tag> ArgParser<App, Args, Tag> for ParseInitCosmosChannelOptions
 where
-    App: CanRaiseAsyncError<IdentifierError> + CanRaiseAsyncError<ChannelError>,
+    App: CanRaiseAsyncError<IdentifierError>,
     Args: HasField<symbol!("target_connection_id"), Value = String>
         + HasField<symbol!("version"), Value = String>
         + HasField<symbol!("ordering"), Value = String>,
