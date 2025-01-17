@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
-use core::str::FromStr;
 
 use cgp::prelude::*;
+use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::PortId;
 
 use crate::traits::parse::ArgParser;
@@ -12,9 +12,9 @@ pub struct ParsePortId<Parsed>(pub PhantomData<Parsed>);
 
 impl<App, Args, Tag, Parsed> ArgParser<App, Args, Tag> for ParsePortId<Parsed>
 where
-    App: CanRaiseAsyncError<Parsed::Err>,
+    App: CanRaiseAsyncError<IdentifierError>,
     Args: HasField<Tag, Value = String>,
-    Parsed: Async + FromStr,
+    Parsed: Async,
 {
     type Parsed = PortId;
 
