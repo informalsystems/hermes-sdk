@@ -1504,6 +1504,7 @@ version = "0.1.0"
 dependencies = [
  "cgp",
  "clap",
+ "hermes-cosmos-chain-components",
  "hermes-encoding-components",
  "hermes-error",
  "hermes-logging-components",

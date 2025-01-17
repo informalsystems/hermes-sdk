@@ -51,7 +51,7 @@ pub struct CreateChannelArgs {
     target_connection_id: String,
 
     #[clap(long = "target-port-id", value_name = "TARGET_PORT_ID")]
-    target_port_id: Option<String>,
+    target_port_id: String,
 
     #[clap(
         long = "counterparty-chain-id",
@@ -70,7 +70,13 @@ pub struct CreateChannelArgs {
     counterparty_client_id: String,
 
     #[clap(long = "counterparty-port-id", value_name = "COUNTERPARTY_PORT_ID")]
-    counterparty_port_id: Option<String>,
+    counterparty_port_id: String,
+
+    #[clap(long = "ordering", value_name = "ORDERING")]
+    ordering: String,
+
+    #[clap(long = "version", value_name = "VERSION")]
+    version: String,
 }
 
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
@@ -86,10 +92,12 @@ where
         + CanParseArg<Args, symbol!("target_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("target_client_id"), Parsed = Chain::ClientId>
         + CanParseArg<Args, symbol!("target_connection_id"), Parsed = Chain::ConnectionId>
-        + CanParseArg<Args, symbol!("target_port_id"), Parsed = Option<Chain::PortId>>
+        + CanParseArg<Args, symbol!("target_port_id"), Parsed = Chain::PortId>
         + CanParseArg<Args, symbol!("counterparty_chain_id"), Parsed = Counterparty::ChainId>
         + CanParseArg<Args, symbol!("counterparty_client_id"), Parsed = Counterparty::ClientId>
-        + CanParseArg<Args, symbol!("counterparty_port_id"), Parsed = Option<Counterparty::PortId>>,
+        + CanParseArg<Args, symbol!("counterparty_port_id"), Parsed = Counterparty::PortId>
+        + CanParseArg<Args, symbol!("ordering"), Parsed = Counterparty::PortId>,
+        + CanParseArg<Args, symbol!("version"), Parsed = Counterparty::PortId>,
     App::Logger: CanLog<LevelInfo>,
     Args: Async,
     Builder: CanBuildRelay<Index<0>, Index<1>, Relay = Relay>

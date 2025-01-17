@@ -18,6 +18,7 @@ hermes-relayer-components               = { workspace = true }
 hermes-encoding-components              = { workspace = true }
 hermes-logging-components               = { workspace = true }
 hermes-test-components                  = { workspace = true }
+hermes-cosmos-chain-components          = { workspace = true }
 
 cgp                 = { workspace = true }
 http                = { workspace = true }
