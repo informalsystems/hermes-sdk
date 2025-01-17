@@ -1,6 +1,7 @@
 use core::fmt::Display;
 use core::marker::PhantomData;
 
+use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -8,23 +9,20 @@ use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
-use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasIbcChainTypes};
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
-use hermes_relayer_components::multi::types::index::Index;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::CommandRunner;
-use crate::traits::output::CanProduceOutput;
-use crate::traits::output::HasOutputType;
+use crate::traits::output::{CanProduceOutput, HasOutputType};
 use crate::traits::parse::CanParseArg;
 
 pub struct RunCreateChannelCommand;
 
-#[derive(Debug, clap::Parser)]
+#[derive(Debug, clap::Parser, HasField)]
 pub struct CreateChannelArgs {
     #[clap(
         long = "target-chain-id",
@@ -105,8 +103,8 @@ where
     Chain: HasChainIdType
         + HasClientIdType<Counterparty>
         + HasInitChannelOptionsType<Counterparty>
-        + HasIbcChainTypes<Counterparty>,
-    Chain::PortId: Default,
+        + HasIbcChainTypes<Counterparty>
+        + HasErrorType,
     Chain::InitChannelOptions: Default,
     Chain::ChainId: Display,
     Chain::ClientId: Display,
@@ -114,8 +112,7 @@ where
     Counterparty::ChainId: Display,
     Counterparty::ClientId: Display,
     Counterparty::ChannelId: Display,
-    Counterparty::PortId: Default,
-    Counterparty: HasChainIdType + HasClientIdType<Chain> + HasIbcChainTypes<Chain>,
+    Counterparty: HasChainIdType + HasClientIdType<Chain> + HasIbcChainTypes<Chain> + HasErrorType,
     Relay: CanBootstrapChannel + HasRelayChains<SrcChain = Chain, DstChain = Counterparty>,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
@@ -124,8 +121,6 @@ where
 
         let target_chain_id = app.parse_arg(args, PhantomData::<symbol!("target_chain_id")>)?;
         let target_client_id = app.parse_arg(args, PhantomData::<symbol!("target_client_id")>)?;
-        let target_connection_id =
-            app.parse_arg(args, PhantomData::<symbol!("target_connection_id")>)?;
         let target_port_id = app.parse_arg(args, PhantomData::<symbol!("target_port_id")>)?;
         let counterparty_chain_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_chain_id")>)?;
@@ -148,12 +143,11 @@ where
         logger
             .log(
                 &format!(
-                    "Creating channel between {}:{} and {}:{} on connection {}...",
+                    "Creating channel between {}:{} and {}:{} ...",
                     target_chain_id,
                     target_client_id,
                     counterparty_chain_id,
                     counterparty_client_id,
-                    target_connection_id,
                 ),
                 &LevelInfo,
             )
