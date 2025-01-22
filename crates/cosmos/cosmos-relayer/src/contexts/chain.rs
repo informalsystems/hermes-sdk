@@ -45,7 +45,7 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     HasCommitmentPrefixType, HasIbcCommitmentPrefix, IbcCommitmentPrefixGetter,
 };
-use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
+use hermes_relayer_components::chain::traits::event_subscription::EventSubscriptionGetter;
 use hermes_relayer_components::chain::traits::extract_data::{
     CanExtractFromEvent, CanExtractFromMessageResponse,
 };
@@ -76,7 +76,8 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+    HasCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
@@ -333,9 +334,11 @@ impl ChainIdGetter<CosmosChain> for CosmosChainContextComponents {
     }
 }
 
-impl HasEventSubscription for CosmosChain {
-    fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
-        &self.subscription
+impl EventSubscriptionGetter<CosmosChain> for CosmosChainContextComponents {
+    fn event_subscription(
+        chain: &CosmosChain,
+    ) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
+        &chain.subscription
     }
 }
 
@@ -347,6 +350,7 @@ pub trait CanUseCosmosChain:
     + HasEventType<Event = Arc<AbciEvent>>
     + HasCreateClientPayloadType<CosmosChain, CreateClientPayload = CosmosCreateClientPayload>
     + HasUpdateClientPayloadType<CosmosChain, UpdateClientPayload = CosmosUpdateClientPayload>
+    + HasCreateClientMessageOptionsType<CosmosChain, CreateClientMessageOptions = ()>
     + HasCreateClientPayloadOptionsType<
         CosmosChain,
         CreateClientPayloadOptions = CosmosCreateClientOptions,
