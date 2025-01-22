@@ -1,10 +1,14 @@
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
+use hermes_chain_type_components::traits::types::event::HasEventType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_cosmos_chain_components::components::client::{
     MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
 };
 use hermes_relayer_components::chain::traits::commitment_prefix::ProvideCommitmentPrefixType;
+use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelEndType, ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
     ProvideChannelOpenTryPayloadType, ProvideInitChannelOptionsType,
@@ -226,17 +230,24 @@ where
 {
     type CreateClientEvent = SolomachineCreateClientEvent;
 
-    fn try_extract_create_client_event(
-        events: &Vec<SolomachineEvent>,
-    ) -> Option<SolomachineCreateClientEvent> {
-        events.iter().find_map(|event| match event {
-            SolomachineEvent::CreateClient(e) => Some(e.clone()),
-            _ => None,
-        })
-    }
-
     fn create_client_event_client_id(event: &SolomachineCreateClientEvent) -> &ClientId {
         &event.client_id
+    }
+}
+
+impl<Chain> EventExtractor<Chain, SolomachineCreateClientEvent> for ProvideSolomachineChainTypes
+where
+    Chain: HasEventType<Event = SolomachineEvent>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<SolomachineCreateClientEvent>,
+        event: &SolomachineEvent,
+    ) -> Option<SolomachineCreateClientEvent> {
+        match event {
+            SolomachineEvent::CreateClient(e) => Some(e.clone()),
+            _ => None,
+        }
     }
 }
 

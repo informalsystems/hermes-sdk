@@ -45,26 +45,6 @@ where
 {
     type CreateClientEvent = CosmosCreateClientEvent;
 
-    fn try_extract_create_client_event(
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosCreateClientEvent> {
-        events.iter().find_map(|event| {
-            if event.kind == "create_client" {
-                for tag in &event.attributes {
-                    if tag.key_bytes() == CLIENT_ID_ATTRIBUTE_KEY.as_bytes() {
-                        let client_id = tag.value_str().ok()?.parse().ok()?;
-
-                        return Some(CosmosCreateClientEvent { client_id });
-                    }
-                }
-
-                None
-            } else {
-                None
-            }
-        })
-    }
-
     fn create_client_event_client_id(event: &CosmosCreateClientEvent) -> &ClientId {
         &event.client_id
     }

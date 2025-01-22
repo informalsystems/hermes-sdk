@@ -50,10 +50,6 @@ pub trait HasCreateClientEvent<Counterparty>:
 {
     type CreateClientEvent: Async;
 
-    fn try_extract_create_client_event(
-        response: &Self::MessageResponse,
-    ) -> Option<Self::CreateClientEvent>;
-
     fn create_client_event_client_id(event: &Self::CreateClientEvent) -> &Self::ClientId;
 }
 
