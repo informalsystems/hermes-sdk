@@ -19,6 +19,7 @@ use hermes_chain_type_components::impls::types::message_response::UseEventsMessa
 use hermes_cosmos_chain_components::components::client::{
     MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
 };
+use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
@@ -196,15 +197,21 @@ impl PacketTimeoutTimestampGetter<MockChainContext, MockChainContext> for MockCh
 impl ProvideWriteAckEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type WriteAckEvent = WriteAckEvent;
 
-    fn try_extract_write_ack_event(event: &Event) -> Option<Self::WriteAckEvent> {
+    fn write_acknowledgement(_event: &WriteAckEvent) -> Vec<u8> {
+        Vec::new() // stub
+    }
+}
+
+impl EventExtractor<MockChainContext, WriteAckEvent> for MockChainComponents {
+    fn try_extract_from_event(
+        _chain: &MockChainContext,
+        _tag: PhantomData<WriteAckEvent>,
+        event: &Event,
+    ) -> Option<WriteAckEvent> {
         match event {
             Event::WriteAcknowledgment(h) => Some(WriteAckEvent::new(*h)),
             _ => None,
         }
-    }
-
-    fn write_acknowledgement(_event: &WriteAckEvent) -> Vec<u8> {
-        Vec::new() // stub
     }
 }
 

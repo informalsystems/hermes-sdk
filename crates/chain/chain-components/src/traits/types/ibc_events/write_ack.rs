@@ -35,20 +35,6 @@ pub trait HasWriteAckEvent<Counterparty>:
     */
     type WriteAckEvent: Async;
 
-    /**
-       Try to extract an abstract
-       [`Event`](crate::traits::types::event::HasEventType::Event)
-       type into a
-       [`WriteAckEvent`](Self::WriteAckEvent).
-       If the extraction fails, return `None`.
-
-       Since an event type may contain many variants, it is not guaranteed
-       that the event extraction would be successful. If the concrete
-       `Event` is dynamic-typed, then the extraction may also fail due to
-       parse errors.
-    */
-    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent>;
-
     fn write_acknowledgement(
         event: &Self::WriteAckEvent,
     ) -> impl AsRef<Self::Acknowledgement> + Send;

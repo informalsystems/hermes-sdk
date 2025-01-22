@@ -7,7 +7,6 @@ use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{EventOf, HeightOf};
 use crate::relay::impls::packet_filters::target::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
@@ -70,15 +69,18 @@ where
     }
 }
 
-impl<Relay> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
+impl<Relay, DstChain> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
-    Relay: HasRelayClientIds
+    Relay: HasRelayChains<DstChain = DstChain>
+        + HasRelayClientIds
         + CanRelayAckPacket
         + CanFilterRelayPackets
         + HasPacketLock
         + HasLogger
         + CanRaiseRelayChainErrors,
-    Relay::DstChain: CanBuildPacketFromWriteAck<Relay::SrcChain>,
+    DstChain: HasErrorType
+        + CanBuildPacketFromWriteAck<Relay::SrcChain>
+        + CanExtractFromEvent<DstChain::WriteAckEvent>,
     MatchPacketSourceChain: RelayPacketFilter<Relay>,
     Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
@@ -87,7 +89,7 @@ where
         height: &HeightOf<Relay::DstChain>,
         event: &EventOf<Relay::DstChain>,
     ) -> Result<(), Relay::Error> {
-        let m_ack_event = Relay::DstChain::try_extract_write_ack_event(event);
+        let m_ack_event = relay.dst_chain().try_extract_from_event(PhantomData, event);
 
         if let Some(ack_event) = m_ack_event {
             let packet = Relay::DstChain::build_packet_from_write_ack_event(&ack_event);

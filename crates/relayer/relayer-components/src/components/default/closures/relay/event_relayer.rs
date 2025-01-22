@@ -40,8 +40,10 @@ where
         + HasSendPacketEvent<DstChain>
         + CanExtractFromEvent<SrcChain::SendPacketEvent>
         + CanQueryCounterpartyChainId<DstChain>,
-    DstChain:
-        HasChainId + CanQueryCounterpartyChainId<SrcChain> + CanBuildPacketFromWriteAck<SrcChain>,
+    DstChain: HasChainId
+        + CanQueryCounterpartyChainId<SrcChain>
+        + CanBuildPacketFromWriteAck<SrcChain>
+        + CanExtractFromEvent<DstChain::WriteAckEvent>,
     Components: DelegatesToDefaultRelayPreset
         + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>

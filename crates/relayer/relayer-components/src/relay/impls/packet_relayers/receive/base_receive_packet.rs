@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
@@ -27,15 +28,17 @@ where
     Relay::DstChain: CanQueryClientStateWithLatestHeight<Relay::SrcChain>
         + CanBuildReceivePacketMessage<Relay::SrcChain>
         + HasMessageResponseEvents
-        + HasWriteAckEvent<Relay::SrcChain, WriteAckEvent = AckEvent>,
+        + HasWriteAckEvent<Relay::SrcChain, WriteAckEvent = AckEvent>
+        + CanExtractFromEvent<AckEvent>,
 {
     async fn relay_receive_packet(
         relay: &Relay,
         source_height: &HeightOf<Relay::SrcChain>,
         packet: &PacketOf<Relay>,
     ) -> Result<Option<AckEvent>, Relay::Error> {
-        let src_client_state = relay
-            .dst_chain()
+        let dst_chain = relay.dst_chain();
+
+        let src_client_state = dst_chain
             .query_client_state_with_latest_height(PhantomData, relay.dst_client_id())
             .await
             .map_err(Relay::raise_error)?;
@@ -46,8 +49,7 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        let message = relay
-            .dst_chain()
+        let message = dst_chain
             .build_receive_packet_message(packet, payload)
             .await
             .map_err(Relay::raise_error)?;
@@ -56,7 +58,7 @@ where
 
         let ack_event = Relay::DstChain::message_response_events(&response)
             .iter()
-            .find_map(Relay::DstChain::try_extract_write_ack_event);
+            .find_map(|event| dst_chain.try_extract_from_event(PhantomData, event));
 
         Ok(ack_event)
     }

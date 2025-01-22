@@ -222,13 +222,22 @@ where
 {
     type WriteAckEvent = WriteAckEvent;
 
-    fn try_extract_write_ack_event(event: &Arc<AbciEvent>) -> Option<WriteAckEvent> {
+    fn write_acknowledgement(event: &WriteAckEvent) -> &Vec<u8> {
+        &event.acknowledgment
+    }
+}
+
+impl<Chain> EventExtractor<Chain, WriteAckEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<WriteAckEvent>,
+        event: &Chain::Event,
+    ) -> Option<WriteAckEvent> {
         try_write_acknowledgment_from_abci_event(event)
             .ok()?
             .map(|write_ack| write_ack.into())
-    }
-
-    fn write_acknowledgement(event: &WriteAckEvent) -> &Vec<u8> {
-        &event.acknowledgment
     }
 }

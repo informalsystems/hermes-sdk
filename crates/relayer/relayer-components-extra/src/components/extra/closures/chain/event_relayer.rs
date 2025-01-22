@@ -19,6 +19,7 @@ pub trait UseExtraChainComponentsForEventRelayer<Counterparty>:
     + CanQueryCounterpartyChainId<Counterparty>
     + CanBuildPacketFromWriteAck<Counterparty>
     + CanExtractFromEvent<Self::SendPacketEvent>
+    + CanExtractFromEvent<Self::WriteAckEvent>
 where
     Counterparty: HasIbcChainTypes<Self> + HasOutgoingPacketType<Self>,
 {
@@ -33,6 +34,7 @@ where
         + HasClientStateType<Counterparty>
         + HasWriteAckEvent<Counterparty>
         + CanExtractFromEvent<Chain::SendPacketEvent>
+        + CanExtractFromEvent<Chain::WriteAckEvent>
         + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain> + HasOutgoingPacketType<Chain>,
     Components: CounterpartyChainIdQuerier<Chain, Counterparty>

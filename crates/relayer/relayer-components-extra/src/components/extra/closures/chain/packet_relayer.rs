@@ -1,4 +1,5 @@
 use cgp::prelude::HasComponents;
+use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilder, CanBuildAckPacketMessage,
 };
@@ -42,6 +43,8 @@ pub trait UseExtraChainComponentsForPacketRelayer<Counterparty>:
     + CanBuildAckPacketMessage<Counterparty>
     + CanBuildTimeoutUnorderedPacketPayload<Counterparty>
     + CanBuildTimeoutUnorderedPacketMessage<Counterparty>
+    + HasWriteAckEvent<Counterparty>
+    + CanExtractFromEvent<Self::WriteAckEvent>
     + UseExtraChainComponentsForIbcMessageSender<Counterparty>
 where
     Counterparty: HasClientStateType<Self>
@@ -65,6 +68,8 @@ where
         + HasAckPacketPayloadType<Counterparty>
         + CanReadPacketFields<Counterparty>
         + HasTimeoutUnorderedPacketPayloadType<Counterparty>
+        + HasWriteAckEvent<Counterparty>
+        + CanExtractFromEvent<Chain::WriteAckEvent>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
         + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>
