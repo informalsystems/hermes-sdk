@@ -1,5 +1,6 @@
 use cgp::core::component::HasComponents;
 use cgp::core::error::ErrorRaiser;
+use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
 use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -36,11 +37,11 @@ where
         + HasComponents<Components = Components>,
     SrcChain: HasChainId
         + CanReadPacketFields<DstChain>
-        + HasSendPacketEvent<Relay::DstChain>
-        + CanQueryCounterpartyChainId<Relay::DstChain>,
-    DstChain: HasChainId
-        + CanQueryCounterpartyChainId<Relay::SrcChain>
-        + CanBuildPacketFromWriteAck<Relay::SrcChain>,
+        + HasSendPacketEvent<DstChain>
+        + CanExtractFromEvent<SrcChain::SendPacketEvent>
+        + CanQueryCounterpartyChainId<DstChain>,
+    DstChain:
+        HasChainId + CanQueryCounterpartyChainId<SrcChain> + CanBuildPacketFromWriteAck<SrcChain>,
     Components: DelegatesToDefaultRelayPreset
         + RelayPacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>

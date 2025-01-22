@@ -195,14 +195,23 @@ where
 {
     type SendPacketEvent = SendPacketEvent;
 
-    fn try_extract_send_packet_event(event: &Arc<AbciEvent>) -> Option<SendPacketEvent> {
+    fn extract_packet_from_send_packet_event(event: &SendPacketEvent) -> Packet {
+        event.packet.clone()
+    }
+}
+
+impl<Chain> EventExtractor<Chain, SendPacketEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<SendPacketEvent>,
+        event: &Chain::Event,
+    ) -> Option<SendPacketEvent> {
         try_send_packet_from_abci_event(event)
             .ok()?
             .map(|send_packet| send_packet.into())
-    }
-
-    fn extract_packet_from_send_packet_event(event: &SendPacketEvent) -> Packet {
-        event.packet.clone()
     }
 }
 

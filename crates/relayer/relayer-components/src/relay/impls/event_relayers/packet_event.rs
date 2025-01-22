@@ -1,3 +1,7 @@
+use core::marker::PhantomData;
+
+use cgp::prelude::HasErrorType;
+use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -9,7 +13,7 @@ use crate::relay::impls::packet_filters::target::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayClientIds};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::event_relayer::EventRelayer;
 use crate::relay::traits::packet_filter::{CanFilterRelayPackets, RelayPacketFilter};
 use crate::relay::traits::packet_lock::HasPacketLock;
@@ -36,10 +40,15 @@ use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 */
 pub struct PacketEventRelayer;
 
-impl<Relay> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
+impl<Relay, SrcChain> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
-    Relay: HasRelayClientIds + CanRelayPacket + CanRaiseRelayChainErrors,
-    Relay::SrcChain: HasSendPacketEvent<Relay::DstChain>,
+    Relay: HasRelayChains<SrcChain = SrcChain>
+        + HasRelayClientIds
+        + CanRelayPacket
+        + CanRaiseRelayChainErrors,
+    SrcChain: HasErrorType
+        + HasSendPacketEvent<Relay::DstChain>
+        + CanExtractFromEvent<SrcChain::SendPacketEvent>,
     MatchPacketDestinationChain: RelayPacketFilter<Relay>,
 {
     async fn relay_chain_event(
@@ -47,7 +56,9 @@ where
         _height: &HeightOf<Relay::SrcChain>,
         event: &EventOf<Relay::SrcChain>,
     ) -> Result<(), Relay::Error> {
-        if let Some(send_packet_event) = Relay::SrcChain::try_extract_send_packet_event(event) {
+        if let Some(send_packet_event) =
+            relay.src_chain().try_extract_from_event(PhantomData, event)
+        {
             let packet = Relay::SrcChain::extract_packet_from_send_packet_event(&send_packet_event);
 
             if MatchPacketDestinationChain::should_relay_packet(relay, &packet).await? {

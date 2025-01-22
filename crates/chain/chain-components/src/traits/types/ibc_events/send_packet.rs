@@ -22,8 +22,6 @@ pub trait HasSendPacketEvent<Counterparty>:
 {
     type SendPacketEvent: Async;
 
-    fn try_extract_send_packet_event(event: &Self::Event) -> Option<Self::SendPacketEvent>;
-
     fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent)
         -> Self::OutgoingPacket;
 }

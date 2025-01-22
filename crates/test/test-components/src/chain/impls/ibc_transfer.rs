@@ -1,5 +1,8 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::CanRaiseAsyncError;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
+use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
@@ -30,6 +33,7 @@ where
         + CanBuildIbcTokenTransferMessage<Counterparty>
         + HasIbcChainTypes<Counterparty>
         + HasSendPacketEvent<Counterparty>
+        + CanExtractFromEvent<Chain::SendPacketEvent>
         + CanRaiseAsyncError<MissingSendPacketEventError>
         + CanSendSingleMessageWithSigner,
     Counterparty: HasAddressType,
@@ -71,7 +75,7 @@ where
 
         let send_packet_event = Chain::message_response_events(&response)
             .iter()
-            .find_map(Chain::try_extract_send_packet_event)
+            .find_map(|event| chain.try_extract_from_event(PhantomData, event))
             .ok_or_else(|| Chain::raise_error(MissingSendPacketEventError))?;
 
         let packet = Chain::extract_packet_from_send_packet_event(&send_packet_event);

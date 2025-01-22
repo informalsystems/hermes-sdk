@@ -232,13 +232,6 @@ impl ProvideChainStatusType<MockChainContext> for MockChainComponents {
 impl ProvideSendPacketEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type SendPacketEvent = SendPacketEvent;
 
-    fn try_extract_send_packet_event(event: &Event) -> Option<SendPacketEvent> {
-        match event {
-            Event::SendPacket(send_packet_event) => Some(send_packet_event.clone()),
-            _ => None,
-        }
-    }
-
     fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent) -> Packet {
         Packet::from(event.clone())
     }

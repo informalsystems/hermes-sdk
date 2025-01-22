@@ -1,4 +1,4 @@
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::{HasAsyncErrorType, HasErrorType};
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -30,10 +30,10 @@ where
 pub trait HasRelayChainTypes:
     HasAsyncErrorType
     + HasSrcChainType<
-        SrcChain: HasAsyncErrorType
+        SrcChain: HasErrorType
                       + HasIbcChainTypes<Self::DstChain>
                       + HasOutgoingPacketType<Self::DstChain>,
-    > + HasDstChainType<DstChain: HasAsyncErrorType + HasIbcChainTypes<Self::SrcChain>>
+    > + HasDstChainType<DstChain: HasErrorType + HasIbcChainTypes<Self::SrcChain>>
 {
 }
 
@@ -42,8 +42,8 @@ where
     Relay: HasChainTypeAt<Src, Chain = SrcChain>
         + HasChainTypeAt<Dst, Chain = DstChain>
         + HasAsyncErrorType,
-    SrcChain: HasAsyncErrorType + HasIbcChainTypes<DstChain> + HasOutgoingPacketType<DstChain>,
-    DstChain: HasAsyncErrorType + HasIbcChainTypes<SrcChain>,
+    SrcChain: HasErrorType + HasIbcChainTypes<DstChain> + HasOutgoingPacketType<DstChain>,
+    DstChain: HasErrorType + HasIbcChainTypes<SrcChain>,
 {
 }
 
