@@ -4,7 +4,7 @@ use std::io::Error as IoError;
 use std::process::ExitStatus;
 
 use cgp::core::error::{ErrorRaiser, ProvideErrorType};
-use hermes_async_runtime_components::channel::types::ChannelClosedError;
+use hermes_async_runtime_components::channel::types::ErrChannelClosed;
 use hermes_tokio_runtime_components::impls::os::child_process::PrematureChildProcessExitError;
 use hermes_tokio_runtime_components::impls::os::exec_command::{
     CommandNotFound, ExecCommandFailure,
@@ -46,8 +46,8 @@ impl ErrorRaiser<HermesRuntime, Utf8Error> for HermesRuntimeComponents {
     }
 }
 
-impl ErrorRaiser<HermesRuntime, ChannelClosedError> for HermesRuntimeComponents {
-    fn raise_error(_e: ChannelClosedError) -> TokioRuntimeError {
+impl ErrorRaiser<HermesRuntime, ErrChannelClosed> for HermesRuntimeComponents {
+    fn raise_error(_e: ErrChannelClosed) -> TokioRuntimeError {
         TokioRuntimeError::ChannelClosed
     }
 }

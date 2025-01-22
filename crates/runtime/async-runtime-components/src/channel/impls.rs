@@ -10,7 +10,7 @@ use hermes_runtime_components::traits::channel::{
 };
 
 use crate::channel::traits::{HasUnboundedChannelType, UnboundedChannelTypeProvider};
-use crate::channel::types::ChannelClosedError;
+use crate::channel::types::ErrChannelClosed;
 use crate::stream::traits::boxed::HasBoxedStreamType;
 
 pub struct ProvideUnboundedChannelType;
@@ -90,7 +90,7 @@ where
 
 impl<Runtime> ChannelUser<Runtime> for ProvideUnboundedChannelType
 where
-    Runtime: HasUnboundedChannelType + CanRaiseAsyncError<ChannelClosedError>,
+    Runtime: HasUnboundedChannelType + CanRaiseAsyncError<ErrChannelClosed>,
 {
     async fn send<T>(sender: &Runtime::Sender<T>, value: T) -> Result<(), Runtime::Error>
     where
@@ -100,7 +100,7 @@ where
             .lock()
             .await
             .unbounded_send(value)
-            .map_err(|_| Runtime::raise_error(ChannelClosedError))
+            .map_err(|_| Runtime::raise_error(ErrChannelClosed))
     }
 
     async fn receive<T>(receiver: &mut Runtime::Receiver<T>) -> Result<T, Runtime::Error>
@@ -110,7 +110,7 @@ where
         Runtime::to_unbounded_receiver_ref(receiver)
             .next()
             .await
-            .ok_or(Runtime::raise_error(ChannelClosedError))
+            .ok_or(Runtime::raise_error(ErrChannelClosed))
     }
 
     fn try_receive<T>(receiver: &mut Runtime::Receiver<T>) -> Result<Option<T>, Runtime::Error>
@@ -123,7 +123,7 @@ where
         match res {
             Ok(Some(res)) => Ok(Some(res)),
             // Ok(None) means that the channel is closed
-            Ok(None) => Err(Runtime::raise_error(ChannelClosedError)),
+            Ok(None) => Err(Runtime::raise_error(ErrChannelClosed)),
             // Error means that there is no meesage currently available
             Err(_) => Ok(None),
         }

@@ -4,7 +4,7 @@ use hermes_runtime_components::traits::channel_once::{
     ChannelOnceCreator, ChannelOnceUser, ProvideChannelOnceType,
 };
 
-use crate::channel::types::ChannelClosedError;
+use crate::channel::types::ErrChannelClosed;
 use crate::channel_once::traits::{HasOneShotChannelType, OneShotChannelTypeProvider};
 
 pub struct ProvideOneShotChannelType;
@@ -76,7 +76,7 @@ where
 
 impl<Runtime> ChannelOnceUser<Runtime> for ProvideOneShotChannelType
 where
-    Runtime: HasOneShotChannelType + CanRaiseAsyncError<ChannelClosedError>,
+    Runtime: HasOneShotChannelType + CanRaiseAsyncError<ErrChannelClosed>,
 {
     fn send_once<T>(sender: Runtime::SenderOnce<T>, value: T) -> Result<(), Runtime::Error>
     where
@@ -84,7 +84,7 @@ where
     {
         Runtime::to_oneshot_sender(sender)
             .send(value)
-            .map_err(|_| Runtime::raise_error(ChannelClosedError))
+            .map_err(|_| Runtime::raise_error(ErrChannelClosed))
     }
 
     async fn receive_once<T>(receiver: Runtime::ReceiverOnce<T>) -> Result<T, Runtime::Error>
@@ -93,6 +93,6 @@ where
     {
         Runtime::to_oneshot_receiver(receiver)
             .await
-            .map_err(|_| Runtime::raise_error(ChannelClosedError))
+            .map_err(|_| Runtime::raise_error(ErrChannelClosed))
     }
 }
