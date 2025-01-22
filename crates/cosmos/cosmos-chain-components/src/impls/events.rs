@@ -1,6 +1,8 @@
 use alloc::sync::Arc;
+use core::marker::PhantomData;
 
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::ibc::{
@@ -65,6 +67,29 @@ where
 
     fn create_client_event_client_id(event: &CosmosCreateClientEvent) -> &ClientId {
         &event.client_id
+    }
+}
+
+impl<Chain> EventExtractor<Chain, CosmosCreateClientEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosCreateClientEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosCreateClientEvent> {
+        if event.kind == "create_client" {
+            for tag in &event.attributes {
+                if tag.key_bytes() == CLIENT_ID_ATTRIBUTE_KEY.as_bytes() {
+                    let client_id = tag.value_str().ok()?.parse().ok()?;
+
+                    return Some(CosmosCreateClientEvent { client_id });
+                }
+            }
+        }
+
+        None
     }
 }
 

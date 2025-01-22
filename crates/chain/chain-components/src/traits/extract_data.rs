@@ -2,6 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_chain_type_components::traits::types::event::HasEventType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
@@ -23,6 +24,23 @@ pub trait CanExtractFromMessageResponse<Data>: HasMessageResponseType {
 }]
 pub trait CanExtractFromEvent<Data>: HasEventType {
     fn try_extract_from_event(&self, _tag: PhantomData<Data>, event: &Self::Event) -> Option<Data>;
+}
+
+pub struct ExtractFromMessageResponseViaEvents;
+
+impl<Chain, Data> MessageResponseExtractor<Chain, Data> for ExtractFromMessageResponseViaEvents
+where
+    Chain: HasMessageResponseEvents + CanExtractFromEvent<Data>,
+{
+    fn try_extract_from_message_response(
+        chain: &Chain,
+        tag: PhantomData<Data>,
+        message_response: &Chain::MessageResponse,
+    ) -> Option<Data> {
+        Chain::message_response_events(message_response)
+            .iter()
+            .find_map(|event| chain.try_extract_from_event(tag, event))
+    }
 }
 
 impl<Chain, Data, Components> MessageResponseExtractor<Chain, Data> for UseDelegate<Components>

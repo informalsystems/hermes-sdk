@@ -8,6 +8,9 @@ use hermes_relayer_components::chain::impls::payload_builders::connection::Build
 use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 pub use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
+pub use hermes_relayer_components::chain::traits::extract_data::{
+    EventExtractorComponent, ExtractFromMessageResponseViaEvents, MessageResponseExtractorComponent,
+};
 pub use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
@@ -223,6 +226,7 @@ cgp_preset! {
             ChannelOpenTryEventComponent,
             SendPacketEventComponent,
             WriteAckEventComponent,
+            EventExtractorComponent,
         ]:
             ProvideCosmosEvents,
         [
@@ -238,6 +242,8 @@ cgp_preset! {
             TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
+        MessageResponseExtractorComponent:
+            ExtractFromMessageResponseViaEvents,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
         RawConsensusStateTypeComponent:
