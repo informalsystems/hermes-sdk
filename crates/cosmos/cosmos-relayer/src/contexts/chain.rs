@@ -337,8 +337,8 @@ impl ChainIdGetter<CosmosChain> for CosmosChainContextComponents {
 impl EventSubscriptionGetter<CosmosChain> for CosmosChainContextComponents {
     fn event_subscription(
         chain: &CosmosChain,
-    ) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
-        &chain.subscription
+    ) -> Option<&Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>> {
+        Some(&chain.subscription)
     }
 }
 

@@ -55,28 +55,32 @@ where
         let target_chain = relay.target_chain();
         let subscription = target_chain.event_subscription();
 
-        loop {
-            if let Some(event_stream) = Runtime::subscribe(subscription).await {
-                let tasks = {
-                    let relay = relay.clone();
+        if let Some(subscription) = subscription {
+            loop {
+                if let Some(event_stream) = Runtime::subscribe(subscription).await {
+                    let tasks = {
+                        let relay = relay.clone();
 
-                    Runtime::map_stream(event_stream, move |(height, event)| {
-                        Box::new(EventRelayerTask {
-                            relay: relay.clone(),
-                            height,
-                            event,
-                            phantom: PhantomData,
+                        Runtime::map_stream(event_stream, move |(height, event)| {
+                            Box::new(EventRelayerTask {
+                                relay: relay.clone(),
+                                height,
+                                event,
+                                phantom: PhantomData,
+                            })
                         })
-                    })
-                };
+                    };
 
-                target_chain
-                    .runtime()
-                    .run_concurrent_task_stream(tasks)
-                    .await;
-            } else {
-                return Ok(());
+                    target_chain
+                        .runtime()
+                        .run_concurrent_task_stream(tasks)
+                        .await;
+                } else {
+                    return Ok(());
+                }
             }
+        } else {
+            Ok(())
         }
     }
 }

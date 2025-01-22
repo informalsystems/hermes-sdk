@@ -15,5 +15,5 @@ where
 {
     fn event_subscription(
         &self,
-    ) -> &<Self::Runtime as HasSubscription>::Subscription<(Self::Height, Self::Event)>;
+    ) -> Option<&<Self::Runtime as HasSubscription>::Subscription<(Self::Height, Self::Event)>>;
 }
