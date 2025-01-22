@@ -12,11 +12,6 @@ pub trait HasConnectionOpenTryEvent<Counterparty>:
 {
     type ConnectionOpenTryEvent: Async;
 
-    fn try_extract_connection_open_try_event(
-        &self,
-        response: &Self::MessageResponse,
-    ) -> Option<Self::ConnectionOpenTryEvent>;
-
     fn connection_open_try_event_connection_id(
         event: &Self::ConnectionOpenTryEvent,
     ) -> &Self::ConnectionId;
@@ -31,10 +26,6 @@ pub trait HasConnectionOpenInitEvent<Counterparty>:
     HasMessageResponseType + HasConnectionIdType<Counterparty>
 {
     type ConnectionOpenInitEvent: Async;
-
-    fn try_extract_connection_open_init_event(
-        response: &Self::MessageResponse,
-    ) -> Option<Self::ConnectionOpenInitEvent>;
 
     fn connection_open_init_event_connection_id(
         event: &Self::ConnectionOpenInitEvent,

@@ -81,21 +81,26 @@ where
 {
     type ConnectionOpenInitEvent = CosmosConnectionOpenInitEvent;
 
-    fn try_extract_connection_open_init_event(
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosConnectionOpenInitEvent> {
-        events.iter().find_map(|event| {
-            let ibc_event = try_conn_open_init_from_abci_event(event).ok()??;
-            let connection_id = ibc_event.conn_id_on_a().clone();
-
-            Some(CosmosConnectionOpenInitEvent { connection_id })
-        })
-    }
-
     fn connection_open_init_event_connection_id(
         event: &CosmosConnectionOpenInitEvent,
     ) -> &ConnectionId {
         &event.connection_id
+    }
+}
+
+impl<Chain> EventExtractor<Chain, CosmosConnectionOpenInitEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosConnectionOpenInitEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosConnectionOpenInitEvent> {
+        let ibc_event = try_conn_open_init_from_abci_event(event).ok()??;
+        let connection_id = ibc_event.conn_id_on_a().clone();
+
+        Some(CosmosConnectionOpenInitEvent { connection_id })
     }
 }
 
@@ -106,22 +111,26 @@ where
 {
     type ConnectionOpenTryEvent = CosmosConnectionOpenTryEvent;
 
-    fn try_extract_connection_open_try_event(
-        _chain: &Chain,
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosConnectionOpenTryEvent> {
-        events.iter().find_map(|event| {
-            let ibc_event = try_conn_open_try_from_abci_event(event).ok()??;
-            let connection_id = ibc_event.conn_id_on_b().clone();
-
-            Some(CosmosConnectionOpenTryEvent { connection_id })
-        })
-    }
-
     fn connection_open_try_event_connection_id(
         event: &CosmosConnectionOpenTryEvent,
     ) -> &ConnectionId {
         &event.connection_id
+    }
+}
+
+impl<Chain> EventExtractor<Chain, CosmosConnectionOpenTryEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosConnectionOpenTryEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosConnectionOpenTryEvent> {
+        let ibc_event = try_conn_open_try_from_abci_event(event).ok()??;
+        let connection_id = ibc_event.conn_id_on_b().clone();
+
+        Some(CosmosConnectionOpenTryEvent { connection_id })
     }
 }
 
@@ -132,18 +141,23 @@ where
 {
     type ChannelOpenInitEvent = CosmosChannelOpenInitEvent;
 
-    fn try_extract_channel_open_init_event(
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosChannelOpenInitEvent> {
-        events.iter().find_map(|event| {
-            let ibc_event = try_chan_open_init_from_abci_event(event).ok()??;
-            let channel_id = ibc_event.chan_id_on_a().clone();
-            Some(CosmosChannelOpenInitEvent { channel_id })
-        })
-    }
-
     fn channel_open_init_event_channel_id(event: &CosmosChannelOpenInitEvent) -> &ChannelId {
         &event.channel_id
+    }
+}
+
+impl<Chain> EventExtractor<Chain, CosmosChannelOpenInitEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosChannelOpenInitEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosChannelOpenInitEvent> {
+        let ibc_event = try_chan_open_init_from_abci_event(event).ok()??;
+        let channel_id = ibc_event.chan_id_on_a().clone();
+        Some(CosmosChannelOpenInitEvent { channel_id })
     }
 }
 
@@ -154,18 +168,23 @@ where
 {
     type ChannelOpenTryEvent = CosmosChannelOpenTryEvent;
 
-    fn try_extract_channel_open_try_event(
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosChannelOpenTryEvent> {
-        events.iter().find_map(|event| {
-            let ibc_event = try_chan_open_try_from_abci_event(event).ok()??;
-            let channel_id = ibc_event.chan_id_on_b().clone();
-            Some(CosmosChannelOpenTryEvent { channel_id })
-        })
-    }
-
     fn channel_open_try_event_channel_id(event: &CosmosChannelOpenTryEvent) -> &ChannelId {
         &event.channel_id
+    }
+}
+
+impl<Chain> EventExtractor<Chain, CosmosChannelOpenTryEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosChannelOpenTryEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosChannelOpenTryEvent> {
+        let ibc_event = try_chan_open_try_from_abci_event(event).ok()??;
+        let channel_id = ibc_event.chan_id_on_b().clone();
+        Some(CosmosChannelOpenTryEvent { channel_id })
     }
 }
 

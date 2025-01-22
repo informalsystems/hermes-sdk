@@ -259,18 +259,25 @@ where
 {
     type ConnectionOpenInitEvent = SolomachineConnectionInitEvent;
 
-    fn try_extract_connection_open_init_event(
-        events: &Vec<SolomachineEvent>,
-    ) -> Option<SolomachineConnectionInitEvent> {
-        events.iter().find_map(|event| match event {
-            SolomachineEvent::ConnectionInit(e) => Some(e.clone()),
-            _ => None,
-        })
-    }
-
     fn connection_open_init_event_connection_id(
         event: &Self::ConnectionOpenInitEvent,
     ) -> &ConnectionId {
         &event.connection_id
+    }
+}
+
+impl<Chain> EventExtractor<Chain, SolomachineConnectionInitEvent> for ProvideSolomachineChainTypes
+where
+    Chain: HasEventType<Event = SolomachineEvent>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<SolomachineConnectionInitEvent>,
+        event: &SolomachineEvent,
+    ) -> Option<SolomachineConnectionInitEvent> {
+        match event {
+            SolomachineEvent::ConnectionInit(e) => Some(e.clone()),
+            _ => None,
+        }
     }
 }

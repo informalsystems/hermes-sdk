@@ -12,10 +12,6 @@ pub trait HasChannelOpenInitEvent<Counterparty>:
 {
     type ChannelOpenInitEvent: Async;
 
-    fn try_extract_channel_open_init_event(
-        event: &Self::MessageResponse,
-    ) -> Option<Self::ChannelOpenInitEvent>;
-
     fn channel_open_init_event_channel_id(event: &Self::ChannelOpenInitEvent) -> &Self::ChannelId;
 }
 
@@ -28,10 +24,6 @@ pub trait HasChannelOpenTryEvent<Counterparty>:
     HasMessageResponseType + HasChannelIdType<Counterparty>
 {
     type ChannelOpenTryEvent: Async;
-
-    fn try_extract_channel_open_try_event(
-        event: &Self::MessageResponse,
-    ) -> Option<Self::ChannelOpenTryEvent>;
 
     fn channel_open_try_event_channel_id(event: &Self::ChannelOpenTryEvent) -> &Self::ChannelId;
 }
