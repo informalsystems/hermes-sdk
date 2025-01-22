@@ -40,8 +40,7 @@ pub struct ProvideCosmosEvents;
 
 impl<Chain, Counterparty> ProvideCreateClientEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
-    Chain: HasClientIdType<Counterparty, ClientId = ClientId>
-        + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>,
+    Chain: HasClientIdType<Counterparty, ClientId = ClientId>,
 {
     type CreateClientEvent = CosmosCreateClientEvent;
 
@@ -76,8 +75,7 @@ where
 impl<Chain, Counterparty> ProvideConnectionOpenInitEvent<Chain, Counterparty>
     for ProvideCosmosEvents
 where
-    Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>
-        + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>,
+    Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>,
 {
     type ConnectionOpenInitEvent = CosmosConnectionOpenInitEvent;
 
@@ -106,8 +104,7 @@ where
 
 impl<Chain, Counterparty> ProvideConnectionOpenTryEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
-    Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>
-        + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>,
+    Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>,
 {
     type ConnectionOpenTryEvent = CosmosConnectionOpenTryEvent;
 
@@ -163,8 +160,7 @@ where
 
 impl<Chain, Counterparty> ProvideChannelOpenTryEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
-    Chain: HasChannelIdType<Counterparty, ChannelId = ChannelId>
-        + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>,
+    Chain: HasChannelIdType<Counterparty, ChannelId = ChannelId>,
 {
     type ChannelOpenTryEvent = CosmosChannelOpenTryEvent;
 

@@ -1,15 +1,12 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 #[cgp_component {
   name: ConnectionOpenTryEventComponent,
   provider: ProvideConnectionOpenTryEvent,
   context: Chain,
 }]
-pub trait HasConnectionOpenTryEvent<Counterparty>:
-    HasMessageResponseType + HasConnectionIdType<Counterparty>
-{
+pub trait HasConnectionOpenTryEvent<Counterparty>: HasConnectionIdType<Counterparty> {
     type ConnectionOpenTryEvent: Async;
 
     fn connection_open_try_event_connection_id(
@@ -22,9 +19,7 @@ pub trait HasConnectionOpenTryEvent<Counterparty>:
   provider: ProvideConnectionOpenInitEvent,
   context: Chain,
 }]
-pub trait HasConnectionOpenInitEvent<Counterparty>:
-    HasMessageResponseType + HasConnectionIdType<Counterparty>
-{
+pub trait HasConnectionOpenInitEvent<Counterparty>: HasConnectionIdType<Counterparty> {
     type ConnectionOpenInitEvent: Async;
 
     fn connection_open_init_event_connection_id(

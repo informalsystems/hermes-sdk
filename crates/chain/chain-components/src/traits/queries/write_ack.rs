@@ -9,7 +9,7 @@ use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 }]
 #[async_trait]
 pub trait CanQueryWriteAck<Counterparty>:
-    HasWriteAckEvent<Counterparty> + HasAsyncErrorType
+    Sized + HasWriteAckEvent<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasOutgoingPacketType<Self>,
 {

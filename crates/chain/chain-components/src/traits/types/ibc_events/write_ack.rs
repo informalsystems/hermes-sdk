@@ -4,7 +4,6 @@
 
 use cgp::prelude::*;
 
-use crate::traits::types::event::HasEventType;
 use crate::traits::types::packets::ack::HasAcknowledgementType;
 
 /**
@@ -17,9 +16,7 @@ use crate::traits::types::packets::ack::HasAcknowledgementType;
   provider: ProvideWriteAckEvent,
   context: Chain,
 }]
-pub trait HasWriteAckEvent<Counterparty>:
-    HasEventType + HasAcknowledgementType<Counterparty>
-{
+pub trait HasWriteAckEvent<Counterparty>: HasAcknowledgementType<Counterparty> {
     /**
        The write acknowledgement event that is emitted when a `RecvPacket`
        message is committed to a chain.

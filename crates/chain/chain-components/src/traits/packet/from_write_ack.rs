@@ -7,7 +7,7 @@ use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
   provider: PacketFromWriteAckBuilder,
   context: Chain,
 }]
-pub trait CanBuildPacketFromWriteAck<Counterparty>: HasWriteAckEvent<Counterparty>
+pub trait CanBuildPacketFromWriteAck<Counterparty>: Sized + HasWriteAckEvent<Counterparty>
 where
     Counterparty: HasOutgoingPacketType<Self>,
 {

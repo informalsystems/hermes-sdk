@@ -2,7 +2,6 @@ use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 #[cgp_component {
   name: CreateClientPayloadOptionsTypeComponent,
@@ -45,9 +44,7 @@ pub type CreateClientPayloadOf<Chain, Counterparty> =
   provider: ProvideCreateClientEvent,
   context: Chain,
 }]
-pub trait HasCreateClientEvent<Counterparty>:
-    HasMessageResponseType + HasClientIdType<Counterparty>
-{
+pub trait HasCreateClientEvent<Counterparty>: HasClientIdType<Counterparty> {
     type CreateClientEvent: Async;
 
     fn create_client_event_client_id(event: &Self::CreateClientEvent) -> &Self::ClientId;
