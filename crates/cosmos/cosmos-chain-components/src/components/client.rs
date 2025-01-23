@@ -33,8 +33,8 @@ pub use hermes_relayer_components::chain::traits::packet::fields::{
 pub use hermes_relayer_components::chain::traits::packet::filter::{
     IncomingPacketFilterComponent, OutgoingPacketFilterComponent,
 };
-use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilderComponent;
-pub use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
+pub use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilderComponent;
+pub use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckEventBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilderComponent,
@@ -151,7 +151,6 @@ use crate::components::delegate::DelegateCosmosChainComponents;
 use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
 use crate::impls::events::ProvideCosmosEvents;
-use crate::impls::packet::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
 use crate::impls::queries::abci::QueryAbci;
 use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
@@ -229,6 +228,7 @@ cgp_preset! {
             WriteAckEventComponent,
             EventExtractorComponent,
             PacketFromSendPacketEventBuilderComponent,
+            PacketFromWriteAckEventBuilderComponent,
         ]:
             ProvideCosmosEvents,
         [
@@ -321,8 +321,6 @@ cgp_preset! {
             QueryCosmosAckPacket,
         AckPacketsQuerierComponent:
             QueryAckPacketsConcurrently,
-        PacketFromWriteAckBuilderComponent:
-            BuildCosmosPacketFromWriteAck,
         ChainStatusQuerierComponent:
             QueryCosmosChainStatus,
         InitConnectionOptionsTypeComponent:

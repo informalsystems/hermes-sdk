@@ -4,7 +4,7 @@ use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketT
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 
 #[cgp_component {
-  provider: PacketFromWriteAckBuilder,
+  provider: PacketFromWriteAckEventBuilder,
   context: Chain,
 }]
 #[async_trait]
