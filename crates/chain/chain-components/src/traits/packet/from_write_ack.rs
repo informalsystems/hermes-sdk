@@ -2,6 +2,7 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
 
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use crate::traits::types::packets::ack::HasAcknowledgementType;
 
 #[cgp_component {
   provider: PacketFromWriteAckEventBuilder,
@@ -9,7 +10,7 @@ use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 }]
 #[async_trait]
 pub trait CanBuildPacketFromWriteAck<Counterparty>:
-    Sized + HasWriteAckEvent<Counterparty> + HasAsyncErrorType
+    Sized + HasWriteAckEvent<Counterparty> + HasAcknowledgementType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasOutgoingPacketType<Self>,
 {
@@ -31,4 +32,9 @@ where
         &self,
         ack: &Self::WriteAckEvent,
     ) -> Result<Counterparty::OutgoingPacket, Self::Error>;
+
+    async fn build_ack_from_write_ack_event(
+        &self,
+        ack: &Self::WriteAckEvent,
+    ) -> Result<Self::Acknowledgement, Self::Error>;
 }

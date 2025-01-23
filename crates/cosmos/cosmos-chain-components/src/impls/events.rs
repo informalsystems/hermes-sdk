@@ -235,10 +235,6 @@ where
         + HasAcknowledgementType<Counterparty, Acknowledgement = Vec<u8>>,
 {
     type WriteAckEvent = WriteAckEvent;
-
-    fn write_acknowledgement(event: &WriteAckEvent) -> &Vec<u8> {
-        &event.acknowledgment
-    }
 }
 
 impl<Chain> EventExtractor<Chain, WriteAckEvent> for ProvideCosmosEvents
@@ -259,7 +255,9 @@ where
 impl<Chain, Counterparty> PacketFromWriteAckEventBuilder<Chain, Counterparty>
     for ProvideCosmosEvents
 where
-    Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAckEvent> + HasAsyncErrorType,
+    Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAckEvent>
+        + HasAcknowledgementType<Counterparty, Acknowledgement = Vec<u8>>
+        + HasAsyncErrorType,
     Counterparty: HasOutgoingPacketType<Chain, OutgoingPacket = Packet>,
 {
     async fn build_packet_from_write_ack_event(
@@ -267,5 +265,12 @@ where
         ack: &WriteAckEvent,
     ) -> Result<Packet, Chain::Error> {
         Ok(ack.packet.clone())
+    }
+
+    async fn build_ack_from_write_ack_event(
+        _chain: &Chain,
+        event: &WriteAckEvent,
+    ) -> Result<Vec<u8>, Chain::Error> {
+        Ok(event.acknowledgment.clone())
     }
 }

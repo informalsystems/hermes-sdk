@@ -2,6 +2,7 @@ use cgp::prelude::CanRaiseAsyncError;
 use hermes_chain_components::traits::packet::fields::{
     HasPacketTimeoutHeight, HasPacketTimeoutTimestamp,
 };
+use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_chain_components::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
 use hermes_logging_components::traits::has_logger::HasLogger;
@@ -49,6 +50,7 @@ where
         + HasPacketTimeoutTimestamp<DstChain>,
     DstChain: CanQueryChainStatus
         + HasWriteAckEvent<Relay::SrcChain>
+        + CanBuildPacketFromWriteAck<Relay::SrcChain>
         + HasChannelIdType<SrcChain>
         + HasPortIdType<SrcChain>
         + HasTimeoutType,
@@ -129,7 +131,7 @@ where
 
             let destination_height = DstChain::chain_status_height(&destination_status);
 
-            if let Some(ack) = write_ack {
+            if let Some(ack_event) = write_ack {
                 logger
                     .log(
                         "relaying ack packet",
@@ -141,12 +143,13 @@ where
                     )
                     .await;
 
+                let ack = dst_chain
+                    .build_ack_from_write_ack_event(&ack_event)
+                    .await
+                    .map_err(Relay::raise_error)?;
+
                 relay
-                    .relay_ack_packet(
-                        destination_height,
-                        packet,
-                        DstChain::write_acknowledgement(&ack).as_ref(),
-                    )
+                    .relay_ack_packet(destination_height, packet, &ack)
                     .await?;
             } else {
                 logger

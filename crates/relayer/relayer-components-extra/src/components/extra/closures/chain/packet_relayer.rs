@@ -10,6 +10,7 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
     CanBuildTimeoutUnorderedPacketMessage, TimeoutUnorderedPacketMessageBuilder,
 };
 use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
+use hermes_relayer_components::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
     AckPacketPayloadBuilder, CanBuildAckPacketPayload,
 };
@@ -65,6 +66,7 @@ where
         + HasOutgoingPacketType<Counterparty>
         + HasReceivePacketPayloadType<Counterparty>
         + HasWriteAckEvent<Counterparty>
+        + CanBuildPacketFromWriteAck<Counterparty>
         + HasAckPacketPayloadType<Counterparty>
         + CanReadPacketFields<Counterparty>
         + HasTimeoutUnorderedPacketPayloadType<Counterparty>

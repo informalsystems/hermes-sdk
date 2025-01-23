@@ -29,6 +29,7 @@ use hermes_relayer_components::chain::traits::packet::fields::{
     PacketTimeoutTimestampGetter,
 };
 use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilder;
+use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckEventBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -197,9 +198,21 @@ impl PacketTimeoutTimestampGetter<MockChainContext, MockChainContext> for MockCh
 
 impl ProvideWriteAckEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type WriteAckEvent = WriteAckEvent;
+}
 
-    fn write_acknowledgement(_event: &WriteAckEvent) -> Vec<u8> {
-        Vec::new() // stub
+impl PacketFromWriteAckEventBuilder<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn build_packet_from_write_ack_event(
+        _chain: &MockChainContext,
+        _ack: &WriteAckEvent,
+    ) -> Result<Packet, Error> {
+        todo!()
+    }
+
+    async fn build_ack_from_write_ack_event(
+        _chain: &MockChainContext,
+        _ack: &WriteAckEvent,
+    ) -> Result<Vec<u8>, Error> {
+        Ok(Vec::new())
     }
 }
 

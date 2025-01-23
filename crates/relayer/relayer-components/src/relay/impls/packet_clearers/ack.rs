@@ -1,5 +1,8 @@
 use alloc::boxed::Box;
 
+use cgp::core::error::ErrorOf;
+use cgp::prelude::CanRaiseAsyncError;
+use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -32,18 +35,21 @@ where
 
 impl<Relay> Task for RelayPacketTask<Relay>
 where
-    Relay: CanRelayAckPacket + HasLogger,
-    Relay::DstChain: HasWriteAckEvent<Relay::SrcChain>,
+    Relay: CanRelayAckPacket + HasLogger + CanRaiseAsyncError<ErrorOf<Relay::DstChain>>,
+    Relay::DstChain: CanBuildPacketFromWriteAck<Relay::SrcChain>,
     Relay::Logger: for<'a> CanLog<LogClearPacketError<'a, Relay>>,
 {
     async fn run(self) {
+        let ack = self
+            .relay
+            .dst_chain()
+            .build_ack_from_write_ack_event(&self.ack)
+            .await
+            .unwrap();
+
         let res = self
             .relay
-            .relay_ack_packet(
-                &self.height,
-                &self.packet,
-                Relay::DstChain::write_acknowledgement(&self.ack).as_ref(),
-            )
+            .relay_ack_packet(&self.height, &self.packet, &ack)
             .await;
 
         if let Err(e) = res {

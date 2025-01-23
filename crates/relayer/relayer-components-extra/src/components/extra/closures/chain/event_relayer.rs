@@ -36,6 +36,7 @@ where
         + HasIbcChainTypes<Counterparty>
         + HasClientStateType<Counterparty>
         + HasWriteAckEvent<Counterparty>
+        + CanBuildPacketFromWriteAck<Counterparty>
         + CanExtractFromEvent<Chain::SendPacketEvent>
         + CanExtractFromEvent<Chain::WriteAckEvent>
         + HasComponents<Components = Components>,
