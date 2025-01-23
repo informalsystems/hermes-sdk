@@ -7,7 +7,9 @@ use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
   provider: PacketFromWriteAckBuilder,
   context: Chain,
 }]
-pub trait CanBuildPacketFromWriteAck<Counterparty>: Sized + HasWriteAckEvent<Counterparty>
+#[async_trait]
+pub trait CanBuildPacketFromWriteAck<Counterparty>:
+    Sized + HasWriteAckEvent<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasOutgoingPacketType<Self>,
 {
@@ -25,7 +27,8 @@ where
        refactored into a method like
        `query_packet_from_write_ack_event`.
     */
-    fn build_packet_from_write_ack_event(
+    async fn build_packet_from_write_ack_event(
+        &self,
         ack: &Self::WriteAckEvent,
-    ) -> &Counterparty::OutgoingPacket;
+    ) -> Result<Counterparty::OutgoingPacket, Self::Error>;
 }

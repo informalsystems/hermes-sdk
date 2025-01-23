@@ -89,20 +89,24 @@ where
         height: &HeightOf<Relay::DstChain>,
         event: &EventOf<Relay::DstChain>,
     ) -> Result<(), Relay::Error> {
-        let m_ack_event = relay.dst_chain().try_extract_from_event(PhantomData, event);
+        let dst_chain = relay.dst_chain();
+        let m_ack_event = dst_chain.try_extract_from_event(PhantomData, event);
 
         if let Some(ack_event) = m_ack_event {
-            let packet = Relay::DstChain::build_packet_from_write_ack_event(&ack_event);
+            let packet = dst_chain
+                .build_packet_from_write_ack_event(&ack_event)
+                .await
+                .map_err(Relay::raise_error)?;
 
             /*
                First check whether the packet is targetted for the destination chain,
                then use the packet filter in the relay context, as we skip `CanRelayPacket`
                which would have done the packet filtering.
             */
-            if MatchPacketSourceChain::should_relay_packet(relay, packet).await?
-                && relay.should_relay_packet(packet).await?
+            if MatchPacketSourceChain::should_relay_packet(relay, &packet).await?
+                && relay.should_relay_packet(&packet).await?
             {
-                let m_lock = relay.try_acquire_packet_lock(packet).await;
+                let m_lock = relay.try_acquire_packet_lock(&packet).await;
 
                 /*
                    Only relay the ack packet if there isn't another packet relayer
@@ -127,7 +131,7 @@ where
                         relay
                             .relay_ack_packet(
                                 height,
-                                packet,
+                                &packet,
                                 Relay::DstChain::write_acknowledgement(&ack_event).as_ref(),
                             )
                             .await?;
@@ -137,7 +141,7 @@ where
                             "skip relaying ack packet, as another packet relayer has acquired the packet lock",
                             &LogSkipRelayLockedPacket {
                                 relay,
-                                packet,
+                                packet: &packet,
                             }).await;
                     }
                 }
