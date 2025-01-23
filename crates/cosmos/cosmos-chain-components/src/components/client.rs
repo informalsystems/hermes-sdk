@@ -33,6 +33,7 @@ pub use hermes_relayer_components::chain::traits::packet::fields::{
 pub use hermes_relayer_components::chain::traits::packet::filter::{
     IncomingPacketFilterComponent, OutgoingPacketFilterComponent,
 };
+use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilderComponent;
 pub use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
@@ -227,6 +228,7 @@ cgp_preset! {
             SendPacketEventComponent,
             WriteAckEventComponent,
             EventExtractorComponent,
+            PacketFromSendPacketEventBuilderComponent,
         ]:
             ProvideCosmosEvents,
         [

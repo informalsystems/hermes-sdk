@@ -1,8 +1,10 @@
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
+use cgp::prelude::HasAsyncErrorType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
+use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::ibc::{
@@ -14,7 +16,9 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::{
+    HasSendPacketEvent, ProvideSendPacketEvent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAcknowledgementType;
@@ -193,6 +197,21 @@ where
 
     fn extract_packet_from_send_packet_event(event: &SendPacketEvent) -> Packet {
         event.packet.clone()
+    }
+}
+
+impl<Chain, Counterparty> PacketFromSendPacketEventBuilder<Chain, Counterparty>
+    for ProvideCosmosEvents
+where
+    Chain: HasSendPacketEvent<Counterparty, SendPacketEvent = SendPacketEvent>
+        + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
+        + HasAsyncErrorType,
+{
+    async fn build_packet_from_send_packet_event(
+        _chain: &Chain,
+        event: &SendPacketEvent,
+    ) -> Result<Packet, Chain::Error> {
+        Ok(event.packet.clone())
     }
 }
 
