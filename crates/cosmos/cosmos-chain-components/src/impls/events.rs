@@ -197,10 +197,6 @@ where
         + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>,
 {
     type SendPacketEvent = SendPacketEvent;
-
-    fn extract_packet_from_send_packet_event(event: &SendPacketEvent) -> Packet {
-        event.packet.clone()
-    }
 }
 
 impl<Chain, Counterparty> PacketFromSendPacketEventBuilder<Chain, Counterparty>

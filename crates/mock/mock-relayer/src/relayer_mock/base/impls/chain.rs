@@ -28,6 +28,7 @@ use hermes_relayer_components::chain::traits::packet::fields::{
     PacketSrcChannelIdGetter, PacketSrcPortIdGetter, PacketTimeoutHeightGetter,
     PacketTimeoutTimestampGetter,
 };
+use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -238,9 +239,14 @@ impl ProvideChainStatusType<MockChainContext> for MockChainComponents {
 
 impl ProvideSendPacketEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type SendPacketEvent = SendPacketEvent;
+}
 
-    fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent) -> Packet {
-        Packet::from(event.clone())
+impl PacketFromSendPacketEventBuilder<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn build_packet_from_send_packet_event(
+        _chain: &MockChainContext,
+        event: &SendPacketEvent,
+    ) -> Result<Packet, Error> {
+        Ok(Packet::from(event.clone()))
     }
 }
 

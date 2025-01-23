@@ -2,6 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::HasErrorType;
 use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
+use hermes_chain_components::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -47,7 +48,8 @@ where
         + CanRaiseRelayChainErrors,
     SrcChain: HasErrorType
         + HasSendPacketEvent<Relay::DstChain>
-        + CanExtractFromEvent<SrcChain::SendPacketEvent>,
+        + CanExtractFromEvent<SrcChain::SendPacketEvent>
+        + CanBuildPacketFromSendPacket<Relay::DstChain>,
     MatchPacketDestinationChain: RelayPacketFilter<Relay>,
 {
     async fn relay_chain_event(
@@ -55,10 +57,13 @@ where
         _height: &HeightOf<Relay::SrcChain>,
         event: &EventOf<Relay::SrcChain>,
     ) -> Result<(), Relay::Error> {
-        if let Some(send_packet_event) =
-            relay.src_chain().try_extract_from_event(PhantomData, event)
-        {
-            let packet = Relay::SrcChain::extract_packet_from_send_packet_event(&send_packet_event);
+        let src_chain = relay.src_chain();
+
+        if let Some(send_packet_event) = src_chain.try_extract_from_event(PhantomData, event) {
+            let packet = src_chain
+                .build_packet_from_send_packet_event(&send_packet_event)
+                .await
+                .map_err(Relay::raise_error)?;
 
             if MatchPacketDestinationChain::should_relay_packet(relay, &packet).await? {
                 relay.relay_packet(&packet).await?;

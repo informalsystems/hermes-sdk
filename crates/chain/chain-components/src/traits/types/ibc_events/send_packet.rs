@@ -3,7 +3,6 @@
 */
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
 
 /**
    Indicates that a chain context's
@@ -15,9 +14,6 @@ use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketT
   provider: ProvideSendPacketEvent,
   context: Chain,
 }]
-pub trait HasSendPacketEvent<Counterparty>: HasOutgoingPacketType<Counterparty> {
+pub trait HasSendPacketEvent<Counterparty> {
     type SendPacketEvent: Async;
-
-    fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent)
-        -> Self::OutgoingPacket;
 }

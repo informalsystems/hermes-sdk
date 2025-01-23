@@ -1,5 +1,6 @@
 use cgp::prelude::{HasAsyncErrorType, HasComponents};
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
+use hermes_relayer_components::chain::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
 use hermes_relayer_components::chain::traits::packet::from_write_ack::{
     CanBuildPacketFromWriteAck, PacketFromWriteAckEventBuilder,
 };
@@ -16,6 +17,7 @@ use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketTy
 pub trait UseExtraChainComponentsForEventRelayer<Counterparty>:
     HasChainId
     + HasSendPacketEvent<Counterparty>
+    + CanBuildPacketFromSendPacket<Counterparty>
     + CanQueryCounterpartyChainId<Counterparty>
     + CanBuildPacketFromWriteAck<Counterparty>
     + CanExtractFromEvent<Self::SendPacketEvent>
@@ -30,6 +32,7 @@ where
     Chain: HasAsyncErrorType
         + HasChainId
         + HasSendPacketEvent<Counterparty>
+        + CanBuildPacketFromSendPacket<Counterparty>
         + HasIbcChainTypes<Counterparty>
         + HasClientStateType<Counterparty>
         + HasWriteAckEvent<Counterparty>
