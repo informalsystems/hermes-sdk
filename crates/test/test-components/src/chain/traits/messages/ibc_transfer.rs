@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
 
@@ -20,7 +20,8 @@ pub trait CanBuildIbcTokenTransferMessage<Counterparty>:
     + HasMessageType
     + HasHeightType
     + HasTimeoutType
-    + HasIbcChainTypes<Counterparty>
+    + HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
 where
     Counterparty: HasAddressType,
 {
