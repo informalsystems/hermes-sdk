@@ -2,6 +2,7 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::core::error::CanRaiseAsyncError;
+use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenInitPayload;
@@ -34,7 +35,8 @@ where
         + HasInitConnectionOptionsType<DstChain>
         + CanBuildConnectionOpenInitMessage<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
-        + HasConnectionOpenInitEvent<DstChain>,
+        + HasConnectionOpenInitEvent<DstChain>
+        + CanExtractFromMessageResponse<SrcChain::ConnectionOpenInitEvent>,
     DstChain: CanBuildConnectionOpenInitPayload<SrcChain>,
     SrcChain::ConnectionId: Clone,
 {
@@ -73,7 +75,8 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        let open_init_event = SrcChain::try_extract_connection_open_init_event(&response)
+        let open_init_event = src_chain
+            .try_extract_from_message_response(PhantomData, &response)
             .ok_or_else(|| Relay::raise_error(MissingConnectionInitEventError { relay }))?;
 
         let src_connection_id =

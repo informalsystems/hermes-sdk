@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_async_runtime_components::channel::types::ChannelClosedError;
+use hermes_async_runtime_components::channel::types::ErrChannelClosed;
 use hermes_async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use hermes_runtime_components::traits::channel::{
     ChannelCreator, ChannelUser, ProvideChannelType, ReceiverStreamer, SenderCloner,
@@ -86,7 +86,7 @@ where
 
 impl<Runtime> ChannelUser<Runtime> for ProvideUnboundedChannelType
 where
-    Runtime: HasUnboundedChannelType + CanRaiseAsyncError<ChannelClosedError>,
+    Runtime: HasUnboundedChannelType + CanRaiseAsyncError<ErrChannelClosed>,
 {
     async fn send<T>(sender: &Runtime::Sender<T>, value: T) -> Result<(), Runtime::Error>
     where
@@ -94,7 +94,7 @@ where
     {
         Runtime::to_unbounded_sender_ref(sender)
             .send(value)
-            .map_err(|_| Runtime::raise_error(ChannelClosedError))
+            .map_err(|_| Runtime::raise_error(ErrChannelClosed))
     }
 
     async fn receive<T>(receiver: &mut Runtime::Receiver<T>) -> Result<T, Runtime::Error>
@@ -104,7 +104,7 @@ where
         Runtime::to_unbounded_receiver_ref(receiver)
             .recv()
             .await
-            .ok_or(Runtime::raise_error(ChannelClosedError))
+            .ok_or(Runtime::raise_error(ErrChannelClosed))
     }
 
     fn try_receive<T>(receiver: &mut Runtime::Receiver<T>) -> Result<Option<T>, Runtime::Error>
@@ -115,7 +115,7 @@ where
             Ok(batch) => Ok(Some(batch)),
             Err(mpsc::error::TryRecvError::Empty) => Ok(None),
             Err(mpsc::error::TryRecvError::Disconnected) => {
-                Err(Runtime::raise_error(ChannelClosedError))
+                Err(Runtime::raise_error(ErrChannelClosed))
             }
         }
     }

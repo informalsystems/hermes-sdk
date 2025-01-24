@@ -1,1 +1,2 @@
-pub struct ChannelClosedError;
+#[derive(Debug)]
+pub struct ErrChannelClosed;

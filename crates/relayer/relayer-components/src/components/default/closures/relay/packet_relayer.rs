@@ -1,5 +1,6 @@
 use cgp::core::component::HasComponents;
 use cgp::core::error::{ErrorRaiser, HasAsyncErrorType};
+use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_chain_components::traits::send_message::EmptyMessageResponse;
 use hermes_chain_components::traits::types::ibc::HasIbcChainTypes;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
@@ -90,6 +91,7 @@ where
         + HasConsensusStateType<SrcChain>
         + HasCounterpartyMessageHeight<SrcChain>
         + HasWriteAckEvent<SrcChain>
+        + CanBuildPacketFromWriteAck<SrcChain>
         + CanReadPacketFields<SrcChain>
         + CanQueryClientState<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>

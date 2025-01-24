@@ -25,6 +25,7 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOpt
 use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::commitment_proof::CosmosCommitmentProof;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::events::client::CosmosCreateClientEvent;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
@@ -44,7 +45,10 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     HasCommitmentPrefixType, HasIbcCommitmentPrefix, IbcCommitmentPrefixGetter,
 };
-use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
+use hermes_relayer_components::chain::traits::event_subscription::EventSubscriptionGetter;
+use hermes_relayer_components::chain::traits::extract_data::{
+    CanExtractFromEvent, CanExtractFromMessageResponse,
+};
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::packet::fields::HasPacketSrcChannelId;
 use hermes_relayer_components::chain::traits::packet::filter::{
@@ -72,7 +76,8 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+    HasCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
@@ -329,9 +334,11 @@ impl ChainIdGetter<CosmosChain> for CosmosChainContextComponents {
     }
 }
 
-impl HasEventSubscription for CosmosChain {
-    fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
-        &self.subscription
+impl EventSubscriptionGetter<CosmosChain> for CosmosChainContextComponents {
+    fn event_subscription(
+        chain: &CosmosChain,
+    ) -> Option<&Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>> {
+        Some(&chain.subscription)
     }
 }
 
@@ -343,6 +350,7 @@ pub trait CanUseCosmosChain:
     + HasEventType<Event = Arc<AbciEvent>>
     + HasCreateClientPayloadType<CosmosChain, CreateClientPayload = CosmosCreateClientPayload>
     + HasUpdateClientPayloadType<CosmosChain, UpdateClientPayload = CosmosUpdateClientPayload>
+    + HasCreateClientMessageOptionsType<CosmosChain, CreateClientMessageOptions = ()>
     + HasCreateClientPayloadOptionsType<
         CosmosChain,
         CreateClientPayloadOptions = CosmosCreateClientOptions,
@@ -386,6 +394,8 @@ pub trait CanUseCosmosChain:
     + CanFilterIncomingPacket<CosmosChain>
     + CanFilterOutgoingPacket<CosmosChain>
     + HasPacketSrcChannelId<CosmosChain>
+    + CanExtractFromEvent<CosmosCreateClientEvent>
+    + CanExtractFromMessageResponse<CosmosCreateClientEvent>
 {
 }
 

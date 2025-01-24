@@ -1,6 +1,8 @@
 use alloc::sync::Arc;
+use core::marker::PhantomData;
 
 use cgp::core::error::CanRaiseAsyncError;
+use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -26,6 +28,7 @@ where
             PortId = PortId,
             Event = Arc<AbciEvent>,
         > + HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAckEvent>
+        + CanExtractFromEvent<WriteAckEvent>
         + HasRpcClient
         + CanRaiseAsyncError<RpcError>
         + CanRaiseAsyncError<&'static str>,
@@ -85,7 +88,7 @@ where
 
         let write_acks: Vec<WriteAckEvent> = events
             .iter()
-            .filter_map(Chain::try_extract_write_ack_event)
+            .filter_map(|event| chain.try_extract_from_event(PhantomData, event))
             .collect();
 
         let write_ack = write_acks

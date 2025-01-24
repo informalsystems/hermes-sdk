@@ -19,6 +19,7 @@ use hermes_chain_type_components::impls::types::message_response::UseEventsMessa
 use hermes_cosmos_chain_components::components::client::{
     MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
 };
+use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
@@ -27,6 +28,8 @@ use hermes_relayer_components::chain::traits::packet::fields::{
     PacketSrcChannelIdGetter, PacketSrcPortIdGetter, PacketTimeoutHeightGetter,
     PacketTimeoutTimestampGetter,
 };
+use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilder;
+use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckEventBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -195,16 +198,34 @@ impl PacketTimeoutTimestampGetter<MockChainContext, MockChainContext> for MockCh
 
 impl ProvideWriteAckEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type WriteAckEvent = WriteAckEvent;
+}
 
-    fn try_extract_write_ack_event(event: &Event) -> Option<Self::WriteAckEvent> {
+impl PacketFromWriteAckEventBuilder<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn build_packet_from_write_ack_event(
+        _chain: &MockChainContext,
+        _ack: &WriteAckEvent,
+    ) -> Result<Packet, Error> {
+        todo!()
+    }
+
+    async fn build_ack_from_write_ack_event(
+        _chain: &MockChainContext,
+        _ack: &WriteAckEvent,
+    ) -> Result<Vec<u8>, Error> {
+        Ok(Vec::new())
+    }
+}
+
+impl EventExtractor<MockChainContext, WriteAckEvent> for MockChainComponents {
+    fn try_extract_from_event(
+        _chain: &MockChainContext,
+        _tag: PhantomData<WriteAckEvent>,
+        event: &Event,
+    ) -> Option<WriteAckEvent> {
         match event {
             Event::WriteAcknowledgment(h) => Some(WriteAckEvent::new(*h)),
             _ => None,
         }
-    }
-
-    fn write_acknowledgement(_event: &WriteAckEvent) -> Vec<u8> {
-        Vec::new() // stub
     }
 }
 
@@ -231,16 +252,14 @@ impl ProvideChainStatusType<MockChainContext> for MockChainComponents {
 
 impl ProvideSendPacketEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type SendPacketEvent = SendPacketEvent;
+}
 
-    fn try_extract_send_packet_event(event: &Event) -> Option<SendPacketEvent> {
-        match event {
-            Event::SendPacket(send_packet_event) => Some(send_packet_event.clone()),
-            _ => None,
-        }
-    }
-
-    fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent) -> Packet {
-        Packet::from(event.clone())
+impl PacketFromSendPacketEventBuilder<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn build_packet_from_send_packet_event(
+        _chain: &MockChainContext,
+        event: &SendPacketEvent,
+    ) -> Result<Packet, Error> {
+        Ok(Packet::from(event.clone()))
     }
 }
 

@@ -1,6 +1,8 @@
 use alloc::sync::Arc;
+use core::marker::PhantomData;
 
 use cgp::core::error::CanRaiseAsyncError;
+use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::queries::send_packets::SendPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
@@ -28,6 +30,7 @@ where
             Event = Arc<AbciEvent>,
         > + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
         + HasSendPacketEvent<Counterparty, SendPacketEvent = SendPacketEvent>
+        + CanExtractFromEvent<SendPacketEvent>
         + HasRpcClient
         + CanRaiseAsyncError<RpcError>
         + CanRaiseAsyncError<&'static str>,
@@ -85,7 +88,7 @@ where
 
         let send_packets: Vec<Packet> = events
             .iter()
-            .filter_map(Chain::try_extract_send_packet_event)
+            .filter_map(|event| chain.try_extract_from_event(PhantomData, event))
             .map(|event| event.packet.clone())
             .collect();
 

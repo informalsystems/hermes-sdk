@@ -1,7 +1,9 @@
 use core::fmt::Debug;
+use core::marker::PhantomData;
 
 use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::HasAsyncErrorType;
+use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
 use crate::chain::traits::send_message::CanSendSingleMessage;
@@ -31,7 +33,8 @@ where
     SrcChain: CanSendSingleMessage
         + HasInitChannelOptionsType<DstChain>
         + CanBuildChannelOpenInitMessage<DstChain>
-        + HasChannelOpenInitEvent<DstChain>,
+        + HasChannelOpenInitEvent<DstChain>
+        + CanExtractFromMessageResponse<SrcChain::ChannelOpenInitEvent>,
     DstChain: HasIbcChainTypes<SrcChain> + HasAsyncErrorType,
     SrcChain::ChannelId: Clone,
 {
@@ -53,7 +56,8 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        let open_init_event = SrcChain::try_extract_channel_open_init_event(&response)
+        let open_init_event = src_chain
+            .try_extract_from_message_response(PhantomData, &response)
             .ok_or_else(|| Relay::raise_error(MissingChannelInitEventError { relay }))?;
 
         let src_channel_id = SrcChain::channel_open_init_event_channel_id(&open_init_event);

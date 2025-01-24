@@ -4,9 +4,6 @@
 
 use cgp::prelude::*;
 
-use crate::traits::types::event::HasEventType;
-use crate::traits::types::packets::ack::HasAcknowledgementType;
-
 /**
    Indicates that a chain context's
    [`Event`](crate::traits::types::event::HasEventType::Event)
@@ -17,9 +14,7 @@ use crate::traits::types::packets::ack::HasAcknowledgementType;
   provider: ProvideWriteAckEvent,
   context: Chain,
 }]
-pub trait HasWriteAckEvent<Counterparty>:
-    HasEventType + HasAcknowledgementType<Counterparty>
-{
+pub trait HasWriteAckEvent<Counterparty> {
     /**
        The write acknowledgement event that is emitted when a `RecvPacket`
        message is committed to a chain.
@@ -34,22 +29,4 @@ pub trait HasWriteAckEvent<Counterparty>:
        we can add new methods to this trait to do the extraction.
     */
     type WriteAckEvent: Async;
-
-    /**
-       Try to extract an abstract
-       [`Event`](crate::traits::types::event::HasEventType::Event)
-       type into a
-       [`WriteAckEvent`](Self::WriteAckEvent).
-       If the extraction fails, return `None`.
-
-       Since an event type may contain many variants, it is not guaranteed
-       that the event extraction would be successful. If the concrete
-       `Event` is dynamic-typed, then the extraction may also fail due to
-       parse errors.
-    */
-    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent>;
-
-    fn write_acknowledgement(
-        event: &Self::WriteAckEvent,
-    ) -> impl AsRef<Self::Acknowledgement> + Send;
 }

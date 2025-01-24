@@ -8,6 +8,9 @@ use hermes_relayer_components::chain::impls::payload_builders::connection::Build
 use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 pub use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
+pub use hermes_relayer_components::chain::traits::extract_data::{
+    EventExtractorComponent, ExtractFromMessageResponseViaEvents, MessageResponseExtractorComponent,
+};
 pub use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
@@ -30,7 +33,8 @@ pub use hermes_relayer_components::chain::traits::packet::fields::{
 pub use hermes_relayer_components::chain::traits::packet::filter::{
     IncomingPacketFilterComponent, OutgoingPacketFilterComponent,
 };
-pub use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
+pub use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilderComponent;
+pub use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckEventBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilderComponent,
@@ -147,7 +151,6 @@ use crate::components::delegate::DelegateCosmosChainComponents;
 use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
 use crate::impls::events::ProvideCosmosEvents;
-use crate::impls::packet::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
 use crate::impls::queries::abci::QueryAbci;
 use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
@@ -223,6 +226,9 @@ cgp_preset! {
             ChannelOpenTryEventComponent,
             SendPacketEventComponent,
             WriteAckEventComponent,
+            EventExtractorComponent,
+            PacketFromSendPacketEventBuilderComponent,
+            PacketFromWriteAckEventBuilderComponent,
         ]:
             ProvideCosmosEvents,
         [
@@ -238,6 +244,8 @@ cgp_preset! {
             TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
+        MessageResponseExtractorComponent:
+            ExtractFromMessageResponseViaEvents,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
         RawConsensusStateTypeComponent:
@@ -313,8 +321,6 @@ cgp_preset! {
             QueryCosmosAckPacket,
         AckPacketsQuerierComponent:
             QueryAckPacketsConcurrently,
-        PacketFromWriteAckBuilderComponent:
-            BuildCosmosPacketFromWriteAck,
         ChainStatusQuerierComponent:
             QueryCosmosChainStatus,
         InitConnectionOptionsTypeComponent:

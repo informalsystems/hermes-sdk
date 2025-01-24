@@ -3,6 +3,7 @@ use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
+use hermes_relayer_components::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -48,6 +49,7 @@ where
     SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
         + HasWriteAckEvent<Relay::SrcChain>
+        + CanBuildPacketFromWriteAck<Relay::SrcChain>
         + HasChannelIdType<SrcChain>
         + HasPortIdType<SrcChain>
         + HasTimeoutType,

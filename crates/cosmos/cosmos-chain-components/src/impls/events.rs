@@ -1,6 +1,11 @@
 use alloc::sync::Arc;
+use core::marker::PhantomData;
 
+use cgp::prelude::HasAsyncErrorType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
+use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilder;
+use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckEventBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::ibc::{
@@ -12,8 +17,12 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
-use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::{
+    HasSendPacketEvent, ProvideSendPacketEvent,
+};
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::{
+    HasWriteAckEvent, ProvideWriteAckEvent,
+};
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAcknowledgementType;
 use ibc::core::channel::types::packet::Packet;
@@ -38,54 +47,44 @@ pub struct ProvideCosmosEvents;
 
 impl<Chain, Counterparty> ProvideCreateClientEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
-    Chain: HasClientIdType<Counterparty, ClientId = ClientId>
-        + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>,
+    Chain: HasClientIdType<Counterparty, ClientId = ClientId>,
 {
     type CreateClientEvent = CosmosCreateClientEvent;
-
-    fn try_extract_create_client_event(
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosCreateClientEvent> {
-        events.iter().find_map(|event| {
-            if event.kind == "create_client" {
-                for tag in &event.attributes {
-                    if tag.key_bytes() == CLIENT_ID_ATTRIBUTE_KEY.as_bytes() {
-                        let client_id = tag.value_str().ok()?.parse().ok()?;
-
-                        return Some(CosmosCreateClientEvent { client_id });
-                    }
-                }
-
-                None
-            } else {
-                None
-            }
-        })
-    }
 
     fn create_client_event_client_id(event: &CosmosCreateClientEvent) -> &ClientId {
         &event.client_id
     }
 }
 
+impl<Chain> EventExtractor<Chain, CosmosCreateClientEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosCreateClientEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosCreateClientEvent> {
+        if event.kind == "create_client" {
+            for tag in &event.attributes {
+                if tag.key_bytes() == CLIENT_ID_ATTRIBUTE_KEY.as_bytes() {
+                    let client_id = tag.value_str().ok()?.parse().ok()?;
+
+                    return Some(CosmosCreateClientEvent { client_id });
+                }
+            }
+        }
+
+        None
+    }
+}
+
 impl<Chain, Counterparty> ProvideConnectionOpenInitEvent<Chain, Counterparty>
     for ProvideCosmosEvents
 where
-    Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>
-        + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>,
+    Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>,
 {
     type ConnectionOpenInitEvent = CosmosConnectionOpenInitEvent;
-
-    fn try_extract_connection_open_init_event(
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosConnectionOpenInitEvent> {
-        events.iter().find_map(|event| {
-            let ibc_event = try_conn_open_init_from_abci_event(event).ok()??;
-            let connection_id = ibc_event.conn_id_on_a().clone();
-
-            Some(CosmosConnectionOpenInitEvent { connection_id })
-        })
-    }
 
     fn connection_open_init_event_connection_id(
         event: &CosmosConnectionOpenInitEvent,
@@ -94,29 +93,48 @@ where
     }
 }
 
+impl<Chain> EventExtractor<Chain, CosmosConnectionOpenInitEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosConnectionOpenInitEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosConnectionOpenInitEvent> {
+        let ibc_event = try_conn_open_init_from_abci_event(event).ok()??;
+        let connection_id = ibc_event.conn_id_on_a().clone();
+
+        Some(CosmosConnectionOpenInitEvent { connection_id })
+    }
+}
+
 impl<Chain, Counterparty> ProvideConnectionOpenTryEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
-    Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>
-        + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>,
+    Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>,
 {
     type ConnectionOpenTryEvent = CosmosConnectionOpenTryEvent;
-
-    fn try_extract_connection_open_try_event(
-        _chain: &Chain,
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosConnectionOpenTryEvent> {
-        events.iter().find_map(|event| {
-            let ibc_event = try_conn_open_try_from_abci_event(event).ok()??;
-            let connection_id = ibc_event.conn_id_on_b().clone();
-
-            Some(CosmosConnectionOpenTryEvent { connection_id })
-        })
-    }
 
     fn connection_open_try_event_connection_id(
         event: &CosmosConnectionOpenTryEvent,
     ) -> &ConnectionId {
         &event.connection_id
+    }
+}
+
+impl<Chain> EventExtractor<Chain, CosmosConnectionOpenTryEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosConnectionOpenTryEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosConnectionOpenTryEvent> {
+        let ibc_event = try_conn_open_try_from_abci_event(event).ok()??;
+        let connection_id = ibc_event.conn_id_on_b().clone();
+
+        Some(CosmosConnectionOpenTryEvent { connection_id })
     }
 }
 
@@ -127,40 +145,49 @@ where
 {
     type ChannelOpenInitEvent = CosmosChannelOpenInitEvent;
 
-    fn try_extract_channel_open_init_event(
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosChannelOpenInitEvent> {
-        events.iter().find_map(|event| {
-            let ibc_event = try_chan_open_init_from_abci_event(event).ok()??;
-            let channel_id = ibc_event.chan_id_on_a().clone();
-            Some(CosmosChannelOpenInitEvent { channel_id })
-        })
-    }
-
     fn channel_open_init_event_channel_id(event: &CosmosChannelOpenInitEvent) -> &ChannelId {
         &event.channel_id
     }
 }
 
+impl<Chain> EventExtractor<Chain, CosmosChannelOpenInitEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosChannelOpenInitEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosChannelOpenInitEvent> {
+        let ibc_event = try_chan_open_init_from_abci_event(event).ok()??;
+        let channel_id = ibc_event.chan_id_on_a().clone();
+        Some(CosmosChannelOpenInitEvent { channel_id })
+    }
+}
+
 impl<Chain, Counterparty> ProvideChannelOpenTryEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
-    Chain: HasChannelIdType<Counterparty, ChannelId = ChannelId>
-        + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>,
+    Chain: HasChannelIdType<Counterparty, ChannelId = ChannelId>,
 {
     type ChannelOpenTryEvent = CosmosChannelOpenTryEvent;
 
-    fn try_extract_channel_open_try_event(
-        events: &Vec<Arc<AbciEvent>>,
-    ) -> Option<CosmosChannelOpenTryEvent> {
-        events.iter().find_map(|event| {
-            let ibc_event = try_chan_open_try_from_abci_event(event).ok()??;
-            let channel_id = ibc_event.chan_id_on_b().clone();
-            Some(CosmosChannelOpenTryEvent { channel_id })
-        })
-    }
-
     fn channel_open_try_event_channel_id(event: &CosmosChannelOpenTryEvent) -> &ChannelId {
         &event.channel_id
+    }
+}
+
+impl<Chain> EventExtractor<Chain, CosmosChannelOpenTryEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosChannelOpenTryEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosChannelOpenTryEvent> {
+        let ibc_event = try_chan_open_try_from_abci_event(event).ok()??;
+        let channel_id = ibc_event.chan_id_on_b().clone();
+        Some(CosmosChannelOpenTryEvent { channel_id })
     }
 }
 
@@ -170,15 +197,35 @@ where
         + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>,
 {
     type SendPacketEvent = SendPacketEvent;
+}
 
-    fn try_extract_send_packet_event(event: &Arc<AbciEvent>) -> Option<SendPacketEvent> {
+impl<Chain, Counterparty> PacketFromSendPacketEventBuilder<Chain, Counterparty>
+    for ProvideCosmosEvents
+where
+    Chain: HasSendPacketEvent<Counterparty, SendPacketEvent = SendPacketEvent>
+        + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
+        + HasAsyncErrorType,
+{
+    async fn build_packet_from_send_packet_event(
+        _chain: &Chain,
+        event: &SendPacketEvent,
+    ) -> Result<Packet, Chain::Error> {
+        Ok(event.packet.clone())
+    }
+}
+
+impl<Chain> EventExtractor<Chain, SendPacketEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<SendPacketEvent>,
+        event: &Chain::Event,
+    ) -> Option<SendPacketEvent> {
         try_send_packet_from_abci_event(event)
             .ok()?
             .map(|send_packet| send_packet.into())
-    }
-
-    fn extract_packet_from_send_packet_event(event: &SendPacketEvent) -> Packet {
-        event.packet.clone()
     }
 }
 
@@ -188,14 +235,42 @@ where
         + HasAcknowledgementType<Counterparty, Acknowledgement = Vec<u8>>,
 {
     type WriteAckEvent = WriteAckEvent;
+}
 
-    fn try_extract_write_ack_event(event: &Arc<AbciEvent>) -> Option<WriteAckEvent> {
+impl<Chain> EventExtractor<Chain, WriteAckEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<WriteAckEvent>,
+        event: &Chain::Event,
+    ) -> Option<WriteAckEvent> {
         try_write_acknowledgment_from_abci_event(event)
             .ok()?
             .map(|write_ack| write_ack.into())
     }
+}
 
-    fn write_acknowledgement(event: &WriteAckEvent) -> &Vec<u8> {
-        &event.acknowledgment
+impl<Chain, Counterparty> PacketFromWriteAckEventBuilder<Chain, Counterparty>
+    for ProvideCosmosEvents
+where
+    Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAckEvent>
+        + HasAcknowledgementType<Counterparty, Acknowledgement = Vec<u8>>
+        + HasAsyncErrorType,
+    Counterparty: HasOutgoingPacketType<Chain, OutgoingPacket = Packet>,
+{
+    async fn build_packet_from_write_ack_event(
+        _chain: &Chain,
+        ack: &WriteAckEvent,
+    ) -> Result<Packet, Chain::Error> {
+        Ok(ack.packet.clone())
+    }
+
+    async fn build_ack_from_write_ack_event(
+        _chain: &Chain,
+        event: &WriteAckEvent,
+    ) -> Result<Vec<u8>, Chain::Error> {
+        Ok(event.acknowledgment.clone())
     }
 }

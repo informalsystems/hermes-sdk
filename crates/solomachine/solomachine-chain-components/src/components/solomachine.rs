@@ -17,11 +17,12 @@ pub use hermes_cosmos_chain_components::components::client::{
 pub use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 pub use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 pub use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
+use hermes_cosmos_relayer::presets::chain::ExtractFromMessageResponseViaEvents;
 pub use hermes_cosmos_relayer::presets::chain::{
-    PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
-    PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
-    PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,
-    PacketTimeoutTimestampGetterComponent,
+    EventExtractorComponent, MessageResponseExtractorComponent, PacketDstChannelIdGetterComponent,
+    PacketDstPortIdGetterComponent, PacketSequenceGetterComponent,
+    PacketSrcChannelIdGetterComponent, PacketSrcPortIdGetterComponent,
+    PacketTimeoutHeightGetterComponent, PacketTimeoutTimestampGetterComponent,
 };
 pub use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 pub use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
@@ -115,6 +116,7 @@ cgp_preset! {
             TimeoutUnorderedPacketPayloadTypeComponent,
             CreateClientEventComponent,
             ConnectionOpenInitEventComponent,
+            EventExtractorComponent,
         ]:
             ProvideSolomachineChainTypes,
         [
@@ -136,6 +138,8 @@ cgp_preset! {
             CosmosPacketFieldReader,
         MessageSenderComponent:
             ProcessSolomachineMessages,
+        MessageResponseExtractorComponent:
+            ExtractFromMessageResponseViaEvents,
         ChainStatusQuerierComponent:
             QuerySolomachineStatus,
         [

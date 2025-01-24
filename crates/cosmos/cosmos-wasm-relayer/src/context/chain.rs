@@ -38,7 +38,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
-use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
+use hermes_relayer_components::chain::traits::event_subscription::EventSubscriptionGetter;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,
@@ -263,9 +263,11 @@ impl ChainIdGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     }
 }
 
-impl HasEventSubscription for WasmCosmosChain {
-    fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
-        &self.subscription
+impl EventSubscriptionGetter<WasmCosmosChain> for WasmCosmosChainComponents {
+    fn event_subscription(
+        chain: &WasmCosmosChain,
+    ) -> Option<&Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>> {
+        Some(&chain.subscription)
     }
 }
 

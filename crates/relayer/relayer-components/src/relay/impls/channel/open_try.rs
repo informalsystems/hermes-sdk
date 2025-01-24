@@ -2,6 +2,7 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::core::error::CanRaiseAsyncError;
+use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenTryMessage;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenTryPayload;
@@ -48,7 +49,8 @@ where
     SrcChain: CanQueryChainHeight + CanBuildChannelOpenTryPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
         + CanBuildChannelOpenTryMessage<SrcChain>
-        + HasChannelOpenTryEvent<SrcChain>,
+        + HasChannelOpenTryEvent<SrcChain>
+        + CanExtractFromMessageResponse<DstChain::ChannelOpenTryEvent>,
     DstChain::ChannelId: Clone,
 {
     async fn relay_channel_open_try(
@@ -89,8 +91,9 @@ where
             .send_message(DestinationTarget, open_try_message)
             .await?;
 
-        let open_try_event =
-            DstChain::try_extract_channel_open_try_event(&response).ok_or_else(|| {
+        let open_try_event = dst_chain
+            .try_extract_from_message_response(PhantomData, &response)
+            .ok_or_else(|| {
                 Relay::raise_error(MissingChannelTryEventError {
                     relay,
                     src_channel_id,
