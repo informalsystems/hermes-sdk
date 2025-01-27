@@ -1,6 +1,9 @@
 use cgp::prelude::HasAsyncErrorType;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
 use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilder;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
@@ -19,15 +22,13 @@ impl<Chain, Counterparty> IbcTokenTransferMessageBuilder<Chain, Counterparty>
 where
     Chain: HasAsyncErrorType
         + HasAddressType
+        + HasMessageType
+        + HasHeightType<Height = Height>
+        + HasTimeoutType<Timeout = Timestamp>
         + HasAmountType<Amount = Amount>
         + HasMemoType<Memo = Option<String>>
-        + HasIbcChainTypes<
-            Counterparty,
-            ChannelId = ChannelId,
-            PortId = PortId,
-            Height = Height,
-            Timeout = Timestamp,
-        >,
+        + HasChannelIdType<Counterparty, ChannelId = ChannelId>
+        + HasPortIdType<Counterparty, PortId = PortId>,
     Counterparty: HasAddressType,
     Chain::Message: From<CosmosMessage>,
 {
