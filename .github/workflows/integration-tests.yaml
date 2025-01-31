@@ -29,7 +29,6 @@ jobs:
       - uses: cachix/cachix-action@v15
         with:
           name: hermes-sdk
-          extraPullNames: cosmos-nix
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - uses: actions-rs/toolchain@v1
         with:
@@ -57,7 +56,6 @@ jobs:
       - uses: cachix/cachix-action@v15
         with:
           name: hermes-sdk
-          extraPullNames: cosmos-nix
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - uses: actions-rs/toolchain@v1
         with:
@@ -86,7 +84,6 @@ jobs:
       - uses: cachix/cachix-action@v15
         with:
           name: hermes-sdk
-          extraPullNames: cosmos-nix
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - uses: actions-rs/toolchain@v1
         with:

@@ -115,7 +115,7 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        BiRelayTypeAtComponent:
+        BiRelayTypeAtComponent<Index<0>, Index<1>>:
             WithType<CosmosBiRelay>,
         [
             ChainTypeAtComponent<Index<0>>,

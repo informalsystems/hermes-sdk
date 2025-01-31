@@ -3,7 +3,7 @@ use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: BiRelayTypeAtComponent,
+  name: BiRelayTypeAtComponent<TagA, TagB>,
   provider: ProvideBiRelayTypeAt,
   context: Setup,
 }]
@@ -17,7 +17,7 @@ impl<Context, TagA, TagB, Provider, BiRelay> ProvideBiRelayTypeAt<Context, TagA,
     for WithProvider<Provider>
 where
     Context: Async,
-    Provider: ProvideType<Context, BiRelayTypeAtComponent, Type = BiRelay>,
+    Provider: ProvideType<Context, BiRelayTypeAtComponent<TagA, TagB>, Type = BiRelay>,
     BiRelay: Async,
 {
     type BiRelay = BiRelay;

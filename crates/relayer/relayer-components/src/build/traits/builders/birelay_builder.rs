@@ -4,7 +4,7 @@ use hermes_chain_components::traits::types::ibc::HasClientIdType;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
-use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
+use crate::multi::traits::relay_at::ClientIdAt;
 
 #[cgp_component {
   provider: BiRelayBuilder,
@@ -15,8 +15,6 @@ pub trait CanBuildBiRelay<A, B>:
     HasBiRelayTypeAt<A, B>
     + HasChainTypeAt<A, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, B>>>
     + HasChainTypeAt<B, Chain: HasChainIdType + HasClientIdType<ChainAt<Self, A>>>
-    + HasRelayTypeAt<A, B>
-    + HasRelayTypeAt<B, A>
     + HasAsyncErrorType
 where
     ChainAt<Self, A>: HasClientIdType<ChainAt<Self, B>>,
