@@ -1,11 +1,14 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
+use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use hermes_relayer_components::birelay::traits::two_way::TwoWayRelayGetter;
-use hermes_relayer_components::components::default::birelay::*;
-use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
-use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
+use hermes_relayer_components::components::default::birelay::{
+    DefaultBiRelayComponents, IsDefaultBiRelayComponents,
+};
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 
@@ -26,14 +29,11 @@ impl HasComponents for CosmosBiRelay {
     type Components = CosmosBiRelayComponents;
 }
 
-with_default_bi_relay_components! {
-    | Components | {
-        delegate_components! {
-            CosmosBiRelayComponents {
-                Components: DefaultBiRelayComponents,
-            }
-        }
-    }
+impl<Component> DelegateComponent<Component> for CosmosBiRelayComponents
+where
+    Self: IsDefaultBiRelayComponents<Component>,
+{
+    type Delegate = DefaultBiRelayComponents;
 }
 
 delegate_components! {
@@ -45,6 +45,12 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        ChainTypeAtComponent<Index<0>>: WithType<CosmosChain>,
+        ChainTypeAtComponent<Index<1>>: WithType<CosmosChain>,
+        [
+            RelayTypeAtComponent<Index<0>, Index<1>>,
+            RelayTypeAtComponent<Index<1>, Index<0>>,
+        ]: WithType<CosmosRelay>,
     }
 }
 
@@ -62,22 +68,6 @@ impl CosmosBiRelay {
     }
 }
 
-impl ProvideChainTypeAt<CosmosBiRelay, Index<0>> for CosmosBiRelayComponents {
-    type Chain = CosmosChain;
-}
-
-impl ProvideChainTypeAt<CosmosBiRelay, Index<1>> for CosmosBiRelayComponents {
-    type Chain = CosmosChain;
-}
-
-impl ProvideRelayTypeAt<CosmosBiRelay, Index<0>, Index<1>> for CosmosBiRelayComponents {
-    type Relay = CosmosRelay;
-}
-
-impl ProvideRelayTypeAt<CosmosBiRelay, Index<1>, Index<0>> for CosmosBiRelayComponents {
-    type Relay = CosmosRelay;
-}
-
 impl TwoWayRelayGetter<CosmosBiRelay> for CosmosBiRelayComponents {
     fn relay_a_to_b(birelay: &CosmosBiRelay) -> &CosmosRelay {
         &birelay.relay_a_to_b
@@ -87,3 +77,7 @@ impl TwoWayRelayGetter<CosmosBiRelay> for CosmosBiRelayComponents {
         &birelay.relay_b_to_a
     }
 }
+
+pub trait CanUseCosmosBiRelay: CanRun {}
+
+impl CanUseCosmosBiRelay for CosmosBiRelay {}

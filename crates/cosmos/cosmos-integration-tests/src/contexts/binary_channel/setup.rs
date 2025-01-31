@@ -89,7 +89,7 @@ delegate_components! {
             RelayTypeAtComponent<Index<0>, Index<1>>,
             RelayTypeAtComponent<Index<1>, Index<0>>,
         ]: WithType<CosmosRelay>,
-        BiRelayTypeAtComponent: WithType<CosmosBiRelay>,
+        BiRelayTypeAtComponent<Index<0>, Index<1>>: WithType<CosmosBiRelay>,
         BinaryChannelDriverBuilderComponent: BuildCosmosBinaryChannelDriver,
     }
 }
