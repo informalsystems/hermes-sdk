@@ -53,7 +53,7 @@ delegate_components! {
             ChainDriverTypeAtComponent,
             RelayTypeAtComponent<Index<0>, Index<1>>,
             RelayTypeAtComponent<Index<1>, Index<0>>,
-            BiRelayTypeAtComponent,
+            BiRelayTypeAtComponent<Index<0>, Index<1>>,
             RelayDriverTypeAtComponent,
         ]:
             ProvideCosmosTestTypes,
