@@ -8,7 +8,8 @@ use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
 use crate::traits::build::CanLoadBuilder;
@@ -75,8 +76,8 @@ where
         + HasChainTypeAt<Index<0>, Chain = ChainA>
         + HasChainTypeAt<Index<1>, Chain = ChainB>,
     BiRelay: CanRun,
-    ChainA: HasIbcChainTypes<ChainB>,
-    ChainB: HasIbcChainTypes<ChainA>,
+    ChainA: HasChainIdType + HasClientIdType<ChainB>,
+    ChainB: HasChainIdType + HasClientIdType<ChainA>,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
         let logger = app.logger();
