@@ -1,9 +1,11 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
-use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerier;
+use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::{
+    CounterpartyChainIdQuerier, CounterpartyChainIdQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -20,6 +22,7 @@ use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryChainIdFromAbci;
 
+#[cgp_provider(CounterpartyChainIdQuerierComponent)]
 impl<Chain, Counterparty> CounterpartyChainIdQuerier<Chain, Counterparty> for QueryChainIdFromAbci
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId, ClientId = ClientId>

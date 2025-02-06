@@ -194,6 +194,13 @@ where
     type Delegate = CosmosChainFullPreset;
 }
 
+impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CosmosChainContextComponents
+where
+    Self: IsCosmosChainFullPreset<Name>,
+    CosmosChainFullPreset: IsProviderFor<Name, Context, Params>,
+{
+}
+
 delegate_components! {
     DelegateCosmosChainComponents {
         CosmosChain: CosmosToCosmosComponents,
@@ -396,10 +403,18 @@ pub trait CanUseCosmosChain:
     + HasPacketSrcChannelId<CosmosChain>
     + CanExtractFromEvent<CosmosCreateClientEvent>
     + CanExtractFromMessageResponse<CosmosCreateClientEvent>
+    + CanUseComponent<ChainStatusQuerierComponent>
 {
 }
 
 impl CanUseCosmosChain for CosmosChain {}
+
+pub trait CanUseCosmosChainComponents:
+    Async + CanUseComponent<ChainStatusQuerierComponent> // + CanQueryChainStatus
+{
+}
+
+impl CanUseCosmosChainComponents for CosmosChain {}
 
 pub trait CanUseLoggerWithCosmosChain:
     for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>

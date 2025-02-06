@@ -26,6 +26,7 @@ pub trait CanBuildUpdateClientMessage<Counterparty>:
     ) -> Result<Vec<Self::Message>, Self::Error>;
 }
 
+#[cgp_provider(UpdateClientMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate> UpdateClientMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
