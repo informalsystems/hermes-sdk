@@ -8,7 +8,8 @@ use hermes_async_runtime_components::task::types::future_task::FutureTask;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::os::child_process::{
-    ChildProcessStarter, ChildProcessWaiter, HasChildProcessType, ProvideChildProcessType,
+    ChildProcessStarter, ChildProcessStarterComponent, ChildProcessTypeComponent,
+    ChildProcessWaiter, ChildProcessWaiterComponent, HasChildProcessType, ProvideChildProcessType,
 };
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
@@ -18,6 +19,7 @@ use tokio::process::{Child, Command};
 
 pub struct ProvideTokioChildProcessType;
 
+#[cgp_provider(ChildProcessTypeComponent)]
 impl<Runtime> ProvideChildProcessType<Runtime> for ProvideTokioChildProcessType
 where
     Runtime: Async,
@@ -32,6 +34,7 @@ pub struct PrematureChildProcessExitError {
     pub stderr: String,
 }
 
+#[cgp_provider(ChildProcessStarterComponent)]
 impl<Runtime> ChildProcessStarter<Runtime> for StartTokioChildProcess
 where
     Runtime: HasChildProcessType<ChildProcess = Child>
@@ -105,6 +108,7 @@ where
 
 pub struct WaitChildProcess;
 
+#[cgp_provider(ChildProcessWaiterComponent)]
 impl<Runtime> ChildProcessWaiter<Runtime> for WaitChildProcess
 where
     Runtime: HasChildProcessType<ChildProcess = Child>

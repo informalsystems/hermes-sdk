@@ -7,10 +7,10 @@
 
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::message::HasMessageType;
-use crate::transaction::traits::encode_tx::TxEncoder;
+use crate::transaction::traits::encode_tx::{TxEncoder, TxEncoderComponent};
 use crate::transaction::traits::types::fee::HasFeeType;
 use crate::transaction::traits::types::nonce::HasNonceType;
 use crate::transaction::traits::types::signer::HasSignerType;
@@ -32,6 +32,7 @@ pub trait HasMaxTxSize {
 
 pub struct LimitEncodedTxSize<InEncoder>(PhantomData<InEncoder>);
 
+#[cgp_provider(TxEncoderComponent)]
 impl<Chain, InEncoder> TxEncoder<Chain> for LimitEncodedTxSize<InEncoder>
 where
     Chain: HasSignerType

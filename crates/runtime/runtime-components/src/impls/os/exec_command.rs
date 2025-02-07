@@ -1,7 +1,12 @@
-use crate::traits::os::exec_command::{CanExecCommandWithEnvs, CommandExecutor, ExecOutput};
+use cgp::prelude::*;
+
+use crate::traits::os::exec_command::{
+    CanExecCommandWithEnvs, CommandExecutor, CommandExecutorComponent, ExecOutput,
+};
 
 pub struct ExecCommandWithNoEnv;
 
+#[cgp_provider(CommandExecutorComponent)]
 impl<Runtime> CommandExecutor<Runtime> for ExecCommandWithNoEnv
 where
     Runtime: CanExecCommandWithEnvs,

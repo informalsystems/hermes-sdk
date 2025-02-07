@@ -1,13 +1,17 @@
 use core::task::{Context, Poll};
 
+use cgp::prelude::*;
 use futures::stream::{Stream, StreamExt};
 use futures::task::noop_waker;
 use hermes_async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
-use hermes_runtime_components::traits::task::{ConcurrentTaskRunner, Task};
+use hermes_runtime_components::traits::task::{
+    ConcurrentTaskRunner, ConcurrentTaskRunnerComponent, Task,
+};
 use tokio::task::JoinSet;
 
 pub struct TokioRunParallelTasks;
 
+#[cgp_provider(ConcurrentTaskRunnerComponent)]
 impl<Runtime> ConcurrentTaskRunner<Runtime> for TokioRunParallelTasks
 where
     Runtime: HasBoxedStreamType,

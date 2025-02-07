@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -7,6 +7,7 @@ use hermes_relayer_components::chain::traits::packet::from_write_ack::CanBuildPa
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::components::default::relay::PacketRelayerComponent;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
 use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
 use hermes_relayer_components::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
@@ -31,6 +32,7 @@ use crate::relay::impls::packet_relayers::retry::RetryRelayer;
 
 pub struct ExtraPacketRelayer;
 
+#[cgp_provider(PacketRelayerComponent)]
 impl<Relay, SrcChain, DstChain> PacketRelayer<Relay> for ExtraPacketRelayer
 where
     Relay: CanRelayAckPacket
