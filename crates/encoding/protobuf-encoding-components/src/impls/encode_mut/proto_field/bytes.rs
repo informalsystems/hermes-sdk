@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_encoding_components::traits::decode_mut::MutDecoder;
-use hermes_encoding_components::traits::encode_mut::MutEncoder;
+use hermes_encoding_components::traits::decode_mut::{MutDecoder, MutDecoderComponent};
+use hermes_encoding_components::traits::encode_mut::{MutEncoder, MutEncoderComponent};
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use prost::bytes::BufMut;
 
@@ -9,6 +9,7 @@ use crate::impls::encode_mut::proto_field::length_delim::EncodeLengthDelimitedHe
 
 pub struct EncodeByteField<const TAG: u32>;
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, Value, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
     for EncodeByteField<TAG>
 where
@@ -35,6 +36,7 @@ where
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy, Value, const TAG: u32> MutDecoder<Encoding, Strategy, Value>
     for EncodeByteField<TAG>
 where

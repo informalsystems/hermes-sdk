@@ -1,12 +1,13 @@
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
 
-use crate::traits::decode_mut::MutDecoder;
-use crate::traits::encode_mut::MutEncoder;
+use crate::traits::decode_mut::{MutDecoder, MutDecoderComponent};
+use crate::traits::encode_mut::{MutEncoder, MutEncoderComponent};
 use crate::traits::types::decode_buffer::HasDecodeBufferType;
 use crate::traits::types::encode_buffer::HasEncodeBufferType;
 
 pub struct EncodeNothing;
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy> MutEncoder<Encoding, Strategy, ()> for EncodeNothing
 where
     Encoding: HasEncodeBufferType + HasAsyncErrorType,
@@ -20,6 +21,7 @@ where
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy> MutDecoder<Encoding, Strategy, ()> for EncodeNothing
 where
     Encoding: HasDecodeBufferType + HasAsyncErrorType,

@@ -1,12 +1,13 @@
 use core::marker::PhantomData;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 
-use crate::traits::decode::{CanDecode, Decoder};
-use crate::traits::encode::{CanEncode, Encoder};
+use crate::traits::decode::{CanDecode, Decoder, DecoderComponent};
+use crate::traits::encode::{CanEncode, Encoder, EncoderComponent};
 
 pub struct EncodeUsingStrategy<Strategy>(pub PhantomData<Strategy>);
 
+#[cgp_provider(EncoderComponent)]
 impl<Encoding, Strategy, InStrategy, Value> Encoder<Encoding, Strategy, Value>
     for EncodeUsingStrategy<InStrategy>
 where
@@ -18,6 +19,7 @@ where
     }
 }
 
+#[cgp_provider(DecoderComponent)]
 impl<Encoding, Strategy, InStrategy, Value> Decoder<Encoding, Strategy, Value>
     for EncodeUsingStrategy<InStrategy>
 where

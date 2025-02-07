@@ -1,13 +1,14 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasAsyncErrorType;
-use hermes_encoding_components::traits::encode_mut::MutEncoder;
+use cgp::prelude::*;
+use hermes_encoding_components::traits::encode_mut::{MutEncoder, MutEncoderComponent};
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 
 use crate::impls::encode_mut::proto_field::length_delim::EncodeLengthDelimitedHeader;
 
 pub struct EncodeLengthDelimitedProtoField<const TAG: u32, InEncoder>(pub PhantomData<InEncoder>);
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, Value, InEncoder, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
     for EncodeLengthDelimitedProtoField<TAG, InEncoder>
 where

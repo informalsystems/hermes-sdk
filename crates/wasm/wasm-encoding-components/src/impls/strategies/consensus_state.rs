@@ -1,4 +1,6 @@
-use hermes_encoding_components::traits::convert::{CanConvert, Converter};
+use cgp::prelude::*;
+use hermes_cosmos_encoding_components::components::{DecoderComponent, EncoderComponent};
+use hermes_encoding_components::traits::convert::{CanConvert, Converter, ConverterComponent};
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::encode::{CanEncode, Encoder};
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
@@ -10,6 +12,7 @@ use crate::types::consensus_state::WasmConsensusState;
 pub struct EncodeViaWasmConsensusState;
 pub struct DecodeViaWasmConsensusState;
 
+#[cgp_provider(EncoderComponent)]
 impl<Encoding, Value> Encoder<Encoding, WasmConsensusState, Value> for EncodeViaWasmConsensusState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
@@ -25,6 +28,7 @@ where
     }
 }
 
+#[cgp_provider(DecoderComponent)]
 impl<Encoding, Value> Decoder<Encoding, WasmConsensusState, Value> for EncodeViaWasmConsensusState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
@@ -40,6 +44,7 @@ where
     }
 }
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding, Value> Converter<Encoding, Value, Any> for EncodeViaWasmConsensusState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
@@ -55,6 +60,7 @@ where
     }
 }
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding, Value> Converter<Encoding, Any, Value> for DecodeViaWasmConsensusState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
