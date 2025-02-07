@@ -5,13 +5,14 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 
 use crate::traits::builders::packet::CanBuildPacket;
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
-use crate::traits::handlers::outgoing::packet::PacketSender;
+use crate::traits::handlers::outgoing::packet::{PacketSender, PacketSenderComponent};
 use crate::traits::nonce::CanAllocatePacketNonce;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::payload::payload::HasPayloadType;
 
 pub struct AllocateNonceAndBuildPacket;
 
+#[cgp_provider(PacketSenderComponent)]
 #[async_trait]
 impl<Chain, Counterparty> PacketSender<Chain, Counterparty> for AllocateNonceAndBuildPacket
 where

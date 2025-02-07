@@ -5,13 +5,16 @@ use cgp::prelude::*;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::{HasDefaultEncoding, HasEncoding};
 
-use crate::traits::handlers::incoming::payload::IncomingPayloadHandler;
+use crate::traits::handlers::incoming::payload::{
+    IncomingPayloadHandler, IncomingPayloadHandlerComponent,
+};
 use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
 pub struct ConvertAndHandlePayload<InApp, InHandler>(pub PhantomData<(InApp, InHandler)>);
 
+#[cgp_provider(IncomingPayloadHandlerComponent)]
 #[async_trait]
 impl<Chain, Counterparty, App, InApp, InHandler, AnyPacketData, PacketData>
     IncomingPayloadHandler<Chain, Counterparty, App> for ConvertAndHandlePayload<InApp, InHandler>

@@ -1,8 +1,8 @@
 use alloc::string::String;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_ibc_components::traits::handlers::incoming::payload::{
-    CanHandleIncomingPayload, IncomingPayloadHandler,
+    CanHandleIncomingPayload, IncomingPayloadHandler, IncomingPayloadHandlerComponent,
 };
 use hermes_ibc_components::types::packet_header::IbcPacketHeader;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
@@ -14,6 +14,7 @@ use crate::types::packet_data::MockAnyPayloadData;
 
 pub struct HandleMockAnyPayloadData;
 
+#[cgp_provider(IncomingPayloadHandlerComponent)]
 impl<Chain: Async, Counterparty: Async>
     IncomingPayloadHandler<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>, AnyApp>
     for HandleMockAnyPayloadData

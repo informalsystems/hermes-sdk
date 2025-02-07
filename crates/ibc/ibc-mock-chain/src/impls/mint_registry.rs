@@ -1,11 +1,19 @@
 use alloc::boxed::Box;
 use alloc::string::String;
 
-use cgp::core::Async;
-use hermes_ibc_token_transfer_components::traits::mint_registry::lookup_incoming::IncomingMintedTokenQuerier;
-use hermes_ibc_token_transfer_components::traits::mint_registry::lookup_outgoing::OutgoingBurnTokenQuerier;
-use hermes_ibc_token_transfer_components::traits::mint_registry::register::MintedTokenRegistrar;
-use hermes_ibc_token_transfer_components::traits::token::create::{CanCreateToken, TokenCreator};
+use cgp::prelude::*;
+use hermes_ibc_token_transfer_components::traits::mint_registry::lookup_incoming::{
+    IncomingMintedTokenQuerier, IncomingMintedTokenQuerierComponent,
+};
+use hermes_ibc_token_transfer_components::traits::mint_registry::lookup_outgoing::{
+    OutgoingBurnTokenQuerier, OutgoingBurnTokenQuerierComponent,
+};
+use hermes_ibc_token_transfer_components::traits::mint_registry::register::{
+    MintedTokenRegistrar, MintedTokenRegistrarComponent,
+};
+use hermes_ibc_token_transfer_components::traits::token::create::{
+    CanCreateToken, TokenCreator, TokenCreatorComponent,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -14,6 +22,7 @@ use crate::types::channel_id::MockChannelId;
 use crate::types::denom::{MockDenom, MockIbcDenom};
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(IncomingMintedTokenQuerierComponent)]
 impl<Chain: Async, Counterparty: Async>
     IncomingMintedTokenQuerier<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents
@@ -40,6 +49,7 @@ impl<Chain: Async, Counterparty: Async>
     }
 }
 
+#[cgp_provider(TokenCreatorComponent)]
 impl<Chain: Async, Counterparty: Async>
     TokenCreator<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents
@@ -62,6 +72,7 @@ impl<Chain: Async, Counterparty: Async>
     }
 }
 
+#[cgp_provider(MintedTokenRegistrarComponent)]
 impl<Chain: Async, Counterparty: Async>
     MintedTokenRegistrar<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents
@@ -93,6 +104,7 @@ impl<Chain: Async, Counterparty: Async>
     }
 }
 
+#[cgp_provider(OutgoingBurnTokenQuerierComponent)]
 impl<Chain: Async, Counterparty: Async>
     OutgoingBurnTokenQuerier<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents

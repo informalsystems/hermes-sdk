@@ -10,13 +10,14 @@ use crate::traits::commitment::value::send_packet::CanBuildSendPacketCommitmentV
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::nonce::HasPacketNonce;
-use crate::traits::handlers::outgoing::packet::PacketSender;
+use crate::traits::handlers::outgoing::packet::{PacketSender, PacketSenderComponent};
 use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::payload::HasPayloadType;
 use crate::types::tags::commitment::send::SendPacket;
 
 pub struct CommitSendPacket<InHandler>(pub PhantomData<InHandler>);
 
+#[cgp_provider(PacketSenderComponent)]
 #[async_trait]
 impl<Chain, Counterparty, InHandler> PacketSender<Chain, Counterparty>
     for CommitSendPacket<InHandler>

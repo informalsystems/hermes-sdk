@@ -1,7 +1,10 @@
-use crate::traits::has_logger::{HasGlobalLogger, LoggerGetter};
+use cgp::prelude::*;
+
+use crate::traits::has_logger::{HasGlobalLogger, LoggerGetter, LoggerGetterComponent};
 
 pub struct GetGlobalLogger;
 
+#[cgp_provider(LoggerGetterComponent)]
 impl<Context> LoggerGetter<Context> for GetGlobalLogger
 where
     Context: HasGlobalLogger,

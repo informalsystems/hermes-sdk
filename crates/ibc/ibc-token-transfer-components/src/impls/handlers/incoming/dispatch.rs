@@ -3,7 +3,9 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
+use hermes_ibc_components::traits::handlers::incoming::payload::{
+    IncomingPayloadHandler, IncomingPayloadHandlerComponent,
+};
 use hermes_ibc_components::traits::types::packet::header::HasPacketHeaderType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
@@ -17,6 +19,7 @@ pub struct DispatchMintOrUnescrow<MintHandler, UnescrowHandler>(
     pub PhantomData<(MintHandler, UnescrowHandler)>,
 );
 
+#[cgp_provider(IncomingPayloadHandlerComponent)]
 impl<Chain, Counterparty, App, MintHandler, UnescrowHandler>
     IncomingPayloadHandler<Chain, Counterparty, App>
     for DispatchMintOrUnescrow<MintHandler, UnescrowHandler>

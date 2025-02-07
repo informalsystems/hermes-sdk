@@ -1,7 +1,9 @@
 use alloc::string::String;
 
-use cgp::core::Async;
-use hermes_ibc_components::traits::queries::recv_packet_commitment::HasPacketReceivedQuerier;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::queries::recv_packet_commitment::{
+    HasPacketReceivedQuerier, HasPacketReceivedQuerierComponent,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -9,6 +11,7 @@ use crate::types::channel_id::MockChannelId;
 use crate::types::nonce::MockNonce;
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(HasPacketReceivedQuerierComponent)]
 impl<Chain: Async, Counterparty: Async>
     HasPacketReceivedQuerier<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents

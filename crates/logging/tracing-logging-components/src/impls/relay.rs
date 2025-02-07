@@ -1,7 +1,7 @@
 use core::fmt::Display;
 
-use cgp::core::Async;
-use hermes_logging_components::traits::logger::Logger;
+use cgp::prelude::*;
+use hermes_logging_components::traits::logger::{Logger, LoggerComponent};
 use hermes_logging_components::types::level::LogLevel;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -20,6 +20,7 @@ use tracing::{error, trace};
 
 use crate::contexts::logger::TracingLogger;
 
+#[cgp_provider(LoggerComponent)]
 impl<'a, Logging, Relay> Logger<Logging, LogSkipRelayLockedPacket<'a, Relay>> for TracingLogger
 where
     Logging: Async,
@@ -38,6 +39,7 @@ where
     }
 }
 
+#[cgp_provider(LoggerComponent)]
 impl<'a, Logging, Relay> Logger<Logging, LogRelayPacketAction<'a, Relay>> for TracingLogger
 where
     Logging: Async,
@@ -57,6 +59,7 @@ where
     }
 }
 
+#[cgp_provider(LoggerComponent)]
 impl<'a, Logging, Relay> Logger<Logging, LogClearPacketError<'a, Relay>> for TracingLogger
 where
     Logging: Async,
@@ -77,6 +80,7 @@ where
     }
 }
 
+#[cgp_provider(LoggerComponent)]
 impl<'a, Logging, Relay> Logger<Logging, LogRelayPacketStatus<'a, Relay>> for TracingLogger
 where
     Logging: Async,
@@ -118,6 +122,7 @@ where
     }
 }
 
+#[cgp_provider(LoggerComponent)]
 impl<'a, Logging, Relay, Target> Logger<Logging, LogSkipBuildUpdateClientMessage<'a, Relay, Target>>
     for TracingLogger
 where
@@ -141,6 +146,7 @@ where
     }
 }
 
+#[cgp_provider(LoggerComponent)]
 impl<'a, Logging, Relay, Target> Logger<Logging, LogWaitUpdateClientHeightStatus<'a, Relay, Target>>
     for TracingLogger
 where
@@ -184,6 +190,7 @@ where
     }
 }
 
+#[cgp_provider(LoggerComponent)]
 impl<'a, Logging, Relay, Target> Logger<Logging, LogBatchWorker<'a, Relay, Target>>
     for TracingLogger
 where

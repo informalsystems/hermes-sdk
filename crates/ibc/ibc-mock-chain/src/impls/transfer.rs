@@ -1,9 +1,9 @@
 use alloc::borrow::ToOwned;
 use alloc::string::String;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_ibc_token_transfer_components::traits::token::transfer::{
-    Burn, Escrow, Mint, TokenTransferer, Unescrow,
+    Burn, Escrow, Mint, TokenTransferer, TokenTransfererComponent, Unescrow,
 };
 
 use crate::components::chain::MockChainComponents;
@@ -12,6 +12,7 @@ use crate::types::address::MockAddress;
 use crate::types::amount::MockAmount;
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(TokenTransfererComponent)]
 impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counterparty>, Mint>
     for MockChainComponents
 {
@@ -36,6 +37,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
     }
 }
 
+#[cgp_provider(TokenTransfererComponent)]
 impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counterparty>, Unescrow>
     for MockChainComponents
 {
@@ -69,6 +71,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
     }
 }
 
+#[cgp_provider(TokenTransfererComponent)]
 impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counterparty>, Escrow>
     for MockChainComponents
 {
@@ -102,6 +105,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
     }
 }
 
+#[cgp_provider(TokenTransfererComponent)]
 impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counterparty>, Burn>
     for MockChainComponents
 {

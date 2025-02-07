@@ -2,6 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
+use crate::components::chain::IncomingPacketHandlerComponent;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::payloads::HasPacketPayloads;
 use crate::traits::fields::payload::data::HasPayloadData;
@@ -14,6 +15,7 @@ use crate::types::tags::commitment::send::SendPacket;
 
 pub struct HandleIncomingPacketPayloads<App>(pub PhantomData<App>);
 
+#[cgp_provider(IncomingPacketHandlerComponent)]
 #[async_trait]
 impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, Counterparty>
     for HandleIncomingPacketPayloads<App>
