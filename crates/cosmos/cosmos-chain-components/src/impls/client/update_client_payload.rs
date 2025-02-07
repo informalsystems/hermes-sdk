@@ -1,9 +1,11 @@
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_comet_light_client_components::traits::update_client::CanBuildLightBlocksForUpdateClient;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use hermes_error::types::HermesError;
-use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::{
+    UpdateClientPayloadBuilder, UpdateClientPayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
@@ -20,6 +22,7 @@ use crate::types::tendermint::TendermintClientState;
 
 pub struct BuildTendermintUpdateClientPayload;
 
+#[cgp_provider(UpdateClientPayloadBuilderComponent)]
 impl<Chain, Counterparty> UpdateClientPayloadBuilder<Chain, Counterparty>
     for BuildTendermintUpdateClientPayload
 where

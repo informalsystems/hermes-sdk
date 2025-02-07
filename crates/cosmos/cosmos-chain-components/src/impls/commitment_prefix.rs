@@ -1,12 +1,14 @@
 use alloc::vec::Vec;
 use std::sync::OnceLock;
 
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
-    HasCommitmentPrefixType, IbcCommitmentPrefixGetter,
+    HasCommitmentPrefixType, IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
 
 pub struct ProvideIbcCommitmentPrefix;
 
+#[cgp_provider(IbcCommitmentPrefixGetterComponent)]
 impl<Chain> IbcCommitmentPrefixGetter<Chain> for ProvideIbcCommitmentPrefix
 where
     Chain: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>,

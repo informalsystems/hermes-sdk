@@ -1,9 +1,11 @@
 use core::time::Duration;
 
-use cgp::prelude::Async;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType, ProvideRawClientStateType,
+    ClientStateFieldsComponent, ClientStateFieldsGetter, ClientStateTypeComponent,
+    HasClientStateType, ProvideClientStateType, ProvideRawClientStateType,
+    RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc::core::client::types::Height;
@@ -14,6 +16,7 @@ use crate::types::tendermint::TendermintClientState;
 
 pub struct ProvideTendermintClientState;
 
+#[cgp_provider(ClientStateTypeComponent)]
 impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty>
     for ProvideTendermintClientState
 where
@@ -24,6 +27,7 @@ where
 
 pub struct ProvideAnyRawClientState;
 
+#[cgp_provider(RawClientStateTypeComponent)]
 impl<Chain> ProvideRawClientStateType<Chain> for ProvideAnyRawClientState
 where
     Chain: Async,
@@ -31,6 +35,7 @@ where
     type RawClientState = Any;
 }
 
+#[cgp_provider(ClientStateFieldsComponent)]
 impl<Chain, Counterparty> ClientStateFieldsGetter<Chain, Counterparty>
     for ProvideTendermintClientState
 where

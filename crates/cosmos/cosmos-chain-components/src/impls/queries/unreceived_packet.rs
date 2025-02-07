@@ -1,5 +1,7 @@
-use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
-use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::{
+    UnreceivedPacketSequencesQuerier, UnreceivedPacketSequencesQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
@@ -13,6 +15,7 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryUnreceivedCosmosPacketSequences;
 
+#[cgp_provider(UnreceivedPacketSequencesQuerierComponent)]
 impl<Chain, Counterparty> UnreceivedPacketSequencesQuerier<Chain, Counterparty>
     for QueryUnreceivedCosmosPacketSequences
 where

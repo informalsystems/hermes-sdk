@@ -1,7 +1,13 @@
-use cgp::core::error::CanRaiseAsyncError;
-use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
-use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
-use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
+    AckPacketMessageBuilder, AckPacketMessageBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::{
+    ReceivePacketMessageBuilder, ReceivePacketMessageBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
+    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
@@ -25,6 +31,7 @@ use crate::types::messages::packet::timeout::CosmosTimeoutPacketMessage;
 
 pub struct BuildCosmosPacketMessages;
 
+#[cgp_provider(ReceivePacketMessageBuilderComponent)]
 impl<Chain, Counterparty> ReceivePacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosPacketMessages
 where
@@ -61,6 +68,7 @@ where
     }
 }
 
+#[cgp_provider(AckPacketMessageBuilderComponent)]
 impl<Chain, Counterparty> AckPacketMessageBuilder<Chain, Counterparty> for BuildCosmosPacketMessages
 where
     Chain: HasMessageType
@@ -96,6 +104,7 @@ where
     }
 }
 
+#[cgp_provider(TimeoutUnorderedPacketMessageBuilderComponent)]
 impl<Chain, Counterparty> TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosPacketMessages
 where

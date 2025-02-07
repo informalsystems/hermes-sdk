@@ -1,6 +1,9 @@
 use core::fmt::Display;
 
-use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::queries::packet_receipt::{
+    PacketReceiptQuerier, PacketReceiptQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasPacketReceiptType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
@@ -10,6 +13,7 @@ use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryPacketReceiptFromAbci;
 
+#[cgp_provider(PacketReceiptQuerierComponent)]
 impl<Chain, Counterparty> PacketReceiptQuerier<Chain, Counterparty> for QueryPacketReceiptFromAbci
 where
     Chain: HasIbcChainTypes<Counterparty>

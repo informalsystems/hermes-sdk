@@ -1,6 +1,8 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_commitments::{
+    PacketCommitmentsQuerier, PacketCommitmentsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
@@ -17,6 +19,7 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryCosmosPacketCommitments;
 
+#[cgp_provider(PacketCommitmentsQuerierComponent)]
 impl<Chain, Counterparty> PacketCommitmentsQuerier<Chain, Counterparty>
     for QueryCosmosPacketCommitments
 where

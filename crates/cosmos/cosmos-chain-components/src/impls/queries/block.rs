@@ -1,5 +1,7 @@
-use cgp::core::error::CanRaiseAsyncError;
-use hermes_relayer_components::chain::traits::queries::block::BlockQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::queries::block::{
+    BlockQuerier, BlockQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::block::HasBlockType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc::core::client::types::Height;
@@ -11,6 +13,7 @@ use crate::traits::rpc_client::HasRpcClient;
 
 pub struct QueryCometBlock;
 
+#[cgp_provider(BlockQuerierComponent)]
 impl<Chain> BlockQuerier<Chain> for QueryCometBlock
 where
     Chain: HasBlockType<Block = (BlockId, Block)>

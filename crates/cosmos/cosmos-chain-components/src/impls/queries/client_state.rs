@@ -1,10 +1,11 @@
 use core::iter::Iterator;
 use core::str::FromStr;
 
-use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllRawClientStatesQuerier, RawClientStateQuerier, RawClientStateWithProofsQuerier,
+    AllRawClientStatesQuerier, AllRawClientStatesQuerierComponent, RawClientStateQuerier,
+    RawClientStateQuerierComponent, RawClientStateWithProofsQuerier,
+    RawClientStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasRawClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -24,6 +25,7 @@ use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryCosmosClientStateFromAbci;
 
+#[cgp_provider(RawClientStateQuerierComponent)]
 impl<Chain, Counterparty> RawClientStateQuerier<Chain, Counterparty>
     for QueryCosmosClientStateFromAbci
 where
@@ -50,6 +52,7 @@ where
     }
 }
 
+#[cgp_provider(RawClientStateWithProofsQuerierComponent)]
 impl<Chain, Counterparty> RawClientStateWithProofsQuerier<Chain, Counterparty>
     for QueryCosmosClientStateFromAbci
 where
@@ -76,6 +79,7 @@ where
     }
 }
 
+#[cgp_provider(AllRawClientStatesQuerierComponent)]
 impl<Chain, Counterparty> AllRawClientStatesQuerier<Chain, Counterparty>
     for QueryCosmosClientStateFromAbci
 where
