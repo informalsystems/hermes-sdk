@@ -1,15 +1,16 @@
 use core::marker::PhantomData;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 
 use crate::build::traits::builders::chain_builder::CanBuildChain;
-use crate::build::traits::builders::relay_builder::RelayBuilder;
+use crate::build::traits::builders::relay_builder::{RelayBuilder, RelayBuilderComponent};
 use crate::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
 use crate::multi::traits::chain_at::ChainIdAt;
 use crate::multi::traits::relay_at::ClientIdAt;
 
 pub struct BuildRelayFromChains;
 
+#[cgp_provider(RelayBuilderComponent)]
 impl<Build, Src: Async, Dst: Async> RelayBuilder<Build, Src, Dst> for BuildRelayFromChains
 where
     Build: CanBuildChain<Src> + CanBuildChain<Dst> + CanBuildRelayFromChains<Src, Dst>,

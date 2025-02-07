@@ -27,6 +27,7 @@ pub type ChainAt<Context, Tag> = <Context as HasChainTypeAt<Tag>>::Chain;
 
 pub type ChainIdAt<Context, Tag> = ChainIdOf<ChainAt<Context, Tag>>;
 
+#[cgp_provider(ChainTypeAtComponent<Tag>)]
 impl<Context, Tag, Provider, Chain> ProvideChainTypeAt<Context, Tag> for WithProvider<Provider>
 where
     Provider: ProvideType<Context, ChainTypeAtComponent<Tag>, Type = Chain>,
@@ -36,6 +37,7 @@ where
     type Chain = Chain;
 }
 
+#[cgp_provider(ChainTypeAtComponent<ChainTag>)]
 impl<Context, ChainTag, FieldTag, Chain> ProvideChainTypeAt<Context, ChainTag>
     for UseField<FieldTag>
 where
@@ -45,6 +47,7 @@ where
     type Chain = Chain;
 }
 
+#[cgp_provider(ChainGetterAtComponent<ChainTag>)]
 impl<Context, ChainTag, FieldTag, Chain> ChainGetterAt<Context, ChainTag> for UseField<FieldTag>
 where
     Context: HasChainTypeAt<ChainTag, Chain = Chain> + HasField<FieldTag, Value = Chain>,

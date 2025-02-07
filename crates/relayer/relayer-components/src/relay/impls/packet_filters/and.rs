@@ -1,10 +1,14 @@
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
+
+use crate::components::default::relay::RelayPacketFilterComponent;
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 use crate::relay::traits::packet_filter::RelayPacketFilter;
 
 pub struct And<FilterA, FilterB>(pub PhantomData<(FilterA, FilterB)>);
 
+#[cgp_provider(RelayPacketFilterComponent)]
 impl<Relay, FilterA, FilterB> RelayPacketFilter<Relay> for And<FilterA, FilterB>
 where
     Relay: HasRelayChains,

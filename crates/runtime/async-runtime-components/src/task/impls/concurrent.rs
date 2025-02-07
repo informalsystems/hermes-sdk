@@ -1,13 +1,17 @@
 use alloc::boxed::Box;
 use alloc::vec::Vec;
 
+use cgp::prelude::*;
 use futures_util::stream::{self, Stream, StreamExt};
-use hermes_runtime_components::traits::task::{ConcurrentTaskRunner, Task};
+use hermes_runtime_components::traits::task::{
+    ConcurrentTaskRunner, ConcurrentTaskRunnerComponent, Task,
+};
 
 use crate::stream::traits::boxed::HasBoxedStreamType;
 
 pub struct RunConcurrentTasks;
 
+#[cgp_provider(ConcurrentTaskRunnerComponent)]
 impl<Runtime> ConcurrentTaskRunner<Runtime> for RunConcurrentTasks
 where
     Runtime: HasBoxedStreamType,

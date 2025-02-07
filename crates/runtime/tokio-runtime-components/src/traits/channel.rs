@@ -101,7 +101,8 @@ where
 impl<Runtime, Component, Delegate> UnboundedChannelTypeProvider<Runtime> for Component
 where
     Runtime: Async,
-    Component: DelegateComponent<ChannelTypeComponent, Delegate = Delegate>,
+    Component: DelegateComponent<ChannelTypeComponent, Delegate = Delegate>
+        + IsProviderFor<ChannelTypeComponent, Runtime, ()>,
     Delegate: UnboundedChannelTypeProvider<Runtime>,
 {
     fn from_unbounded_sender<T>(sender: mpsc::UnboundedSender<T>) -> Self::Sender<T>

@@ -1,14 +1,17 @@
 use alloc::vec::Vec;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 
-use crate::traits::types::packets::timeout::ProvidePacketReceiptType;
+use crate::traits::types::packets::timeout::{
+    PacketReceiptTypeComponent, ProvidePacketReceiptType,
+};
 
 // TODO: determine if we can use `bool` instead of `Vec<u8>` as the
 // canonical `PacketReceipt` type
 
 pub struct ProvideBytesPacketReceipt;
 
+#[cgp_provider(PacketReceiptTypeComponent)]
 impl<Chain, Counterparty> ProvidePacketReceiptType<Chain, Counterparty>
     for ProvideBytesPacketReceipt
 where
@@ -19,6 +22,7 @@ where
 
 pub struct ProvideBoolPacketReceipt;
 
+#[cgp_provider(PacketReceiptTypeComponent)]
 impl<Chain, Counterparty> ProvidePacketReceiptType<Chain, Counterparty> for ProvideBoolPacketReceipt
 where
     Chain: Async,

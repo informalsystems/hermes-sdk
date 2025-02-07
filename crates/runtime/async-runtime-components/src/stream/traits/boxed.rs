@@ -65,7 +65,8 @@ where
 impl<Runtime, Component, Delegate> BoxedStreamTypeProvider<Runtime> for Component
 where
     Runtime: Async,
-    Component: DelegateComponent<StreamTypeComponent, Delegate = Delegate>,
+    Component: DelegateComponent<StreamTypeComponent, Delegate = Delegate>
+        + IsProviderFor<StreamTypeComponent, Runtime, ()>,
     Delegate: BoxedStreamTypeProvider<Runtime>,
 {
     fn to_boxed_stream<Item>(

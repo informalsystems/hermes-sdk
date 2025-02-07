@@ -1,13 +1,14 @@
 use alloc::sync::Arc;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::subscription::ProvideSubscription;
+use hermes_runtime_components::traits::subscription::{ProvideSubscription, SubscriptionComponent};
 
 use crate::stream::traits::boxed::HasBoxedStreamType;
 use crate::subscription::traits::subscription::Subscription;
 
 pub struct ProvideBoxedSubscription;
 
+#[cgp_provider(SubscriptionComponent)]
 impl<Runtime> ProvideSubscription<Runtime> for ProvideBoxedSubscription
 where
     Runtime: HasBoxedStreamType,

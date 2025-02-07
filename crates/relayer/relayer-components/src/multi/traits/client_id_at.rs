@@ -21,6 +21,7 @@ pub trait HasClientIdAt<Chain, Counterparty>:
     ) -> &ClientIdAt<Self, Chain, Counterparty>;
 }
 
+#[cgp_provider(ClientIdAtGetterComponent<ChainTag, CounterpartyTag>)]
 impl<Context, ChainTag, CounterpartyTag, FieldTag, Chain, Counterparty, ClientId>
     ClientIdAtGetter<Context, ChainTag, CounterpartyTag> for UseField<FieldTag>
 where

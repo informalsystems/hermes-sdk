@@ -76,7 +76,8 @@ where
 
 impl<Runtime, Component, Delegate> OneShotChannelTypeProvider<Runtime> for Component
 where
-    Component: DelegateComponent<ChannelOnceTypeComponent, Delegate = Delegate>,
+    Component: DelegateComponent<ChannelOnceTypeComponent, Delegate = Delegate>
+        + IsProviderFor<ChannelOnceTypeComponent, Runtime, ()>,
     Delegate: OneShotChannelTypeProvider<Runtime>,
 {
     fn from_oneshot_sender<T>(sender: Sender<T>) -> Self::SenderOnce<T>

@@ -47,6 +47,7 @@ where
     ) -> Result<Vec<Counterparty::Height>, Self::Error>;
 }
 
+#[cgp_provider(ConsensusStateHeightsQuerierComponent)]
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateHeightsQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where

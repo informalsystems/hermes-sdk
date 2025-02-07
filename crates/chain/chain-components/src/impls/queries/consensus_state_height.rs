@@ -1,10 +1,11 @@
 use core::fmt::Debug;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
 use crate::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerier,
+    ConsensusStateHeightQuerierComponent,
 };
 use crate::traits::types::height::HasHeightType;
 
@@ -20,6 +21,7 @@ where
     pub target_height: &'a Counterparty::Height,
 }
 
+#[cgp_provider(ConsensusStateHeightQuerierComponent)]
 impl<Chain, Counterparty> ConsensusStateHeightQuerier<Chain, Counterparty>
     for QueryConsensusStateHeightsAndFindHeightBefore
 where

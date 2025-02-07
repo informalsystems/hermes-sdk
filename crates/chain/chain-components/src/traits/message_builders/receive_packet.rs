@@ -21,6 +21,7 @@ where
     ) -> Result<Self::Message, Self::Error>;
 }
 
+#[cgp_provider(ReceivePacketMessageBuilderComponent)]
 impl<Chain, Counterparty, Components> ReceivePacketMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where

@@ -1,11 +1,14 @@
 use alloc::vec::Vec;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 
-use crate::traits::types::packets::ack::ProvideAcknowledgementType;
+use crate::traits::types::packets::ack::{
+    AcknowledgementTypeComponent, ProvideAcknowledgementType,
+};
 
 pub struct ProvideBytesAcknowlegement;
 
+#[cgp_provider(AcknowledgementTypeComponent)]
 impl<Chain, Counterparty> ProvideAcknowledgementType<Chain, Counterparty>
     for ProvideBytesAcknowlegement
 where

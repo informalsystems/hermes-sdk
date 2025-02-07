@@ -50,6 +50,7 @@ pub trait HasCreateClientEvent<Counterparty>: HasClientIdType<Counterparty> {
     fn create_client_event_client_id(event: &Self::CreateClientEvent) -> &Self::ClientId;
 }
 
+#[cgp_provider(CreateClientMessageOptionsTypeComponent)]
 impl<Chain, Counterparty, Components, Delegate>
     ProvideCreateClientMessageOptionsType<Chain, Counterparty> for UseDelegate<Components>
 where
@@ -60,6 +61,7 @@ where
     type CreateClientMessageOptions = Delegate::CreateClientMessageOptions;
 }
 
+#[cgp_provider(CreateClientPayloadOptionsTypeComponent)]
 impl<Chain, Counterparty, Components, Delegate>
     ProvideCreateClientPayloadOptionsType<Chain, Counterparty> for UseDelegate<Components>
 where
@@ -70,6 +72,7 @@ where
     type CreateClientPayloadOptions = Delegate::CreateClientPayloadOptions;
 }
 
+#[cgp_provider(CreateClientPayloadTypeComponent)]
 impl<Chain, Counterparty, Components, Delegate> ProvideCreateClientPayloadType<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -80,6 +83,7 @@ where
     type CreateClientPayload = Delegate::CreateClientPayload;
 }
 
+#[cgp_provider(CreateClientMessageOptionsTypeComponent)]
 impl<Chain, Counterparty, Provider, CreateClientMessageOptions>
     ProvideCreateClientMessageOptionsType<Chain, Counterparty> for WithProvider<Provider>
 where
@@ -91,6 +95,7 @@ where
     type CreateClientMessageOptions = CreateClientMessageOptions;
 }
 
+#[cgp_provider(CreateClientPayloadOptionsTypeComponent)]
 impl<Chain, Counterparty, Provider, CreateClientPayloadOptions>
     ProvideCreateClientPayloadOptionsType<Chain, Counterparty> for WithProvider<Provider>
 where
@@ -102,6 +107,7 @@ where
     type CreateClientPayloadOptions = CreateClientPayloadOptions;
 }
 
+#[cgp_provider(CreateClientPayloadTypeComponent)]
 impl<Chain, Counterparty, Provider, CreateClientPayload>
     ProvideCreateClientPayloadType<Chain, Counterparty> for WithProvider<Provider>
 where

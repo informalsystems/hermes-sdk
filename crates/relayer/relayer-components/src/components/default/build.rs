@@ -7,10 +7,10 @@ use crate::build::components::chain::cache::BuildChainWithCache;
 use crate::build::components::relay::build_from_chain::BuildRelayFromChains;
 use crate::build::components::relay::cache::BuildRelayWithCache;
 use crate::build::traits::builders::birelay_builder::{BiRelayBuilderComponent, CanBuildBiRelay};
-use crate::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
-use crate::build::traits::builders::chain_builder::{ChainBuilder, ChainBuilderComponent};
+use crate::build::traits::builders::birelay_from_relay_builder::{BiRelayFromRelayBuilder, CanBuildBiRelayFromRelays};
+use crate::build::traits::builders::chain_builder::{CanBuildChain, ChainBuilder, ChainBuilderComponent};
 use crate::build::traits::builders::relay_builder::RelayBuilderComponent;
-use crate::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
+use crate::build::traits::builders::relay_from_chains_builder::{CanBuildRelayFromChains, RelayFromChainsBuilder};
 use crate::build::traits::cache::{HasChainCache, HasRelayCache};
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt};
@@ -28,7 +28,7 @@ pub trait CanUseDefaultBuildComponents: UseDefaultBuildComponents {}
 
 pub trait UseDefaultBuildComponents: CanBuildBiRelay<Index<0>, Index<1>> {}
 
-impl<Build, Components, BaseComponents> UseDefaultBuildComponents for Build
+impl<Build> UseDefaultBuildComponents for Build
 where
     Build: Async
         + HasBiRelayTypeAt<Index<0>, Index<1>>
@@ -36,7 +36,10 @@ where
         + HasRelayCache<Index<1>, Index<0>>
         + HasChainCache<Index<0>>
         + HasChainCache<Index<1>>
-        + HasComponents<Components = Components>,
+        + CanBuildChain<Index<0>> + ChainBuilder<Build, Index<1>>
+        + CanBuildBiRelayFromRelays<Index<0>, Index<1>>
+        + CanBuildRelayFromChains<Index<0>, Index<1>>
+        + CanBuildRelayFromChains<Index<1>, Index<0>>,
     RelayAt<Build, Index<0>, Index<1>>: Clone,
     RelayAt<Build, Index<1>, Index<0>>: Clone,
     ChainAt<Build, Index<0>>: Clone,
@@ -45,12 +48,5 @@ where
     ChainIdAt<Build, Index<1>>: Ord + Clone,
     ClientIdAt<Build, Index<0>, Index<1>>: Ord + Clone,
     ClientIdAt<Build, Index<1>, Index<0>>: Ord + Clone,
-    Components: HasComponents<Components = BaseComponents>
-        + DelegatesToDefaultBuildComponents<BaseComponents>
-        + BiRelayFromRelayBuilder<Build, Index<0>, Index<1>>
-        + RelayFromChainsBuilder<Build, Index<0>, Index<1>>
-        + RelayFromChainsBuilder<Build, Index<1>, Index<0>>
-        + ProvideErrorType<Build, Error: Async>,
-    BaseComponents: Async + ChainBuilder<Build, Index<0>> + ChainBuilder<Build, Index<1>>,
 {
 }
