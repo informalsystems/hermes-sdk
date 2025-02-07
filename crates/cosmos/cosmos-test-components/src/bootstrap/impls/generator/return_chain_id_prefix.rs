@@ -1,11 +1,14 @@
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_test_components::chain::traits::chain_id::CanBuildChainIdFromString;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
+use crate::bootstrap::components::cosmos_sdk::ChainIdGeneratorComponent;
 use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGenerator;
 
 pub struct ReturnPrefixAsChainId;
 
+#[cgp_provider(ChainIdGeneratorComponent)]
 impl<Bootstrap, Chain> ChainIdGenerator<Bootstrap> for ReturnPrefixAsChainId
 where
     Bootstrap: HasChainType<Chain = Chain>,

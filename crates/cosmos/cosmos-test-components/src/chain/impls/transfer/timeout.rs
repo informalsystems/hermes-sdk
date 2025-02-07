@@ -1,14 +1,18 @@
 use core::time::Duration;
 
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::status::Time;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::timestamp::{HasTimeType, HasTimeoutType};
-use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculator;
+use hermes_test_components::chain::traits::transfer::timeout::{
+    IbcTransferTimeoutCalculator, IbcTransferTimeoutCalculatorComponent,
+};
 use ibc::primitives::Timestamp;
 use time::OffsetDateTime;
 
 pub struct IbcTransferTimeoutAfterSeconds<const SECS: u64>;
 
+#[cgp_provider(IbcTransferTimeoutCalculatorComponent)]
 impl<Chain, const SECS: u64> IbcTransferTimeoutCalculator<Chain>
     for IbcTransferTimeoutAfterSeconds<SECS>
 where

@@ -7,10 +7,11 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::chain_driver::traits::types::chain::HasChain;
-use crate::chain_driver::traits::wait::ChainStartupWaiter;
+use crate::chain_driver::traits::wait::{ChainStartupWaiter, ChainStartupWaiterComponent};
 
 pub struct WaitChainReachHeight<const H: u64>;
 
+#[cgp_provider(ChainStartupWaiterComponent)]
 impl<ChainDriver, Chain, const H: u64> ChainStartupWaiter<ChainDriver> for WaitChainReachHeight<H>
 where
     ChainDriver:
@@ -39,6 +40,7 @@ where
 
 pub struct NoWaitChainStartup;
 
+#[cgp_provider(ChainStartupWaiterComponent)]
 impl<ChainDriver> ChainStartupWaiter<ChainDriver> for NoWaitChainStartup
 where
     ChainDriver: Async + HasAsyncErrorType,

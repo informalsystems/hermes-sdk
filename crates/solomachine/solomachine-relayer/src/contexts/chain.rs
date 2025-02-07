@@ -14,6 +14,10 @@ use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::presets::chain::{
+    ChannelEndQuerierComponent, ClientStateQuerierComponent, ConnectionEndQuerierComponent,
+    ConsensusStateQuerierComponent,
+};
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingTypeComponent, HasDefaultEncoding,
@@ -150,6 +154,7 @@ impl IbcCommitmentPrefixGetter<MockSolomachine> for SolomachineChainComponents2 
     }
 }
 
+#[cgp_provider(ClientStateQuerierComponent)]
 impl<Counterparty> ClientStateQuerier<MockSolomachine, Counterparty> for SolomachineChainComponents2
 where
     Counterparty: HasClientStateType<MockSolomachine, ClientState = TendermintClientState>,
@@ -170,6 +175,7 @@ where
     }
 }
 
+#[cgp_provider(ConsensusStateQuerierComponent)]
 impl<Counterparty> ConsensusStateQuerier<MockSolomachine, Counterparty>
     for SolomachineChainComponents2
 where
@@ -196,6 +202,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionEndQuerierComponent)]
 impl<Counterparty> ConnectionEndQuerier<MockSolomachine, Counterparty>
     for SolomachineChainComponents2
 {
@@ -217,6 +224,7 @@ impl<Counterparty> ConnectionEndQuerier<MockSolomachine, Counterparty>
     }
 }
 
+#[cgp_provider(ChannelEndQuerierComponent)]
 impl<Counterparty> ChannelEndQuerier<MockSolomachine, Counterparty>
     for SolomachineChainComponents2
 {

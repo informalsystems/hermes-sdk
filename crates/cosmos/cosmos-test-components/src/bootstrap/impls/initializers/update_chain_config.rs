@@ -1,7 +1,7 @@
 use core::time::Duration;
 use std::path::PathBuf;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
@@ -12,6 +12,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc::core::host::types::identifiers::ChainId;
 use toml::Value;
 
+use crate::bootstrap::components::cosmos_sdk::ChainNodeConfigInitializerComponent;
 use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
 use crate::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CanModifyCosmosSdkConfig;
@@ -23,6 +24,7 @@ use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
 pub struct UpdateCosmosChainNodeConfig;
 
+#[cgp_provider(ChainNodeConfigInitializerComponent)]
 impl<Bootstrap, Runtime, Chain> ChainNodeConfigInitializer<Bootstrap>
     for UpdateCosmosChainNodeConfig
 where

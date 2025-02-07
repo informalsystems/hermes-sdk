@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
@@ -6,6 +6,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
+use crate::bootstrap::components::cosmos_sdk::GenesisValidatorAdderComponent;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAdder;
 
@@ -16,6 +17,7 @@ use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAd
 */
 pub struct AddCosmosGenesisValidator;
 
+#[cgp_provider(GenesisValidatorAdderComponent)]
 impl<Bootstrap, Runtime, Chain> GenesisValidatorAdder<Bootstrap> for AddCosmosGenesisValidator
 where
     Bootstrap: HasRuntime<Runtime = Runtime>

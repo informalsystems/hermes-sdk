@@ -1,14 +1,17 @@
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::wallet::{
-    HasWalletType, ProvideWalletType, WalletSignerProvider,
+    HasWalletType, ProvideWalletType, WalletSignerComponent, WalletSignerProvider,
+    WalletTypeComponent,
 };
 
 use crate::chain::types::wallet::CosmosTestWallet;
 
 pub struct ProvideCosmosTestWallet;
 
+#[cgp_provider(WalletTypeComponent)]
 impl<Chain> ProvideWalletType<Chain> for ProvideCosmosTestWallet
 where
     Chain: HasAddressType<Address = String>,
@@ -20,6 +23,7 @@ where
     }
 }
 
+#[cgp_provider(WalletSignerComponent)]
 impl<Chain> WalletSignerProvider<Chain> for ProvideCosmosTestWallet
 where
     Chain: HasWalletType<Wallet = CosmosTestWallet> + HasSignerType<Signer = Secp256k1KeyPair>,

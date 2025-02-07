@@ -1,7 +1,8 @@
 use alloc::sync::Arc;
 use core::fmt::Debug;
 
-use cgp::core::error::{ErrorRaiser, HasAsyncErrorType};
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent};
+use cgp::prelude::*;
 use eyre::eyre;
 
 use crate::types::{Error, ErrorDetail};
@@ -11,6 +12,7 @@ pub struct DebugErrorWithRetry<const RETRYABLE: bool>;
 pub type DebugRetryableError = DebugErrorWithRetry<true>;
 pub type DebugError = DebugErrorWithRetry<false>;
 
+#[cgp_provider(ErrorRaiserComponent)]
 impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for DebugErrorWithRetry<RETRYABLE>
 where
     Context: HasAsyncErrorType<Error = Error>,

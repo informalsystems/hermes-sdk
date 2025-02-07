@@ -4,7 +4,8 @@ use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
+    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
+    EncodingTypeComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
@@ -42,6 +43,7 @@ delegate_components! {
 
 pub struct ProvideSolomachineEncoding;
 
+#[cgp_provider(EncodingTypeComponent)]
 impl<Chain> ProvideEncodingType<Chain, AsBytes> for ProvideSolomachineEncoding
 where
     Chain: Async,
@@ -49,6 +51,7 @@ where
     type Encoding = SolomachineEncoding;
 }
 
+#[cgp_provider(DefaultEncodingGetterComponent)]
 impl<Chain> DefaultEncodingGetter<Chain, AsBytes> for ProvideSolomachineEncoding
 where
     Chain: HasEncodingType<AsBytes, Encoding = SolomachineEncoding>,

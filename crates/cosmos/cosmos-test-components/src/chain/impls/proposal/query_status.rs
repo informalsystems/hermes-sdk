@@ -1,8 +1,10 @@
 use core::fmt::Debug;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
-use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerier;
+use hermes_test_components::chain::traits::proposal::query_status::{
+    ProposalStatusQuerier, ProposalStatusQuerierComponent,
+};
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use http::uri::InvalidUri;
@@ -21,6 +23,7 @@ pub struct ProposalFailed<'a, Chain> {
     pub proposal: &'a Proposal,
 }
 
+#[cgp_provider(ProposalStatusQuerierComponent)]
 impl<Chain> ProposalStatusQuerier<Chain> for QueryProposalStatusWithGrpc
 where
     Chain: HasProposalIdType<ProposalId = u64>

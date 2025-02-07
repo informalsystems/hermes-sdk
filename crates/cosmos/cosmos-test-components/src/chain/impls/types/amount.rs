@@ -1,6 +1,7 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_test_components::chain::traits::types::amount::{
-    HasAmountType, ProvideAmountMethods, ProvideAmountType,
+    AmountMethodsComponent, AmountTypeComponent, HasAmountType, ProvideAmountMethods,
+    ProvideAmountType,
 };
 use hermes_test_components::chain::traits::types::denom::HasDenomType;
 
@@ -9,6 +10,7 @@ use crate::chain::types::denom::Denom;
 
 pub struct ProvideU128AmountWithDenom;
 
+#[cgp_provider(AmountTypeComponent)]
 impl<ChainDriver> ProvideAmountType<ChainDriver> for ProvideU128AmountWithDenom
 where
     ChainDriver: HasDenomType<Denom = Denom>,
@@ -20,6 +22,7 @@ where
     }
 }
 
+#[cgp_provider(AmountMethodsComponent)]
 impl<ChainDriver> ProvideAmountMethods<ChainDriver> for ProvideU128AmountWithDenom
 where
     ChainDriver: HasAmountType<Amount = Amount> + CanRaiseAsyncError<&'static str>,

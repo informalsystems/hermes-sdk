@@ -1,14 +1,17 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::random::CanGenerateRandom;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
-use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGenerator;
+use hermes_test_components::chain_driver::traits::fields::amount::{
+    RandomAmountGenerator, RandomAmountGeneratorComponent,
+};
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 use crate::chain::types::amount::Amount;
 
 pub struct GenerateRandomAmount;
 
+#[cgp_provider(RandomAmountGeneratorComponent)]
 impl<ChainDriver, Chain> RandomAmountGenerator<ChainDriver> for GenerateRandomAmount
 where
     ChainDriver: HasChainType<Chain = Chain> + HasRuntime + CanRaiseAsyncError<&'static str>,

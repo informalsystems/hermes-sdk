@@ -2,13 +2,15 @@ use alloc::format;
 use alloc::sync::Arc;
 use core::fmt::Debug;
 
-use cgp::core::error::{ErrorRaiser, HasAsyncErrorType};
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, HasAsyncErrorType};
+use cgp::prelude::*;
 
 use crate::traits::wrap::WrapError;
 use crate::types::{Error, ErrorDetail};
 
 pub struct WrapErrorDetail;
 
+#[cgp_provider(ErrorRaiserComponent)]
 impl<Context, Detail> ErrorRaiser<Context, WrapError<Detail, Error>> for WrapErrorDetail
 where
     Context: HasAsyncErrorType<Error = Error>,

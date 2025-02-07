@@ -1,6 +1,9 @@
-use cgp::prelude::{Async, CanRaiseAsyncError, HasAsyncErrorType};
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
+use hermes_cosmos_relayer::presets::chain::{
+    CreateClientMessageBuilderComponent, CreateClientMessageOptionsTypeComponent,
+};
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
@@ -19,6 +22,7 @@ use crate::types::payloads::client::SolomachineCreateClientPayload;
 
 pub struct BuildCreateSolomachineClientMessage;
 
+#[cgp_provider(CreateClientMessageOptionsTypeComponent)]
 impl<Chain, Counterparty> ProvideCreateClientMessageOptionsType<Chain, Counterparty>
     for BuildCreateSolomachineClientMessage
 where
@@ -27,6 +31,7 @@ where
     type CreateClientMessageOptions = ();
 }
 
+#[cgp_provider(CreateClientMessageBuilderComponent)]
 impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateSolomachineClientMessage
 where

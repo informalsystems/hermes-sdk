@@ -1,4 +1,3 @@
-use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
@@ -7,6 +6,7 @@ use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
+use crate::bootstrap::components::cosmos_sdk::GenesisAccountAdderComponent;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdder;
 
@@ -18,6 +18,7 @@ use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdder;
 */
 pub struct LegacyAddCosmosGenesisAccount;
 
+#[cgp_provider(GenesisAccountAdderComponent)]
 impl<Bootstrap, Runtime, Chain> GenesisAccountAdder<Bootstrap> for LegacyAddCosmosGenesisAccount
 where
     Bootstrap: HasRuntime<Runtime = Runtime>

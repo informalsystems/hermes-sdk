@@ -1,10 +1,12 @@
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
-use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilder;
+use hermes_test_components::chain::traits::messages::ibc_transfer::{
+    IbcTokenTransferMessageBuilder, IbcTokenTransferMessageBuilderComponent,
+};
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::memo::HasMemoType;
@@ -17,6 +19,7 @@ use crate::chain::types::messages::token_transfer::TokenTransferMessage;
 
 pub struct BuildCosmosIbcTransferMessage;
 
+#[cgp_provider(IbcTokenTransferMessageBuilderComponent)]
 impl<Chain, Counterparty> IbcTokenTransferMessageBuilder<Chain, Counterparty>
     for BuildCosmosIbcTransferMessage
 where

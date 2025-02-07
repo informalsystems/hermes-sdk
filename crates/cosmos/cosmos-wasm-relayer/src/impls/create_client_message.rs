@@ -1,10 +1,11 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
 use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientPayload;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
+use hermes_cosmos_relayer::presets::chain::CreateClientMessageBuilderComponent;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
@@ -25,6 +26,7 @@ use crate::types::create_client::CreateWasmTendermintMessageOptions;
 
 pub struct BuildCreateWasmTendermintClientMessage;
 
+#[cgp_provider(CreateClientMessageBuilderComponent)]
 impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateWasmTendermintClientMessage
 where

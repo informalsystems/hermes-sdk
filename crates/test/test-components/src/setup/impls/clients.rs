@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
@@ -15,13 +14,14 @@ use hermes_relayer_components::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
 };
 
-use crate::setup::traits::clients::ClientSetup;
+use crate::setup::traits::clients::{ClientSetup, ClientSetupComponent};
 use crate::setup::traits::create_client_options_at::{
     HasCreateClientMessageOptionsAt, HasCreateClientPayloadOptionsAt,
 };
 
 pub struct SetupClientsWithRelay;
 
+#[cgp_provider(ClientSetupComponent)]
 impl<Setup, A: Async, B: Async, Relay, SrcChain, DstChain> ClientSetup<Setup, A, B>
     for SetupClientsWithRelay
 where

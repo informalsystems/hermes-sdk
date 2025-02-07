@@ -1,8 +1,10 @@
 use core::num::ParseIntError;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
-use hermes_test_components::chain::traits::queries::balance::BalanceQuerier;
+use hermes_test_components::chain::traits::queries::balance::{
+    BalanceQuerier, BalanceQuerierComponent,
+};
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use http::uri::InvalidUri;
@@ -17,6 +19,7 @@ use crate::chain::types::denom::Denom;
 
 pub struct QueryCosmosBalance;
 
+#[cgp_provider(BalanceQuerierComponent)]
 impl<Chain> BalanceQuerier<Chain> for QueryCosmosBalance
 where
     Chain: HasAddressType

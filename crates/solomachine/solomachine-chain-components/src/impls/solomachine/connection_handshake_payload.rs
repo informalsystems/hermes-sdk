@@ -1,8 +1,12 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
+};
+use hermes_cosmos_relayer::presets::chain::{
+    ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilderComponent,
+    ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenTryPayloadBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
@@ -37,6 +41,7 @@ use crate::types::payloads::connection::{
 
 pub struct BuildSolomachineConnectionHandshakePayloads;
 
+#[cgp_provider(ConnectionOpenInitPayloadBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenInitPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineConnectionHandshakePayloads
 where
@@ -62,6 +67,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenTryPayloadBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenTryPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineConnectionHandshakePayloads
 where
@@ -160,6 +166,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenAckPayloadBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenAckPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineConnectionHandshakePayloads
 where
@@ -261,6 +268,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenConfirmPayloadBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenConfirmPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineConnectionHandshakePayloads
 where
