@@ -1,7 +1,8 @@
 use alloc::boxed::Box;
 use alloc::vec;
 
-use cgp::extra::run::Runner;
+use cgp::extra::run::{Runner, RunnerComponent};
+use cgp::prelude::*;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
@@ -41,6 +42,7 @@ where
     }
 }
 
+#[cgp_provider(RunnerComponent)]
 impl<Relay> Runner<Relay> for RelayBothTargets
 where
     Relay: Clone

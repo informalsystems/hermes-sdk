@@ -1,4 +1,4 @@
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_chain_components::traits::types::ibc::{HasChannelIdType, HasPortIdType};
@@ -8,6 +8,7 @@ use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use crate::components::default::relay::PacketRelayerComponent;
 use crate::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
 use crate::relay::impls::packet_relayers::general::full_relay::{
     FullCycleRelayer, LogRelayPacketAction,
@@ -26,6 +27,7 @@ use crate::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTim
 
 pub struct DefaultPacketRelayer;
 
+#[cgp_provider(PacketRelayerComponent)]
 impl<Relay, SrcChain, DstChain> PacketRelayer<Relay> for DefaultPacketRelayer
 where
     Relay: CanRelayAckPacket

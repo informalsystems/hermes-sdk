@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenTryMessage;
@@ -10,6 +10,7 @@ use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenTryEvent;
 use crate::chain::types::aliases::ChannelIdOf;
+use crate::components::default::relay::ChannelOpenTryRelayerComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::channel::open_try::ChannelOpenTryRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
@@ -38,6 +39,7 @@ where
     pub src_channel_id: &'a ChannelIdOf<Relay::SrcChain, Relay::DstChain>,
 }
 
+#[cgp_provider(ChannelOpenTryRelayerComponent)]
 impl<Relay, SrcChain, DstChain> ChannelOpenTryRelayer<Relay> for RelayChannelOpenTry
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

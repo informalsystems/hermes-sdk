@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence,
 };
@@ -7,6 +8,7 @@ use hermes_chain_components::traits::packet::fields::{
 use crate::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{HeightOf, WriteAckEventOf};
+use crate::components::default::relay::ReceivePacketRelayerComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayer;
 
@@ -14,6 +16,7 @@ pub struct SkipReceivedPacketRelayer<Relayer> {
     pub phantom: PhantomData<Relayer>,
 }
 
+#[cgp_provider(ReceivePacketRelayerComponent)]
 impl<Relay, Relayer> ReceivePacketRelayer<Relay> for SkipReceivedPacketRelayer<Relayer>
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,

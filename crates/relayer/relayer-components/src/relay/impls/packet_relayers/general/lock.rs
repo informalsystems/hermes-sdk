@@ -1,8 +1,10 @@
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
+use crate::components::default::relay::PacketRelayerComponent;
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::PacketRelayer;
@@ -24,6 +26,7 @@ where
     pub packet: &'a PacketOf<Relay>,
 }
 
+#[cgp_provider(PacketRelayerComponent)]
 impl<Relay, InRelayer> PacketRelayer<Relay> for LockPacketRelayer<InRelayer>
 where
     Relay: HasRelayChains + HasPacketLock + HasLogger,

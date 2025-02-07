@@ -1,6 +1,7 @@
 use cgp::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::components::default::relay::ChannelOpenHandshakeRelayerComponent;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::channel::open_ack::CanRelayChannelOpenAck;
 use crate::relay::traits::channel::open_confirm::CanRelayChannelOpenConfirm;
@@ -21,6 +22,7 @@ use crate::relay::traits::channel::open_try::CanRelayChannelOpenTry;
 */
 pub struct RelayChannelOpenHandshake;
 
+#[cgp_provider(ChannelOpenHandshakeRelayerComponent)]
 impl<Relay, SrcChain, DstChain> ChannelOpenHandshakeRelayer<Relay> for RelayChannelOpenHandshake
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

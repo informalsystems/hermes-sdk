@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 
@@ -12,6 +12,7 @@ use crate::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use crate::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientPayloadType,
 };
+use crate::components::default::relay::ClientCreatorComponent;
 use crate::relay::traits::client_creator::ClientCreator;
 use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
@@ -46,6 +47,7 @@ where
     }
 }
 
+#[cgp_provider(ClientCreatorComponent)]
 impl<Relay, Target, TargetChain, CounterpartyChain> ClientCreator<Relay, Target>
     for CreateClientWithChains
 where

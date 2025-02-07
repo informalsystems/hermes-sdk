@@ -1,9 +1,12 @@
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
+
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenConfirmMessage;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenConfirmPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use crate::components::default::relay::ConnectionOpenConfirmRelayerComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
@@ -23,6 +26,7 @@ use crate::relay::traits::update_client_message_builder::CanBuildTargetUpdateCli
 */
 pub struct RelayConnectionOpenConfirm;
 
+#[cgp_provider(ConnectionOpenConfirmRelayerComponent)]
 impl<Relay, SrcChain, DstChain> ConnectionOpenConfirmRelayer<Relay> for RelayConnectionOpenConfirm
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

@@ -1,7 +1,7 @@
 use alloc::boxed::Box;
 
 use cgp::core::error::ErrorOf;
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -14,6 +14,7 @@ use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments
 use crate::chain::traits::queries::unreceived_acks_sequences::CanQueryUnreceivedAcksSequences;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{ChannelIdOf, HeightOf, PortIdOf, WriteAckEventOf};
+use crate::components::default::relay::PacketClearerComponent;
 use crate::relay::impls::packet_clearers::receive_packet::{
     ClearPacketAction, LogClearPacketError,
 };
@@ -69,6 +70,7 @@ where
     }
 }
 
+#[cgp_provider(PacketClearerComponent)]
 impl<Relay> PacketClearer<Relay> for ClearAckPackets
 where
     Relay: Clone + HasRuntime + HasRelayChains + CanRaiseRelayChainErrors + HasLogger,

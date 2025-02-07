@@ -1,9 +1,12 @@
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
+
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenConfirmMessage;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenConfirmPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use crate::components::default::relay::ChannelOpenConfirmRelayerComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
@@ -24,6 +27,7 @@ use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPor
 */
 pub struct RelayChannelOpenConfirm;
 
+#[cgp_provider(ChannelOpenConfirmRelayerComponent)]
 impl<Relay, SrcChain, DstChain> ChannelOpenConfirmRelayer<Relay> for RelayChannelOpenConfirm
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

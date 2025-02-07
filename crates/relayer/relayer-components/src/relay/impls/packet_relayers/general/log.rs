@@ -1,9 +1,10 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
+use crate::components::default::relay::PacketRelayerComponent;
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 use crate::relay::traits::packet_relayer::PacketRelayer;
 
@@ -27,6 +28,7 @@ where
     Error { error: &'a Relay::Error },
 }
 
+#[cgp_provider(PacketRelayerComponent)]
 impl<Relay, InRelayer> PacketRelayer<Relay> for LoggerRelayer<InRelayer>
 where
     Relay: HasRelayChains + HasLogger,

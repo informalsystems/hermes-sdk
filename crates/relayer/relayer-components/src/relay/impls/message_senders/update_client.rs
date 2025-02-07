@@ -1,15 +1,18 @@
 use alloc::collections::BTreeSet;
 use alloc::vec::Vec;
 
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 use crate::chain::traits::types::ibc::{HasCounterpartyMessageHeight, HasIbcChainTypes};
+use crate::components::default::relay::IbcMessageSenderComponent;
 use crate::relay::traits::ibc_message_sender::IbcMessageSender;
 use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 use crate::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 
 pub struct SendIbcMessagesWithUpdateClient<Sender>(pub Sender);
 
+#[cgp_provider(IbcMessageSenderComponent<Sink>)]
 impl<InSender, Relay, Sink, Target, TargetChain, CounterpartyChain>
     IbcMessageSender<Relay, Sink, Target> for SendIbcMessagesWithUpdateClient<InSender>
 where

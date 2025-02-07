@@ -1,8 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
@@ -10,6 +9,7 @@ use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
+use crate::components::default::relay::ChannelInitializerComponent;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::channel::open_init::ChannelInitializer;
 
@@ -25,6 +25,7 @@ pub struct MissingChannelInitEventError<'a, Relay> {
     pub relay: &'a Relay,
 }
 
+#[cgp_provider(ChannelInitializerComponent)]
 impl<Relay, SrcChain, DstChain> ChannelInitializer<Relay> for InitializeChannel
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
