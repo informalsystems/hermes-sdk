@@ -11,6 +11,7 @@ pub trait HasIbcMessageHeaderType<Counterparty>: Async {
     type IbcMessageHeader: Async;
 }
 
+#[cgp_provider(IbcMessageHeaderTypeComponent)]
 impl<Chain, Counterparty, Provider, IbcMessageHeader>
     ProvideIbcMessageHeaderType<Chain, Counterparty> for WithProvider<Provider>
 where

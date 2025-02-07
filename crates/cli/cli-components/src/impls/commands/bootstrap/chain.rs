@@ -24,6 +24,7 @@ use crate::traits::output::CanProduceOutput;
 
 pub struct RunBootstrapChainCommand<UpdateConfig>(pub PhantomData<UpdateConfig>);
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App, Args, Bootstrap, ChainDriver, Chain, Runtime, UpdateConfig> CommandRunner<App, Args>
     for RunBootstrapChainCommand<UpdateConfig>
 where

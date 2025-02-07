@@ -11,6 +11,7 @@ pub trait HasPayloadHeaderType<Counterparty>: Async {
     type PayloadHeader: Async;
 }
 
+#[cgp_provider(PayloadHeaderTypeComponent)]
 impl<Chain, Counterparty, Provider, PayloadHeader> ProvidePayloadHeaderType<Chain, Counterparty>
     for WithProvider<Provider>
 where

@@ -27,6 +27,7 @@ pub trait HasHeightType: Sized + Async {
     type Height: Ord + Display + Clone + Async;
 }
 
+#[cgp_provider(HeightTypeComponent)]
 impl<Chain, Provider, Height> ProvideHeightType<Chain> for WithProvider<Provider>
 where
     Chain: Async,

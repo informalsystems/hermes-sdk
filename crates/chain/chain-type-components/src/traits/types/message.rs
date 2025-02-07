@@ -55,6 +55,7 @@ pub trait HasMessageType: Sized + Async {
     type Message: Async;
 }
 
+#[cgp_provider(MessageTypeComponent)]
 impl<Chain, Provider, Message> ProvideMessageType<Chain> for WithProvider<Provider>
 where
     Chain: Async,

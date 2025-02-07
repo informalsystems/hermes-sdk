@@ -43,6 +43,7 @@ where
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy, Encoder, InEncoders, ValueA, ValueB>
     MutDecoder<Encoding, Strategy, Cons<ValueA, ValueB>>
     for CombineEncoders<Cons<Encoder, InEncoders>>

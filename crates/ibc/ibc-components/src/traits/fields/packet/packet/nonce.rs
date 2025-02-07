@@ -28,6 +28,7 @@ pub trait HasPacketNonce<Counterparty>:
     fn packet_nonce(packet_header: &Self::Packet) -> &Self::PacketNonce;
 }
 
+#[cgp_provider(PacketNonceGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketNonceGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where

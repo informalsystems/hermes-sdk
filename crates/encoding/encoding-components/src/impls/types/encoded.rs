@@ -1,11 +1,12 @@
 use alloc::vec::Vec;
 
-use cgp::prelude::Async;
+use cgp::prelude::*;
 
-use crate::traits::types::encoded::ProvideEncodedType;
+use crate::traits::types::encoded::{EncodedTypeComponent, ProvideEncodedType};
 
 pub struct ProvideEncodedBytes;
 
+#[cgp_provider(EncodedTypeComponent)]
 impl<Encode> ProvideEncodedType<Encode> for ProvideEncodedBytes
 where
     Encode: Async,

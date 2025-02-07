@@ -17,6 +17,7 @@ pub trait HasClientStateType<Counterparty>: Async {
 pub type ClientStateOf<Chain, Counterparty> =
     <Chain as HasClientStateType<Counterparty>>::ClientState;
 
+#[cgp_provider(ClientStateTypeComponent)]
 impl<Chain, Counterparty, Components, Delegate> ProvideClientStateType<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -27,6 +28,7 @@ where
     type ClientState = Delegate::ClientState;
 }
 
+#[cgp_provider(ClientStateTypeComponent)]
 impl<Chain, Counterparty, Provider, ClientState> ProvideClientStateType<Chain, Counterparty>
     for WithProvider<Provider>
 where

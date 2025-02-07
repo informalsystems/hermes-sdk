@@ -6,12 +6,13 @@ use crate::traits::query_light_block::{
     GetTrustedOrVerified,
 };
 use crate::traits::verify_target_height::{
-    CanVerifyTargetHeight, NoInitialTrustedState, TargetHeightVerifier, VerifyBackward,
-    VerifyForward, VerifyToTarget,
+    CanVerifyTargetHeight, NoInitialTrustedState, TargetHeightVerifier,
+    TargetHeightVerifierComponent, VerifyBackward, VerifyForward, VerifyToTarget,
 };
 
 pub struct DoVerifyToTarget;
 
+#[cgp_provider(TargetHeightVerifierComponent)]
 #[async_trait]
 impl<Client> TargetHeightVerifier<Client, VerifyToTarget> for DoVerifyToTarget
 where

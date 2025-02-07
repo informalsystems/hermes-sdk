@@ -12,7 +12,9 @@ use crate::traits::types::status::HasVerificationStatusType;
 use crate::traits::types::verdict::HasVerdictType;
 use crate::traits::update_verification_status::{CanUpdateVerificationStatus, VerifiedStatus};
 use crate::traits::validate_light_block::{CanValidateLightBlock, IsWithinTrustingPeriod};
-use crate::traits::verify_target_height::{NoInitialTrustedState, TargetHeightVerifier};
+use crate::traits::verify_target_height::{
+    NoInitialTrustedState, TargetHeightVerifier, TargetHeightVerifierComponent,
+};
 use crate::traits::verify_update_header::CanVerifyUpdateHeader;
 use crate::types::status::VerificationStatus;
 use crate::types::verdict::Verdict;
@@ -27,7 +29,7 @@ where
     pub trusted_height: &'a Client::Height,
 }
 
-#[async_trait]
+#[cgp_provider(TargetHeightVerifierComponent)]
 impl<Client, Mode> TargetHeightVerifier<Client, Mode> for DoVerifyForward
 where
     Client: HasLightBlockHeight

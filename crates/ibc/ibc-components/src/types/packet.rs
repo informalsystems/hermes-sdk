@@ -2,10 +2,10 @@ use alloc::vec::Vec;
 
 use cgp::prelude::*;
 
-use crate::traits::builders::packet::PacketBuilder;
+use crate::traits::builders::packet::{PacketBuilder, PacketBuilderComponent};
 use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::packet::nonce::HasPacketNonceType;
-use crate::traits::types::packet::packet::{HasPacketType, ProvidePacketType};
+use crate::traits::types::packet::packet::{HasPacketType, PacketTypeComponent, ProvidePacketType};
 use crate::traits::types::payload::payload::HasPayloadType;
 
 #[derive(HasField)]
@@ -22,6 +22,7 @@ where
 
 pub struct UseIbcPacket;
 
+#[cgp_provider(PacketTypeComponent)]
 impl<Chain, Counterparty> ProvidePacketType<Chain, Counterparty> for UseIbcPacket
 where
     Chain: HasPacketHeaderType<Counterparty>
@@ -32,6 +33,7 @@ where
     type Packet = IbcPacket<Chain, Counterparty>;
 }
 
+#[cgp_provider(PacketBuilderComponent)]
 impl<Chain, Counterparty> PacketBuilder<Chain, Counterparty> for UseIbcPacket
 where
     Chain: HasPacketHeaderType<Counterparty, PacketHeader: Clone>

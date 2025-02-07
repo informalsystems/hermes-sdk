@@ -21,6 +21,7 @@ where
     fn packet_dst_channel_id(packet_header: &Self::PacketHeader) -> &Counterparty::ChannelId;
 }
 
+#[cgp_provider(PacketChannelIdGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketChannelIdGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where

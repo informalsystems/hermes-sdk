@@ -21,6 +21,7 @@ where
     fn payload_dst_app_id(payload_header: &Self::PayloadHeader) -> &Counterparty::AppId;
 }
 
+#[cgp_provider(PayloadAppIdGetterComponent)]
 impl<Chain, Counterparty, Provider> PayloadAppIdGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where

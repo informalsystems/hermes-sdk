@@ -16,6 +16,7 @@ pub trait HasClientIdType<Counterparty>: Sized + Async {
     type ClientId: Debug + Async;
 }
 
+#[cgp_provider(ClientIdTypeComponent)]
 impl<Chain, Counterparty, Provider, ClientId> ProvideClientIdType<Chain, Counterparty>
     for WithProvider<Provider>
 where

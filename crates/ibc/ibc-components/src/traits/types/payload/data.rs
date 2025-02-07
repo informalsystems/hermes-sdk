@@ -16,6 +16,7 @@ pub trait HasPayloadDataType<Counterparty, App>: Async {
 pub type PayloadDataOf<Chain, Counterparty, App> =
     <Chain as HasPayloadDataType<Counterparty, App>>::PayloadData;
 
+#[cgp_provider(PayloadDataTypeComponent)]
 impl<Chain, Counterparty, App, Provider, PayloadData>
     ProvidePayloadDataType<Chain, Counterparty, App> for WithProvider<Provider>
 where
@@ -26,6 +27,7 @@ where
     type PayloadData = PayloadData;
 }
 
+#[cgp_provider(PayloadDataTypeComponent)]
 impl<Chain, Counterparty, App, Provider, PayloadData>
     ProvidePayloadDataType<Chain, Counterparty, App> for WithAppProvider<Provider>
 where
@@ -36,6 +38,7 @@ where
     type PayloadData = PayloadData;
 }
 
+#[cgp_provider(PayloadDataTypeComponent)]
 impl<Chain, Counterparty, App, Components, Delegate>
     ProvidePayloadDataType<Chain, Counterparty, App> for UseDelegate<Components>
 where

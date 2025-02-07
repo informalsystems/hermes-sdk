@@ -9,6 +9,7 @@ pub trait HasEncodedLength<Strategy, Value> {
     fn encoded_length(&self, value: &Value) -> u64;
 }
 
+#[cgp_provider(EncodedLengthGetterComponent)]
 impl<Encoding, Strategy, Value, Components> EncodedLengthGetter<Encoding, Strategy, Value>
     for UseDelegate<Components>
 where

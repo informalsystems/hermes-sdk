@@ -18,6 +18,7 @@ pub trait HasPayloadMintAmount<Counterparty, App>:
     fn payload_mint_amount(payload_data: &Self::PayloadData) -> &Self::Amount;
 }
 
+#[cgp_provider(PayloadMintAmountGetterComponent)]
 impl<Chain, Counterparty, App, Provider> PayloadMintAmountGetter<Chain, Counterparty, App>
     for WithProvider<Provider>
 where

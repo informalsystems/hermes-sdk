@@ -1,10 +1,11 @@
-use cgp::prelude::HasAsyncErrorType;
-use hermes_encoding_components::traits::convert::Converter;
+use cgp::prelude::*;
+use hermes_encoding_components::traits::convert::{Converter, ConverterComponent};
 use ibc::primitives::proto::Any as IbcAny;
 use prost_types::Any as ProstAny;
 
 pub struct ConvertIbcAny;
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding> Converter<Encoding, ProstAny, IbcAny> for ConvertIbcAny
 where
     Encoding: HasAsyncErrorType,
@@ -17,6 +18,7 @@ where
     }
 }
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding> Converter<Encoding, IbcAny, ProstAny> for ConvertIbcAny
 where
     Encoding: HasAsyncErrorType,

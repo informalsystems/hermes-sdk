@@ -15,6 +15,7 @@ pub trait HasQuantityType: Async {
 
 pub type QuantityOf<Chain> = <Chain as HasQuantityType>::Quantity;
 
+#[cgp_provider(QuantityTypeComponent)]
 impl<Chain, Provider, Quantity> ProvideQuantityType<Chain> for WithProvider<Provider>
 where
     Chain: Async,

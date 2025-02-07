@@ -17,6 +17,7 @@ pub trait HasPayloadHeader<Counterparty>:
     fn payload_header(payload: &Self::Payload) -> &Self::PayloadHeader;
 }
 
+#[cgp_provider(PayloadHeaderGetterComponent)]
 impl<Chain, Counterparty, Provider> PayloadHeaderGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where

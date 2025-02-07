@@ -11,6 +11,7 @@ pub trait HasPacketHeaderType<Counterparty>: Sized + Async {
     type PacketHeader: Async;
 }
 
+#[cgp_provider(PacketHeaderTypeComponent)]
 impl<Chain, Counterparty, Provider, PacketHeader> ProvidePacketHeaderType<Chain, Counterparty>
     for WithProvider<Provider>
 where

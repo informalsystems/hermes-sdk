@@ -1,17 +1,19 @@
 use core::num::TryFromIntError;
 
-use cgp::prelude::{CanRaiseAsyncError, HasAsyncErrorType};
+use cgp::prelude::*;
 use hermes_encoding_components::impls::encode_mut::pair::EncoderPair;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
+use hermes_protobuf_encoding_components::components::{MutDecoderComponent, MutEncoderComponent};
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::u64::EncodeU64ProtoField;
 use ibc::core::primitives::{Timestamp, TimestampError};
 use ibc_proto::google::protobuf::Timestamp as ProtoTimestamp;
 
 pub struct EncodeTimestamp;
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy> MutEncoder<Encoding, Strategy, Timestamp> for EncodeTimestamp
 where
     Encoding: HasEncodeBufferType + HasAsyncErrorType,
@@ -40,6 +42,7 @@ where
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy> MutDecoder<Encoding, Strategy, Timestamp> for EncodeTimestamp
 where
     Encoding: HasDecodeBufferType

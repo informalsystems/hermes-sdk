@@ -17,6 +17,7 @@ pub trait HasPayloadData<Counterparty, App>:
     fn payload_data(payload: &Self::Payload) -> &Self::PayloadData;
 }
 
+#[cgp_provider(PayloadDataGetterComponent)]
 impl<Chain, Counterparty, App, Provider> PayloadDataGetter<Chain, Counterparty, App>
     for WithProvider<Provider>
 where

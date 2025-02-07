@@ -11,6 +11,7 @@ pub trait HasVerdictType: Async {
     type Verdict: Async;
 }
 
+#[cgp_provider(VerdictTypeComponent)]
 impl<Client: Async, Provider, Verdict> ProvideVerdictType<Client> for WithProvider<Provider>
 where
     Provider: ProvideType<Client, VerdictTypeComponent, Type = Verdict>,
