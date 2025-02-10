@@ -13,6 +13,7 @@ pub trait HasGovernanceProposalAuthority: HasChainType<Chain: HasAddressType> {
     fn governance_proposal_authority(&self) -> &AddressOf<Self::Chain>;
 }
 
+#[cgp_provider(GovernanceProposalAuthorityGetterComponent)]
 impl<Bootstrap, Chain> GovernanceProposalAuthorityGetter<Bootstrap> for UseContext
 where
     Bootstrap: HasChainType<Chain = Chain>

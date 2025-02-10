@@ -20,6 +20,7 @@ pub trait HasPortIdAt<TargetTag: Async, CounterpartyTag: Async>:
     ) -> &PortIdOf<ChainAt<Self, TargetTag>, ChainAt<Self, CounterpartyTag>>;
 }
 
+#[cgp_provider(PortIdAtComponent)]
 impl<Context, TargetTag: Async, CounterpartyTag: Async, Tag, Chain, Counterparty, PortId>
     ProvidePortIdAt<Context, TargetTag, CounterpartyTag> for UseField<Tag>
 where

@@ -3,10 +3,11 @@ use core::str::FromStr;
 
 use cgp::prelude::*;
 
-use crate::traits::parse::ArgParser;
+use crate::traits::parse::{ArgParser, ArgParserComponent};
 
 pub struct ParseFromString<Parsed>(pub PhantomData<Parsed>);
 
+#[cgp_provider(ArgParserComponent)]
 impl<App, Args, Tag, Parsed> ArgParser<App, Args, Tag> for ParseFromString<Parsed>
 where
     App: CanRaiseAsyncError<Parsed::Err>,
@@ -24,6 +25,7 @@ where
 
 pub struct ParseFromOptionalString<Parsed>(pub PhantomData<Parsed>);
 
+#[cgp_provider(ArgParserComponent)]
 impl<App, Args, Tag, Parsed> ArgParser<App, Args, Tag> for ParseFromOptionalString<Parsed>
 where
     App: CanRaiseAsyncError<Parsed::Err>,

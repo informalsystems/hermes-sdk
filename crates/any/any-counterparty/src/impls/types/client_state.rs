@@ -1,6 +1,9 @@
 use core::time::Duration;
 
-use cgp::prelude::Async;
+use cgp::prelude::*;
+use hermes_cosmos_chain_components::components::client::{
+    ClientStateFieldsComponent, ClientStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType,
@@ -13,6 +16,7 @@ use crate::types::client_state::AnyClientState;
 
 pub struct ProvideAnyClientState;
 
+#[cgp_provider(ClientStateTypeComponent)]
 impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty> for ProvideAnyClientState
 where
     Chain: Async,
@@ -20,6 +24,7 @@ where
     type ClientState = AnyClientState;
 }
 
+#[cgp_provider(ClientStateFieldsComponent)]
 impl<Chain, Counterparty> ClientStateFieldsGetter<Chain, Counterparty> for ProvideAnyClientState
 where
     Chain: HasChainIdType<ChainId = ChainId>

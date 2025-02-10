@@ -17,6 +17,7 @@ pub trait HasVerificationTrace {
     fn verification_trace_mut(&mut self) -> &mut VerificationTrace;
 }
 
+#[cgp_provider(VerificationTraceGetterComponent)]
 impl<Client> VerificationTraceGetter<Client> for UseContext
 where
     Client: HasFieldMut<symbol!("verification_trace"), Value = VerificationTrace>,

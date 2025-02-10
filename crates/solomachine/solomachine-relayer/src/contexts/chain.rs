@@ -26,7 +26,9 @@ use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::Error;
-use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
+use hermes_relayer_components::chain::traits::commitment_prefix::{
+    IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
@@ -43,7 +45,9 @@ use hermes_relayer_components::chain::traits::queries::connection_end::Connectio
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusStateWithProofs, ConsensusStateQuerier,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
+use hermes_relayer_components::chain::traits::types::chain_id::{
+    ChainIdGetter, ChainIdGetterComponent,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -142,12 +146,14 @@ impl MockSolomachine {
     }
 }
 
+#[cgp_provider(ChainIdGetterComponent)]
 impl ChainIdGetter<MockSolomachine> for SolomachineChainComponents2 {
     fn chain_id(chain: &MockSolomachine) -> &ChainId {
         &chain.chain_id
     }
 }
 
+#[cgp_provider(IbcCommitmentPrefixGetterComponent)]
 impl IbcCommitmentPrefixGetter<MockSolomachine> for SolomachineChainComponents2 {
     fn ibc_commitment_prefix(chain: &MockSolomachine) -> &String {
         &chain.commitment_prefix

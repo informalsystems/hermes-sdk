@@ -20,7 +20,7 @@ use hermes_relayer_components::relay::traits::target::{HasSourceTargetChainTypes
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 
 use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::CommandRunner;
+use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
@@ -64,6 +64,7 @@ pub struct UpdateClientArgs {
 }
 pub struct RunUpdateClientCommand;
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
     for RunUpdateClientCommand
 where

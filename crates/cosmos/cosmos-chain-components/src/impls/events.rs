@@ -6,8 +6,12 @@ use hermes_chain_type_components::traits::types::message_response::HasMessageRes
 use hermes_relayer_components::chain::traits::extract_data::{
     EventExtractor, EventExtractorComponent,
 };
-use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilder;
-use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckEventBuilder;
+use hermes_relayer_components::chain::traits::packet::from_send_packet::{
+    PacketFromSendPacketEventBuilder, PacketFromSendPacketEventBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::packet::from_write_ack::{
+    PacketFromWriteAckEventBuilder, PacketFromWriteAckEventBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, ProvideCreateClientEvent,
 };
@@ -20,7 +24,8 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     ProvideChannelOpenTryEvent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
-    ConnectionOpenTryEventComponent, ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
+    ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
+    ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::{
     HasSendPacketEvent, ProvideSendPacketEvent, SendPacketEventComponent,
@@ -86,6 +91,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenInitEventComponent)]
 impl<Chain, Counterparty> ProvideConnectionOpenInitEvent<Chain, Counterparty>
     for ProvideCosmosEvents
 where
@@ -214,6 +220,7 @@ where
     type SendPacketEvent = SendPacketEvent;
 }
 
+#[cgp_provider(PacketFromSendPacketEventBuilderComponent)]
 impl<Chain, Counterparty> PacketFromSendPacketEventBuilder<Chain, Counterparty>
     for ProvideCosmosEvents
 where
@@ -270,6 +277,7 @@ where
     }
 }
 
+#[cgp_provider(PacketFromWriteAckEventBuilderComponent)]
 impl<Chain, Counterparty> PacketFromWriteAckEventBuilder<Chain, Counterparty>
     for ProvideCosmosEvents
 where

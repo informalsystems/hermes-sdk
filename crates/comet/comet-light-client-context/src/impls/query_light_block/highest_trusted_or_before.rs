@@ -1,6 +1,7 @@
+use cgp::prelude::*;
 use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_comet_light_client_components::traits::query_light_block::{
-    GetHighestTrustedOrVerifiedBefore, LightBlockQuerier,
+    GetHighestTrustedOrVerifiedBefore, LightBlockQuerier, LightBlockQuerierComponent,
 };
 use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
 use hermes_comet_light_client_components::types::status::VerificationStatus;
@@ -11,6 +12,7 @@ use crate::traits::light_block_store::HasLightBlockStore;
 
 pub struct QueryHighestTrustedOrVerifiedBefore;
 
+#[cgp_provider(LightBlockQuerierComponent)]
 impl<Client> LightBlockQuerier<Client, GetHighestTrustedOrVerifiedBefore>
     for QueryHighestTrustedOrVerifiedBefore
 where

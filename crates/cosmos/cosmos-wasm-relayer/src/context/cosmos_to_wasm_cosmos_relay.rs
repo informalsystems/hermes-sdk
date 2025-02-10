@@ -109,14 +109,19 @@ delegate_components! {
     }
 }
 
-with_default_relay_preset! {
-    | Components | {
-        delegate_components! {
-            CosmosToWasmCosmosRelayComponents {
-                Components: DefaultRelayPreset,
-            }
-        }
-    }
+impl<Component> DelegateComponent<Component> for CosmosToWasmCosmosRelayComponents
+where
+    Self: IsDefaultRelayPreset<Component>,
+{
+    type Delegate = DefaultRelayPreset;
+}
+
+impl<Name, Context, Params> IsProviderFor<Name, Context, Params>
+    for CosmosToWasmCosmosRelayComponents
+where
+    Self: IsDefaultRelayPreset<Name>,
+    DefaultRelayPreset: IsProviderFor<Name, Context, Params>,
+{
 }
 
 impl HasComponents for CosmosToWasmCosmosRelay {

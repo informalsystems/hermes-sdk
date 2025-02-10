@@ -19,6 +19,7 @@ pub trait HasLightBlockStore: Async {
     fn light_block_store_mut(&mut self) -> &mut LightBlockStore;
 }
 
+#[cgp_provider(LightBlockStoreGetterComponent)]
 impl<Client: Async> LightBlockStoreGetter<Client> for UseContext
 where
     Client: HasFieldMut<symbol!("light_block_store"), Value = LightBlockStore>,

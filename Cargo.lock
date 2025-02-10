@@ -1867,6 +1867,7 @@ name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "cgp-component-macro",
  "hermes-chain-components",
  "hermes-chain-type-components",
  "hermes-encoding-components",

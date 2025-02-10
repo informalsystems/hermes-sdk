@@ -18,7 +18,9 @@ use hermes_cosmos_chain_components::types::key_types::secp256k1::{
 };
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_error::types::Error;
-use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
+use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::{
+    BiRelayFromRelayBuilder, BiRelayFromRelayBuilderComponent,
+};
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
 use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
@@ -32,7 +34,9 @@ use hermes_relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_relayer_components_extra::build::traits::cache::{
     BatchSenderCacheAt, BatchSenderCacheGetterComponent,
 };
-use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::RelayWithBatchBuilder;
+use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::{
+    RelayWithBatchBuilder, RelayWithBatchBuilderComponent,
+};
 use hermes_relayer_components_extra::components::extra::build::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
@@ -94,17 +98,19 @@ impl HasComponents for CosmosBuildComponents {
     type Components = CosmosBaseBuildComponents;
 }
 
-with_extra_build_components! {
-    | Components | {
-        delegate_components! {
-            CosmosBuildComponents {
-                Components: ExtraBuildComponents<CosmosBaseBuildComponents>
-            }
-        }
-    }
+impl<Name> DelegateComponent<Name> for CosmosBuildComponents
+where
+    Self: IsExtraBuildComponents<Name>,
+{
+    type Delegate = ExtraBuildComponents<CosmosBaseBuildComponents>;
 }
 
-impl CanUseExtraBuildComponents for CosmosBuilder {}
+impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CosmosBuildComponents
+where
+    Self: IsExtraBuildComponents<Name>,
+    ExtraBuildComponents<CosmosBaseBuildComponents>: IsProviderFor<Name, Context, Params>,
+{
+}
 
 delegate_components! {
     CosmosBuildComponents {
@@ -272,6 +278,7 @@ pub fn get_keypair(
     Ok(key_entry)
 }
 
+#[cgp_provider(ChainBuilderComponent)]
 impl ChainBuilder<CosmosBuilder, Index<0>> for CosmosBaseBuildComponents {
     async fn build_chain(
         build: &CosmosBuilder,
@@ -282,6 +289,7 @@ impl ChainBuilder<CosmosBuilder, Index<0>> for CosmosBaseBuildComponents {
     }
 }
 
+#[cgp_provider(ChainBuilderComponent)]
 impl ChainBuilder<CosmosBuilder, Index<1>> for CosmosBaseBuildComponents {
     async fn build_chain(
         build: &CosmosBuilder,
@@ -292,6 +300,7 @@ impl ChainBuilder<CosmosBuilder, Index<1>> for CosmosBaseBuildComponents {
     }
 }
 
+#[cgp_provider(RelayWithBatchBuilderComponent)]
 impl RelayWithBatchBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildComponents {
     async fn build_relay_with_batch(
         build: &CosmosBuilder,
@@ -316,6 +325,7 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildCom
     }
 }
 
+#[cgp_provider(RelayWithBatchBuilderComponent)]
 impl RelayWithBatchBuilder<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildComponents {
     async fn build_relay_with_batch(
         build: &CosmosBuilder,
@@ -340,6 +350,7 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildCom
     }
 }
 
+#[cgp_provider(BiRelayFromRelayBuilderComponent)]
 impl BiRelayFromRelayBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildComponents {
     async fn build_birelay_from_relays(
         build: &CosmosBuilder,

@@ -1,7 +1,7 @@
 use std::io::Error as IoError;
 use std::path::PathBuf;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::fs::copy_file::CanCopyFile;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
@@ -11,10 +11,11 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use tokio::fs;
 
-use crate::bootstrap::traits::import_bridge_key::BridgeKeyImporter;
+use crate::bootstrap::traits::import_bridge_key::{BridgeKeyImporter, BridgeKeyImporterComponent};
 
 pub struct CopyBridgeKey;
 
+#[cgp_provider(BridgeKeyImporterComponent)]
 impl<Bootstrap, Chain, ChainDriver, Runtime> BridgeKeyImporter<Bootstrap> for CopyBridgeKey
 where
     Bootstrap: HasRuntime<Runtime = Runtime>

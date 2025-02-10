@@ -11,6 +11,7 @@ pub trait HasWasmClientByteCode {
     fn wasm_client_byte_code(&self) -> &Vec<u8>;
 }
 
+#[cgp_provider(WasmClientByteCodeGetterComponent)]
 impl<Bootstrap> WasmClientByteCodeGetter<Bootstrap> for UseContext
 where
     Bootstrap: Async + HasField<symbol!("wasm_client_byte_code"), Value = Vec<u8>>,

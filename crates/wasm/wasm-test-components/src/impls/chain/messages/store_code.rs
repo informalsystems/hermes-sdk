@@ -1,3 +1,4 @@
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{
     CosmosMessage, DynCosmosMessage, ToCosmosMessage,
 };
@@ -12,7 +13,9 @@ use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::lightclients::wasm::v1::MsgStoreCode;
 use prost::Message;
 
-use crate::traits::chain::messages::store_code::StoreCodeMessageBuilder;
+use crate::traits::chain::messages::store_code::{
+    StoreCodeMessageBuilder, StoreCodeMessageBuilderComponent,
+};
 
 pub struct BuildStoreCodeMessage;
 
@@ -25,6 +28,7 @@ pub struct StoreCodeProposalMessage {
     pub deposit_amount: Amount,
 }
 
+#[cgp_provider(StoreCodeMessageBuilderComponent)]
 impl<Chain> StoreCodeMessageBuilder<Chain> for BuildStoreCodeMessage
 where
     Chain:

@@ -13,6 +13,7 @@ pub trait HasBuilderTypeAt<A: Async, B: Async>: HasBiRelayTypeAt<A, B> {
 
 pub type BuilderTypeAt<Context, A, B> = <Context as HasBuilderTypeAt<A, B>>::Builder;
 
+#[cgp_provider(BuilderTypeAtComponent)]
 impl<Context, A: Async, B: Async, Provider, Builder> ProvideBuilderTypeAt<Context, A, B>
     for WithProvider<Provider>
 where

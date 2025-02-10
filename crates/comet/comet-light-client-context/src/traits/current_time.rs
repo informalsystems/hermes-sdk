@@ -12,6 +12,7 @@ pub trait HasCurrentTime: Async {
     fn current_time(&self) -> Time;
 }
 
+#[cgp_provider(CurrentTimeGetterComponent)]
 impl<Client: Async> CurrentTimeGetter<Client> for UseContext
 where
     Client: HasField<symbol!("current_time"), Value = Time>,

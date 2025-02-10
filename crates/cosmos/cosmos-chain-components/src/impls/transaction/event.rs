@@ -1,14 +1,17 @@
 use alloc::sync::Arc;
 
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_relayer_components::transaction::traits::parse_events::TxMessageResponseParser;
+use hermes_relayer_components::transaction::traits::parse_events::{
+    TxMessageResponseParser, TxMessageResponseParserComponent,
+};
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 pub struct ParseCosmosTxResponseAsEvents;
 
+#[cgp_provider(TxMessageResponseParserComponent)]
 impl<Chain> TxMessageResponseParser<Chain> for ParseCosmosTxResponseAsEvents
 where
     Chain: HasTxResponseType<TxResponse = TxResponse>

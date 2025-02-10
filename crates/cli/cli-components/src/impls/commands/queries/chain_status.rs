@@ -8,7 +8,7 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 
 use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::CommandRunner;
+use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
@@ -26,6 +26,7 @@ pub struct QueryChainStatusArgs {
     chain_id: String,
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App, Args, Build, Chain> CommandRunner<App, Args> for RunQueryChainStatusCommand
 where
     App: CanLoadBuilder<Builder = Build>

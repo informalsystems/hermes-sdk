@@ -5,11 +5,14 @@ use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasConnectionIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
+use hermes_test_components::setup::traits::init_channel_options_at::{
+    InitChannelOptionsAtComponent, ProvideInitChannelOptionsAt,
+};
 use ibc::core::host::types::identifiers::ConnectionId;
 
 pub struct UseCosmosInitChannelOptions;
 
+#[cgp_provider(InitChannelOptionsAtComponent)]
 impl<Context, Chain, Counterparty, TargetTag: Async, CounterpartyTag: Async>
     ProvideInitChannelOptionsAt<Context, TargetTag, CounterpartyTag> for UseCosmosInitChannelOptions
 where

@@ -1,3 +1,13 @@
+use cgp::prelude::*;
+use hermes_cli_components::impls::commands::queries::chain::QueryChainSubCommand;
+use hermes_cli_components::impls::commands::queries::client::QueryClientSubCommand;
+use hermes_cli_components::impls::commands::queries::clients::QueryClientsArgs;
+use hermes_cli_components::impls::commands::queries::connection::QueryConnectionSubCommand;
+use hermes_cli_components::impls::commands::queries::wallet::QueryWalletSubCommand;
+use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
+use hermes_cli_framework::command::CommandRunner;
+use hermes_cli_framework::output::Output;
+
 mod connections;
 pub use connections::QueryConnections;
 
@@ -8,14 +18,6 @@ mod channels;
 pub use channels::QueryChannels;
 
 mod packet;
-use hermes_cli_components::impls::commands::queries::chain::QueryChainSubCommand;
-use hermes_cli_components::impls::commands::queries::client::QueryClientSubCommand;
-use hermes_cli_components::impls::commands::queries::clients::QueryClientsArgs;
-use hermes_cli_components::impls::commands::queries::connection::QueryConnectionSubCommand;
-use hermes_cli_components::impls::commands::queries::wallet::QueryWalletSubCommand;
-use hermes_cli_components::traits::command::CanRunCommand;
-use hermes_cli_framework::command::CommandRunner;
-use hermes_cli_framework::output::Output;
 pub use packet::PacketCommands;
 
 use crate::contexts::app::HermesApp;
@@ -58,6 +60,7 @@ pub enum QueryCommands {
     Packet(PacketCommands),
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl CommandRunner<HermesApp> for QueryCommands {
     async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {

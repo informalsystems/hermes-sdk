@@ -1,11 +1,14 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
+use cgp::prelude::*;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::{
+    CosmosGenesisConfigModifier, CosmosGenesisConfigModifierComponent,
+};
 use serde_json::Value;
 
 pub struct ModifyWasmGenesisConfig<InModifier>(pub PhantomData<InModifier>);
 
+#[cgp_provider(CosmosGenesisConfigModifierComponent)]
 impl<Bootstrap, InModifier> CosmosGenesisConfigModifier<Bootstrap>
     for ModifyWasmGenesisConfig<InModifier>
 where

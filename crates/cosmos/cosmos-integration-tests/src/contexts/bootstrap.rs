@@ -70,8 +70,6 @@ pub struct CosmosBootstrapFields {
     pub dynamic_gas: Option<DynamicGasConfig>,
 }
 
-impl CanUseCosmosSdkChainBootstrapper for CosmosBootstrap {}
-
 pub struct CosmosBootstrapComponents;
 
 impl HasComponents for CosmosBootstrap {
@@ -86,14 +84,18 @@ impl Deref for CosmosBootstrap {
     }
 }
 
-with_cosmos_sdk_bootstrap_components! {
-    | Components | {
-        delegate_components! {
-            CosmosBootstrapComponents {
-                Components: CosmosSdkBootstrapComponents,
-            }
-        }
-    }
+impl<Name> DelegateComponent<Name> for CosmosBootstrapComponents
+where
+    Self: IsCosmosSdkBootstrapComponents<Name>,
+{
+    type Delegate = CosmosSdkBootstrapComponents;
+}
+
+impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CosmosBootstrapComponents
+where
+    Self: IsCosmosSdkBootstrapComponents<Name>,
+    CosmosSdkBootstrapComponents: IsProviderFor<Name, Context, Params>,
+{
 }
 
 delegate_components! {

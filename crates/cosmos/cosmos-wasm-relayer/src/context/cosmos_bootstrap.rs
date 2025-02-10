@@ -65,8 +65,6 @@ pub struct CosmosWithWasmClientBootstrap {
     pub dynamic_gas: Option<DynamicGasConfig>,
 }
 
-impl CanUseCosmosSdkChainBootstrapper for CosmosWithWasmClientBootstrap {}
-
 pub struct CosmosWithWasmClientBootstrapComponents;
 
 impl HasComponents for CosmosWithWasmClientBootstrap {

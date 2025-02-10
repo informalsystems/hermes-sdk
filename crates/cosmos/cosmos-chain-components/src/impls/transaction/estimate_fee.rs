@@ -1,6 +1,8 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimator;
+use hermes_relayer_components::transaction::traits::estimate_tx_fee::{
+    TxFeeEstimator, TxFeeEstimatorComponent,
+};
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use http::uri::InvalidUri;
@@ -20,6 +22,7 @@ use crate::types::transaction::signed_tx::SignedTx;
 
 pub struct EstimateCosmosTxFee;
 
+#[cgp_provider(TxFeeEstimatorComponent)]
 impl<Chain> TxFeeEstimator<Chain> for EstimateCosmosTxFee
 where
     Chain: HasTransactionType<Transaction = SignedTx>

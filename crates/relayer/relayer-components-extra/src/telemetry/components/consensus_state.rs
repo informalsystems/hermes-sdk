@@ -1,7 +1,9 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasAsyncErrorType;
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    ConsensusStateQuerier, ConsensusStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -13,6 +15,7 @@ pub struct ConsensusStateTelemetryQuerier<InQuerier> {
     pub querier: InQuerier,
 }
 
+#[cgp_provider(ConsensusStateQuerierComponent)]
 impl<InQuerier, Chain, Counterparty, Telemetry> ConsensusStateQuerier<Chain, Counterparty>
     for ConsensusStateTelemetryQuerier<InQuerier>
 where

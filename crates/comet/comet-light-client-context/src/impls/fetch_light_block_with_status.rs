@@ -1,6 +1,7 @@
+use cgp::prelude::*;
 use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_comet_light_client_components::traits::fetch_light_block::{
-    CanFetchLightBlock, LightBlockWithStatusFetcher,
+    CanFetchLightBlock, LightBlockWithStatusFetcher, LightBlockWithStatusFetcherComponent,
 };
 use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
 use hermes_comet_light_client_components::traits::types::status::HasVerificationStatusType;
@@ -12,6 +13,7 @@ use crate::traits::light_block_store::HasLightBlockStore;
 
 pub struct FetchTendermintLightBlockWithStatus;
 
+#[cgp_provider(LightBlockWithStatusFetcherComponent)]
 impl<Client> LightBlockWithStatusFetcher<Client> for FetchTendermintLightBlockWithStatus
 where
     Client: HasHeightType<Height = Height>

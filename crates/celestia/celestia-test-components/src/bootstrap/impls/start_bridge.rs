@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
@@ -10,12 +10,13 @@ use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasCh
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use ibc::core::host::types::identifiers::ChainId;
 
-use crate::bootstrap::traits::start_bridge::BridgeStarter;
+use crate::bootstrap::traits::start_bridge::{BridgeStarter, BridgeStarterComponent};
 use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;
 use crate::types::bridge_config::CelestiaBridgeConfig;
 
 pub struct StartCelestiaBridge;
 
+#[cgp_provider(BridgeStarterComponent)]
 impl<Bootstrap, ChainDriver, Chain, Runtime> BridgeStarter<Bootstrap> for StartCelestiaBridge
 where
     Bootstrap: HasChainType<Chain = Chain>

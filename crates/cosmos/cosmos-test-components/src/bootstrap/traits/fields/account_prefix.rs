@@ -11,6 +11,7 @@ pub trait HasAccountPrefix: Async {
     fn account_prefix(&self) -> &str;
 }
 
+#[cgp_provider(AccountPrefixGetterComponent)]
 impl<Bootstrap> AccountPrefixGetter<Bootstrap> for UseContext
 where
     Bootstrap: Async + HasField<symbol!("account_prefix"), Value = String>,

@@ -1,7 +1,10 @@
-use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
+use crate::bootstrap::components::cosmos_sdk::{
+    WalletConfigFieldsComponent, WalletConfigTypeComponent,
+};
 use crate::bootstrap::traits::types::wallet_config::{
     HasWalletConfigType, ProvideWalletConfigType, WalletConfigFieldsGetter,
 };
@@ -10,6 +13,7 @@ use crate::chain::types::amount::Amount;
 
 pub struct ProvideCosmosWalletConfigType;
 
+#[cgp_provider(WalletConfigTypeComponent)]
 impl<Bootstrap> ProvideWalletConfigType<Bootstrap> for ProvideCosmosWalletConfigType
 where
     Bootstrap: Async,
@@ -17,6 +21,7 @@ where
     type WalletConfig = CosmosWalletConfig;
 }
 
+#[cgp_provider(WalletConfigFieldsComponent)]
 impl<Bootstrap> WalletConfigFieldsGetter<Bootstrap> for ProvideCosmosWalletConfigType
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig> + HasChainType,

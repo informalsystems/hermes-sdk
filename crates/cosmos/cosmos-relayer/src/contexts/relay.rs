@@ -32,7 +32,6 @@ use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderG
 use hermes_relayer_components_extra::batch::traits::types::{
     CanUseMessageBatchChannel, MessageBatchSenderOf,
 };
-use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::{
     ExtraRelayPreset, IsExtraRelayPreset,
 };
@@ -165,11 +164,16 @@ where
     type Delegate = ExtraRelayPreset;
 }
 
+impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CosmosRelayComponents
+where
+    Self: IsExtraRelayPreset<Name>,
+    ExtraRelayPreset: IsProviderFor<Name, Context, Params>,
+{
+}
+
 impl HasComponents for CosmosRelay {
     type Components = CosmosRelayComponents;
 }
-
-impl CanUseExtraAutoRelayer for CosmosRelay {}
 
 pub trait CanUseCosmosRelay:
     HasRelayClientIds

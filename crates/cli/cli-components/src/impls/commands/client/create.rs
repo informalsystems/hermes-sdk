@@ -21,12 +21,13 @@ use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
 
 use crate::traits::build::{BuilderOf, CanLoadBuilder, HasBuilderType};
-use crate::traits::command::CommandRunner;
+use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
 pub struct RunCreateClientCommand;
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
     for RunCreateClientCommand
 where

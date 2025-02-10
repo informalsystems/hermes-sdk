@@ -20,6 +20,7 @@ pub trait CanLoadBootstrap<Args: Async>: HasBootstrapType + HasAsyncErrorType {
     async fn load_bootstrap(&self, args: &Args) -> Result<Self::Bootstrap, Self::Error>;
 }
 
+#[cgp_provider(BootstrapTypeComponent)]
 impl<App, Provider, Bootstrap> ProvideBootstrapType<App> for WithProvider<Provider>
 where
     App: Async,

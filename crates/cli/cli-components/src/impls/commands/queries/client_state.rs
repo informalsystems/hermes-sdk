@@ -14,7 +14,7 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 
 use crate::traits::any_counterparty::HasAnyCounterparty;
 use crate::traits::build::{CanLoadBuilder, HasBuilderType};
-use crate::traits::command::CommandRunner;
+use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
@@ -48,6 +48,7 @@ pub struct QueryClientStateArgs {
     height: Option<String>,
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientStateCommand
 where
     App: HasBuilderType<Builder = Build>

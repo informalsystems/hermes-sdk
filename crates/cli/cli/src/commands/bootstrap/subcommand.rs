@@ -1,4 +1,7 @@
-use hermes_cli_components::traits::command::{CanRunCommand, CommandRunner};
+use cgp::prelude::*;
+use hermes_cli_components::traits::command::{
+    CanRunCommand, CommandRunner, CommandRunnerComponent,
+};
 
 use crate::commands::bootstrap::chain::BootstrapChainArgs;
 
@@ -9,6 +12,7 @@ pub enum BootstrapSubCommand {
 
 pub struct RunBootstrapSubCommand;
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App> CommandRunner<App, BootstrapSubCommand> for RunBootstrapSubCommand
 where
     App: CanRunCommand<BootstrapChainArgs>,

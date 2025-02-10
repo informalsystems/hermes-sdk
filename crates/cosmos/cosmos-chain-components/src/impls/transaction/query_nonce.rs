@@ -1,5 +1,7 @@
-use cgp::core::error::CanRaiseAsyncError;
-use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::transaction::traits::nonce::query_nonce::{
+    NonceQuerier, NonceQuerierComponent,
+};
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 use http::uri::InvalidUri;
@@ -13,6 +15,7 @@ use crate::types::transaction::account::{query_account, Account};
 
 pub struct QueryCosmosAccount;
 
+#[cgp_provider(NonceQuerierComponent)]
 impl<Chain> NonceQuerier<Chain> for QueryCosmosAccount
 where
     Chain: HasSignerType<Signer = Secp256k1KeyPair>

@@ -1,7 +1,9 @@
 use cgp::core::error::{ErrorTypeComponent, HasAsyncErrorType};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
-use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
+use hermes_relayer_components::error::traits::retry::{
+    ProvideRetryableError, RetryableErrorComponent,
+};
 
 use crate::types::Error;
 
@@ -13,6 +15,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(RetryableErrorComponent)]
 impl<Context> ProvideRetryableError<Context> for ProvideHermesError
 where
     Context: HasAsyncErrorType<Error = Error>,

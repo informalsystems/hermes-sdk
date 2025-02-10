@@ -22,6 +22,7 @@ pub trait CanLoadBuilder: HasBuilderType + HasAsyncErrorType {
     async fn load_builder(&self) -> Result<Self::Builder, Self::Error>;
 }
 
+#[cgp_provider(BuilderTypeComponent)]
 impl<App, Provider, Builder> ProvideBuilderType<App> for WithProvider<Provider>
 where
     App: Async,

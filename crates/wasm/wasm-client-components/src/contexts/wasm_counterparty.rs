@@ -10,7 +10,8 @@ use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::decode::CanDecode;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
+    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
+    EncodingTypeComponent, ProvideEncodingType,
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
@@ -73,10 +74,12 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(EncodingTypeComponent)]
 impl ProvideEncodingType<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
     type Encoding = WasmClientEncoding;
 }
 
+#[cgp_provider(DefaultEncodingGetterComponent)]
 impl DefaultEncodingGetter<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
     fn default_encoding() -> &'static WasmClientEncoding {
         &WasmClientEncoding
