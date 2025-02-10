@@ -9,7 +9,7 @@ pub use hermes_chain_components as chain;
 
 pub mod birelay;
 pub mod build;
-// pub mod components;
+pub mod components;
 pub mod error;
 pub mod multi;
 pub mod relay;

@@ -1,11 +1,12 @@
 use cgp::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::components::default::relay::ChannelOpenHandshakeRelayerComponent;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::channel::open_ack::CanRelayChannelOpenAck;
 use crate::relay::traits::channel::open_confirm::CanRelayChannelOpenConfirm;
-use crate::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayer;
+use crate::relay::traits::channel::open_handshake::{
+    ChannelOpenHandshakeRelayer, ChannelOpenHandshakeRelayerComponent,
+};
 use crate::relay::traits::channel::open_try::CanRelayChannelOpenTry;
 
 /**

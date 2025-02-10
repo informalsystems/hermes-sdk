@@ -6,9 +6,10 @@ use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOp
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenConfirmPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::components::default::relay::ChannelOpenConfirmRelayerComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayer;
+use crate::relay::traits::channel::open_confirm::{
+    ChannelOpenConfirmRelayer, ChannelOpenConfirmRelayerComponent,
+};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::{DestinationTarget, HasDestinationTargetChainTypes};
 use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};

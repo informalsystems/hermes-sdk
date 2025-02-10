@@ -9,9 +9,8 @@ use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
-use crate::components::default::relay::ChannelInitializerComponent;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::channel::open_init::ChannelInitializer;
+use crate::relay::traits::channel::open_init::{ChannelInitializer, ChannelInitializerComponent};
 
 /**
    A base implementation for [`ChannelInitializer`] which submits a

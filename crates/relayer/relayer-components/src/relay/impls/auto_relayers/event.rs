@@ -11,8 +11,7 @@ use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::height::HasHeightType;
-use crate::components::default::relay::AutoRelayerComponent;
-use crate::relay::traits::auto_relayer::AutoRelayer;
+use crate::relay::traits::auto_relayer::{AutoRelayer, AutoRelayerComponent};
 use crate::relay::traits::event_relayer::CanRelayEvent;
 use crate::relay::traits::target::{HasTargetChainTypes, HasTargetChains, RelayTarget};
 

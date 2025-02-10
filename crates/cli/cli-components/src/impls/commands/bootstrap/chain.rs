@@ -16,7 +16,7 @@ use hermes_test_components::chain_driver::traits::config::ConfigUpdater;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 
 use crate::traits::bootstrap::CanLoadBootstrap;
-use crate::traits::command::CommandRunner;
+use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::config::config_path::HasConfigPath;
 use crate::traits::config::load_config::CanLoadConfig;
 use crate::traits::config::write_config::CanWriteConfig;
