@@ -88,11 +88,6 @@ where
         let dst_chain = relay.dst_chain();
         let src_chain = relay.src_chain();
 
-        let height = src_chain
-            .query_chain_height()
-            .await
-            .map_err(Relay::raise_error)?;
-
         let commitment_sequences = src_chain
             .query_packet_commitments(src_channel_id, src_port_id)
             .await
@@ -110,7 +105,6 @@ where
                 dst_channel_id,
                 dst_port_id,
                 &unreceived_sequences,
-                &height,
             )
             .await
             .map_err(Relay::raise_error)?;
