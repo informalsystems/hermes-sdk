@@ -5,7 +5,7 @@ use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::{
     PacketAcknowledgementsQuerier, PacketAcknowledgementsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasIbcChainTypes, HasSequenceType};
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc::core::client::types::Height;
@@ -37,7 +37,7 @@ where
         + CanRaiseAsyncError<DecodingError>
         + CanRaiseAsyncError<Status>
         + CanRaiseAsyncError<eyre::Report>,
-    Counterparty: HasIbcChainTypes<Chain, Sequence = Sequence, Height = Height>,
+    Counterparty: HasSequenceType<Chain, Sequence = Sequence>,
 {
     async fn query_packet_acknowlegements(
         chain: &Chain,
