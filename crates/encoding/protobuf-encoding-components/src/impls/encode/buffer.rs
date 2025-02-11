@@ -1,6 +1,7 @@
-use hermes_encoding_components::traits::decode::Decoder;
+use cgp::prelude::*;
+use hermes_encoding_components::traits::decode::{Decoder, DecoderComponent};
 use hermes_encoding_components::traits::decode_mut::CanDecodeMut;
-use hermes_encoding_components::traits::encode::Encoder;
+use hermes_encoding_components::traits::encode::{Encoder, EncoderComponent};
 use hermes_encoding_components::traits::encode_mut::CanEncodeMut;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
@@ -9,6 +10,7 @@ use crate::impls::encode_mut::chunk::{CanDecodeProtoChunks, HasProtoChunksDecode
 
 pub struct EncodeProtoWithMutBuffer;
 
+#[cgp_provider(EncoderComponent)]
 impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for EncodeProtoWithMutBuffer
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
@@ -24,6 +26,7 @@ where
     }
 }
 
+#[cgp_provider(DecoderComponent)]
 impl<Encoding, Strategy, Value> Decoder<Encoding, Strategy, Value> for EncodeProtoWithMutBuffer
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>

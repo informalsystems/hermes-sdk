@@ -4,7 +4,7 @@ use cgp::prelude::*;
 
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
-use crate::traits::types::payload::payload::ProvidePayloadType;
+use crate::traits::types::payload::payload::{PayloadTypeComponent, ProvidePayloadType};
 
 #[derive(HasField)]
 pub struct IbcPayload<Chain, Counterparty, App>
@@ -17,6 +17,7 @@ where
 
 pub struct UseIbcPayload<App>(pub PhantomData<App>);
 
+#[cgp_provider(PayloadTypeComponent)]
 impl<Chain, Counterparty, App> ProvidePayloadType<Chain, Counterparty> for UseIbcPayload<App>
 where
     Chain: HasPayloadHeaderType<Counterparty> + HasPayloadDataType<Counterparty, App>,

@@ -1,6 +1,7 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
-    ChannelEndQuerier, ChannelEndWithProofsQuerier,
+    ChannelEndQuerier, ChannelEndQuerierComponent, ChannelEndWithProofsQuerier,
+    ChannelEndWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -16,6 +17,7 @@ use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryCosmosChannelEndFromAbci;
 
+#[cgp_provider(ChannelEndQuerierComponent)]
 impl<Chain, Counterparty> ChannelEndQuerier<Chain, Counterparty> for QueryCosmosChannelEndFromAbci
 where
     Chain: HasChannelEndType<Counterparty, ChannelEnd = ChannelEnd>
@@ -41,6 +43,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelEndWithProofsQuerierComponent)]
 impl<Chain, Counterparty> ChannelEndWithProofsQuerier<Chain, Counterparty>
     for QueryCosmosChannelEndFromAbci
 where

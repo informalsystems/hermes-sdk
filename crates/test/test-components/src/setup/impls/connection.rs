@@ -1,6 +1,6 @@
-use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
+use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
-use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -12,11 +12,12 @@ use hermes_relayer_components::multi::traits::relay_at::{
 };
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 
-use crate::setup::traits::connection::ConnectionSetup;
+use crate::setup::traits::connection::{ConnectionSetup, ConnectionSetupComponent};
 use crate::setup::traits::init_connection_options_at::HasInitConnectionOptionsAt;
 
 pub struct SetupConnectionHandshake;
 
+#[cgp_provider(ConnectionSetupComponent)]
 impl<Setup, A: Async, B: Async> ConnectionSetup<Setup, A, B> for SetupConnectionHandshake
 where
     Setup: HasBiRelayTypeAt<A, B>

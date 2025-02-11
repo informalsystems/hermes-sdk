@@ -1,11 +1,12 @@
-use cgp::core::Async;
-use hermes_runtime_components::traits::random::RandomGenerator;
+use cgp::prelude::*;
+use hermes_runtime_components::traits::random::{RandomGenerator, RandomGeneratorComponent};
 use rand::distributions::uniform::SampleUniform;
 use rand::distributions::Standard;
 use rand::prelude::*;
 
 pub struct ThreadRandomGenerator;
 
+#[cgp_provider(RandomGeneratorComponent)]
 impl<Runtime, T> RandomGenerator<Runtime, T> for ThreadRandomGenerator
 where
     Runtime: Async,

@@ -1,8 +1,10 @@
 use alloc::borrow::ToOwned;
 use alloc::string::String;
 
-use cgp::core::Async;
-use hermes_ibc_components::traits::commitment::store::CommitmentStorage;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::commitment::store::{
+    CommitmentStorage, CommitmentStorageComponent,
+};
 use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::tags::commitment::receive::ReceivePacket;
 use hermes_ibc_components::types::tags::commitment::send::SendPacket;
@@ -13,6 +15,7 @@ use crate::types::commitment::path::{
     MockReceivePacketCommitmentPath, MockSendPacketCommitmentPath,
 };
 
+#[cgp_provider(CommitmentStorageComponent)]
 impl<Chain: Async, Counterparty: Async>
     CommitmentStorage<MockChain<Chain, Counterparty>, SendPacket> for MockChainComponents
 {
@@ -41,6 +44,7 @@ impl<Chain: Async, Counterparty: Async>
     }
 }
 
+#[cgp_provider(CommitmentStorageComponent)]
 impl<Chain: Async, Counterparty: Async>
     CommitmentStorage<MockChain<Chain, Counterparty>, ReceivePacket> for MockChainComponents
 {

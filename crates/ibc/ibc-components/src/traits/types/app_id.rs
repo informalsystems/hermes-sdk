@@ -11,6 +11,7 @@ pub trait HasAppIdType<Counterparty>: Sized + Async {
     type AppId: Async;
 }
 
+#[cgp_provider(AppIdTypeComponent)]
 impl<Chain, Counterparty, Provider, AppId> ProvideAppIdType<Chain, Counterparty>
     for WithProvider<Provider>
 where

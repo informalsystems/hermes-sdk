@@ -1,5 +1,7 @@
+use cgp::prelude::*;
 use futures::stream::{self, StreamExt};
 use hermes_cli_components::traits::build::CanLoadBuilder;
+use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
@@ -85,6 +87,7 @@ pub struct PacketsClear {
     counterparty_channel_id: ChannelId,
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl CommandRunner<HermesApp> for PacketsClear {
     async fn run(&self, app: &HermesApp) -> Result<Output> {
         let builder = app.load_builder().await?;

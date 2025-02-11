@@ -1,8 +1,10 @@
 use std::collections::HashSet;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::{
+    PacketAcknowledgementsQuerier, PacketAcknowledgementsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
@@ -19,6 +21,7 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryCosmosPacketAcknowledgements;
 
+#[cgp_provider(PacketAcknowledgementsQuerierComponent)]
 impl<Chain, Counterparty> PacketAcknowledgementsQuerier<Chain, Counterparty>
     for QueryCosmosPacketAcknowledgements
 where

@@ -21,6 +21,7 @@ where
     fn ibc_message_dst_app_id(message_header: &Self::IbcMessageHeader) -> &Counterparty::AppId;
 }
 
+#[cgp_provider(IbcMessageAppIdGetterComponent)]
 impl<Chain, Counterparty, Provider> IbcMessageAppIdGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where

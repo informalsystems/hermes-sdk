@@ -1,6 +1,9 @@
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_ibc_components::traits::types::payload::data::ProvidePayloadDataType;
+use hermes_ibc_components::traits::types::payload::data::{
+    PayloadDataTypeComponent, ProvidePayloadDataType,
+};
 
 use crate::types::packet_data::mint::IbcTransferMintPayloadData;
 use crate::types::packet_data::unescrow::IbcTransferUnescrowPayloadData;
@@ -16,6 +19,7 @@ where
 
 pub struct UseIbcTransferPayloadData;
 
+#[cgp_provider(PayloadDataTypeComponent)]
 impl<Chain, Counterparty, App> ProvidePayloadDataType<Chain, Counterparty, App>
     for UseIbcTransferPayloadData
 where

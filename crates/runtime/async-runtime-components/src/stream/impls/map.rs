@@ -2,12 +2,13 @@ use alloc::boxed::Box;
 
 use cgp::prelude::*;
 use futures_util::stream::StreamExt;
-use hermes_runtime_components::traits::stream::StreamMapper;
+use hermes_runtime_components::traits::stream::{StreamMapper, StreamMapperComponent};
 
 use crate::stream::traits::boxed::HasBoxedStreamType;
 
 pub struct BoxedStreamMapper;
 
+#[cgp_provider(StreamMapperComponent)]
 impl<Runtime> StreamMapper<Runtime> for BoxedStreamMapper
 where
     Runtime: HasBoxedStreamType,

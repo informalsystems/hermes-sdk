@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
@@ -10,6 +10,7 @@ use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHe
 use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
+use crate::components::default::relay::ConnectionInitializerComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::connection::open_init::ConnectionInitializer;
 
@@ -25,6 +26,7 @@ pub struct MissingConnectionInitEventError<'a, Relay> {
     pub relay: &'a Relay,
 }
 
+#[cgp_provider(ConnectionInitializerComponent)]
 impl<Relay, SrcChain, DstChain> ConnectionInitializer<Relay> for InitializeConnection
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

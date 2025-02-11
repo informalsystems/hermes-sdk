@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
@@ -8,12 +8,13 @@ use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderTyp
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
 
-use crate::traits::builders::unescrow::UnescrowPayloadBuilder;
+use crate::traits::builders::unescrow::{UnescrowPayloadBuilder, UnescrowPayloadBuilderComponent};
 use crate::traits::fields::message::receiver::HasMessageTransferReceiver;
 use crate::types::packet_data::unescrow::IbcTransferUnescrowPayloadData;
 
 pub struct BuildUnescrowPayload;
 
+#[cgp_provider(UnescrowPayloadBuilderComponent)]
 impl<Chain, Counterparty, App> UnescrowPayloadBuilder<Chain, Counterparty, App>
     for BuildUnescrowPayload
 where

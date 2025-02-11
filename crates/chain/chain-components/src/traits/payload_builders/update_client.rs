@@ -24,6 +24,7 @@ pub trait CanBuildUpdateClientPayload<Counterparty>:
     ) -> Result<Self::UpdateClientPayload, Self::Error>;
 }
 
+#[cgp_provider(UpdateClientPayloadBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate> UpdateClientPayloadBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where

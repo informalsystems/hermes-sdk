@@ -69,8 +69,6 @@ pub struct LegacyCosmosBootstrapFields {
     pub dynamic_gas: Option<DynamicGasConfig>,
 }
 
-impl CanUseLegacyCosmosSdkChainBootstrapper for LegacyCosmosBootstrap {}
-
 pub struct LegacyCosmosBootstrapComponents;
 
 impl HasComponents for LegacyCosmosBootstrap {
@@ -85,14 +83,18 @@ impl Deref for LegacyCosmosBootstrap {
     }
 }
 
-with_legacy_cosmos_sdk_bootstrap_components! {
-    | Components | {
-        delegate_components! {
-            LegacyCosmosBootstrapComponents {
-                Components: LegacyCosmosSdkBootstrapComponents,
-            }
-        }
-    }
+impl<Name> DelegateComponent<Name> for LegacyCosmosBootstrapComponents
+where
+    Self: IsLegacyCosmosSdkBootstrapComponents<Name>,
+{
+    type Delegate = LegacyCosmosSdkBootstrapComponents;
+}
+
+impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for LegacyCosmosBootstrapComponents
+where
+    Self: IsLegacyCosmosSdkBootstrapComponents<Name>,
+    LegacyCosmosSdkBootstrapComponents: IsProviderFor<Name, Context, Params>,
+{
 }
 
 delegate_components! {

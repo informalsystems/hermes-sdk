@@ -19,6 +19,7 @@ pub trait CanProduceOutput<Value>: HasOutputType {
     fn produce_output(&self, value: Value) -> Self::Output;
 }
 
+#[cgp_provider(OutputTypeComponent)]
 impl<App, Provider, Output> ProvideOutputType<App> for WithProvider<Provider>
 where
     App: Async,

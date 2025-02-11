@@ -1,11 +1,18 @@
 use alloc::vec::Vec;
 
-use crate::traits::fields::message_response_events::MessageResponseEventsGetter;
+use cgp::prelude::*;
+
+use crate::traits::fields::message_response_events::{
+    MessageResponseEventsGetter, MessageResponseEventsGetterComponent,
+};
 use crate::traits::types::event::HasEventType;
-use crate::traits::types::message_response::{HasMessageResponseType, ProvideMessageResponseType};
+use crate::traits::types::message_response::{
+    HasMessageResponseType, MessageResponseTypeComponent, ProvideMessageResponseType,
+};
 
 pub struct UseEventsMessageResponse;
 
+#[cgp_provider(MessageResponseTypeComponent)]
 impl<Chain> ProvideMessageResponseType<Chain> for UseEventsMessageResponse
 where
     Chain: HasEventType,
@@ -13,6 +20,7 @@ where
     type MessageResponse = Vec<Chain::Event>;
 }
 
+#[cgp_provider(MessageResponseEventsGetterComponent)]
 impl<Chain> MessageResponseEventsGetter<Chain> for UseEventsMessageResponse
 where
     Chain: HasEventType + HasMessageResponseType<MessageResponse = Vec<Chain::Event>>,

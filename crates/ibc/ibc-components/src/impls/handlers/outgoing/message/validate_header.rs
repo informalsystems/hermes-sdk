@@ -6,7 +6,7 @@ use cgp::prelude::*;
 use crate::traits::fields::message::app_id::HasIbcMessageAppIds;
 use crate::traits::fields::payload::app_id::HasPayloadAppIds;
 use crate::traits::fields::payload::header::HasPayloadHeader;
-use crate::traits::handlers::outgoing::message::IbcMessageHandler;
+use crate::traits::handlers::outgoing::message::{IbcMessageHandler, IbcMessageHandlerComponent};
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
@@ -39,6 +39,7 @@ where
     pub payload_header: &'a Chain::PayloadHeader,
 }
 
+#[cgp_provider(IbcMessageHandlerComponent)]
 #[async_trait]
 impl<Chain, Counterparty, App, InHandler> IbcMessageHandler<Chain, Counterparty, App>
     for ValidateHeaderAppIds<InHandler>

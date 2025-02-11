@@ -2,7 +2,8 @@ use cgp::prelude::*;
 use hermes_logging_components::impls::delegate::DelegateLogger;
 use hermes_logging_components::impls::global::GetGlobalLogger;
 use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
+    GlobalLoggerGetter, GlobalLoggerGetterComponent, HasLoggerType, LoggerGetterComponent,
+    LoggerTypeComponent, ProvideLoggerType,
 };
 use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_logging_components::types::level::{
@@ -85,6 +86,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(LoggerTypeComponent)]
 impl<Context> ProvideLoggerType<Context> for ProvideHermesLogger
 where
     Context: Async,
@@ -92,6 +94,7 @@ where
     type Logger = HermesLogger;
 }
 
+#[cgp_provider(GlobalLoggerGetterComponent)]
 impl<Context> GlobalLoggerGetter<Context> for ProvideHermesLogger
 where
     Context: HasLoggerType<Logger = HermesLogger>,

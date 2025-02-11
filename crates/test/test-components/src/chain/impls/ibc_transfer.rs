@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
@@ -10,7 +10,9 @@ use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::Ha
 use hermes_relayer_components::transaction::impls::send_single_message_with_signer::CanSendSingleMessageWithSigner;
 
 use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
-use crate::chain::traits::transfer::ibc_transfer::TokenIbcTransferrer;
+use crate::chain::traits::transfer::ibc_transfer::{
+    TokenIbcTransferrer, TokenIbcTransferrerComponent,
+};
 use crate::chain::traits::transfer::timeout::CanCalculateIbcTransferTimeout;
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
@@ -22,6 +24,7 @@ pub struct SendIbcTransferMessage;
 #[derive(Debug)]
 pub struct MissingSendPacketEventError;
 
+#[cgp_provider(TokenIbcTransferrerComponent)]
 impl<Chain, Counterparty> TokenIbcTransferrer<Chain, Counterparty> for SendIbcTransferMessage
 where
     Chain: HasWalletType

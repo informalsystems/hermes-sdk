@@ -13,6 +13,7 @@ pub trait CanModifyCometConfig: HasAsyncErrorType {
     fn modify_comet_config(&self, comet_config: &mut Value) -> Result<(), Self::Error>;
 }
 
+#[cgp_provider(CometConfigModifierComponent)]
 impl<Bootstrap, Modifier> CometConfigModifier<Bootstrap> for UseContext
 where
     Bootstrap: HasAsyncErrorType + HasField<symbol!("comet_config_modifier"), Value = Modifier>,

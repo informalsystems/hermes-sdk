@@ -1,4 +1,8 @@
 use cgp::core::Async;
+use cgp::prelude::*;
+use hermes_cosmos_chain_components::components::client::{
+    ConsensusStateFieldComponent, ConsensusStateTypeComponent,
+};
 use hermes_cosmos_chain_components::types::status::Time;
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateFieldGetter, HasConsensusStateType, ProvideConsensusStateType,
@@ -9,6 +13,7 @@ use crate::types::consensus_state::AnyConsensusState;
 
 pub struct ProvideAnyConsensusState;
 
+#[cgp_provider(ConsensusStateTypeComponent)]
 impl<Chain, Counterparty> ProvideConsensusStateType<Chain, Counterparty>
     for ProvideAnyConsensusState
 where
@@ -17,6 +22,7 @@ where
     type ConsensusState = AnyConsensusState;
 }
 
+#[cgp_provider(ConsensusStateFieldComponent)]
 impl<Chain, Counterparty> ConsensusStateFieldGetter<Chain, Counterparty>
     for ProvideAnyConsensusState
 where

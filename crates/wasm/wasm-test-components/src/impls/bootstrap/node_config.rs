@@ -1,11 +1,14 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
+use cgp::prelude::*;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::{
+    CometConfigModifier, CometConfigModifierComponent,
+};
 use toml::Value;
 
 pub struct ModifyWasmNodeConfig<InModifier>(pub PhantomData<InModifier>);
 
+#[cgp_provider(CometConfigModifierComponent)]
 impl<Bootstrap, InModifier> CometConfigModifier<Bootstrap> for ModifyWasmNodeConfig<InModifier>
 where
     Bootstrap: CanRaiseAsyncError<&'static str>,

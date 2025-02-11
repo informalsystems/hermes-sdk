@@ -113,6 +113,7 @@ pub trait HasPacketTimeoutTimestamp<Counterparty>:
     fn packet_timeout_timestamp(packet: &Self::OutgoingPacket) -> Option<TimeoutOf<Counterparty>>;
 }
 
+#[cgp_provider(PacketSrcChannelIdGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketSrcChannelIdGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
@@ -128,6 +129,7 @@ where
     }
 }
 
+#[cgp_provider(PacketSrcPortIdGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketSrcPortIdGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
@@ -140,6 +142,7 @@ where
     }
 }
 
+#[cgp_provider(PacketDstChannelIdGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketDstChannelIdGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
@@ -156,6 +159,7 @@ where
     }
 }
 
+#[cgp_provider(PacketDstPortIdGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketDstPortIdGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
@@ -172,6 +176,7 @@ where
     }
 }
 
+#[cgp_provider(PacketSequenceGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketSequenceGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
@@ -184,6 +189,7 @@ where
     }
 }
 
+#[cgp_provider(PacketTimeoutHeightGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketTimeoutHeightGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
@@ -200,6 +206,7 @@ where
     }
 }
 
+#[cgp_provider(PacketTimeoutTimestampGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketTimeoutTimestampGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
@@ -216,6 +223,7 @@ where
     }
 }
 
+#[cgp_provider(PacketSrcChannelIdGetterComponent)]
 impl<Chain, Counterparty, Components> PacketSrcChannelIdGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -228,6 +236,7 @@ where
     }
 }
 
+#[cgp_provider(PacketSrcPortIdGetterComponent)]
 impl<Chain, Counterparty, Components> PacketSrcPortIdGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -240,6 +249,7 @@ where
     }
 }
 
+#[cgp_provider(PacketDstChannelIdGetterComponent)]
 impl<Chain, Counterparty, Components> PacketDstChannelIdGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -253,6 +263,7 @@ where
     }
 }
 
+#[cgp_provider(PacketDstPortIdGetterComponent)]
 impl<Chain, Counterparty, Components> PacketDstPortIdGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -266,6 +277,7 @@ where
     }
 }
 
+#[cgp_provider(PacketSequenceGetterComponent)]
 impl<Chain, Counterparty, Components> PacketSequenceGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -278,6 +290,7 @@ where
     }
 }
 
+#[cgp_provider(PacketTimeoutHeightGetterComponent)]
 impl<Chain, Counterparty, Components> PacketTimeoutHeightGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -291,6 +304,7 @@ where
     }
 }
 
+#[cgp_provider(PacketTimeoutTimestampGetterComponent)]
 impl<Chain, Counterparty, Components> PacketTimeoutTimestampGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where

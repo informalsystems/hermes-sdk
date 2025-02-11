@@ -1,6 +1,7 @@
+use cgp::prelude::*;
 use futures::stream::{self, StreamExt, TryStreamExt};
 use hermes_relayer_components::chain::traits::queries::ack_packets::{
-    AckPacketsQuerier, CanQueryAckPacket,
+    AckPacketsQuerier, AckPacketsQuerierComponent, CanQueryAckPacket,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -9,6 +10,7 @@ use hermes_relayer_components::chain::types::aliases::WriteAckEventOf;
 
 pub struct QueryAckPacketsConcurrently;
 
+#[cgp_provider(AckPacketsQuerierComponent)]
 impl<Chain, Counterparty> AckPacketsQuerier<Chain, Counterparty> for QueryAckPacketsConcurrently
 where
     Chain: CanQueryAckPacket<Counterparty>,

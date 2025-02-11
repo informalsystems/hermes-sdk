@@ -87,6 +87,7 @@ where
     ) -> Result<Self::Message, Self::Error>;
 }
 
+#[cgp_provider(ConnectionOpenInitMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate>
     ConnectionOpenInitMessageBuilder<Chain, Counterparty> for UseDelegate<Components>
 where
@@ -116,6 +117,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenTryMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -144,6 +146,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenAckMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -168,6 +171,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenConfirmMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate>
     ConnectionOpenConfirmMessageBuilder<Chain, Counterparty> for UseDelegate<Components>
 where

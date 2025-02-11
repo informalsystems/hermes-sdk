@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 
@@ -8,6 +9,7 @@ use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacke
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::HeightOf;
+use crate::components::default::relay::ReceivePacketRelayerComponent;
 use crate::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasDstClientId, HasRelayChains, PacketOf,
 };
@@ -17,6 +19,7 @@ use crate::relay::traits::target::{DestinationTarget, HasDestinationTargetChainT
 
 pub struct BaseReceivePacketRelayer;
 
+#[cgp_provider(ReceivePacketRelayerComponent)]
 impl<Relay, AckEvent> ReceivePacketRelayer<Relay> for BaseReceivePacketRelayer
 where
     Relay: HasRelayChains

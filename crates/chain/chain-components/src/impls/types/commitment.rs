@@ -1,11 +1,14 @@
 use alloc::vec::Vec;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 
-use crate::traits::types::packets::receive::ProvidePacketCommitmentType;
+use crate::traits::types::packets::receive::{
+    PacketCommitmentTypeComponent, ProvidePacketCommitmentType,
+};
 
 pub struct ProvideBytesPacketCommitment;
 
+#[cgp_provider(PacketCommitmentTypeComponent)]
 impl<Chain, Counterparty> ProvidePacketCommitmentType<Chain, Counterparty>
     for ProvideBytesPacketCommitment
 where

@@ -1,5 +1,5 @@
-use cgp::core::error::{ErrorRaiser, HasAsyncErrorType, ProvideErrorType};
-use cgp::core::Async;
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent, ProvideErrorType};
+use cgp::prelude::*;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::send_message::EmptyMessageResponse;
 use hermes_runtime::types::error::TokioRuntimeError;
@@ -8,6 +8,7 @@ use crate::relayer_mock::base::error::{BaseError, Error};
 
 pub struct HandleMockError;
 
+#[cgp_provider(ErrorTypeComponent)]
 impl<Context> ProvideErrorType<Context> for HandleMockError
 where
     Context: Async,
@@ -15,6 +16,7 @@ where
     type Error = Error;
 }
 
+#[cgp_provider(ErrorRaiserComponent)]
 impl<Context> ErrorRaiser<Context, Error> for HandleMockError
 where
     Context: HasAsyncErrorType<Error = Error>,
@@ -24,6 +26,7 @@ where
     }
 }
 
+#[cgp_provider(ErrorRaiserComponent)]
 impl<Context> ErrorRaiser<Context, EmptyMessageResponse> for HandleMockError
 where
     Context: HasAsyncErrorType<Error = Error>,
@@ -33,6 +36,7 @@ where
     }
 }
 
+#[cgp_provider(ErrorRaiserComponent)]
 impl<Context> ErrorRaiser<Context, TokioRuntimeError> for HandleMockError
 where
     Context: HasAsyncErrorType<Error = Error>,

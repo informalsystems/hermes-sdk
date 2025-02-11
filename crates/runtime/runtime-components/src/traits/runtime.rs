@@ -22,6 +22,7 @@ pub trait HasRuntime: HasRuntimeType {
 
 pub type RuntimeOf<Context> = <Context as HasRuntimeType>::Runtime;
 
+#[cgp_provider(RuntimeTypeComponent)]
 impl<Context, Provider, Runtime> ProvideRuntimeType<Context> for WithProvider<Provider>
 where
     Context: Async,
@@ -31,6 +32,7 @@ where
     type Runtime = Runtime;
 }
 
+#[cgp_provider(RuntimeGetterComponent)]
 impl<Context, Provider, Runtime> RuntimeGetter<Context> for WithProvider<Provider>
 where
     Context: HasRuntimeType<Runtime = Runtime>,

@@ -37,6 +37,7 @@ pub trait HasClientStateFields<Counterparty>:
     fn client_state_chain_id(client_state: &Self::ClientState) -> Self::ChainId;
 }
 
+#[cgp_provider(ClientStateFieldsComponent)]
 impl<Chain, Counterparty, Components, Delegate> ClientStateFieldsGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where

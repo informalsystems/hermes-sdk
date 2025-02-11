@@ -1,4 +1,5 @@
-use hermes_cli_components::traits::build::{BuilderLoader, HasBuilderType};
+use cgp::prelude::*;
+use hermes_cli_components::traits::build::{BuilderLoader, BuilderLoaderComponent, HasBuilderType};
 use hermes_cli_components::traits::config::load_config::CanLoadConfig;
 use hermes_cli_components::traits::types::config::HasConfigType;
 use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
@@ -8,6 +9,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 
 pub struct LoadCosmosBuilder;
 
+#[cgp_provider(BuilderLoaderComponent)]
 impl<App> BuilderLoader<App> for LoadCosmosBuilder
 where
     App: HasBuilderType<Builder = CosmosBuilder>

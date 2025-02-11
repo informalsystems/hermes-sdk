@@ -1,8 +1,10 @@
 use alloc::borrow::ToOwned;
 use alloc::string::String;
 
-use cgp::core::Async;
-use hermes_ibc_components::traits::queries::client_id::ClientIdFromChannelIdQuerier;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::queries::client_id::{
+    ClientIdFromChannelIdQuerier, ClientIdFromChannelIdQuerierComponent,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -10,6 +12,7 @@ use crate::types::channel_id::MockChannelId;
 use crate::types::client_id::MockClientId;
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(ClientIdFromChannelIdQuerierComponent)]
 impl<Chain: Async, Counterparty: Async>
     ClientIdFromChannelIdQuerier<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents

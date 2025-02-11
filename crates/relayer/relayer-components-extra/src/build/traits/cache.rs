@@ -118,6 +118,7 @@ pub trait HasBatchSenderCache<SrcTag: Async, DstTag: Async, Target: RelayTarget>
     ) -> &Self::BatchSenderCache;
 }
 
+#[cgp_provider(BatchSenderCacheGetterComponent)]
 impl<Build, SrcTag: Async, DstTag: Async, Target: RelayTarget, FieldTag>
     BatchSenderCacheGetter<Build, SrcTag, DstTag, Target> for UseField<FieldTag>
 where

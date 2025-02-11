@@ -5,13 +5,16 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::{UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
+use hermes_relayer_components::components::default::relay::TargetUpdateClientMessageBuilderComponent;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeAtComponent,
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::traits::chains::{HasDstClientId, HasSrcClientId};
-use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
+use hermes_relayer_components::relay::traits::packet_lock::{
+    PacketLockComponent, ProvidePacketLock,
+};
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
@@ -57,6 +60,7 @@ delegate_components! {
 
 pub struct MockBuildUpdateClientMessage;
 
+#[cgp_provider(TargetUpdateClientMessageBuilderComponent)]
 impl TargetUpdateClientMessageBuilder<MockRelayContext, SourceTarget>
     for MockBuildUpdateClientMessage
 {
@@ -74,6 +78,7 @@ impl TargetUpdateClientMessageBuilder<MockRelayContext, SourceTarget>
     }
 }
 
+#[cgp_provider(TargetUpdateClientMessageBuilderComponent)]
 impl TargetUpdateClientMessageBuilder<MockRelayContext, DestinationTarget>
     for MockBuildUpdateClientMessage
 {
@@ -91,6 +96,7 @@ impl TargetUpdateClientMessageBuilder<MockRelayContext, DestinationTarget>
     }
 }
 
+#[cgp_provider(PacketLockComponent)]
 impl ProvidePacketLock<MockRelayContext> for MockRelayComponents {
     type PacketLock<'a> = ();
 

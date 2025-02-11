@@ -1,11 +1,14 @@
 use core::time::Duration;
 
-use cgp::prelude::Async;
+use cgp::prelude::*;
 
-use crate::chain::traits::assert::poll_assert::PollAssertDurationGetter;
+use crate::chain::traits::assert::poll_assert::{
+    PollAssertDurationGetter, PollAssertDurationGetterComponent,
+};
 
 pub struct ProvideDefaultPollAssertDuration;
 
+#[cgp_provider(PollAssertDurationGetterComponent)]
 impl<Chain> PollAssertDurationGetter<Chain> for ProvideDefaultPollAssertDuration
 where
     Chain: Async,

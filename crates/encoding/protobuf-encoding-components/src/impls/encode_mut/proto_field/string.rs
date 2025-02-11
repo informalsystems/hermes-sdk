@@ -1,7 +1,7 @@
 use core::str::{self, Utf8Error};
 
 use cgp::prelude::*;
-use hermes_encoding_components::traits::decode_mut::MutDecoder;
+use hermes_encoding_components::traits::decode_mut::{MutDecoder, MutDecoderComponent};
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 
@@ -16,6 +16,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy, const TAG: u32> MutDecoder<Encoding, Strategy, String>
     for EncodeStringField<TAG>
 where

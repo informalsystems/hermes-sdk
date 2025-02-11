@@ -1,5 +1,6 @@
+use cgp::prelude::*;
 use hermes_cli_components::impls::commands::client::update::UpdateClientArgs;
-use hermes_cli_components::traits::command::CanRunCommand;
+use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
@@ -18,6 +19,7 @@ pub enum ClientCommands {
     Update(UpdateClientArgs),
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl CommandRunner<HermesApp> for ClientCommands {
     async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {

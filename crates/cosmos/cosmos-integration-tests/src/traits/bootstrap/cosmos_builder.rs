@@ -12,6 +12,7 @@ pub trait HasCosmosBuilder: Async {
     fn cosmos_builder(&self) -> &CosmosBuilder;
 }
 
+#[cgp_provider(CosmosBuilderGetterComponent)]
 impl<Bootstrap> CosmosBuilderGetter<Bootstrap> for UseContext
 where
     Bootstrap: Async + HasField<symbol!("cosmos_builder"), Value = CosmosBuilder>,

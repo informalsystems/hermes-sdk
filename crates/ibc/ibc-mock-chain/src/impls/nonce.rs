@@ -1,7 +1,7 @@
 use alloc::string::String;
 
-use cgp::core::Async;
-use hermes_ibc_components::traits::nonce::PacketNonceAllocator;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::nonce::{PacketNonceAllocator, PacketNonceAllocatorComponent};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -9,6 +9,7 @@ use crate::types::channel_id::MockChannelId;
 use crate::types::nonce::MockNonce;
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(PacketNonceAllocatorComponent)]
 impl<Chain: Async, Counterparty: Async>
     PacketNonceAllocator<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents

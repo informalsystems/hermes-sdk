@@ -1,7 +1,7 @@
 use alloc::boxed::Box;
 use alloc::vec;
 
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
@@ -9,6 +9,7 @@ use super::ack::ClearAckPackets;
 use super::receive_packet::ClearReceivePackets;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
+use crate::components::default::relay::PacketClearerComponent;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_clearer::PacketClearer;
 
@@ -63,6 +64,7 @@ where
     }
 }
 
+#[cgp_provider(PacketClearerComponent)]
 impl<Relay, SrcChain, DstChain> PacketClearer<Relay> for ClearAllPackets
 where
     Relay: Clone + HasRuntime + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>,

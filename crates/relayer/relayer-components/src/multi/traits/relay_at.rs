@@ -49,6 +49,7 @@ impl<Context, SrcTag, DstTag> HasBoundedRelayTypeAt<SrcTag, DstTag> for Context 
 {
 }
 
+#[cgp_provider(RelayTypeAtComponent<SrcTag, DstTag>)]
 impl<Context, SrcTag, DstTag, Provider, Relay> ProvideRelayTypeAt<Context, SrcTag, DstTag>
     for WithProvider<Provider>
 where

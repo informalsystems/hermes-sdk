@@ -1,7 +1,9 @@
 use core::fmt::Display;
 
-use cgp::prelude::HasAsyncErrorType;
-use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::{
+    PacketCommitmentQuerier, PacketCommitmentQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasPacketCommitmentType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
@@ -11,6 +13,7 @@ use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryPacketCommitmentFromAbci;
 
+#[cgp_provider(PacketCommitmentQuerierComponent)]
 impl<Chain, Counterparty> PacketCommitmentQuerier<Chain, Counterparty>
     for QueryPacketCommitmentFromAbci
 where

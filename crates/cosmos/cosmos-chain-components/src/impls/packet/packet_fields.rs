@@ -1,9 +1,12 @@
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_relayer_components::chain::traits::packet::fields::{
-    PacketDstChannelIdGetter, PacketDstPortIdGetter, PacketSequenceGetter,
-    PacketSrcChannelIdGetter, PacketSrcPortIdGetter, PacketTimeoutHeightGetter,
-    PacketTimeoutTimestampGetter,
+    PacketDstChannelIdGetter, PacketDstChannelIdGetterComponent, PacketDstPortIdGetter,
+    PacketDstPortIdGetterComponent, PacketSequenceGetter, PacketSequenceGetterComponent,
+    PacketSrcChannelIdGetter, PacketSrcChannelIdGetterComponent, PacketSrcPortIdGetter,
+    PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetter, PacketTimeoutHeightGetterComponent,
+    PacketTimeoutTimestampGetter, PacketTimeoutTimestampGetterComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     HasChannelIdType, HasPortIdType, HasSequenceType,
@@ -17,6 +20,7 @@ use ibc::primitives::Timestamp;
 
 pub struct CosmosPacketFieldReader;
 
+#[cgp_provider(PacketSrcChannelIdGetterComponent)]
 impl<Chain, Counterparty> PacketSrcChannelIdGetter<Chain, Counterparty> for CosmosPacketFieldReader
 where
     Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
@@ -27,6 +31,7 @@ where
     }
 }
 
+#[cgp_provider(PacketSrcPortIdGetterComponent)]
 impl<Chain, Counterparty> PacketSrcPortIdGetter<Chain, Counterparty> for CosmosPacketFieldReader
 where
     Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
@@ -37,6 +42,7 @@ where
     }
 }
 
+#[cgp_provider(PacketDstChannelIdGetterComponent)]
 impl<Chain, Counterparty> PacketDstChannelIdGetter<Chain, Counterparty> for CosmosPacketFieldReader
 where
     Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>,
@@ -47,6 +53,7 @@ where
     }
 }
 
+#[cgp_provider(PacketDstPortIdGetterComponent)]
 impl<Chain, Counterparty> PacketDstPortIdGetter<Chain, Counterparty> for CosmosPacketFieldReader
 where
     Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>,
@@ -57,6 +64,7 @@ where
     }
 }
 
+#[cgp_provider(PacketSequenceGetterComponent)]
 impl<Chain, Counterparty> PacketSequenceGetter<Chain, Counterparty> for CosmosPacketFieldReader
 where
     Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
@@ -67,6 +75,7 @@ where
     }
 }
 
+#[cgp_provider(PacketTimeoutHeightGetterComponent)]
 impl<Chain, Counterparty> PacketTimeoutHeightGetter<Chain, Counterparty> for CosmosPacketFieldReader
 where
     Chain: HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>,
@@ -80,6 +89,7 @@ where
     }
 }
 
+#[cgp_provider(PacketTimeoutTimestampGetterComponent)]
 impl<Chain, Counterparty> PacketTimeoutTimestampGetter<Chain, Counterparty>
     for CosmosPacketFieldReader
 where

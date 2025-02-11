@@ -1,3 +1,4 @@
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
@@ -6,7 +7,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
-use crate::bootstrap::traits::bootstrap_bridge::BridgeBootstrapper;
+use crate::bootstrap::traits::bootstrap_bridge::{BridgeBootstrapper, BridgeBootstrapperComponent};
 use crate::bootstrap::traits::bridge_auth_token::CanGenerateBridgeAuthToken;
 use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
 use crate::bootstrap::traits::build_bridge_driver::CanBuildBridgeDriver;
@@ -18,6 +19,7 @@ use crate::bridge_driver::traits::bridge_auth_token::HasBridgeAuthTokenType;
 
 pub struct BootstrapCelestiaBridge;
 
+#[cgp_provider(BridgeBootstrapperComponent)]
 impl<Bootstrap, Chain, ChainDriver, Runtime> BridgeBootstrapper<Bootstrap>
     for BootstrapCelestiaBridge
 where

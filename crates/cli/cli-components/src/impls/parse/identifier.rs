@@ -7,12 +7,13 @@ use ibc::core::channel::types::Version;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::{ConnectionId, PortId};
 
-use crate::traits::parse::ArgParser;
+use crate::traits::parse::{ArgParser, ArgParserComponent};
 
 const DEFAULT_VERSION: &str = "ics20-1";
 
 pub struct ParsePortId;
 
+#[cgp_provider(ArgParserComponent)]
 impl<App, Args, Tag> ArgParser<App, Args, Tag> for ParsePortId
 where
     App: CanRaiseAsyncError<IdentifierError>,
@@ -35,6 +36,7 @@ where
 
 pub struct ParseInitCosmosChannelOptions;
 
+#[cgp_provider(ArgParserComponent)]
 impl<App, Args, Tag> ArgParser<App, Args, Tag> for ParseInitCosmosChannelOptions
 where
     App: HasAsyncErrorType,

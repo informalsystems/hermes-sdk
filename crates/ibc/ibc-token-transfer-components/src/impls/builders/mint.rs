@@ -1,4 +1,4 @@
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
@@ -6,12 +6,13 @@ use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderTyp
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
 
-use crate::traits::builders::mint::MintPayloadBuilder;
+use crate::traits::builders::mint::{MintPayloadBuilder, MintPayloadBuilderComponent};
 use crate::traits::fields::message::receiver::HasMessageTransferReceiver;
 use crate::types::packet_data::mint::IbcTransferMintPayloadData;
 
 pub struct BuildMintPayload;
 
+#[cgp_provider(MintPayloadBuilderComponent)]
 impl<Chain, Counterparty, App> MintPayloadBuilder<Chain, Counterparty, App> for BuildMintPayload
 where
     Chain: HasPayloadHeaderType<Counterparty>

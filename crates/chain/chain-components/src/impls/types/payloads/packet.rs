@@ -1,9 +1,15 @@
-use cgp::core::Async;
+use cgp::prelude::*;
 
 use crate::traits::types::height::HasHeightType;
-use crate::traits::types::packets::ack::{HasAcknowledgementType, ProvideAckPacketPayloadType};
-use crate::traits::types::packets::receive::ProvideReceivePacketPayloadType;
-use crate::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
+use crate::traits::types::packets::ack::{
+    AckPacketPayloadTypeComponent, HasAcknowledgementType, ProvideAckPacketPayloadType,
+};
+use crate::traits::types::packets::receive::{
+    ProvideReceivePacketPayloadType, ReceivePacketPayloadTypeComponent,
+};
+use crate::traits::types::packets::timeout::{
+    ProvideTimeoutUnorderedPacketPayloadType, TimeoutUnorderedPacketPayloadTypeComponent,
+};
 use crate::traits::types::proof::HasCommitmentProofType;
 use crate::types::payloads::packet::{
     AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
@@ -11,6 +17,7 @@ use crate::types::payloads::packet::{
 
 pub struct ProvidePacketPayloadTypes;
 
+#[cgp_provider(ReceivePacketPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>
     for ProvidePacketPayloadTypes
 where
@@ -19,6 +26,7 @@ where
     type ReceivePacketPayload = ReceivePacketPayload<Chain>;
 }
 
+#[cgp_provider(AckPacketPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
     for ProvidePacketPayloadTypes
 where
@@ -28,6 +36,7 @@ where
     type AckPacketPayload = AckPacketPayload<Chain, Counterparty>;
 }
 
+#[cgp_provider(TimeoutUnorderedPacketPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideTimeoutUnorderedPacketPayloadType<Chain, Counterparty>
     for ProvidePacketPayloadTypes
 where

@@ -17,6 +17,7 @@ pub trait HasPacketHeader<Counterparty>:
     fn packet_header(packet: &Self::Packet) -> &Self::PacketHeader;
 }
 
+#[cgp_provider(PacketHeaderGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketHeaderGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where

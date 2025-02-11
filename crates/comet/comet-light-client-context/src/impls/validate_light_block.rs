@@ -1,8 +1,10 @@
 use core::time::Duration;
 
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
-use hermes_comet_light_client_components::traits::validate_light_block::LightBlockValidator;
+use hermes_comet_light_client_components::traits::validate_light_block::{
+    LightBlockValidator, LightBlockValidatorComponent,
+};
 use tendermint::Time;
 use tendermint_light_client_verifier::types::LightBlock;
 
@@ -17,6 +19,7 @@ pub struct TrustedStateOutsideTrustingPeriod<'a> {
     pub trusting_period: Duration,
 }
 
+#[cgp_provider(LightBlockValidatorComponent)]
 impl<Client, Mode> LightBlockValidator<Client, Mode> for ValidateTendermintLightBlock
 where
     Client: HasLightBlockType<LightBlock = LightBlock>

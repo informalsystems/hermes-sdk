@@ -1,13 +1,14 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 
-use crate::traits::decode_mut::MutDecoder;
+use crate::traits::decode_mut::{MutDecoder, MutDecoderComponent};
 use crate::traits::transform::Transformer;
 use crate::traits::types::decode_buffer::HasDecodeBufferType;
 
 pub struct DecodeFrom<Transform, InDecoder>(pub PhantomData<(Transform, InDecoder)>);
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy, Transform, Source, Target, InDecoder>
     MutDecoder<Encoding, Strategy, Target> for DecodeFrom<Transform, InDecoder>
 where

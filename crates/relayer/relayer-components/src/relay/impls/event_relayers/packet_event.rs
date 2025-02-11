@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasErrorType;
+use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
 use hermes_chain_components::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
 use hermes_logging_components::traits::has_logger::HasLogger;
@@ -9,6 +9,7 @@ use hermes_logging_components::traits::logger::CanLog;
 use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::types::aliases::{EventOf, HeightOf};
+use crate::components::default::relay::EventRelayerComponent;
 use crate::relay::impls::packet_filters::target::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
@@ -40,6 +41,7 @@ use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 */
 pub struct PacketEventRelayer;
 
+#[cgp_provider(EventRelayerComponent)]
 impl<Relay, SrcChain> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain>
@@ -74,6 +76,7 @@ where
     }
 }
 
+#[cgp_provider(EventRelayerComponent)]
 impl<Relay, DstChain> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
     Relay: HasRelayChains<DstChain = DstChain>

@@ -1,16 +1,21 @@
 use core::marker::PhantomData;
 
 use cgp::core::field::Index;
+use cgp::prelude::*;
 
 use crate::multi::traits::chain_at::{
-    ChainGetterAt, HasChainAt, HasChainTypeAt, ProvideChainTypeAt,
+    ChainGetterAt, ChainGetterAtComponent, ChainTypeAtComponent, HasChainAt, HasChainTypeAt,
+    ProvideChainTypeAt,
 };
-use crate::multi::traits::client_id_at::{ClientIdAtGetter, HasClientIdAt};
+use crate::multi::traits::client_id_at::{
+    ClientIdAtGetter, ClientIdAtGetterComponent, HasClientIdAt,
+};
 use crate::multi::traits::relay_at::ClientIdAt;
 use crate::multi::types::tags::{Dst, Src};
 
 pub struct SelectRelayChains<SrcTag, DstTag>(pub PhantomData<(SrcTag, DstTag)>);
 
+#[cgp_provider(ChainTypeAtComponent<Src>)]
 impl<Relay, SrcTag, DstTag> ProvideChainTypeAt<Relay, Src> for SelectRelayChains<SrcTag, DstTag>
 where
     Relay: HasChainTypeAt<SrcTag>,
@@ -18,6 +23,7 @@ where
     type Chain = Relay::Chain;
 }
 
+#[cgp_provider(ChainTypeAtComponent<Dst>)]
 impl<Relay, SrcTag, DstTag> ProvideChainTypeAt<Relay, Dst> for SelectRelayChains<SrcTag, DstTag>
 where
     Relay: HasChainTypeAt<DstTag>,
@@ -25,6 +31,7 @@ where
     type Chain = Relay::Chain;
 }
 
+#[cgp_provider(ChainGetterAtComponent<Src>)]
 impl<Relay, SrcTag, DstTag, Chain> ChainGetterAt<Relay, Src> for SelectRelayChains<SrcTag, DstTag>
 where
     Relay: HasChainAt<SrcTag, Chain = Chain> + HasChainTypeAt<Src, Chain = Chain>,
@@ -34,6 +41,7 @@ where
     }
 }
 
+#[cgp_provider(ChainGetterAtComponent<Dst>)]
 impl<Relay, SrcTag, DstTag, Chain> ChainGetterAt<Relay, Dst> for SelectRelayChains<SrcTag, DstTag>
 where
     Relay: HasChainAt<DstTag, Chain = Chain> + HasChainTypeAt<Dst, Chain = Chain>,
@@ -43,6 +51,7 @@ where
     }
 }
 
+#[cgp_provider(ClientIdAtGetterComponent<Src, Dst>)]
 impl<Relay, SrcTag, DstTag, SrcChain, DstChain> ClientIdAtGetter<Relay, Src, Dst>
     for SelectRelayChains<SrcTag, DstTag>
 where
@@ -57,6 +66,7 @@ where
     }
 }
 
+#[cgp_provider(ClientIdAtGetterComponent<Dst, Src>)]
 impl<Relay, SrcTag, DstTag, SrcChain, DstChain> ClientIdAtGetter<Relay, Dst, Src>
     for SelectRelayChains<SrcTag, DstTag>
 where

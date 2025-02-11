@@ -1,7 +1,9 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_ibc_components::traits::types::message::ProvideIbcMessageType;
+use hermes_ibc_components::traits::types::message::{
+    IbcMessageTypeComponent, ProvideIbcMessageType,
+};
 
 #[derive(HasField)]
 pub struct IbcTransferMessage<Chain, Counterparty>
@@ -15,6 +17,7 @@ where
 
 pub struct UseIbcTransferMessage;
 
+#[cgp_provider(IbcMessageTypeComponent)]
 impl<Chain, Counterparty, App> ProvideIbcMessageType<Chain, Counterparty, App>
     for UseIbcTransferMessage
 where

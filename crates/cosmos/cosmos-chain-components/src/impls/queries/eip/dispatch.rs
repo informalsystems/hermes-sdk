@@ -1,6 +1,6 @@
-use cgp::core::Async;
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 
+use crate::components::transaction::EipQuerierComponent;
 use crate::impls::queries::eip::feemarket::QueryEipFromFeeMarket;
 use crate::impls::queries::eip::osmosis::OsmosisQueryEip;
 use crate::traits::eip::eip_query::EipQuerier;
@@ -9,6 +9,7 @@ use crate::types::config::gas::eip_type::EipQueryType;
 
 pub struct DispatchQueryEip;
 
+#[cgp_provider(EipQuerierComponent)]
 impl<Chain> EipQuerier<Chain> for DispatchQueryEip
 where
     QueryEipFromFeeMarket: EipQuerier<Chain>,

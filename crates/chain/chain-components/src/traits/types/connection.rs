@@ -59,6 +59,7 @@ pub trait HasConnectionEndType<Counterparty>: Async {
     type ConnectionEnd: Async;
 }
 
+#[cgp_provider(ConnectionEndTypeComponent)]
 impl<Chain, Counterparty, Provider, ConnectionEnd> ProvideConnectionEndType<Chain, Counterparty>
     for WithProvider<Provider>
 where

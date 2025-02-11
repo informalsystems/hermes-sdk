@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
+use crate::components::chain::IncomingPacketHandlerComponent;
 use crate::traits::commitment::path::receive_packet::CanBuildReceivePacketCommitmentPath;
 use crate::traits::commitment::store::CanStoreCommitment;
 use crate::traits::commitment::value::receive_packet::CanBuildReceivePacketCommitmentValue;
@@ -16,6 +17,7 @@ use crate::types::tags::commitment::send::SendPacket;
 
 pub struct CommitReceivePacket<InHandler>(pub PhantomData<InHandler>);
 
+#[cgp_provider(IncomingPacketHandlerComponent)]
 #[async_trait]
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for CommitReceivePacket<InHandler>

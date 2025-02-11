@@ -1,7 +1,8 @@
 use cgp::prelude::*;
 use futures_channel::oneshot::{channel, Receiver, Sender};
 use hermes_runtime_components::traits::channel_once::{
-    ChannelOnceCreator, ChannelOnceUser, ProvideChannelOnceType,
+    ChannelOnceCreator, ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUser,
+    ChannelOnceUserComponent, ProvideChannelOnceType,
 };
 
 use crate::channel::types::ErrChannelClosed;
@@ -9,6 +10,7 @@ use crate::channel_once::traits::{HasOneShotChannelType, OneShotChannelTypeProvi
 
 pub struct ProvideOneShotChannelType;
 
+#[cgp_provider(ChannelOnceTypeComponent)]
 impl<Runtime> ProvideChannelOnceType<Runtime> for ProvideOneShotChannelType
 where
     Runtime: Async,
@@ -57,6 +59,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOnceCreatorComponent)]
 impl<Runtime> ChannelOnceCreator<Runtime> for ProvideOneShotChannelType
 where
     Runtime: HasOneShotChannelType,
@@ -74,6 +77,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOnceUserComponent)]
 impl<Runtime> ChannelOnceUser<Runtime> for ProvideOneShotChannelType
 where
     Runtime: HasOneShotChannelType + CanRaiseAsyncError<ErrChannelClosed>,

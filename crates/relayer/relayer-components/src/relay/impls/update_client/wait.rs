@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::{CanRaiseAsyncError, *};
 use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_chain_components::traits::types::message::HasMessageType;
 use hermes_logging_components::traits::has_logger::HasLogger;
@@ -9,6 +9,7 @@ use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use crate::chain::types::aliases::HeightOf;
+use crate::components::default::relay::TargetUpdateClientMessageBuilderComponent;
 use crate::relay::traits::target::{
     CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, RelayTarget,
 };
@@ -36,6 +37,7 @@ where
     },
 }
 
+#[cgp_provider(TargetUpdateClientMessageBuilderComponent)]
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
     TargetUpdateClientMessageBuilder<Relay, Target> for WaitUpdateClient<InUpdateClient>
 where

@@ -1,5 +1,7 @@
-use cgp::prelude::CanRaiseAsyncError;
-use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::{
+    ReceivedPacketQuerier, ReceivedPacketQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};
@@ -10,6 +12,7 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryCosmosReceivedPacket;
 
+#[cgp_provider(ReceivedPacketQuerierComponent)]
 impl<Chain, Counterparty> ReceivedPacketQuerier<Chain, Counterparty> for QueryCosmosReceivedPacket
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>

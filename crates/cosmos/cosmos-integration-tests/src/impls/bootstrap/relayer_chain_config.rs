@@ -1,7 +1,7 @@
 use core::str::FromStr;
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::impls::types::config::{CosmosChainConfig, EventSourceMode};
 use hermes_cosmos_chain_components::types::config::gas::gas_config::{GasConfig, GasPrice};
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
@@ -18,10 +18,13 @@ use ibc_proto::cosmos::tx::v1beta1::Fee;
 use tendermint_rpc::{Error as TendermintRpcError, Url};
 
 use crate::traits::bootstrap::compat_mode::HasCompatMode;
-use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilder;
+use crate::traits::bootstrap::relayer_chain_config::{
+    RelayerChainConfigBuilder, RelayerChainConfigBuilderComponent,
+};
 
 pub struct BuildRelayerChainConfig;
 
+#[cgp_provider(RelayerChainConfigBuilderComponent)]
 impl<Bootstrap, Chain> RelayerChainConfigBuilder<Bootstrap> for BuildRelayerChainConfig
 where
     Bootstrap: HasAccountPrefix

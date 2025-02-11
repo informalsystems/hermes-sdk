@@ -12,6 +12,7 @@ pub trait HasDynamicGas: Async {
     fn dynamic_gas(&self) -> &Option<DynamicGasConfig>;
 }
 
+#[cgp_provider(DynamicGasGetterComponent)]
 impl<Bootstrap> DynamicGasGetter<Bootstrap> for UseContext
 where
     Bootstrap: Async + HasField<symbol!("dynamic_gas"), Value = Option<DynamicGasConfig>>,

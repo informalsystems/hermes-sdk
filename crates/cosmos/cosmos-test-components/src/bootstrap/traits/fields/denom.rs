@@ -33,6 +33,7 @@ pub trait HasDenomPrefix<Label>: Async {
     fn denom_prefix(&self, label: Label) -> &str;
 }
 
+#[cgp_provider(DenomPrefixGetterComponent)]
 impl<Bootstrap> DenomPrefixGetter<Bootstrap, DenomForStaking> for UseContext
 where
     Bootstrap: Async + HasField<symbol!("staking_denom_prefix"), Value = String>,
@@ -42,6 +43,7 @@ where
     }
 }
 
+#[cgp_provider(DenomPrefixGetterComponent)]
 impl<Bootstrap> DenomPrefixGetter<Bootstrap, DenomForTransfer> for UseContext
 where
     Bootstrap: Async + HasField<symbol!("transfer_denom_prefix"), Value = String>,

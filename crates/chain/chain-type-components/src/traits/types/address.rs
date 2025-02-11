@@ -15,6 +15,7 @@ pub trait HasAddressType: Async {
 
 pub type AddressOf<Chain> = <Chain as HasAddressType>::Address;
 
+#[cgp_provider(AddressTypeComponent)]
 impl<Chain, Provider, Address> ProvideAddressType<Chain> for WithProvider<Provider>
 where
     Chain: Async,

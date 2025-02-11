@@ -12,7 +12,7 @@ use hermes_cli_components::impls::commands::channel::create::{
     CreateChannelArgs, RunCreateChannelCommand,
 };
 use hermes_cli_components::impls::commands::client::create::{
-    CreateClientOptionsParser, RunCreateClientCommand,
+    CreateClientOptionsParser, CreateClientOptionsParserComponent, RunCreateClientCommand,
 };
 use hermes_cli_components::impls::commands::client::update::{
     RunUpdateClientCommand, UpdateClientArgs,
@@ -65,7 +65,9 @@ use hermes_cli_components::impls::config::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
 use hermes_cli_components::impls::parse::identifier::{ParseInitCosmosChannelOptions, ParsePortId};
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
-use hermes_cli_components::traits::any_counterparty::ProvideAnyCounterparty;
+use hermes_cli_components::traits::any_counterparty::{
+    AnyCounterpartyComponent, ProvideAnyCounterparty,
+};
 use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, BootstrapTypeComponent};
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, BuilderTypeComponent, CanLoadBuilder,
@@ -75,7 +77,7 @@ use hermes_cli_components::traits::config::config_path::ConfigPathGetterComponen
 use hermes_cli_components::traits::config::load_config::{CanLoadConfig, ConfigLoaderComponent};
 use hermes_cli_components::traits::config::write_config::{CanWriteConfig, ConfigWriterComponent};
 use hermes_cli_components::traits::output::{
-    CanProduceOutput, HasOutputType, OutputProducer, OutputTypeComponent,
+    CanProduceOutput, HasOutputType, OutputProducer, OutputProducerComponent, OutputTypeComponent,
 };
 use hermes_cli_components::traits::parse::ArgParserComponent;
 use hermes_cli_components::traits::types::config::ConfigTypeComponent;
@@ -255,6 +257,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(AnyCounterpartyComponent)]
 impl<App> ProvideAnyCounterparty<App> for HermesAppComponents
 where
     App: Async,
@@ -262,6 +265,7 @@ where
     type AnyCounterparty = AnyCounterparty;
 }
 
+#[cgp_provider(OutputProducerComponent)]
 impl<App, Value> OutputProducer<App, Value> for HermesAppComponents
 where
     App: HasOutputType<Output = Output>,
@@ -272,6 +276,7 @@ where
     }
 }
 
+#[cgp_provider(CreateClientOptionsParserComponent)]
 impl CreateClientOptionsParser<HermesApp, CreateClientArgs, Index<0>, Index<1>>
     for HermesAppComponents
 {

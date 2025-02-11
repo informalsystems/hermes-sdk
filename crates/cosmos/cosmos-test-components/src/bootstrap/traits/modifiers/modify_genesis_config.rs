@@ -12,6 +12,7 @@ pub trait CanModifyCosmosGenesisConfig: HasAsyncErrorType {
     fn modify_genesis_config(&self, genesis_config: &mut Value) -> Result<(), Self::Error>;
 }
 
+#[cgp_provider(CosmosGenesisConfigModifierComponent)]
 impl<Bootstrap, Modifier> CosmosGenesisConfigModifier<Bootstrap> for UseContext
 where
     Bootstrap: HasAsyncErrorType + HasField<symbol!("genesis_config_modifier"), Value = Modifier>,

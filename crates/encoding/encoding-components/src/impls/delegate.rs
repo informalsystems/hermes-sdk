@@ -1,19 +1,20 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
-use cgp::prelude::{DelegateComponent, HasAsyncErrorType};
+use cgp::prelude::*;
 
-use crate::traits::convert::Converter;
-use crate::traits::decode::Decoder;
-use crate::traits::decode_mut::MutDecoder;
-use crate::traits::encode::Encoder;
-use crate::traits::encode_mut::MutEncoder;
-use crate::traits::schema::SchemaGetter;
+use crate::traits::convert::{Converter, ConverterComponent};
+use crate::traits::decode::{Decoder, DecoderComponent};
+use crate::traits::decode_mut::{MutDecoder, MutDecoderComponent};
+use crate::traits::encode::{Encoder, EncoderComponent};
+use crate::traits::encode_mut::{MutEncoder, MutEncoderComponent};
+use crate::traits::schema::{SchemaGetter, SchemaGetterComponent};
 use crate::traits::types::decode_buffer::HasDecodeBufferType;
 use crate::traits::types::encode_buffer::HasEncodeBufferType;
 use crate::traits::types::encoded::HasEncodedType;
 use crate::traits::types::schema::HasSchemaType;
 
+#[cgp_provider(EncoderComponent)]
 impl<Encoding, Strategy, Value, Components, Delegate> Encoder<Encoding, Strategy, Value>
     for UseDelegate<Components>
 where
@@ -26,6 +27,7 @@ where
     }
 }
 
+#[cgp_provider(DecoderComponent)]
 impl<Encoding, Strategy, Value, Components, Delegate> Decoder<Encoding, Strategy, Value>
     for UseDelegate<Components>
 where
@@ -38,6 +40,7 @@ where
     }
 }
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding, From, To, Components, Delegate> Converter<Encoding, From, To>
     for UseDelegate<Components>
 where
@@ -50,6 +53,7 @@ where
     }
 }
 
+#[cgp_provider(SchemaGetterComponent)]
 impl<Encoding, Value, Components, Delegate> SchemaGetter<Encoding, Value>
     for UseDelegate<Components>
 where
@@ -62,6 +66,7 @@ where
     }
 }
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, Value, Components, Delegate> MutEncoder<Encoding, Strategy, Value>
     for UseDelegate<Components>
 where
@@ -78,6 +83,7 @@ where
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy, Value, Components, Delegate> MutDecoder<Encoding, Strategy, Value>
     for UseDelegate<Components>
 where

@@ -14,6 +14,7 @@ pub trait HasUpdateClientPayloadType<Counterparty>: Async {
 pub type UpdateClientPayloadOf<Chain, Counterparty> =
     <Chain as HasUpdateClientPayloadType<Counterparty>>::UpdateClientPayload;
 
+#[cgp_provider(UpdateClientPayloadTypeComponent)]
 impl<Chain, Counterparty, Components, Delegate> ProvideUpdateClientPayloadType<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -24,6 +25,7 @@ where
     type UpdateClientPayload = Delegate::UpdateClientPayload;
 }
 
+#[cgp_provider(UpdateClientPayloadTypeComponent)]
 impl<Chain, Counterparty, Provider, UpdateClientPayload>
     ProvideUpdateClientPayloadType<Chain, Counterparty> for WithProvider<Provider>
 where

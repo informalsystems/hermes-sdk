@@ -4,7 +4,9 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::connection::open_ack::CanRelayConnectionOpenAck;
 use crate::relay::traits::connection::open_confirm::CanRelayConnectionOpenConfirm;
-use crate::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayer;
+use crate::relay::traits::connection::open_handshake::{
+    ConnectionOpenHandshakeRelayer, ConnectionOpenHandshakeRelayerComponent,
+};
 use crate::relay::traits::connection::open_try::CanRelayConnectionOpenTry;
 
 /**
@@ -21,6 +23,7 @@ use crate::relay::traits::connection::open_try::CanRelayConnectionOpenTry;
 */
 pub struct RelayConnectionOpenHandshake;
 
+#[cgp_provider(ConnectionOpenHandshakeRelayerComponent)]
 impl<Relay, SrcChain, DstChain> ConnectionOpenHandshakeRelayer<Relay>
     for RelayConnectionOpenHandshake
 where

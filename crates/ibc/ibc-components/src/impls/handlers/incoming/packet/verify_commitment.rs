@@ -4,6 +4,7 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 
+use crate::components::chain::IncomingPacketHandlerComponent;
 use crate::traits::commitment::path::send_packet::CanBuildSendPacketCommitmentPath;
 use crate::traits::commitment::value::send_packet::CanBuildSendPacketCommitmentValue;
 use crate::traits::commitment::verify::CanVerifyCommitment;
@@ -18,6 +19,7 @@ use crate::types::tags::commitment::send::SendPacket;
 
 pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>);
 
+#[cgp_provider(IncomingPacketHandlerComponent)]
 #[async_trait]
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for VerifySendPacketCommitmentProof<InHandler>

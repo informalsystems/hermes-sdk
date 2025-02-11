@@ -1,8 +1,9 @@
-use cgp::core::Async;
+use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::commitment_proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::{
-    CommitmentProofBytesGetter, CommitmentProofHeightGetter, HasCommitmentProofType,
-    ProvideCommitmentProofType,
+    CommitmentProofBytesGetter, CommitmentProofBytesGetterComponent, CommitmentProofHeightGetter,
+    CommitmentProofHeightGetterComponent, HasCommitmentProofType, ProvideCommitmentProofType,
 };
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
@@ -15,6 +16,7 @@ pub struct CosmosCommitmentProof {
 
 pub struct ProvideCosmosCommitmentProof;
 
+#[cgp_provider(CommitmentProofTypeComponent)]
 impl<Chain> ProvideCommitmentProofType<Chain> for ProvideCosmosCommitmentProof
 where
     Chain: Async,
@@ -22,6 +24,7 @@ where
     type CommitmentProof = CosmosCommitmentProof;
 }
 
+#[cgp_provider(CommitmentProofHeightGetterComponent)]
 impl<Chain> CommitmentProofHeightGetter<Chain> for ProvideCosmosCommitmentProof
 where
     Chain: HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>
@@ -32,6 +35,7 @@ where
     }
 }
 
+#[cgp_provider(CommitmentProofBytesGetterComponent)]
 impl<Chain> CommitmentProofBytesGetter<Chain> for ProvideCosmosCommitmentProof
 where
     Chain: HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>,

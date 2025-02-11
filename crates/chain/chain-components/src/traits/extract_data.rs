@@ -28,6 +28,7 @@ pub trait CanExtractFromEvent<Data>: HasEventType {
 
 pub struct ExtractFromMessageResponseViaEvents;
 
+#[cgp_provider(MessageResponseExtractorComponent)]
 impl<Chain, Data> MessageResponseExtractor<Chain, Data> for ExtractFromMessageResponseViaEvents
 where
     Chain: HasMessageResponseEvents + CanExtractFromEvent<Data>,
@@ -43,6 +44,7 @@ where
     }
 }
 
+#[cgp_provider(MessageResponseExtractorComponent)]
 impl<Chain, Data, Components> MessageResponseExtractor<Chain, Data> for UseDelegate<Components>
 where
     Chain: HasMessageResponseType,
@@ -58,6 +60,7 @@ where
     }
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain, Data, Components> EventExtractor<Chain, Data> for UseDelegate<Components>
 where
     Chain: HasEventType,

@@ -32,8 +32,6 @@ use hermes_test_components::setup::traits::port_id_at::PortIdAtComponent;
 use ibc::core::host::types::identifiers::PortId;
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use crate::contexts::bootstrap::CosmosBootstrap;
-use crate::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use crate::impls::binary_channel_driver::BuildCosmosBinaryChannelDriver;
 use crate::impls::init_channel_options::UseCosmosInitChannelOptions;
 
@@ -102,16 +100,4 @@ impl<BootstrapA, BootstrapB> HasField<symbol!("create_client_message_options")>
     fn get_field(&self, _phantom: PhantomData<symbol!("create_client_message_options")>) -> &() {
         &()
     }
-}
-
-impl CanUseBinaryChannelTestSetup for CosmosBinaryChannelSetup<CosmosBootstrap, CosmosBootstrap> {}
-
-impl CanUseBinaryChannelTestSetup
-    for CosmosBinaryChannelSetup<CosmosBootstrap, LegacyCosmosBootstrap>
-{
-}
-
-impl CanUseBinaryChannelTestSetup
-    for CosmosBinaryChannelSetup<LegacyCosmosBootstrap, LegacyCosmosBootstrap>
-{
 }

@@ -1,9 +1,10 @@
-use cgp::core::Async;
+use cgp::prelude::*;
 
-use crate::traits::logger::Logger;
+use crate::traits::logger::{Logger, LoggerComponent};
 
 pub struct IgnoreLog;
 
+#[cgp_provider(LoggerComponent)]
 impl<Logging, Details> Logger<Logging, Details> for IgnoreLog
 where
     Logging: Async,

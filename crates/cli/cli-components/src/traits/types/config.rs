@@ -11,6 +11,7 @@ pub trait HasConfigType: Async {
     type Config: Async;
 }
 
+#[cgp_provider(ConfigTypeComponent)]
 impl<App, Provider, Config> ProvideConfigType<App> for WithProvider<Provider>
 where
     App: Async,

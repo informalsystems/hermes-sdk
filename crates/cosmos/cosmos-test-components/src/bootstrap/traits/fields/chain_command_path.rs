@@ -16,6 +16,7 @@ where
     fn chain_command_path(&self) -> &FilePathOf<Self::Runtime>;
 }
 
+#[cgp_provider(ChainCommandPathGetterComponent)]
 impl<Bootstrap, Runtime> ChainCommandPathGetter<Bootstrap> for UseContext
 where
     Bootstrap: HasRuntime<Runtime = Runtime>

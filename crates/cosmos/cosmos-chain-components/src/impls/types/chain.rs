@@ -5,34 +5,47 @@ use cgp::core::error::CanRaiseAsyncError;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
-use hermes_chain_type_components::traits::fields::height::HeightIncrementer;
+use hermes_chain_type_components::traits::fields::height::{
+    HeightIncrementer, HeightIncrementerComponent,
+};
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
+use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_chain_type_components::traits::types::event::EventTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
 use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
+use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
+use hermes_chain_type_components::traits::types::timeout::TimeoutTypeComponent;
 use hermes_relayer_components::chain::impls::types::ack::ProvideBytesAcknowlegement;
 use hermes_relayer_components::chain::impls::types::commitment::ProvideBytesPacketCommitment;
 use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCommitmentPrefixBytes;
 use hermes_relayer_components::chain::impls::types::receipt::ProvideBytesPacketReceipt;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::types::block::{
-    HasBlockType, ProvideBlockHash, ProvideBlockType,
+    BlockHashComponent, BlockTypeComponent, HasBlockType, ProvideBlockHash, ProvideBlockType,
 };
 use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, ProvideChainIdType};
-use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndType;
-use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionEndType;
+use hermes_relayer_components::chain::traits::types::channel::{
+    ChannelEndTypeComponent, ProvideChannelEndType,
+};
+use hermes_relayer_components::chain::traits::types::connection::{
+    ConnectionEndTypeComponent, ProvideConnectionEndType,
+};
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetter, HasHeightType, HeightFieldGetter,
+    GenesisHeightGetter, GenesisHeightGetterComponent, HasHeightType, HeightFieldComponent,
+    HeightFieldGetter,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
+    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
     ProvideChannelIdType, ProvideClientIdType, ProvideConnectionIdType, ProvidePortIdType,
-    ProvideSequenceType,
+    ProvideSequenceType, SequenceTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::message::{
-    HasMessageType, MessageSizeEstimator,
+    HasMessageType, MessageSizeEstimator, MessageSizeEstimatorComponent,
 };
-use hermes_relayer_components::chain::traits::types::packet::ProvideOutgoingPacketType;
+use hermes_relayer_components::chain::traits::types::packet::{
+    OutgoingPacketTypeComponent, ProvideOutgoingPacketType,
+};
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
@@ -40,9 +53,11 @@ use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
     CommitmentProofTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
+use hermes_relayer_components::chain::traits::types::status::{
+    ChainStatusTypeComponent, ProvideChainStatusType,
+};
 use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimeType, ProvideTimeType, ProvideTimeoutType, TimeMeasurer,
+    HasTimeType, ProvideTimeType, ProvideTimeoutType, TimeMeasurer, TimeMeasurerComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::channel::types::packet::Packet;
@@ -93,6 +108,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(HeightFieldComponent)]
 impl<Chain> HeightFieldGetter<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasHeightType<Height = Height>,
@@ -106,6 +122,7 @@ where
     }
 }
 
+#[cgp_provider(HeightIncrementerComponent)]
 impl<Chain> HeightIncrementer<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasHeightType<Height = Height> + HasAsyncErrorType,
@@ -115,6 +132,7 @@ where
     }
 }
 
+#[cgp_provider(GenesisHeightGetterComponent)]
 impl<Chain> GenesisHeightGetter<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasHeightType<Height = Height> + HasChainId<ChainId = ChainId> + HasAsyncErrorType,
@@ -124,6 +142,7 @@ where
     }
 }
 
+#[cgp_provider(TimeTypeComponent)]
 impl<Chain> ProvideTimeType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -131,6 +150,7 @@ where
     type Time = Time;
 }
 
+#[cgp_provider(TimeMeasurerComponent)]
 impl<Chain> TimeMeasurer<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasTimeType<Time = Time>,
@@ -140,6 +160,7 @@ where
     }
 }
 
+#[cgp_provider(TimeoutTypeComponent)]
 impl<Chain> ProvideTimeoutType<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasTimeType<Time = Time>,
@@ -151,6 +172,7 @@ where
     }
 }
 
+#[cgp_provider(MessageSizeEstimatorComponent)]
 impl<Chain> MessageSizeEstimator<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasMessageType<Message = CosmosMessage> + CanRaiseAsyncError<EncodeError>,
@@ -164,6 +186,7 @@ where
     }
 }
 
+#[cgp_provider(ChainStatusTypeComponent)]
 impl<Chain> ProvideChainStatusType<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasHeightType<Height = Height> + HasTimeType<Time = Time>,
@@ -179,6 +202,7 @@ where
     }
 }
 
+#[cgp_provider(ChainIdTypeComponent)]
 impl<Chain> ProvideChainIdType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -186,6 +210,7 @@ where
     type ChainId = ChainId;
 }
 
+#[cgp_provider(ClientIdTypeComponent)]
 impl<Chain, Counterparty> ProvideClientIdType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -193,6 +218,7 @@ where
     type ClientId = ClientId;
 }
 
+#[cgp_provider(ConnectionIdTypeComponent)]
 impl<Chain, Counterparty> ProvideConnectionIdType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -200,6 +226,7 @@ where
     type ConnectionId = ConnectionId;
 }
 
+#[cgp_provider(ChannelIdTypeComponent)]
 impl<Chain, Counterparty> ProvideChannelIdType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -207,6 +234,7 @@ where
     type ChannelId = ChannelId;
 }
 
+#[cgp_provider(PortIdTypeComponent)]
 impl<Chain, Counterparty> ProvidePortIdType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -214,6 +242,7 @@ where
     type PortId = PortId;
 }
 
+#[cgp_provider(SequenceTypeComponent)]
 impl<Chain, Counterparty> ProvideSequenceType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -221,6 +250,7 @@ where
     type Sequence = Sequence;
 }
 
+#[cgp_provider(OutgoingPacketTypeComponent)]
 impl<Chain, Counterparty> ProvideOutgoingPacketType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -228,6 +258,7 @@ where
     type OutgoingPacket = Packet;
 }
 
+#[cgp_provider(BlockTypeComponent)]
 impl<Chain> ProvideBlockType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -235,6 +266,7 @@ where
     type Block = (BlockId, Block);
 }
 
+#[cgp_provider(BlockHashComponent)]
 impl<Chain> ProvideBlockHash<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasBlockType<Block = (BlockId, Block)>,
@@ -246,6 +278,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionEndTypeComponent)]
 impl<Chain, Counterparty> ProvideConnectionEndType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,
@@ -253,6 +286,7 @@ where
     type ConnectionEnd = ConnectionEnd;
 }
 
+#[cgp_provider(ChannelEndTypeComponent)]
 impl<Chain, Counterparty> ProvideChannelEndType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,

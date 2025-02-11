@@ -7,11 +7,13 @@ use ibc::core::client::types::Height;
 use ibc_proto::cosmos::staking::v1beta1::QueryParamsResponse;
 use prost::{DecodeError, Message};
 
+use crate::components::client::UnbondingPeriodQuerierComponent;
 use crate::traits::abci_query::CanQueryAbci;
 use crate::traits::unbonding_period::UnbondingPeriodQuerier;
 
 pub struct StakingParamsUnbondingPeriod;
 
+#[cgp_provider(UnbondingPeriodQuerierComponent)]
 impl<Chain> UnbondingPeriodQuerier<Chain> for StakingParamsUnbondingPeriod
 where
     Chain: CanQueryChainHeight

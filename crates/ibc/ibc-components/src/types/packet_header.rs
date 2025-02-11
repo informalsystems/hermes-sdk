@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
-use crate::traits::types::packet::header::ProvidePacketHeaderType;
+use crate::traits::types::packet::header::{PacketHeaderTypeComponent, ProvidePacketHeaderType};
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
 
 #[derive(HasField)]
@@ -17,6 +17,7 @@ where
 
 pub struct UseIbcPacketHeader;
 
+#[cgp_provider(PacketHeaderTypeComponent)]
 impl<Chain, Counterparty> ProvidePacketHeaderType<Chain, Counterparty> for UseIbcPacketHeader
 where
     Chain: HasChannelIdType<Counterparty>,

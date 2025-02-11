@@ -9,7 +9,7 @@ use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::time::HasTime;
 
 use crate::error::traits::retry::HasRetryableError;
-use crate::transaction::traits::poll_tx_response::TxResponsePoller;
+use crate::transaction::traits::poll_tx_response::{TxResponsePoller, TxResponsePollerComponent};
 use crate::transaction::traits::query_tx_response::CanQueryTxResponse;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 
@@ -57,6 +57,7 @@ pub trait HasPollTimeout {
     fn poll_backoff(&self) -> Duration;
 }
 
+#[cgp_provider(TxResponsePollerComponent)]
 impl<Chain> TxResponsePoller<Chain> for PollTxResponse
 where
     Chain: CanQueryTxResponse

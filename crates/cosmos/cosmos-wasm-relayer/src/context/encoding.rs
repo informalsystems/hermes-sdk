@@ -9,7 +9,8 @@ use hermes_encoding_components::traits::convert::{CanConvert, CanConvertBothWays
 use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
+    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
+    EncodingTypeComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
@@ -59,6 +60,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(EncodingTypeComponent)]
 impl<Context> ProvideEncodingType<Context, AsBytes> for ProvideWasmCosmosEncoding
 where
     Context: Async,
@@ -66,6 +68,7 @@ where
     type Encoding = WasmCosmosEncoding;
 }
 
+#[cgp_provider(DefaultEncodingGetterComponent)]
 impl<Context> DefaultEncodingGetter<Context, AsBytes> for ProvideWasmCosmosEncoding
 where
     Context: HasEncodingType<AsBytes, Encoding = WasmCosmosEncoding>,

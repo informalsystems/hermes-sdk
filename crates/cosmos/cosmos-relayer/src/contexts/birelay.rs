@@ -3,7 +3,9 @@ use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
-use hermes_relayer_components::birelay::traits::two_way::TwoWayRelayGetter;
+use hermes_relayer_components::birelay::traits::two_way::{
+    TwoWayRelayGetter, TwoWayRelayGetterComponent,
+};
 use hermes_relayer_components::components::default::birelay::{
     DefaultBiRelayComponents, IsDefaultBiRelayComponents,
 };
@@ -34,6 +36,13 @@ where
     Self: IsDefaultBiRelayComponents<Component>,
 {
     type Delegate = DefaultBiRelayComponents;
+}
+
+impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CosmosBiRelayComponents
+where
+    Self: IsDefaultBiRelayComponents<Name>,
+    DefaultBiRelayComponents: IsProviderFor<Name, Context, Params>,
+{
 }
 
 delegate_components! {
@@ -68,6 +77,7 @@ impl CosmosBiRelay {
     }
 }
 
+#[cgp_provider(TwoWayRelayGetterComponent)]
 impl TwoWayRelayGetter<CosmosBiRelay> for CosmosBiRelayComponents {
     fn relay_a_to_b(birelay: &CosmosBiRelay) -> &CosmosRelay {
         &birelay.relay_a_to_b

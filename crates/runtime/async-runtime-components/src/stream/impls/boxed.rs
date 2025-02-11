@@ -3,12 +3,13 @@ use core::pin::Pin;
 
 use cgp::prelude::*;
 use futures_core::stream::Stream;
-use hermes_runtime_components::traits::stream::ProvideStreamType;
+use hermes_runtime_components::traits::stream::{ProvideStreamType, StreamTypeComponent};
 
 use crate::stream::traits::boxed::BoxedStreamTypeProvider;
 
 pub struct ProvideBoxedStreamType;
 
+#[cgp_provider(StreamTypeComponent)]
 impl<Runtime> ProvideStreamType<Runtime> for ProvideBoxedStreamType
 where
     Runtime: Async,

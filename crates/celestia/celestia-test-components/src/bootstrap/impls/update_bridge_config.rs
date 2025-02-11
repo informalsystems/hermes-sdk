@@ -1,4 +1,4 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::HasGrpcPort;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;
 use hermes_relayer_components::chain::traits::queries::block::CanQueryBlock;
@@ -13,12 +13,15 @@ use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasCh
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use toml::Value;
 
-use crate::bootstrap::traits::init_bridge_config::BridgeConfigInitializer;
+use crate::bootstrap::traits::init_bridge_config::{
+    BridgeConfigInitializer, BridgeConfigInitializerComponent,
+};
 use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;
 use crate::types::bridge_config::CelestiaBridgeConfig;
 
 pub struct UpdateCelestiaBridgeConfig;
 
+#[cgp_provider(BridgeConfigInitializerComponent)]
 impl<Bootstrap, Runtime, Chain, ChainDriver> BridgeConfigInitializer<Bootstrap>
     for UpdateCelestiaBridgeConfig
 where

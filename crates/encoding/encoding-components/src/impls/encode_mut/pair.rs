@@ -1,10 +1,10 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseContext;
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
 
-use crate::traits::decode_mut::MutDecoder;
-use crate::traits::encode_mut::MutEncoder;
+use crate::traits::decode_mut::{MutDecoder, MutDecoderComponent};
+use crate::traits::encode_mut::{MutEncoder, MutEncoderComponent};
 use crate::traits::types::decode_buffer::HasDecodeBufferType;
 use crate::traits::types::encode_buffer::HasEncodeBufferType;
 
@@ -12,6 +12,7 @@ pub struct EncoderPair<EncoderA, EncoderB>(pub PhantomData<(EncoderA, EncoderB)>
 
 pub type EncodeCons<NextEncode> = EncoderPair<UseContext, NextEncode>;
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, EncoderA, EncoderB, ValueA, ValueB>
     MutEncoder<Encoding, Strategy, (ValueA, ValueB)> for EncoderPair<EncoderA, EncoderB>
 where
@@ -31,6 +32,7 @@ where
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy, EncoderA, EncoderB, ValueA, ValueB>
     MutDecoder<Encoding, Strategy, (ValueA, ValueB)> for EncoderPair<EncoderA, EncoderB>
 where

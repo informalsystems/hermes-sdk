@@ -1,4 +1,5 @@
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
+use hermes_cosmos_relayer::presets::chain::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -13,6 +14,7 @@ use crate::types::payloads::client::SolomachineUpdateClientPayload;
 
 pub struct BuildSolomachineUpdateClientPayload;
 
+#[cgp_provider(UpdateClientPayloadBuilderComponent)]
 impl<Chain, Counterparty> UpdateClientPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineUpdateClientPayload
 where

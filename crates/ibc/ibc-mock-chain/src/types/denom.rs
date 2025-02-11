@@ -2,8 +2,8 @@ use alloc::boxed::Box;
 use core::cmp::Ordering;
 use core::fmt::{Debug, Display};
 
-use cgp::core::Async;
-use hermes_chain_type_components::traits::types::denom::ProvideDenomType;
+use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::denom::{DenomTypeComponent, ProvideDenomType};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -31,6 +31,7 @@ pub struct MockIbcDenom<Chain, Counterparty> {
     pub src_denom: Box<MockDenom<Counterparty, Chain>>,
 }
 
+#[cgp_provider(DenomTypeComponent)]
 impl<Chain: Async, Counterparty: Async> ProvideDenomType<MockChain<Chain, Counterparty>>
     for MockChainComponents
 {

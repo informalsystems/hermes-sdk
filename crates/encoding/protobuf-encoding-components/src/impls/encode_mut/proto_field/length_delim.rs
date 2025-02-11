@@ -1,11 +1,12 @@
-use cgp::prelude::HasAsyncErrorType;
-use hermes_encoding_components::traits::encode_mut::MutEncoder;
+use cgp::prelude::*;
+use hermes_encoding_components::traits::encode_mut::{MutEncoder, MutEncoderComponent};
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use prost::bytes::BufMut;
 use prost::encoding::{encode_key, encode_varint, WireType};
 
 pub struct EncodeLengthDelimitedHeader<const TAG: u32>;
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, const TAG: u32> MutEncoder<Encoding, Strategy, u64>
     for EncodeLengthDelimitedHeader<TAG>
 where

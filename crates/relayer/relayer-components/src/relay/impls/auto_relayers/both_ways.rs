@@ -1,9 +1,9 @@
 use alloc::boxed::Box;
 use alloc::vec;
 
-use cgp::core::error::HasAsyncErrorType;
 use cgp::core::field::Index;
-use cgp::extra::run::{CanRun, Runner};
+use cgp::extra::run::{CanRun, Runner, RunnerComponent};
+use cgp::prelude::*;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
@@ -43,6 +43,7 @@ where
     }
 }
 
+#[cgp_provider(RunnerComponent)]
 impl<BiRelay> Runner<BiRelay> for RelayBothWays
 where
     BiRelay: HasTwoWayRelay + HasRuntime + HasAsyncErrorType,

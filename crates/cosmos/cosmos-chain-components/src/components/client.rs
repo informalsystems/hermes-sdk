@@ -289,7 +289,6 @@ cgp_preset! {
             BuildPacketPayloads,
 
         [
-            ReceivePacketMessageBuilderComponent,
             AckPacketMessageBuilderComponent,
             TimeoutUnorderedPacketMessageBuilderComponent,
         ]:
@@ -386,6 +385,8 @@ cgp_preset! {
             ChannelOpenTryMessageBuilderComponent,
             ChannelOpenAckMessageBuilderComponent,
             ChannelOpenConfirmMessageBuilderComponent,
+
+            ReceivePacketMessageBuilderComponent,
 
             PacketSrcChannelIdGetterComponent,
             PacketSrcPortIdGetterComponent,

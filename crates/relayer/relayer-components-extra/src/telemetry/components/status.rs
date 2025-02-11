@@ -1,4 +1,4 @@
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::chain_status::*;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 
@@ -9,6 +9,7 @@ pub struct ChainStatusTelemetryQuerier<InQuerier> {
     pub querier: InQuerier,
 }
 
+#[cgp_provider(ChainStatusQuerierComponent)]
 impl<InQuerier, Chain, Telemetry> ChainStatusQuerier<Chain>
     for ChainStatusTelemetryQuerier<InQuerier>
 where

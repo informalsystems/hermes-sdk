@@ -1,7 +1,8 @@
 use core::time::Duration;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
+use hermes_cosmos_relayer::presets::chain::{ClientStateFieldsComponent, ClientStateTypeComponent};
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType,
 };
@@ -12,6 +13,7 @@ use crate::types::client_state::SolomachineClientState;
 
 pub struct ProvideSolomachineClientState;
 
+#[cgp_provider(ClientStateTypeComponent)]
 impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty>
     for ProvideSolomachineClientState
 where
@@ -21,6 +23,7 @@ where
 }
 
 // TODO: properly implement solomachine client state fields
+#[cgp_provider(ClientStateFieldsComponent)]
 impl<Chain, Counterparty> ClientStateFieldsGetter<Chain, Counterparty>
     for ProvideSolomachineClientState
 where

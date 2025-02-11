@@ -1,20 +1,21 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
-use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::types::AsBytes;
 
 use crate::traits::queries::consensus_state::{
     CanQueryRawConsensusState, CanQueryRawConsensusStateWithProofs, ConsensusStateQuerier,
-    ConsensusStateWithProofsQuerier,
+    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerier,
+    ConsensusStateWithProofsQuerierComponent,
 };
 use crate::traits::types::consensus_state::HasConsensusStateType;
 use crate::traits::types::height::HasHeightType;
 
 pub struct QueryAndConvertRawConsensusState;
 
+#[cgp_provider(ConsensusStateQuerierComponent)]
 impl<Chain, Counterparty, Encoding> ConsensusStateQuerier<Chain, Counterparty>
     for QueryAndConvertRawConsensusState
 where
@@ -43,6 +44,7 @@ where
     }
 }
 
+#[cgp_provider(ConsensusStateWithProofsQuerierComponent)]
 impl<Chain, Counterparty, Encoding> ConsensusStateWithProofsQuerier<Chain, Counterparty>
     for QueryAndConvertRawConsensusState
 where

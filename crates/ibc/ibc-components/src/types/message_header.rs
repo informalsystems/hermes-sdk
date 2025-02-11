@@ -1,7 +1,9 @@
 use cgp::prelude::*;
 
 use crate::traits::types::app_id::HasAppIdType;
-use crate::traits::types::message_header::ProvideIbcMessageHeaderType;
+use crate::traits::types::message_header::{
+    IbcMessageHeaderTypeComponent, ProvideIbcMessageHeaderType,
+};
 
 #[derive(HasField)]
 pub struct IbcMessageHeader<Chain, Counterparty>
@@ -15,6 +17,7 @@ where
 
 pub struct UseIbcMessageHeader;
 
+#[cgp_provider(IbcMessageHeaderTypeComponent)]
 impl<Chain, Counterparty> ProvideIbcMessageHeaderType<Chain, Counterparty> for UseIbcMessageHeader
 where
     Chain: HasAppIdType<Counterparty>,

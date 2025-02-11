@@ -16,6 +16,7 @@ pub trait HasMessageTransferAmount<Counterparty, App>:
     fn message_transfer_amount(message: &Self::IbcMessage) -> &Self::Amount;
 }
 
+#[cgp_provider(MessageTransferAmountGetterComponent)]
 impl<Chain, Counterparty, App, Provider> MessageTransferAmountGetter<Chain, Counterparty, App>
     for WithProvider<Provider>
 where

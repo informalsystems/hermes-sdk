@@ -1,9 +1,11 @@
-use cgp::core::error::{ErrorRaiser, HasAsyncErrorType};
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, HasAsyncErrorType};
+use cgp::prelude::*;
 
 use crate::types::Error;
 
 pub struct ReturnError;
 
+#[cgp_provider(ErrorRaiserComponent)]
 impl<Context> ErrorRaiser<Context, Error> for ReturnError
 where
     Context: HasAsyncErrorType<Error = Error>,

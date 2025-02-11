@@ -1,10 +1,12 @@
-use hermes_runtime_components::traits::spawn::TaskSpawner;
+use cgp::prelude::*;
+use hermes_runtime_components::traits::spawn::{TaskSpawner, TaskSpawnerComponent};
 use hermes_runtime_components::traits::task::Task;
 
 use crate::traits::runtime::HasTokioRuntime;
 
 pub struct TokioSpawnTask;
 
+#[cgp_provider(TaskSpawnerComponent)]
 impl<Runtime> TaskSpawner<Runtime> for TokioSpawnTask
 where
     Runtime: HasTokioRuntime,

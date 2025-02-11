@@ -1,8 +1,7 @@
-use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
-use cgp::core::Async;
+use cgp::prelude::*;
 
 use crate::setup::traits::driver::CanBuildTestDriver;
-use crate::setup::traits::run_test::TestRunner;
+use crate::setup::traits::run_test::{TestRunner, TestRunnerComponent};
 use crate::test_case::traits::test_case::TestCase;
 
 /**
@@ -10,6 +9,7 @@ use crate::test_case::traits::test_case::TestCase;
 */
 pub struct BuildDriverAndRunTest;
 
+#[cgp_provider(TestRunnerComponent)]
 impl<Setup, Driver, Test> TestRunner<Setup, Test> for BuildDriverAndRunTest
 where
     Setup: CanBuildTestDriver<TestDriver = Driver> + CanRaiseAsyncError<Driver::Error>,

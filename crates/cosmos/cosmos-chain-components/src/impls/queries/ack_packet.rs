@@ -1,9 +1,11 @@
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
-use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketQuerier;
+use hermes_relayer_components::chain::traits::queries::ack_packets::{
+    AckPacketQuerier, AckPacketQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
@@ -19,6 +21,7 @@ use crate::types::events::write_acknowledgment::WriteAckEvent;
 
 pub struct QueryCosmosAckPacket;
 
+#[cgp_provider(AckPacketQuerierComponent)]
 impl<Chain, Counterparty> AckPacketQuerier<Chain, Counterparty> for QueryCosmosAckPacket
 where
     Chain: HasIbcChainTypes<

@@ -17,6 +17,7 @@ where
     fn ibc_transfer_receiver(payload_data: &Self::PayloadData) -> &Counterparty::Address;
 }
 
+#[cgp_provider(IbcTransferReceiverGetterComponent)]
 impl<Chain, Counterparty, App, Provider> IbcTransferReceiverGetter<Chain, Counterparty, App>
     for WithProvider<Provider>
 where

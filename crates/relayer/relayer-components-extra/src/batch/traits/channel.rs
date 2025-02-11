@@ -15,6 +15,7 @@ pub trait HasMessageBatchSender<Tag>: HasMessageBatchChannelTypes<Tag> {
     fn get_batch_sender(&self, _tag: PhantomData<Tag>) -> &Self::MessageBatchSender;
 }
 
+#[cgp_provider(MessageBatchSenderGetterComponent<SenderTag>)]
 impl<Context, SenderTag, FieldTag> MessageBatchSenderGetter<Context, SenderTag>
     for UseField<FieldTag>
 where
@@ -29,6 +30,7 @@ where
     }
 }
 
+#[cgp_provider(MessageBatchSenderGetterComponent<Src>)]
 impl<Relay, SrcTag, DstTag, Sender> MessageBatchSenderGetter<Relay, Src>
     for SelectRelayChains<SrcTag, DstTag>
 where
@@ -40,6 +42,7 @@ where
     }
 }
 
+#[cgp_provider(MessageBatchSenderGetterComponent<Dst>)]
 impl<Relay, SrcTag, DstTag, Sender> MessageBatchSenderGetter<Relay, Dst>
     for SelectRelayChains<SrcTag, DstTag>
 where

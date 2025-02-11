@@ -40,6 +40,7 @@ where
     ) -> &CreateClientPayloadOptionsOf<ChainAt<Self, Target>, ChainAt<Self, Counterparty>>;
 }
 
+#[cgp_provider(CreateClientMessageOptionsAtComponent)]
 impl<Setup, Tag, Target: Async, Counterparty: Async, ChainA, ChainB>
     ProvideCreateClientMessageOptionsAt<Setup, Target, Counterparty> for UseField<Tag>
 where
@@ -56,6 +57,7 @@ where
     }
 }
 
+#[cgp_provider(CreateClientPayloadOptionsAtComponent)]
 impl<Setup, Tag, Target: Async, Counterparty: Async, ChainA, ChainB>
     ProvideCreateClientPayloadOptionsAt<Setup, Target, Counterparty> for UseField<Tag>
 where

@@ -1,15 +1,16 @@
 use core::fmt::Display;
 
-use cgp::core::error::CanRaiseAsyncError;
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_encoding_components::types::AsBytes;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
-    ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
-    ConnectionOpenInitMessageBuilder, ConnectionOpenTryMessageBuilder,
+    ConnectionOpenAckMessageBuilder, ConnectionOpenAckMessageBuilderComponent,
+    ConnectionOpenConfirmMessageBuilder, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilder, ConnectionOpenInitMessageBuilderComponent,
+    ConnectionOpenTryMessageBuilder, ConnectionOpenTryMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
@@ -39,6 +40,7 @@ use crate::types::messages::connection::open_try::CosmosConnectionOpenTryMessage
 
 pub struct BuildCosmosConnectionHandshakeMessage;
 
+#[cgp_provider(ConnectionOpenInitMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenInitMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
@@ -80,6 +82,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenTryMessageBuilderComponent)]
 impl<Chain, Counterparty, Encoding> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
@@ -153,6 +156,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenAckMessageBuilderComponent)]
 impl<Chain, Counterparty, Encoding> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
@@ -229,6 +233,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenConfirmMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where

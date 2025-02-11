@@ -1,5 +1,7 @@
+use cgp::prelude::*;
+
 use crate::impls::commands::queries::channel_end::QueryChannelEndArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner};
+use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryChannelSubCommand;
 
@@ -9,6 +11,7 @@ pub enum QueryChannelSubCommand {
     End(QueryChannelEndArgs),
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App> CommandRunner<App, QueryChannelSubCommand> for RunQueryChannelSubCommand
 where
     App: CanRunCommand<QueryChannelEndArgs>,

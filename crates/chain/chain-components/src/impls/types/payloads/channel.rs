@@ -1,8 +1,9 @@
-use cgp::core::Async;
+use cgp::prelude::*;
 
 use crate::traits::types::channel::{
-    HasChannelEndType, ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
-    ProvideChannelOpenTryPayloadType,
+    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
+    ChannelOpenTryPayloadTypeComponent, HasChannelEndType, ProvideChannelOpenAckPayloadType,
+    ProvideChannelOpenConfirmPayloadType, ProvideChannelOpenTryPayloadType,
 };
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::proof::HasCommitmentProofType;
@@ -12,6 +13,7 @@ use crate::types::payloads::channel::{
 
 pub struct ProvideChannelPayloadTypes;
 
+#[cgp_provider(ChannelOpenTryPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
     for ProvideChannelPayloadTypes
 where
@@ -21,6 +23,7 @@ where
     type ChannelOpenTryPayload = ChannelOpenTryPayload<Chain, Counterparty>;
 }
 
+#[cgp_provider(ChannelOpenAckPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideChannelOpenAckPayloadType<Chain, Counterparty>
     for ProvideChannelPayloadTypes
 where
@@ -30,6 +33,7 @@ where
     type ChannelOpenAckPayload = ChannelOpenAckPayload<Chain, Counterparty>;
 }
 
+#[cgp_provider(ChannelOpenConfirmPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideChannelOpenConfirmPayloadType<Chain, Counterparty>
     for ProvideChannelPayloadTypes
 where

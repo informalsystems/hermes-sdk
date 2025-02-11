@@ -1,15 +1,18 @@
 use core::fmt::{Debug, Display};
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::error::traits::retry::HasRetryableError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_test_components::chain::traits::proposal::poll_status::ProposalStatusPoller;
+use hermes_test_components::chain::traits::proposal::poll_status::{
+    ProposalStatusPoller, ProposalStatusPollerComponent,
+};
 use hermes_test_components::chain::traits::proposal::query_status::CanQueryProposalStatus;
 
 pub struct PollProposalStatus;
 
+#[cgp_provider(ProposalStatusPollerComponent)]
 impl<Chain> ProposalStatusPoller<Chain> for PollProposalStatus
 where
     Chain: CanQueryProposalStatus + HasRuntime + HasRetryableError + CanRaiseAsyncError<String>,

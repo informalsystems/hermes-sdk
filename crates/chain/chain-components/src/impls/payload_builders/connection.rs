@@ -1,14 +1,16 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
 
 use crate::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use crate::traits::payload_builders::connection_handshake::{
-    ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
-    ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
+    ConnectionOpenAckPayloadBuilder, ConnectionOpenAckPayloadBuilderComponent,
+    ConnectionOpenConfirmPayloadBuilder, ConnectionOpenConfirmPayloadBuilderComponent,
+    ConnectionOpenInitPayloadBuilder, ConnectionOpenInitPayloadBuilderComponent,
+    ConnectionOpenTryPayloadBuilder, ConnectionOpenTryPayloadBuilderComponent,
 };
 use crate::traits::queries::client_state::CanQueryClientStateWithProofs;
 use crate::traits::queries::connection_end::CanQueryConnectionEndWithProofs;
@@ -27,6 +29,7 @@ use crate::types::payloads::connection::{
 
 pub struct BuildConnectionHandshakePayload;
 
+#[cgp_provider(ConnectionOpenInitPayloadBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenInitPayloadBuilder<Chain, Counterparty>
     for BuildConnectionHandshakePayload
 where
@@ -47,6 +50,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenTryPayloadBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenTryPayloadBuilder<Chain, Counterparty>
     for BuildConnectionHandshakePayload
 where
@@ -111,6 +115,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenAckPayloadBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenAckPayloadBuilder<Chain, Counterparty>
     for BuildConnectionHandshakePayload
 where
@@ -172,6 +177,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenConfirmPayloadBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenConfirmPayloadBuilder<Chain, Counterparty>
     for BuildConnectionHandshakePayload
 where

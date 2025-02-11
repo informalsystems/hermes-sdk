@@ -1,7 +1,9 @@
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
 use hermes_comet_light_client_components::traits::types::verdict::HasVerdictType;
-use hermes_comet_light_client_components::traits::verify_update_header::UpdateHeaderVerifier;
+use hermes_comet_light_client_components::traits::verify_update_header::{
+    UpdateHeaderVerifier, UpdateHeaderVerifierComponent,
+};
 use hermes_comet_light_client_components::types::verdict::Verdict;
 use tendermint_light_client_verifier::errors::VerificationErrorDetail;
 use tendermint_light_client_verifier::types::LightBlock;
@@ -13,6 +15,7 @@ use crate::traits::verifier_options::HasVerifierOptions;
 
 pub struct VerifyUpdateHeaderWithProdVerifier;
 
+#[cgp_provider(UpdateHeaderVerifierComponent)]
 impl<Client> UpdateHeaderVerifier<Client> for VerifyUpdateHeaderWithProdVerifier
 where
     Client: HasLightBlockType<LightBlock = LightBlock>

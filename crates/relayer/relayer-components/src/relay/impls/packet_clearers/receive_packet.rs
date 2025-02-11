@@ -1,5 +1,6 @@
 use alloc::boxed::Box;
 
+use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -9,6 +10,7 @@ use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments
 use crate::chain::traits::queries::send_packets::CanQuerySendPackets;
 use crate::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
+use crate::components::default::relay::PacketClearerComponent;
 use crate::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChainTypes, HasRelayChains, PacketOf,
 };
@@ -64,6 +66,7 @@ where
     }
 }
 
+#[cgp_provider(PacketClearerComponent)]
 impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
     Relay: Clone + HasRuntime + HasRelayChains + CanRaiseRelayChainErrors,

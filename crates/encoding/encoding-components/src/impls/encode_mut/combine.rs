@@ -2,13 +2,14 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::traits::decode_mut::MutDecoder;
-use crate::traits::encode_mut::MutEncoder;
+use crate::traits::decode_mut::{MutDecoder, MutDecoderComponent};
+use crate::traits::encode_mut::{MutEncoder, MutEncoderComponent};
 use crate::traits::types::decode_buffer::HasDecodeBufferType;
 use crate::traits::types::encode_buffer::HasEncodeBufferType;
 
 pub struct CombineEncoders<Encoders>(pub PhantomData<Encoders>);
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, Encoder, InEncoders, Value> MutEncoder<Encoding, Strategy, Value>
     for CombineEncoders<Cons<Encoder, InEncoders>>
 where
@@ -28,6 +29,7 @@ where
     }
 }
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Value> for CombineEncoders<Nil>
 where
     Encoding: HasEncodeBufferType + HasAsyncErrorType,
@@ -41,6 +43,7 @@ where
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy, Encoder, InEncoders, ValueA, ValueB>
     MutDecoder<Encoding, Strategy, Cons<ValueA, ValueB>>
     for CombineEncoders<Cons<Encoder, InEncoders>>
@@ -60,6 +63,7 @@ where
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy> MutDecoder<Encoding, Strategy, Nil> for CombineEncoders<Nil>
 where
     Encoding: HasDecodeBufferType + HasAsyncErrorType,

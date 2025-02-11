@@ -13,6 +13,7 @@ pub trait HasBiRelayTypeAt<TagA, TagB>: Async {
 
 pub type BiRelayAt<Context, TagA, TagB> = <Context as HasBiRelayTypeAt<TagA, TagB>>::BiRelay;
 
+#[cgp_provider(BiRelayTypeAtComponent<TagA, TagB>)]
 impl<Context, TagA, TagB, Provider, BiRelay> ProvideBiRelayTypeAt<Context, TagA, TagB>
     for WithProvider<Provider>
 where

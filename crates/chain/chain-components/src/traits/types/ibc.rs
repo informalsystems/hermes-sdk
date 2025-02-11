@@ -105,6 +105,7 @@ where
     ) -> Option<Counterparty::Height>;
 }
 
+#[cgp_provider(CounterpartyMessageHeightGetterComponent)]
 impl<Chain, Counterparty, Components, Delegate> CounterpartyMessageHeightGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where

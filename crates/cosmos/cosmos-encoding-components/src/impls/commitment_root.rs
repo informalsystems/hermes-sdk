@@ -3,7 +3,7 @@ use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::transform::Transformer;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
-use hermes_protobuf_encoding_components::components::MutDecoderComponent;
+use hermes_protobuf_encoding_components::components::{MutDecoderComponent, MutEncoderComponent};
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
 use ibc::core::commitment_types::commitment::CommitmentRoot;
 
@@ -18,6 +18,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy> MutEncoder<Encoding, Strategy, CommitmentRoot> for EncodeCommitmentRoot
 where
     Encoding: HasEncodeBufferType + HasAsyncErrorType,

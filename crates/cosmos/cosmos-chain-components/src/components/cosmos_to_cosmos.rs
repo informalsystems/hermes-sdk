@@ -1,6 +1,7 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
+pub use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
     ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
@@ -10,6 +11,8 @@ pub use hermes_relayer_components::chain::traits::message_builders::connection_h
     ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
 };
 pub use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
+pub use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
+pub use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::packet::fields::{
     PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
@@ -48,6 +51,7 @@ use crate::impls::client::update_client_payload::BuildTendermintUpdateClientPayl
 use crate::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::message_height::GetCosmosCounterpartyMessageHeight;
 use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
+use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
 use crate::impls::types::client_state::ProvideTendermintClientState;
 use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
@@ -124,5 +128,11 @@ cgp_preset! {
             PacketTimeoutTimestampGetterComponent,
         ]:
             CosmosPacketFieldReader,
+        [
+            ReceivePacketMessageBuilderComponent,
+            AckPacketMessageBuilderComponent,
+            TimeoutUnorderedPacketMessageBuilderComponent,
+        ]:
+            BuildCosmosPacketMessages,
     }
 }

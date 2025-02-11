@@ -20,6 +20,7 @@ pub trait HasPacketType<Counterparty>: Async {
     type Packet: Async;
 }
 
+#[cgp_provider(PacketTypeComponent)]
 impl<Chain, Counterparty, Provider, Packet> ProvidePacketType<Chain, Counterparty>
     for WithProvider<Provider>
 where

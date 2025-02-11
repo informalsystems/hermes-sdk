@@ -1,6 +1,8 @@
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
+use hermes_relayer_components::chain::traits::queries::write_ack::{
+    WriteAckQuerier, WriteAckQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use ibc::core::channel::types::packet::Packet;
@@ -16,6 +18,7 @@ use crate::types::events::write_acknowledgment::WriteAckEvent;
 
 pub struct QueryCosmosWriteAckEvent;
 
+#[cgp_provider(WriteAckQuerierComponent)]
 impl<Chain, Counterparty> WriteAckQuerier<Chain, Counterparty> for QueryCosmosWriteAckEvent
 where
     Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAckEvent>

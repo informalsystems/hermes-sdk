@@ -1,11 +1,13 @@
+use cgp::prelude::*;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
-use crate::transaction::traits::nonce::allocate_nonce::NonceAllocator;
+use crate::transaction::traits::nonce::allocate_nonce::{NonceAllocator, NonceAllocatorComponent};
 use crate::transaction::traits::nonce::nonce_mutex::HasMutexForNonceAllocation;
 use crate::transaction::traits::nonce::query_nonce::CanQueryNonce;
 
 pub struct AllocateNonceWithMutex;
 
+#[cgp_provider(NonceAllocatorComponent)]
 impl<Context> NonceAllocator<Context> for AllocateNonceWithMutex
 where
     Context: CanQueryNonce + HasMutexForNonceAllocation,

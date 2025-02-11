@@ -1,5 +1,7 @@
-use cgp::core::Async;
-use hermes_ibc_components::traits::types::commitment::path::ProvideCommitmentPathType;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::types::commitment::path::{
+    CommitmentPathTypeComponent, ProvideCommitmentPathType,
+};
 use hermes_ibc_components::types::tags::commitment::receive::ReceivePacket;
 use hermes_ibc_components::types::tags::commitment::send::SendPacket;
 
@@ -21,12 +23,14 @@ pub struct MockReceivePacketCommitmentPath<Chain, Counterparty> {
     pub nonce: Tagged<Counterparty, Chain, MockNonce>,
 }
 
+#[cgp_provider(CommitmentPathTypeComponent)]
 impl<Chain: Async, Counterparty: Async>
     ProvideCommitmentPathType<MockChain<Chain, Counterparty>, SendPacket> for MockChainComponents
 {
     type CommitmentPath = MockSendPacketCommitmentPath<Chain, Counterparty>;
 }
 
+#[cgp_provider(CommitmentPathTypeComponent)]
 impl<Chain: Async, Counterparty: Async>
     ProvideCommitmentPathType<MockChain<Chain, Counterparty>, ReceivePacket>
     for MockChainComponents

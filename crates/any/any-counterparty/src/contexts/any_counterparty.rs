@@ -20,7 +20,8 @@ use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode::EncoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
+    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
+    EncodingTypeComponent, ProvideEncodingType,
 };
 pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
 use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
@@ -112,10 +113,12 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(EncodingTypeComponent)]
 impl ProvideEncodingType<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
     type Encoding = AnyClientEncoding;
 }
 
+#[cgp_provider(DefaultEncodingGetterComponent)]
 impl DefaultEncodingGetter<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
     fn default_encoding() -> &'static AnyClientEncoding {
         &AnyClientEncoding

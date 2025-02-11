@@ -11,6 +11,7 @@ pub trait CanUpdateConfig<Config>: HasAsyncErrorType {
     fn update_config(&self, config: &mut Config) -> Result<String, Self::Error>;
 }
 
+#[cgp_provider(ConfigUpdaterComponent)]
 impl<ChainDriver, Config> ConfigUpdater<ChainDriver, Config> for UseContext
 where
     ChainDriver: CanUpdateConfig<Config>,

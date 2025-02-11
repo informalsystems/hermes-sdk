@@ -5,7 +5,9 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
+use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::{
+    RelayFromChainsBuilder, RelayFromChainsBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::chain::types::aliases::{ChainIdOf, ClientIdOf};
@@ -34,6 +36,7 @@ use crate::build::traits::relay_with_batch_builder::CanBuildRelayWithBatch;
 
 pub struct BuildRelayWithBatchWorker;
 
+#[cgp_provider(RelayFromChainsBuilderComponent)]
 impl<Build, SrcTag: Async, DstTag: Async, Relay, SrcChain, DstChain>
     RelayFromChainsBuilder<Build, SrcTag, DstTag> for BuildRelayWithBatchWorker
 where

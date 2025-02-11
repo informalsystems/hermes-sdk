@@ -2,10 +2,11 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::traits::parse::ArgParser;
+use crate::traits::parse::{ArgParser, ArgParserComponent};
 
 pub struct GetField;
 
+#[cgp_provider(ArgParserComponent)]
 impl<App, Args, Tag, Field> ArgParser<App, Args, Tag> for GetField
 where
     App: HasAsyncErrorType,
@@ -25,6 +26,7 @@ where
 
 pub struct GetFieldWithTag<Tag>(pub PhantomData<Tag>);
 
+#[cgp_provider(ArgParserComponent)]
 impl<App, Args, TagA, TagB, Field> ArgParser<App, Args, TagA> for GetFieldWithTag<TagB>
 where
     App: HasAsyncErrorType,

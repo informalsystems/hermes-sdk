@@ -21,6 +21,7 @@ pub trait HasInitConnectionOptionsAt<Target: Async, Counterparty: Async>:
     ) -> &InitConnectionOptionsOf<ChainAt<Self, Target>, ChainAt<Self, Counterparty>>;
 }
 
+#[cgp_provider(InitConnectionOptionsAtComponent)]
 impl<
         Setup,
         Target: Async,

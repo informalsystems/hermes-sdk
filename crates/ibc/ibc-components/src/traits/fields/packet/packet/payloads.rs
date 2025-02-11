@@ -17,6 +17,7 @@ pub trait HasPacketPayloads<Counterparty>:
     fn packet_payloads(packet: &Self::Packet) -> &[Self::Payload];
 }
 
+#[cgp_provider(PacketPayloadsGetterComponent)]
 impl<Chain, Counterparty, Provider, Payloads> PacketPayloadsGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where

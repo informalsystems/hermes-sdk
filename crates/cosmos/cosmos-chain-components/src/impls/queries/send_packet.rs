@@ -1,9 +1,11 @@
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
-use hermes_relayer_components::chain::traits::queries::send_packets::SendPacketQuerier;
+use hermes_relayer_components::chain::traits::queries::send_packets::{
+    SendPacketQuerier, SendPacketQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
@@ -19,6 +21,7 @@ use crate::types::events::send_packet::SendPacketEvent;
 
 pub struct QueryCosmosSendPacket;
 
+#[cgp_provider(SendPacketQuerierComponent)]
 impl<Chain, Counterparty> SendPacketQuerier<Chain, Counterparty> for QueryCosmosSendPacket
 where
     Chain: HasIbcChainTypes<

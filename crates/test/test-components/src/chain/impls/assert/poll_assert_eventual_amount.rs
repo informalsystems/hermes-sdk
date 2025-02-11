@@ -1,11 +1,13 @@
 use core::fmt::Debug;
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
-use crate::chain::traits::assert::eventual_amount::EventualAmountAsserter;
+use crate::chain::traits::assert::eventual_amount::{
+    EventualAmountAsserter, EventualAmountAsserterComponent,
+};
 use crate::chain::traits::assert::poll_assert::HasPollAssertDuration;
 use crate::chain::traits::queries::balance::CanQueryBalance;
 use crate::chain::traits::types::address::HasAddressType;
@@ -13,6 +15,7 @@ use crate::chain::traits::types::amount::HasAmountType;
 
 pub struct PollAssertEventualAmount;
 
+#[cgp_provider(EventualAmountAsserterComponent)]
 impl<Chain> EventualAmountAsserter<Chain> for PollAssertEventualAmount
 where
     Chain: HasRuntime

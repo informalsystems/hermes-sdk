@@ -11,6 +11,7 @@ pub trait HasPacketNonceType<Counterparty>: Async {
     type PacketNonce: Async;
 }
 
+#[cgp_provider(PacketNonceTypeComponent)]
 impl<Chain, Counterparty, Provider, PacketNonce> ProvidePacketNonceType<Chain, Counterparty>
     for WithProvider<Provider>
 where

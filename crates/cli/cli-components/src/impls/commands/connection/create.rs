@@ -16,7 +16,7 @@ use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrap
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 
 use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::CommandRunner;
+use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::{CanProduceOutput, HasOutputType};
 use crate::traits::parse::CanParseArg;
 
@@ -57,6 +57,7 @@ pub struct CreateConnectionArgs {
     counterparty_client_id: String,
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
     for RunCreateConnectionCommand
 where

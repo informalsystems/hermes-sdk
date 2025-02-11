@@ -13,6 +13,7 @@ pub trait CanModifyCosmosSdkConfig: HasAsyncErrorType {
     fn modify_cosmos_sdk_config(&self, cosmos_sdk_config: &mut Value) -> Result<(), Self::Error>;
 }
 
+#[cgp_provider(CosmosSdkConfigModifierComponent)]
 impl<Bootstrap, Modifier> CosmosSdkConfigModifier<Bootstrap> for UseContext
 where
     Bootstrap:

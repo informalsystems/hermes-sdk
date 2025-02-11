@@ -104,6 +104,7 @@ pub trait CanBuildChannelOpenConfirmMessage<Counterparty>:
     ) -> Result<Self::Message, Self::Error>;
 }
 
+#[cgp_provider(ChannelOpenInitMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate> ChannelOpenInitMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -131,6 +132,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenTryMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate> ChannelOpenTryMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -158,6 +160,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenAckMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate> ChannelOpenAckMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -188,6 +191,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenConfirmMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate>
     ChannelOpenConfirmMessageBuilder<Chain, Counterparty> for UseDelegate<Components>
 where

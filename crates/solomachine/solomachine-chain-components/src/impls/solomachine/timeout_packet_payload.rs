@@ -1,5 +1,6 @@
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
+use hermes_cosmos_relayer::presets::chain::TimeoutUnorderedPacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -18,6 +19,7 @@ use crate::types::sign_data::SolomachineSignData;
 
 pub struct BuildSolomachineTimeoutPacketPayload;
 
+#[cgp_provider(TimeoutUnorderedPacketPayloadBuilderComponent)]
 impl<Chain, Counterparty> TimeoutUnorderedPacketPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineTimeoutPacketPayload
 where

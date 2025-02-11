@@ -3,11 +3,14 @@ use std::path::Path;
 
 use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::fs::read_file::FileAsStringReader;
+use hermes_runtime_components::traits::fs::read_file::{
+    FileAsStringReader, FileAsStringReaderComponent,
+};
 use tokio::fs::read_to_string;
 
 pub struct TokioReadFileAsString;
 
+#[cgp_provider(FileAsStringReaderComponent)]
 impl<Runtime> FileAsStringReader<Runtime> for TokioReadFileAsString
 where
     Runtime: HasFilePathType + CanRaiseAsyncError<IoError>,

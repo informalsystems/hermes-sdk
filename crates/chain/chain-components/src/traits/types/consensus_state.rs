@@ -28,6 +28,7 @@ where
     fn consensus_state_timestamp(consensus_state: &Self::ConsensusState) -> Counterparty::Time;
 }
 
+#[cgp_provider(ConsensusStateFieldComponent)]
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateFieldGetter<Chain, Counterparty>
     for UseDelegate<Components>
 where

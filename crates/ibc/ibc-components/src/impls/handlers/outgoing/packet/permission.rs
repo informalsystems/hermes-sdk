@@ -5,13 +5,14 @@ use cgp::prelude::*;
 
 use crate::traits::fields::caller::HasCaller;
 use crate::traits::fields::payload::header::HasPayloadHeader;
-use crate::traits::handlers::outgoing::packet::PacketSender;
+use crate::traits::handlers::outgoing::packet::{PacketSender, PacketSenderComponent};
 use crate::traits::handlers::outgoing::permission::CanCheckSendPayloadPermission;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::packet::packet::HasPacketType;
 
 pub struct CheckSendPayloadPermission<InHandler>(pub PhantomData<InHandler>);
 
+#[cgp_provider(PacketSenderComponent)]
 #[async_trait]
 impl<Chain, Counterparty, InHandler> PacketSender<Chain, Counterparty>
     for CheckSendPayloadPermission<InHandler>
