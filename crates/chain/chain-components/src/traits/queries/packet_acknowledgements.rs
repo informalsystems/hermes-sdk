@@ -1,7 +1,6 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
@@ -12,7 +11,7 @@ use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 }]
 #[async_trait]
 pub trait CanQueryPacketAcknowledgements<Counterparty>:
-    HasHeightType + HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasAsyncErrorType
+    HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasSequenceType<Self>,
 {
