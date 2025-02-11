@@ -1,6 +1,5 @@
 use core::fmt;
 
-use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::Sequence;
 use serde::Serialize;
 
@@ -49,42 +48,5 @@ impl CollatedPendingPackets {
                 .collated()
                 .collect(),
         }
-    }
-}
-
-#[derive(Serialize, Debug)]
-pub struct PacketSequences {
-    pub height: Height,
-    pub sequences: Vec<u64>,
-}
-
-impl PacketSequences {
-    pub fn new(height: Height, sequences: Vec<Sequence>) -> Self {
-        Self {
-            height,
-            sequences: sequences.into_iter().map(u64::from).collect(),
-        }
-    }
-
-    pub fn collated(self) -> CollatedPacketSequences {
-        CollatedPacketSequences {
-            height: self.height,
-            sequences: self.sequences.into_iter().collated().collect(),
-        }
-    }
-}
-
-#[derive(Serialize)]
-pub struct CollatedPacketSequences {
-    pub height: Height,
-    pub sequences: Vec<Collated<u64>>,
-}
-
-impl fmt::Debug for CollatedPacketSequences {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("PacketSequences")
-            .field("height", &self.height)
-            .field("sequences", &self.sequences)
-            .finish()
     }
 }

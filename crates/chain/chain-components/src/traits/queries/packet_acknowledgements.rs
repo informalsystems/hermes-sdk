@@ -25,5 +25,5 @@ where
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,
         sequences: &[Counterparty::Sequence],
-    ) -> Result<Option<(Vec<Counterparty::Sequence>, Self::Height)>, Self::Error>;
+    ) -> Result<Option<Vec<Counterparty::Sequence>>, Self::Error>;
 }

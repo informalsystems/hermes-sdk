@@ -1,7 +1,6 @@
 use std::collections::HashSet;
 
 use cgp::prelude::*;
-use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::{
     PacketAcknowledgementsQuerier, PacketAcknowledgementsQuerierComponent,
 };
@@ -44,7 +43,7 @@ where
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,
         sequences: &[Counterparty::Sequence],
-    ) -> Result<Option<(Vec<Counterparty::Sequence>, Chain::Height)>, Chain::Error> {
+    ) -> Result<Option<Vec<Counterparty::Sequence>>, Chain::Error> {
         let mut client = ChannelQueryClient::connect(
             Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,
         )
@@ -83,12 +82,6 @@ where
         response_acks.retain(|s| commit_set.contains(s));
         response_acks.sort_unstable();
 
-        let raw_height = response
-            .height
-            .ok_or_else(|| Chain::raise_error(eyre!("missing height in response")))?;
-
-        let height = Height::try_from(raw_height).map_err(Chain::raise_error)?;
-
-        Ok(Some((response_acks, height)))
+        Ok(Some(response_acks))
     }
 }

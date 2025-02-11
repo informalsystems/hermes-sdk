@@ -210,7 +210,7 @@ impl QueryPendingPackets {
         )
         .await?;
 
-        let unreceived_acknowledgement_sequences = if let Some((acks_on_counterparty, _)) =
+        let unreceived_acknowledgement_sequences = if let Some(acks_on_counterparty) =
             acks_and_height_on_counterparty
         {
             <CosmosChain as CanQueryUnreceivedAcksSequences<CosmosChain>>::query_unreceived_acknowledgments_sequences(
@@ -255,7 +255,7 @@ impl QueryPendingPackets {
         )
         .await?;
 
-        let unreceived_acknowledgement_sequences = if let Some((acks_on_counterparty, _)) =
+        let unreceived_acknowledgement_sequences = if let Some(acks_on_counterparty) =
             acks_and_height_on_counterparty
         {
             <CosmosChain as CanQueryUnreceivedAcksSequences<CosmosChain>>::query_unreceived_acknowledgments_sequences(

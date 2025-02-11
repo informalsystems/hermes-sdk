@@ -124,7 +124,7 @@ fn packet_ack_test() -> Result<(), Error> {
         .await?;
 
         assert!(acks_and_height_on_counterparty.is_some());
-        assert!(acks_and_height_on_counterparty.unwrap().0.is_empty());
+        assert!(acks_and_height_on_counterparty.unwrap().is_empty());
 
         <Result<(), Error>>::Ok(())
     })?;
