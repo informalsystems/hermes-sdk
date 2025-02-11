@@ -182,7 +182,7 @@ impl QueryPendingPackets {
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
 
         // Retrieve source Chain summary
-        let (commitment_sequences, _) =
+        let commitment_sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &chain,
                 &channel_id,
@@ -230,7 +230,7 @@ impl QueryPendingPackets {
         };
 
         // Retrieve destination chain summary
-        let (commitment_sequences, _) =
+        let commitment_sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &counterparty_chain,
                 counterparty_channel_id,

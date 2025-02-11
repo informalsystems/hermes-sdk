@@ -1,6 +1,7 @@
 use alloc::boxed::Box;
 
 use cgp::prelude::*;
+use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -71,8 +72,9 @@ impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
     Relay: Clone + HasRuntime + HasRelayChains + CanRaiseRelayChainErrors,
     Relay::DstChain: CanQueryUnreceivedPacketSequences<Relay::SrcChain>,
-    Relay::SrcChain:
-        CanQueryPacketCommitments<Relay::DstChain> + CanQuerySendPackets<Relay::DstChain>,
+    Relay::SrcChain: CanQueryChainHeight
+        + CanQueryPacketCommitments<Relay::DstChain>
+        + CanQuerySendPackets<Relay::DstChain>,
     Relay::Runtime: CanRunConcurrentTasks,
     RelayPacketTask<Relay>: Task,
 {
@@ -86,7 +88,12 @@ where
         let dst_chain = relay.dst_chain();
         let src_chain = relay.src_chain();
 
-        let (commitment_sequences, height) = src_chain
+        let height = src_chain
+            .query_chain_height()
+            .await
+            .map_err(Relay::raise_error)?;
+
+        let commitment_sequences = src_chain
             .query_packet_commitments(src_channel_id, src_port_id)
             .await
             .map_err(Relay::raise_error)?;

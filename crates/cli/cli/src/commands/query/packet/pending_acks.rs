@@ -124,7 +124,7 @@ impl QueryPendingAcks {
         let counterparty_chain_id = client_state.chain_id();
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
 
-        let (commitment_sequences, _) =
+        let commitment_sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &chain,
                 &channel_id,
