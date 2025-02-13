@@ -3,7 +3,6 @@ use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
-use hermes_async_runtime_components::task::types::future_task::FutureTask;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
@@ -15,10 +14,10 @@ use hermes_relayer_components::multi::traits::birelay_at::{
 };
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
-use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_test_components::relay_driver::run::{
     RelayerBackgroundRunner, RelayerBackgroundRunnerComponent,
 };
+use tokio::task::AbortHandle;
 
 #[derive(HasField)]
 pub struct CosmosRelayDriver {
@@ -53,17 +52,26 @@ delegate_components! {
 
 #[cgp_provider(RelayerBackgroundRunnerComponent)]
 impl RelayerBackgroundRunner<CosmosRelayDriver> for CosmosRelayDriverComponents {
-    type RunHandle<'a> = ();
+    type RunHandle<'a> = AbortOnDrop;
 
-    async fn run_relayer_in_background(relay_driver: &CosmosRelayDriver) -> Result<(), Error> {
+    async fn run_relayer_in_background(
+        relay_driver: &CosmosRelayDriver,
+    ) -> Result<AbortOnDrop, Error> {
         let birelay = relay_driver.birelay.clone();
-        let runtime = &relay_driver.birelay.runtime;
 
-        runtime.spawn_task(FutureTask::new(async move {
+        let handle = tokio::spawn(async move {
             let _ = birelay.run().await;
-        }));
+        });
 
-        Ok(())
+        Ok(AbortOnDrop(handle.abort_handle()))
+    }
+}
+
+pub struct AbortOnDrop(pub AbortHandle);
+
+impl Drop for AbortOnDrop {
+    fn drop(&mut self) {
+        self.0.abort();
     }
 }
 
