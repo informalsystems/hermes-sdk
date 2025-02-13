@@ -1,5 +1,6 @@
 pub mod ack_packets;
 pub mod block;
+pub mod block_events;
 pub mod chain_status;
 pub mod channel_end;
 pub mod client_state;

@@ -20,7 +20,6 @@ where
         counterparty_channel_id: &Counterparty::ChannelId,
         counterparty_port_id: &Counterparty::PortId,
         sequences: &[Chain::Sequence],
-        height: &Chain::Height,
     ) -> Result<Vec<Chain::OutgoingPacket>, Chain::Error> {
         let send_packets = stream::iter(sequences)
             // TODO: use `flat_map_unordered`
@@ -31,7 +30,6 @@ where
                     counterparty_channel_id,
                     counterparty_port_id,
                     sequence,
-                    height,
                 )
             })
             .try_collect::<Vec<_>>()

@@ -182,7 +182,7 @@ impl QueryPendingPackets {
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
 
         // Retrieve source Chain summary
-        let (commitment_sequences, _) =
+        let commitment_sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &chain,
                 &channel_id,
@@ -210,7 +210,7 @@ impl QueryPendingPackets {
         )
         .await?;
 
-        let unreceived_acknowledgement_sequences = if let Some((acks_on_counterparty, _)) =
+        let unreceived_acknowledgement_sequences = if let Some(acks_on_counterparty) =
             acks_and_height_on_counterparty
         {
             <CosmosChain as CanQueryUnreceivedAcksSequences<CosmosChain>>::query_unreceived_acknowledgments_sequences(
@@ -230,7 +230,7 @@ impl QueryPendingPackets {
         };
 
         // Retrieve destination chain summary
-        let (commitment_sequences, _) =
+        let commitment_sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &counterparty_chain,
                 counterparty_channel_id,
@@ -255,7 +255,7 @@ impl QueryPendingPackets {
         )
         .await?;
 
-        let unreceived_acknowledgement_sequences = if let Some((acks_on_counterparty, _)) =
+        let unreceived_acknowledgement_sequences = if let Some(acks_on_counterparty) =
             acks_and_height_on_counterparty
         {
             <CosmosChain as CanQueryUnreceivedAcksSequences<CosmosChain>>::query_unreceived_acknowledgments_sequences(

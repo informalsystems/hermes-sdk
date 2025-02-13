@@ -6,6 +6,9 @@ pub use hermes_chain_type_components::traits::types::message_response::MessageRe
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
+use hermes_relayer_components::chain::impls::queries::block_events::{
+    RetryQueryBlockEvents, WaitBlockHeightAndQueryEvents,
+};
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 pub use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 pub use hermes_relayer_components::chain::traits::extract_data::{
@@ -52,6 +55,7 @@ pub use hermes_relayer_components::chain::traits::queries::ack_packets::{
     AckPacketQuerierComponent, AckPacketsQuerierComponent,
 };
 pub use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
+pub use hermes_relayer_components::chain::traits::queries::block_events::BlockEventsQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
@@ -156,6 +160,7 @@ use crate::impls::queries::abci::QueryAbci;
 use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
 use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
+use crate::impls::queries::block_events::QueryCosmosBlockEvents;
 use crate::impls::queries::chain_id::QueryChainIdFromAbci;
 use crate::impls::queries::chain_status::QueryCosmosChainStatus;
 use crate::impls::queries::channel_end::QueryCosmosChannelEndFromAbci;
@@ -328,6 +333,12 @@ cgp_preset! {
             ProvideCosmosInitChannelOptionsType,
         BlockQuerierComponent:
             QueryCometBlock,
+        BlockEventsQuerierComponent:
+            RetryQueryBlockEvents<
+                5,
+                WaitBlockHeightAndQueryEvents<
+                    QueryCosmosBlockEvents
+                >>,
         AbciQuerierComponent:
             QueryAbci,
         UnbondingPeriodQuerierComponent:

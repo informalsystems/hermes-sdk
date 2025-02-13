@@ -1,11 +1,10 @@
 use std::collections::HashSet;
 
 use cgp::prelude::*;
-use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::{
     PacketAcknowledgementsQuerier, PacketAcknowledgementsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasIbcChainTypes, HasSequenceType};
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc::core::client::types::Height;
@@ -37,14 +36,14 @@ where
         + CanRaiseAsyncError<DecodingError>
         + CanRaiseAsyncError<Status>
         + CanRaiseAsyncError<eyre::Report>,
-    Counterparty: HasIbcChainTypes<Chain, Sequence = Sequence, Height = Height>,
+    Counterparty: HasSequenceType<Chain, Sequence = Sequence>,
 {
     async fn query_packet_acknowlegements(
         chain: &Chain,
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,
         sequences: &[Counterparty::Sequence],
-    ) -> Result<Option<(Vec<Counterparty::Sequence>, Chain::Height)>, Chain::Error> {
+    ) -> Result<Option<Vec<Counterparty::Sequence>>, Chain::Error> {
         let mut client = ChannelQueryClient::connect(
             Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,
         )
@@ -83,12 +82,6 @@ where
         response_acks.retain(|s| commit_set.contains(s));
         response_acks.sort_unstable();
 
-        let raw_height = response
-            .height
-            .ok_or_else(|| Chain::raise_error(eyre!("missing height in response")))?;
-
-        let height = Height::try_from(raw_height).map_err(Chain::raise_error)?;
-
-        Ok(Some((response_acks, height)))
+        Ok(Some(response_acks))
     }
 }

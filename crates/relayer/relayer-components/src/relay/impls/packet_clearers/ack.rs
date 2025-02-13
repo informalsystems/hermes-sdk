@@ -3,6 +3,7 @@ use alloc::boxed::Box;
 use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
+use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -74,8 +75,9 @@ where
 impl<Relay> PacketClearer<Relay> for ClearAckPackets
 where
     Relay: Clone + HasRuntime + HasRelayChains + CanRaiseRelayChainErrors + HasLogger,
-    Relay::DstChain:
-        CanQueryAckPackets<Relay::SrcChain> + CanQueryPacketAcknowledgements<Relay::SrcChain>,
+    Relay::DstChain: CanQueryChainHeight
+        + CanQueryAckPackets<Relay::SrcChain>
+        + CanQueryPacketAcknowledgements<Relay::SrcChain>,
     Relay::SrcChain: CanQueryPacketCommitments<Relay::DstChain>
         + CanQueryUnreceivedAcksSequences<Relay::DstChain>,
     Relay::Runtime: CanRunConcurrentTasks,
@@ -91,7 +93,7 @@ where
         let dst_chain = relay.dst_chain();
         let src_chain = relay.src_chain();
 
-        let (commitment_sequences, _) = src_chain
+        let commitment_sequences = src_chain
             .query_packet_commitments(src_channel_id, src_port_id)
             .await
             .map_err(Relay::raise_error)?;
@@ -101,7 +103,7 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        if let Some((acks_on_counterparty, height)) = acks_and_height_on_counterparty {
+        if let Some(acks_on_counterparty) = acks_and_height_on_counterparty {
             let unreceived_ack_sequences = src_chain
                 .query_unreceived_acknowledgments_sequences(
                     src_channel_id,
@@ -118,8 +120,12 @@ where
                     dst_channel_id,
                     dst_port_id,
                     &unreceived_ack_sequences,
-                    &height,
                 )
+                .await
+                .map_err(Relay::raise_error)?;
+
+            let height = dst_chain
+                .query_chain_height()
                 .await
                 .map_err(Relay::raise_error)?;
 

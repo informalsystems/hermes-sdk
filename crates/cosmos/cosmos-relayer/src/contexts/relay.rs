@@ -11,6 +11,7 @@ use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::components::default::relay::AutoRelayerComponent;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainAt, ChainGetterAtComponent, ChainTypeAtComponent,
@@ -22,7 +23,6 @@ use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, PacketMutexOf,
 };
 use hermes_relayer_components::relay::impls::selector::SelectRelayAToB;
-use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelay;
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{
@@ -37,7 +37,7 @@ use hermes_relayer_components_extra::components::extra::relay::{
 };
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeOf, RuntimeTypeComponent,
+    HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeComponent,
 };
 use ibc::core::host::types::identifiers::ClientId;
 
@@ -177,8 +177,9 @@ impl HasComponents for CosmosRelay {
 
 pub trait CanUseCosmosRelay:
     HasRelayClientIds
-    + CanAutoRelay<SourceTarget>
-    + CanAutoRelay<DestinationTarget>
+    + HasRuntime
+    + CanUseComponent<AutoRelayerComponent, SourceTarget>
+    + CanUseComponent<AutoRelayerComponent, DestinationTarget>
     + HasSourceTargetChainTypes
     + HasDestinationTargetChainTypes
     + CanCreateClient<SourceTarget>

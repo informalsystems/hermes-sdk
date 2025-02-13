@@ -36,10 +36,6 @@ where
         counterparty_channel_id: &Self::ChannelId,
         counterparty_port_id: &Self::PortId,
         sequences: &[Counterparty::Sequence],
-        // The height is given to query the packets from a specific height.
-        // This height should be the same as the query height from the
-        // `CanQueryPacketAcknowledgements` made on the same chain.
-        height: &Self::Height,
     ) -> Result<
         Vec<(
             Counterparty::OutgoingPacket,
@@ -75,7 +71,6 @@ where
         counterparty_channel_id: &Self::ChannelId,
         counterparty_port_id: &Self::PortId,
         sequence: &Counterparty::Sequence,
-        height: &Self::Height,
     ) -> Result<
         (
             Counterparty::OutgoingPacket,

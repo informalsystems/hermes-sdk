@@ -33,10 +33,6 @@ pub trait CanQuerySendPackets<Counterparty>:
         counterparty_channel_id: &ChannelIdOf<Counterparty, Self>,
         counterparty_port_id: &PortIdOf<Counterparty, Self>,
         sequences: &[Self::Sequence],
-        // The height is given to query the packets from a specific height.
-        // This height should be the same as the query height from the
-        // `CanQueryPacketCommitments` made on the same chain.
-        height: &Self::Height,
     ) -> Result<Vec<Self::OutgoingPacket>, Self::Error>;
 }
 
@@ -63,6 +59,5 @@ pub trait CanQuerySendPacket<Counterparty>:
         counterparty_channel_id: &ChannelIdOf<Counterparty, Self>,
         counterparty_port_id: &PortIdOf<Counterparty, Self>,
         sequence: &Self::Sequence,
-        height: &Self::Height,
     ) -> Result<Self::OutgoingPacket, Self::Error>;
 }

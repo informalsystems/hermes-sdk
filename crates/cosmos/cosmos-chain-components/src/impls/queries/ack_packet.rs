@@ -46,7 +46,6 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_port_id: &PortId,
         sequence: &Sequence,
-        _height: &Height,
     ) -> Result<(Packet, WriteAckEvent), Chain::Error> {
         // The ack packet are queried from the destination chain, so the destination
         // channel id and port id are the counterparty channel id and counterparty port id.

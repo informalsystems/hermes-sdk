@@ -23,7 +23,6 @@ where
         counterparty_channel_id: &Chain::ChannelId,
         counterparty_port_id: &Chain::PortId,
         sequences: &[Counterparty::Sequence],
-        height: &Chain::Height,
     ) -> Result<
         Vec<(
             Counterparty::OutgoingPacket,
@@ -40,7 +39,6 @@ where
                     counterparty_channel_id,
                     counterparty_port_id,
                     sequence,
-                    height,
                 )
             })
             .try_collect::<Vec<_>>()
