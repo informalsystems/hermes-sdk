@@ -16,9 +16,7 @@ use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::RelayAt;
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelayWithHeights;
 use hermes_relayer_components::relay::traits::chains::HasRelayChainTypes;
-use hermes_relayer_components::relay::traits::target::{
-    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
-};
+use hermes_relayer_components::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
@@ -79,14 +77,10 @@ where
     BiRelay: HasTwoWayRelay,
     RelayAt<BiRelay, Index<0>, Index<1>>: HasRelayChainTypes<SrcChain = ChainA, DstChain = ChainB>
         + HasSourceTargetChainTypes
-        + HasDestinationTargetChainTypes
-        + CanAutoRelayWithHeights<SourceTarget>
-        + CanAutoRelayWithHeights<DestinationTarget>,
+        + CanAutoRelayWithHeights<SourceTarget>,
     RelayAt<BiRelay, Index<1>, Index<0>>: HasRelayChainTypes<SrcChain = ChainB, DstChain = ChainA>
         + HasSourceTargetChainTypes
-        + HasDestinationTargetChainTypes
-        + CanAutoRelayWithHeights<SourceTarget>
-        + CanAutoRelayWithHeights<DestinationTarget>,
+        + CanAutoRelayWithHeights<SourceTarget>,
     Logger: CanLogMessage,
     Driver::Error: From<ChainA::Error>
         + From<ChainB::Error>
