@@ -180,55 +180,67 @@ where
             assert_eq!(balance_b2, balance_b1);
         }
 
-        // let wallet_a2 = chain_driver_a.wallet_at(UserWallet, PhantomData::<Index<1>>);
+        let height_b1 = chain_b.query_chain_height().await?;
 
-        // let address_a2 = ChainA::wallet_address(wallet_a2);
+        let wallet_a2 = chain_driver_a.wallet_at(UserWallet, PhantomData::<Index<1>>);
 
-        // let b_to_a_amount = chain_driver_b.random_amount(500, &balance_b1).await;
+        let address_a2 = ChainA::wallet_address(wallet_a2);
 
-        // logger
-        //     .log_message(&format!(
-        //         "Sending IBC transfer from chain {} to chain {} with amount of {}",
-        //         chain_id_b, chain_id_a, b_to_a_amount,
-        //     ))
-        //     .await;
+        let b_to_a_amount = chain_driver_b.random_amount(500, &balance_b1).await;
 
-        // chain_b
-        //     .ibc_transfer_token(
-        //         channel_id_b,
-        //         port_id_b,
-        //         wallet_b,
-        //         address_a2,
-        //         &b_to_a_amount,
-        //         &chain_b.default_memo(),
-        //     )
-        //     .await?;
+        logger
+            .log_message(&format!(
+                "Sending IBC transfer from chain {} to chain {} with amount of {}",
+                chain_id_b, chain_id_a, b_to_a_amount,
+            ))
+            .await;
 
-        // let balance_b2 = ChainB::subtract_amount(&balance_b1, &b_to_a_amount)?;
+        chain_b
+            .ibc_transfer_token(
+                channel_id_b,
+                port_id_b,
+                wallet_b,
+                address_a2,
+                &b_to_a_amount,
+                &chain_b.default_memo(),
+            )
+            .await?;
 
-        // let denom_b = ChainB::amount_denom(&balance_b1);
+        let balance_b2 = ChainB::subtract_amount(&balance_b1, &b_to_a_amount)?;
 
-        // let balance_b3 = chain_b.query_balance(address_b, denom_b).await?;
+        let denom_b = ChainB::amount_denom(&balance_b1);
 
-        // assert_eq!(balance_b2, balance_b3);
+        let balance_b3 = chain_b.query_balance(address_b, denom_b).await?;
 
-        // let balance_a4 = chain_a.query_balance(address_a2, denom_a).await?;
+        assert_eq!(balance_b2, balance_b3);
 
-        // let balance_a5 = ChainA::add_amount(
-        //     &balance_a4,
-        //     &ChainA::transmute_counterparty_amount(&b_to_a_amount, denom_a),
-        // )?;
+        let balance_a4 = chain_a.query_balance(address_a2, denom_a).await?;
 
-        // chain_a
-        //     .assert_eventual_amount(address_a2, &balance_a5)
-        //     .await?;
+        let balance_a5 = ChainA::add_amount(
+            &balance_a4,
+            &ChainA::transmute_counterparty_amount(&b_to_a_amount, denom_a),
+        )?;
 
-        // logger
-        //     .log_message(&format!(
-        //         "successfully performed reverse IBC transfer from chain {} back to chain {}",
-        //         chain_id_b, chain_id_a,
-        //     ))
-        //     .await;
+        let height_b2 = chain_b.query_chain_height().await?;
+
+        relay_b_to_a
+            .auto_relay_with_heights(SourceTarget, &height_b1, Some(&height_b2))
+            .await?;
+
+        {
+            let balance_a6 = chain_a
+                .query_balance(address_a2, ChainA::amount_denom(&balance_a5))
+                .await?;
+
+            assert_eq!(balance_a6, balance_a5);
+        }
+
+        logger
+            .log_message(&format!(
+                "successfully performed reverse IBC transfer from chain {} back to chain {}",
+                chain_id_b, chain_id_a,
+            ))
+            .await;
 
         Ok(())
     }
