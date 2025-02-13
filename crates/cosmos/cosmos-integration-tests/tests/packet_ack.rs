@@ -29,7 +29,7 @@ fn packet_ack_test() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        setup.relay_driver.run_relayer_in_background().await?;
+        let _relayer = setup.relay_driver.run_relayer_in_background().await?;
 
         let balance_a = setup
             .chain_driver_a

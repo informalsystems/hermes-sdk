@@ -51,7 +51,7 @@ fn packet_filter_test() -> Result<(), Error> {
             balance_a.denom.clone(),
         );
 
-        setup.relay_driver.run_relayer_in_background().await?;
+        let _relayer = setup.relay_driver.run_relayer_in_background().await?;
 
         <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
             &setup.chain_driver_a.chain,
@@ -115,7 +115,7 @@ fn no_packet_filter_test() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        setup.relay_driver.run_relayer_in_background().await?;
+        let _relayer = setup.relay_driver.run_relayer_in_background().await?;
 
         let balance_a = setup
             .chain_driver_a
