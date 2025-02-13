@@ -2,13 +2,13 @@ use alloc::boxed::Box;
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
 use hermes_chain_components::traits::queries::block_events::CanQueryBlockEvents;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::types::event::HasEventType;
 use hermes_chain_components::traits::types::height::CanIncrementHeight;
 use hermes_chain_components::types::aliases::EventOf;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 use crate::components::default::relay::AutoRelayerComponent;

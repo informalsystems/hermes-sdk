@@ -4,7 +4,7 @@ use cgp::prelude::*;
 use crate::error::impls::retry::ReturnMaxRetry;
 pub use crate::error::traits::retry::MaxErrorRetryGetterComponent;
 use crate::relay::impls::auto_relayers::both_targets::RelayBothTargets;
-use crate::relay::impls::auto_relayers::event_subscription::RelayWithEventSubscription;
+use crate::relay::impls::auto_relayers::poll_event::RelayWithPolledEvents;
 use crate::relay::impls::channel::open_ack::RelayChannelOpenAck;
 use crate::relay::impls::channel::open_confirm::RelayChannelOpenConfirm;
 use crate::relay::impls::channel::open_handshake::RelayChannelOpenHandshake;
@@ -61,7 +61,7 @@ cgp_preset! {
         TimeoutUnorderedPacketRelayerComponent: BaseTimeoutUnorderedPacketRelayer,
         EventRelayerComponent: PacketEventRelayer,
         RunnerComponent: RelayBothTargets,
-        AutoRelayerComponent: RelayWithEventSubscription,
+        AutoRelayerComponent: RelayWithPolledEvents,
         ClientCreatorComponent: CreateClientWithChains,
         PacketClearerComponent: ClearAllPackets,
         ChannelInitializerComponent: InitializeChannel,
