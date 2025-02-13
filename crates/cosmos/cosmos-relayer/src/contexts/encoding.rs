@@ -1,6 +1,8 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::encoding::components::*;
+use hermes_cosmos_chain_components::encoding::components::{
+    CosmosClientEncodingComponents, IsCosmosClientEncodingComponents,
+};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
@@ -27,23 +29,8 @@ use prost_types::Any;
 
 use crate::impls::error::HandleCosmosError;
 
+#[cgp_context(CosmosEncodingContextComponents: CosmosClientEncodingComponents)]
 pub struct CosmosEncoding;
-
-pub struct CosmosEncodingContextComponents;
-
-impl HasComponents for CosmosEncoding {
-    type Components = CosmosEncodingContextComponents;
-}
-
-with_cosmos_client_encoding_components! {
-    | Components | {
-        delegate_components! {
-            CosmosEncodingContextComponents {
-                Components: CosmosClientEncodingComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     CosmosEncodingContextComponents {

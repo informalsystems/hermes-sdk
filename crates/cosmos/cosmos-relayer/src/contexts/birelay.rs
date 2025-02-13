@@ -18,31 +18,12 @@ use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::error::HandleCosmosError;
 
+#[cgp_context(CosmosBiRelayComponents: DefaultBiRelayComponents)]
 #[derive(HasField, Clone)]
 pub struct CosmosBiRelay {
     pub runtime: HermesRuntime,
     pub relay_a_to_b: CosmosRelay,
     pub relay_b_to_a: CosmosRelay,
-}
-
-pub struct CosmosBiRelayComponents;
-
-impl HasComponents for CosmosBiRelay {
-    type Components = CosmosBiRelayComponents;
-}
-
-impl<Component> DelegateComponent<Component> for CosmosBiRelayComponents
-where
-    Self: IsDefaultBiRelayComponents<Component>,
-{
-    type Delegate = DefaultBiRelayComponents;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CosmosBiRelayComponents
-where
-    Self: IsDefaultBiRelayComponents<Name>,
-    DefaultBiRelayComponents: IsProviderFor<Name, Context, Params>,
-{
 }
 
 delegate_components! {

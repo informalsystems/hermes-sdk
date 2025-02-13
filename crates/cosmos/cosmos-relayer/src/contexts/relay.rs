@@ -44,6 +44,7 @@ use ibc::core::host::types::identifiers::ClientId;
 use crate::contexts::chain::CosmosChain;
 use crate::impls::error::HandleCosmosError;
 
+#[cgp_context(CosmosRelayComponents: ExtraRelayPreset)]
 #[derive(Clone)]
 pub struct CosmosRelay {
     pub fields: Arc<dyn HasCosmosRelayFields>,
@@ -106,8 +107,6 @@ impl CosmosRelay {
     }
 }
 
-pub struct CosmosRelayComponents;
-
 delegate_components! {
     CosmosRelayComponents {
         [
@@ -155,24 +154,6 @@ delegate_components! {
         ]:
             SelectRelayAToB,
     }
-}
-
-impl<Name> DelegateComponent<Name> for CosmosRelayComponents
-where
-    Self: IsExtraRelayPreset<Name>,
-{
-    type Delegate = ExtraRelayPreset;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CosmosRelayComponents
-where
-    Self: IsExtraRelayPreset<Name>,
-    ExtraRelayPreset: IsProviderFor<Name, Context, Params>,
-{
-}
-
-impl HasComponents for CosmosRelay {
-    type Components = CosmosRelayComponents;
 }
 
 pub trait CanUseCosmosRelay:
