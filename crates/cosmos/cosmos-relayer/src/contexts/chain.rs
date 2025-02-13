@@ -432,6 +432,7 @@ pub trait CanUseCosmosChain:
     + CanExtractFromEvent<CosmosCreateClientEvent>
     + CanExtractFromMessageResponse<CosmosCreateClientEvent>
     + CanUseComponent<ChainStatusQuerierComponent>
+    + CanUseComponent<BlockEventsQuerierComponent>
 {
 }
 
