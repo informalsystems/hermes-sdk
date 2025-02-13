@@ -6,6 +6,9 @@ pub use hermes_chain_type_components::traits::types::message_response::MessageRe
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
+use hermes_relayer_components::chain::impls::queries::block_events::{
+    RetryQueryBlockEvents, WaitBlockHeightAndQueryEvents,
+};
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 pub use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 pub use hermes_relayer_components::chain::traits::extract_data::{
@@ -331,7 +334,11 @@ cgp_preset! {
         BlockQuerierComponent:
             QueryCometBlock,
         BlockEventsQuerierComponent:
-            QueryCosmosBlockEvents,
+            RetryQueryBlockEvents<
+                5,
+                WaitBlockHeightAndQueryEvents<
+                    QueryCosmosBlockEvents
+                >>,
         AbciQuerierComponent:
             QueryAbci,
         UnbondingPeriodQuerierComponent:
