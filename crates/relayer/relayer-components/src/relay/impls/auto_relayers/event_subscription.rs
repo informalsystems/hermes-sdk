@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::types::aliases::{EventOf, HeightOf};
+use hermes_chain_components::types::aliases::EventOf;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::stream::CanMapStream;
 use hermes_runtime_components::traits::subscription::HasSubscription;
@@ -18,7 +18,7 @@ use crate::relay::traits::target::{HasTargetChainTypes, HasTargetChains, RelayTa
 /// A one-way auto-relayer type that is responsible for listening for a
 /// particular event subscription and relaying messages to a target
 /// chain in response to those events in a concurrent fashion.
-pub struct RelayEvents;
+pub struct RelayWithEventSubscription;
 
 pub struct EventRelayerTask<Relay, Target>
 where
@@ -26,7 +26,6 @@ where
     Relay: HasTargetChainTypes<Target, TargetChain: HasHeightType + HasEventType>,
 {
     pub relay: Relay,
-    pub height: HeightOf<Relay::TargetChain>,
     pub event: EventOf<Relay::TargetChain>,
     pub phantom: PhantomData<Target>,
 }
@@ -42,7 +41,7 @@ where
 }
 
 #[cgp_provider(AutoRelayerComponent)]
-impl<Relay, Target, Runtime> AutoRelayer<Relay, Target> for RelayEvents
+impl<Relay, Target, Runtime> AutoRelayer<Relay, Target> for RelayWithEventSubscription
 where
     Target: RelayTarget,
     Relay: HasTargetChains<Target> + CanRelayEvent<Target> + HasRuntime + Clone,
@@ -59,10 +58,9 @@ where
                     let tasks = {
                         let relay = relay.clone();
 
-                        Runtime::map_stream(event_stream, move |(height, event)| {
+                        Runtime::map_stream(event_stream, move |(_height, event)| {
                             Box::new(EventRelayerTask {
                                 relay: relay.clone(),
-                                height,
                                 event,
                                 phantom: PhantomData,
                             })
