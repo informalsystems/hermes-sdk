@@ -4,22 +4,20 @@ use core::marker::PhantomData;
 use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
 use hermes_chain_components::traits::queries::block_events::CanQueryBlockEvents;
-use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::types::event::HasEventType;
 use hermes_chain_components::traits::types::height::CanIncrementHeight;
-use hermes_chain_components::types::aliases::EventOf;
+use hermes_chain_components::types::aliases::{EventOf, HeightOf};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
-use crate::components::default::relay::AutoRelayerComponent;
-use crate::relay::traits::auto_relayer::AutoRelayer;
+use crate::relay::traits::auto_relayer::{AutoRelayerWithHeights, AutoRelayerWithHeightsComponent};
 use crate::relay::traits::event_relayer::CanRelayEvent;
 use crate::relay::traits::target::{HasTargetChainTypes, HasTargetChains, RelayTarget};
 
 pub struct RelayWithPolledEvents;
 
-#[cgp_provider(AutoRelayerComponent)]
-impl<Relay, Target> AutoRelayer<Relay, Target> for RelayWithPolledEvents
+#[cgp_provider(AutoRelayerWithHeightsComponent)]
+impl<Relay, Target> AutoRelayerWithHeights<Relay, Target> for RelayWithPolledEvents
 where
     Relay: Clone
         + HasRuntime
@@ -27,17 +25,19 @@ where
         + CanRelayEvent<Target>
         + CanRaiseAsyncError<ErrorOf<Relay::TargetChain>>,
     Target: RelayTarget,
-    Relay::TargetChain: CanQueryChainHeight + CanIncrementHeight + CanQueryBlockEvents,
+    Relay::TargetChain: CanIncrementHeight + CanQueryBlockEvents,
     Relay::Runtime: CanRunConcurrentTasks,
 {
-    async fn auto_relay(relay: &Relay, _target: Target) -> Result<(), Relay::Error> {
+    async fn auto_relay_with_heights(
+        relay: &Relay,
+        _target: Target,
+        start_height: &HeightOf<Relay::TargetChain>,
+        end_height: Option<&HeightOf<Relay::TargetChain>>,
+    ) -> Result<(), Relay::Error> {
         let chain = relay.target_chain();
         let runtime = relay.runtime();
 
-        let mut height = chain
-            .query_chain_height()
-            .await
-            .map_err(Relay::raise_error)?;
+        let mut height = start_height.clone();
 
         loop {
             let events = chain
@@ -59,6 +59,12 @@ where
             runtime.run_concurrent_tasks(tasks).await;
 
             height = Relay::TargetChain::increment_height(&height).map_err(Relay::raise_error)?;
+
+            if let Some(end_height) = end_height {
+                if &height > end_height {
+                    return Ok(());
+                }
+            }
         }
     }
 }

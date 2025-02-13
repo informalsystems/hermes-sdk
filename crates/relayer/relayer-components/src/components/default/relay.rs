@@ -5,6 +5,7 @@ use crate::error::impls::retry::ReturnMaxRetry;
 pub use crate::error::traits::retry::MaxErrorRetryGetterComponent;
 use crate::relay::impls::auto_relayers::both_targets::RelayBothTargets;
 use crate::relay::impls::auto_relayers::poll_event::RelayWithPolledEvents;
+use crate::relay::impls::auto_relayers::starting_current_height::AutoRelayStartingCurrentHeight;
 use crate::relay::impls::channel::open_ack::RelayChannelOpenAck;
 use crate::relay::impls::channel::open_confirm::RelayChannelOpenConfirm;
 use crate::relay::impls::channel::open_handshake::RelayChannelOpenHandshake;
@@ -28,7 +29,9 @@ use crate::relay::impls::packet_relayers::receive::base_receive_packet::BaseRece
 use crate::relay::impls::packet_relayers::receive::skip_received_packet::SkipReceivedPacketRelayer;
 use crate::relay::impls::packet_relayers::timeout_unordered::timeout_unordered_packet::BaseTimeoutUnorderedPacketRelayer;
 use crate::relay::impls::update_client::default::DefaultTargetUpdateClientMessageBuilder;
-pub use crate::relay::traits::auto_relayer::AutoRelayerComponent;
+pub use crate::relay::traits::auto_relayer::{
+    AutoRelayerComponent, AutoRelayerWithHeightsComponent,
+};
 pub use crate::relay::traits::channel::open_ack::ChannelOpenAckRelayerComponent;
 pub use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerComponent;
 pub use crate::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
@@ -61,7 +64,8 @@ cgp_preset! {
         TimeoutUnorderedPacketRelayerComponent: BaseTimeoutUnorderedPacketRelayer,
         EventRelayerComponent: PacketEventRelayer,
         RunnerComponent: RelayBothTargets,
-        AutoRelayerComponent: RelayWithPolledEvents,
+        AutoRelayerComponent: AutoRelayStartingCurrentHeight,
+        AutoRelayerWithHeightsComponent: RelayWithPolledEvents,
         ClientCreatorComponent: CreateClientWithChains,
         PacketClearerComponent: ClearAllPackets,
         ChannelInitializerComponent: InitializeChannel,
