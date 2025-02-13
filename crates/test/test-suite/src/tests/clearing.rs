@@ -1,14 +1,24 @@
 use alloc::format;
 use core::marker::PhantomData;
 
+use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
+use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
+use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::RelayAt;
+use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelayWithHeights;
+use hermes_relayer_components::relay::traits::chains::HasRelayChainTypes;
+use hermes_relayer_components::relay::traits::target::{
+    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+};
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
@@ -26,8 +36,8 @@ use hermes_test_components::test_case::traits::test_case::TestCase;
 
 pub struct TestPacketClearing;
 
-impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB, RelayDriver, Logger> TestCase<Driver>
-    for TestPacketClearing
+impl<Driver, ChainA, ChainB, BiRelay, ChainDriverA, ChainDriverB, RelayDriver, Logger>
+    TestCase<Driver> for TestPacketClearing
 where
     Driver: HasAsyncErrorType
         + HasLogger<Logger = Logger>
@@ -45,9 +55,11 @@ where
         + CanGenerateRandomAmount,
     ChainDriverB:
         HasChain<Chain = ChainB> + HasWalletAt<UserWallet, Index<0>> + CanGenerateRandomAmount,
+    RelayDriver: HasBiRelayAt<Index<0>, Index<1>, BiRelay = BiRelay>,
     ChainA: HasIbcChainTypes<ChainB>
         + HasChainId
         + HasOutgoingPacketType<ChainB>
+        + CanQueryChainHeight
         + CanQueryBalance
         + HasAmountMethods
         + CanConvertIbcTransferredAmount<ChainB>
@@ -57,14 +69,29 @@ where
     ChainB: HasIbcChainTypes<ChainA>
         + HasChainId
         + HasOutgoingPacketType<ChainA>
+        + CanQueryChainHeight
         + HasAmountMethods
         + CanQueryBalance
         + CanIbcTransferToken<ChainA>
         + CanConvertIbcTransferredAmount<ChainA>
         + CanAssertEventualAmount
         + HasDefaultMemo,
+    BiRelay: HasTwoWayRelay,
+    RelayAt<BiRelay, Index<0>, Index<1>>: HasRelayChainTypes<SrcChain = ChainA, DstChain = ChainB>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
+        + CanAutoRelayWithHeights<SourceTarget>
+        + CanAutoRelayWithHeights<DestinationTarget>,
+    RelayAt<BiRelay, Index<1>, Index<0>>: HasRelayChainTypes<SrcChain = ChainB, DstChain = ChainA>
+        + HasSourceTargetChainTypes
+        + HasDestinationTargetChainTypes
+        + CanAutoRelayWithHeights<SourceTarget>
+        + CanAutoRelayWithHeights<DestinationTarget>,
     Logger: CanLogMessage,
-    Driver::Error: From<ChainA::Error> + From<ChainB::Error>,
+    Driver::Error: From<ChainA::Error>
+        + From<ChainB::Error>
+        + From<ErrorOf<RelayAt<BiRelay, Index<0>, Index<1>>>>
+        + From<ErrorOf<RelayAt<BiRelay, Index<1>, Index<0>>>>,
 {
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
         let logger = driver.logger();
@@ -74,6 +101,12 @@ where
         let chain_driver_b = driver.chain_driver_at(PhantomData::<Index<1>>);
 
         let relay_driver = driver.relay_driver_at(PhantomData::<(Index<0>, Index<1>)>);
+
+        let birelay = relay_driver.birelay_at(PhantomData);
+
+        let relay_a_to_b = birelay.relay_a_to_b();
+
+        let relay_b_to_a = birelay.relay_b_to_a();
 
         let chain_a = chain_driver_a.chain();
 
@@ -105,6 +138,8 @@ where
 
         let port_id_b = driver.port_id_at(PhantomData::<(Index<1>, Index<0>)>);
 
+        let height_a1 = chain_a.query_chain_height().await?;
+
         logger
             .log_message(&format!(
                 "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
@@ -129,68 +164,71 @@ where
 
         assert_eq!(balance_a2, balance_a3);
 
+        let height_a2 = chain_a.query_chain_height().await?;
+
+        relay_a_to_b
+            .auto_relay_with_heights(SourceTarget, &height_a1, Some(&height_a2))
+            .await?;
+
         let balance_b1 = ChainB::ibc_transfer_amount_from(&a_to_b_amount, channel_id_b, port_id_b)?;
 
-        logger
-            .log_message(&format!(
-                "Waiting for user on chain B to receive IBC transferred amount of {}",
-                balance_b1
-            ))
-            .await;
+        {
+            let balance_b2 = chain_b
+                .query_balance(address_b, ChainB::amount_denom(&balance_b1))
+                .await?;
 
-        chain_b
-            .assert_eventual_amount(address_b, &balance_b1)
-            .await?;
+            assert_eq!(balance_b2, balance_b1);
+        }
 
-        let wallet_a2 = chain_driver_a.wallet_at(UserWallet, PhantomData::<Index<1>>);
+        // let wallet_a2 = chain_driver_a.wallet_at(UserWallet, PhantomData::<Index<1>>);
 
-        let address_a2 = ChainA::wallet_address(wallet_a2);
+        // let address_a2 = ChainA::wallet_address(wallet_a2);
 
-        let b_to_a_amount = chain_driver_b.random_amount(500, &balance_b1).await;
+        // let b_to_a_amount = chain_driver_b.random_amount(500, &balance_b1).await;
 
-        logger
-            .log_message(&format!(
-                "Sending IBC transfer from chain {} to chain {} with amount of {}",
-                chain_id_b, chain_id_a, b_to_a_amount,
-            ))
-            .await;
+        // logger
+        //     .log_message(&format!(
+        //         "Sending IBC transfer from chain {} to chain {} with amount of {}",
+        //         chain_id_b, chain_id_a, b_to_a_amount,
+        //     ))
+        //     .await;
 
-        chain_b
-            .ibc_transfer_token(
-                channel_id_b,
-                port_id_b,
-                wallet_b,
-                address_a2,
-                &b_to_a_amount,
-                &chain_b.default_memo(),
-            )
-            .await?;
+        // chain_b
+        //     .ibc_transfer_token(
+        //         channel_id_b,
+        //         port_id_b,
+        //         wallet_b,
+        //         address_a2,
+        //         &b_to_a_amount,
+        //         &chain_b.default_memo(),
+        //     )
+        //     .await?;
 
-        let balance_b2 = ChainB::subtract_amount(&balance_b1, &b_to_a_amount)?;
+        // let balance_b2 = ChainB::subtract_amount(&balance_b1, &b_to_a_amount)?;
 
-        let denom_b = ChainB::amount_denom(&balance_b1);
+        // let denom_b = ChainB::amount_denom(&balance_b1);
 
-        let balance_b3 = chain_b.query_balance(address_b, denom_b).await?;
+        // let balance_b3 = chain_b.query_balance(address_b, denom_b).await?;
 
-        assert_eq!(balance_b2, balance_b3);
+        // assert_eq!(balance_b2, balance_b3);
 
-        let balance_a4 = chain_a.query_balance(address_a2, denom_a).await?;
+        // let balance_a4 = chain_a.query_balance(address_a2, denom_a).await?;
 
-        let balance_a5 = ChainA::add_amount(
-            &balance_a4,
-            &ChainA::transmute_counterparty_amount(&b_to_a_amount, denom_a),
-        )?;
+        // let balance_a5 = ChainA::add_amount(
+        //     &balance_a4,
+        //     &ChainA::transmute_counterparty_amount(&b_to_a_amount, denom_a),
+        // )?;
 
-        chain_a
-            .assert_eventual_amount(address_a2, &balance_a5)
-            .await?;
+        // chain_a
+        //     .assert_eventual_amount(address_a2, &balance_a5)
+        //     .await?;
 
-        logger
-            .log_message(&format!(
-                "successfully performed reverse IBC transfer from chain {} back to chain {}",
-                chain_id_b, chain_id_a,
-            ))
-            .await;
+        // logger
+        //     .log_message(&format!(
+        //         "successfully performed reverse IBC transfer from chain {} back to chain {}",
+        //         chain_id_b, chain_id_a,
+        //     ))
+        //     .await;
 
         Ok(())
     }

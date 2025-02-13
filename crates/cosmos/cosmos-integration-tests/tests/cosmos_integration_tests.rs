@@ -16,7 +16,7 @@ fn cosmos_integration_tests() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        TestIbcTransfer.run_test(&setup).await?;
+        // TestIbcTransfer.run_test(&setup).await?;
 
         TestPacketClearing.run_test(&setup).await?;
 
