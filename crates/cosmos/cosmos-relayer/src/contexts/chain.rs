@@ -12,7 +12,7 @@ use hermes_chain_type_components::traits::fields::message_response_events::HasMe
 use hermes_chain_type_components::traits::types::event::HasEventType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_cosmos_chain_components::components::client::{
-    BlockEventsQuerierComponent, ChainStatusQuerierComponent,
+    BlockEventsQuerierComponent, ChainStatusQuerierComponent, PacketIsClearedQuerierComponent,
 };
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
@@ -376,6 +376,7 @@ pub trait CanUseCosmosChain:
     + CanExtractFromMessageResponse<CosmosCreateClientEvent>
     + CanUseComponent<ChainStatusQuerierComponent>
     + CanUseComponent<BlockEventsQuerierComponent>
+    + CanUseComponent<PacketIsClearedQuerierComponent, CosmosChain>
 {
 }
 

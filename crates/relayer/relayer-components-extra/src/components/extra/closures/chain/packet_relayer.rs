@@ -21,7 +21,7 @@ use hermes_relayer_components::chain::traits::payload_builders::timeout_unordere
     CanBuildTimeoutUnorderedPacketPayload, TimeoutUnorderedPacketPayloadBuilder,
 };
 use hermes_relayer_components::chain::traits::queries::packet_is_received::{
-    CanQueryPacketIsReceived, ReceivedPacketQuerier,
+    CanQueryPacketIsReceived, PacketIsReceivedQuerier,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -82,7 +82,7 @@ where
         + HasAckPacketPayloadType<Chain>
         + HasTimeoutUnorderedPacketPayloadType<Chain>
         + HasReceivePacketPayloadType<Chain>,
-    Components: ReceivedPacketQuerier<Chain, Counterparty>
+    Components: PacketIsReceivedQuerier<Chain, Counterparty>
         + ReceivePacketPayloadBuilder<Chain, Counterparty>
         + ReceivePacketMessageBuilder<Chain, Counterparty>
         + AckPacketPayloadBuilder<Chain, Counterparty>

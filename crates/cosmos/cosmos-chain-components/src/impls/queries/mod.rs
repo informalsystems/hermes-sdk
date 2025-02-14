@@ -12,5 +12,6 @@ pub mod eip;
 pub mod packet_acknowledgement;
 pub mod packet_commitment;
 pub mod packet_receipt;
+pub mod received_ack;
 pub mod received_packet;
 pub mod write_ack_event;

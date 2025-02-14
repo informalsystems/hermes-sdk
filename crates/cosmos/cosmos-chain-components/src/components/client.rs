@@ -75,7 +75,8 @@ pub use hermes_relayer_components::chain::traits::queries::consensus_state_heigh
 pub use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
-pub use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
+pub use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerierComponent;
+pub use hermes_relayer_components::chain::traits::queries::packet_is_received::PacketIsReceivedQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
 pub use hermes_relayer_components::chain::traits::types::block::{
@@ -158,7 +159,8 @@ use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
 use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromAbci;
 use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
 use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
-use crate::impls::queries::received_packet::QueryCosmosReceivedPacket;
+use crate::impls::queries::received_ack::QueryCosmosPacketIsCleared;
+use crate::impls::queries::received_packet::QueryCosmosPacketIsReceived;
 use crate::impls::queries::write_ack_event::QueryCosmosWriteAckEvent;
 use crate::impls::relay::packet_filter::FilterPacketWithConfig;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
@@ -281,8 +283,10 @@ cgp_preset! {
         ]:
             BuildCosmosPacketMessages,
 
-        ReceivedPacketQuerierComponent:
-            QueryCosmosReceivedPacket,
+        PacketIsReceivedQuerierComponent:
+            QueryCosmosPacketIsReceived,
+        PacketIsClearedQuerierComponent:
+            QueryCosmosPacketIsCleared,
 
         PacketCommitmentQuerierComponent:
             QueryPacketCommitmentFromAbci,
