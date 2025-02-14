@@ -11,6 +11,9 @@ use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterCompone
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_chain_type_components::traits::types::event::HasEventType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_cosmos_chain_components::components::client::{
+    BlockEventsQuerierComponent, ChainStatusQuerierComponent,
+};
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
@@ -129,9 +132,10 @@ use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
-use crate::presets::chain::*;
+use crate::presets::chain::{CosmosChainFullPreset, IsCosmosChainFullPreset};
 use crate::types::telemetry::CosmosTelemetry;
 
+#[cgp_context(CosmosChainContextComponents: CosmosChainFullPreset)]
 #[derive(Clone)]
 pub struct CosmosChain {
     pub base_chain: Arc<BaseCosmosChain>,
@@ -157,12 +161,6 @@ impl Deref for CosmosChain {
     fn deref(&self) -> &BaseCosmosChain {
         &self.base_chain
     }
-}
-
-pub struct CosmosChainContextComponents;
-
-impl HasComponents for CosmosChain {
-    type Components = CosmosChainContextComponents;
 }
 
 delegate_components! {
@@ -193,20 +191,6 @@ delegate_components! {
         ]:
             WasmChainComponents,
     }
-}
-
-impl<Name> DelegateComponent<Name> for CosmosChainContextComponents
-where
-    Self: IsCosmosChainFullPreset<Name>,
-{
-    type Delegate = CosmosChainFullPreset;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CosmosChainContextComponents
-where
-    Self: IsCosmosChainFullPreset<Name>,
-    CosmosChainFullPreset: IsProviderFor<Name, Context, Params>,
-{
 }
 
 delegate_components! {
