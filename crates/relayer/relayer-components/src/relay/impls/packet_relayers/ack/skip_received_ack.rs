@@ -4,7 +4,7 @@ use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::{
     HasPacketSequence, HasPacketSrcChannelId, HasPacketSrcPortId,
 };
-use hermes_chain_components::traits::queries::ack_is_received::CanQueryAckIsReceived;
+use hermes_chain_components::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_chain_components::traits::types::packets::ack::HasAcknowledgementType;
 
@@ -20,7 +20,7 @@ where
     Relay:
         HasRelayChains<SrcChain = SrcChain, DstChain = DstChain> + CanRaiseError<SrcChain::Error>,
     DstChain: HasHeightType + HasAcknowledgementType<SrcChain>,
-    SrcChain: CanQueryAckIsReceived<DstChain>
+    SrcChain: CanQueryPacketIsCleared<DstChain>
         + HasPacketSrcChannelId<DstChain>
         + HasPacketSrcPortId<DstChain>
         + HasPacketSequence<DstChain>,
@@ -34,7 +34,7 @@ where
     ) -> Result<(), Relay::Error> {
         let ack_received = relay
             .src_chain()
-            .query_ack_is_received(
+            .query_packet_is_cleared(
                 &SrcChain::packet_src_port_id(packet),
                 &SrcChain::packet_src_channel_id(packet),
                 &SrcChain::packet_sequence(packet),

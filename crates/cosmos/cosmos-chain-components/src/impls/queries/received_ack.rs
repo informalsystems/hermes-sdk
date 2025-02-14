@@ -1,8 +1,8 @@
 use core::fmt::Display;
 
 use cgp::prelude::HasAsyncErrorType;
-use hermes_relayer_components::chain::traits::queries::ack_is_received::AckIsReceivedQuerier;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::{
     HasChannelIdType, HasPortIdType, HasSequenceType,
 };
@@ -12,7 +12,7 @@ use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryCosmosAckedPacket;
 
-impl<Chain, Counterparty> AckIsReceivedQuerier<Chain, Counterparty> for QueryCosmosAckedPacket
+impl<Chain, Counterparty> PacketIsClearedQuerier<Chain, Counterparty> for QueryCosmosAckedPacket
 where
     Chain: HasChannelIdType<Counterparty>
         + HasPortIdType<Counterparty>
@@ -22,7 +22,7 @@ where
         + HasAsyncErrorType,
     Chain::ChannelId: Display,
 {
-    async fn query_ack_is_received(
+    async fn query_packet_is_cleared(
         chain: &Chain,
         port_id: &Chain::PortId,
         channel_id: &Chain::ChannelId,
@@ -37,8 +37,7 @@ where
             .query_abci(IBC_QUERY_PATH, commitment_path.as_bytes(), &height)
             .await?;
 
-        // Checks if a packet commitment has been cleared on source.
-        // The packet commitment is cleared when either an acknowledgment or a timeout is received on source.
+        // Once a packet has been cleared, the chain would have removed its packet commitment
 
         Ok(commitment.is_empty())
     }

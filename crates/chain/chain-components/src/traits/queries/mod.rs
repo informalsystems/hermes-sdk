@@ -1,4 +1,3 @@
-pub mod ack_is_received;
 pub mod block;
 pub mod block_events;
 pub mod chain_status;
@@ -10,6 +9,7 @@ pub mod consensus_state_height;
 pub mod counterparty_chain_id;
 pub mod packet_acknowledgement;
 pub mod packet_commitment;
+pub mod packet_is_cleared;
 pub mod packet_is_received;
 pub mod packet_receipt;
 pub mod write_ack;
