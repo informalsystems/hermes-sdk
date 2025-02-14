@@ -173,13 +173,13 @@ where
                 .query_packet_is_received(port_id_b, channel_id_b, &sequence_a)
                 .await?;
 
-            assert_eq!(is_received, false);
+            assert!(!is_received);
 
             let is_cleared = chain_a
                 .query_packet_is_cleared(port_id_a, channel_id_a, &sequence_a)
                 .await?;
 
-            assert_eq!(is_cleared, false);
+            assert!(!is_cleared);
         }
 
         relay_a_to_b
@@ -201,13 +201,13 @@ where
                 .query_packet_is_received(port_id_b, channel_id_b, &sequence_a)
                 .await?;
 
-            assert_eq!(is_received, true);
+            assert!(is_received);
 
             let is_cleared = chain_a
                 .query_packet_is_cleared(port_id_a, channel_id_a, &sequence_a)
                 .await?;
 
-            assert_eq!(is_cleared, true);
+            assert!(is_cleared);
         }
 
         let height_b1 = chain_b.query_chain_height().await?;
@@ -260,13 +260,13 @@ where
                 .query_packet_is_received(port_id_a, channel_id_a, &sequence_b)
                 .await?;
 
-            assert_eq!(is_received, false);
+            assert!(!is_received);
 
             let is_cleared = chain_b
                 .query_packet_is_cleared(port_id_b, channel_id_b, &sequence_b)
                 .await?;
 
-            assert_eq!(is_cleared, false);
+            assert!(!is_cleared);
         }
 
         relay_b_to_a
@@ -286,13 +286,13 @@ where
                 .query_packet_is_received(port_id_a, channel_id_a, &sequence_b)
                 .await?;
 
-            assert_eq!(is_received, true);
+            assert!(is_received);
 
             let is_cleared = chain_b
                 .query_packet_is_cleared(port_id_b, channel_id_b, &sequence_b)
                 .await?;
 
-            assert_eq!(is_cleared, true);
+            assert!(is_cleared);
         }
 
         logger
