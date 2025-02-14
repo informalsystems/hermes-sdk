@@ -78,9 +78,9 @@ fn packet_filter_test() -> Result<(), Error> {
 
         let is_received =
             <CosmosChain as CanQueryPacketIsReceived<CosmosChain>>::query_packet_is_received(
-                &setup.chain_driver_a.chain,
-                &setup.port_id_a,
-                &setup.channel_id_a,
+                &setup.chain_driver_b.chain,
+                &setup.port_id_b,
+                &setup.channel_id_b,
                 &packet.seq_on_a,
             )
             .await?;
@@ -159,9 +159,9 @@ fn no_packet_filter_test() -> Result<(), Error> {
 
         let is_received =
             <CosmosChain as CanQueryPacketIsReceived<CosmosChain>>::query_packet_is_received(
-                &setup.chain_driver_a.chain,
-                &setup.port_id_a,
-                &setup.channel_id_a,
+                &setup.chain_driver_b.chain,
+                &setup.port_id_b,
+                &setup.channel_id_b,
                 &packet.seq_on_a,
             )
             .await?;
