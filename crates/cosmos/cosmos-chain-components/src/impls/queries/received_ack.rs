@@ -1,8 +1,10 @@
 use core::fmt::Display;
 
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_cleared::{
+    PacketIsClearedQuerier, PacketIsClearedQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::{
     HasChannelIdType, HasPortIdType, HasSequenceType,
 };
@@ -10,9 +12,10 @@ use ibc::cosmos_host::IBC_QUERY_PATH;
 
 use crate::traits::abci_query::CanQueryAbci;
 
-pub struct QueryCosmosAckedPacket;
+pub struct QueryCosmosPacketIsCleared;
 
-impl<Chain, Counterparty> PacketIsClearedQuerier<Chain, Counterparty> for QueryCosmosAckedPacket
+#[cgp_provider(PacketIsClearedQuerierComponent)]
+impl<Chain, Counterparty> PacketIsClearedQuerier<Chain, Counterparty> for QueryCosmosPacketIsCleared
 where
     Chain: HasChannelIdType<Counterparty>
         + HasPortIdType<Counterparty>

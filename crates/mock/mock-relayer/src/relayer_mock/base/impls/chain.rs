@@ -28,14 +28,14 @@ use hermes_cosmos_chain_components::components::client::{
     MessageResponseTypeComponent, MessageSizeEstimatorComponent, MessageTypeComponent,
     OutgoingPacketTypeComponent, PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
     PacketFromSendPacketEventBuilderComponent, PacketFromWriteAckEventBuilderComponent,
-    PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
-    PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,
-    PacketTimeoutTimestampGetterComponent, PortIdTypeComponent,
+    PacketIsReceivedQuerierComponent, PacketSequenceGetterComponent,
+    PacketSrcChannelIdGetterComponent, PacketSrcPortIdGetterComponent,
+    PacketTimeoutHeightGetterComponent, PacketTimeoutTimestampGetterComponent, PortIdTypeComponent,
     ReceivePacketMessageBuilderComponent, ReceivePacketPayloadBuilderComponent,
-    ReceivePacketPayloadTypeComponent, ReceivedPacketQuerierComponent, SendPacketEventComponent,
-    SequenceTypeComponent, TimeTypeComponent, TimeoutTypeComponent,
-    TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent,
-    TimeoutUnorderedPacketPayloadTypeComponent, WriteAckEventComponent, WriteAckQuerierComponent,
+    ReceivePacketPayloadTypeComponent, SendPacketEventComponent, SequenceTypeComponent,
+    TimeTypeComponent, TimeoutTypeComponent, TimeoutUnorderedPacketMessageBuilderComponent,
+    TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+    WriteAckEventComponent, WriteAckQuerierComponent,
 };
 use hermes_cosmos_chain_components::components::transaction::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
@@ -55,7 +55,7 @@ use hermes_relayer_components::chain::traits::payload_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
-use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::PacketIsReceivedQuerier;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::send_message::MessageSender;
 use hermes_relayer_components::chain::traits::types::chain_id::{
@@ -393,8 +393,8 @@ impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainCompone
     }
 }
 
-#[cgp_provider(ReceivedPacketQuerierComponent)]
-impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComponents {
+#[cgp_provider(PacketIsReceivedQuerierComponent)]
+impl PacketIsReceivedQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_packet_is_received(
         chain: &MockChainContext,
         port_id: &PortId,
