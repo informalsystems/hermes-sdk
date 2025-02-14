@@ -26,6 +26,7 @@ use crate::relay::impls::packet_relayers::ack::base_ack_packet::BaseAckPacketRel
 use crate::relay::impls::packet_relayers::general::default::DefaultPacketRelayer;
 use crate::relay::impls::packet_relayers::receive::base_receive_packet::BaseReceivePacketRelayer;
 use crate::relay::impls::packet_relayers::receive::skip_received_packet::SkipReceivedPacketRelayer;
+use crate::relay::impls::packet_relayers::skip_cleared::SkipClearedPacket;
 use crate::relay::impls::packet_relayers::timeout_unordered::timeout_unordered_packet::BaseTimeoutUnorderedPacketRelayer;
 use crate::relay::impls::update_client::default::DefaultTargetUpdateClientMessageBuilder;
 pub use crate::relay::traits::auto_relayer::{
@@ -57,9 +58,9 @@ cgp_preset! {
         IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
         TargetUpdateClientMessageBuilderComponent: DefaultTargetUpdateClientMessageBuilder,
         PacketRelayerComponent: DefaultPacketRelayer,
-        ReceivePacketRelayerComponent: SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
-        AckPacketRelayerComponent: BaseAckPacketRelayer,
-        TimeoutUnorderedPacketRelayerComponent: BaseTimeoutUnorderedPacketRelayer,
+        ReceivePacketRelayerComponent: SkipClearedPacket<SkipReceivedPacketRelayer<BaseReceivePacketRelayer>>,
+        AckPacketRelayerComponent: SkipClearedPacket<BaseAckPacketRelayer>,
+        TimeoutUnorderedPacketRelayerComponent: SkipClearedPacket<BaseTimeoutUnorderedPacketRelayer>,
         EventRelayerComponent: PacketEventRelayer,
         RunnerComponent: RelayBothTargets,
         AutoRelayerComponent: AutoRelayStartingCurrentHeight,
