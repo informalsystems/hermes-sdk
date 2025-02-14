@@ -77,9 +77,6 @@ pub use hermes_relayer_components::chain::traits::queries::packet_acknowledgemen
 pub use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
-pub use hermes_relayer_components::chain::traits::queries::send_packets::{
-    SendPacketQuerierComponent, SendPacketsQuerierComponent,
-};
 pub use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
 pub use hermes_relayer_components::chain::traits::types::block::{
     BlockHashComponent, BlockTypeComponent,
@@ -162,8 +159,6 @@ use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFro
 use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
 use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
 use crate::impls::queries::received_packet::QueryCosmosReceivedPacket;
-use crate::impls::queries::send_packet::QueryCosmosSendPacket;
-use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
 use crate::impls::queries::write_ack_event::QueryCosmosWriteAckEvent;
 use crate::impls::relay::packet_filter::FilterPacketWithConfig;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
@@ -295,10 +290,6 @@ cgp_preset! {
             QueryPacketAcknowledgementFromAbci,
         PacketReceiptQuerierComponent:
             QueryPacketReceiptFromAbci,
-        SendPacketQuerierComponent:
-            QueryCosmosSendPacket,
-        SendPacketsQuerierComponent:
-            QuerySendPacketsConcurrently,
         ChainStatusQuerierComponent:
             QueryCosmosChainStatus,
         InitConnectionOptionsTypeComponent:
