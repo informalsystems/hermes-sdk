@@ -51,9 +51,6 @@ pub use hermes_relayer_components::chain::traits::payload_builders::create_clien
 pub use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
-pub use hermes_relayer_components::chain::traits::queries::ack_packets::{
-    AckPacketQuerierComponent, AckPacketsQuerierComponent,
-};
 pub use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::block_events::BlockEventsQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
@@ -79,14 +76,11 @@ pub use hermes_relayer_components::chain::traits::queries::counterparty_chain_id
 pub use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
-pub use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::send_packets::{
     SendPacketQuerierComponent, SendPacketsQuerierComponent,
 };
-pub use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerierComponent;
-pub use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
 pub use hermes_relayer_components::chain::traits::types::block::{
     BlockHashComponent, BlockTypeComponent,
@@ -157,8 +151,6 @@ use crate::impls::connection::init_connection_options::ProvideCosmosInitConnecti
 use crate::impls::events::ProvideCosmosEvents;
 use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
 use crate::impls::queries::abci::QueryAbci;
-use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
-use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::block_events::QueryCosmosBlockEvents;
 use crate::impls::queries::chain_id::QueryChainIdFromAbci;
@@ -170,13 +162,10 @@ use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
 use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromAbci;
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
-use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
 use crate::impls::queries::received_packet::QueryCosmosReceivedPacket;
 use crate::impls::queries::send_packet::QueryCosmosSendPacket;
 use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
-use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
-use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryCosmosWriteAckEvent;
 use crate::impls::relay::packet_filter::FilterPacketWithConfig;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
@@ -299,15 +288,8 @@ cgp_preset! {
         ]:
             BuildCosmosPacketMessages,
 
-        PacketCommitmentsQuerierComponent:
-            QueryCosmosPacketCommitments,
         ReceivedPacketQuerierComponent:
             QueryCosmosReceivedPacket,
-
-        UnreceivedPacketSequencesQuerierComponent:
-            QueryUnreceivedCosmosPacketSequences,
-        UnreceivedAcksSequencesQuerierComponent:
-            QueryUnreceivedCosmosAcksSequences,
 
         PacketCommitmentQuerierComponent:
             QueryPacketCommitmentFromAbci,
@@ -321,10 +303,6 @@ cgp_preset! {
             QueryCosmosSendPacket,
         SendPacketsQuerierComponent:
             QuerySendPacketsConcurrently,
-        AckPacketQuerierComponent:
-            QueryCosmosAckPacket,
-        AckPacketsQuerierComponent:
-            QueryAckPacketsConcurrently,
         ChainStatusQuerierComponent:
             QueryCosmosChainStatus,
         InitConnectionOptionsTypeComponent:

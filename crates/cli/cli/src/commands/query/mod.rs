@@ -17,9 +17,6 @@ pub use channel::QueryChannel;
 mod channels;
 pub use channels::QueryChannels;
 
-mod packet;
-pub use packet::PacketCommands;
-
 use crate::contexts::app::HermesApp;
 use crate::Result;
 
@@ -54,10 +51,6 @@ pub enum QueryCommands {
     /// Query channel information
     #[clap(subcommand)]
     Channel(QueryChannel),
-
-    /// Query information about IBC packets
-    #[clap(subcommand)]
-    Packet(PacketCommands),
 }
 
 #[cgp_provider(CommandRunnerComponent)]
@@ -72,7 +65,6 @@ impl CommandRunner<HermesApp> for QueryCommands {
             Self::Connections(cmd) => cmd.run(app).await,
             Self::Channels(cmd) => cmd.run(app).await,
             Self::Channel(cmd) => cmd.run(app).await,
-            Self::Packet(cmd) => cmd.run(app).await,
         }
     }
 }

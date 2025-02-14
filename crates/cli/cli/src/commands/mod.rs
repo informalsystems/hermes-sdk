@@ -9,7 +9,6 @@ use crate::Result;
 
 pub mod bootstrap;
 pub mod channel;
-pub mod clear;
 pub mod client;
 pub mod connection;
 pub mod query;
@@ -37,10 +36,6 @@ pub enum HermesCommand {
     #[clap(subcommand)]
     Query(query::QueryCommands),
 
-    /// Clear subcommands
-    #[clap(subcommand)]
-    Clear(clear::ClearCommands),
-
     /// Manage keys in the relayer for each chain
     #[clap(subcommand)]
     Keys(keys::KeysCmd),
@@ -58,7 +53,6 @@ impl CommandRunner<HermesApp> for HermesCommand {
             Self::Connection(cmd) => cmd.run(app).await,
             Self::Channel(cmd) => cmd.run(app).await,
             Self::Query(cmd) => cmd.run(app).await,
-            Self::Clear(cmd) => cmd.run(app).await,
             Self::Keys(cmd) => cmd.run(app).await,
             Self::Bootstrap(cmd) => app.run_command(cmd).await,
         }
