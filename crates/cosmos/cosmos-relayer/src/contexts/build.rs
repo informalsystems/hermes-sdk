@@ -37,7 +37,9 @@ use hermes_relayer_components_extra::build::traits::cache::{
 use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::{
     RelayWithBatchBuilder, RelayWithBatchBuilderComponent,
 };
-use hermes_relayer_components_extra::components::extra::build::*;
+use hermes_relayer_components_extra::components::extra::build::{
+    ChainBuilderComponent, ExtraBuildComponents, IsExtraBuildComponents,
+};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
 use ibc::core::host::types::identifiers::{ChainId, ClientId};
@@ -50,6 +52,10 @@ use crate::contexts::relay::CosmosRelay;
 use crate::impls::error::HandleCosmosError;
 use crate::types::telemetry::CosmosTelemetry;
 
+#[cgp_context(
+    CosmosBuildComponents:
+        ExtraBuildComponents<CosmosBaseBuildComponents>
+)]
 #[derive(Clone)]
 pub struct CosmosBuilder {
     pub fields: Arc<dyn HasCosmosBuilderFields>,
@@ -86,31 +92,7 @@ impl HasCosmosBuilderFields for CosmosBuilderFields {
     }
 }
 
-pub struct CosmosBuildComponents;
-
 pub struct CosmosBaseBuildComponents;
-
-impl HasComponents for CosmosBuilder {
-    type Components = CosmosBuildComponents;
-}
-
-impl HasComponents for CosmosBuildComponents {
-    type Components = CosmosBaseBuildComponents;
-}
-
-impl<Name> DelegateComponent<Name> for CosmosBuildComponents
-where
-    Self: IsExtraBuildComponents<Name>,
-{
-    type Delegate = ExtraBuildComponents<CosmosBaseBuildComponents>;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CosmosBuildComponents
-where
-    Self: IsExtraBuildComponents<Name>,
-    ExtraBuildComponents<CosmosBaseBuildComponents>: IsProviderFor<Name, Context, Params>,
-{
-}
 
 delegate_components! {
     CosmosBuildComponents {
