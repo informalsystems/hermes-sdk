@@ -2,12 +2,11 @@ use cgp::prelude::*;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
-use hermes_cli_framework::output::{json, Output};
+use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, PortId};
 
-use crate::commands::query::packet::util::PacketSequences;
 use crate::contexts::app::HermesApp;
 use crate::Result;
 
@@ -48,7 +47,7 @@ impl CommandRunner<HermesApp> for QueryPacketCommitments {
 
         let chain = builder.build_chain(&self.chain_id).await?;
 
-        let (sequences, height) =
+        let sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &chain,
                 &self.channel_id,
@@ -56,12 +55,6 @@ impl CommandRunner<HermesApp> for QueryPacketCommitments {
             )
             .await?;
 
-        let packet_sequences = PacketSequences::new(height, sequences);
-
-        if json() {
-            Ok(Output::success(packet_sequences))
-        } else {
-            Ok(Output::success(packet_sequences.collated()))
-        }
+        Ok(Output::success(sequences))
     }
 }

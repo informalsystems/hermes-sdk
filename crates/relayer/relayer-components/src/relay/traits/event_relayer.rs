@@ -2,7 +2,7 @@ use cgp::prelude::*;
 use hermes_chain_components::traits::types::height::HasHeightType;
 
 use crate::chain::traits::types::event::HasEventType;
-use crate::chain::types::aliases::{EventOf, HeightOf};
+use crate::chain::types::aliases::EventOf;
 use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
 /**
@@ -31,7 +31,6 @@ pub trait CanRelayEvent<Target: RelayTarget>:
     */
     async fn relay_chain_event(
         &self,
-        height: &HeightOf<Self::TargetChain>,
         event: &EventOf<Self::TargetChain>,
     ) -> Result<(), Self::Error>;
 }

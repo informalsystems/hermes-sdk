@@ -1,5 +1,4 @@
 use cgp::prelude::*;
-use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::{
     PacketCommitmentsQuerier, PacketCommitmentsQuerierComponent,
 };
@@ -40,7 +39,7 @@ where
         chain: &Chain,
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,
-    ) -> Result<(Vec<Chain::Sequence>, Chain::Height), Chain::Error> {
+    ) -> Result<Vec<Chain::Sequence>, Chain::Error> {
         let mut client = ChannelQueryClient::connect(
             Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,
         )
@@ -70,12 +69,6 @@ where
             .map(|packet_state| packet_state.sequence.into())
             .collect();
 
-        let raw_height = response
-            .height
-            .ok_or_else(|| Chain::raise_error(eyre!("missing height in response")))?;
-
-        let height = Height::try_from(raw_height).map_err(Chain::raise_error)?;
-
-        Ok((commitment_sequences, height))
+        Ok(commitment_sequences)
     }
 }

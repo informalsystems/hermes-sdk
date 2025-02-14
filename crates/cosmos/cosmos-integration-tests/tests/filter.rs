@@ -51,7 +51,7 @@ fn packet_filter_test() -> Result<(), Error> {
             balance_a.denom.clone(),
         );
 
-        setup.relay_driver.run_relayer_in_background().await?;
+        let _relayer = setup.relay_driver.run_relayer_in_background().await?;
 
         <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
             &setup.chain_driver_a.chain,
@@ -77,7 +77,7 @@ fn packet_filter_test() -> Result<(), Error> {
         // Wait for a bit
         tokio::time::sleep(core::time::Duration::from_secs(5)).await;
 
-        let (commitment_sequences, _) =
+        let commitment_sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &setup.chain_driver_a.chain,
                 &setup.channel_id_a,
@@ -115,7 +115,7 @@ fn no_packet_filter_test() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        setup.relay_driver.run_relayer_in_background().await?;
+        let _relayer = setup.relay_driver.run_relayer_in_background().await?;
 
         let balance_a = setup
             .chain_driver_a
@@ -168,7 +168,7 @@ fn no_packet_filter_test() -> Result<(), Error> {
             .assert_eventual_amount(&setup.chain_driver_b.user_wallet_b.address, &balance_b)
             .await?;
 
-        let (commitment_sequences, _) =
+        let commitment_sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &setup.chain_driver_a.chain,
                 &setup.channel_id_a,

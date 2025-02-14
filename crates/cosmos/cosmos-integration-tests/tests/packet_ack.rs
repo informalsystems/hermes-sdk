@@ -29,7 +29,7 @@ fn packet_ack_test() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        setup.relay_driver.run_relayer_in_background().await?;
+        let _relayer = setup.relay_driver.run_relayer_in_background().await?;
 
         let balance_a = setup
             .chain_driver_a
@@ -82,7 +82,7 @@ fn packet_ack_test() -> Result<(), Error> {
             .assert_eventual_amount(&setup.chain_driver_b.user_wallet_b.address, &balance_b)
             .await?;
 
-        let (commitment_sequences, _) =
+        let commitment_sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &setup.chain_driver_a.chain,
                 &setup.channel_id_a,
@@ -105,7 +105,7 @@ fn packet_ack_test() -> Result<(), Error> {
         // Wait for acknowledgments to be relayed
         tokio::time::sleep(core::time::Duration::from_secs(15)).await;
 
-        let (commitment_sequences, _) =
+        let commitment_sequences =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &setup.chain_driver_a.chain,
                 &setup.channel_id_a,
@@ -124,7 +124,7 @@ fn packet_ack_test() -> Result<(), Error> {
         .await?;
 
         assert!(acks_and_height_on_counterparty.is_some());
-        assert!(acks_and_height_on_counterparty.unwrap().0.is_empty());
+        assert!(acks_and_height_on_counterparty.unwrap().is_empty());
 
         <Result<(), Error>>::Ok(())
     })?;
