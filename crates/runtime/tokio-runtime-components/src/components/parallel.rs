@@ -4,7 +4,6 @@ use hermes_async_runtime_components::channel_once::impls::ProvideOneShotChannelT
 use hermes_async_runtime_components::mutex::impls::mutex::ProvideFuturesMutex;
 use hermes_async_runtime_components::stream::impls::boxed::ProvideBoxedStreamType;
 use hermes_async_runtime_components::stream::impls::map::BoxedStreamMapper;
-use hermes_async_runtime_components::subscription::impls::subscription::ProvideBoxedSubscription;
 use hermes_runtime_components::impls::os::exec_command::ExecCommandWithNoEnv;
 pub use hermes_runtime_components::traits::channel::{
     ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,
@@ -57,7 +56,6 @@ cgp_preset! {
         MutexComponent: ProvideFuturesMutex,
         StreamTypeComponent: ProvideBoxedStreamType,
         StreamMapperComponent: BoxedStreamMapper,
-        SubscriptionComponent: ProvideBoxedSubscription,
         ConcurrentTaskRunnerComponent: TokioRunParallelTasks,
         TaskSpawnerComponent: TokioSpawnTask,
         [
