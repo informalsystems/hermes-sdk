@@ -2,7 +2,7 @@ use core::str::FromStr;
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::impls::types::config::{CosmosChainConfig, EventSourceMode};
+use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::{GasConfig, GasPrice};
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
@@ -75,9 +75,6 @@ where
                 .map_err(Bootstrap::raise_error)?,
             grpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.grpc_port))
                 .map_err(Bootstrap::raise_error)?,
-            event_source: EventSourceMode::Push {
-                url: format!("ws://localhost:{}/websocket", chain_node_config.rpc_port),
-            },
             rpc_timeout: Duration::from_secs(10),
             account_prefix: bootstrap.account_prefix().into(),
             key_name: relayer_wallet.id.clone(),

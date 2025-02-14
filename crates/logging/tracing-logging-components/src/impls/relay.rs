@@ -5,7 +5,6 @@ use hermes_logging_components::traits::logger::{Logger, LoggerComponent};
 use hermes_logging_components::types::level::LogLevel;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
@@ -54,27 +53,6 @@ where
             src_chain_id = %details.relay.src_chain().chain_id(),
             dst_chain_id = %details.relay.dst_chain().chain_id(),
             relay_progress = ?details.relay_progress,
-            "{message}",
-        );
-    }
-}
-
-#[cgp_provider(LoggerComponent)]
-impl<'a, Logging, Relay> Logger<Logging, LogClearPacketError<'a, Relay>> for TracingLogger
-where
-    Logging: Async,
-    Relay: HasRelayChains,
-    PacketOf<Relay>: Display,
-    Relay::SrcChain: HasChainId,
-    Relay::DstChain: HasChainId,
-{
-    async fn log(_logging: &Logging, message: &str, details: &LogClearPacketError<'a, Relay>) {
-        error!(
-            packet = %details.packet,
-            src_chain_id = %details.relay.src_chain().chain_id(),
-            dst_chain_id = %details.relay.dst_chain().chain_id(),
-            clear_action = ?details.clear_action,
-            error = ?details.error,
             "{message}",
         );
     }

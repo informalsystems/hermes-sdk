@@ -2,11 +2,14 @@ use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::{
     ReceivedPacketQuerier, ReceivedPacketQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use http::uri::InvalidUri;
+use http::Uri;
 use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};
+use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;
+use ibc_proto::ibc::core::channel::v1::QueryUnreceivedPacketsRequest;
 use tonic::transport::Error as TransportError;
-use tonic::Status;
+use tonic::{Request, Status};
 
 use crate::traits::grpc_address::HasGrpcAddress;
 
@@ -17,7 +20,7 @@ impl<Chain, Counterparty> ReceivedPacketQuerier<Chain, Counterparty> for QueryCo
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
         + HasGrpcAddress
-        + CanQueryUnreceivedPacketSequences<Counterparty>
+        + CanRaiseAsyncError<InvalidUri>
         + CanRaiseAsyncError<TransportError>
         + CanRaiseAsyncError<Status>,
     Counterparty: HasIbcChainTypes<Chain, Sequence = Sequence>,
@@ -30,10 +33,26 @@ where
     ) -> Result<bool, Chain::Error> {
         let sequence = *sequence;
 
-        let unreceived_sequences = chain
-            .query_unreceived_packet_sequences(channel_id, port_id, &[sequence])
-            .await?;
+        let mut client = ChannelQueryClient::connect(
+            Uri::try_from(&chain.grpc_address().to_string()).map_err(Chain::raise_error)?,
+        )
+        .await
+        .map_err(Chain::raise_error)?;
 
-        Ok(unreceived_sequences.is_empty())
+        let raw_request = QueryUnreceivedPacketsRequest {
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            packet_commitment_sequences: vec![sequence.value()],
+        };
+
+        let request = Request::new(raw_request);
+
+        let response = client
+            .unreceived_packets(request)
+            .await
+            .map_err(Chain::raise_error)?
+            .into_inner();
+
+        Ok(response.sequences.is_empty())
     }
 }

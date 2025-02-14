@@ -11,7 +11,6 @@ use hermes_logging_components::types::level::{
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
@@ -64,8 +63,6 @@ delegate_components! {
                 LogSkipRelayLockedPacket<'a, Relay>,
             <'a, Relay: HasRelayChains>
                 LogRelayPacketAction<'a, Relay>,
-            <'a, Relay: HasRelayChains>
-                LogClearPacketError<'a, Relay>,
             <'a, Relay: HasRelayChains>
                 LogRelayPacketStatus<'a, Relay>,
             <'a, Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>, Target: RelayTarget>

@@ -10,8 +10,7 @@ use hermes_cosmos_integration_tests::init::{
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_error::types::Error;
-use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
-use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
@@ -53,7 +52,7 @@ fn packet_filter_test() -> Result<(), Error> {
 
         let _relayer = setup.relay_driver.run_relayer_in_background().await?;
 
-        <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
+        let packet = <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
             &setup.chain_driver_a.chain,
             &setup.channel_id_a,
             &setup.port_id_a,
@@ -77,26 +76,16 @@ fn packet_filter_test() -> Result<(), Error> {
         // Wait for a bit
         tokio::time::sleep(core::time::Duration::from_secs(5)).await;
 
-        let commitment_sequences =
-            <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
-                &setup.chain_driver_a.chain,
-                &setup.channel_id_a,
-                &setup.port_id_a,
+        let is_received =
+            <CosmosChain as CanQueryPacketIsReceived<CosmosChain>>::query_packet_is_received(
+                &setup.chain_driver_b.chain,
+                &setup.port_id_b,
+                &setup.channel_id_b,
+                &packet.seq_on_a,
             )
             .await?;
 
-        let unreceived_sequences = <CosmosChain as CanQueryUnreceivedPacketSequences<
-            CosmosChain,
-        >>::query_unreceived_packet_sequences(
-            &setup.chain_driver_b.chain,
-            &setup.channel_id_b,
-            &setup.port_id_b,
-            &commitment_sequences,
-        )
-        .await?;
-
-        // Assert packets have not been relayed
-        assert!(!unreceived_sequences.is_empty());
+        assert!(!is_received);
 
         <Result<(), Error>>::Ok(())
     })?;
@@ -140,7 +129,7 @@ fn no_packet_filter_test() -> Result<(), Error> {
             balance_a.denom.clone(),
         );
 
-        <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
+        let packet = <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
             &setup.chain_driver_a.chain,
             &setup.channel_id_a,
             &setup.port_id_a,
@@ -168,25 +157,16 @@ fn no_packet_filter_test() -> Result<(), Error> {
             .assert_eventual_amount(&setup.chain_driver_b.user_wallet_b.address, &balance_b)
             .await?;
 
-        let commitment_sequences =
-            <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
-                &setup.chain_driver_a.chain,
-                &setup.channel_id_a,
-                &setup.port_id_a,
+        let is_received =
+            <CosmosChain as CanQueryPacketIsReceived<CosmosChain>>::query_packet_is_received(
+                &setup.chain_driver_b.chain,
+                &setup.port_id_b,
+                &setup.channel_id_b,
+                &packet.seq_on_a,
             )
             .await?;
 
-        let unreceived_sequences = <CosmosChain as CanQueryUnreceivedPacketSequences<
-            CosmosChain,
-        >>::query_unreceived_packet_sequences(
-            &setup.chain_driver_b.chain,
-            &setup.channel_id_b,
-            &setup.port_id_b,
-            &commitment_sequences,
-        )
-        .await?;
-
-        assert!(unreceived_sequences.is_empty());
+        assert!(is_received);
 
         <Result<(), Error>>::Ok(())
     })?;

@@ -20,7 +20,6 @@ use crate::relay::impls::create_client::CreateClientWithChains;
 use crate::relay::impls::event_relayers::packet_event::PacketEventRelayer;
 use crate::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use crate::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient;
-use crate::relay::impls::packet_clearers::packets::ClearAllPackets;
 use crate::relay::impls::packet_filters::chain::FilterRelayPacketWithChains;
 use crate::relay::impls::packet_lock::ProvidePacketLockWithMutex;
 use crate::relay::impls::packet_relayers::ack::base_ack_packet::BaseAckPacketRelayer;
@@ -45,7 +44,6 @@ pub use crate::relay::traits::connection::open_init::ConnectionInitializerCompon
 pub use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
 pub use crate::relay::traits::event_relayer::EventRelayerComponent;
 pub use crate::relay::traits::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
-pub use crate::relay::traits::packet_clearer::PacketClearerComponent;
 pub use crate::relay::traits::packet_filter::RelayPacketFilterComponent;
 pub use crate::relay::traits::packet_lock::PacketLockComponent;
 pub use crate::relay::traits::packet_relayer::PacketRelayerComponent;
@@ -67,7 +65,6 @@ cgp_preset! {
         AutoRelayerComponent: AutoRelayStartingCurrentHeight,
         AutoRelayerWithHeightsComponent: RelayWithPolledEvents,
         ClientCreatorComponent: CreateClientWithChains,
-        PacketClearerComponent: ClearAllPackets,
         ChannelInitializerComponent: InitializeChannel,
         ChannelOpenTryRelayerComponent: RelayChannelOpenTry,
         ChannelOpenAckRelayerComponent: RelayChannelOpenAck,
