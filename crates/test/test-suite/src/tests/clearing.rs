@@ -7,7 +7,10 @@ use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
+use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
@@ -17,7 +20,6 @@ use hermes_relayer_components::multi::traits::relay_at::RelayAt;
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelayWithHeights;
 use hermes_relayer_components::relay::traits::chains::HasRelayChainTypes;
 use hermes_relayer_components::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
-use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
@@ -62,7 +64,9 @@ where
         + HasAmountMethods
         + CanConvertIbcTransferredAmount<ChainB>
         + CanIbcTransferToken<ChainB>
-        + CanAssertEventualAmount
+        + CanQueryPacketIsReceived<ChainB>
+        + CanQueryPacketIsCleared<ChainB>
+        + CanReadPacketFields<ChainB>
         + HasDefaultMemo,
     ChainB: HasIbcChainTypes<ChainA>
         + HasChainId
@@ -72,7 +76,9 @@ where
         + CanQueryBalance
         + CanIbcTransferToken<ChainA>
         + CanConvertIbcTransferredAmount<ChainA>
-        + CanAssertEventualAmount
+        + CanQueryPacketIsReceived<ChainA>
+        + CanQueryPacketIsCleared<ChainA>
+        + CanReadPacketFields<ChainA>
         + HasDefaultMemo,
     BiRelay: HasTwoWayRelay,
     RelayAt<BiRelay, Index<0>, Index<1>>: HasRelayChainTypes<SrcChain = ChainA, DstChain = ChainB>
@@ -141,7 +147,7 @@ where
             ))
             .await;
 
-        chain_a
+        let packet_a = chain_a
             .ibc_transfer_token(
                 channel_id_a,
                 port_id_a,
@@ -152,6 +158,8 @@ where
             )
             .await?;
 
+        let sequence_a = ChainA::packet_sequence(&packet_a);
+
         let balance_a2 = ChainA::subtract_amount(&balance_a1, &a_to_b_amount)?;
 
         let balance_a3 = chain_a.query_balance(address_a1, denom_a).await?;
@@ -159,6 +167,20 @@ where
         assert_eq!(balance_a2, balance_a3);
 
         let height_a2 = chain_a.query_chain_height().await?;
+
+        {
+            let is_received = chain_b
+                .query_packet_is_received(port_id_b, channel_id_b, &sequence_a)
+                .await?;
+
+            assert_eq!(is_received, false);
+
+            let is_cleared = chain_a
+                .query_packet_is_cleared(port_id_a, channel_id_a, &sequence_a)
+                .await?;
+
+            assert_eq!(is_cleared, false);
+        }
 
         relay_a_to_b
             .auto_relay_with_heights(SourceTarget, &height_a1, Some(&height_a2))
@@ -172,6 +194,20 @@ where
                 .await?;
 
             assert_eq!(balance_b2, balance_b1);
+        }
+
+        {
+            let is_received = chain_b
+                .query_packet_is_received(port_id_b, channel_id_b, &sequence_a)
+                .await?;
+
+            assert_eq!(is_received, true);
+
+            let is_cleared = chain_a
+                .query_packet_is_cleared(port_id_a, channel_id_a, &sequence_a)
+                .await?;
+
+            assert_eq!(is_cleared, true);
         }
 
         let height_b1 = chain_b.query_chain_height().await?;
@@ -189,7 +225,7 @@ where
             ))
             .await;
 
-        chain_b
+        let packet_b = chain_b
             .ibc_transfer_token(
                 channel_id_b,
                 port_id_b,
@@ -199,6 +235,8 @@ where
                 &chain_b.default_memo(),
             )
             .await?;
+
+        let sequence_b = ChainB::packet_sequence(&packet_b);
 
         let balance_b2 = ChainB::subtract_amount(&balance_b1, &b_to_a_amount)?;
 
@@ -217,6 +255,20 @@ where
 
         let height_b2 = chain_b.query_chain_height().await?;
 
+        {
+            let is_received = chain_a
+                .query_packet_is_received(port_id_a, channel_id_a, &sequence_b)
+                .await?;
+
+            assert_eq!(is_received, false);
+
+            let is_cleared = chain_b
+                .query_packet_is_cleared(port_id_b, channel_id_b, &sequence_b)
+                .await?;
+
+            assert_eq!(is_cleared, false);
+        }
+
         relay_b_to_a
             .auto_relay_with_heights(SourceTarget, &height_b1, Some(&height_b2))
             .await?;
@@ -227,6 +279,20 @@ where
                 .await?;
 
             assert_eq!(balance_a6, balance_a5);
+        }
+
+        {
+            let is_received = chain_a
+                .query_packet_is_received(port_id_a, channel_id_a, &sequence_b)
+                .await?;
+
+            assert_eq!(is_received, true);
+
+            let is_cleared = chain_b
+                .query_packet_is_cleared(port_id_b, channel_id_b, &sequence_b)
+                .await?;
+
+            assert_eq!(is_cleared, true);
         }
 
         logger

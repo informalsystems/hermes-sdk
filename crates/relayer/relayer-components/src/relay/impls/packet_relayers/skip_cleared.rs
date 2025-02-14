@@ -51,7 +51,7 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        if packet_is_cleared {
+        if !packet_is_cleared {
             InRelayer::relay_receive_packet(relay, source_height, packet).await
         } else {
             Ok(None)
