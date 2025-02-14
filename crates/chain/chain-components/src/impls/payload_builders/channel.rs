@@ -1,11 +1,13 @@
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
 use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 
 use crate::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
 };
 use crate::traits::queries::channel_end::CanQueryChannelEndWithProofs;
+use crate::traits::queries::counterparty_connection_id::CanQueryCounterpartyConnectionId;
 use crate::traits::types::channel::{
     HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
 };
@@ -23,12 +25,15 @@ where
     Chain: HasHeightType
         + HasChannelIdType<Counterparty>
         + HasPortIdType<Counterparty>
+        + HasConnectionIdType<Counterparty>
         + HasChannelOpenTryPayloadType<
             Counterparty,
             ChannelOpenTryPayload = ChannelOpenTryPayload<Chain, Counterparty>,
         > + HasClientStateType<Counterparty>
         + CanQueryChannelEndWithProofs<Counterparty>
+        + CanQueryCounterpartyConnectionId<Counterparty>
         + HasCommitmentProofHeight,
+    Counterparty: HasConnectionIdType<Chain>,
 {
     async fn build_channel_open_try_payload(
         chain: &Chain,
@@ -41,6 +46,10 @@ where
             .query_channel_end_with_proofs(channel_id, port_id, height)
             .await?;
 
+        let counterparty_connection_id = chain
+            .query_channel_end_counterparty_connection_id(&channel_end)
+            .await?;
+
         // TODO: validate channel state
 
         // TODO: check that all commitment proof heights are the same
@@ -50,6 +59,7 @@ where
             channel_end,
             update_height,
             proof_init,
+            counterparty_connection_id,
         };
 
         Ok(payload)

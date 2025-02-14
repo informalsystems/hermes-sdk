@@ -9,6 +9,7 @@ pub mod client_state;
 pub mod connection_end;
 pub mod consensus_state;
 pub mod consensus_state_height;
+pub mod counterparty_connection_id;
 pub mod eip;
 pub mod packet_acknowledgement;
 pub mod packet_acknowledgements;

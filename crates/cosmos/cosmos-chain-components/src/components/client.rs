@@ -72,6 +72,7 @@ pub use hermes_relayer_components::chain::traits::queries::consensus_state_heigh
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
 pub use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
+pub use hermes_relayer_components::chain::traits::queries::counterparty_connection_id::CounterpartyConnectionIdQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
 pub use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
@@ -162,6 +163,7 @@ use crate::impls::queries::channel_end::QueryCosmosChannelEndFromAbci;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromAbci;
 use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
+use crate::impls::queries::counterparty_connection_id::QueryCounterpartyConnectionId;
 use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromAbci;
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
@@ -267,6 +269,8 @@ cgp_preset! {
             QueryCosmosConsensusStateFromAbci,
         CounterpartyChainIdQuerierComponent:
             QueryChainIdFromAbci,
+        CounterpartyConnectionIdQuerierComponent:
+            QueryCounterpartyConnectionId,
         [
             ConnectionOpenInitPayloadBuilderComponent,
             ConnectionOpenTryPayloadBuilderComponent,

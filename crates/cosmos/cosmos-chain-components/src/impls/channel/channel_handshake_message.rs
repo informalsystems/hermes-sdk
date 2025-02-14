@@ -11,7 +11,9 @@ use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelOpenTryPayloadType, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
+use hermes_relayer_components::chain::traits::types::ibc::{
+    HasChannelIdType, HasConnectionIdType, HasPortIdType,
+};
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
@@ -84,6 +86,7 @@ where
     Chain: HasMessageType
         + HasChannelIdType<Counterparty, ChannelId: Display>
         + HasPortIdType<Counterparty, PortId: Display>
+        + HasConnectionIdType<Counterparty>
         + CanRaiseAsyncError<ClientError>,
     Counterparty: HasChannelIdType<Chain, ChannelId: Display>
         + HasPortIdType<Chain, PortId: Display>
