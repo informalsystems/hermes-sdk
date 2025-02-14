@@ -1,6 +1,5 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
-use std::str::FromStr;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::WithField;
@@ -8,15 +7,13 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
-use hermes_async_runtime_components::subscription::impls::empty::EmptySubscription;
-use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterComponent;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_chain_type_components::traits::types::event::HasEventType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_components::impls::types::config::{CosmosChainConfig, EventSourceMode};
+use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
 use hermes_cosmos_chain_components::traits::gas_config::{
@@ -54,9 +51,6 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     HasCommitmentPrefixType, HasIbcCommitmentPrefix, IbcCommitmentPrefixGetter,
     IbcCommitmentPrefixGetterComponent,
-};
-use hermes_relayer_components::chain::traits::event_subscription::{
-    EventSubscriptionGetter, EventSubscriptionGetterComponent,
 };
 use hermes_relayer_components::chain::traits::extract_data::{
     CanExtractFromEvent, CanExtractFromMessageResponse,
@@ -126,18 +120,15 @@ use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
-use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
-use tendermint_rpc::query::{EventType, Query};
-use tendermint_rpc::{HttpClient, Url, WebSocketClientUrl};
+use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
-use crate::impls::subscription::CanCreateAbciEventSubscription;
 use crate::presets::chain::*;
 use crate::types::telemetry::CosmosTelemetry;
 
@@ -153,7 +144,6 @@ pub struct BaseCosmosChain {
     pub compat_mode: CompatMode,
     pub runtime: HermesRuntime,
     pub telemetry: CosmosTelemetry,
-    pub subscription: Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>,
     pub ibc_commitment_prefix: Vec<u8>,
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
@@ -286,32 +276,11 @@ impl CosmosChain {
         rpc_client: HttpClient,
         compat_mode: CompatMode,
         key_entry: Secp256k1KeyPair,
-        event_source_mode: EventSourceMode,
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
         packet_filter: PacketFilterConfig,
     ) -> Self {
         let chain_id = ChainId::new(&chain_config.id).unwrap();
-        let chain_version = chain_id.revision_number();
-
-        let subscription = match event_source_mode {
-            EventSourceMode::Push { url } => runtime.new_abci_event_subscription(
-                chain_version,
-                WebSocketClientUrl::from_str(&url).unwrap(),
-                compat_mode,
-                vec![
-                    Query::from(EventType::NewBlock),
-                    Query::eq("message.module", "ibc_client"),
-                    Query::eq("message.module", "ibc_connection"),
-                    Query::eq("message.module", "ibc_channel"),
-                    Query::eq("message.module", "interchainquery"),
-                ],
-            ),
-            EventSourceMode::Pull { .. } => {
-                // TODO: implement pull-based event source
-                Arc::new(EmptySubscription::new())
-            }
-        };
 
         let ibc_commitment_prefix = chain_config.store_prefix.clone().into();
 
@@ -322,7 +291,6 @@ impl CosmosChain {
                 compat_mode,
                 runtime,
                 telemetry,
-                subscription,
                 ibc_commitment_prefix,
                 rpc_client,
                 key_entry,
@@ -365,15 +333,6 @@ impl RpcClientGetter<CosmosChain> for CosmosChainContextComponents {
 impl ChainIdGetter<CosmosChain> for CosmosChainContextComponents {
     fn chain_id(chain: &CosmosChain) -> &ChainId {
         &chain.chain_id
-    }
-}
-
-#[cgp_provider(EventSubscriptionGetterComponent)]
-impl EventSubscriptionGetter<CosmosChain> for CosmosChainContextComponents {
-    fn event_subscription(
-        chain: &CosmosChain,
-    ) -> Option<&Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>> {
-        Some(&chain.subscription)
     }
 }
 

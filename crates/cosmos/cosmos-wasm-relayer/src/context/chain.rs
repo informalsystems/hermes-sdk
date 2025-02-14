@@ -1,5 +1,4 @@
 use core::ops::Deref;
-use std::sync::Arc;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::field::WithField;
@@ -7,7 +6,6 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
-use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
 use hermes_cosmos_chain_components::traits::gas_config::{
@@ -47,9 +45,6 @@ use hermes_logging_components::traits::has_logger::{
 };
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
-};
-use hermes_relayer_components::chain::traits::event_subscription::{
-    EventSubscriptionGetter, EventSubscriptionGetterComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
@@ -130,11 +125,9 @@ use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
-use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;
-use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
 
 use crate::components::chain::{CosmosChainWasmPreset, IsCosmosChainWasmPreset};
@@ -296,15 +289,6 @@ impl HasTelemetry for WasmCosmosChain {
 impl ChainIdGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn chain_id(chain: &WasmCosmosChain) -> &ChainId {
         &chain.chain_id
-    }
-}
-
-#[cgp_provider(EventSubscriptionGetterComponent)]
-impl EventSubscriptionGetter<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn event_subscription(
-        chain: &WasmCosmosChain,
-    ) -> Option<&Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>> {
-        Some(&chain.subscription)
     }
 }
 

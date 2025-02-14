@@ -194,8 +194,6 @@ impl CosmosBuilder {
     ) -> Result<CosmosChain, Error> {
         let key = get_keypair(&chain_config, m_keypair)?;
 
-        let event_source_mode = chain_config.event_source.clone();
-
         let mut rpc_client = HttpClient::new(chain_config.rpc_addr.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
@@ -213,7 +211,6 @@ impl CosmosBuilder {
             rpc_client,
             compat_mode,
             key,
-            event_source_mode,
             self.runtime.clone(),
             self.telemetry.clone(),
             self.packet_filter.clone(),

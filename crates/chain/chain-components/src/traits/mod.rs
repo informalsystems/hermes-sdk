@@ -1,5 +1,4 @@
 pub mod commitment_prefix;
-pub mod event_subscription;
 pub mod extract_data;
 pub mod message_builders;
 pub mod packet;
