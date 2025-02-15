@@ -1,7 +1,7 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::components::client::{
+use hermes_cosmos_chain_components::components::cosmos_to_cosmos::{
     ClientStateFieldsComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;

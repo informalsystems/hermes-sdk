@@ -1,6 +1,5 @@
 use cgp::prelude::*;
-use hermes_cosmos_relayer::presets::chain::CosmosChainFullPreset;
-use CosmosChainFullPreset::re_exports::*;
+use hermes_cosmos_relayer::presets::chain::*;
 
 use crate::impls::client_state::ProvideWrappedTendermintClientState;
 

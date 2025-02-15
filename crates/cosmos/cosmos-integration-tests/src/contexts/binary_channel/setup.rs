@@ -17,7 +17,7 @@ use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_test_components::driver::traits::types::builder_at::BuilderTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
-use hermes_test_components::setup::binary_channel::components::BinaryChannelTestComponents;
+use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
 use hermes_test_components::setup::traits::bootstrap_at::BootstrapAtComponent;
 use hermes_test_components::setup::traits::builder_at::BuilderAtComponent;
@@ -54,8 +54,6 @@ pub struct CosmosBinaryChannelSetupComponents;
 impl<BootstrapA, BootstrapB> HasComponents for CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
     type Components = CosmosBinaryChannelSetupComponents;
 }
-
-use BinaryChannelTestComponents::re_exports::*;
 
 BinaryChannelTestComponents::with_components! {
     | Components | {

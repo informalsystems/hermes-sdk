@@ -1,11 +1,9 @@
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::components::client::{
-    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
+use hermes_cosmos_chain_components::components::cosmos_to_cosmos::{
     ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent, OutgoingPacketTypeComponent,
-    PortIdTypeComponent, SequenceTypeComponent,
+    ConsensusStateWithProofsQuerierComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::{
@@ -41,7 +39,14 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsComponent, ClientStateTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::{
+    HeightFieldComponent, HeightTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::ibc::{
+    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
+    SequenceTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 
