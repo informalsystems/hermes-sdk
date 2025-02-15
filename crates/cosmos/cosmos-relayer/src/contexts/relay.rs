@@ -32,9 +32,7 @@ use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderG
 use hermes_relayer_components_extra::batch::traits::types::{
     CanUseMessageBatchChannel, MessageBatchSenderOf,
 };
-use hermes_relayer_components_extra::components::extra::relay::{
-    ExtraRelayPreset, IsExtraRelayPreset,
-};
+use hermes_relayer_components_extra::components::extra::relay::ExtraRelayPreset;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeComponent,

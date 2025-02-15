@@ -27,7 +27,7 @@ cgp_preset! {
             DecodeBufferTypeComponent,
             SchemaTypeComponent,
         ]:
-            WasmEncodingComponents,
+            WasmEncodingComponents::Provider,
         ConverterComponent:
             UseDelegate<WasmCosmosConverterComponents>,
         [

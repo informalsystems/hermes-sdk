@@ -1,9 +1,10 @@
 use cgp::prelude::*;
-use hermes_cosmos_relayer::presets::chain::*;
+use hermes_cosmos_relayer::presets::chain::CosmosChainFullPreset;
+use CosmosChainFullPreset::re_exports::*;
 
 use crate::impls::client_state::ProvideWrappedTendermintClientState;
 
-with_cosmos_chain_full_preset! {
+CosmosChainFullPreset::with_components! {
     [
         ClientStateTypeComponent,
         ClientStateFieldsComponent,
@@ -11,7 +12,7 @@ with_cosmos_chain_full_preset! {
     | Components | {
         cgp_preset! {
             CosmosChainWasmPreset {
-                Components : CosmosChainFullPreset,
+                Components : CosmosChainFullPreset::Provider,
                 [
                     ClientStateTypeComponent,
                     ClientStateFieldsComponent,

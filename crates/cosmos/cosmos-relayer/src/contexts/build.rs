@@ -38,7 +38,7 @@ use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::{
     RelayWithBatchBuilder, RelayWithBatchBuilderComponent,
 };
 use hermes_relayer_components_extra::components::extra::build::{
-    ChainBuilderComponent, ExtraBuildComponents, IsExtraBuildComponents,
+    ChainBuilderComponent, ExtraBuildComponents,
 };
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};

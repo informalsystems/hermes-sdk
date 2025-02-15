@@ -17,7 +17,7 @@ use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
+use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
 use hermes_cosmos_test_components::bootstrap::impls::chain::build_wait::BuildAndWaitChainDriver;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
@@ -50,6 +50,7 @@ use hermes_wasm_test_components::traits::bootstrap::gov_authority::GovernancePro
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
    a `CosmosChainDriver`.
 */
+#[cgp_context(CosmosWithWasmClientBootstrapComponents: CosmosSdkBootstrapComponents)]
 #[derive(HasField)]
 pub struct CosmosWithWasmClientBootstrap {
     pub runtime: HermesRuntime,
@@ -63,22 +64,6 @@ pub struct CosmosWithWasmClientBootstrap {
     pub wasm_client_byte_code: Vec<u8>,
     pub governance_proposal_authority: String,
     pub dynamic_gas: Option<DynamicGasConfig>,
-}
-
-pub struct CosmosWithWasmClientBootstrapComponents;
-
-impl HasComponents for CosmosWithWasmClientBootstrap {
-    type Components = CosmosWithWasmClientBootstrapComponents;
-}
-
-with_cosmos_sdk_bootstrap_components! {
-    | Components | {
-        delegate_components! {
-            CosmosWithWasmClientBootstrapComponents {
-                Components: CosmosSdkBootstrapComponents,
-            }
-        }
-    }
 }
 
 delegate_components! {

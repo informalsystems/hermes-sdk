@@ -27,7 +27,7 @@ delegate_components! {
             (ViaProtobuf, TendermintConsensusState),
             (ViaProtobuf, ProtoTendermintConsensusState),
         ]:
-            CosmosClientEncodingComponents,
+            CosmosClientEncodingComponents::Provider,
 
         (ViaProtobuf, AnyClientState): EncodeAnyClientState,
         (ViaProtobuf, AnyConsensusState): EncodeAnyConsensusState,

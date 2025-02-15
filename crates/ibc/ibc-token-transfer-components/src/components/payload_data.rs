@@ -5,7 +5,9 @@ use crate::types::packet_data::transfer::UseIbcTransferPayloadData;
 use crate::types::packet_data::unescrow::UseIbcTransferUnescrowPayloadData;
 use crate::types::tags::{IbcTransferApp, IbcTransferMintApp, IbcTransferUnescrowApp};
 
-cgp_preset! {
+pub struct IbcTokenTransferPayloadDataTypes;
+
+delegate_components! {
     IbcTokenTransferPayloadDataTypes {
         IbcTransferApp: UseIbcTransferPayloadData,
         IbcTransferMintApp: UseIbcTransferMintPayloadData,

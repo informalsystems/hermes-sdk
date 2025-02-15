@@ -6,9 +6,7 @@ use cgp::prelude::*;
 use hermes_relayer_components::birelay::traits::two_way::{
     TwoWayRelayGetter, TwoWayRelayGetterComponent,
 };
-use hermes_relayer_components::components::default::birelay::{
-    DefaultBiRelayComponents, IsDefaultBiRelayComponents,
-};
+use hermes_relayer_components::components::default::birelay::DefaultBiRelayComponents;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_runtime::types::runtime::HermesRuntime;

@@ -25,7 +25,7 @@ use hermes_relayer_components::chain::traits::types::client_state::ClientStateTy
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
-use hermes_wasm_encoding_components::components::*;
+use hermes_wasm_encoding_components::components::WasmEncodingComponents;
 use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 
 use crate::impls::types::client_state::ProvideWasmClientState;
@@ -86,23 +86,8 @@ impl DefaultEncodingGetter<WasmCounterparty, AsBytes> for WasmCounterpartyCompon
     }
 }
 
+#[cgp_context(WasmClientEncodingComponents : WasmEncodingComponents)]
 pub struct WasmClientEncoding;
-
-pub struct WasmClientEncodingComponents;
-
-impl HasComponents for WasmClientEncoding {
-    type Components = WasmClientEncodingComponents;
-}
-
-with_wasm_encoding_components! {
-    | Components | {
-        delegate_components! {
-            WasmClientEncodingComponents {
-                Components: WasmEncodingComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     WasmClientEncodingComponents {

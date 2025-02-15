@@ -54,7 +54,7 @@ cgp_preset! {
             NonceAllocatorComponent,
             TxResponsePollerComponent,
         ]:
-            DefaultTxComponents,
+            DefaultTxComponents::Provider,
         PollTimeoutGetterComponent:
             DefaultPollTimeout,
         TxMessageResponseParserComponent:

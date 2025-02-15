@@ -12,30 +12,15 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
-use hermes_solomachine_chain_components::encoding::components::*;
+use hermes_solomachine_chain_components::encoding::components::SolomachineEncodingComponents;
 use hermes_solomachine_chain_components::types::client_state::SolomachineClientState;
 use hermes_solomachine_chain_components::types::consensus_state::SolomachineConsensusState;
 
+#[cgp_context(SolomachineEncodingContextComponents: SolomachineEncodingComponents)]
 pub struct SolomachineEncoding;
 
-pub struct SolomachineEncodingComponents2;
-
-impl HasComponents for SolomachineEncoding {
-    type Components = SolomachineEncodingComponents2;
-}
-
-with_solomachine_encoding_components! {
-    | Components | {
-        delegate_components! {
-            SolomachineEncodingComponents2 {
-                Components: SolomachineEncodingComponents,
-            }
-        }
-    }
-}
-
 delegate_components! {
-    SolomachineEncodingComponents2 {
+    SolomachineEncodingContextComponents {
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
     }

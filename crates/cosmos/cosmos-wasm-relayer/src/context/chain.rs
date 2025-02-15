@@ -130,17 +130,16 @@ use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;
 use tendermint_rpc::{HttpClient, Url};
 
-use crate::components::chain::{CosmosChainWasmPreset, IsCosmosChainWasmPreset};
+use crate::components::chain::CosmosChainWasmPreset;
 use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
 use crate::types::client_state::WasmTendermintClientState;
 
+#[cgp_context(WasmCosmosChainComponents: CosmosChainWasmPreset)]
 #[derive(Clone)]
 pub struct WasmCosmosChain {
     pub chain: CosmosChain,
 }
-
-pub struct WasmCosmosChainComponents;
 
 impl Deref for WasmCosmosChain {
     type Target = CosmosChain;
@@ -148,10 +147,6 @@ impl Deref for WasmCosmosChain {
     fn deref(&self) -> &CosmosChain {
         &self.chain
     }
-}
-
-impl HasComponents for WasmCosmosChain {
-    type Components = WasmCosmosChainComponents;
 }
 
 delegate_components! {
@@ -184,23 +179,9 @@ delegate_components! {
     }
 }
 
-impl<Component> DelegateComponent<Component> for WasmCosmosChainComponents
-where
-    Self: IsCosmosChainWasmPreset<Component>,
-{
-    type Delegate = CosmosChainWasmPreset;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for WasmCosmosChainComponents
-where
-    Self: IsCosmosChainWasmPreset<Name>,
-    CosmosChainWasmPreset: IsProviderFor<Name, Context, Params>,
-{
-}
-
 delegate_components! {
     DelegateCosmosChainComponents {
-        WasmCosmosChain: CosmosToWasmCosmosComponents,
+        WasmCosmosChain: CosmosToWasmCosmosComponents::Provider,
     }
 }
 

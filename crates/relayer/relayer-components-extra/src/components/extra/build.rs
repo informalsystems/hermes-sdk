@@ -19,6 +19,6 @@ cgp_preset! {
             RelayBuilderComponent,
             BiRelayBuilderComponent,
         ]:
-            DefaultBuildComponents<BaseComponents>,
+            DefaultBuildComponents::Provider<BaseComponents>,
     }
 }

@@ -62,6 +62,6 @@ cgp_preset! {
             TcpPortReserverComponent,
             RandomGeneratorComponent,
         ]:
-            TokioParallelRuntimeComponents,
+            TokioParallelRuntimeComponents::Provider,
     }
 }

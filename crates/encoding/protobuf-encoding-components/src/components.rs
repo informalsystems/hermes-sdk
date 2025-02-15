@@ -19,7 +19,9 @@ use crate::impls::types::encode_buffer::ProvideBytesEncodeBuffer;
 pub use crate::traits::length::EncodedLengthGetterComponent;
 use crate::types::strategy::ViaProtobuf;
 
-cgp_preset! {
+pub struct ProtobufEncodingComponents;
+
+delegate_components! {
     ProtobufEncodingComponents {
         EncodedTypeComponent:
             ProvideEncodedBytes,

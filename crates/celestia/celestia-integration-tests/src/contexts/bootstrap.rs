@@ -70,6 +70,7 @@ use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
 
+#[cgp_context(CelestiaBootstrapComponents: LegacyCosmosSdkBootstrapComponents)]
 #[derive(HasField)]
 pub struct CelestiaBootstrap {
     pub runtime: HermesRuntime,
@@ -77,26 +78,6 @@ pub struct CelestiaBootstrap {
     pub chain_store_dir: PathBuf,
     pub bridge_store_dir: PathBuf,
     pub dynamic_gas: Option<DynamicGasConfig>,
-}
-
-pub struct CelestiaBootstrapComponents;
-
-impl HasComponents for CelestiaBootstrap {
-    type Components = CelestiaBootstrapComponents;
-}
-
-impl<Name> DelegateComponent<Name> for CelestiaBootstrapComponents
-where
-    Self: IsLegacyCosmosSdkBootstrapComponents<Name>,
-{
-    type Delegate = LegacyCosmosSdkBootstrapComponents;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for CelestiaBootstrapComponents
-where
-    Self: IsLegacyCosmosSdkBootstrapComponents<Name>,
-    LegacyCosmosSdkBootstrapComponents: IsProviderFor<Name, Context, Params>,
-{
 }
 
 delegate_components! {
@@ -111,7 +92,7 @@ delegate_components! {
             BridgeAuthTokenGeneratorComponent,
             BridgeStarterComponent,
         ]:
-            BaseCelestiaBootstrapComponents,
+            BaseCelestiaBootstrapComponents::Provider,
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent: WithType<HermesRuntime>,

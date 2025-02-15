@@ -36,7 +36,7 @@ cgp_preset! {
             CreateClientPayloadBuilderComponent,
             UpdateClientPayloadBuilderComponent,
         ]:
-            CosmosToCosmosComponents,
+            CosmosToCosmosComponents::Provider,
         [
             CreateClientMessageBuilderComponent,
             CreateClientMessageOptionsTypeComponent,

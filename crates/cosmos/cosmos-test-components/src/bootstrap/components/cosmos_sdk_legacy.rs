@@ -3,7 +3,7 @@ pub use hermes_test_components::bootstrap::traits::chain::{
     CanBootstrapChain, ChainBootstrapperComponent,
 };
 
-use crate::bootstrap::components::cosmos_sdk::{CosmosSdkBootstrapComponents, *};
+use crate::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_validator::LegacyAddCosmosGenesisValidator;
 use crate::bootstrap::impls::genesis_legacy::collect_gentxs::LegacyCollectCosmosGentxs;
@@ -37,7 +37,7 @@ pub use crate::bootstrap::traits::types::wallet_config::{
     WalletConfigTypeComponent,
 };
 
-with_cosmos_sdk_bootstrap_components! {
+CosmosSdkBootstrapComponents::with_components! {
     [
         GenesisAccountAdderComponent,
         GenesisValidatorAdderComponent,
@@ -52,7 +52,7 @@ with_cosmos_sdk_bootstrap_components! {
                 GenesisTransactionsCollectorComponent: LegacyCollectCosmosGentxs,
                 WalletInitializerComponent: InitCosmosTestWallet<GetStdOutOrElseStdErr>,
 
-                Components: CosmosSdkBootstrapComponents,
+                Components: CosmosSdkBootstrapComponents::Provider,
             }
         }
     }

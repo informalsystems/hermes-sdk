@@ -15,7 +15,9 @@ use crate::impls::commitment_root::EncodeCommitmentRoot;
 use crate::impls::height::EncodeHeight;
 use crate::impls::timestamp::EncodeTimestamp;
 
-cgp_preset! {
+pub struct CosmosEncodingComponents;
+
+delegate_components! {
     CosmosEncodingComponents {
         [
             EncodedTypeComponent,

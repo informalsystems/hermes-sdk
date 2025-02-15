@@ -24,23 +24,8 @@ use prost_types::Any;
 use crate::encoding::components::*;
 use crate::types::client_state::WasmTendermintClientState;
 
+#[cgp_context(WasmCosmosEncodingContextComponents: WasmCosmosEncodingComponents)]
 pub struct WasmCosmosEncoding;
-
-pub struct WasmCosmosEncodingContextComponents;
-
-impl HasComponents for WasmCosmosEncoding {
-    type Components = WasmCosmosEncodingContextComponents;
-}
-
-with_wasm_cosmos_encoding_components! {
-    | Components | {
-        delegate_components! {
-            WasmCosmosEncodingContextComponents {
-                Components: WasmCosmosEncodingComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     WasmCosmosEncodingContextComponents {

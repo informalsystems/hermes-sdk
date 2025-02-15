@@ -1,8 +1,6 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::encoding::components::{
-    CosmosClientEncodingComponents, IsCosmosClientEncodingComponents,
-};
+use hermes_cosmos_chain_components::encoding::components::CosmosClientEncodingComponents;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };

@@ -11,9 +11,8 @@ use hermes_tokio_runtime_components::impls::os::exec_command::{
     CommandNotFound, ExecCommandFailure,
 };
 
-use crate::impls::runtime::components::HermesRuntimeComponents;
 use crate::types::error::TokioRuntimeError;
-use crate::types::runtime::HermesRuntime;
+use crate::types::runtime::{HermesRuntime, HermesRuntimeComponents};
 
 impl ProvideErrorType<HermesRuntime> for HermesRuntimeComponents {
     type Error = TokioRuntimeError;

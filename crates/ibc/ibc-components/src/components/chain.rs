@@ -28,7 +28,9 @@ use crate::types::payload::UseIbcPayload;
 use crate::types::payload_header::UseIbcPayloadHeader;
 use crate::types::tags::apps::any::AnyApp;
 
-cgp_preset! {
+pub struct IbcChainComponents;
+
+delegate_components! {
     IbcChainComponents {
         [
             PacketTypeComponent,

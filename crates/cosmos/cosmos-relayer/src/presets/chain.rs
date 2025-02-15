@@ -1,19 +1,19 @@
 use cgp::prelude::*;
-pub use hermes_cosmos_chain_components::components::client::*;
-pub use hermes_cosmos_chain_components::components::transaction::*;
-pub use hermes_cosmos_test_components::chain::components::*;
+pub use hermes_cosmos_chain_components::components::client::CosmosChainClientPreset::re_exports::*;
+pub use hermes_cosmos_chain_components::components::transaction::CosmosChainTxPreset::re_exports::*;
+pub use hermes_cosmos_test_components::chain::components::CosmosChainTestPreset::re_exports::*;
 
-with_cosmos_chain_client_preset! {
+CosmosChainClientPreset::with_components! {
     | ClientComponents | {
-        with_cosmos_chain_tx_preset! {
+        CosmosChainTxPreset::with_components! {
             | TxComponents | {
-                with_cosmmos_chain_test_preset! {
+                CosmosChainTestPreset::with_components! {
                     | TestComponents | {
                         cgp_preset! {
                             CosmosChainFullPreset {
-                                ClientComponents: CosmosChainClientPreset,
-                                TestComponents: CosmmosChainTestPreset,
-                                TxComponents: CosmosChainTxPreset,
+                                ClientComponents: CosmosChainClientPreset::Provider,
+                                TestComponents: CosmosChainTestPreset::Provider,
+                                TxComponents: CosmosChainTxPreset::Provider,
                             }
                         }
                     }
