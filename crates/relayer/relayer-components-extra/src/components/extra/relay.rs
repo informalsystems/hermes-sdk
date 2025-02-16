@@ -1,6 +1,6 @@
-pub use cgp::extra::run::RunnerComponent;
+use cgp::extra::run::RunnerComponent;
 use cgp::prelude::*;
-pub use hermes_relayer_components::components::default::relay::*;
+use hermes_relayer_components::components::default::relay::DefaultRelayPreset;
 use hermes_relayer_components::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use hermes_relayer_components::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 
