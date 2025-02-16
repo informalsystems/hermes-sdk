@@ -2,7 +2,7 @@ use core::fmt::Debug;
 use std::path::PathBuf;
 
 use cgp::core::component::{UseContext, UseDelegate};
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -126,7 +126,7 @@ impl HasComponents for HermesApp {
 delegate_components! {
     HermesAppComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
             RetryableErrorComponent,
         ]:

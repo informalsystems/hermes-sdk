@@ -1,7 +1,7 @@
 use alloc::string::String;
 
 use cgp::core::component::{UseDelegate, WithProvider};
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::{UseDelegatedType, WithType};
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
@@ -87,7 +87,7 @@ cgp_preset! {
             PacketSenderComponent,
         ]:
             IbcChainComponents,
-        ErrorTypeComponent:
+        ErrorTypeProviderComponent:
             WithType<String>,
         QuantityTypeComponent:
             WithType<MockQuantity>,

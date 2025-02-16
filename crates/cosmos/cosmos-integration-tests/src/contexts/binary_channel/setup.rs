@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -67,7 +67,7 @@ with_binary_channel_test_components! {
 
 delegate_components! {
     CosmosBinaryChannelSetupComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
             BootstrapAtComponent,

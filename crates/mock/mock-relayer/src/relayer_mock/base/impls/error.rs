@@ -1,4 +1,6 @@
-use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent, ProvideErrorType};
+use cgp::core::error::{
+    ErrorRaiser, ErrorRaiserComponent, ErrorTypeProvider, ErrorTypeProviderComponent,
+};
 use cgp::prelude::*;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::send_message::EmptyMessageResponse;
@@ -8,8 +10,8 @@ use crate::relayer_mock::base::error::{BaseError, Error};
 
 pub struct HandleMockError;
 
-#[cgp_provider(ErrorTypeComponent)]
-impl<Context> ProvideErrorType<Context> for HandleMockError
+#[cgp_provider(ErrorTypeProviderComponent)]
+impl<Context> ErrorTypeProvider<Context> for HandleMockError
 where
     Context: Async,
 {

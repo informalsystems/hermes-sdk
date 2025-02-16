@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use std::vec;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -35,7 +35,7 @@ impl HasComponents for MockRelayContext {
 delegate_components! {
     MockRelayComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
         ]:
             HandleMockError,

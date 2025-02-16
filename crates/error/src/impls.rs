@@ -1,4 +1,4 @@
-use cgp::core::error::{ErrorTypeComponent, HasAsyncErrorType};
+use cgp::core::error::{ErrorTypeProviderComponent, HasAsyncErrorType};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_relayer_components::error::traits::retry::{
@@ -11,7 +11,7 @@ pub struct ProvideHermesError;
 
 delegate_components! {
     ProvideHermesError {
-        ErrorTypeComponent: WithType<Error>
+        ErrorTypeProviderComponent: WithType<Error>
     }
 }
 

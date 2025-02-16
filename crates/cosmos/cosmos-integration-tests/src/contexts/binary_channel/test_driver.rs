@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_error::handlers::debug::DebugError;
@@ -47,7 +47,7 @@ impl HasComponents for CosmosBinaryChannelTestDriver {
 
 delegate_components! {
     CosmosBinaryChannelTestDriverComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
             ChainTypeAtComponent<Index<0>>,

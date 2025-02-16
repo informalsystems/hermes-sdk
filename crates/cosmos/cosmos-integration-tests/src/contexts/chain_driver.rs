@@ -2,7 +2,7 @@ use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use std::path::PathBuf;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
@@ -79,7 +79,7 @@ impl HasComponents for CosmosChainDriver {
 
 delegate_components! {
     CosmosChainDriverComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,

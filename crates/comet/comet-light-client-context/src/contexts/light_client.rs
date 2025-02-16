@@ -1,5 +1,5 @@
 use cgp::core::component::{UseContext, UseDelegate};
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::WithDelegatedType;
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::height::{HasHeightType, HeightTypeComponent};
@@ -95,7 +95,7 @@ impl HasComponents for CometLightClient {
 
 delegate_components! {
     CometLightClientComponents {
-        ErrorTypeComponent:
+        ErrorTypeProviderComponent:
             ProvideHermesError,
         ErrorRaiserComponent:
             UseDelegate<HandleLightClientError>,

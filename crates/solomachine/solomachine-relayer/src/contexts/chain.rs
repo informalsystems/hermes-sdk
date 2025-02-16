@@ -4,7 +4,7 @@ use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -107,7 +107,7 @@ with_solomachine_chain_components! {
 
 delegate_components! {
     SolomachineChainComponents2 {
-        ErrorTypeComponent:
+        ErrorTypeProviderComponent:
             ProvideHermesError,
         ErrorRaiserComponent:
             DebugError,
