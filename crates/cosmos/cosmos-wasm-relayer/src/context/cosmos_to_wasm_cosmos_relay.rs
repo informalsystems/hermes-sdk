@@ -121,8 +121,8 @@ where
 {
 }
 
-impl HasComponents for CosmosToWasmCosmosRelay {
-    type Components = CosmosToWasmCosmosRelayComponents;
+impl HasProvider for CosmosToWasmCosmosRelay {
+    type Provider = CosmosToWasmCosmosRelayComponents;
 }
 
 pub trait CanUseCosmosToWasmCosmosRelay:

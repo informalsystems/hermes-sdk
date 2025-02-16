@@ -6,8 +6,8 @@ use crate::types::runtime::HermesRuntime;
 
 pub struct HermesRuntimeComponents;
 
-impl HasComponents for HermesRuntime {
-    type Components = HermesRuntimeComponents;
+impl HasProvider for HermesRuntime {
+    type Provider = HermesRuntimeComponents;
 }
 
 with_tokio_parallel_runtime_components! {

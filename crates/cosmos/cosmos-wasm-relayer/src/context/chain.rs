@@ -150,8 +150,8 @@ impl Deref for WasmCosmosChain {
     }
 }
 
-impl HasComponents for WasmCosmosChain {
-    type Components = WasmCosmosChainComponents;
+impl HasProvider for WasmCosmosChain {
+    type Provider = WasmCosmosChainComponents;
 }
 
 delegate_components! {

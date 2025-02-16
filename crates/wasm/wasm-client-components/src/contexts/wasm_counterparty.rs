@@ -34,8 +34,8 @@ pub struct WasmCounterparty;
 
 pub struct WasmCounterpartyComponents;
 
-impl HasComponents for WasmCounterparty {
-    type Components = WasmCounterpartyComponents;
+impl HasProvider for WasmCounterparty {
+    type Provider = WasmCounterpartyComponents;
 }
 
 delegate_components! {
@@ -90,8 +90,8 @@ pub struct WasmClientEncoding;
 
 pub struct WasmClientEncodingComponents;
 
-impl HasComponents for WasmClientEncoding {
-    type Components = WasmClientEncodingComponents;
+impl HasProvider for WasmClientEncoding {
+    type Provider = WasmClientEncodingComponents;
 }
 
 with_wasm_encoding_components! {

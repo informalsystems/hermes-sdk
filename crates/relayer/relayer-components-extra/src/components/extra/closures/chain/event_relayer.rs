@@ -1,4 +1,4 @@
-use cgp::prelude::{HasAsyncErrorType, HasComponents};
+use cgp::prelude::{HasAsyncErrorType, HasProvider};
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
 use hermes_relayer_components::chain::traits::packet::from_write_ack::{
@@ -39,7 +39,7 @@ where
         + CanBuildPacketFromWriteAck<Counterparty>
         + CanExtractFromEvent<Chain::SendPacketEvent>
         + CanExtractFromEvent<Chain::WriteAckEvent>
-        + HasComponents<Components = Components>,
+        + HasProvider<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain> + HasOutgoingPacketType<Chain>,
     Components: CounterpartyChainIdQuerier<Chain, Counterparty>
         + PacketFromWriteAckEventBuilder<Chain, Counterparty>,

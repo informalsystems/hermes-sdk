@@ -1,4 +1,4 @@
-use cgp::prelude::HasComponents;
+use cgp::prelude::HasProvider;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenTryMessage, ChannelOpenTryMessageBuilder,
 };
@@ -47,7 +47,7 @@ where
         + HasInitChannelOptionsType<Counterparty>
         + HasChannelOpenTryPayloadType<Counterparty>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
-        + HasComponents<Components = Components>,
+        + HasProvider<Components = Components>,
     Counterparty: HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
         + HasIbcChainTypes<Chain>

@@ -21,10 +21,10 @@ pub trait HasBoxedStreamType: HasStreamType {
         Item: Async;
 }
 
-impl<Runtime, Components> HasBoxedStreamType for Runtime
+impl<Runtime, Provider> HasBoxedStreamType for Runtime
 where
-    Runtime: Async + HasComponents<Components = Components>,
-    Components: BoxedStreamTypeProvider<Runtime>,
+    Runtime: Async + HasProvider<Provider = Provider>,
+    Provider: BoxedStreamTypeProvider<Runtime>,
 {
     fn to_boxed_stream<Item>(
         stream: Self::Stream<Item>,
@@ -32,7 +32,7 @@ where
     where
         Item: Async,
     {
-        Components::to_boxed_stream(stream)
+        Provider::to_boxed_stream(stream)
     }
 
     fn from_boxed_stream<Item>(
@@ -41,7 +41,7 @@ where
     where
         Item: Async,
     {
-        Components::from_boxed_stream(stream)
+        Provider::from_boxed_stream(stream)
     }
 }
 

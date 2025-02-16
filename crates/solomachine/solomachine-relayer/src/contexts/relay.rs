@@ -44,8 +44,8 @@ with_default_relay_preset! {
     }
 }
 
-impl HasComponents for SolomachineRelay {
-    type Components = SolomachineRelayComponents;
+impl HasProvider for SolomachineRelay {
+    type Provider = SolomachineRelayComponents;
 }
 
 delegate_components! {

@@ -1,4 +1,4 @@
-use cgp::prelude::HasComponents;
+use cgp::prelude::HasProvider;
 use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
 use hermes_relayer_components::chain::traits::message_builders::update_client::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
@@ -69,7 +69,7 @@ where
         + HasIbcChainTypes<Counterparty>
         + HasClientStateType<Counterparty>
         + HasUpdateClientPayloadType<Counterparty>
-        + HasComponents<Components = Components>,
+        + HasProvider<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasConsensusStateType<Chain>

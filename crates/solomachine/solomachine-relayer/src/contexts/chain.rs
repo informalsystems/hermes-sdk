@@ -89,8 +89,8 @@ pub struct MockSolomachine {
 
 pub struct SolomachineChainComponents2;
 
-impl HasComponents for MockSolomachine {
-    type Components = SolomachineChainComponents2;
+impl HasProvider for MockSolomachine {
+    type Provider = SolomachineChainComponents2;
 }
 
 impl DelegateComponent<MockSolomachine> for DelegateCosmosChainComponents {

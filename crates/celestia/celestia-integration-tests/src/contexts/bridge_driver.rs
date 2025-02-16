@@ -17,8 +17,8 @@ pub struct CelestiaBridgeDriver {
 
 pub struct CelestiaBridgeDriverComponents;
 
-impl HasComponents for CelestiaBridgeDriver {
-    type Components = CelestiaBridgeDriverComponents;
+impl HasProvider for CelestiaBridgeDriver {
+    type Provider = CelestiaBridgeDriverComponents;
 }
 
 #[cgp_provider(BridgeAuthTokenTypeComponent)]

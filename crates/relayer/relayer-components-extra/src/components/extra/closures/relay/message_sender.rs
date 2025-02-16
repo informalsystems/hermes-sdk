@@ -1,4 +1,4 @@
-use cgp::core::component::HasComponents;
+use cgp::core::component::HasProvider;
 use cgp::core::error::{CanRaiseAsyncError, ErrorOf, ErrorRaiser};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -55,7 +55,7 @@ where
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>
         + CanRaiseAsyncError<ErrorOf<Relay::Runtime>>
-        + HasComponents<Components = Components>,
+        + HasProvider<Components = Components>,
     SrcChain: HasIbcChainTypes<DstChain>
         + HasOutgoingPacketType<DstChain>
         + CanSendMessages

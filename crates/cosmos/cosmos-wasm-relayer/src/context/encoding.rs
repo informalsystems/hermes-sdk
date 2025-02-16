@@ -28,8 +28,8 @@ pub struct WasmCosmosEncoding;
 
 pub struct WasmCosmosEncodingContextComponents;
 
-impl HasComponents for WasmCosmosEncoding {
-    type Components = WasmCosmosEncodingContextComponents;
+impl HasProvider for WasmCosmosEncoding {
+    type Provider = WasmCosmosEncodingContextComponents;
 }
 
 with_wasm_cosmos_encoding_components! {

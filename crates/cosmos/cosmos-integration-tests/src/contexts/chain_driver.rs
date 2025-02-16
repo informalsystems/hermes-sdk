@@ -73,8 +73,8 @@ pub struct CosmosChainDriver {
 
 pub struct CosmosChainDriverComponents;
 
-impl HasComponents for CosmosChainDriver {
-    type Components = CosmosChainDriverComponents;
+impl HasProvider for CosmosChainDriver {
+    type Provider = CosmosChainDriverComponents;
 }
 
 delegate_components! {

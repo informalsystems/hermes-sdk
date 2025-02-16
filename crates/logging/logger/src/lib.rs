@@ -34,8 +34,8 @@ pub struct HermesLoggerComponents;
 
 pub struct HermesLogHandlers;
 
-impl HasComponents for HermesLogger {
-    type Components = HermesLoggerComponents;
+impl HasProvider for HermesLogger {
+    type Provider = HermesLoggerComponents;
 }
 
 delegate_components! {

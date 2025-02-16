@@ -40,8 +40,8 @@ where
     }
 }
 
-impl HasComponents for NoLogger {
-    type Components = NoLoggerComponents;
+impl HasProvider for NoLogger {
+    type Provider = NoLoggerComponents;
 }
 
 delegate_components! {

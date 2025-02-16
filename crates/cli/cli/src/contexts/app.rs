@@ -121,8 +121,8 @@ pub struct HermesParserComponents;
 
 pub struct HermesCommandRunnerComponents;
 
-impl HasComponents for HermesApp {
-    type Components = HermesAppComponents;
+impl HasProvider for HermesApp {
+    type Provider = HermesAppComponents;
 }
 
 delegate_components! {

@@ -41,8 +41,8 @@ pub struct CosmosBinaryChannelTestDriver {
 
 pub struct CosmosBinaryChannelTestDriverComponents;
 
-impl HasComponents for CosmosBinaryChannelTestDriver {
-    type Components = CosmosBinaryChannelTestDriverComponents;
+impl HasProvider for CosmosBinaryChannelTestDriver {
+    type Provider = CosmosBinaryChannelTestDriverComponents;
 }
 
 delegate_components! {

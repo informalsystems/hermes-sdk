@@ -89,8 +89,8 @@ pub struct CometLightClient {
 
 pub struct CometLightClientComponents;
 
-impl HasComponents for CometLightClient {
-    type Components = CometLightClientComponents;
+impl HasProvider for CometLightClient {
+    type Provider = CometLightClientComponents;
 }
 
 delegate_components! {

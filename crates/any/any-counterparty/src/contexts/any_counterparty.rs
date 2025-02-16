@@ -56,8 +56,8 @@ pub struct AnyCounterparty;
 
 pub struct AnyCounterpartyComponents;
 
-impl HasComponents for AnyCounterparty {
-    type Components = AnyCounterpartyComponents;
+impl HasProvider for AnyCounterparty {
+    type Provider = AnyCounterpartyComponents;
 }
 
 delegate_components! {
@@ -129,8 +129,8 @@ pub struct AnyClientEncoding;
 
 pub struct AnyClientEncodingComponents;
 
-impl HasComponents for AnyClientEncoding {
-    type Components = AnyClientEncodingComponents;
+impl HasProvider for AnyClientEncoding {
+    type Provider = AnyClientEncodingComponents;
 }
 
 delegate_components! {

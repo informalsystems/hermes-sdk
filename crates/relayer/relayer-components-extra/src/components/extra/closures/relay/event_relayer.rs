@@ -1,4 +1,4 @@
-use cgp::core::component::HasComponents;
+use cgp::core::component::HasProvider;
 use cgp::core::error::ErrorRaiser;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -32,7 +32,7 @@ where
         + HasLogger
         + UseExtraAckPacketRelayer
         + UseExtraPacketRelayer
-        + HasComponents<Components = Components>,
+        + HasProvider<Components = Components>,
     SrcChain: CanReadPacketFields<DstChain> + UseExtraChainComponentsForEventRelayer<DstChain>,
     DstChain: UseExtraChainComponentsForEventRelayer<SrcChain>,
     Components: DelegatesToExtraRelayPreset

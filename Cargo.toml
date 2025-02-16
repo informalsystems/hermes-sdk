@@ -177,24 +177,24 @@ hermes-ibc-token-transfer-components    = { version = "0.1.0" }
 hermes-ibc-mock-chain                   = { version = "0.1.0" }
 
 [patch.crates-io]
-cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
-cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "cgp-type-redesign" }
+cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
+cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "has-components-rename" }
 
 hermes-chain-components             = { path = "./crates/chain/chain-components" }
 hermes-chain-type-components        = { path = "./crates/chain/chain-type-components" }

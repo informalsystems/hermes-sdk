@@ -1,4 +1,4 @@
-use cgp::prelude::HasComponents;
+use cgp::prelude::HasProvider;
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilder, CanBuildAckPacketMessage,
@@ -73,7 +73,7 @@ where
         + HasWriteAckEvent<Counterparty>
         + CanExtractFromEvent<Chain::WriteAckEvent>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
-        + HasComponents<Components = Components>,
+        + HasProvider<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasOutgoingPacketType<Chain>
         + HasClientStateType<Chain>

@@ -83,8 +83,8 @@ pub struct CelestiaBootstrap {
 
 pub struct CelestiaBootstrapComponents;
 
-impl HasComponents for CelestiaBootstrap {
-    type Components = CelestiaBootstrapComponents;
+impl HasProvider for CelestiaBootstrap {
+    type Provider = CelestiaBootstrapComponents;
 }
 
 impl<Name> DelegateComponent<Name> for CelestiaBootstrapComponents

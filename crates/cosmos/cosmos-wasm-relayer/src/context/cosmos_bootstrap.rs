@@ -69,8 +69,8 @@ pub struct CosmosWithWasmClientBootstrap {
 
 pub struct CosmosWithWasmClientBootstrapComponents;
 
-impl HasComponents for CosmosWithWasmClientBootstrap {
-    type Components = CosmosWithWasmClientBootstrapComponents;
+impl HasProvider for CosmosWithWasmClientBootstrap {
+    type Provider = CosmosWithWasmClientBootstrapComponents;
 }
 
 with_cosmos_sdk_bootstrap_components! {

@@ -26,8 +26,8 @@ pub struct CosmosRelayDriver {
 
 pub struct CosmosRelayDriverComponents;
 
-impl HasComponents for CosmosRelayDriver {
-    type Components = CosmosRelayDriverComponents;
+impl HasProvider for CosmosRelayDriver {
+    type Provider = CosmosRelayDriverComponents;
 }
 
 delegate_components! {

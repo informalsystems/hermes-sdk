@@ -1,4 +1,4 @@
-use cgp::core::component::HasComponents;
+use cgp::core::component::HasProvider;
 use cgp::core::error::ErrorRaiser;
 use cgp::extra::run::CanRun;
 use cgp::prelude::HasAsyncErrorType;
@@ -39,7 +39,7 @@ where
         + CanUseMessageBatchChannel<Src>
         + CanUseMessageBatchChannel<Dst>
         + UseExtraEventRelayer
-        + HasComponents<Components = Components>,
+        + HasProvider<Components = Components>,
     SrcChain: HasAsyncErrorType
         + HasRuntime
         + HasChainId

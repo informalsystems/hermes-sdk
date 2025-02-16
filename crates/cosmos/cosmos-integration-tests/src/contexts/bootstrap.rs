@@ -74,8 +74,8 @@ pub struct CosmosBootstrapFields {
 
 pub struct CosmosBootstrapComponents;
 
-impl HasComponents for CosmosBootstrap {
-    type Components = CosmosBootstrapComponents;
+impl HasProvider for CosmosBootstrap {
+    type Provider = CosmosBootstrapComponents;
 }
 
 impl Deref for CosmosBootstrap {

@@ -51,8 +51,8 @@ pub struct CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
 }
 pub struct CosmosBinaryChannelSetupComponents;
 
-impl<BootstrapA, BootstrapB> HasComponents for CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
-    type Components = CosmosBinaryChannelSetupComponents;
+impl<BootstrapA, BootstrapB> HasProvider for CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
+    type Provider = CosmosBinaryChannelSetupComponents;
 }
 
 with_binary_channel_test_components! {

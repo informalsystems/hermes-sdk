@@ -190,8 +190,8 @@ impl<Chain: Async, Counterparty: Async> HasMockChainState<Chain, Counterparty>
     }
 }
 
-impl<Chain: Async, Counterparty: Async> HasComponents for MockChain<Chain, Counterparty> {
-    type Components = MockChainComponents;
+impl<Chain: Async, Counterparty: Async> HasProvider for MockChain<Chain, Counterparty> {
+    type Provider = MockChainComponents;
 }
 
 impl<Chain: Async, Counterparty: Async> Clone for MockChainState<Chain, Counterparty> {

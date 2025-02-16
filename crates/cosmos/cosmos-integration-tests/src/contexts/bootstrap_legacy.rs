@@ -73,8 +73,8 @@ pub struct LegacyCosmosBootstrapFields {
 
 pub struct LegacyCosmosBootstrapComponents;
 
-impl HasComponents for LegacyCosmosBootstrap {
-    type Components = LegacyCosmosBootstrapComponents;
+impl HasProvider for LegacyCosmosBootstrap {
+    type Provider = LegacyCosmosBootstrapComponents;
 }
 
 impl Deref for LegacyCosmosBootstrap {

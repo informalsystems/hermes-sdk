@@ -1,4 +1,4 @@
-use cgp::prelude::{CanRaiseAsyncError, HasComponents};
+use cgp::prelude::{CanRaiseAsyncError, HasProvider};
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
 use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
@@ -29,7 +29,7 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasSourceTargetChainTypes
         + HasDestinationTargetChainTypes
-        + HasComponents<Components = Components>
+        + HasProvider<Components = Components>
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>
         + for<'a> CanRaiseAsyncError<MissingChannelInitEventError<'a, Relay>>

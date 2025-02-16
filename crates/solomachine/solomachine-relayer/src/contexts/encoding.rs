@@ -20,8 +20,8 @@ pub struct SolomachineEncoding;
 
 pub struct SolomachineEncodingComponents2;
 
-impl HasComponents for SolomachineEncoding {
-    type Components = SolomachineEncodingComponents2;
+impl HasProvider for SolomachineEncoding {
+    type Provider = SolomachineEncodingComponents2;
 }
 
 with_solomachine_encoding_components! {
