@@ -12,7 +12,9 @@ use hermes_relayer_components::components::default::birelay::{
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
@@ -33,7 +35,7 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         ChainTypeAtComponent<Index<0>>: WithType<CosmosChain>,
         ChainTypeAtComponent<Index<1>>: WithType<CosmosChain>,

@@ -53,7 +53,9 @@ use hermes_relayer_components::chain::traits::types::connection::HasInitConnecti
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use hermes_solomachine_chain_components::components::cosmos::SolomachineCosmosComponents;
 use hermes_solomachine_chain_components::components::solomachine::*;
 use hermes_solomachine_chain_components::methods::encode::public_key::PublicKey;
@@ -111,7 +113,7 @@ delegate_components! {
             ProvideHermesError,
         ErrorRaiserComponent:
             DebugError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             EncodingTypeComponent,

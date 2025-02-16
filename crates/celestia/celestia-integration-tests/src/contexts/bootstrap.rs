@@ -63,7 +63,9 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::HermesError;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 use tokio::process::Child;
@@ -114,7 +116,7 @@ delegate_components! {
             BaseCelestiaBootstrapComponents,
         ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             ChainTypeComponent,

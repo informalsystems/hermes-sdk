@@ -96,7 +96,9 @@ use hermes_logging_components::traits::has_logger::{
 };
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
 use serde::Serialize;
@@ -131,7 +133,7 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             ProvideCliError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             LoggerTypeComponent,

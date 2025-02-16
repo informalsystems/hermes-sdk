@@ -17,7 +17,9 @@ use hermes_relayer_components::relay::traits::packet_lock::{
 };
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 
 use crate::relayer_mock::base::error::Error;
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -39,7 +41,7 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleMockError,
-        RuntimeTypeComponent: WithType<MockRuntimeContext>,
+        RuntimeTypeProviderComponent: WithType<MockRuntimeContext>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             ChainTypeAtComponent<Src>,

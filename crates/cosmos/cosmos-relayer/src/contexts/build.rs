@@ -41,7 +41,9 @@ use hermes_relayer_components_extra::components::extra::build::{
     ChainBuilderComponent, ExtraBuildComponents, IsExtraBuildComponents,
 };
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
@@ -101,7 +103,7 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         BiRelayTypeAtComponent<Index<0>, Index<1>>:
             WithType<CosmosBiRelay>,

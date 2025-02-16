@@ -116,7 +116,7 @@ use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{
-    HasRuntime, RuntimeGetterComponent, RuntimeTypeComponent,
+    HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_wasm_test_components::components::WasmChainComponents;
@@ -162,7 +162,7 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             LoggerTypeComponent,

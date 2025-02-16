@@ -27,7 +27,7 @@ use hermes_error::types::Error;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    RuntimeGetter, RuntimeGetterComponent, RuntimeTypeComponent,
+    RuntimeGetter, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
@@ -81,7 +81,7 @@ delegate_components! {
     CosmosChainDriverComponents {
         ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
-        RuntimeTypeComponent:
+        RuntimeTypeProviderComponent:
             ProvideHermesRuntime,
         [
             RandomAmountGeneratorComponent,

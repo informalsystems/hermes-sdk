@@ -30,7 +30,9 @@ use hermes_relayer_components::relay::impls::packet_lock::PacketMutexGetterCompo
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
 
 use crate::context::chain::WasmCosmosChain;
@@ -77,7 +79,7 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             LoggerTypeComponent,

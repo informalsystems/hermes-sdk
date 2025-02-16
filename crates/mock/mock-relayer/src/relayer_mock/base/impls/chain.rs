@@ -84,7 +84,9 @@ use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusT
 use hermes_relayer_components::chain::traits::types::timestamp::{
     ProvideTimeType, ProvideTimeoutType,
 };
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -111,7 +113,7 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleMockError,
-        RuntimeTypeComponent: WithType<MockRuntimeContext>,
+        RuntimeTypeProviderComponent: WithType<MockRuntimeContext>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             MessageResponseTypeComponent,

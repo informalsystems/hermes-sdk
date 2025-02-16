@@ -37,7 +37,7 @@ use hermes_relayer_components_extra::components::extra::relay::{
 };
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeComponent,
+    HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,
 };
 use ibc::core::host::types::identifiers::ClientId;
 
@@ -115,7 +115,7 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             ChainTypeAtComponent<Index<0>>,
