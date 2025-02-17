@@ -29,7 +29,6 @@ pub use hermes_runtime_components::traits::random::RandomGeneratorComponent;
 pub use hermes_runtime_components::traits::sleep::SleeperComponent;
 pub use hermes_runtime_components::traits::spawn::TaskSpawnerComponent;
 pub use hermes_runtime_components::traits::stream::{StreamMapperComponent, StreamTypeComponent};
-pub use hermes_runtime_components::traits::subscription::SubscriptionComponent;
 pub use hermes_runtime_components::traits::task::ConcurrentTaskRunnerComponent;
 pub use hermes_runtime_components::traits::time::TimeComponent;
 
