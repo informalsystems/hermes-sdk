@@ -19,25 +19,7 @@ use hermes_chain_type_components::impls::types::message_response::UseEventsMessa
 use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterComponent;
 use hermes_chain_type_components::traits::types::commitment_proof::ProvideCommitmentProofType;
 use hermes_cosmos_chain_components::components::client::{
-    AckPacketMessageBuilderComponent, AckPacketPayloadBuilderComponent,
-    AckPacketPayloadTypeComponent, ChainIdTypeComponent, ChainStatusQuerierComponent,
-    ChainStatusTypeComponent, ChannelIdTypeComponent, ClientIdTypeComponent,
-    ClientStateQuerierComponent, ClientStateTypeComponent, CommitmentProofTypeComponent,
-    ConnectionIdTypeComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    CounterpartyMessageHeightGetterComponent, EventExtractorComponent, EventTypeComponent,
-    HeightIncrementerComponent, HeightTypeComponent, MessageResponseEventsGetterComponent,
-    MessageResponseTypeComponent, MessageSizeEstimatorComponent, MessageTypeComponent,
-    OutgoingPacketTypeComponent, PacketAcknowledgementQuerierComponent,
-    PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
-    PacketFromSendPacketEventBuilderComponent, PacketFromWriteAckEventBuilderComponent,
-    PacketIsReceivedQuerierComponent, PacketSequenceGetterComponent,
-    PacketSrcChannelIdGetterComponent, PacketSrcPortIdGetterComponent,
-    PacketTimeoutHeightGetterComponent, PacketTimeoutTimestampGetterComponent, PortIdTypeComponent,
-    ReceivePacketMessageBuilderComponent, ReceivePacketPayloadBuilderComponent,
-    ReceivePacketPayloadTypeComponent, SendPacketEventComponent, SequenceTypeComponent,
-    TimeTypeComponent, TimeoutTypeComponent, TimeoutUnorderedPacketMessageBuilderComponent,
-    TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadTypeComponent,
-    WriteAckEventComponent, WriteAckQuerierComponent,
+    AckPacketMessageBuilderComponent, AckPacketPayloadBuilderComponent, AckPacketPayloadTypeComponent, ChainIdTypeComponent, ChainStatusQuerierComponent, ChainStatusTypeComponent, ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateQuerierComponent, ClientStateTypeComponent, CommitmentProofTypeComponent, ConnectionIdTypeComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent, CounterpartyMessageHeightGetterComponent, EventExtractorComponent, EventTypeComponent, HeightIncrementerComponent, HeightTypeComponent, MessageResponseEventsGetterComponent, MessageResponseTypeComponent, MessageSizeEstimatorComponent, MessageTypeComponent, OutgoingPacketTypeComponent, PacketAcknowledgementQuerierComponent, PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent, PacketFromSendPacketEventBuilderComponent, PacketFromWriteAckEventBuilderComponent, PacketIsClearedQuerierComponent, PacketIsReceivedQuerierComponent, PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent, PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent, PacketTimeoutTimestampGetterComponent, PortIdTypeComponent, ReceivePacketMessageBuilderComponent, ReceivePacketPayloadBuilderComponent, ReceivePacketPayloadTypeComponent, SendPacketEventComponent, SequenceTypeComponent, TimeTypeComponent, TimeoutTypeComponent, TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadTypeComponent, WriteAckEventComponent, WriteAckQuerierComponent
 };
 use hermes_cosmos_chain_components::components::transaction::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
@@ -496,6 +478,7 @@ impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockCha
     }
 }
 
+#[cgp_provider(PacketIsClearedQuerierComponent)]
 impl PacketIsClearedQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_packet_is_cleared(
         _chain: &MockChainContext,
