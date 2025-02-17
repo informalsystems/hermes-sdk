@@ -1,11 +1,11 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
 use hermes_relayer_components::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
+use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::components::default::relay::PacketRelayerComponent;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
@@ -48,13 +48,12 @@ where
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>
         + for<'a> CanRaiseAsyncError<MaxRetryExceededError<'a, Relay>>,
-    SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
+    SrcChain:
+        CanQueryChainStatus + CanQueryPacketIsCleared<DstChain> + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
         + HasWriteAckEvent<Relay::SrcChain>
         + CanBuildPacketFromWriteAck<Relay::SrcChain>
-        + HasChannelIdType<SrcChain>
-        + HasPortIdType<SrcChain>
-        + HasTimeoutType,
+        + CanQueryPacketIsReceived<SrcChain>,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>
         + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,

@@ -1,10 +1,7 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::packet::fields::{
-    HasPacketTimeoutHeight, HasPacketTimeoutTimestamp,
-};
+use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
-use hermes_chain_components::traits::types::ibc::{HasChannelIdType, HasPortIdType};
-use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
+use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -47,21 +44,26 @@ where
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>,
-    SrcChain: CanQueryChainStatus
-        + HasPacketTimeoutHeight<DstChain>
-        + HasPacketTimeoutTimestamp<DstChain>,
+    SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
-        + HasWriteAckEvent<Relay::SrcChain>
-        + CanBuildPacketFromWriteAck<Relay::SrcChain>
-        + HasChannelIdType<SrcChain>
-        + HasPortIdType<SrcChain>
-        + HasTimeoutType,
+        + HasWriteAckEvent<SrcChain>
+        + CanBuildPacketFromWriteAck<SrcChain>
+        + CanQueryPacketIsReceived<SrcChain>,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
         let logger = relay.logger();
+
+        let is_packet_received = dst_chain
+            .query_packet_is_received(
+                &SrcChain::packet_dst_port_id(packet),
+                &SrcChain::packet_dst_channel_id(packet),
+                &SrcChain::packet_sequence(packet),
+            )
+            .await
+            .map_err(Relay::raise_error)?;
 
         let destination_status = dst_chain
             .query_chain_status()
@@ -87,7 +89,7 @@ where
             }
         };
 
-        if has_packet_timed_out {
+        if !is_packet_received && has_packet_timed_out {
             logger
                 .log(
                     "relaying timeout unordered packet",
@@ -119,7 +121,7 @@ where
                 )
                 .await;
 
-            let write_ack = relay
+            let m_ack = relay
                 .relay_receive_packet(
                     Relay::SrcChain::chain_status_height(&src_chain_status),
                     packet,
@@ -133,7 +135,7 @@ where
 
             let destination_height = DstChain::chain_status_height(&destination_status);
 
-            if let Some(ack_event) = write_ack {
+            if let Some(ack) = m_ack {
                 logger
                     .log(
                         "relaying ack packet",
@@ -144,11 +146,6 @@ where
                         },
                     )
                     .await;
-
-                let ack = dst_chain
-                    .build_ack_from_write_ack_event(&ack_event)
-                    .await
-                    .map_err(Relay::raise_error)?;
 
                 relay
                     .relay_ack_packet(destination_height, packet, &ack)

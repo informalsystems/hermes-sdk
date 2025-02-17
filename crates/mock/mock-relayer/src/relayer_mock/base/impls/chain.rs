@@ -17,25 +17,27 @@ use cgp::prelude::*;
 use eyre::eyre;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterComponent;
+use hermes_chain_type_components::traits::types::commitment_proof::ProvideCommitmentProofType;
 use hermes_cosmos_chain_components::components::client::{
     AckPacketMessageBuilderComponent, AckPacketPayloadBuilderComponent,
     AckPacketPayloadTypeComponent, ChainIdTypeComponent, ChainStatusQuerierComponent,
     ChainStatusTypeComponent, ChannelIdTypeComponent, ClientIdTypeComponent,
-    ClientStateQuerierComponent, ClientStateTypeComponent, ConnectionIdTypeComponent,
-    ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
+    ClientStateQuerierComponent, ClientStateTypeComponent, CommitmentProofTypeComponent,
+    ConnectionIdTypeComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
     CounterpartyMessageHeightGetterComponent, EventExtractorComponent, EventTypeComponent,
     HeightIncrementerComponent, HeightTypeComponent, MessageResponseEventsGetterComponent,
     MessageResponseTypeComponent, MessageSizeEstimatorComponent, MessageTypeComponent,
-    OutgoingPacketTypeComponent, PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
+    OutgoingPacketTypeComponent, PacketAcknowledgementQuerierComponent,
+    PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
     PacketFromSendPacketEventBuilderComponent, PacketFromWriteAckEventBuilderComponent,
-    PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
-    PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,
-    PacketTimeoutTimestampGetterComponent, PortIdTypeComponent,
+    PacketIsReceivedQuerierComponent, PacketSequenceGetterComponent,
+    PacketSrcChannelIdGetterComponent, PacketSrcPortIdGetterComponent,
+    PacketTimeoutHeightGetterComponent, PacketTimeoutTimestampGetterComponent, PortIdTypeComponent,
     ReceivePacketMessageBuilderComponent, ReceivePacketPayloadBuilderComponent,
-    ReceivePacketPayloadTypeComponent, ReceivedPacketQuerierComponent, SendPacketEventComponent,
-    SequenceTypeComponent, TimeTypeComponent, TimeoutTypeComponent,
-    TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent,
-    TimeoutUnorderedPacketPayloadTypeComponent, WriteAckEventComponent, WriteAckQuerierComponent,
+    ReceivePacketPayloadTypeComponent, SendPacketEventComponent, SequenceTypeComponent,
+    TimeTypeComponent, TimeoutTypeComponent, TimeoutUnorderedPacketMessageBuilderComponent,
+    TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+    WriteAckEventComponent, WriteAckQuerierComponent,
 };
 use hermes_cosmos_chain_components::components::transaction::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
@@ -55,7 +57,9 @@ use hermes_relayer_components::chain::traits::payload_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
-use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::PacketIsReceivedQuerier;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::send_message::MessageSender;
 use hermes_relayer_components::chain::traits::types::chain_id::{
@@ -237,6 +241,11 @@ impl ProvideWriteAckEvent<MockChainContext, MockChainContext> for MockChainCompo
     type WriteAckEvent = WriteAckEvent;
 }
 
+#[cgp_provider(CommitmentProofTypeComponent)]
+impl ProvideCommitmentProofType<MockChainContext> for MockChainComponents {
+    type CommitmentProof = ();
+}
+
 #[cgp_provider(PacketFromWriteAckEventBuilderComponent)]
 impl PacketFromWriteAckEventBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_packet_from_write_ack_event(
@@ -251,6 +260,19 @@ impl PacketFromWriteAckEventBuilder<MockChainContext, MockChainContext> for Mock
         _ack: &WriteAckEvent,
     ) -> Result<Vec<u8>, Error> {
         Ok(Vec::new())
+    }
+}
+
+#[cgp_provider(PacketAcknowledgementQuerierComponent)]
+impl PacketAcknowledgementQuerier<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn query_packet_acknowledgement(
+        _chain: &MockChainContext,
+        _channel_id: &ChannelId,
+        _port_id: &PortId,
+        _sequence: &Sequence,
+        _height: &MockHeight,
+    ) -> Result<(Vec<u8>, ()), Error> {
+        todo!()
     }
 }
 
@@ -391,8 +413,8 @@ impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainCompone
     }
 }
 
-#[cgp_provider(ReceivedPacketQuerierComponent)]
-impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComponents {
+#[cgp_provider(PacketIsReceivedQuerierComponent)]
+impl PacketIsReceivedQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_packet_is_received(
         chain: &MockChainContext,
         port_id: &PortId,
@@ -471,6 +493,17 @@ impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockCha
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {
         Ok(payload)
+    }
+}
+
+impl PacketIsClearedQuerier<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn query_packet_is_cleared(
+        _chain: &MockChainContext,
+        _port_id: &PortId,
+        _channel_id: &ChannelId,
+        _sequence: &Sequence,
+    ) -> Result<bool, Error> {
+        Ok(false) // stub
     }
 }
 

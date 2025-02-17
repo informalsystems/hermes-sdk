@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::{
-    ReceivedPacketQuerier, ReceivedPacketQuerierComponent,
+    PacketIsReceivedQuerier, PacketIsReceivedQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
@@ -13,10 +13,11 @@ use tonic::{Request, Status};
 
 use crate::traits::grpc_address::HasGrpcAddress;
 
-pub struct QueryCosmosReceivedPacket;
+pub struct QueryCosmosPacketIsReceived;
 
-#[cgp_provider(ReceivedPacketQuerierComponent)]
-impl<Chain, Counterparty> ReceivedPacketQuerier<Chain, Counterparty> for QueryCosmosReceivedPacket
+#[cgp_provider(PacketIsReceivedQuerierComponent)]
+impl<Chain, Counterparty> PacketIsReceivedQuerier<Chain, Counterparty>
+    for QueryCosmosPacketIsReceived
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
         + HasGrpcAddress

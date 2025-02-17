@@ -4,7 +4,7 @@ use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 
 #[cgp_component {
-  provider: ReceivedPacketQuerier,
+  provider: PacketIsReceivedQuerier,
   context: Chain,
 }]
 #[async_trait]

@@ -1,8 +1,8 @@
 use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
-use hermes_chain_components::traits::types::ibc::{HasChannelIdType, HasPortIdType};
-use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
+use hermes_chain_components::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
+use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -17,6 +17,7 @@ use crate::relay::impls::packet_relayers::general::lock::{
     LockPacketRelayer, LogSkipRelayLockedPacket,
 };
 use crate::relay::impls::packet_relayers::general::log::{LogRelayPacketStatus, LoggerRelayer};
+use crate::relay::impls::packet_relayers::skip_cleared::SkipClearedPacket;
 use crate::relay::traits::chains::{HasRelayChains, HasRelayPacketType};
 use crate::relay::traits::packet_filter::CanFilterRelayPackets;
 use crate::relay::traits::packet_lock::HasPacketLock;
@@ -40,19 +41,18 @@ where
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>,
-    SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
+    SrcChain:
+        CanQueryChainStatus + CanQueryPacketIsCleared<DstChain> + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
-        + HasWriteAckEvent<Relay::SrcChain>
-        + CanBuildPacketFromWriteAck<Relay::SrcChain>
-        + HasChannelIdType<SrcChain>
-        + HasPortIdType<SrcChain>
-        + HasTimeoutType,
+        + HasWriteAckEvent<SrcChain>
+        + CanBuildPacketFromWriteAck<SrcChain>
+        + CanQueryPacketIsReceived<SrcChain>,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>
         + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
-        <LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>>::relay_packet(
+        <LockPacketRelayer<LoggerRelayer<FilterRelayer<SkipClearedPacket<FullCycleRelayer>>>>>::relay_packet(
             relay, packet,
         )
         .await
