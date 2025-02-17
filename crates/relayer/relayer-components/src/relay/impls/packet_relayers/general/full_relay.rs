@@ -2,7 +2,6 @@ use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
-use hermes_chain_components::traits::queries::write_ack::CanQueryWriteAckEvent;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -48,7 +47,6 @@ where
     SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
         + HasWriteAckEvent<SrcChain>
-        + CanQueryWriteAckEvent<SrcChain>
         + CanBuildPacketFromWriteAck<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
@@ -107,35 +105,28 @@ where
                 .relay_timeout_unordered_packet(destination_height, packet)
                 .await?;
         } else {
-            let write_ack = if is_packet_received {
-                dst_chain
-                    .query_write_ack_event(packet)
-                    .await
-                    .map_err(Relay::raise_error)?
-            } else {
-                let src_chain_status = src_chain
-                    .query_chain_status()
-                    .await
-                    .map_err(Relay::raise_error)?;
+            let src_chain_status = src_chain
+                .query_chain_status()
+                .await
+                .map_err(Relay::raise_error)?;
 
-                logger
-                    .log(
-                        "relaying receive packet",
-                        &LogRelayPacketAction {
-                            relay,
-                            packet,
-                            relay_progress: RelayPacketProgress::RelayRecvPacket,
-                        },
-                    )
-                    .await;
-
-                relay
-                    .relay_receive_packet(
-                        Relay::SrcChain::chain_status_height(&src_chain_status),
+            logger
+                .log(
+                    "relaying receive packet",
+                    &LogRelayPacketAction {
+                        relay,
                         packet,
-                    )
-                    .await?
-            };
+                        relay_progress: RelayPacketProgress::RelayRecvPacket,
+                    },
+                )
+                .await;
+
+            let write_ack = relay
+                .relay_receive_packet(
+                    Relay::SrcChain::chain_status_height(&src_chain_status),
+                    packet,
+                )
+                .await?;
 
             let destination_status = dst_chain
                 .query_chain_status()

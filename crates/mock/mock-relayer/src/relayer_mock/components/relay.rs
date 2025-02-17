@@ -8,7 +8,7 @@ use hermes_relayer_components::relay::impls::update_client::wait::WaitUpdateClie
 use hermes_relayer_components::relay::impls::packet_relayers::ack::base_ack_packet::BaseAckPacketRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::FullCycleRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::receive::base_receive_packet::BaseReceivePacketRelayer;
-use hermes_relayer_components::relay::impls::packet_relayers::receive::skip_received_packet::SkipReceivedPacketRelayer;
+use hermes_relayer_components::relay::impls::packet_relayers::receive::skip_received_packet::SkipReceivedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::timeout_unordered::timeout_unordered_packet::BaseTimeoutUnorderedPacketRelayer;
 use hermes_relayer_components::relay::traits::ibc_message_sender::{MainSink, IbcMessageSenderComponent};
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
@@ -33,7 +33,7 @@ delegate_components! {
             SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
         PacketRelayerComponent: FullCycleRelayer,
         ReceivePacketRelayerComponent:
-            SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
+            SkipReceivedPacket<BaseReceivePacketRelayer>,
         AckPacketRelayerComponent:
             BaseAckPacketRelayer,
         TimeoutUnorderedPacketRelayerComponent:

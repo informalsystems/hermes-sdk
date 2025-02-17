@@ -3,7 +3,6 @@ use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_chain_components::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
-use hermes_chain_components::traits::queries::write_ack::CanQueryWriteAckEvent;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -46,7 +45,6 @@ where
         CanQueryChainStatus + CanQueryPacketIsCleared<DstChain> + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
         + HasWriteAckEvent<SrcChain>
-        + CanQueryWriteAckEvent<SrcChain>
         + CanBuildPacketFromWriteAck<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
