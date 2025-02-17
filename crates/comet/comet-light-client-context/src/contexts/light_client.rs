@@ -1,5 +1,5 @@
 use cgp::core::component::{UseContext, UseDelegate};
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::WithDelegatedType;
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::height::{HasHeightType, HeightTypeComponent};
@@ -76,6 +76,7 @@ use crate::traits::verification_trace::{VerificationTrace, VerificationTraceGett
 use crate::traits::verifier::VerifierComponent;
 use crate::traits::verifier_options::{HasVerifierOptions, VerifierOptionsGetterComponent};
 
+#[cgp_context(CometLightClientComponents)]
 #[derive(HasField)]
 pub struct CometLightClient {
     pub current_time: Time,
@@ -87,15 +88,9 @@ pub struct CometLightClient {
     pub verifier: ProdVerifier,
 }
 
-pub struct CometLightClientComponents;
-
-impl HasComponents for CometLightClient {
-    type Components = CometLightClientComponents;
-}
-
 delegate_components! {
     CometLightClientComponents {
-        ErrorTypeComponent:
+        ErrorTypeProviderComponent:
             ProvideHermesError,
         ErrorRaiserComponent:
             UseDelegate<HandleLightClientError>,

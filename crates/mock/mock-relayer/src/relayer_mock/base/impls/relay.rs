@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use std::vec;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -17,7 +17,9 @@ use hermes_relayer_components::relay::traits::packet_lock::{
 };
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 
 use crate::relayer_mock::base::error::Error;
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -28,18 +30,14 @@ use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::components::relay::MockRelayComponents;
 use crate::relayer_mock::contexts::relay::MockRelayContext;
 
-impl HasComponents for MockRelayContext {
-    type Components = MockRelayComponents;
-}
-
 delegate_components! {
     MockRelayComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
         ]:
             HandleMockError,
-        RuntimeTypeComponent: WithType<MockRuntimeContext>,
+        RuntimeTypeProviderComponent: WithType<MockRuntimeContext>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             ChainTypeAtComponent<Src>,

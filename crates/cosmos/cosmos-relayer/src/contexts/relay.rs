@@ -2,7 +2,7 @@ use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 use core::ops::Deref;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -37,7 +37,7 @@ use hermes_relayer_components_extra::components::extra::relay::{
 };
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeComponent,
+    HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,
 };
 use ibc::core::host::types::identifiers::ClientId;
 
@@ -110,12 +110,12 @@ impl CosmosRelay {
 delegate_components! {
     CosmosRelayComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             ChainTypeAtComponent<Index<0>>,

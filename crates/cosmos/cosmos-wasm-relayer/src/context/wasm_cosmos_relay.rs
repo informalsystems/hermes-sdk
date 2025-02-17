@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 use std::sync::Arc;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::extra::run::CanRun;
@@ -29,11 +29,14 @@ use hermes_relayer_components::relay::impls::packet_lock::PacketMutexGetterCompo
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
 
 use crate::context::chain::WasmCosmosChain;
 
+#[cgp_context(WasmCosmosRelayComponents: DefaultRelayPreset)]
 #[derive(HasField, Clone)]
 pub struct WasmCosmosRelay {
     pub runtime: HermesRuntime,
@@ -66,17 +69,15 @@ impl WasmCosmosRelay {
     }
 }
 
-pub struct WasmCosmosRelayComponents;
-
 delegate_components! {
     WasmCosmosRelayComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
@@ -101,24 +102,6 @@ delegate_components! {
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
     }
-}
-
-impl<Component> DelegateComponent<Component> for WasmCosmosRelayComponents
-where
-    Self: IsDefaultRelayPreset<Component>,
-{
-    type Delegate = DefaultRelayPreset;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for WasmCosmosRelayComponents
-where
-    Self: IsDefaultRelayPreset<Name>,
-    DefaultRelayPreset: IsProviderFor<Name, Context, Params>,
-{
-}
-
-impl HasComponents for WasmCosmosRelay {
-    type Components = WasmCosmosRelayComponents;
 }
 
 pub trait CanUseWasmCosmosRelay:

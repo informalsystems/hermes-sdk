@@ -5,6 +5,7 @@ use cgp::prelude::*;
 use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
+#[cgp_context(MockRelayComponents)]
 #[derive(HasField)]
 pub struct MockRelayContext {
     pub src_chain: MockChainContext,

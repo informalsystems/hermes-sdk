@@ -2,7 +2,7 @@ use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use std::path::PathBuf;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
@@ -27,7 +27,7 @@ use hermes_error::types::Error;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    RuntimeGetter, RuntimeGetterComponent, RuntimeTypeComponent,
+    RuntimeGetter, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
@@ -58,6 +58,7 @@ use toml::to_string_pretty;
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
 */
+#[cgp_context(CosmosChainDriverComponents)]
 pub struct CosmosChainDriver {
     pub chain: CosmosChain,
     pub chain_command_path: PathBuf,
@@ -71,17 +72,11 @@ pub struct CosmosChainDriver {
     pub wallets: BTreeMap<String, CosmosTestWallet>,
 }
 
-pub struct CosmosChainDriverComponents;
-
-impl HasComponents for CosmosChainDriver {
-    type Components = CosmosChainDriverComponents;
-}
-
 delegate_components! {
     CosmosChainDriverComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
-        RuntimeTypeComponent:
+        RuntimeTypeProviderComponent:
             ProvideHermesRuntime,
         [
             RandomAmountGeneratorComponent,

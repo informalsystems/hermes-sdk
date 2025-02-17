@@ -2,7 +2,7 @@ use core::fmt::Debug;
 use std::path::PathBuf;
 
 use cgp::core::component::{UseContext, UseDelegate};
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -96,7 +96,9 @@ use hermes_logging_components::traits::has_logger::{
 };
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
 use serde::Serialize;
@@ -107,31 +109,26 @@ use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
 
+#[cgp_context(HermesAppComponents)]
 #[derive(HasField)]
 pub struct HermesApp {
     pub config_path: PathBuf,
     pub runtime: HermesRuntime,
 }
 
-pub struct HermesAppComponents;
-
 pub struct HermesParserComponents;
 
 pub struct HermesCommandRunnerComponents;
 
-impl HasComponents for HermesApp {
-    type Components = HermesAppComponents;
-}
-
 delegate_components! {
     HermesAppComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
             RetryableErrorComponent,
         ]:
             ProvideCliError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             LoggerTypeComponent,

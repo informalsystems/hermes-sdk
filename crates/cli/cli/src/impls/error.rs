@@ -1,7 +1,7 @@
 use core::convert::Infallible;
 
 use cgp::core::component::UseDelegate;
-use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use eyre::Report;
 use hermes_error::handlers::display::DisplayError;
@@ -36,7 +36,7 @@ impl<Context> CanHandleCliError<Context> for ProvideCliError where
 delegate_components! {
     ProvideCliError {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             RetryableErrorComponent,
         ]: ProvideHermesError,
         ErrorRaiserComponent: UseDelegate<CliErrorHandlers>,

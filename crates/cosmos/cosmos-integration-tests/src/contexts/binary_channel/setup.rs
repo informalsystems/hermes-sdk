@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -39,6 +39,7 @@ use crate::impls::init_channel_options::UseCosmosInitChannelOptions;
    A setup context for setting up a binary channel test driver,
    with both chains being Cosmos chains.
 */
+#[cgp_context(CosmosBinaryChannelSetupComponents: BinaryChannelTestComponents)]
 #[derive(HasField)]
 pub struct CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
     pub bootstrap_a: BootstrapA,
@@ -49,25 +50,10 @@ pub struct CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
     pub init_connection_options: CosmosInitConnectionOptions,
     pub create_client_payload_options: CosmosCreateClientOptions,
 }
-pub struct CosmosBinaryChannelSetupComponents;
-
-impl<BootstrapA, BootstrapB> HasComponents for CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
-    type Components = CosmosBinaryChannelSetupComponents;
-}
-
-with_binary_channel_test_components! {
-    | Components | {
-        delegate_components! {
-            CosmosBinaryChannelSetupComponents {
-                Components: BinaryChannelTestComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     CosmosBinaryChannelSetupComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
             BootstrapAtComponent,

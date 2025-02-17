@@ -18,8 +18,7 @@ use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::R
 use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 
 use crate::relayer_mock::base::impls::relay::MockBuildUpdateClientMessage;
-
-pub struct MockRelayComponents;
+pub use crate::relayer_mock::contexts::relay::MockRelayComponents;
 
 delegate_components! {
     MockRelayComponents {

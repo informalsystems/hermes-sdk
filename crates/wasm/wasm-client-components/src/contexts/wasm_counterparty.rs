@@ -1,4 +1,4 @@
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
@@ -30,13 +30,8 @@ use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 
 use crate::impls::types::client_state::ProvideWasmClientState;
 
+#[cgp_context(WasmCounterpartyComponents)]
 pub struct WasmCounterparty;
-
-pub struct WasmCounterpartyComponents;
-
-impl HasComponents for WasmCounterparty {
-    type Components = WasmCounterpartyComponents;
-}
 
 delegate_components! {
     WasmCounterpartyComponents {
@@ -86,27 +81,12 @@ impl DefaultEncodingGetter<WasmCounterparty, AsBytes> for WasmCounterpartyCompon
     }
 }
 
+#[cgp_context(WasmClientEncodingComponents: WasmEncodingComponents)]
 pub struct WasmClientEncoding;
-
-pub struct WasmClientEncodingComponents;
-
-impl HasComponents for WasmClientEncoding {
-    type Components = WasmClientEncodingComponents;
-}
-
-with_wasm_encoding_components! {
-    | Components | {
-        delegate_components! {
-            WasmClientEncodingComponents {
-                Components: WasmEncodingComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     WasmClientEncodingComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
     }
 }

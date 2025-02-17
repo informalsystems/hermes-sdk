@@ -1,4 +1,4 @@
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::extra::run::CanRun;
@@ -12,7 +12,9 @@ use hermes_relayer_components::components::default::birelay::{
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
@@ -29,11 +31,11 @@ pub struct CosmosBiRelay {
 delegate_components! {
     CosmosBiRelayComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         ChainTypeAtComponent<Index<0>>: WithType<CosmosChain>,
         ChainTypeAtComponent<Index<1>>: WithType<CosmosChain>,

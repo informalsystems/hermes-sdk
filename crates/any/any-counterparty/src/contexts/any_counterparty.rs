@@ -1,5 +1,5 @@
 use cgp::core::component::UseDelegate;
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
@@ -52,13 +52,8 @@ use crate::impls::types::consensus_state::ProvideAnyConsensusState;
 use crate::types::client_state::AnyClientState;
 use crate::types::consensus_state::AnyConsensusState;
 
+#[cgp_context(AnyCounterpartyComponents)]
 pub struct AnyCounterparty;
-
-pub struct AnyCounterpartyComponents;
-
-impl HasComponents for AnyCounterparty {
-    type Components = AnyCounterpartyComponents;
-}
 
 delegate_components! {
     AnyCounterpartyComponents {
@@ -125,17 +120,12 @@ impl DefaultEncodingGetter<AnyCounterparty, AsBytes> for AnyCounterpartyComponen
     }
 }
 
+#[cgp_context(AnyClientEncodingComponents)]
 pub struct AnyClientEncoding;
-
-pub struct AnyClientEncodingComponents;
-
-impl HasComponents for AnyClientEncoding {
-    type Components = AnyClientEncodingComponents;
-}
 
 delegate_components! {
     AnyClientEncodingComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
             EncoderComponent,
