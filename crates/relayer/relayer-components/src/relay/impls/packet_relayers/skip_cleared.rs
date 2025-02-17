@@ -6,7 +6,6 @@ use hermes_chain_components::traits::packet::fields::{
 };
 use hermes_chain_components::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_chain_components::traits::types::height::HasHeightType;
-use hermes_chain_components::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 use hermes_chain_components::traits::types::packets::ack::HasAcknowledgementType;
 
@@ -33,14 +32,14 @@ where
         + HasPacketSrcChannelId<DstChain>
         + HasPacketSrcPortId<DstChain>
         + HasPacketSequence<DstChain>,
-    DstChain: HasWriteAckEvent<SrcChain>,
+    DstChain: HasAcknowledgementType<SrcChain>,
     InRelayer: ReceivePacketRelayer<Relay>,
 {
     async fn relay_receive_packet(
         relay: &Relay,
         source_height: &SrcChain::Height,
         packet: &SrcChain::OutgoingPacket,
-    ) -> Result<Option<DstChain::WriteAckEvent>, Relay::Error> {
+    ) -> Result<Option<DstChain::Acknowledgement>, Relay::Error> {
         let packet_is_cleared = relay
             .src_chain()
             .query_packet_is_cleared(

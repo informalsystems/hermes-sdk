@@ -2,6 +2,8 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
+use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
+use hermes_chain_components::traits::types::packets::ack::HasAcknowledgementType;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
@@ -20,25 +22,27 @@ use crate::relay::traits::target::{DestinationTarget, HasDestinationTargetChainT
 pub struct BaseReceivePacketRelayer;
 
 #[cgp_provider(ReceivePacketRelayerComponent)]
-impl<Relay, AckEvent> ReceivePacketRelayer<Relay> for BaseReceivePacketRelayer
+impl<Relay, SrcChain, DstChain> ReceivePacketRelayer<Relay> for BaseReceivePacketRelayer
 where
-    Relay: HasRelayChains
+    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasDestinationTargetChainTypes
         + HasDstClientId
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
         + CanRaiseRelayChainErrors,
-    Relay::SrcChain: CanBuildReceivePacketPayload<Relay::DstChain>,
-    Relay::DstChain: CanQueryClientStateWithLatestHeight<Relay::SrcChain>
-        + CanBuildReceivePacketMessage<Relay::SrcChain>
+    SrcChain: CanBuildReceivePacketPayload<DstChain>,
+    DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
+        + CanBuildReceivePacketMessage<SrcChain>
         + HasMessageResponseEvents
-        + HasWriteAckEvent<Relay::SrcChain, WriteAckEvent = AckEvent>
-        + CanExtractFromEvent<AckEvent>,
+        + HasWriteAckEvent<SrcChain>
+        + CanExtractFromEvent<DstChain::WriteAckEvent>
+        + HasAcknowledgementType<SrcChain>
+        + CanBuildPacketFromWriteAck<SrcChain>,
 {
     async fn relay_receive_packet(
         relay: &Relay,
         source_height: &HeightOf<Relay::SrcChain>,
         packet: &PacketOf<Relay>,
-    ) -> Result<Option<AckEvent>, Relay::Error> {
+    ) -> Result<Option<DstChain::Acknowledgement>, Relay::Error> {
         let dst_chain = relay.dst_chain();
 
         let src_client_state = dst_chain
@@ -59,10 +63,20 @@ where
 
         let response = relay.send_message(DestinationTarget, message).await?;
 
-        let ack_event = Relay::DstChain::message_response_events(&response)
+        let m_ack_event = Relay::DstChain::message_response_events(&response)
             .iter()
             .find_map(|event| dst_chain.try_extract_from_event(PhantomData, event));
 
-        Ok(ack_event)
+        match m_ack_event {
+            Some(ack_event) => {
+                let ack = dst_chain
+                    .build_ack_from_write_ack_event(&ack_event)
+                    .await
+                    .map_err(Relay::raise_error)?;
+
+                Ok(Some(ack))
+            }
+            None => Ok(None),
+        }
     }
 }

@@ -121,7 +121,7 @@ where
                 )
                 .await;
 
-            let write_ack = relay
+            let m_ack = relay
                 .relay_receive_packet(
                     Relay::SrcChain::chain_status_height(&src_chain_status),
                     packet,
@@ -135,7 +135,7 @@ where
 
             let destination_height = DstChain::chain_status_height(&destination_status);
 
-            if let Some(ack_event) = write_ack {
+            if let Some(ack) = m_ack {
                 logger
                     .log(
                         "relaying ack packet",
@@ -146,11 +146,6 @@ where
                         },
                     )
                     .await;
-
-                let ack = dst_chain
-                    .build_ack_from_write_ack_event(&ack_event)
-                    .await
-                    .map_err(Relay::raise_error)?;
 
                 relay
                     .relay_ack_packet(destination_height, packet, &ack)
