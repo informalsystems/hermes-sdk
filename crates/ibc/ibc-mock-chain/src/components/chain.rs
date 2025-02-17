@@ -1,7 +1,7 @@
 use alloc::string::String;
 
 use cgp::core::component::{UseDelegate, WithProvider};
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::{UseDelegatedType, WithType};
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
@@ -50,11 +50,12 @@ use crate::components::handlers::outgoing_message::MockIbcMessageHandlers;
 use crate::components::ibc_message::MockIbcMessageTypes;
 use crate::components::ibc_types::MockIbcChainTypes;
 use crate::components::payload_data::MockPayloadDataTypes;
+pub use crate::contexts::chain::MockChainComponents;
 use crate::impls::error::RaiseDebugString;
 use crate::impls::tagged::UseTaggedType;
 use crate::types::quantity::MockQuantity;
 
-cgp_preset! {
+delegate_components! {
     MockChainComponents {
         [
             HeightTypeComponent,
@@ -87,7 +88,7 @@ cgp_preset! {
             PacketSenderComponent,
         ]:
             IbcChainComponents,
-        ErrorTypeComponent:
+        ErrorTypeProviderComponent:
             WithType<String>,
         QuantityTypeComponent:
             WithType<MockQuantity>,

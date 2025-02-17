@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use cgp::core::component::UseContext;
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -28,7 +28,9 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 use tendermint_rpc::client::CompatMode;
@@ -46,6 +48,7 @@ use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderCom
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
    a `CosmosChainDriver`.
 */
+#[cgp_context(LegacyCosmosBootstrapComponents: LegacyCosmosSdkBootstrapComponents)]
 #[derive(Clone)]
 pub struct LegacyCosmosBootstrap {
     pub fields: Arc<LegacyCosmosBootstrapFields>,
@@ -69,12 +72,6 @@ pub struct LegacyCosmosBootstrapFields {
     pub dynamic_gas: Option<DynamicGasConfig>,
 }
 
-pub struct LegacyCosmosBootstrapComponents;
-
-impl HasComponents for LegacyCosmosBootstrap {
-    type Components = LegacyCosmosBootstrapComponents;
-}
-
 impl Deref for LegacyCosmosBootstrap {
     type Target = LegacyCosmosBootstrapFields;
 
@@ -83,25 +80,11 @@ impl Deref for LegacyCosmosBootstrap {
     }
 }
 
-impl<Name> DelegateComponent<Name> for LegacyCosmosBootstrapComponents
-where
-    Self: IsLegacyCosmosSdkBootstrapComponents<Name>,
-{
-    type Delegate = LegacyCosmosSdkBootstrapComponents;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for LegacyCosmosBootstrapComponents
-where
-    Self: IsLegacyCosmosSdkBootstrapComponents<Name>,
-    LegacyCosmosSdkBootstrapComponents: IsProviderFor<Name, Context, Params>,
-{
-}
-
 delegate_components! {
     LegacyCosmosBootstrapComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
         [

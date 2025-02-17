@@ -153,7 +153,7 @@ hermes-cli-components                   = { version = "0.1.0" }
 hermes-cli-framework                    = { version = "0.1.0" }
 
 hermes-cosmos-chain-components          = { version = "0.1.0" }
-hermes-cosmos-encoding-components          = { version = "0.1.0" }
+hermes-cosmos-encoding-components       = { version = "0.1.0" }
 hermes-cosmos-relayer                   = { version = "0.1.0" }
 hermes-cosmos-wasm-relayer              = { version = "0.1.0" }
 hermes-cosmos-test-components           = { version = "0.1.0" }

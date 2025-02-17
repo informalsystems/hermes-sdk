@@ -1,6 +1,6 @@
 use core::ops::Deref;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -116,7 +116,7 @@ use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{
-    HasRuntime, RuntimeGetterComponent, RuntimeTypeComponent,
+    HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_wasm_test_components::components::WasmChainComponents;
@@ -135,12 +135,11 @@ use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
 use crate::types::client_state::WasmTendermintClientState;
 
+#[cgp_context(WasmCosmosChainComponents: CosmosChainWasmPreset)]
 #[derive(Clone)]
 pub struct WasmCosmosChain {
     pub chain: CosmosChain,
 }
-
-pub struct WasmCosmosChainComponents;
 
 impl Deref for WasmCosmosChain {
     type Target = CosmosChain;
@@ -150,19 +149,15 @@ impl Deref for WasmCosmosChain {
     }
 }
 
-impl HasComponents for WasmCosmosChain {
-    type Components = WasmCosmosChainComponents;
-}
-
 delegate_components! {
     WasmCosmosChainComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
@@ -182,20 +177,6 @@ delegate_components! {
         ]:
             WasmChainComponents,
     }
-}
-
-impl<Component> DelegateComponent<Component> for WasmCosmosChainComponents
-where
-    Self: IsCosmosChainWasmPreset<Component>,
-{
-    type Delegate = CosmosChainWasmPreset;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for WasmCosmosChainComponents
-where
-    Self: IsCosmosChainWasmPreset<Name>,
-    CosmosChainWasmPreset: IsProviderFor<Name, Context, Params>,
-{
 }
 
 delegate_components! {

@@ -1,4 +1,4 @@
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::extra::run::CanRun;
@@ -19,20 +19,15 @@ use hermes_test_components::relay_driver::run::{
 };
 use tokio::task::AbortHandle;
 
+#[cgp_context(CosmosRelayDriverComponents)]
 #[derive(HasField)]
 pub struct CosmosRelayDriver {
     pub birelay: CosmosBiRelay,
 }
 
-pub struct CosmosRelayDriverComponents;
-
-impl HasComponents for CosmosRelayDriver {
-    type Components = CosmosRelayDriverComponents;
-}
-
 delegate_components! {
     CosmosRelayDriverComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
             ChainTypeAtComponent<Index<0>>,

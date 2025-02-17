@@ -3,7 +3,7 @@ use core::str::Utf8Error;
 use std::io::Error as IoError;
 use std::process::ExitStatus;
 
-use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ProvideErrorType};
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeProvider};
 use cgp::prelude::{cgp_provider, *};
 use hermes_async_runtime_components::channel::types::ErrChannelClosed;
 use hermes_tokio_runtime_components::impls::os::child_process::PrematureChildProcessExitError;
@@ -11,11 +11,10 @@ use hermes_tokio_runtime_components::impls::os::exec_command::{
     CommandNotFound, ExecCommandFailure,
 };
 
-use crate::impls::runtime::components::HermesRuntimeComponents;
 use crate::types::error::TokioRuntimeError;
-use crate::types::runtime::HermesRuntime;
+use crate::types::runtime::{HermesRuntime, HermesRuntimeComponents};
 
-impl ProvideErrorType<HermesRuntime> for HermesRuntimeComponents {
+impl ErrorTypeProvider<HermesRuntime> for HermesRuntimeComponents {
     type Error = TokioRuntimeError;
 }
 

@@ -10,7 +10,7 @@
 
 use core::marker::PhantomData;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -85,7 +85,9 @@ use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusT
 use hermes_relayer_components::chain::traits::types::timestamp::{
     ProvideTimeType, ProvideTimeoutType,
 };
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -101,18 +103,14 @@ use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::components::chain::MockChainComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
-impl HasComponents for MockChainContext {
-    type Components = MockChainComponents;
-}
-
 delegate_components! {
     MockChainComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
         ]:
             HandleMockError,
-        RuntimeTypeComponent: WithType<MockRuntimeContext>,
+        RuntimeTypeProviderComponent: WithType<MockRuntimeContext>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             MessageResponseTypeComponent,

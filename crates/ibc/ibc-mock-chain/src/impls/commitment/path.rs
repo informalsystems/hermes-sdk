@@ -8,8 +8,7 @@ use hermes_ibc_components::traits::commitment::path::send_packet::{
     SendPacketCommitmentPathBuilder, SendPacketCommitmentPathBuilderComponent,
 };
 
-use crate::components::chain::MockChainComponents;
-use crate::contexts::chain::MockChain;
+use crate::contexts::chain::{MockChain, MockChainComponents};
 use crate::types::channel_id::MockChannelId;
 use crate::types::commitment::path::{
     MockReceivePacketCommitmentPath, MockSendPacketCommitmentPath,

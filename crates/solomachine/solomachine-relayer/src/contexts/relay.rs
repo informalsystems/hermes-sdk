@@ -1,4 +1,4 @@
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -14,13 +14,15 @@ use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComp
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
-use hermes_relayer_components::with_default_relay_preset;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::chain::MockSolomachine;
 
+#[cgp_context(SolomachineRelayComponents: DefaultRelayPreset)]
 #[derive(HasField)]
 pub struct SolomachineRelay {
     pub runtime: HermesRuntime,
@@ -30,27 +32,11 @@ pub struct SolomachineRelay {
     pub dst_client_id: ClientId,
 }
 
-pub struct SolomachineRelayComponents;
-
-with_default_relay_preset! {
-    | Components | {
-        delegate_components! {
-            SolomachineRelayComponents {
-                Components : DefaultRelayPreset,
-            }
-        }
-    }
-}
-
-impl HasComponents for SolomachineRelay {
-    type Components = SolomachineRelayComponents;
-}
-
 delegate_components! {
     SolomachineRelayComponents {
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
             ChainTypeAtComponent<Src>,

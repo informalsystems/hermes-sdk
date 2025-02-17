@@ -40,37 +40,37 @@ pub trait OneShotChannelTypeProvider<Runtime>: ProvideChannelOnceType<Runtime> {
         T: Async;
 }
 
-impl<Runtime, Components> HasOneShotChannelType for Runtime
+impl<Runtime, Provider> HasOneShotChannelType for Runtime
 where
-    Runtime: HasComponents<Components = Components>,
-    Components: OneShotChannelTypeProvider<Runtime>,
+    Runtime: HasProvider<Provider = Provider>,
+    Provider: OneShotChannelTypeProvider<Runtime>,
 {
     fn from_oneshot_sender<T>(sender: Sender<T>) -> Self::SenderOnce<T>
     where
         T: Async,
     {
-        Components::from_oneshot_sender(sender)
+        Provider::from_oneshot_sender(sender)
     }
 
     fn from_oneshot_receiver<T>(receiver: Receiver<T>) -> Self::ReceiverOnce<T>
     where
         T: Async,
     {
-        Components::from_oneshot_receiver(receiver)
+        Provider::from_oneshot_receiver(receiver)
     }
 
     fn to_oneshot_sender<T>(sender: Self::SenderOnce<T>) -> Sender<T>
     where
         T: Async,
     {
-        Components::to_oneshot_sender(sender)
+        Provider::to_oneshot_sender(sender)
     }
 
     fn to_oneshot_receiver<T>(receiver: Self::ReceiverOnce<T>) -> Receiver<T>
     where
         T: Async,
     {
-        Components::to_oneshot_receiver(receiver)
+        Provider::to_oneshot_receiver(receiver)
     }
 }
 

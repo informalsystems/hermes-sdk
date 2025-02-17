@@ -1,4 +1,4 @@
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::encoding::components::{
     CosmosClientEncodingComponents, IsCosmosClientEncodingComponents,
@@ -35,7 +35,7 @@ pub struct CosmosEncoding;
 delegate_components! {
     CosmosEncodingContextComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
