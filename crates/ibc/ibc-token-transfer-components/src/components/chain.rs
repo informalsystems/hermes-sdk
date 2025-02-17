@@ -17,7 +17,9 @@ use crate::traits::fields::payload_data::receiver::IbcTransferReceiverGetterComp
 use crate::traits::fields::payload_data::unescrow_amount::PayloadUnescrowAmountGetterComponent;
 use crate::types::message::UseIbcTransferMessage;
 
-cgp_preset! {
+pub struct IbcTokenTransferChainComponents;
+
+delegate_components! {
     IbcTokenTransferChainComponents {
         PayloadDataTypeComponent:
             UseDelegate<IbcTokenTransferPayloadDataTypes>,
