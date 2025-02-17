@@ -74,6 +74,7 @@ use crate::contexts::encoding::{ProvideSolomachineEncoding, SolomachineEncoding}
 
 const DEFAULT_DIVERSIFIER: &str = "solo-machine-diversifier";
 
+#[cgp_context(SolomachineChainContextComponents: SolomachineChainComponents)]
 #[derive(HasField, Clone)]
 pub struct MockSolomachine {
     pub runtime: HermesRuntime,
@@ -87,28 +88,12 @@ pub struct MockSolomachine {
     pub connections: Arc<Mutex<HashMap<ConnectionId, ConnectionEnd>>>,
 }
 
-pub struct SolomachineChainComponents2;
-
-impl HasProvider for MockSolomachine {
-    type Provider = SolomachineChainComponents2;
-}
-
 impl DelegateComponent<MockSolomachine> for DelegateCosmosChainComponents {
     type Delegate = SolomachineCosmosComponents;
 }
 
-with_solomachine_chain_components! {
-    | Components | {
-        delegate_components! {
-            SolomachineChainComponents2 {
-                Components: SolomachineChainComponents,
-            }
-        }
-    }
-}
-
 delegate_components! {
-    SolomachineChainComponents2 {
+    SolomachineChainContextComponents {
         ErrorTypeProviderComponent:
             ProvideHermesError,
         ErrorRaiserComponent:
@@ -149,21 +134,22 @@ impl MockSolomachine {
 }
 
 #[cgp_provider(ChainIdGetterComponent)]
-impl ChainIdGetter<MockSolomachine> for SolomachineChainComponents2 {
+impl ChainIdGetter<MockSolomachine> for SolomachineChainContextComponents {
     fn chain_id(chain: &MockSolomachine) -> &ChainId {
         &chain.chain_id
     }
 }
 
 #[cgp_provider(IbcCommitmentPrefixGetterComponent)]
-impl IbcCommitmentPrefixGetter<MockSolomachine> for SolomachineChainComponents2 {
+impl IbcCommitmentPrefixGetter<MockSolomachine> for SolomachineChainContextComponents {
     fn ibc_commitment_prefix(chain: &MockSolomachine) -> &String {
         &chain.commitment_prefix
     }
 }
 
 #[cgp_provider(ClientStateQuerierComponent)]
-impl<Counterparty> ClientStateQuerier<MockSolomachine, Counterparty> for SolomachineChainComponents2
+impl<Counterparty> ClientStateQuerier<MockSolomachine, Counterparty>
+    for SolomachineChainContextComponents
 where
     Counterparty: HasClientStateType<MockSolomachine, ClientState = TendermintClientState>,
 {
@@ -185,7 +171,7 @@ where
 
 #[cgp_provider(ConsensusStateQuerierComponent)]
 impl<Counterparty> ConsensusStateQuerier<MockSolomachine, Counterparty>
-    for SolomachineChainComponents2
+    for SolomachineChainContextComponents
 where
     Counterparty: HasHeightType<Height = Height>
         + HasConsensusStateType<MockSolomachine, ConsensusState = TendermintConsensusState>,
@@ -212,7 +198,7 @@ where
 
 #[cgp_provider(ConnectionEndQuerierComponent)]
 impl<Counterparty> ConnectionEndQuerier<MockSolomachine, Counterparty>
-    for SolomachineChainComponents2
+    for SolomachineChainContextComponents
 {
     async fn query_connection_end(
         chain: &MockSolomachine,
@@ -234,7 +220,7 @@ impl<Counterparty> ConnectionEndQuerier<MockSolomachine, Counterparty>
 
 #[cgp_provider(ChannelEndQuerierComponent)]
 impl<Counterparty> ChannelEndQuerier<MockSolomachine, Counterparty>
-    for SolomachineChainComponents2
+    for SolomachineChainContextComponents
 {
     async fn query_channel_end(
         _chain: &MockSolomachine,

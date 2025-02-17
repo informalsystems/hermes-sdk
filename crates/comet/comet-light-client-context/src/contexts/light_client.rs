@@ -76,6 +76,7 @@ use crate::traits::verification_trace::{VerificationTrace, VerificationTraceGett
 use crate::traits::verifier::VerifierComponent;
 use crate::traits::verifier_options::{HasVerifierOptions, VerifierOptionsGetterComponent};
 
+#[cgp_context(CometLightClientComponents)]
 #[derive(HasField)]
 pub struct CometLightClient {
     pub current_time: Time,
@@ -85,12 +86,6 @@ pub struct CometLightClient {
     pub light_block_store: LightBlockStore,
     pub verification_trace: VerificationTrace,
     pub verifier: ProdVerifier,
-}
-
-pub struct CometLightClientComponents;
-
-impl HasProvider for CometLightClient {
-    type Provider = CometLightClientComponents;
 }
 
 delegate_components! {

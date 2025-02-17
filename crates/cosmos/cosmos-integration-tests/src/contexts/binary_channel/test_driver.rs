@@ -27,6 +27,7 @@ use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;
 use crate::impls::test_driver::types::ProvideCosmosTestTypes;
 
+#[cgp_context(CosmosBinaryChannelTestDriverComponents)]
 pub struct CosmosBinaryChannelTestDriver {
     pub relay_driver: CosmosRelayDriver,
     pub chain_driver_a: CosmosChainDriver,
@@ -37,12 +38,6 @@ pub struct CosmosBinaryChannelTestDriver {
     pub channel_id_b: ChannelId,
     pub port_id_a: PortId,
     pub port_id_b: PortId,
-}
-
-pub struct CosmosBinaryChannelTestDriverComponents;
-
-impl HasProvider for CosmosBinaryChannelTestDriver {
-    type Provider = CosmosBinaryChannelTestDriverComponents;
 }
 
 delegate_components! {

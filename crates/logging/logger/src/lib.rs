@@ -28,15 +28,10 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransacti
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
+#[cgp_context(HermesLoggerComponents)]
 pub struct HermesLogger;
 
-pub struct HermesLoggerComponents;
-
 pub struct HermesLogHandlers;
-
-impl HasProvider for HermesLogger {
-    type Provider = HermesLoggerComponents;
-}
 
 delegate_components! {
     HermesLoggerComponents {

@@ -10,9 +10,8 @@ use crate::traits::logger::{CanLog, LoggerComponent};
 
 pub struct ProvideNoLogger;
 
+#[cgp_context(NoLoggerComponents)]
 pub struct NoLogger;
-
-pub struct NoLoggerComponents;
 
 pub trait CanUseNoLogger<Details>: CanLog<Details>
 where
@@ -38,10 +37,6 @@ where
     fn global_logger() -> &'static NoLogger {
         &NoLogger
     }
-}
-
-impl HasProvider for NoLogger {
-    type Provider = NoLoggerComponents;
 }
 
 delegate_components! {

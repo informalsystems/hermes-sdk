@@ -30,13 +30,8 @@ use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 
 use crate::impls::types::client_state::ProvideWasmClientState;
 
+#[cgp_context(WasmCounterpartyComponents)]
 pub struct WasmCounterparty;
-
-pub struct WasmCounterpartyComponents;
-
-impl HasProvider for WasmCounterparty {
-    type Provider = WasmCounterpartyComponents;
-}
 
 delegate_components! {
     WasmCounterpartyComponents {
@@ -86,23 +81,8 @@ impl DefaultEncodingGetter<WasmCounterparty, AsBytes> for WasmCounterpartyCompon
     }
 }
 
+#[cgp_context(WasmClientEncodingComponents: WasmEncodingComponents)]
 pub struct WasmClientEncoding;
-
-pub struct WasmClientEncodingComponents;
-
-impl HasProvider for WasmClientEncoding {
-    type Provider = WasmClientEncodingComponents;
-}
-
-with_wasm_encoding_components! {
-    | Components | {
-        delegate_components! {
-            WasmClientEncodingComponents {
-                Components: WasmEncodingComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     WasmClientEncodingComponents {

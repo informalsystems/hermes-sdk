@@ -52,13 +52,8 @@ use crate::impls::types::consensus_state::ProvideAnyConsensusState;
 use crate::types::client_state::AnyClientState;
 use crate::types::consensus_state::AnyConsensusState;
 
+#[cgp_context(AnyCounterpartyComponents)]
 pub struct AnyCounterparty;
-
-pub struct AnyCounterpartyComponents;
-
-impl HasProvider for AnyCounterparty {
-    type Provider = AnyCounterpartyComponents;
-}
 
 delegate_components! {
     AnyCounterpartyComponents {
@@ -125,13 +120,8 @@ impl DefaultEncodingGetter<AnyCounterparty, AsBytes> for AnyCounterpartyComponen
     }
 }
 
+#[cgp_context(AnyClientEncodingComponents)]
 pub struct AnyClientEncoding;
-
-pub struct AnyClientEncodingComponents;
-
-impl HasProvider for AnyClientEncoding {
-    type Provider = AnyClientEncodingComponents;
-}
 
 delegate_components! {
     AnyClientEncodingComponents {

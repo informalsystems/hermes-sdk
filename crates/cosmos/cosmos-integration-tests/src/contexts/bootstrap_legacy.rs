@@ -48,6 +48,7 @@ use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderCom
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
    a `CosmosChainDriver`.
 */
+#[cgp_context(LegacyCosmosBootstrapComponents: LegacyCosmosSdkBootstrapComponents)]
 #[derive(Clone)]
 pub struct LegacyCosmosBootstrap {
     pub fields: Arc<LegacyCosmosBootstrapFields>,
@@ -71,32 +72,12 @@ pub struct LegacyCosmosBootstrapFields {
     pub dynamic_gas: Option<DynamicGasConfig>,
 }
 
-pub struct LegacyCosmosBootstrapComponents;
-
-impl HasProvider for LegacyCosmosBootstrap {
-    type Provider = LegacyCosmosBootstrapComponents;
-}
-
 impl Deref for LegacyCosmosBootstrap {
     type Target = LegacyCosmosBootstrapFields;
 
     fn deref(&self) -> &Self::Target {
         &self.fields
     }
-}
-
-impl<Name> DelegateComponent<Name> for LegacyCosmosBootstrapComponents
-where
-    Self: IsLegacyCosmosSdkBootstrapComponents<Name>,
-{
-    type Delegate = LegacyCosmosSdkBootstrapComponents;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for LegacyCosmosBootstrapComponents
-where
-    Self: IsLegacyCosmosSdkBootstrapComponents<Name>,
-    LegacyCosmosSdkBootstrapComponents: IsProviderFor<Name, Context, Params>,
-{
 }
 
 delegate_components! {

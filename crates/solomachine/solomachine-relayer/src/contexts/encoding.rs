@@ -16,26 +16,11 @@ use hermes_solomachine_chain_components::encoding::components::*;
 use hermes_solomachine_chain_components::types::client_state::SolomachineClientState;
 use hermes_solomachine_chain_components::types::consensus_state::SolomachineConsensusState;
 
+#[cgp_context(SolomachineEncodingContextComponents: SolomachineEncodingComponents)]
 pub struct SolomachineEncoding;
 
-pub struct SolomachineEncodingComponents2;
-
-impl HasProvider for SolomachineEncoding {
-    type Provider = SolomachineEncodingComponents2;
-}
-
-with_solomachine_encoding_components! {
-    | Components | {
-        delegate_components! {
-            SolomachineEncodingComponents2 {
-                Components: SolomachineEncodingComponents,
-            }
-        }
-    }
-}
-
 delegate_components! {
-    SolomachineEncodingComponents2 {
+    SolomachineEncodingContextComponents {
         ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
     }

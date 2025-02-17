@@ -58,6 +58,7 @@ use toml::to_string_pretty;
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
 */
+#[cgp_context(CosmosChainDriverComponents)]
 pub struct CosmosChainDriver {
     pub chain: CosmosChain,
     pub chain_command_path: PathBuf,
@@ -69,12 +70,6 @@ pub struct CosmosChainDriver {
     pub user_wallet_a: CosmosTestWallet,
     pub user_wallet_b: CosmosTestWallet,
     pub wallets: BTreeMap<String, CosmosTestWallet>,
-}
-
-pub struct CosmosChainDriverComponents;
-
-impl HasProvider for CosmosChainDriver {
-    type Provider = CosmosChainDriverComponents;
 }
 
 delegate_components! {

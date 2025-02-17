@@ -36,6 +36,7 @@ use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence}
 
 use crate::context::chain::WasmCosmosChain;
 
+#[cgp_context(WasmCosmosRelayComponents: DefaultRelayPreset)]
 #[derive(HasField, Clone)]
 pub struct WasmCosmosRelay {
     pub runtime: HermesRuntime,
@@ -67,8 +68,6 @@ impl WasmCosmosRelay {
         }
     }
 }
-
-pub struct WasmCosmosRelayComponents;
 
 delegate_components! {
     WasmCosmosRelayComponents {
@@ -103,24 +102,6 @@ delegate_components! {
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
     }
-}
-
-impl<Component> DelegateComponent<Component> for WasmCosmosRelayComponents
-where
-    Self: IsDefaultRelayPreset<Component>,
-{
-    type Delegate = DefaultRelayPreset;
-}
-
-impl<Name, Context, Params> IsProviderFor<Name, Context, Params> for WasmCosmosRelayComponents
-where
-    Self: IsDefaultRelayPreset<Name>,
-    DefaultRelayPreset: IsProviderFor<Name, Context, Params>,
-{
-}
-
-impl HasProvider for WasmCosmosRelay {
-    type Provider = WasmCosmosRelayComponents;
 }
 
 pub trait CanUseWasmCosmosRelay:

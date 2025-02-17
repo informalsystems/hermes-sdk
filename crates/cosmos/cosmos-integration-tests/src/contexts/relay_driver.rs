@@ -19,15 +19,10 @@ use hermes_test_components::relay_driver::run::{
 };
 use tokio::task::AbortHandle;
 
+#[cgp_context(CosmosRelayDriverComponents)]
 #[derive(HasField)]
 pub struct CosmosRelayDriver {
     pub birelay: CosmosBiRelay,
-}
-
-pub struct CosmosRelayDriverComponents;
-
-impl HasProvider for CosmosRelayDriver {
-    type Provider = CosmosRelayDriverComponents;
 }
 
 delegate_components! {

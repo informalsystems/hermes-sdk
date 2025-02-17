@@ -109,21 +109,16 @@ use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
 
+#[cgp_context(HermesAppComponents)]
 #[derive(HasField)]
 pub struct HermesApp {
     pub config_path: PathBuf,
     pub runtime: HermesRuntime,
 }
 
-pub struct HermesAppComponents;
-
 pub struct HermesParserComponents;
 
 pub struct HermesCommandRunnerComponents;
-
-impl HasProvider for HermesApp {
-    type Provider = HermesAppComponents;
-}
 
 delegate_components! {
     HermesAppComponents {

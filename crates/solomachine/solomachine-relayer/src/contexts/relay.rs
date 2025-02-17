@@ -23,6 +23,7 @@ use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::chain::MockSolomachine;
 
+#[cgp_context(SolomachineRelayComponents: DefaultRelayPreset)]
 #[derive(HasField)]
 pub struct SolomachineRelay {
     pub runtime: HermesRuntime,
@@ -30,22 +31,6 @@ pub struct SolomachineRelay {
     pub dst_chain: CosmosChain,
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
-}
-
-pub struct SolomachineRelayComponents;
-
-with_default_relay_preset! {
-    | Components | {
-        delegate_components! {
-            SolomachineRelayComponents {
-                Components : DefaultRelayPreset,
-            }
-        }
-    }
-}
-
-impl HasProvider for SolomachineRelay {
-    type Provider = SolomachineRelayComponents;
 }
 
 delegate_components! {

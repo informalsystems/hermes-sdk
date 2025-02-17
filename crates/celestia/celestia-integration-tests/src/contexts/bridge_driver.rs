@@ -9,16 +9,11 @@ use hermes_celestia_test_components::bridge_driver::traits::bridge_rpc_port::{
 use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
 use tokio::process::Child;
 
+#[cgp_context(CelestiaBridgeDriverComponents)]
 pub struct CelestiaBridgeDriver {
     pub bridge_process: Child,
     pub bridge_config: CelestiaBridgeConfig,
     pub bridge_auth_token: String,
-}
-
-pub struct CelestiaBridgeDriverComponents;
-
-impl HasProvider for CelestiaBridgeDriver {
-    type Provider = CelestiaBridgeDriverComponents;
 }
 
 #[cgp_provider(BridgeAuthTokenTypeComponent)]

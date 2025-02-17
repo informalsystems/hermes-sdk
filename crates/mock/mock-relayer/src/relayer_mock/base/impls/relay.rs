@@ -30,10 +30,6 @@ use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::components::relay::MockRelayComponents;
 use crate::relayer_mock::contexts::relay::MockRelayContext;
 
-impl HasProvider for MockRelayContext {
-    type Provider = MockRelayComponents;
-}
-
 delegate_components! {
     MockRelayComponents {
         [

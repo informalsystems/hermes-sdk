@@ -102,10 +102,6 @@ use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::components::chain::MockChainComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
-impl HasProvider for MockChainContext {
-    type Provider = MockChainComponents;
-}
-
 delegate_components! {
     MockChainComponents {
         [
