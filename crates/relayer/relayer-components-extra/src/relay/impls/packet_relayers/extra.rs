@@ -6,6 +6,7 @@ use hermes_relayer_components::chain::traits::packet::from_write_ack::CanBuildPa
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
+use hermes_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::components::default::relay::PacketRelayerComponent;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
@@ -52,6 +53,7 @@ where
         CanQueryChainStatus + CanQueryPacketIsCleared<DstChain> + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
         + HasWriteAckEvent<Relay::SrcChain>
+        + CanQueryWriteAckEvent<SrcChain>
         + CanBuildPacketFromWriteAck<Relay::SrcChain>
         + CanQueryPacketIsReceived<SrcChain>,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
