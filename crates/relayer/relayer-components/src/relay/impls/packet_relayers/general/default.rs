@@ -2,8 +2,7 @@ use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_chain_components::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
-use hermes_chain_components::traits::types::ibc::{HasChannelIdType, HasPortIdType};
-use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
+use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -47,9 +46,7 @@ where
     DstChain: CanQueryChainStatus
         + HasWriteAckEvent<Relay::SrcChain>
         + CanBuildPacketFromWriteAck<Relay::SrcChain>
-        + HasChannelIdType<SrcChain>
-        + HasPortIdType<SrcChain>
-        + HasTimeoutType,
+        + CanQueryPacketIsReceived<SrcChain>,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>
         + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,

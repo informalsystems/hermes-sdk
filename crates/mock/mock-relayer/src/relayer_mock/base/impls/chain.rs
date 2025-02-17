@@ -55,6 +55,7 @@ use hermes_relayer_components::chain::traits::payload_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerier;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::PacketIsReceivedQuerier;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::send_message::MessageSender;
@@ -473,6 +474,17 @@ impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockCha
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {
         Ok(payload)
+    }
+}
+
+impl PacketIsClearedQuerier<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn query_packet_is_cleared(
+        _chain: &MockChainContext,
+        _port_id: &PortId,
+        _channel_id: &ChannelId,
+        _sequence: &Sequence,
+    ) -> Result<bool, Error> {
+        Ok(false) // stub
     }
 }
 
