@@ -76,6 +76,7 @@ mod preset {
         ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
     };
     use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
+    use hermes_relayer_components::chain::traits::queries::counterparty_connection_id::CounterpartyConnectionIdQuerierComponent;
     use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
     use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
     use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerierComponent;
@@ -159,6 +160,7 @@ mod preset {
     use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
     use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromAbci;
     use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
+    use crate::impls::queries::counterparty_connection_id::QueryCounterpartyConnectionId;
     use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromAbci;
     use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
     use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
@@ -303,6 +305,8 @@ mod preset {
                 ProvideCosmosInitConnectionOptionsType,
             InitChannelOptionsTypeComponent:
                 ProvideCosmosInitChannelOptionsType,
+            CounterpartyConnectionIdQuerierComponent:
+                QueryCounterpartyConnectionId,
             BlockQuerierComponent:
                 QueryCometBlock,
             BlockEventsQuerierComponent:

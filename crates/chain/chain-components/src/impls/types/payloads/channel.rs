@@ -1,4 +1,5 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
 
 use crate::traits::types::channel::{
     ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
@@ -18,7 +19,7 @@ impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
     for ProvideChannelPayloadTypes
 where
     Chain: HasChannelEndType<Counterparty> + HasHeightType + HasCommitmentProofType,
-    Counterparty: Async,
+    Counterparty: HasConnectionIdType<Chain> + Async,
 {
     type ChannelOpenTryPayload = ChannelOpenTryPayload<Chain, Counterparty>;
 }

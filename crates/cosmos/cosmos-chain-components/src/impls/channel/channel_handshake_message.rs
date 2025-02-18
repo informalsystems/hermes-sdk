@@ -13,7 +13,9 @@ use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelOpenTryPayloadType, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
+use hermes_relayer_components::chain::traits::types::ibc::{
+    HasChannelIdType, HasConnectionIdType, HasPortIdType,
+};
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
@@ -86,11 +88,12 @@ impl<Chain, Counterparty> ChannelOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
     Chain: HasMessageType
-        + HasChannelIdType<Counterparty, ChannelId: Display>
-        + HasPortIdType<Counterparty, PortId: Display>
+        + HasChannelIdType<Counterparty>
+        + HasPortIdType<Counterparty>
+        + HasConnectionIdType<Counterparty>
         + CanRaiseAsyncError<ClientError>,
-    Counterparty: HasChannelIdType<Chain, ChannelId: Display>
-        + HasPortIdType<Chain, PortId: Display>
+    Counterparty: HasChannelIdType<Chain>
+        + HasPortIdType<Chain>
         + HasChannelOpenTryPayloadType<
             Chain,
             ChannelOpenTryPayload = ChannelOpenTryPayload<Counterparty, Chain>,
@@ -108,12 +111,9 @@ where
     ) -> Result<Chain::Message, Chain::Error> {
         let ordering = payload.channel_end.ordering as i32;
 
-        let connection_hops = payload
-            .channel_end
-            .connection_hops
-            .iter()
-            .map(ToString::to_string)
-            .collect();
+        let connection_id = payload.counterparty_connection_id;
+
+        let connection_hops = vec![connection_id.to_string()];
 
         let version = payload.channel_end.version.to_string();
 
