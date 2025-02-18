@@ -30,9 +30,10 @@ use hermes_cosmos_chain_components::components::client::{
     OutgoingPacketTypeComponent, PacketAcknowledgementQuerierComponent,
     PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
     PacketFromSendPacketEventBuilderComponent, PacketFromWriteAckEventBuilderComponent,
-    PacketIsReceivedQuerierComponent, PacketSequenceGetterComponent,
-    PacketSrcChannelIdGetterComponent, PacketSrcPortIdGetterComponent,
-    PacketTimeoutHeightGetterComponent, PacketTimeoutTimestampGetterComponent, PortIdTypeComponent,
+    PacketIsClearedQuerierComponent, PacketIsReceivedQuerierComponent,
+    PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
+    PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,
+    PacketTimeoutTimestampGetterComponent, PortIdTypeComponent,
     ReceivePacketMessageBuilderComponent, ReceivePacketPayloadBuilderComponent,
     ReceivePacketPayloadTypeComponent, SendPacketEventComponent, SequenceTypeComponent,
     TimeTypeComponent, TimeoutTypeComponent, TimeoutUnorderedPacketMessageBuilderComponent,
@@ -496,6 +497,7 @@ impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockCha
     }
 }
 
+#[cgp_provider(PacketIsClearedQuerierComponent)]
 impl PacketIsClearedQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_packet_is_cleared(
         _chain: &MockChainContext,

@@ -1,24 +1,27 @@
-use cgp::prelude::*;
-pub use hermes_relayer_components::build::traits::builders::birelay_builder::{
-    BiRelayBuilderComponent, CanBuildBiRelay,
-};
-pub use hermes_relayer_components::build::traits::builders::chain_builder::{
-    ChainBuilder, ChainBuilderComponent,
-};
-pub use hermes_relayer_components::build::traits::builders::relay_builder::RelayBuilderComponent;
-pub use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilderComponent;
-use hermes_relayer_components::components::default::build::DefaultBuildComponents;
+#[cgp::re_export_imports]
+mod preset {
+    use cgp::prelude::*;
+    use hermes_relayer_components::build::traits::builders::birelay_builder::{
+        BiRelayBuilderComponent, CanBuildBiRelay,
+    };
+    use hermes_relayer_components::build::traits::builders::chain_builder::{
+        ChainBuilder, ChainBuilderComponent,
+    };
+    use hermes_relayer_components::build::traits::builders::relay_builder::RelayBuilderComponent;
+    use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilderComponent;
+    use hermes_relayer_components::components::default::build::DefaultBuildComponents;
 
-use crate::build::impls::relay::batch::BuildRelayWithBatchWorker;
+    use crate::build::impls::relay::batch::BuildRelayWithBatchWorker;
 
-cgp_preset! {
-    ExtraBuildComponents<BaseComponents: Async> {
-        RelayFromChainsBuilderComponent: BuildRelayWithBatchWorker,
-        [
-            ChainBuilderComponent,
-            RelayBuilderComponent,
-            BiRelayBuilderComponent,
-        ]:
-            DefaultBuildComponents<BaseComponents>,
+    cgp_preset! {
+        ExtraBuildComponents<BaseComponents: Async> {
+            RelayFromChainsBuilderComponent: BuildRelayWithBatchWorker,
+            [
+                ChainBuilderComponent,
+                RelayBuilderComponent,
+                BiRelayBuilderComponent,
+            ]:
+                DefaultBuildComponents<BaseComponents>,
+        }
     }
 }

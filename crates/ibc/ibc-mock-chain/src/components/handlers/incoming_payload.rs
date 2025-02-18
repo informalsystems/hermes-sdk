@@ -7,7 +7,9 @@ use hermes_ibc_token_transfer_components::types::tags::{
 
 use crate::impls::handlers::incoming::HandleMockAnyPayloadData;
 
-cgp_preset! {
+pub struct MockPayloadHandlers;
+
+delegate_components! {
     MockPayloadHandlers {
         AnyApp: HandleMockAnyPayloadData,
         [

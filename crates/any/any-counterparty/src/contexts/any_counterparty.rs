@@ -1,12 +1,6 @@
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::components::client::{
-    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
-    ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent, OutgoingPacketTypeComponent,
-    PortIdTypeComponent, SequenceTypeComponent,
-};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::{
     CosmosClientEncodingComponents, DecodeBufferTypeComponent, EncodeBufferTypeComponent,
@@ -37,11 +31,24 @@ use hermes_relayer_components::chain::impls::queries::query_and_convert_consensu
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsComponent, ClientStateTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateFieldComponent, ConsensusStateTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::height::{
+    HeightFieldComponent, HeightTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::ibc::{
+    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
+    SequenceTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 
