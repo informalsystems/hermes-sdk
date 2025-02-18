@@ -26,17 +26,22 @@ where
 {
     async fn query_channel_end_counterparty_connection_id(
         chain: &Chain,
-        channel_end: &Chain::ChannelEnd,
-    ) -> Result<Counterparty::ConnectionId, Chain::Error> {
-        let connection_id = channel_end
+        channel_end: &ChannelEnd,
+    ) -> Result<ConnectionId, Chain::Error> {
+        let [connection_id]: [ConnectionId; 1] = channel_end
             .connection_hops
-            .first()
-            .ok_or_else(|| Chain::raise_error(format!("channel end has no connection_hops")))?;
+            .clone()
+            .try_into()
+            .map_err(|_| {
+                Chain::raise_error(format!(
+                    "channel end must have exactly one connection ID in connection_hops"
+                ))
+            })?;
 
         let latest_height = chain.query_chain_height().await?;
 
         let connection_end = chain
-            .query_connection_end(connection_id, &latest_height)
+            .query_connection_end(&connection_id, &latest_height)
             .await?;
 
         let counterparty_connection_id = connection_end
