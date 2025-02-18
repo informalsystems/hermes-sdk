@@ -3,7 +3,9 @@ use core::str::Utf8Error;
 use std::io::Error as IoError;
 use std::process::ExitStatus;
 
-use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeProvider, ErrorTypeProviderComponent};
+use cgp::core::error::{
+    ErrorRaiser, ErrorRaiserComponent, ErrorTypeProvider, ErrorTypeProviderComponent,
+};
 use cgp::prelude::{cgp_provider, *};
 use hermes_async_runtime_components::channel::types::ErrChannelClosed;
 use hermes_tokio_runtime_components::impls::os::child_process::PrematureChildProcessExitError;
