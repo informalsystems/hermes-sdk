@@ -17,6 +17,7 @@ pub trait HasConsensusStateType<Counterparty>: Async {
 pub type ConsensusStateOf<Chain, Counterparty> =
     <Chain as HasConsensusStateType<Counterparty>>::ConsensusState;
 
+#[cgp_provider(ConsensusStateTypeComponent)]
 impl<Chain, Counterparty, Components, Delegate> ProvideConsensusStateType<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -27,6 +28,7 @@ where
     type ConsensusState = Delegate::ConsensusState;
 }
 
+#[cgp_provider(ConsensusStateTypeComponent)]
 impl<Chain, Counterparty, Provider, ConsensusState> ProvideConsensusStateType<Chain, Counterparty>
     for WithProvider<Provider>
 where

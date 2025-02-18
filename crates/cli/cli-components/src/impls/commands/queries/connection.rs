@@ -1,5 +1,7 @@
+use cgp::prelude::*;
+
 use crate::impls::commands::queries::connection_end::QueryConnectionEndArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner};
+use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryConnectionSubCommand;
 
@@ -9,6 +11,7 @@ pub enum QueryConnectionSubCommand {
     End(QueryConnectionEndArgs),
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App> CommandRunner<App, QueryConnectionSubCommand> for RunQueryConnectionSubCommand
 where
     App: CanRunCommand<QueryConnectionEndArgs>,

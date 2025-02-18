@@ -1,11 +1,12 @@
-use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
-use hermes_encoding_components::traits::decode::Decoder;
-use hermes_encoding_components::traits::encode::Encoder;
+use cgp::prelude::*;
+use hermes_encoding_components::traits::decode::{Decoder, DecoderComponent};
+use hermes_encoding_components::traits::encode::{Encoder, EncoderComponent};
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use prost::{DecodeError, Message};
 
 pub struct EncodeAsProtobuf;
 
+#[cgp_provider(EncoderComponent)]
 impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for EncodeAsProtobuf
 where
     Value: Message,
@@ -16,6 +17,7 @@ where
     }
 }
 
+#[cgp_provider(DecoderComponent)]
 impl<Encoding, Strategy, Value> Decoder<Encoding, Strategy, Value> for EncodeAsProtobuf
 where
     Value: Message + Default,

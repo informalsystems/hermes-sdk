@@ -1,18 +1,20 @@
 use core::cmp::min;
 
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use num_bigint::BigInt;
 use num_rational::BigRational;
 
+use crate::components::transaction::GasToFeeConverterComponent;
 use crate::traits::convert_gas_to_fee::GasToFeeConverter;
 use crate::traits::eip::eip_query::CanQueryEipBaseFee;
 use crate::traits::gas_config::HasGasConfig;
 
 pub struct StaticConvertCosmosGasToFee;
 
+#[cgp_provider(GasToFeeConverterComponent)]
 impl<Chain> GasToFeeConverter<Chain> for StaticConvertCosmosGasToFee
 where
     Chain: HasFeeType<Fee = Fee> + HasGasConfig + HasAsyncErrorType,
@@ -41,6 +43,7 @@ where
 
 pub struct DynamicConvertCosmosGasToFee;
 
+#[cgp_provider(GasToFeeConverterComponent)]
 impl<Chain> GasToFeeConverter<Chain> for DynamicConvertCosmosGasToFee
 where
     Chain: HasFeeType<Fee = Fee> + HasGasConfig + CanQueryEipBaseFee,

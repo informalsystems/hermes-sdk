@@ -1,11 +1,12 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
-use hermes_encoding_components::traits::convert::Converter;
+use hermes_encoding_components::traits::convert::{Converter, ConverterComponent};
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::schema::HasSchema;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
+use hermes_protobuf_encoding_components::components::DecoderComponent;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
@@ -19,6 +20,7 @@ pub struct UnknownConsensusStateType {
     pub type_url: String,
 }
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding, ConsensusState> Converter<Encoding, Any, ConsensusState> for EncodeAnyConsensusState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
@@ -41,6 +43,7 @@ where
     }
 }
 
+#[cgp_provider(DecoderComponent)]
 impl<Encoding, Strategy, ConsensusState> Decoder<Encoding, Strategy, ConsensusState>
     for EncodeAnyConsensusState
 where

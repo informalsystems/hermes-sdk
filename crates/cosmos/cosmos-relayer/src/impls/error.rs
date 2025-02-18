@@ -5,7 +5,7 @@ use core::num::{ParseFloatError, ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
 
 use cgp::core::component::UseDelegate;
-use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use eyre::Report;
 use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateType;
@@ -95,7 +95,7 @@ impl<Context> CanHandleCosmosError<Context> for HandleCosmosError where
 delegate_components! {
     HandleCosmosError {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             RetryableErrorComponent,
         ]: ProvideHermesError,
         ErrorRaiserComponent:

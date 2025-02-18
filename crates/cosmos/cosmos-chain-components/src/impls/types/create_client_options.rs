@@ -1,5 +1,6 @@
-use cgp::prelude::Async;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     ProvideCreateClientMessageOptionsType, ProvideCreateClientPayloadOptionsType,
 };
 
@@ -7,6 +8,7 @@ use crate::types::payloads::client::CosmosCreateClientOptions;
 
 pub struct ProvideCosmosCreateClientSettings;
 
+#[cgp_provider(CreateClientPayloadOptionsTypeComponent)]
 impl<Chain, Counterparty> ProvideCreateClientPayloadOptionsType<Chain, Counterparty>
     for ProvideCosmosCreateClientSettings
 where
@@ -17,6 +19,7 @@ where
 
 pub struct ProvideNoCreateClientMessageOptionsType;
 
+#[cgp_provider(CreateClientMessageOptionsTypeComponent)]
 impl<Chain, Counterparty> ProvideCreateClientMessageOptionsType<Chain, Counterparty>
     for ProvideNoCreateClientMessageOptionsType
 where

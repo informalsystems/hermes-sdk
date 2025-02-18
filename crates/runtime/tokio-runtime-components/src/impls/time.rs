@@ -1,11 +1,12 @@
 use core::time::Duration;
 use std::time::Instant;
 
-use cgp::prelude::Async;
-use hermes_runtime_components::traits::time::ProvideTime;
+use cgp::prelude::*;
+use hermes_runtime_components::traits::time::{ProvideTime, TimeComponent};
 
 pub struct ProvideStdTime;
 
+#[cgp_provider(TimeComponent)]
 impl<Runtime> ProvideTime<Runtime> for ProvideStdTime
 where
     Runtime: Async,

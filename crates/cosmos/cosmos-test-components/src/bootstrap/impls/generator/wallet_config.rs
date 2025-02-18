@@ -5,7 +5,9 @@ use hermes_test_components::chain::traits::types::denom::HasDenomType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 use crate::bootstrap::traits::fields::denom::{DenomForStaking, DenomForTransfer, HasGenesisDenom};
-use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
+use crate::bootstrap::traits::generator::generate_wallet_config::{
+    WalletConfigGenerator, WalletConfigGeneratorComponent,
+};
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 use crate::bootstrap::types::wallet_config::CosmosWalletConfig;
@@ -21,6 +23,7 @@ use crate::chain::types::denom::Denom;
 */
 pub struct GenerateStandardWalletConfig;
 
+#[cgp_provider(WalletConfigGeneratorComponent)]
 impl<Bootstrap, Chain> WalletConfigGenerator<Bootstrap> for GenerateStandardWalletConfig
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>

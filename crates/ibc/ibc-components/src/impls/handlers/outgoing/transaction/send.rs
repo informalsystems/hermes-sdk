@@ -10,11 +10,14 @@ use crate::traits::fields::transaction::header::HasIbcTransactionHeader;
 use crate::traits::fields::transaction::messages::HasIbcTransactionMessages;
 use crate::traits::handlers::outgoing::message::IbcMessageHandler;
 use crate::traits::handlers::outgoing::packet::CanSendPacket;
-use crate::traits::handlers::outgoing::transaction::IbcTransactionHandler;
+use crate::traits::handlers::outgoing::transaction::{
+    IbcTransactionHandler, IbcTransactionHandlerComponent,
+};
 use crate::traits::types::transaction::HasIbcTransactionType;
 
 pub struct HandleMessagesAndSendPacket<App, InHandler>(pub PhantomData<(App, InHandler)>);
 
+#[cgp_provider(IbcTransactionHandlerComponent)]
 #[async_trait]
 impl<Chain, Counterparty, App, InHandler> IbcTransactionHandler<Chain, Counterparty>
     for HandleMessagesAndSendPacket<App, InHandler>

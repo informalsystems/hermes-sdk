@@ -8,6 +8,7 @@ use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
+use crate::bootstrap::components::cosmos_sdk::GenesisWalletAdderComponent;
 use crate::bootstrap::traits::genesis::add_genesis_account::CanAddGenesisAccount;
 use crate::bootstrap::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
 use crate::bootstrap::traits::genesis::add_genesis_wallet::GenesisWalletAdder;
@@ -16,6 +17,7 @@ use crate::bootstrap::traits::types::wallet_config::HasWalletConfigFields;
 
 pub struct AddCosmosWalletToGenesis;
 
+#[cgp_provider(GenesisWalletAdderComponent)]
 impl<Bootstrap, Runtime, Chain, ChainDriver> GenesisWalletAdder<Bootstrap>
     for AddCosmosWalletToGenesis
 where

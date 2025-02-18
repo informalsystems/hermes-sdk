@@ -1,8 +1,9 @@
 use std::collections::btree_map::Entry;
 
+use cgp::prelude::*;
 use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
 use hermes_comet_light_client_components::traits::update_verification_status::{
-    TrustedStatus, VerificationStatusUpdater, VerifiedStatus,
+    TrustedStatus, VerificationStatusUpdater, VerificationStatusUpdaterComponent, VerifiedStatus,
 };
 use hermes_comet_light_client_components::types::status::VerificationStatus;
 use tendermint_light_client_verifier::types::LightBlock;
@@ -11,6 +12,7 @@ use crate::traits::light_block_store::HasLightBlockStore;
 
 pub struct DoUpdateVerifactionStatus;
 
+#[cgp_provider(VerificationStatusUpdaterComponent)]
 impl<Client> VerificationStatusUpdater<Client, VerifiedStatus> for DoUpdateVerifactionStatus
 where
     Client: HasLightBlockType<LightBlock = LightBlock> + HasLightBlockStore,
@@ -39,6 +41,7 @@ where
     }
 }
 
+#[cgp_provider(VerificationStatusUpdaterComponent)]
 impl<Client> VerificationStatusUpdater<Client, TrustedStatus> for DoUpdateVerifactionStatus
 where
     Client: HasLightBlockType<LightBlock = LightBlock> + HasLightBlockStore,

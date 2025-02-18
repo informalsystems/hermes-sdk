@@ -25,6 +25,7 @@ pub trait CanBuildCreateClientMessage<Counterparty>:
     ) -> Result<Self::Message, Self::Error>;
 }
 
+#[cgp_provider(CreateClientMessageBuilderComponent)]
 impl<Chain, Counterparty, Components, Delegate> CreateClientMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where

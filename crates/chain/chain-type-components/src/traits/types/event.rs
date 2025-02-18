@@ -51,6 +51,7 @@ pub trait HasEventType: Sized + Async {
     type Event: Async;
 }
 
+#[cgp_provider(EventTypeComponent)]
 impl<Chain, Provider, Event> ProvideEventType<Chain> for WithProvider<Provider>
 where
     Chain: Async,

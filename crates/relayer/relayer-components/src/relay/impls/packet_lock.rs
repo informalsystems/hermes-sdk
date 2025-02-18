@@ -21,7 +21,7 @@ use hermes_runtime_components::traits::task::Task;
 
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf, SequenceOf};
 use crate::relay::traits::chains::{HasRelayChainTypes, HasRelayChains, PacketOf};
-use crate::relay::traits::packet_lock::ProvidePacketLock;
+use crate::relay::traits::packet_lock::{PacketLockComponent, ProvidePacketLock};
 
 pub struct ProvidePacketLockWithMutex;
 
@@ -140,6 +140,7 @@ where
     }
 }
 
+#[cgp_provider(PacketLockComponent)]
 impl<Relay> ProvidePacketLock<Relay> for ProvidePacketLockWithMutex
 where
     Relay: HasRuntime + CanUsePacketMutex + HasPacketMutex + HasRelayChains,
@@ -190,6 +191,7 @@ where
     }
 }
 
+#[cgp_provider(PacketMutexGetterComponent)]
 impl<Relay, FieldTag> PacketMutexGetter<Relay> for UseField<FieldTag>
 where
     Relay: HasPacketMutexType + HasField<FieldTag, Value = Relay::PacketMutex>,

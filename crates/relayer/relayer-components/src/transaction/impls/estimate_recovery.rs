@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
 
-use crate::transaction::traits::estimate_tx_fee::TxFeeEstimator;
+use crate::transaction::traits::estimate_tx_fee::{TxFeeEstimator, TxFeeEstimatorComponent};
 use crate::transaction::traits::types::fee::HasFeeType;
 use crate::transaction::traits::types::transaction::HasTransactionType;
 
@@ -12,6 +12,7 @@ pub trait CanRecoverEstimateError: HasFeeType + HasAsyncErrorType {
 
 pub struct TryRecoverEstimateError<InEstimator>(pub PhantomData<InEstimator>);
 
+#[cgp_provider(TxFeeEstimatorComponent)]
 impl<Context, InEstimator> TxFeeEstimator<Context> for TryRecoverEstimateError<InEstimator>
 where
     Context: CanRecoverEstimateError + HasTransactionType,

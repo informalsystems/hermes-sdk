@@ -1,3 +1,4 @@
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
@@ -5,7 +6,9 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use hermes_ibc_components::traits::fields::caller::HasCaller;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
-use hermes_ibc_components::traits::handlers::outgoing::message::IbcMessageHandler;
+use hermes_ibc_components::traits::handlers::outgoing::message::{
+    IbcMessageHandler, IbcMessageHandlerComponent,
+};
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 
 use crate::traits::builders::mint::CanBuildMintPayload;
@@ -17,6 +20,7 @@ use crate::traits::token::transfer::{Burn, CanTransferToken, Escrow};
 
 pub struct HandleOutgoingIbcTransfer;
 
+#[cgp_provider(IbcMessageHandlerComponent)]
 impl<Chain, Counterparty, App> IbcMessageHandler<Chain, Counterparty, App>
     for HandleOutgoingIbcTransfer
 where

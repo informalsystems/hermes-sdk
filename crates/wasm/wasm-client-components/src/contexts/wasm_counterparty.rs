@@ -1,4 +1,4 @@
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
@@ -10,7 +10,8 @@ use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::decode::CanDecode;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
+    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
+    EncodingTypeComponent, ProvideEncodingType,
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
@@ -29,13 +30,8 @@ use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 
 use crate::impls::types::client_state::ProvideWasmClientState;
 
+#[cgp_context(WasmCounterpartyComponents)]
 pub struct WasmCounterparty;
-
-pub struct WasmCounterpartyComponents;
-
-impl HasComponents for WasmCounterparty {
-    type Components = WasmCounterpartyComponents;
-}
 
 delegate_components! {
     WasmCounterpartyComponents {
@@ -73,37 +69,24 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(EncodingTypeComponent)]
 impl ProvideEncodingType<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
     type Encoding = WasmClientEncoding;
 }
 
+#[cgp_provider(DefaultEncodingGetterComponent)]
 impl DefaultEncodingGetter<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
     fn default_encoding() -> &'static WasmClientEncoding {
         &WasmClientEncoding
     }
 }
 
+#[cgp_context(WasmClientEncodingComponents: WasmEncodingComponents)]
 pub struct WasmClientEncoding;
-
-pub struct WasmClientEncodingComponents;
-
-impl HasComponents for WasmClientEncoding {
-    type Components = WasmClientEncodingComponents;
-}
-
-with_wasm_encoding_components! {
-    | Components | {
-        delegate_components! {
-            WasmClientEncodingComponents {
-                Components: WasmEncodingComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     WasmClientEncodingComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
     }
 }

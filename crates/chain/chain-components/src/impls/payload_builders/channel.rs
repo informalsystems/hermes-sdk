@@ -1,10 +1,13 @@
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
 use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 
 use crate::traits::payload_builders::channel_handshake::{
-    ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
+    ChannelOpenAckPayloadBuilder, ChannelOpenAckPayloadBuilderComponent,
+    ChannelOpenConfirmPayloadBuilder, ChannelOpenConfirmPayloadBuilderComponent,
+    ChannelOpenTryPayloadBuilder, ChannelOpenTryPayloadBuilderComponent,
 };
 use crate::traits::queries::channel_end::CanQueryChannelEndWithProofs;
 use crate::traits::queries::counterparty_connection_id::CanQueryCounterpartyConnectionId;
@@ -19,6 +22,7 @@ use crate::types::payloads::channel::{
 
 pub struct BuildChannelHandshakePayload;
 
+#[cgp_provider(ChannelOpenTryPayloadBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenTryPayloadBuilder<Chain, Counterparty>
     for BuildChannelHandshakePayload
 where
@@ -66,6 +70,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenAckPayloadBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenAckPayloadBuilder<Chain, Counterparty>
     for BuildChannelHandshakePayload
 where
@@ -105,6 +110,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenConfirmPayloadBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenConfirmPayloadBuilder<Chain, Counterparty>
     for BuildChannelHandshakePayload
 where

@@ -1,6 +1,8 @@
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_comet_light_client_components::traits::compute_verification_height::NextVerificationHeightComputer;
+use hermes_comet_light_client_components::traits::compute_verification_height::{
+    NextVerificationHeightComputer, NextVerificationHeightComputerComponent,
+};
 use hermes_comet_light_client_components::traits::light_block::height::HasLightBlockHeight;
 use hermes_comet_light_client_components::traits::query_light_block::{
     CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore,
@@ -10,6 +12,7 @@ use tendermint::block::Height;
 
 pub struct BisectHeight;
 
+#[cgp_provider(NextVerificationHeightComputerComponent)]
 impl<Client> NextVerificationHeightComputer<Client> for BisectHeight
 where
     Client: HasHeightType<Height = Height>

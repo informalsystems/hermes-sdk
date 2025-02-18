@@ -1,4 +1,5 @@
-use cgp::core::error::{ErrorRaiser, HasAsyncErrorType};
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent};
+use cgp::prelude::*;
 
 pub struct MaxRetryExceededError<'a, Context>
 where
@@ -11,6 +12,7 @@ where
 
 pub struct UnwrapMaxRetryExceededError;
 
+#[cgp_provider(ErrorRaiserComponent)]
 impl<'a, Context> ErrorRaiser<Context, MaxRetryExceededError<'a, Context>>
     for UnwrapMaxRetryExceededError
 where

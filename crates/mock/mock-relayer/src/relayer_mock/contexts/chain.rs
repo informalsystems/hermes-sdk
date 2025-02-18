@@ -33,6 +33,7 @@ use crate::relayer_mock::base::types::state::State;
 use crate::relayer_mock::util::clock::MockClock;
 use crate::relayer_mock::util::mutex::MutexUtil;
 
+#[cgp_context(MockChainComponents)]
 #[derive(Clone)]
 pub struct MockChainContext {
     pub fields: Arc<MockChainContextFields>,

@@ -1,6 +1,8 @@
+use cgp::prelude::*;
 use hermes_test_components::chain::traits::types::denom::HasDenomType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
+use crate::bootstrap::components::cosmos_sdk::GenesisDenomGetterComponent;
 use crate::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, GenesisDenomGetter,
 };
@@ -10,6 +12,7 @@ use crate::chain::types::denom::Denom;
 
 pub struct GetCosmosGenesisDenoms;
 
+#[cgp_provider(GenesisDenomGetterComponent)]
 impl<Bootstrap, Chain> GenesisDenomGetter<Bootstrap, DenomForStaking> for GetCosmosGenesisDenoms
 where
     Bootstrap: HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
@@ -21,6 +24,7 @@ where
     }
 }
 
+#[cgp_provider(GenesisDenomGetterComponent)]
 impl<Bootstrap, Chain> GenesisDenomGetter<Bootstrap, DenomForTransfer> for GetCosmosGenesisDenoms
 where
     Bootstrap: HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>

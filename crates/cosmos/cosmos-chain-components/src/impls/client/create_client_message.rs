@@ -4,7 +4,9 @@ use cgp::prelude::*;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::types::AsBytes;
-use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::create_client::{
+    CreateClientMessageBuilder, CreateClientMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -18,6 +20,7 @@ use crate::types::messages::client::create::CosmosCreateClientMessage;
 
 pub struct BuildAnyCreateClientMessage;
 
+#[cgp_provider(CreateClientMessageBuilderComponent)]
 impl<Chain, Counterparty, Encoding, Payload> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildAnyCreateClientMessage
 where

@@ -1,5 +1,7 @@
-use cgp::core::Async;
-use hermes_ibc_components::traits::types::commitment::value::ProvideCommitmentValueType;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::types::commitment::value::{
+    CommitmentValueTypeComponent, ProvideCommitmentValueType,
+};
 use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::tags::commitment::receive::ReceivePacket;
 use hermes_ibc_components::types::tags::commitment::send::SendPacket;
@@ -7,6 +9,7 @@ use hermes_ibc_components::types::tags::commitment::send::SendPacket;
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
 
+#[cgp_provider(CommitmentValueTypeComponent)]
 impl<Chain: Async, Counterparty: Async>
     ProvideCommitmentValueType<MockChain<Chain, Counterparty>, SendPacket> for MockChainComponents
 {
@@ -14,6 +17,7 @@ impl<Chain: Async, Counterparty: Async>
         IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>;
 }
 
+#[cgp_provider(CommitmentValueTypeComponent)]
 impl<Chain: Async, Counterparty: Async>
     ProvideCommitmentValueType<MockChain<Chain, Counterparty>, ReceivePacket>
     for MockChainComponents

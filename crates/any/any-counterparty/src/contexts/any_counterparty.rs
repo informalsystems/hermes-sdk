@@ -1,12 +1,6 @@
 use cgp::core::component::UseDelegate;
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::components::client::{
-    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
-    ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent, OutgoingPacketTypeComponent,
-    PortIdTypeComponent, SequenceTypeComponent,
-};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::{
     CosmosClientEncodingComponents, DecodeBufferTypeComponent, EncodeBufferTypeComponent,
@@ -20,7 +14,8 @@ use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode::EncoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
+    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
+    EncodingTypeComponent, ProvideEncodingType,
 };
 pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
 use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
@@ -36,11 +31,24 @@ use hermes_relayer_components::chain::impls::queries::query_and_convert_consensu
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsComponent, ClientStateTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateFieldComponent, ConsensusStateTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::height::{
+    HeightFieldComponent, HeightTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::ibc::{
+    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
+    SequenceTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 
@@ -51,13 +59,8 @@ use crate::impls::types::consensus_state::ProvideAnyConsensusState;
 use crate::types::client_state::AnyClientState;
 use crate::types::consensus_state::AnyConsensusState;
 
+#[cgp_context(AnyCounterpartyComponents)]
 pub struct AnyCounterparty;
-
-pub struct AnyCounterpartyComponents;
-
-impl HasComponents for AnyCounterparty {
-    type Components = AnyCounterpartyComponents;
-}
 
 delegate_components! {
     AnyCounterpartyComponents {
@@ -112,27 +115,24 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(EncodingTypeComponent)]
 impl ProvideEncodingType<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
     type Encoding = AnyClientEncoding;
 }
 
+#[cgp_provider(DefaultEncodingGetterComponent)]
 impl DefaultEncodingGetter<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
     fn default_encoding() -> &'static AnyClientEncoding {
         &AnyClientEncoding
     }
 }
 
+#[cgp_context(AnyClientEncodingComponents)]
 pub struct AnyClientEncoding;
-
-pub struct AnyClientEncodingComponents;
-
-impl HasComponents for AnyClientEncoding {
-    type Components = AnyClientEncodingComponents;
-}
 
 delegate_components! {
     AnyClientEncodingComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
             EncoderComponent,

@@ -1,10 +1,16 @@
 use core::fmt::{Debug, Display};
 
-use cgp::core::Async;
-use hermes_chain_type_components::traits::builders::amount::AmountBuilder;
-use hermes_chain_type_components::traits::fields::amount::denom::AmountDenomGetter;
-use hermes_chain_type_components::traits::fields::amount::quantity::AmountQuantityGetter;
-use hermes_chain_type_components::traits::types::amount::ProvideAmountType;
+use cgp::prelude::*;
+use hermes_chain_type_components::traits::builders::amount::{
+    AmountBuilder, AmountBuilderComponent,
+};
+use hermes_chain_type_components::traits::fields::amount::denom::{
+    AmountDenomGetter, AmountDenomGetterComponent,
+};
+use hermes_chain_type_components::traits::fields::amount::quantity::{
+    AmountQuantityGetter, AmountQuantityGetterComponent,
+};
+use hermes_chain_type_components::traits::types::amount::{AmountTypeComponent, ProvideAmountType};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -16,12 +22,14 @@ pub struct MockAmount<Chain, Counterparty> {
     pub denom: MockDenom<Chain, Counterparty>,
 }
 
+#[cgp_provider(AmountTypeComponent)]
 impl<Chain: Async, Counterparty: Async> ProvideAmountType<MockChain<Chain, Counterparty>>
     for MockChainComponents
 {
     type Amount = MockAmount<Chain, Counterparty>;
 }
 
+#[cgp_provider(AmountDenomGetterComponent)]
 impl<Chain: Async, Counterparty: Async> AmountDenomGetter<MockChain<Chain, Counterparty>>
     for MockChainComponents
 {
@@ -30,6 +38,7 @@ impl<Chain: Async, Counterparty: Async> AmountDenomGetter<MockChain<Chain, Count
     }
 }
 
+#[cgp_provider(AmountQuantityGetterComponent)]
 impl<Chain: Async, Counterparty: Async> AmountQuantityGetter<MockChain<Chain, Counterparty>>
     for MockChainComponents
 {
@@ -38,6 +47,7 @@ impl<Chain: Async, Counterparty: Async> AmountQuantityGetter<MockChain<Chain, Co
     }
 }
 
+#[cgp_provider(AmountBuilderComponent)]
 impl<Chain: Async, Counterparty: Async> AmountBuilder<MockChain<Chain, Counterparty>>
     for MockChainComponents
 {

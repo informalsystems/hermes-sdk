@@ -1,9 +1,12 @@
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
-use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
+use hermes_ibc_components::traits::handlers::incoming::payload::{
+    IncomingPayloadHandler, IncomingPayloadHandlerComponent,
+};
 
 use crate::traits::fields::payload_data::mint_amount::HasPayloadMintAmount;
 use crate::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
@@ -14,6 +17,7 @@ use crate::traits::token::transfer::{CanTransferToken, Mint};
 
 pub struct HandleIncomingMintTransfer;
 
+#[cgp_provider(IncomingPayloadHandlerComponent)]
 impl<Chain, Counterparty, App> IncomingPayloadHandler<Chain, Counterparty, App>
     for HandleIncomingMintTransfer
 where

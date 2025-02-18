@@ -2,7 +2,9 @@ use cgp::prelude::*;
 use hermes_async_runtime_components::channel::types::ErrChannelClosed;
 use hermes_async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use hermes_runtime_components::traits::channel::{
-    ChannelCreator, ChannelUser, ProvideChannelType, ReceiverStreamer, SenderCloner,
+    ChannelCreator, ChannelCreatorComponent, ChannelTypeComponent, ChannelUser,
+    ChannelUserComponent, ProvideChannelType, ReceiverStreamer, ReceiverStreamerComponent,
+    SenderCloner, SenderClonerComponent,
 };
 use tokio::sync::mpsc;
 use tokio_stream::wrappers::UnboundedReceiverStream;
@@ -11,6 +13,7 @@ use crate::traits::channel::{HasUnboundedChannelType, UnboundedChannelTypeProvid
 
 pub struct ProvideUnboundedChannelType;
 
+#[cgp_provider(ChannelTypeComponent)]
 impl<Runtime> ProvideChannelType<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: Async,
@@ -67,6 +70,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelCreatorComponent)]
 impl<Runtime> ChannelCreator<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: HasUnboundedChannelType,
@@ -84,6 +88,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelUserComponent)]
 impl<Runtime> ChannelUser<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: HasUnboundedChannelType + CanRaiseAsyncError<ErrChannelClosed>,
@@ -121,6 +126,7 @@ where
     }
 }
 
+#[cgp_provider(ReceiverStreamerComponent)]
 impl<Runtime> ReceiverStreamer<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: HasUnboundedChannelType + HasBoxedStreamType,
@@ -135,6 +141,7 @@ where
     }
 }
 
+#[cgp_provider(SenderClonerComponent)]
 impl<Runtime> SenderCloner<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: HasUnboundedChannelType,

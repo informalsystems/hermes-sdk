@@ -16,7 +16,7 @@ use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapCha
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 
 use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::CommandRunner;
+use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::{CanProduceOutput, HasOutputType};
 use crate::traits::parse::CanParseArg;
 
@@ -77,6 +77,7 @@ pub struct CreateChannelArgs {
     version: String,
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
     for RunCreateChannelCommand
 where

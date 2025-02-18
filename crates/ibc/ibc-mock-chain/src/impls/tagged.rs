@@ -1,17 +1,19 @@
 use core::marker::PhantomData;
 
-use cgp::core::types::ProvideType;
-use cgp::core::Async;
+use cgp::core::types::{ProvideType, TypeComponent};
+use cgp::prelude::*;
 
 use crate::contexts::chain::MockChain;
 use crate::types::tagged::Tagged;
 
 pub struct UseTaggedType<Provider>(pub PhantomData<Provider>);
 
-impl<A: Async, B: Async, Tag, Provider, Type> ProvideType<MockChain<A, B>, Tag>
-    for UseTaggedType<Provider>
+#[cgp_provider(TypeComponent)]
+impl<A, B, Tag, Provider> ProvideType<MockChain<A, B>, Tag> for UseTaggedType<Provider>
 where
-    Provider: ProvideType<MockChain<A, B>, Tag, Type = Type>,
+    A: Async,
+    B: Async,
+    Provider: ProvideType<MockChain<A, B>, Tag>,
 {
-    type Type = Tagged<A, B, Type>;
+    type Type = Tagged<A, B, Provider::Type>;
 }

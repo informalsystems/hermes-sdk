@@ -4,6 +4,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::time::HasTimeType;
 
+use crate::components::chain::IncomingPacketHandlerComponent;
 use crate::traits::fields::packet::header::timeout::HasPacketTimeout;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::timeout::CanCompareTimeoutTime;
@@ -26,6 +27,7 @@ where
     pub packet: &'a Counterparty::Packet,
 }
 
+#[cgp_provider(IncomingPacketHandlerComponent)]
 #[async_trait]
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for DisallowTimedOutIncomingPacket<InHandler>

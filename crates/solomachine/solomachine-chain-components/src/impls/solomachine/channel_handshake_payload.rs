@@ -1,4 +1,8 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
+use hermes_cosmos_relayer::presets::chain::{
+    ChannelOpenAckPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilderComponent,
+    ChannelOpenTryPayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
@@ -24,6 +28,7 @@ use crate::types::payloads::channel::{
 
 pub struct BuildSolomachineChannelHandshakePayloads;
 
+#[cgp_provider(ChannelOpenTryPayloadBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenTryPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where
@@ -75,6 +80,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenAckPayloadBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenAckPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where
@@ -124,6 +130,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenConfirmPayloadBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenConfirmPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where

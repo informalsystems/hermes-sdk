@@ -19,6 +19,7 @@ pub trait CanBuildTestDriver: HasTestDriverType + HasAsyncErrorType {
     async fn build_driver(&self) -> Result<Self::TestDriver, Self::Error>;
 }
 
+#[cgp_provider(TestDriverTypeComponent)]
 impl<Setup, Provider, TestDriver> ProvideTestDriverType<Setup> for WithProvider<Provider>
 where
     Provider: ProvideType<Setup, TestDriverTypeComponent, Type = TestDriver>,

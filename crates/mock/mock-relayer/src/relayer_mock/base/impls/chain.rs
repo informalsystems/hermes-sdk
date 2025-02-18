@@ -10,15 +10,37 @@
 
 use core::marker::PhantomData;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use eyre::eyre;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
+use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterComponent;
+use hermes_chain_type_components::traits::types::commitment_proof::ProvideCommitmentProofType;
 use hermes_cosmos_chain_components::components::client::{
-    MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
+    AckPacketMessageBuilderComponent, AckPacketPayloadBuilderComponent,
+    AckPacketPayloadTypeComponent, ChainIdTypeComponent, ChainStatusQuerierComponent,
+    ChainStatusTypeComponent, ChannelIdTypeComponent, ClientIdTypeComponent,
+    ClientStateQuerierComponent, ClientStateTypeComponent, CommitmentProofTypeComponent,
+    ConnectionIdTypeComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
+    CounterpartyMessageHeightGetterComponent, EventExtractorComponent, EventTypeComponent,
+    HeightIncrementerComponent, HeightTypeComponent, MessageResponseEventsGetterComponent,
+    MessageResponseTypeComponent, MessageSizeEstimatorComponent, MessageTypeComponent,
+    OutgoingPacketTypeComponent, PacketAcknowledgementQuerierComponent,
+    PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
+    PacketFromSendPacketEventBuilderComponent, PacketFromWriteAckEventBuilderComponent,
+    PacketIsClearedQuerierComponent, PacketIsReceivedQuerierComponent,
+    PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
+    PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,
+    PacketTimeoutTimestampGetterComponent, PortIdTypeComponent,
+    ReceivePacketMessageBuilderComponent, ReceivePacketPayloadBuilderComponent,
+    ReceivePacketPayloadTypeComponent, SendPacketEventComponent, SequenceTypeComponent,
+    TimeTypeComponent, TimeoutTypeComponent, TimeoutUnorderedPacketMessageBuilderComponent,
+    TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+    WriteAckEventComponent, WriteAckQuerierComponent,
 };
+use hermes_cosmos_chain_components::components::transaction::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
@@ -36,7 +58,9 @@ use hermes_relayer_components::chain::traits::payload_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
-use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::PacketIsReceivedQuerier;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::send_message::MessageSender;
 use hermes_relayer_components::chain::traits::types::chain_id::{
@@ -65,7 +89,9 @@ use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusT
 use hermes_relayer_components::chain::traits::types::timestamp::{
     ProvideTimeType, ProvideTimeoutType,
 };
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -81,18 +107,14 @@ use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::components::chain::MockChainComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
-impl HasComponents for MockChainContext {
-    type Components = MockChainComponents;
-}
-
 delegate_components! {
     MockChainComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
         ]:
             HandleMockError,
-        RuntimeTypeComponent: WithType<MockRuntimeContext>,
+        RuntimeTypeProviderComponent: WithType<MockRuntimeContext>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             MessageResponseTypeComponent,
@@ -102,18 +124,22 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(HeightTypeComponent)]
 impl ProvideHeightType<MockChainContext> for MockChainComponents {
     type Height = MockHeight;
 }
 
+#[cgp_provider(EventTypeComponent)]
 impl ProvideEventType<MockChainContext> for MockChainComponents {
     type Event = Event;
 }
 
+#[cgp_provider(TimeTypeComponent)]
 impl ProvideTimeType<MockChainContext> for MockChainComponents {
     type Time = MockTimestamp;
 }
 
+#[cgp_provider(TimeoutTypeComponent)]
 impl ProvideTimeoutType<MockChainContext> for MockChainComponents {
     type Timeout = MockTimestamp;
 
@@ -122,84 +148,106 @@ impl ProvideTimeoutType<MockChainContext> for MockChainComponents {
     }
 }
 
+#[cgp_provider(MessageTypeComponent)]
 impl ProvideMessageType<MockChainContext> for MockChainComponents {
     type Message = MockMessage;
 }
 
+#[cgp_provider(ChainIdTypeComponent)]
 impl ProvideChainIdType<MockChainContext> for MockChainComponents {
     type ChainId = String;
 }
 
+#[cgp_provider(ClientIdTypeComponent)]
 impl ProvideClientIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type ClientId = ClientId;
 }
 
+#[cgp_provider(ConnectionIdTypeComponent)]
 impl ProvideConnectionIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type ConnectionId = String;
 }
 
+#[cgp_provider(ChannelIdTypeComponent)]
 impl ProvideChannelIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type ChannelId = ChannelId;
 }
 
+#[cgp_provider(PortIdTypeComponent)]
 impl ProvidePortIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type PortId = PortId;
 }
 
+#[cgp_provider(SequenceTypeComponent)]
 impl ProvideSequenceType<MockChainContext, MockChainContext> for MockChainComponents {
     type Sequence = Sequence;
 }
 
+#[cgp_provider(OutgoingPacketTypeComponent)]
 impl ProvideOutgoingPacketType<MockChainContext, MockChainContext> for MockChainComponents {
     type OutgoingPacket = Packet;
 }
 
+#[cgp_provider(PacketSrcChannelIdGetterComponent)]
 impl PacketSrcChannelIdGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn packet_src_channel_id(packet: &Packet) -> ChannelId {
         packet.src_channel_id.clone()
     }
 }
 
+#[cgp_provider(PacketSrcPortIdGetterComponent)]
 impl PacketSrcPortIdGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn packet_src_port_id(packet: &Packet) -> PortId {
         packet.src_port_id.clone()
     }
 }
 
+#[cgp_provider(PacketDstPortIdGetterComponent)]
 impl PacketDstPortIdGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn packet_dst_port_id(packet: &Packet) -> PortId {
         packet.dst_port_id.clone()
     }
 }
 
+#[cgp_provider(PacketDstChannelIdGetterComponent)]
 impl PacketDstChannelIdGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn packet_dst_channel_id(packet: &Packet) -> ChannelId {
         packet.dst_channel_id.clone()
     }
 }
 
+#[cgp_provider(PacketSequenceGetterComponent)]
 impl PacketSequenceGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn packet_sequence(packet: &Packet) -> Sequence {
         packet.sequence
     }
 }
 
+#[cgp_provider(PacketTimeoutHeightGetterComponent)]
 impl PacketTimeoutHeightGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn packet_timeout_height(packet: &Packet) -> Option<MockHeight> {
         Some(packet.timeout_height)
     }
 }
 
+#[cgp_provider(PacketTimeoutTimestampGetterComponent)]
 impl PacketTimeoutTimestampGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn packet_timeout_timestamp(packet: &Packet) -> Option<MockTimestamp> {
         Some(packet.timeout_timestamp.clone())
     }
 }
 
+#[cgp_provider(WriteAckEventComponent)]
 impl ProvideWriteAckEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type WriteAckEvent = WriteAckEvent;
 }
 
+#[cgp_provider(CommitmentProofTypeComponent)]
+impl ProvideCommitmentProofType<MockChainContext> for MockChainComponents {
+    type CommitmentProof = ();
+}
+
+#[cgp_provider(PacketFromWriteAckEventBuilderComponent)]
 impl PacketFromWriteAckEventBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_packet_from_write_ack_event(
         _chain: &MockChainContext,
@@ -216,6 +264,20 @@ impl PacketFromWriteAckEventBuilder<MockChainContext, MockChainContext> for Mock
     }
 }
 
+#[cgp_provider(PacketAcknowledgementQuerierComponent)]
+impl PacketAcknowledgementQuerier<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn query_packet_acknowledgement(
+        _chain: &MockChainContext,
+        _channel_id: &ChannelId,
+        _port_id: &PortId,
+        _sequence: &Sequence,
+        _height: &MockHeight,
+    ) -> Result<(Vec<u8>, ()), Error> {
+        todo!()
+    }
+}
+
+#[cgp_provider(EventExtractorComponent)]
 impl EventExtractor<MockChainContext, WriteAckEvent> for MockChainComponents {
     fn try_extract_from_event(
         _chain: &MockChainContext,
@@ -229,15 +291,18 @@ impl EventExtractor<MockChainContext, WriteAckEvent> for MockChainComponents {
     }
 }
 
+#[cgp_provider(ConsensusStateTypeComponent)]
 impl ProvideConsensusStateType<MockChainContext, MockChainContext> for MockChainComponents {
     type ConsensusState = ConsensusState;
 }
 
+#[cgp_provider(ClientStateTypeComponent)]
 impl ProvideClientStateType<MockChainContext, MockChainContext> for MockChainComponents {
     // TODO
     type ClientState = ();
 }
 
+#[cgp_provider(ChainStatusTypeComponent)]
 impl ProvideChainStatusType<MockChainContext> for MockChainComponents {
     type ChainStatus = ChainStatus;
 
@@ -250,10 +315,12 @@ impl ProvideChainStatusType<MockChainContext> for MockChainComponents {
     }
 }
 
+#[cgp_provider(SendPacketEventComponent)]
 impl ProvideSendPacketEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type SendPacketEvent = SendPacketEvent;
 }
 
+#[cgp_provider(PacketFromSendPacketEventBuilderComponent)]
 impl PacketFromSendPacketEventBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_packet_from_send_packet_event(
         _chain: &MockChainContext,
@@ -263,12 +330,14 @@ impl PacketFromSendPacketEventBuilder<MockChainContext, MockChainContext> for Mo
     }
 }
 
+#[cgp_provider(HeightIncrementerComponent)]
 impl HeightIncrementer<MockChainContext> for MockChainComponents {
     fn increment_height(height: &MockHeight) -> Result<MockHeight, Error> {
         Ok(height.increment())
     }
 }
 
+#[cgp_provider(MessageSizeEstimatorComponent)]
 impl MessageSizeEstimator<MockChainContext> for MockChainComponents {
     fn estimate_message_size(_message: &MockMessage) -> Result<usize, Error> {
         // Only single messages are sent by the Mock Chain
@@ -276,12 +345,14 @@ impl MessageSizeEstimator<MockChainContext> for MockChainComponents {
     }
 }
 
+#[cgp_provider(ChainIdGetterComponent)]
 impl ChainIdGetter<MockChainContext> for MockChainComponents {
     fn chain_id(chain: &MockChainContext) -> &String {
         &chain.name
     }
 }
 
+#[cgp_provider(MessageSenderComponent)]
 impl MessageSender<MockChainContext> for MockChainComponents {
     async fn send_messages(
         chain: &MockChainContext,
@@ -291,6 +362,7 @@ impl MessageSender<MockChainContext> for MockChainComponents {
     }
 }
 
+#[cgp_provider(ChainStatusQuerierComponent)]
 impl ChainStatusQuerier<MockChainContext> for MockChainComponents {
     async fn query_chain_status(chain: &MockChainContext) -> Result<ChainStatus, Error> {
         let height = chain.get_current_height();
@@ -303,6 +375,7 @@ impl ChainStatusQuerier<MockChainContext> for MockChainComponents {
     }
 }
 
+#[cgp_provider(CounterpartyMessageHeightGetterComponent)]
 impl CounterpartyMessageHeightGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn counterparty_message_height_for_update_client(message: &MockMessage) -> Option<MockHeight> {
         match message {
@@ -314,6 +387,7 @@ impl CounterpartyMessageHeightGetter<MockChainContext, MockChainContext> for Moc
     }
 }
 
+#[cgp_provider(ConsensusStateQuerierComponent)]
 impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_consensus_state(
         chain: &MockChainContext,
@@ -328,6 +402,7 @@ impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockChainComp
     }
 }
 
+#[cgp_provider(ClientStateQuerierComponent)]
 impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_client_state(
         _chain: &MockChainContext,
@@ -339,7 +414,8 @@ impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainCompone
     }
 }
 
-impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComponents {
+#[cgp_provider(PacketIsReceivedQuerierComponent)]
+impl PacketIsReceivedQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_packet_is_received(
         chain: &MockChainContext,
         port_id: &PortId,
@@ -351,6 +427,7 @@ impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComp
     }
 }
 
+#[cgp_provider(WriteAckQuerierComponent)]
 impl WriteAckQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_write_ack_event(
         chain: &MockChainContext,
@@ -379,10 +456,12 @@ impl WriteAckQuerier<MockChainContext, MockChainContext> for MockChainComponents
     }
 }
 
+#[cgp_provider(ReceivePacketPayloadTypeComponent)]
 impl ProvideReceivePacketPayloadType<MockChainContext, MockChainContext> for MockChainComponents {
     type ReceivePacketPayload = MockMessage;
 }
 
+#[cgp_provider(ReceivePacketPayloadBuilderComponent)]
 impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_receive_packet_payload(
         chain: &MockChainContext,
@@ -407,6 +486,7 @@ impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockCha
     }
 }
 
+#[cgp_provider(ReceivePacketMessageBuilderComponent)]
 impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_receive_packet_message(
         _chain: &MockChainContext,
@@ -417,10 +497,24 @@ impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockCha
     }
 }
 
+#[cgp_provider(PacketIsClearedQuerierComponent)]
+impl PacketIsClearedQuerier<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn query_packet_is_cleared(
+        _chain: &MockChainContext,
+        _port_id: &PortId,
+        _channel_id: &ChannelId,
+        _sequence: &Sequence,
+    ) -> Result<bool, Error> {
+        Ok(false) // stub
+    }
+}
+
+#[cgp_provider(AckPacketPayloadTypeComponent)]
 impl ProvideAckPacketPayloadType<MockChainContext, MockChainContext> for MockChainComponents {
     type AckPacketPayload = MockMessage;
 }
 
+#[cgp_provider(AckPacketPayloadBuilderComponent)]
 impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_ack_packet_payload(
         chain: &MockChainContext,
@@ -448,6 +542,7 @@ impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainCo
     }
 }
 
+#[cgp_provider(AckPacketMessageBuilderComponent)]
 impl AckPacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_ack_packet_message(
         _chain: &MockChainContext,
@@ -458,12 +553,14 @@ impl AckPacketMessageBuilder<MockChainContext, MockChainContext> for MockChainCo
     }
 }
 
+#[cgp_provider(TimeoutUnorderedPacketPayloadTypeComponent)]
 impl ProvideTimeoutUnorderedPacketPayloadType<MockChainContext, MockChainContext>
     for MockChainComponents
 {
     type TimeoutUnorderedPacketPayload = MockMessage;
 }
 
+#[cgp_provider(TimeoutUnorderedPacketPayloadBuilderComponent)]
 impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext>
     for MockChainComponents
 {
@@ -488,6 +585,7 @@ impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext>
     }
 }
 
+#[cgp_provider(TimeoutUnorderedPacketMessageBuilderComponent)]
 impl TimeoutUnorderedPacketMessageBuilder<MockChainContext, MockChainContext>
     for MockChainComponents
 {

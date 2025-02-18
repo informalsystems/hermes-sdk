@@ -1,20 +1,22 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::core::error::CanRaiseAsyncError;
-use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::types::AsBytes;
 
 use crate::traits::queries::client_state::{
-    AllClientStatesQuerier, CanQueryAllRawClientStates, CanQueryRawClientState,
-    CanQueryRawClientStateWithProofs, ClientStateQuerier, ClientStateWithProofsQuerier,
+    AllClientStatesQuerier, AllClientStatesQuerierComponent, CanQueryAllRawClientStates,
+    CanQueryRawClientState, CanQueryRawClientStateWithProofs, ClientStateQuerier,
+    ClientStateQuerierComponent, ClientStateWithProofsQuerier,
+    ClientStateWithProofsQuerierComponent,
 };
 use crate::traits::types::client_state::HasClientStateType;
 
 pub struct QueryAndConvertRawClientState;
 
+#[cgp_provider(ClientStateQuerierComponent)]
 impl<Chain, Counterparty, Encoding> ClientStateQuerier<Chain, Counterparty>
     for QueryAndConvertRawClientState
 where
@@ -38,6 +40,7 @@ where
     }
 }
 
+#[cgp_provider(ClientStateWithProofsQuerierComponent)]
 impl<Chain, Counterparty, Encoding> ClientStateWithProofsQuerier<Chain, Counterparty>
     for QueryAndConvertRawClientState
 where
@@ -63,6 +66,7 @@ where
     }
 }
 
+#[cgp_provider(AllClientStatesQuerierComponent)]
 impl<Chain, Counterparty, Encoding> AllClientStatesQuerier<Chain, Counterparty>
     for QueryAndConvertRawClientState
 where

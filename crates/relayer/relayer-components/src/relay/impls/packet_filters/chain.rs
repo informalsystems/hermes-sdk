@@ -1,12 +1,15 @@
+use cgp::prelude::*;
 use hermes_chain_components::traits::packet::filter::{
     CanFilterIncomingPacket, CanFilterOutgoingPacket,
 };
 
+use crate::components::default::relay::RelayPacketFilterComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_filter::RelayPacketFilter;
 
 pub struct FilterRelayPacketWithChains;
 
+#[cgp_provider(RelayPacketFilterComponent)]
 impl<Relay> RelayPacketFilter<Relay> for FilterRelayPacketWithChains
 where
     Relay: HasRelayChains<

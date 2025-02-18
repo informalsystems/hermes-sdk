@@ -15,6 +15,7 @@ where
     async fn run_command(&self, args: &Args) -> Result<Self::Output, Self::Error>;
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App, Args, Components, Delegate> CommandRunner<App, Args> for UseDelegate<Components>
 where
     App: HasOutputType + HasAsyncErrorType,

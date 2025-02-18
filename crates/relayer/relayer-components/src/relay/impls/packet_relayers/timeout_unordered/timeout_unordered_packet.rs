@@ -1,12 +1,13 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 
 use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
 use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::types::aliases::HeightOf;
+use crate::components::default::relay::TimeoutUnorderedPacketRelayerComponent;
 use crate::relay::traits::chains::{HasRelayChains, HasSrcClientId, PacketOf};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayer;
@@ -17,6 +18,7 @@ use crate::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
 /// implemented on top of this base type.
 pub struct BaseTimeoutUnorderedPacketRelayer;
 
+#[cgp_provider(TimeoutUnorderedPacketRelayerComponent)]
 impl<Relay> TimeoutUnorderedPacketRelayer<Relay> for BaseTimeoutUnorderedPacketRelayer
 where
     Relay: HasSourceTargetChainTypes

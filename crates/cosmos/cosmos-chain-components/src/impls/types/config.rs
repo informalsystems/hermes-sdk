@@ -21,7 +21,6 @@ pub struct CosmosChainConfig {
     pub key_store_folder: Option<PathBuf>,
     pub key_name: String,
     pub store_prefix: String,
-    pub event_source: EventSourceMode,
 
     pub clock_drift: Duration,
     pub max_block_time: Duration,

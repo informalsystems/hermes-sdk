@@ -20,6 +20,7 @@ where
     fn payload_unescrow_amount(payload_data: &Self::PayloadData) -> &Counterparty::Amount;
 }
 
+#[cgp_provider(PayloadUnescrowAmountGetterComponent)]
 impl<Chain, Counterparty, App, Provider> PayloadUnescrowAmountGetter<Chain, Counterparty, App>
     for WithProvider<Provider>
 where

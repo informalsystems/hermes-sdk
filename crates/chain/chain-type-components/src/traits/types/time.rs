@@ -11,6 +11,7 @@ pub trait HasTimeType: Async {
     type Time: Async;
 }
 
+#[cgp_provider(TimeTypeComponent)]
 impl<Chain, Provider, Time> ProvideTimeType<Chain> for WithProvider<Provider>
 where
     Chain: Async,

@@ -1,11 +1,12 @@
-use cgp::core::Async;
-use hermes_ibc_components::traits::fields::caller::CallerGetter;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::fields::caller::{CallerGetter, CallerGetterComponent};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
 use crate::types::address::MockAddress;
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(CallerGetterComponent)]
 impl<Chain: Async, Counterparty: Async> CallerGetter<MockChain<Chain, Counterparty>>
     for MockChainComponents
 {

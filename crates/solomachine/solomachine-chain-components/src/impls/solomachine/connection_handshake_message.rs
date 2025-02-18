@@ -1,4 +1,8 @@
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
+use hermes_cosmos_relayer::presets::chain::{
+    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -22,6 +26,7 @@ use crate::types::message::SolomachineMessage;
 
 pub struct BuildCosmosToSolomachineConnectionHandshakeMessage;
 
+#[cgp_provider(ConnectionOpenInitMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenInitMessageBuilder<Chain, Counterparty>
     for BuildCosmosToSolomachineConnectionHandshakeMessage
 where
@@ -53,6 +58,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenTryMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosToSolomachineConnectionHandshakeMessage
 where
@@ -85,6 +91,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenAckMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
     for BuildCosmosToSolomachineConnectionHandshakeMessage
 where
@@ -115,6 +122,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenConfirmMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildCosmosToSolomachineConnectionHandshakeMessage
 where

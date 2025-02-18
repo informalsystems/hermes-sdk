@@ -1,9 +1,11 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
 use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use hermes_error::types::HermesError;
-use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::{
+    CreateClientPayloadBuilder, CreateClientPayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainHeight, CanQueryChainStatus,
 };
@@ -28,6 +30,7 @@ use crate::types::tendermint::TendermintClientState;
 
 pub struct BuildCosmosCreateClientPayload;
 
+#[cgp_provider(CreateClientPayloadBuilderComponent)]
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildCosmosCreateClientPayload
 where

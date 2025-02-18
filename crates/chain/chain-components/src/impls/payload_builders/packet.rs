@@ -1,13 +1,19 @@
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
 
 use crate::traits::packet::fields::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence, HasPacketSrcChannelId,
     HasPacketSrcPortId,
 };
-use crate::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
-use crate::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
-use crate::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
+use crate::traits::payload_builders::ack_packet::{
+    AckPacketPayloadBuilder, AckPacketPayloadBuilderComponent,
+};
+use crate::traits::payload_builders::receive_packet::{
+    ReceivePacketPayloadBuilder, ReceivePacketPayloadBuilderComponent,
+};
+use crate::traits::payload_builders::timeout_unordered_packet::{
+    TimeoutUnorderedPacketPayloadBuilder, TimeoutUnorderedPacketPayloadBuilderComponent,
+};
 use crate::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
 use crate::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use crate::traits::queries::packet_receipt::CanQueryPacketReceipt;
@@ -22,6 +28,7 @@ use crate::types::payloads::packet::{
 
 pub struct BuildPacketPayloads;
 
+#[cgp_provider(ReceivePacketPayloadBuilderComponent)]
 impl<Chain, Counterparty> ReceivePacketPayloadBuilder<Chain, Counterparty> for BuildPacketPayloads
 where
     Chain: HasReceivePacketPayloadType<
@@ -64,6 +71,7 @@ where
     }
 }
 
+#[cgp_provider(AckPacketPayloadBuilderComponent)]
 impl<Chain, Counterparty> AckPacketPayloadBuilder<Chain, Counterparty> for BuildPacketPayloads
 where
     Chain: HasAckPacketPayloadType<
@@ -110,6 +118,7 @@ where
     }
 }
 
+#[cgp_provider(TimeoutUnorderedPacketPayloadBuilderComponent)]
 impl<Chain, Counterparty> TimeoutUnorderedPacketPayloadBuilder<Chain, Counterparty>
     for BuildPacketPayloads
 where

@@ -1,8 +1,10 @@
 use std::str::FromStr;
 
+use cgp::prelude::*;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_cli_components::traits::build::CanLoadBuilder;
+use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
@@ -74,6 +76,7 @@ pub struct ChannelEndsSummary {
     counterparty_port_id: PortId,
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl CommandRunner<HermesApp> for QueryChannelEnds {
     async fn run(&self, app: &HermesApp) -> Result<Output> {
         let builder = app.load_builder().await?;

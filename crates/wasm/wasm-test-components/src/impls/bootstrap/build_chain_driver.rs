@@ -2,9 +2,11 @@ use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseAsyncError;
 use cgp::core::field::Index;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
+use cgp::prelude::*;
+use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::{
+    ChainDriverBuilder, ChainDriverBuilderComponent,
+};
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::chain::types::amount::Amount;
@@ -35,6 +37,7 @@ use crate::traits::chain::upload_client_code::CanUploadWasmClientCode;
 
 pub struct BuildChainDriverAndInitWasmClient<InBuilder>(pub PhantomData<InBuilder>);
 
+#[cgp_provider(ChainDriverBuilderComponent)]
 impl<Bootstrap, ChainDriver, Chain, Runtime, InBuilder> ChainDriverBuilder<Bootstrap>
     for BuildChainDriverAndInitWasmClient<InBuilder>
 where

@@ -1,9 +1,9 @@
 #![allow(clippy::ptr_arg)]
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::transaction::traits::encode_tx::TxEncoder;
+use hermes_relayer_components::transaction::traits::encode_tx::{TxEncoder, TxEncoderComponent};
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
@@ -24,6 +24,7 @@ use crate::types::transaction::signed_tx::SignedTx;
 
 pub struct EncodeCosmosTx;
 
+#[cgp_provider(TxEncoderComponent)]
 impl<Chain> TxEncoder<Chain> for EncodeCosmosTx
 where
     Chain: HasSignerType<Signer = Secp256k1KeyPair>

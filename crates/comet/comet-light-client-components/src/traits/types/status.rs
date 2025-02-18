@@ -11,6 +11,7 @@ pub trait HasVerificationStatusType: Async {
     type VerificationStatus: Async;
 }
 
+#[cgp_provider(VerificationStatusTypeComponent)]
 impl<Client: Async, Provider, VerificationStatus> ProvideVerificationStatusType<Client>
     for WithProvider<Provider>
 where

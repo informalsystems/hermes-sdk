@@ -1,10 +1,13 @@
 use std::path::PathBuf;
 
-use cgp::core::Async;
-use hermes_runtime_components::traits::fs::file_path::ProvideFilePathType;
+use cgp::prelude::*;
+use hermes_runtime_components::traits::fs::file_path::{
+    FilePathTypeComponent, ProvideFilePathType,
+};
 
 pub struct ProvideStdPathType;
 
+#[cgp_provider(FilePathTypeComponent)]
 impl<Runtime> ProvideFilePathType<Runtime> for ProvideStdPathType
 where
     Runtime: Async,

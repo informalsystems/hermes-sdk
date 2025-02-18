@@ -1,7 +1,8 @@
-use cgp::prelude::Async;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::consensus_state::{
-    ConsensusStateFieldGetter, HasConsensusStateType, ProvideConsensusStateType,
-    ProvideRawConsensusStateType,
+    ConsensusStateFieldComponent, ConsensusStateFieldGetter, ConsensusStateTypeComponent,
+    HasConsensusStateType, ProvideConsensusStateType, ProvideRawConsensusStateType,
+    RawConsensusStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimeType;
 use prost_types::Any;
@@ -11,6 +12,7 @@ use crate::types::tendermint::TendermintConsensusState;
 
 pub struct ProvideTendermintConsensusState;
 
+#[cgp_provider(ConsensusStateTypeComponent)]
 impl<Chain, Counterparty> ProvideConsensusStateType<Chain, Counterparty>
     for ProvideTendermintConsensusState
 where
@@ -19,6 +21,7 @@ where
     type ConsensusState = TendermintConsensusState;
 }
 
+#[cgp_provider(ConsensusStateFieldComponent)]
 impl<Chain, Counterparty> ConsensusStateFieldGetter<Chain, Counterparty>
     for ProvideTendermintConsensusState
 where
@@ -32,6 +35,7 @@ where
 
 pub struct ProvideAnyRawConsensusState;
 
+#[cgp_provider(RawConsensusStateTypeComponent)]
 impl<Chain> ProvideRawConsensusStateType<Chain> for ProvideAnyRawConsensusState
 where
     Chain: Async,

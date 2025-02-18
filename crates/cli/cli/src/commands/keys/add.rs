@@ -2,8 +2,10 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
+use cgp::prelude::*;
 use hdpath::StandardHDPath;
 use hermes_cli_components::traits::build::CanLoadBuilder;
+use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
@@ -185,6 +187,7 @@ fn check_key_exists(keyring: &KeyRing, key_name: &str, overwrite: bool) {
     }
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl CommandRunner<HermesApp> for KeysAddCmd {
     async fn run(&self, app: &HermesApp) -> hermes_cli_framework::Result<Output> {
         let builder = app.load_builder().await?;

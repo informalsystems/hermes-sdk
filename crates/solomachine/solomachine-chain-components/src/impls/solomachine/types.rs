@@ -7,6 +7,18 @@ use hermes_chain_type_components::traits::types::message_response::HasMessageRes
 use hermes_cosmos_chain_components::components::client::{
     MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
 };
+use hermes_cosmos_relayer::presets::chain::{
+    AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
+    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
+    CommitmentPrefixTypeComponent, ConnectionOpenAckPayloadTypeComponent,
+    ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitEventComponent,
+    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
+    CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
+    CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    EventExtractorComponent, EventTypeComponent, InitChannelOptionsTypeComponent,
+    InitConnectionOptionsTypeComponent, MessageTypeComponent, ReceivePacketPayloadTypeComponent,
+    TimeoutUnorderedPacketPayloadTypeComponent, UpdateClientPayloadTypeComponent,
+};
 use hermes_relayer_components::chain::traits::commitment_prefix::ProvideCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -65,6 +77,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(MessageTypeComponent)]
 impl<Chain> ProvideMessageType<Chain> for ProvideSolomachineChainTypes
 where
     Chain: Async,
@@ -72,6 +85,7 @@ where
     type Message = SolomachineMessage;
 }
 
+#[cgp_provider(EventTypeComponent)]
 impl<Chain> ProvideEventType<Chain> for ProvideSolomachineChainTypes
 where
     Chain: Async,
@@ -79,6 +93,7 @@ where
     type Event = SolomachineEvent;
 }
 
+#[cgp_provider(ChannelEndTypeComponent)]
 impl<Chain, Counterparty> ProvideChannelEndType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -87,6 +102,7 @@ where
     type ChannelEnd = ChannelEnd;
 }
 
+#[cgp_provider(CommitmentPrefixTypeComponent)]
 impl<Chain> ProvideCommitmentPrefixType<Chain> for ProvideSolomachineChainTypes
 where
     Chain: Async,
@@ -94,6 +110,7 @@ where
     type CommitmentPrefix = String;
 }
 
+#[cgp_provider(CreateClientPayloadOptionsTypeComponent)]
 impl<Chain, Counterparty> ProvideCreateClientPayloadOptionsType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -102,6 +119,7 @@ where
     type CreateClientPayloadOptions = ();
 }
 
+#[cgp_provider(CreateClientMessageOptionsTypeComponent)]
 impl<Chain, Counterparty> ProvideCreateClientMessageOptionsType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -110,6 +128,7 @@ where
     type CreateClientMessageOptions = ();
 }
 
+#[cgp_provider(CreateClientPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -118,6 +137,7 @@ where
     type CreateClientPayload = SolomachineCreateClientPayload;
 }
 
+#[cgp_provider(UpdateClientPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideUpdateClientPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -126,6 +146,7 @@ where
     type UpdateClientPayload = SolomachineUpdateClientPayload;
 }
 
+#[cgp_provider(InitConnectionOptionsTypeComponent)]
 impl<Chain, Counterparty> ProvideInitConnectionOptionsType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -134,6 +155,7 @@ where
     type InitConnectionOptions = ();
 }
 
+#[cgp_provider(InitChannelOptionsTypeComponent)]
 impl<Chain, Counterparty> ProvideInitChannelOptionsType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -142,6 +164,7 @@ where
     type InitChannelOptions = ();
 }
 
+#[cgp_provider(ConnectionOpenInitPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideConnectionOpenInitPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -150,6 +173,7 @@ where
     type ConnectionOpenInitPayload = SolomachineConnectionOpenInitPayload;
 }
 
+#[cgp_provider(ConnectionOpenTryPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideConnectionOpenTryPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -158,6 +182,7 @@ where
     type ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload;
 }
 
+#[cgp_provider(ConnectionOpenAckPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideConnectionOpenAckPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -166,6 +191,7 @@ where
     type ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload;
 }
 
+#[cgp_provider(ConnectionOpenConfirmPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideConnectionOpenConfirmPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -174,6 +200,7 @@ where
     type ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload;
 }
 
+#[cgp_provider(ChannelOpenTryPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -182,6 +209,7 @@ where
     type ChannelOpenTryPayload = SolomachineChannelOpenTryPayload;
 }
 
+#[cgp_provider(ChannelOpenAckPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideChannelOpenAckPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -190,6 +218,7 @@ where
     type ChannelOpenAckPayload = SolomachineChannelOpenAckPayload;
 }
 
+#[cgp_provider(ChannelOpenConfirmPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideChannelOpenConfirmPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -198,6 +227,7 @@ where
     type ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload;
 }
 
+#[cgp_provider(ReceivePacketPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -206,6 +236,7 @@ where
     type ReceivePacketPayload = SolomachineReceivePacketPayload;
 }
 
+#[cgp_provider(AckPacketPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -214,6 +245,7 @@ where
     type AckPacketPayload = SolomachineAckPacketPayload;
 }
 
+#[cgp_provider(TimeoutUnorderedPacketPayloadTypeComponent)]
 impl<Chain, Counterparty> ProvideTimeoutUnorderedPacketPayloadType<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -222,6 +254,7 @@ where
     type TimeoutUnorderedPacketPayload = SolomachineTimeoutUnorderedPacketPayload;
 }
 
+#[cgp_provider(CreateClientEventComponent)]
 impl<Chain, Counterparty> ProvideCreateClientEvent<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -235,6 +268,7 @@ where
     }
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain> EventExtractor<Chain, SolomachineCreateClientEvent> for ProvideSolomachineChainTypes
 where
     Chain: HasEventType<Event = SolomachineEvent>,
@@ -251,6 +285,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenInitEventComponent)]
 impl<Chain, Counterparty> ProvideConnectionOpenInitEvent<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
@@ -266,6 +301,7 @@ where
     }
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain> EventExtractor<Chain, SolomachineConnectionInitEvent> for ProvideSolomachineChainTypes
 where
     Chain: HasEventType<Event = SolomachineEvent>,

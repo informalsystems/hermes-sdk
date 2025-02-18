@@ -1,5 +1,7 @@
-use cgp::core::error::CanRaiseAsyncError;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
+    ConsensusStateHeightsQuerier, ConsensusStateHeightsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
@@ -15,6 +17,7 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryConsensusStateHeightsFromGrpc;
 
+#[cgp_provider(ConsensusStateHeightsQuerierComponent)]
 impl<Chain, Counterparty> ConsensusStateHeightsQuerier<Chain, Counterparty>
     for QueryConsensusStateHeightsFromGrpc
 where

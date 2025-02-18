@@ -1,13 +1,18 @@
 use alloc::string::String;
 
-use cgp::core::Async;
-use hermes_ibc_components::traits::commitment::value::receive_packet::ReceivePacketCommitmentValueBuilder;
-use hermes_ibc_components::traits::commitment::value::send_packet::SendPacketCommitmentValueBuilder;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::commitment::value::receive_packet::{
+    ReceivePacketCommitmentValueBuilder, ReceivePacketCommitmentValueBuilderComponent,
+};
+use hermes_ibc_components::traits::commitment::value::send_packet::{
+    SendPacketCommitmentValueBuilder, SendPacketCommitmentValueBuilderComponent,
+};
 use hermes_ibc_components::types::packet::IbcPacket;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
 
+#[cgp_provider(SendPacketCommitmentValueBuilderComponent)]
 impl<Chain: Async, Counterparty: Async>
     SendPacketCommitmentValueBuilder<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents
@@ -20,6 +25,7 @@ impl<Chain: Async, Counterparty: Async>
     }
 }
 
+#[cgp_provider(ReceivePacketCommitmentValueBuilderComponent)]
 impl<Chain: Async, Counterparty: Async>
     ReceivePacketCommitmentValueBuilder<
         MockChain<Chain, Counterparty>,

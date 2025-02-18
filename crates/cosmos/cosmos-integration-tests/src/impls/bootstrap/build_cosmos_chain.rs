@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
@@ -10,12 +10,15 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfig;
+use crate::traits::bootstrap::build_chain::{
+    ChainBuilderWithNodeConfig, ChainBuilderWithNodeConfigComponent,
+};
 use crate::traits::bootstrap::cosmos_builder::HasCosmosBuilder;
 use crate::traits::bootstrap::relayer_chain_config::CanBuildRelayerChainConfig;
 
 pub struct BuildCosmosChainWithNodeConfig;
 
+#[cgp_provider(ChainBuilderWithNodeConfigComponent)]
 impl<Bootstrap> ChainBuilderWithNodeConfig<Bootstrap> for BuildCosmosChainWithNodeConfig
 where
     Bootstrap: HasChainType<Chain = CosmosChain>

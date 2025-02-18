@@ -169,6 +169,7 @@ where
     }
 }
 
+#[cgp_provider(ClientStateQuerierComponent)]
 impl<Chain, Counterparty, Components, Delegate> ClientStateQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -187,6 +188,7 @@ where
     }
 }
 
+#[cgp_provider(ClientStateWithProofsQuerierComponent)]
 impl<Chain, Counterparty, Components, Delegate> ClientStateWithProofsQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -206,6 +208,7 @@ where
     }
 }
 
+#[cgp_provider(AllClientStatesQuerierComponent)]
 impl<Chain, Counterparty, Components, Delegate> AllClientStatesQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where

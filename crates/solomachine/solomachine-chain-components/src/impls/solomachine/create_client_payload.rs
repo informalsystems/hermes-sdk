@@ -1,4 +1,5 @@
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
+use hermes_cosmos_relayer::presets::chain::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
@@ -11,6 +12,7 @@ use crate::types::payloads::client::SolomachineCreateClientPayload;
 
 pub struct BuildSolomachineCreateClientPayload;
 
+#[cgp_provider(CreateClientPayloadBuilderComponent)]
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineCreateClientPayload
 where

@@ -5,7 +5,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::bootstrap::traits::chain::ChainBootstrapper;
+use hermes_test_components::bootstrap::traits::chain::{
+    ChainBootstrapper, ChainBootstrapperComponent,
+};
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
@@ -23,6 +25,7 @@ use crate::bootstrap::traits::initializers::init_genesis_config::CanInitChainGen
 
 pub struct BootstrapCosmosChain;
 
+#[cgp_provider(ChainBootstrapperComponent)]
 impl<Bootstrap, Runtime, Chain, ChainDriver> ChainBootstrapper<Bootstrap> for BootstrapCosmosChain
 where
     Bootstrap: HasAsyncErrorType

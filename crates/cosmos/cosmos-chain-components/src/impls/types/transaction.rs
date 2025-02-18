@@ -1,13 +1,25 @@
-use cgp::core::Async;
-use hermes_relayer_components::transaction::traits::nonce::nonce_guard::ProvideNonceGuard;
-use hermes_relayer_components::transaction::traits::types::fee::ProvideFeeType;
-use hermes_relayer_components::transaction::traits::types::nonce::{
-    HasNonceType, ProvideNonceType,
+use cgp::prelude::*;
+use hermes_relayer_components::transaction::traits::nonce::nonce_guard::{
+    NonceGuardComponent, ProvideNonceGuard,
 };
-use hermes_relayer_components::transaction::traits::types::signer::ProvideSignerType;
-use hermes_relayer_components::transaction::traits::types::transaction::ProvideTransactionType;
-use hermes_relayer_components::transaction::traits::types::tx_hash::ProvideTransactionHashType;
-use hermes_relayer_components::transaction::traits::types::tx_response::ProvideTxResponseType;
+use hermes_relayer_components::transaction::traits::types::fee::{
+    FeeTypeComponent, ProvideFeeType,
+};
+use hermes_relayer_components::transaction::traits::types::nonce::{
+    HasNonceType, NonceTypeComponent, ProvideNonceType,
+};
+use hermes_relayer_components::transaction::traits::types::signer::{
+    ProvideSignerType, SignerTypeComponent,
+};
+use hermes_relayer_components::transaction::traits::types::transaction::{
+    ProvideTransactionType, TransactionTypeComponent,
+};
+use hermes_relayer_components::transaction::traits::types::tx_hash::{
+    ProvideTransactionHashType, TransactionHashTypeComponent,
+};
+use hermes_relayer_components::transaction::traits::types::tx_response::{
+    ProvideTxResponseType, TxResponseTypeComponent,
+};
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use prost::Message as _;
 use tendermint::hash::Hash;
@@ -20,6 +32,7 @@ use crate::types::transaction::signed_tx::SignedTx;
 
 pub struct ProvideCosmosTransactionTypes;
 
+#[cgp_provider(SignerTypeComponent)]
 impl<Chain> ProvideSignerType<Chain> for ProvideCosmosTransactionTypes
 where
     Chain: Async,
@@ -27,6 +40,7 @@ where
     type Signer = Secp256k1KeyPair;
 }
 
+#[cgp_provider(NonceTypeComponent)]
 impl<Chain> ProvideNonceType<Chain> for ProvideCosmosTransactionTypes
 where
     Chain: Async,
@@ -34,6 +48,7 @@ where
     type Nonce = Account;
 }
 
+#[cgp_provider(TransactionTypeComponent)]
 impl<Chain> ProvideTransactionType<Chain> for ProvideCosmosTransactionTypes
 where
     Chain: Async,
@@ -51,6 +66,7 @@ where
     }
 }
 
+#[cgp_provider(FeeTypeComponent)]
 impl<Chain> ProvideFeeType<Chain> for ProvideCosmosTransactionTypes
 where
     Chain: Async,
@@ -58,6 +74,7 @@ where
     type Fee = Fee;
 }
 
+#[cgp_provider(TransactionHashTypeComponent)]
 impl<Chain> ProvideTransactionHashType<Chain> for ProvideCosmosTransactionTypes
 where
     Chain: Async,
@@ -65,6 +82,7 @@ where
     type TxHash = Hash;
 }
 
+#[cgp_provider(TxResponseTypeComponent)]
 impl<Chain> ProvideTxResponseType<Chain> for ProvideCosmosTransactionTypes
 where
     Chain: Async,
@@ -72,6 +90,7 @@ where
     type TxResponse = TxResponse;
 }
 
+#[cgp_provider(NonceGuardComponent)]
 impl<Chain> ProvideNonceGuard<Chain> for ProvideCosmosTransactionTypes
 where
     Chain: HasNonceType<Nonce = Account>,

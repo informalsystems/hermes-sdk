@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -32,8 +32,6 @@ use hermes_test_components::setup::traits::port_id_at::PortIdAtComponent;
 use ibc::core::host::types::identifiers::PortId;
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use crate::contexts::bootstrap::CosmosBootstrap;
-use crate::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use crate::impls::binary_channel_driver::BuildCosmosBinaryChannelDriver;
 use crate::impls::init_channel_options::UseCosmosInitChannelOptions;
 
@@ -41,6 +39,7 @@ use crate::impls::init_channel_options::UseCosmosInitChannelOptions;
    A setup context for setting up a binary channel test driver,
    with both chains being Cosmos chains.
 */
+#[cgp_context(CosmosBinaryChannelSetupComponents: BinaryChannelTestComponents)]
 #[derive(HasField)]
 pub struct CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
     pub bootstrap_a: BootstrapA,
@@ -51,25 +50,10 @@ pub struct CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
     pub init_connection_options: CosmosInitConnectionOptions,
     pub create_client_payload_options: CosmosCreateClientOptions,
 }
-pub struct CosmosBinaryChannelSetupComponents;
-
-impl<BootstrapA, BootstrapB> HasComponents for CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
-    type Components = CosmosBinaryChannelSetupComponents;
-}
-
-with_binary_channel_test_components! {
-    | Components | {
-        delegate_components! {
-            CosmosBinaryChannelSetupComponents {
-                Components: BinaryChannelTestComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     CosmosBinaryChannelSetupComponents {
-        ErrorTypeComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
             BootstrapAtComponent,
@@ -102,16 +86,4 @@ impl<BootstrapA, BootstrapB> HasField<symbol!("create_client_message_options")>
     fn get_field(&self, _phantom: PhantomData<symbol!("create_client_message_options")>) -> &() {
         &()
     }
-}
-
-impl CanUseBinaryChannelTestSetup for CosmosBinaryChannelSetup<CosmosBootstrap, CosmosBootstrap> {}
-
-impl CanUseBinaryChannelTestSetup
-    for CosmosBinaryChannelSetup<CosmosBootstrap, LegacyCosmosBootstrap>
-{
-}
-
-impl CanUseBinaryChannelTestSetup
-    for CosmosBinaryChannelSetup<LegacyCosmosBootstrap, LegacyCosmosBootstrap>
-{
 }

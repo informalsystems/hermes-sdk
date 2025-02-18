@@ -1,11 +1,12 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::sleep::Sleeper;
+use hermes_runtime_components::traits::sleep::{Sleeper, SleeperComponent};
 use tokio::time::sleep;
 
 pub struct TokioSleep;
 
+#[cgp_provider(SleeperComponent)]
 impl<Runtime> Sleeper<Runtime> for TokioSleep
 where
     Runtime: Async,

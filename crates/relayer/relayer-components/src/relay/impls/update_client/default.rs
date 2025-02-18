@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_components::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use hermes_chain_components::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
 use hermes_logging_components::traits::has_logger::HasLogger;
@@ -11,6 +11,7 @@ use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientP
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use crate::chain::traits::types::client_state::HasClientStateFields;
+use crate::components::default::relay::TargetUpdateClientMessageBuilderComponent;
 use crate::relay::impls::update_client::build::BuildUpdateClientMessages;
 use crate::relay::impls::update_client::skip::{LogSkipBuildUpdateClientMessage, SkipUpdateClient};
 use crate::relay::impls::update_client::wait::{LogWaitUpdateClientHeightStatus, WaitUpdateClient};
@@ -21,6 +22,7 @@ use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessa
 
 pub struct DefaultTargetUpdateClientMessageBuilder;
 
+#[cgp_provider(TargetUpdateClientMessageBuilderComponent)]
 impl<Relay, Target, TargetChain, CounterpartyChain> TargetUpdateClientMessageBuilder<Relay, Target>
     for DefaultTargetUpdateClientMessageBuilder
 where

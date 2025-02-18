@@ -1,19 +1,25 @@
 use core::ops::Deref;
-use std::sync::Arc;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
-use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
-use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
-use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
-use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
-use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
+use hermes_cosmos_chain_components::traits::gas_config::{
+    GasConfigGetter, GasConfigGetterComponent,
+};
+use hermes_cosmos_chain_components::traits::grpc_address::{
+    GrpcAddressGetter, GrpcAddressGetterComponent,
+};
+use hermes_cosmos_chain_components::traits::rpc_client::{
+    RpcClientGetter, RpcClientGetterComponent,
+};
+use hermes_cosmos_chain_components::traits::tx_extension_options::{
+    TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent,
+};
 use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
@@ -37,8 +43,9 @@ use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
-use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
-use hermes_relayer_components::chain::traits::event_subscription::EventSubscriptionGetter;
+use hermes_relayer_components::chain::traits::commitment_prefix::{
+    IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,
@@ -78,7 +85,9 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
+use hermes_relayer_components::chain::traits::types::chain_id::{
+    ChainIdGetter, ChainIdGetterComponent,
+};
 use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
@@ -91,17 +100,23 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
-use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
-use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::ProvideMutexForNonceAllocation;
+use hermes_relayer_components::transaction::traits::default_signer::{
+    DefaultSignerGetter, DefaultSignerGetterComponent,
+};
+use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::{
+    MutexForNonceAllocationComponent, ProvideMutexForNonceAllocation,
+};
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
-use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetter;
+use hermes_relayer_components::transaction::traits::simulation_fee::{
+    FeeForSimulationGetter, FeeForSimulationGetterComponent,
+};
 use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{
-    HasRuntime, RuntimeGetterComponent, RuntimeTypeComponent,
+    HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_wasm_test_components::components::WasmChainComponents;
@@ -110,11 +125,9 @@ use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
-use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;
-use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
 
 use crate::components::chain::{CosmosChainWasmPreset, IsCosmosChainWasmPreset};
@@ -122,12 +135,11 @@ use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
 use crate::types::client_state::WasmTendermintClientState;
 
+#[cgp_context(WasmCosmosChainComponents: CosmosChainWasmPreset)]
 #[derive(Clone)]
 pub struct WasmCosmosChain {
     pub chain: CosmosChain,
 }
-
-pub struct WasmCosmosChainComponents;
 
 impl Deref for WasmCosmosChain {
     type Target = CosmosChain;
@@ -137,19 +149,15 @@ impl Deref for WasmCosmosChain {
     }
 }
 
-impl HasComponents for WasmCosmosChain {
-    type Components = WasmCosmosChainComponents;
-}
-
 delegate_components! {
     WasmCosmosChainComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
@@ -171,43 +179,41 @@ delegate_components! {
     }
 }
 
-impl<Component> DelegateComponent<Component> for WasmCosmosChainComponents
-where
-    Self: IsCosmosChainWasmPreset<Component>,
-{
-    type Delegate = CosmosChainWasmPreset;
-}
-
 delegate_components! {
     DelegateCosmosChainComponents {
         WasmCosmosChain: CosmosToWasmCosmosComponents,
     }
 }
 
+#[cgp_provider(TxExtensionOptionsGetterComponent)]
 impl TxExtensionOptionsGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn tx_extension_options(chain: &WasmCosmosChain) -> &Vec<ibc_proto::google::protobuf::Any> {
         &chain.chain_config.extension_options
     }
 }
 
+#[cgp_provider(GasConfigGetterComponent)]
 impl GasConfigGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn gas_config(chain: &WasmCosmosChain) -> &GasConfig {
         &chain.chain_config.gas_config
     }
 }
 
+#[cgp_provider(DefaultSignerGetterComponent)]
 impl DefaultSignerGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn get_default_signer(chain: &WasmCosmosChain) -> &Secp256k1KeyPair {
         &chain.key_entry
     }
 }
 
+#[cgp_provider(FeeForSimulationGetterComponent)]
 impl FeeForSimulationGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn fee_for_simulation(chain: &WasmCosmosChain) -> &Fee {
         &chain.chain_config.gas_config.max_fee
     }
 }
 
+#[cgp_provider(MutexForNonceAllocationComponent)]
 impl ProvideMutexForNonceAllocation<WasmCosmosChain> for WasmCosmosChainComponents {
     fn mutex_for_nonce_allocation<'a>(
         chain: &'a WasmCosmosChain,
@@ -227,18 +233,21 @@ impl ProvideMutexForNonceAllocation<WasmCosmosChain> for WasmCosmosChainComponen
     }
 }
 
+#[cgp_provider(IbcCommitmentPrefixGetterComponent)]
 impl IbcCommitmentPrefixGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn ibc_commitment_prefix(chain: &WasmCosmosChain) -> &Vec<u8> {
         &chain.ibc_commitment_prefix
     }
 }
 
+#[cgp_provider(GrpcAddressGetterComponent)]
 impl GrpcAddressGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn grpc_address(chain: &WasmCosmosChain) -> &Url {
         &chain.chain_config.grpc_addr
     }
 }
 
+#[cgp_provider(RpcClientGetterComponent)]
 impl RpcClientGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn rpc_client(chain: &WasmCosmosChain) -> &HttpClient {
         &chain.rpc_client
@@ -257,17 +266,10 @@ impl HasTelemetry for WasmCosmosChain {
     }
 }
 
+#[cgp_provider(ChainIdGetterComponent)]
 impl ChainIdGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn chain_id(chain: &WasmCosmosChain) -> &ChainId {
         &chain.chain_id
-    }
-}
-
-impl EventSubscriptionGetter<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn event_subscription(
-        chain: &WasmCosmosChain,
-    ) -> Option<&Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>> {
-        Some(&chain.subscription)
     }
 }
 
@@ -349,8 +351,6 @@ where
         + HasCreateClientPayloadType<Self>
 {
 }
-
-impl CanUseWasmCosmosChain for WasmCosmosChain {}
 
 pub trait CanUseCosmosChainWithWasmCosmosChain:
     CanQueryClientState<WasmCosmosChain>

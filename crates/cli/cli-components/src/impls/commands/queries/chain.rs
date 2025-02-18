@@ -1,5 +1,7 @@
+use cgp::prelude::*;
+
 use super::chain_status::QueryChainStatusArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner};
+use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryChainSubCommand;
 
@@ -9,6 +11,7 @@ pub enum QueryChainSubCommand {
     Status(QueryChainStatusArgs),
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App> CommandRunner<App, QueryChainSubCommand> for RunQueryChainSubCommand
 where
     App: CanRunCommand<QueryChainStatusArgs>,

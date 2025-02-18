@@ -18,6 +18,7 @@ where
     fn message_transfer_receiver(message: &Self::IbcMessage) -> &Counterparty::Address;
 }
 
+#[cgp_provider(MessageTransferAddressGetterComponent)]
 impl<Chain, Counterparty, App, Provider> MessageTransferAddressGetter<Chain, Counterparty, App>
     for WithProvider<Provider>
 where

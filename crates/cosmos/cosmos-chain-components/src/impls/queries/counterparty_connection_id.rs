@@ -1,15 +1,16 @@
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
-use hermes_relayer_components::chain::traits::queries::counterparty_connection_id::CounterpartyConnectionIdQuerier;
+use hermes_relayer_components::chain::traits::queries::counterparty_connection_id::{
+    CounterpartyConnectionIdQuerier, CounterpartyConnectionIdQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::ibc::HasConnectionIdType;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc::core::host::types::identifiers::ConnectionId;
 
-pub struct QueryCounterpartyConnectionId;
-
+#[new_cgp_provider(CounterpartyConnectionIdQuerierComponent)]
 impl<Chain, Counterparty> CounterpartyConnectionIdQuerier<Chain, Counterparty>
     for QueryCounterpartyConnectionId
 where

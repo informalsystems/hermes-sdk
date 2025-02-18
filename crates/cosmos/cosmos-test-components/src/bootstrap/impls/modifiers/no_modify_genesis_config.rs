@@ -1,10 +1,13 @@
-use cgp::core::error::HasAsyncErrorType;
+use cgp::prelude::*;
 use serde_json::Value;
 
-use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
+use crate::bootstrap::traits::modifiers::modify_genesis_config::{
+    CosmosGenesisConfigModifier, CosmosGenesisConfigModifierComponent,
+};
 
 pub struct NoModifyGenesisConfig;
 
+#[cgp_provider(CosmosGenesisConfigModifierComponent)]
 impl<Bootstrap> CosmosGenesisConfigModifier<Bootstrap> for NoModifyGenesisConfig
 where
     Bootstrap: HasAsyncErrorType,

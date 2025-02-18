@@ -1,27 +1,37 @@
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
-use cgp::prelude::HasAsyncErrorType;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
-use hermes_relayer_components::chain::traits::packet::from_send_packet::PacketFromSendPacketEventBuilder;
-use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckEventBuilder;
-use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
+use hermes_relayer_components::chain::traits::extract_data::{
+    EventExtractor, EventExtractorComponent,
+};
+use hermes_relayer_components::chain::traits::packet::from_send_packet::{
+    PacketFromSendPacketEventBuilder, PacketFromSendPacketEventBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::packet::from_write_ack::{
+    PacketFromWriteAckEventBuilder, PacketFromWriteAckEventBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientEventComponent, ProvideCreateClientEvent,
+};
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::ibc::{
     HasChannelIdType, HasClientIdType, HasConnectionIdType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
-    ProvideChannelOpenInitEvent, ProvideChannelOpenTryEvent,
+    ChannelOpenInitEventComponent, ChannelOpenTryEventComponent, ProvideChannelOpenInitEvent,
+    ProvideChannelOpenTryEvent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
+    ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
     ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::{
-    HasSendPacketEvent, ProvideSendPacketEvent,
+    HasSendPacketEvent, ProvideSendPacketEvent, SendPacketEventComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::{
-    HasWriteAckEvent, ProvideWriteAckEvent,
+    HasWriteAckEvent, ProvideWriteAckEvent, WriteAckEventComponent,
 };
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAcknowledgementType;
@@ -45,6 +55,7 @@ use crate::types::events::write_acknowledgment::WriteAckEvent;
 
 pub struct ProvideCosmosEvents;
 
+#[cgp_provider(CreateClientEventComponent)]
 impl<Chain, Counterparty> ProvideCreateClientEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
     Chain: HasClientIdType<Counterparty, ClientId = ClientId>,
@@ -56,6 +67,7 @@ where
     }
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain> EventExtractor<Chain, CosmosCreateClientEvent> for ProvideCosmosEvents
 where
     Chain: HasEventType<Event = Arc<AbciEvent>>,
@@ -79,6 +91,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenInitEventComponent)]
 impl<Chain, Counterparty> ProvideConnectionOpenInitEvent<Chain, Counterparty>
     for ProvideCosmosEvents
 where
@@ -93,6 +106,7 @@ where
     }
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain> EventExtractor<Chain, CosmosConnectionOpenInitEvent> for ProvideCosmosEvents
 where
     Chain: HasEventType<Event = Arc<AbciEvent>>,
@@ -109,6 +123,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenTryEventComponent)]
 impl<Chain, Counterparty> ProvideConnectionOpenTryEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
     Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>,
@@ -122,6 +137,7 @@ where
     }
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain> EventExtractor<Chain, CosmosConnectionOpenTryEvent> for ProvideCosmosEvents
 where
     Chain: HasEventType<Event = Arc<AbciEvent>>,
@@ -138,6 +154,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenInitEventComponent)]
 impl<Chain, Counterparty> ProvideChannelOpenInitEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
     Chain: HasChannelIdType<Counterparty, ChannelId = ChannelId>
@@ -150,6 +167,7 @@ where
     }
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain> EventExtractor<Chain, CosmosChannelOpenInitEvent> for ProvideCosmosEvents
 where
     Chain: HasEventType<Event = Arc<AbciEvent>>,
@@ -165,6 +183,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenTryEventComponent)]
 impl<Chain, Counterparty> ProvideChannelOpenTryEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
     Chain: HasChannelIdType<Counterparty, ChannelId = ChannelId>,
@@ -176,6 +195,7 @@ where
     }
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain> EventExtractor<Chain, CosmosChannelOpenTryEvent> for ProvideCosmosEvents
 where
     Chain: HasEventType<Event = Arc<AbciEvent>>,
@@ -191,6 +211,7 @@ where
     }
 }
 
+#[cgp_provider(SendPacketEventComponent)]
 impl<Chain, Counterparty> ProvideSendPacketEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
     Chain: HasEventType<Event = Arc<AbciEvent>>
@@ -199,6 +220,7 @@ where
     type SendPacketEvent = SendPacketEvent;
 }
 
+#[cgp_provider(PacketFromSendPacketEventBuilderComponent)]
 impl<Chain, Counterparty> PacketFromSendPacketEventBuilder<Chain, Counterparty>
     for ProvideCosmosEvents
 where
@@ -214,6 +236,7 @@ where
     }
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain> EventExtractor<Chain, SendPacketEvent> for ProvideCosmosEvents
 where
     Chain: HasEventType<Event = Arc<AbciEvent>>,
@@ -229,6 +252,7 @@ where
     }
 }
 
+#[cgp_provider(WriteAckEventComponent)]
 impl<Chain, Counterparty> ProvideWriteAckEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
     Chain: HasEventType<Event = Arc<AbciEvent>>
@@ -237,6 +261,7 @@ where
     type WriteAckEvent = WriteAckEvent;
 }
 
+#[cgp_provider(EventExtractorComponent)]
 impl<Chain> EventExtractor<Chain, WriteAckEvent> for ProvideCosmosEvents
 where
     Chain: HasEventType<Event = Arc<AbciEvent>>,
@@ -252,6 +277,7 @@ where
     }
 }
 
+#[cgp_provider(PacketFromWriteAckEventBuilderComponent)]
 impl<Chain, Counterparty> PacketFromWriteAckEventBuilder<Chain, Counterparty>
     for ProvideCosmosEvents
 where

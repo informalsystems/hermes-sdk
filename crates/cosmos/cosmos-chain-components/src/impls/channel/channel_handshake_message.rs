@@ -1,10 +1,12 @@
 use core::fmt::Display;
 
-use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
-    ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
-    ChannelOpenTryMessageBuilder,
+    ChannelOpenAckMessageBuilder, ChannelOpenAckMessageBuilderComponent,
+    ChannelOpenConfirmMessageBuilder, ChannelOpenConfirmMessageBuilderComponent,
+    ChannelOpenInitMessageBuilder, ChannelOpenInitMessageBuilderComponent,
+    ChannelOpenTryMessageBuilder, ChannelOpenTryMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelEndType, HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType,
@@ -32,6 +34,7 @@ use crate::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
 
 pub struct BuildCosmosChannelHandshakeMessage;
 
+#[cgp_provider(ChannelOpenInitMessageBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenInitMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
@@ -80,6 +83,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenTryMessageBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
@@ -148,6 +152,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenAckMessageBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenAckMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
@@ -193,6 +198,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenConfirmMessageBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where

@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use std::fs::{self, File};
 use std::str::FromStr;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -18,7 +18,9 @@ use hermes_cosmos_chain_components::types::key_types::secp256k1::{
 };
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_error::types::Error;
-use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
+use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::{
+    BiRelayFromRelayBuilder, BiRelayFromRelayBuilderComponent,
+};
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
 use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
@@ -32,10 +34,16 @@ use hermes_relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_relayer_components_extra::build::traits::cache::{
     BatchSenderCacheAt, BatchSenderCacheGetterComponent,
 };
-use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::RelayWithBatchBuilder;
-use hermes_relayer_components_extra::components::extra::build::*;
+use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::{
+    RelayWithBatchBuilder, RelayWithBatchBuilderComponent,
+};
+use hermes_relayer_components_extra::components::extra::build::{
+    ChainBuilderComponent, ExtraBuildComponents, IsExtraBuildComponents,
+};
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetterComponent, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
@@ -46,6 +54,10 @@ use crate::contexts::relay::CosmosRelay;
 use crate::impls::error::HandleCosmosError;
 use crate::types::telemetry::CosmosTelemetry;
 
+#[cgp_context(
+    CosmosBuildComponents:
+        ExtraBuildComponents<CosmosBaseBuildComponents>
+)]
 #[derive(Clone)]
 pub struct CosmosBuilder {
     pub fields: Arc<dyn HasCosmosBuilderFields>,
@@ -82,38 +94,16 @@ impl HasCosmosBuilderFields for CosmosBuilderFields {
     }
 }
 
-pub struct CosmosBuildComponents;
-
 pub struct CosmosBaseBuildComponents;
-
-impl HasComponents for CosmosBuilder {
-    type Components = CosmosBuildComponents;
-}
-
-impl HasComponents for CosmosBuildComponents {
-    type Components = CosmosBaseBuildComponents;
-}
-
-with_extra_build_components! {
-    | Components | {
-        delegate_components! {
-            CosmosBuildComponents {
-                Components: ExtraBuildComponents<CosmosBaseBuildComponents>
-            }
-        }
-    }
-}
-
-impl CanUseExtraBuildComponents for CosmosBuilder {}
 
 delegate_components! {
     CosmosBuildComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent: WithType<HermesRuntime>,
+        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         BiRelayTypeAtComponent<Index<0>, Index<1>>:
             WithType<CosmosBiRelay>,
@@ -188,8 +178,6 @@ impl CosmosBuilder {
     ) -> Result<CosmosChain, Error> {
         let key = get_keypair(&chain_config, m_keypair)?;
 
-        let event_source_mode = chain_config.event_source.clone();
-
         let mut rpc_client = HttpClient::new(chain_config.rpc_addr.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
@@ -207,7 +195,6 @@ impl CosmosBuilder {
             rpc_client,
             compat_mode,
             key,
-            event_source_mode,
             self.runtime.clone(),
             self.telemetry.clone(),
             self.packet_filter.clone(),
@@ -272,6 +259,7 @@ pub fn get_keypair(
     Ok(key_entry)
 }
 
+#[cgp_provider(ChainBuilderComponent)]
 impl ChainBuilder<CosmosBuilder, Index<0>> for CosmosBaseBuildComponents {
     async fn build_chain(
         build: &CosmosBuilder,
@@ -282,6 +270,7 @@ impl ChainBuilder<CosmosBuilder, Index<0>> for CosmosBaseBuildComponents {
     }
 }
 
+#[cgp_provider(ChainBuilderComponent)]
 impl ChainBuilder<CosmosBuilder, Index<1>> for CosmosBaseBuildComponents {
     async fn build_chain(
         build: &CosmosBuilder,
@@ -292,6 +281,7 @@ impl ChainBuilder<CosmosBuilder, Index<1>> for CosmosBaseBuildComponents {
     }
 }
 
+#[cgp_provider(RelayWithBatchBuilderComponent)]
 impl RelayWithBatchBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildComponents {
     async fn build_relay_with_batch(
         build: &CosmosBuilder,
@@ -316,6 +306,7 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildCom
     }
 }
 
+#[cgp_provider(RelayWithBatchBuilderComponent)]
 impl RelayWithBatchBuilder<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildComponents {
     async fn build_relay_with_batch(
         build: &CosmosBuilder,
@@ -340,6 +331,7 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildCom
     }
 }
 
+#[cgp_provider(BiRelayFromRelayBuilderComponent)]
 impl BiRelayFromRelayBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildComponents {
     async fn build_birelay_from_relays(
         build: &CosmosBuilder,

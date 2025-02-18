@@ -13,6 +13,7 @@ pub trait HasChainStoreDir: HasRuntime<Runtime: HasFilePathType> {
     fn chain_store_dir(&self) -> &FilePathOf<Self::Runtime>;
 }
 
+#[cgp_provider(ChainStoreDirGetterComponent)]
 impl<Bootstrap, Runtime> ChainStoreDirGetter<Bootstrap> for UseContext
 where
     Bootstrap: HasRuntime<Runtime = Runtime>

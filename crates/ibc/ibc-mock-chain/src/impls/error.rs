@@ -2,11 +2,12 @@ use alloc::format;
 use alloc::string::String;
 use core::fmt::Debug;
 
-use cgp::core::error::ErrorRaiser;
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent};
 use cgp::prelude::*;
 
 pub struct RaiseDebugString;
 
+#[cgp_provider(ErrorRaiserComponent)]
 impl<Context, Error> ErrorRaiser<Context, Error> for RaiseDebugString
 where
     Context: HasAsyncErrorType,

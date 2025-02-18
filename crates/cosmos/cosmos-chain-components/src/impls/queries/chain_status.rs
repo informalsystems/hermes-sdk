@@ -1,5 +1,7 @@
-use cgp::core::error::{CanRaiseAsyncError, HasAsyncErrorType};
-use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::queries::chain_status::{
+    ChainStatusQuerier, ChainStatusQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
@@ -12,6 +14,7 @@ use crate::types::status::ChainStatus;
 
 pub struct QueryCosmosChainStatus;
 
+#[cgp_provider(ChainStatusQuerierComponent)]
 impl<Chain> ChainStatusQuerier<Chain> for QueryCosmosChainStatus
 where
     Chain: HasAsyncErrorType

@@ -1,12 +1,12 @@
 use core::marker::PhantomData;
 
-use cgp::core::Async;
-use cgp::prelude::{HasAsyncErrorType, HasField};
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::packet::fields::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSrcChannelId, HasPacketSrcPortId,
 };
 use hermes_relayer_components::chain::traits::packet::filter::{
-    IncomingPacketFilter, OutgoingPacketFilter,
+    IncomingPacketFilter, IncomingPacketFilterComponent, OutgoingPacketFilter,
+    OutgoingPacketFilterComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
@@ -15,6 +15,7 @@ use crate::types::messages::packet::packet_filter::PacketFilterConfig;
 
 pub struct FilterPacketWithConfig<Tag>(pub PhantomData<Tag>);
 
+#[cgp_provider(OutgoingPacketFilterComponent)]
 impl<Chain, Counterparty, Tag> OutgoingPacketFilter<Chain, Counterparty>
     for FilterPacketWithConfig<Tag>
 where
@@ -36,6 +37,7 @@ where
     }
 }
 
+#[cgp_provider(IncomingPacketFilterComponent)]
 impl<Chain, Counterparty, Tag> IncomingPacketFilter<Chain, Counterparty>
     for FilterPacketWithConfig<Tag>
 where

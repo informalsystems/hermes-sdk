@@ -63,6 +63,7 @@ pub trait HasChannelEndType<Counterparty>: Async {
     type ChannelEnd: Async;
 }
 
+#[cgp_provider(ChannelEndTypeComponent)]
 impl<Chain, Counterparty, Provider, ChannelEnd> ProvideChannelEndType<Chain, Counterparty>
     for WithProvider<Provider>
 where

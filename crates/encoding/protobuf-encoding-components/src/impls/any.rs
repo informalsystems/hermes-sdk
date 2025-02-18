@@ -2,9 +2,9 @@ use core::fmt::Display;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_encoding_components::traits::convert::Converter;
-use hermes_encoding_components::traits::decode::Decoder;
-use hermes_encoding_components::traits::encode::Encoder;
+use hermes_encoding_components::traits::convert::{Converter, ConverterComponent};
+use hermes_encoding_components::traits::decode::{Decoder, DecoderComponent};
+use hermes_encoding_components::traits::encode::{Encoder, EncoderComponent};
 use hermes_encoding_components::traits::schema::HasSchema;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use prost::{DecodeError, Message};
@@ -20,6 +20,7 @@ pub struct EncodeAsAnyProtobuf<InStrategy, InEncoder>(pub PhantomData<(InStrateg
 
 pub struct DecodeAsAnyProtobuf<InStrategy, InEncoder>(pub PhantomData<(InStrategy, InEncoder)>);
 
+#[cgp_provider(EncoderComponent)]
 impl<InEncoder, Encoding, Strategy, InStrategy, Value> Encoder<Encoding, Strategy, Value>
     for EncodeAsAnyProtobuf<InStrategy, InEncoder>
 where
@@ -35,6 +36,7 @@ where
     }
 }
 
+#[cgp_provider(ConverterComponent)]
 impl<InEncoder, Encoding, InStrategy, Value> Converter<Encoding, Value, Any>
     for EncodeAsAnyProtobuf<InStrategy, InEncoder>
 where
@@ -56,6 +58,7 @@ where
     }
 }
 
+#[cgp_provider(DecoderComponent)]
 impl<InEncoder, Encoding, Strategy, InStrategy, Value> Decoder<Encoding, Strategy, Value>
     for DecodeAsAnyProtobuf<InStrategy, InEncoder>
 where
@@ -69,6 +72,7 @@ where
     }
 }
 
+#[cgp_provider(ConverterComponent)]
 impl<InEncoder, Encoding, InStrategy, Value> Converter<Encoding, Any, Value>
     for DecodeAsAnyProtobuf<InStrategy, InEncoder>
 where

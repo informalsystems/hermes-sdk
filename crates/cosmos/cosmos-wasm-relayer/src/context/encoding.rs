@@ -1,4 +1,4 @@
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
@@ -9,7 +9,8 @@ use hermes_encoding_components::traits::convert::{CanConvert, CanConvertBothWays
 use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
+    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
+    EncodingTypeComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
@@ -23,28 +24,13 @@ use prost_types::Any;
 use crate::encoding::components::*;
 use crate::types::client_state::WasmTendermintClientState;
 
+#[cgp_context(WasmCosmosEncodingContextComponents: WasmCosmosEncodingComponents)]
 pub struct WasmCosmosEncoding;
-
-pub struct WasmCosmosEncodingContextComponents;
-
-impl HasComponents for WasmCosmosEncoding {
-    type Components = WasmCosmosEncodingContextComponents;
-}
-
-with_wasm_cosmos_encoding_components! {
-    | Components | {
-        delegate_components! {
-            WasmCosmosEncodingContextComponents {
-                Components: WasmCosmosEncodingComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     WasmCosmosEncodingContextComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
@@ -59,6 +45,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(EncodingTypeComponent)]
 impl<Context> ProvideEncodingType<Context, AsBytes> for ProvideWasmCosmosEncoding
 where
     Context: Async,
@@ -66,6 +53,7 @@ where
     type Encoding = WasmCosmosEncoding;
 }
 
+#[cgp_provider(DefaultEncodingGetterComponent)]
 impl<Context> DefaultEncodingGetter<Context, AsBytes> for ProvideWasmCosmosEncoding
 where
     Context: HasEncodingType<AsBytes, Encoding = WasmCosmosEncoding>,

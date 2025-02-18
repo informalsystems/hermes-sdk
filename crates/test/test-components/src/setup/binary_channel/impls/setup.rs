@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::HasAsyncErrorType;
 use cgp::core::field::Index;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
@@ -12,11 +12,12 @@ use crate::setup::traits::chain::CanSetupChain;
 use crate::setup::traits::channel::CanSetupChannel;
 use crate::setup::traits::clients::CanSetupClients;
 use crate::setup::traits::connection::CanSetupConnection;
-use crate::setup::traits::driver::{DriverBuilder, HasTestDriverType};
+use crate::setup::traits::driver::{DriverBuilder, DriverBuilderComponent, HasTestDriverType};
 use crate::setup::traits::drivers::binary_channel::CanBuildTestDriverWithBinaryChannel;
 
 pub struct SetupBinaryChannelDriver;
 
+#[cgp_provider(DriverBuilderComponent)]
 impl<Setup, ChainA, ChainB> DriverBuilder<Setup> for SetupBinaryChannelDriver
 where
     Setup: HasTestDriverType

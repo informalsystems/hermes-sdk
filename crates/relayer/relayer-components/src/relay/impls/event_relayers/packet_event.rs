@@ -1,14 +1,16 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasErrorType;
+use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
 use hermes_chain_components::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
+use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use crate::chain::types::aliases::{EventOf, HeightOf};
+use crate::chain::types::aliases::EventOf;
+use crate::components::default::relay::EventRelayerComponent;
 use crate::relay::impls::packet_filters::target::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
@@ -40,6 +42,7 @@ use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 */
 pub struct PacketEventRelayer;
 
+#[cgp_provider(EventRelayerComponent)]
 impl<Relay, SrcChain> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain>
@@ -54,7 +57,6 @@ where
 {
     async fn relay_chain_event(
         relay: &Relay,
-        _height: &HeightOf<Relay::SrcChain>,
         event: &EventOf<Relay::SrcChain>,
     ) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
@@ -74,6 +76,7 @@ where
     }
 }
 
+#[cgp_provider(EventRelayerComponent)]
 impl<Relay, DstChain> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
     Relay: HasRelayChains<DstChain = DstChain>
@@ -83,7 +86,7 @@ where
         + HasPacketLock
         + HasLogger
         + CanRaiseRelayChainErrors,
-    DstChain: HasErrorType
+    DstChain: CanQueryChainHeight
         + CanBuildPacketFromWriteAck<Relay::SrcChain>
         + CanExtractFromEvent<DstChain::WriteAckEvent>,
     MatchPacketSourceChain: RelayPacketFilter<Relay>,
@@ -91,7 +94,6 @@ where
 {
     async fn relay_chain_event(
         relay: &Relay,
-        height: &HeightOf<Relay::DstChain>,
         event: &EventOf<Relay::DstChain>,
     ) -> Result<(), Relay::Error> {
         let dst_chain = relay.dst_chain();
@@ -138,7 +140,12 @@ where
                             .await
                             .map_err(Relay::raise_error)?;
 
-                        relay.relay_ack_packet(height, &packet, &ack).await?;
+                        let height = dst_chain
+                            .query_chain_height()
+                            .await
+                            .map_err(Relay::raise_error)?;
+
+                        relay.relay_ack_packet(&height, &packet, &ack).await?;
                     }
                     None => {
                         relay.logger().log(

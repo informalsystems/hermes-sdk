@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 
-use crate::build::traits::builders::birelay_builder::BiRelayBuilder;
+use crate::build::traits::builders::birelay_builder::{BiRelayBuilder, BiRelayBuilderComponent};
 use crate::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use crate::build::traits::builders::relay_builder::CanBuildRelay;
 use crate::multi::traits::chain_at::ChainIdAt;
@@ -10,6 +10,7 @@ use crate::multi::traits::relay_at::ClientIdAt;
 
 pub struct BuildBiRelayFromRelays;
 
+#[cgp_provider(BiRelayBuilderComponent)]
 impl<Build, A: Async, B: Async> BiRelayBuilder<Build, A, B> for BuildBiRelayFromRelays
 where
     Build: CanBuildBiRelayFromRelays<A, B> + CanBuildRelay<A, B> + CanBuildRelay<B, A>,

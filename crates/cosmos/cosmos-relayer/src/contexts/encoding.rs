@@ -1,6 +1,8 @@
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::encoding::components::*;
+use hermes_cosmos_chain_components::encoding::components::{
+    CosmosClientEncodingComponents, IsCosmosClientEncodingComponents,
+};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
@@ -9,7 +11,8 @@ use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::encode_and_decode_mut::CanEncodeAndDecodeMut;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
+    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
+    EncodingTypeComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
@@ -26,28 +29,13 @@ use prost_types::Any;
 
 use crate::impls::error::HandleCosmosError;
 
+#[cgp_context(CosmosEncodingContextComponents: CosmosClientEncodingComponents)]
 pub struct CosmosEncoding;
-
-pub struct CosmosEncodingContextComponents;
-
-impl HasComponents for CosmosEncoding {
-    type Components = CosmosEncodingContextComponents;
-}
-
-with_cosmos_client_encoding_components! {
-    | Components | {
-        delegate_components! {
-            CosmosEncodingContextComponents {
-                Components: CosmosClientEncodingComponents,
-            }
-        }
-    }
-}
 
 delegate_components! {
     CosmosEncodingContextComponents {
         [
-            ErrorTypeComponent,
+            ErrorTypeProviderComponent,
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
@@ -62,6 +50,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(EncodingTypeComponent)]
 impl<Context> ProvideEncodingType<Context, AsBytes> for ProvideCosmosEncoding
 where
     Context: Async,
@@ -69,6 +58,7 @@ where
     type Encoding = CosmosEncoding;
 }
 
+#[cgp_provider(DefaultEncodingGetterComponent)]
 impl<Context> DefaultEncodingGetter<Context, AsBytes> for ProvideCosmosEncoding
 where
     Context: HasEncodingType<AsBytes, Encoding = CosmosEncoding>,

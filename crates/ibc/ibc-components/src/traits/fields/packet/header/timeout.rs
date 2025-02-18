@@ -18,6 +18,7 @@ where
     fn packet_timeout(packet_header: &Self::PacketHeader) -> &Counterparty::PacketTimeout;
 }
 
+#[cgp_provider(PacketTimeoutGetterComponent)]
 impl<Chain, Counterparty, Provider> PacketTimeoutGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where

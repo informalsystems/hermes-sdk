@@ -1,7 +1,9 @@
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::packets::ack::{
+    AcknowledgementOf, HasAcknowledgementType,
+};
 
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::chain::types::aliases::{HeightOf, WriteAckEventOf};
+use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 
 #[cgp_component {
@@ -10,11 +12,11 @@ use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 }]
 #[async_trait]
 pub trait CanRelayReceivePacket:
-    HasRelayChains<DstChain: HasWriteAckEvent<Self::SrcChain>>
+    HasRelayChains<DstChain: HasAcknowledgementType<Self::SrcChain>>
 {
     async fn relay_receive_packet(
         &self,
         source_height: &HeightOf<Self::SrcChain>,
         packet: &PacketOf<Self>,
-    ) -> Result<Option<WriteAckEventOf<Self::DstChain, Self::SrcChain>>, Self::Error>;
+    ) -> Result<Option<AcknowledgementOf<Self::DstChain, Self::SrcChain>>, Self::Error>;
 }

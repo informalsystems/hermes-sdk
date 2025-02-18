@@ -11,6 +11,7 @@ pub trait HasCommitmentProofType: Async {
     type CommitmentProof: Async;
 }
 
+#[cgp_provider(CommitmentProofTypeComponent)]
 impl<Chain, Provider, CommitmentProof> ProvideCommitmentProofType<Chain> for WithProvider<Provider>
 where
     Chain: Async,

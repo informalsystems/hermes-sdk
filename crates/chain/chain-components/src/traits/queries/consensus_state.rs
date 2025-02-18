@@ -130,6 +130,7 @@ where
     }
 }
 
+#[cgp_provider(ConsensusStateQuerierComponent)]
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
@@ -149,6 +150,7 @@ where
     }
 }
 
+#[cgp_provider(ConsensusStateWithProofsQuerierComponent)]
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateWithProofsQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where

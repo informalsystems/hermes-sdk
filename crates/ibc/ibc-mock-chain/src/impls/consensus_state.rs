@@ -2,9 +2,13 @@ use alloc::borrow::ToOwned;
 use alloc::string::String;
 use alloc::sync::Arc;
 
-use cgp::core::Async;
-use hermes_chain_type_components::traits::types::ibc::consensus_state::ProvideConsensusStateType;
-use hermes_ibc_components::traits::queries::consensus_state::ConsensusStateQuerier;
+use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::consensus_state::{
+    ConsensusStateTypeComponent, ProvideConsensusStateType,
+};
+use hermes_ibc_components::traits::queries::consensus_state::{
+    ConsensusStateQuerier, ConsensusStateQuerierComponent,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::{MockChain, MockChainState};
@@ -12,12 +16,14 @@ use crate::types::client_id::MockClientId;
 use crate::types::height::MockHeight;
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(ConsensusStateTypeComponent)]
 impl<A: Async, B: Async, Counterparty> ProvideConsensusStateType<MockChain<A, B>, Counterparty>
     for MockChainComponents
 {
     type ConsensusState = Arc<MockChainState<A, B>>;
 }
 
+#[cgp_provider(ConsensusStateQuerierComponent)]
 impl<Chain: Async, Counterparty: Async>
     ConsensusStateQuerier<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents

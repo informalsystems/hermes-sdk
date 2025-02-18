@@ -1,8 +1,10 @@
 use std::string::FromUtf8Error;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverter;
+use hermes_test_components::chain::traits::transfer::amount::{
+    IbcTransferredAmountConverter, IbcTransferredAmountConverterComponent,
+};
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use sha2::{Digest, Sha256};
@@ -13,6 +15,7 @@ use crate::chain::types::denom::Denom;
 
 pub struct ConvertCosmosIbcAmount;
 
+#[cgp_provider(IbcTransferredAmountConverterComponent)]
 impl<Chain, Counterparty> IbcTransferredAmountConverter<Chain, Counterparty>
     for ConvertCosmosIbcAmount
 where

@@ -9,7 +9,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
 use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::CommandRunner;
+use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::{CanProduceOutput, HasOutputType};
 use crate::traits::parse::CanParseArg;
 
@@ -44,6 +44,7 @@ pub struct QueryConnectionEndArgs {
     height: Option<String>,
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args>
     for RunQueryConnectionEndCommand
 where

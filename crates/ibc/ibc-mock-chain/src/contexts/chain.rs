@@ -78,7 +78,6 @@ use hermes_ibc_token_transfer_components::types::tags::{
     IbcTransferApp, IbcTransferMintApp, IbcTransferUnescrowApp,
 };
 
-use crate::components::chain::MockChainComponents;
 use crate::types::address::MockAddress;
 use crate::types::amount::MockAmount;
 use crate::types::app_id::MockAppId;
@@ -96,6 +95,7 @@ use crate::types::quantity::MockQuantity;
 use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
+#[cgp_context(MockChainComponents)]
 pub struct MockChain<Chain: Async, Counterparty: Async> {
     /// The current caller of the mock chain methods.
     /// We assume that this is only callable by the mock kernel,
@@ -188,10 +188,6 @@ impl<Chain: Async, Counterparty: Async> HasMockChainState<Chain, Counterparty>
     fn mock_chain_state_mut(&mut self) -> &mut MockChainState<Chain, Counterparty> {
         self
     }
-}
-
-impl<Chain: Async, Counterparty: Async> HasComponents for MockChain<Chain, Counterparty> {
-    type Components = MockChainComponents;
 }
 
 impl<Chain: Async, Counterparty: Async> Clone for MockChainState<Chain, Counterparty> {

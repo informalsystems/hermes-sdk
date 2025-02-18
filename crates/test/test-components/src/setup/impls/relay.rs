@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
-use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
+use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
-use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
@@ -12,10 +12,11 @@ use hermes_relayer_components::multi::traits::relay_at::{
 };
 
 use crate::setup::traits::builder_at::HasBuilderAt;
-use crate::setup::traits::relay::RelaySetup;
+use crate::setup::traits::relay::{RelaySetup, RelaySetupComponent};
 
 pub struct SetupRelayWithBuilder;
 
+#[cgp_provider(RelaySetupComponent)]
 impl<Setup, A: Async, B: Async> RelaySetup<Setup, A, B> for SetupRelayWithBuilder
 where
     Setup: HasBoundedRelayTypeAt<A, B>

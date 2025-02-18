@@ -1,14 +1,16 @@
-use cgp::prelude::{CanRaiseAsyncError, HasAsyncErrorType};
+use cgp::prelude::*;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
+use hermes_protobuf_encoding_components::components::{MutDecoderComponent, MutEncoderComponent};
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::string::EncodeStringField;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::ChainId;
 
 pub struct EncodeChainIdField<const TAG: u32>;
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, const TAG: u32> MutEncoder<Encoding, Strategy, ChainId>
     for EncodeChainIdField<TAG>
 where
@@ -26,6 +28,7 @@ where
     }
 }
 
+#[cgp_provider(MutDecoderComponent)]
 impl<Encoding, Strategy, const TAG: u32> MutDecoder<Encoding, Strategy, ChainId>
     for EncodeChainIdField<TAG>
 where

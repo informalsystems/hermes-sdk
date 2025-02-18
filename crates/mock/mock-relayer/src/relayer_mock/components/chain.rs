@@ -6,7 +6,7 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_relayer_components::chain::impls::types::ack::ProvideBytesAcknowlegement;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 
-pub struct MockChainComponents;
+pub use crate::relayer_mock::contexts::chain::MockChainComponents;
 
 delegate_components! {
     MockChainComponents {

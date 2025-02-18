@@ -1,6 +1,10 @@
-use cgp::core::Async;
-use hermes_ibc_components::traits::fields::commitment::proof_height::CommitmentProofHeightGetter;
-use hermes_ibc_components::traits::types::commitment::proof::ProvideCommitmentProofType;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::fields::commitment::proof_height::{
+    CommitmentProofHeightGetter, CommitmentProofHeightGetterComponent,
+};
+use hermes_ibc_components::traits::types::commitment::proof::{
+    CommitmentProofTypeComponent, ProvideCommitmentProofType,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -11,12 +15,14 @@ pub struct MockCommitmentProof<Chain, Counterparty> {
     pub height: Tagged<Chain, Counterparty, MockHeight>,
 }
 
+#[cgp_provider(CommitmentProofTypeComponent)]
 impl<Chain: Async, Counterparty: Async, Tag>
     ProvideCommitmentProofType<MockChain<Chain, Counterparty>, Tag> for MockChainComponents
 {
     type CommitmentProof = MockCommitmentProof<Chain, Counterparty>;
 }
 
+#[cgp_provider(CommitmentProofHeightGetterComponent)]
 impl<Chain: Async, Counterparty: Async, Tag>
     CommitmentProofHeightGetter<MockChain<Chain, Counterparty>, Tag> for MockChainComponents
 {

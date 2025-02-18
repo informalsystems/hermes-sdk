@@ -1,7 +1,12 @@
-use crate::chain::traits::types::memo::{DefaultMemoGetter, HasMemoType};
+use cgp::prelude::*;
+
+use crate::chain::traits::types::memo::{
+    DefaultMemoGetter, DefaultMemoGetterComponent, HasMemoType,
+};
 
 pub struct ProvideDefaultMemo;
 
+#[cgp_provider(DefaultMemoGetterComponent)]
 impl<Chain> DefaultMemoGetter<Chain> for ProvideDefaultMemo
 where
     Chain: HasMemoType,

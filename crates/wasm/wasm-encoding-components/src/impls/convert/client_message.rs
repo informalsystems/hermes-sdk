@@ -1,4 +1,5 @@
-use hermes_encoding_components::traits::convert::{CanConvert, Converter};
+use cgp::prelude::*;
+use hermes_encoding_components::traits::convert::{CanConvert, Converter, ConverterComponent};
 use hermes_encoding_components::traits::decode::CanDecode;
 use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
@@ -8,6 +9,7 @@ use prost_types::Any;
 
 pub struct EncodeViaClientMessage;
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding, Value> Converter<Encoding, Value, Any> for EncodeViaClientMessage
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
@@ -25,6 +27,7 @@ where
 
 pub struct DecodeViaClientMessage;
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding, Value> Converter<Encoding, Any, Value> for DecodeViaClientMessage
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>

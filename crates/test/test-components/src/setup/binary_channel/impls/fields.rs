@@ -2,17 +2,20 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
+use hermes_relayer_components::multi::traits::chain_at::{
+    ChainTypeAtComponent, ProvideChainTypeAt,
+};
 
 use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::driver::traits::types::chain_driver::HasChainDriverType;
 use crate::driver::traits::types::chain_driver_at::{
-    HasChainDriverTypeAt, ProvideChainDriverTypeAt,
+    ChainDriverTypeAtComponent, HasChainDriverTypeAt, ProvideChainDriverTypeAt,
 };
-use crate::setup::traits::bootstrap_at::ProvideBootstrapAt;
+use crate::setup::traits::bootstrap_at::{BootstrapAtComponent, ProvideBootstrapAt};
 
 pub struct UseBinarySetupFields;
 
+#[cgp_provider(BootstrapAtComponent)]
 impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<0>> for UseBinarySetupFields
 where
     Setup: HasChainDriverTypeAt<Index<0>> + HasField<symbol!("bootstrap_a"), Value = Bootstrap>,
@@ -25,6 +28,7 @@ where
     }
 }
 
+#[cgp_provider(BootstrapAtComponent)]
 impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<1>> for UseBinarySetupFields
 where
     Setup: HasChainDriverTypeAt<Index<1>> + HasField<symbol!("bootstrap_b"), Value = Bootstrap>,
@@ -37,6 +41,7 @@ where
     }
 }
 
+#[cgp_provider(ChainTypeAtComponent<Index<0>>)]
 impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, Index<0>> for UseBinarySetupFields
 where
     Setup: Async + HasField<symbol!("bootstrap_a"), Value = Bootstrap>,
@@ -46,6 +51,7 @@ where
     type Chain = Chain;
 }
 
+#[cgp_provider(ChainTypeAtComponent<Index<1>>)]
 impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, Index<1>> for UseBinarySetupFields
 where
     Setup: Async + HasField<symbol!("bootstrap_b"), Value = Bootstrap>,
@@ -55,6 +61,7 @@ where
     type Chain = Chain;
 }
 
+#[cgp_provider(ChainDriverTypeAtComponent)]
 impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, Index<0>>
     for UseBinarySetupFields
 where
@@ -65,6 +72,7 @@ where
     type ChainDriver = ChainDriver;
 }
 
+#[cgp_provider(ChainDriverTypeAtComponent)]
 impl<Setup, Bootstrap, ChainDriver> ProvideChainDriverTypeAt<Setup, Index<1>>
     for UseBinarySetupFields
 where

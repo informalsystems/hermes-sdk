@@ -2,8 +2,10 @@ use alloc::borrow::ToOwned;
 use alloc::string::String;
 use alloc::sync::Arc;
 
-use cgp::core::Async;
-use hermes_ibc_components::traits::commitment::verify::CommitmentVerifier;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::commitment::verify::{
+    CommitmentVerifier, CommitmentVerifierComponent,
+};
 use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::tags::commitment::receive::ReceivePacket;
 use hermes_ibc_components::types::tags::commitment::send::SendPacket;
@@ -15,6 +17,7 @@ use crate::types::commitment::path::{
 };
 use crate::types::commitment::proof::MockCommitmentProof;
 
+#[cgp_provider(CommitmentVerifierComponent)]
 impl<Chain: Async, Counterparty: Async>
     CommitmentVerifier<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>, SendPacket>
     for MockChainComponents
@@ -45,6 +48,7 @@ impl<Chain: Async, Counterparty: Async>
     }
 }
 
+#[cgp_provider(CommitmentVerifierComponent)]
 impl<Chain: Async, Counterparty: Async>
     CommitmentVerifier<
         MockChain<Chain, Counterparty>,

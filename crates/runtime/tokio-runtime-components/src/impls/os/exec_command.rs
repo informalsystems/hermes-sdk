@@ -5,7 +5,9 @@ use std::io::{Error as IoError, ErrorKind};
 
 use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::exec_command::{CommandWithEnvsExecutor, ExecOutput};
+use hermes_runtime_components::traits::os::exec_command::{
+    CommandWithEnvsExecutor, CommandWithEnvsExecutorComponent, ExecOutput,
+};
 use tokio::process::Command;
 
 pub struct TokioExecCommand;
@@ -21,6 +23,7 @@ pub struct CommandNotFound {
     pub command: String,
 }
 
+#[cgp_provider(CommandWithEnvsExecutorComponent)]
 impl<Runtime> CommandWithEnvsExecutor<Runtime> for TokioExecCommand
 where
     Runtime: HasFilePathType

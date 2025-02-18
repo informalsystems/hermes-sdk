@@ -1,9 +1,11 @@
 use alloc::collections::BTreeMap;
 use std::path::PathBuf;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
+use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::{
+    ChainDriverBuilder, ChainDriverBuilderComponent,
+};
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
@@ -25,6 +27,7 @@ use crate::traits::bootstrap::build_chain::CanBuildChainWithNodeConfig;
 
 pub struct BuildCosmosChainDriver;
 
+#[cgp_provider(ChainDriverBuilderComponent)]
 impl<Bootstrap, Runtime> ChainDriverBuilder<Bootstrap> for BuildCosmosChainDriver
 where
     Bootstrap: HasChainDriverType<ChainDriver = CosmosChainDriver>

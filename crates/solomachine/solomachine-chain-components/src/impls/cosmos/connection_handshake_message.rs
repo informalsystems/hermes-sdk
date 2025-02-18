@@ -1,6 +1,10 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
+use hermes_cosmos_relayer::presets::chain::{
+    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
+};
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -23,6 +27,7 @@ use crate::types::payloads::connection::{
 
 pub struct BuildSolomachineConnectionHandshakeMessagesForCosmos;
 
+#[cgp_provider(ConnectionOpenInitMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenInitMessageBuilder<Chain, Counterparty>
     for BuildSolomachineConnectionHandshakeMessagesForCosmos
 where
@@ -49,6 +54,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenTryMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
     for BuildSolomachineConnectionHandshakeMessagesForCosmos
 where
@@ -102,6 +108,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenAckMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
     for BuildSolomachineConnectionHandshakeMessagesForCosmos
 where
@@ -126,6 +133,7 @@ where
     }
 }
 
+#[cgp_provider(ConnectionOpenConfirmMessageBuilderComponent)]
 impl<Chain, Counterparty> ConnectionOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildSolomachineConnectionHandshakeMessagesForCosmos
 where

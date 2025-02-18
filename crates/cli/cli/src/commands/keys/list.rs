@@ -1,7 +1,9 @@
 use core::fmt::Write;
 use std::collections::BTreeMap;
 
+use cgp::prelude::*;
 use hermes_cli_components::traits::build::CanLoadBuilder;
+use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::types::key_types::keyring::KeyRing;
@@ -22,6 +24,7 @@ pub struct KeysListCmd {
     chain_id: ChainId,
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl CommandRunner<HermesApp> for KeysListCmd {
     async fn run(&self, app: &HermesApp) -> hermes_cli_framework::Result<Output> {
         let builder = app.load_builder().await?;

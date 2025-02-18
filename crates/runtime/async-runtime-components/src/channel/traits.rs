@@ -62,37 +62,37 @@ where
         T: Async;
 }
 
-impl<Runtime, Components> HasUnboundedChannelType for Runtime
+impl<Runtime, Provider> HasUnboundedChannelType for Runtime
 where
-    Runtime: Async + HasComponents<Components = Components>,
-    Components: UnboundedChannelTypeProvider<Runtime> + ProvideChannelType<Runtime>,
+    Runtime: Async + HasProvider<Provider = Provider>,
+    Provider: UnboundedChannelTypeProvider<Runtime> + ProvideChannelType<Runtime>,
 {
     fn from_unbounded_sender<T>(sender: Arc<Mutex<mpsc::UnboundedSender<T>>>) -> Self::Sender<T>
     where
         T: Async,
     {
-        Components::from_unbounded_sender(sender)
+        Provider::from_unbounded_sender(sender)
     }
 
     fn from_unbounded_receiver<T>(receiver: mpsc::UnboundedReceiver<T>) -> Self::Receiver<T>
     where
         T: Async,
     {
-        Components::from_unbounded_receiver(receiver)
+        Provider::from_unbounded_receiver(receiver)
     }
 
     fn to_unbounded_receiver<T>(receiver: Self::Receiver<T>) -> mpsc::UnboundedReceiver<T>
     where
         T: Async,
     {
-        Components::to_unbounded_receiver(receiver)
+        Provider::to_unbounded_receiver(receiver)
     }
 
     fn to_unbounded_sender_ref<T>(sender: &Self::Sender<T>) -> &Arc<Mutex<mpsc::UnboundedSender<T>>>
     where
         T: Async,
     {
-        Components::to_unbounded_sender_ref(sender)
+        Provider::to_unbounded_sender_ref(sender)
     }
 
     fn to_unbounded_receiver_ref<T>(
@@ -101,14 +101,15 @@ where
     where
         T: Async,
     {
-        Components::to_unbounded_receiver_ref(receiver)
+        Provider::to_unbounded_receiver_ref(receiver)
     }
 }
 
 impl<Runtime, Component, Delegate> UnboundedChannelTypeProvider<Runtime> for Component
 where
     Runtime: Async,
-    Component: DelegateComponent<ChannelTypeComponent, Delegate = Delegate>,
+    Component: DelegateComponent<ChannelTypeComponent, Delegate = Delegate>
+        + IsProviderFor<ChannelTypeComponent, Runtime, ()>,
     Delegate: UnboundedChannelTypeProvider<Runtime>,
 {
     fn from_unbounded_sender<T>(sender: Arc<Mutex<mpsc::UnboundedSender<T>>>) -> Self::Sender<T>

@@ -15,7 +15,9 @@ use crate::types::client_id::MockClientId;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
 
-cgp_preset! {
+pub struct MockIbcChainTypes;
+
+delegate_components! {
     MockIbcChainTypes {
         TimeTypeComponent: MockHeight,
         HeightTypeComponent: MockHeight,

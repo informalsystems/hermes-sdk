@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
 use cgp::core::field::Index;
 use cgp::core::Async;
+use cgp::prelude::*;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -14,12 +15,13 @@ use hermes_relayer_components::multi::traits::relay_at::{
 };
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 
-use crate::setup::traits::channel::ChannelSetup;
+use crate::setup::traits::channel::{ChannelSetup, ChannelSetupComponent};
 use crate::setup::traits::init_channel_options_at::HasInitChannelOptionsAt;
 use crate::setup::traits::port_id_at::HasPortIdAt;
 
 pub struct SetupChannelHandshake;
 
+#[cgp_provider(ChannelSetupComponent)]
 impl<Setup, A: Async, B: Async> ChannelSetup<Setup, A, B> for SetupChannelHandshake
 where
     Setup: HasBiRelayTypeAt<A, B>

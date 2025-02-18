@@ -1,8 +1,11 @@
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{
     CosmosMessage, DynCosmosMessage, ToCosmosMessage,
 };
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_test_components::chain::traits::proposal::messages::deposit::DepositProposalMessageBuilder;
+use hermes_test_components::chain::traits::proposal::messages::deposit::{
+    DepositProposalMessageBuilder, DepositProposalMessageBuilderComponent,
+};
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use ibc::primitives::Signer;
@@ -21,6 +24,7 @@ pub struct DepositMessage {
     pub amount: Coin,
 }
 
+#[cgp_provider(DepositProposalMessageBuilderComponent)]
 impl<Chain> DepositProposalMessageBuilder<Chain> for BuildDepositProposalMessage
 where
     Chain: HasProposalIdType<ProposalId = u64>

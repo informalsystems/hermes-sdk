@@ -1,20 +1,23 @@
 use core::str::{from_utf8, FromStr, Utf8Error};
 use std::num::ParseIntError;
 
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_cosmos_chain_components::types::event::AbciEvent;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 
 use crate::traits::chain::messages::store_code::CanBuildStoreCodeMessage;
-use crate::traits::chain::upload_client_code::WasmClientCodeUploader;
+use crate::traits::chain::upload_client_code::{
+    WasmClientCodeUploader, WasmClientCodeUploaderComponent,
+};
 
 pub struct SendStoreCodeProposalMessage;
 
 #[derive(Debug)]
 pub struct ProposalIdNotFound;
 
+#[cgp_provider(WasmClientCodeUploaderComponent)]
 impl<Chain> WasmClientCodeUploader<Chain> for SendStoreCodeProposalMessage
 where
     Chain: CanBuildStoreCodeMessage

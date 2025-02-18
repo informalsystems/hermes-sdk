@@ -1,14 +1,15 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use serde::de::DeserializeOwned;
 
 use crate::traits::config::config_path::HasConfigPath;
-use crate::traits::config::load_config::ConfigLoader;
+use crate::traits::config::load_config::{ConfigLoader, ConfigLoaderComponent};
 use crate::traits::types::config::HasConfigType;
 
 pub struct LoadTomlConfig;
 
+#[cgp_provider(ConfigLoaderComponent)]
 impl<App, Runtime, Config> ConfigLoader<App> for LoadTomlConfig
 where
     App: HasRuntime<Runtime = Runtime>

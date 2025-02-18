@@ -1,12 +1,17 @@
-use cgp::core::Async;
-use hermes_ibc_components::traits::fields::timeout::TimeoutTimeComparer;
-use hermes_ibc_components::traits::queries::time::CurrentTimeQuerier;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::fields::timeout::{
+    TimeoutTimeComparer, TimeoutTimeComparerComponent,
+};
+use hermes_ibc_components::traits::queries::time::{
+    CurrentTimeQuerier, CurrentTimeQuerierComponent,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
 use crate::types::height::MockHeight;
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(CurrentTimeQuerierComponent)]
 impl<Chain: Async, Counterparty: Async> CurrentTimeQuerier<MockChain<Chain, Counterparty>>
     for MockChainComponents
 {
@@ -19,6 +24,7 @@ impl<Chain: Async, Counterparty: Async> CurrentTimeQuerier<MockChain<Chain, Coun
     }
 }
 
+#[cgp_provider(TimeoutTimeComparerComponent)]
 impl<Chain: Async, Counterparty: Async>
     TimeoutTimeComparer<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents

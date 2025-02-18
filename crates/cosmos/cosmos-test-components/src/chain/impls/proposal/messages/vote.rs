@@ -1,8 +1,11 @@
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{
     CosmosMessage, DynCosmosMessage, ToCosmosMessage,
 };
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_test_components::chain::traits::proposal::messages::vote::VoteProposalMessageBuilder;
+use hermes_test_components::chain::traits::proposal::messages::vote::{
+    VoteProposalMessageBuilder, VoteProposalMessageBuilderComponent,
+};
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
 use ibc::primitives::Signer;
@@ -20,6 +23,7 @@ pub struct VoteMessage {
     pub vote_option: i32,
 }
 
+#[cgp_provider(VoteProposalMessageBuilderComponent)]
 impl<Chain> VoteProposalMessageBuilder<Chain> for BuildVoteProposalMessage
 where
     Chain: HasProposalIdType<ProposalId = u64>

@@ -13,6 +13,7 @@ pub trait HasRandomIdFlag: Async {
 
 pub struct ReturnRandomIdFlag<const FLAG: bool>;
 
+#[cgp_provider(RandomIdFlagGetterComponent)]
 impl<Bootstrap, const FLAG: bool> RandomIdFlagGetter<Bootstrap> for ReturnRandomIdFlag<FLAG>
 where
     Bootstrap: Async,
@@ -22,6 +23,7 @@ where
     }
 }
 
+#[cgp_provider(RandomIdFlagGetterComponent)]
 impl<Bootstrap> RandomIdFlagGetter<Bootstrap> for UseContext
 where
     Bootstrap: Async + HasField<symbol!("should_randomize_identifiers"), Value = bool>,

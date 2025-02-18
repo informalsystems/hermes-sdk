@@ -12,6 +12,7 @@ pub trait HasPeerId: Async {
     fn peer_id(&self) -> &PeerId;
 }
 
+#[cgp_provider(PeerIdGetterComponent)]
 impl<Client> PeerIdGetter<Client> for UseContext
 where
     Client: Async + HasField<symbol!("peer_id"), Value = PeerId>,

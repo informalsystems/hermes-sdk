@@ -1,5 +1,7 @@
-use cgp::core::error::HasAsyncErrorType;
-use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
+use cgp::prelude::*;
+use hermes_relayer_components::chain::traits::message_builders::update_client::{
+    UpdateClientMessageBuilder, UpdateClientMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc::core::host::types::identifiers::ClientId;
@@ -12,6 +14,7 @@ use crate::types::payloads::client::CosmosUpdateClientPayload;
 
 pub struct BuildCosmosUpdateClientMessage;
 
+#[cgp_provider(UpdateClientMessageBuilderComponent)]
 impl<Chain, Counterparty> UpdateClientMessageBuilder<Chain, Counterparty>
     for BuildCosmosUpdateClientMessage
 where

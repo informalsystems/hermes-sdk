@@ -6,7 +6,9 @@ use futures_channel::mpsc;
 use futures_util::lock::Mutex;
 use futures_util::stream::StreamExt;
 use hermes_runtime_components::traits::channel::{
-    ChannelCreator, ChannelUser, ProvideChannelType, ReceiverStreamer, SenderCloner,
+    ChannelCreator, ChannelCreatorComponent, ChannelTypeComponent, ChannelUser,
+    ChannelUserComponent, ProvideChannelType, ReceiverStreamer, ReceiverStreamerComponent,
+    SenderCloner, SenderClonerComponent,
 };
 
 use crate::channel::traits::{HasUnboundedChannelType, UnboundedChannelTypeProvider};
@@ -15,6 +17,7 @@ use crate::stream::traits::boxed::HasBoxedStreamType;
 
 pub struct ProvideUnboundedChannelType;
 
+#[cgp_provider(ChannelTypeComponent)]
 impl<Runtime> ProvideChannelType<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: Async,
@@ -71,6 +74,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelCreatorComponent)]
 impl<Runtime> ChannelCreator<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: HasUnboundedChannelType,
@@ -88,6 +92,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelUserComponent)]
 impl<Runtime> ChannelUser<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: HasUnboundedChannelType + CanRaiseAsyncError<ErrChannelClosed>,
@@ -130,6 +135,7 @@ where
     }
 }
 
+#[cgp_provider(ReceiverStreamerComponent)]
 impl<Runtime> ReceiverStreamer<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: HasUnboundedChannelType + HasBoxedStreamType,
@@ -142,6 +148,7 @@ where
     }
 }
 
+#[cgp_provider(SenderClonerComponent)]
 impl<Runtime> SenderCloner<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: HasUnboundedChannelType,

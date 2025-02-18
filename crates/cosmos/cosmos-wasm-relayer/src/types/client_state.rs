@@ -1,9 +1,11 @@
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decode::CanDecode;
 use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
+use hermes_wasm_encoding_components::components::ConverterComponent;
 use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 use ibc::core::client::types::Height;
 use prost_types::Any;
@@ -21,6 +23,7 @@ impl From<WasmTendermintClientState> for TendermintClientState {
 
 pub struct EncodeWasmTendermintClientState;
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding> Converter<Encoding, WasmTendermintClientState, Any>
     for EncodeWasmTendermintClientState
 where
@@ -51,6 +54,7 @@ where
     }
 }
 
+#[cgp_provider(ConverterComponent)]
 impl<Encoding> Converter<Encoding, Any, WasmTendermintClientState>
     for EncodeWasmTendermintClientState
 where

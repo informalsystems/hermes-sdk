@@ -15,6 +15,7 @@ pub trait HasVerifier: Async {
     fn verifier(&self) -> &Self::Verifier;
 }
 
+#[cgp_provider(VerifierComponent)]
 impl<Client> ProvideVerifier<Client> for UseContext
 where
     Client: Async + HasField<symbol!("verifier"), Value: Verifier>,

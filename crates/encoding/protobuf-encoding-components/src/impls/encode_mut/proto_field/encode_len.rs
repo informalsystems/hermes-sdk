@@ -1,15 +1,17 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::HasAsyncErrorType;
-use hermes_encoding_components::traits::encode_mut::MutEncoder;
+use cgp::prelude::*;
+use hermes_encoding_components::traits::encode_mut::{MutEncoder, MutEncoderComponent};
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use prost::bytes::BufMut;
 use prost::encoding::{encode_key, encode_varint, encoded_len_varint, key_len, WireType};
 
+use crate::components::EncodedLengthGetterComponent;
 use crate::traits::length::EncodedLengthGetter;
 
 pub struct EncodeProtoFieldWithKnownLength<const TAG: u32, InEncoder>(pub PhantomData<InEncoder>);
 
+#[cgp_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, Value, InEncoder, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
     for EncodeProtoFieldWithKnownLength<TAG, InEncoder>
 where
@@ -32,6 +34,7 @@ where
     }
 }
 
+#[cgp_provider(EncodedLengthGetterComponent)]
 impl<Encoding, Strategy, Value, InEncoder, const TAG: u32>
     EncodedLengthGetter<Encoding, Strategy, Value>
     for EncodeProtoFieldWithKnownLength<TAG, InEncoder>

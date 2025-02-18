@@ -1,5 +1,7 @@
+use cgp::prelude::*;
+
 use crate::impls::commands::queries::balance::QueryBalanceArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner};
+use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryWalletSubCommand;
 
@@ -9,6 +11,7 @@ pub enum QueryWalletSubCommand {
     Balance(QueryBalanceArgs),
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App> CommandRunner<App, QueryWalletSubCommand> for RunQueryWalletSubCommand
 where
     App: CanRunCommand<QueryBalanceArgs>,

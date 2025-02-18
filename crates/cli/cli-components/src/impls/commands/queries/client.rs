@@ -1,7 +1,9 @@
+use cgp::prelude::*;
+
 use crate::impls::commands::queries::client_state::QueryClientStateArgs;
 use crate::impls::commands::queries::client_status::QueryClientStatusArgs;
 use crate::impls::commands::queries::consensus_state::QueryConsensusStateArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner};
+use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryClientSubCommand;
 
@@ -17,6 +19,7 @@ pub enum QueryClientSubCommand {
     Consensus(QueryConsensusStateArgs),
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl<App> CommandRunner<App, QueryClientSubCommand> for RunQueryClientSubCommand
 where
     App: CanRunCommand<QueryClientStateArgs>

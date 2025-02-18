@@ -1,14 +1,18 @@
 use alloc::vec::Vec;
 
+use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 use crate::transaction::traits::nonce::allocate_nonce::CanAllocateNonce;
 use crate::transaction::traits::parse_events::CanParseTxMessageResponse;
-use crate::transaction::traits::send_messages_with_signer::MessagesWithSignerSender;
+use crate::transaction::traits::send_messages_with_signer::{
+    MessagesWithSignerSender, MessagesWithSignerSenderComponent,
+};
 use crate::transaction::traits::send_messages_with_signer_and_nonce::CanSendMessagesWithSignerAndNonce;
 
 pub struct AllocateNonceAndSendMessages;
 
+#[cgp_provider(MessagesWithSignerSenderComponent)]
 impl<Chain> MessagesWithSignerSender<Chain> for AllocateNonceAndSendMessages
 where
     Chain: HasMessageResponseType

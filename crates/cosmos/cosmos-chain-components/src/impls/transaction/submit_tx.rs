@@ -1,7 +1,9 @@
 use core::fmt::Debug;
 
-use cgp::core::error::CanRaiseAsyncError;
-use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitter;
+use cgp::prelude::*;
+use hermes_relayer_components::transaction::traits::submit_tx::{
+    TxSubmitter, TxSubmitterComponent,
+};
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use ibc_proto::cosmos::tx::v1beta1::TxRaw;
@@ -29,6 +31,7 @@ impl<Chain> Debug for BroadcastTxError<'_, Chain> {
     }
 }
 
+#[cgp_provider(TxSubmitterComponent)]
 impl<Chain> TxSubmitter<Chain> for BroadcastCosmosTx
 where
     Chain: HasTransactionType<Transaction = SignedTx>

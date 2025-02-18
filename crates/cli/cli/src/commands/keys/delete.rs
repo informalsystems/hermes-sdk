@@ -1,4 +1,6 @@
+use cgp::prelude::*;
 use hermes_cli_components::traits::build::CanLoadBuilder;
+use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
@@ -76,6 +78,7 @@ enum KeysDeleteId<'a> {
     Named(&'a str),
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl CommandRunner<HermesApp> for KeysDeleteCmd {
     async fn run(&self, app: &HermesApp) -> hermes_cli_framework::Result<Output> {
         let builder = app.load_builder().await?;

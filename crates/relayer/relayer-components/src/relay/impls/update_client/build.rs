@@ -1,13 +1,14 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use crate::chain::traits::types::client_state::HasClientStateFields;
+use crate::components::default::relay::TargetUpdateClientMessageBuilderComponent;
 use crate::relay::traits::target::{
     HasTargetChainTypes, HasTargetChains, HasTargetClientIds, RelayTarget,
 };
@@ -15,6 +16,7 @@ use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessa
 
 pub struct BuildUpdateClientMessages;
 
+#[cgp_provider(TargetUpdateClientMessageBuilderComponent)]
 impl<Relay, Target, TargetChain, CounterpartyChain> TargetUpdateClientMessageBuilder<Relay, Target>
     for BuildUpdateClientMessages
 where

@@ -2,7 +2,8 @@ use cgp::prelude::*;
 use hermes_logging_components::impls::delegate::DelegateLogger;
 use hermes_logging_components::impls::global::GetGlobalLogger;
 use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
+    GlobalLoggerGetter, GlobalLoggerGetterComponent, HasLoggerType, LoggerGetterComponent,
+    LoggerTypeComponent, ProvideLoggerType,
 };
 use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_logging_components::types::level::{
@@ -10,7 +11,6 @@ use hermes_logging_components::types::level::{
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
@@ -28,15 +28,10 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransacti
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
+#[cgp_context(HermesLoggerComponents)]
 pub struct HermesLogger;
 
-pub struct HermesLoggerComponents;
-
 pub struct HermesLogHandlers;
-
-impl HasComponents for HermesLogger {
-    type Components = HermesLoggerComponents;
-}
 
 delegate_components! {
     HermesLoggerComponents {
@@ -64,8 +59,6 @@ delegate_components! {
             <'a, Relay: HasRelayChains>
                 LogRelayPacketAction<'a, Relay>,
             <'a, Relay: HasRelayChains>
-                LogClearPacketError<'a, Relay>,
-            <'a, Relay: HasRelayChains>
                 LogRelayPacketStatus<'a, Relay>,
             <'a, Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>, Target: RelayTarget>
                 LogSkipBuildUpdateClientMessage<'a, Relay, Target>,
@@ -85,6 +78,7 @@ delegate_components! {
     }
 }
 
+#[cgp_provider(LoggerTypeComponent)]
 impl<Context> ProvideLoggerType<Context> for ProvideHermesLogger
 where
     Context: Async,
@@ -92,6 +86,7 @@ where
     type Logger = HermesLogger;
 }
 
+#[cgp_provider(GlobalLoggerGetterComponent)]
 impl<Context> GlobalLoggerGetter<Context> for ProvideHermesLogger
 where
     Context: HasLoggerType<Logger = HermesLogger>,

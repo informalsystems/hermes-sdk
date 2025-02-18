@@ -3,11 +3,14 @@ use std::path::Path;
 
 use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::fs::write_file::StringToFileWriter;
+use hermes_runtime_components::traits::fs::write_file::{
+    StringToFileWriter, StringToFileWriterComponent,
+};
 use tokio::fs::write;
 
 pub struct TokioWriteStringToFile;
 
+#[cgp_provider(StringToFileWriterComponent)]
 impl<Runtime> StringToFileWriter<Runtime> for TokioWriteStringToFile
 where
     Runtime: HasFilePathType + HasAsyncErrorType,

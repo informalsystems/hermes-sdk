@@ -2,9 +2,11 @@ mod add;
 pub use add::KeysAddCmd;
 
 mod list;
+use hermes_cli_components::traits::command::CommandRunnerComponent;
 pub use list::KeysListCmd;
 
 mod delete;
+use cgp::prelude::*;
 pub use delete::KeysDeleteCmd;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
@@ -25,6 +27,7 @@ pub enum KeysCmd {
     Delete(KeysDeleteCmd),
 }
 
+#[cgp_provider(CommandRunnerComponent)]
 impl CommandRunner<HermesApp> for KeysCmd {
     async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {

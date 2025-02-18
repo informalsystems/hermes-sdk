@@ -13,6 +13,7 @@ pub trait CanParseArg<Args, Tag>: HasAsyncErrorType {
     fn parse_arg(&self, args: &Args, tag: PhantomData<Tag>) -> Result<Self::Parsed, Self::Error>;
 }
 
+#[cgp_provider(ArgParserComponent)]
 impl<App, Args, Tag, Components, Delegate> ArgParser<App, Args, Tag> for UseDelegate<Components>
 where
     App: HasAsyncErrorType,

@@ -1,18 +1,21 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::prelude::{Async, CanRaiseAsyncError};
+use cgp::prelude::*;
 use hermes_encoding_components::traits::decode::CanDecode;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
 
-use crate::traits::queries::consensus_state::{CanQueryRawConsensusState, ConsensusStateQuerier};
+use crate::traits::queries::consensus_state::{
+    CanQueryRawConsensusState, ConsensusStateQuerier, ConsensusStateQuerierComponent,
+};
 use crate::traits::types::consensus_state::HasConsensusStateType;
 use crate::traits::types::height::HasHeightType;
 
 pub struct QueryAndDecodeConsensusState<Strategy>(pub PhantomData<Strategy>);
 
+#[cgp_provider(ConsensusStateQuerierComponent)]
 impl<Chain, Counterparty, Encoding, Strategy> ConsensusStateQuerier<Chain, Counterparty>
     for QueryAndDecodeConsensusState<Strategy>
 where

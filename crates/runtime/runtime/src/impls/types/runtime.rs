@@ -1,11 +1,14 @@
-use cgp::core::Async;
-use hermes_runtime_components::traits::runtime::ProvideRuntimeType;
+use cgp::prelude::*;
+use hermes_runtime_components::traits::runtime::{
+    RuntimeTypeProvider, RuntimeTypeProviderComponent,
+};
 
 use crate::types::runtime::HermesRuntime;
 
 pub struct ProvideHermesRuntime;
 
-impl<Context> ProvideRuntimeType<Context> for ProvideHermesRuntime
+#[cgp_provider(RuntimeTypeProviderComponent)]
+impl<Context> RuntimeTypeProvider<Context> for ProvideHermesRuntime
 where
     Context: Async,
 {

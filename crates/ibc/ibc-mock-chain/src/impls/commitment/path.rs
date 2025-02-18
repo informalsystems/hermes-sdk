@@ -1,11 +1,14 @@
 use alloc::string::String;
 
-use cgp::core::Async;
-use hermes_ibc_components::traits::commitment::path::receive_packet::ReceivePacketCommitmentPathBuilder;
-use hermes_ibc_components::traits::commitment::path::send_packet::SendPacketCommitmentPathBuilder;
+use cgp::prelude::*;
+use hermes_ibc_components::traits::commitment::path::receive_packet::{
+    ReceivePacketCommitmentPathBuilder, ReceivePacketCommitmentPathBuilderComponent,
+};
+use hermes_ibc_components::traits::commitment::path::send_packet::{
+    SendPacketCommitmentPathBuilder, SendPacketCommitmentPathBuilderComponent,
+};
 
-use crate::components::chain::MockChainComponents;
-use crate::contexts::chain::MockChain;
+use crate::contexts::chain::{MockChain, MockChainComponents};
 use crate::types::channel_id::MockChannelId;
 use crate::types::commitment::path::{
     MockReceivePacketCommitmentPath, MockSendPacketCommitmentPath,
@@ -13,6 +16,7 @@ use crate::types::commitment::path::{
 use crate::types::nonce::MockNonce;
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(ReceivePacketCommitmentPathBuilderComponent)]
 impl<Chain: Async, Counterparty: Async>
     ReceivePacketCommitmentPathBuilder<
         MockChain<Chain, Counterparty>,
@@ -32,6 +36,7 @@ impl<Chain: Async, Counterparty: Async>
     }
 }
 
+#[cgp_provider(SendPacketCommitmentPathBuilderComponent)]
 impl<Chain: Async, Counterparty: Async>
     SendPacketCommitmentPathBuilder<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents

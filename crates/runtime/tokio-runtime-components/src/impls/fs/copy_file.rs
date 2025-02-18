@@ -1,13 +1,14 @@
 use std::io::Error as IoError;
 use std::path::Path;
 
-use cgp::core::error::CanRaiseAsyncError;
-use hermes_runtime_components::traits::fs::copy_file::FileCopier;
+use cgp::prelude::*;
+use hermes_runtime_components::traits::fs::copy_file::{FileCopier, FileCopierComponent};
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use tokio::fs::copy;
 
 pub struct TokioCopyFile;
 
+#[cgp_provider(FileCopierComponent)]
 impl<Runtime> FileCopier<Runtime> for TokioCopyFile
 where
     Runtime: HasFilePathType + CanRaiseAsyncError<IoError>,

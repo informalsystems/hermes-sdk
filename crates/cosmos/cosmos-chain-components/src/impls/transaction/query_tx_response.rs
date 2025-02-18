@@ -1,5 +1,7 @@
-use cgp::core::error::CanRaiseAsyncError;
-use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerier;
+use cgp::prelude::*;
+use hermes_relayer_components::transaction::traits::query_tx_response::{
+    TxResponseQuerier, TxResponseQuerierComponent,
+};
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
 use tendermint::Hash as TxHash;
@@ -11,6 +13,7 @@ use crate::traits::rpc_client::HasRpcClient;
 
 pub struct QueryCosmosTxResponse;
 
+#[cgp_provider(TxResponseQuerierComponent)]
 impl<Chain> TxResponseQuerier<Chain> for QueryCosmosTxResponse
 where
     Chain: HasTransactionHashType<TxHash = TxHash>

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::{Async, CanRaiseAsyncError};
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
@@ -10,6 +10,7 @@ use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use serde_json as json;
 
+use crate::bootstrap::components::cosmos_sdk::WalletInitializerComponent;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::fields::hd_path::HasWalletHdPath;
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializer;
@@ -41,6 +42,7 @@ impl ExecOutputGetter for GetStdOutOrElseStdErr {
     }
 }
 
+#[cgp_provider(WalletInitializerComponent)]
 impl<Bootstrap, Runtime, Chain, OutputGetter> WalletInitializer<Bootstrap>
     for InitCosmosTestWallet<OutputGetter>
 where

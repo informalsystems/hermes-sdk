@@ -1,9 +1,11 @@
+use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSrcChannelId, HasPacketSrcPortId,
 };
 
 use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
+use crate::components::default::relay::RelayPacketFilterComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_filter::RelayPacketFilter;
 
@@ -11,6 +13,7 @@ pub struct MatchPacketSourceChain;
 
 pub struct MatchPacketDestinationChain;
 
+#[cgp_provider(RelayPacketFilterComponent)]
 impl<Relay> RelayPacketFilter<Relay> for MatchPacketSourceChain
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,
@@ -37,6 +40,7 @@ where
     }
 }
 
+#[cgp_provider(RelayPacketFilterComponent)]
 impl<Relay> RelayPacketFilter<Relay> for MatchPacketDestinationChain
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,

@@ -1,6 +1,7 @@
-use cgp::core::error::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    RawConsensusStateQuerier, RawConsensusStateWithProofsQuerier,
+    RawConsensusStateQuerier, RawConsensusStateQuerierComponent,
+    RawConsensusStateWithProofsQuerier, RawConsensusStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasRawConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
@@ -16,6 +17,7 @@ use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryCosmosConsensusStateFromAbci;
 
+#[cgp_provider(RawConsensusStateQuerierComponent)]
 impl<Chain, Counterparty> RawConsensusStateQuerier<Chain, Counterparty>
     for QueryCosmosConsensusStateFromAbci
 where
@@ -52,6 +54,7 @@ where
     }
 }
 
+#[cgp_provider(RawConsensusStateWithProofsQuerierComponent)]
 impl<Chain, Counterparty> RawConsensusStateWithProofsQuerier<Chain, Counterparty>
     for QueryCosmosConsensusStateFromAbci
 where

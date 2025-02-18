@@ -15,6 +15,7 @@ pub trait HasDenomType: Async {
 
 pub type DenomOf<Chain> = <Chain as HasDenomType>::Denom;
 
+#[cgp_provider(DenomTypeComponent)]
 impl<Chain, Provider, Denom> ProvideDenomType<Chain> for WithProvider<Provider>
 where
     Chain: Async,

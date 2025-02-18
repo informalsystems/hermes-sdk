@@ -1,11 +1,14 @@
-use cgp::core::error::HasAsyncErrorType;
-use cgp::prelude::CanRaiseAsyncError;
+use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
+use hermes_cosmos_relayer::presets::chain::{
+    ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
+    ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
     ChannelOpenTryMessageBuilder,
@@ -26,6 +29,7 @@ use crate::types::payloads::channel::{
 
 pub struct BuildSolomachineChannelHandshakeMessagesForCosmos;
 
+#[cgp_provider(ChannelOpenInitMessageBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenInitMessageBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakeMessagesForCosmos
 where
@@ -68,6 +72,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenTryMessageBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenTryMessageBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakeMessagesForCosmos
 where
@@ -118,6 +123,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenAckMessageBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenAckMessageBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakeMessagesForCosmos
 where
@@ -154,6 +160,7 @@ where
     }
 }
 
+#[cgp_provider(ChannelOpenConfirmMessageBuilderComponent)]
 impl<Chain, Counterparty> ChannelOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakeMessagesForCosmos
 where

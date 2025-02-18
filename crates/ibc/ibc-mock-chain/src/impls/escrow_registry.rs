@@ -1,9 +1,13 @@
 use alloc::borrow::ToOwned;
 use alloc::string::String;
 
-use cgp::core::Async;
-use hermes_ibc_token_transfer_components::traits::escrow_registry::escrow::EscrowTokenRegistrar;
-use hermes_ibc_token_transfer_components::traits::escrow_registry::unescrow::UnescrowTokenRegistrar;
+use cgp::prelude::*;
+use hermes_ibc_token_transfer_components::traits::escrow_registry::escrow::{
+    EscrowTokenRegistrar, EscrowTokenRegistrarComponent,
+};
+use hermes_ibc_token_transfer_components::traits::escrow_registry::unescrow::{
+    UnescrowTokenRegistrar, UnescrowTokenRegistrarComponent,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -12,6 +16,7 @@ use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
 use crate::types::tagged::Tagged;
 
+#[cgp_provider(UnescrowTokenRegistrarComponent)]
 impl<Chain: Async, Counterparty: Async>
     UnescrowTokenRegistrar<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents
@@ -46,6 +51,7 @@ impl<Chain: Async, Counterparty: Async>
     }
 }
 
+#[cgp_provider(EscrowTokenRegistrarComponent)]
 impl<Chain: Async, Counterparty: Async>
     EscrowTokenRegistrar<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents

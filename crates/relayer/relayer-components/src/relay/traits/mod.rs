@@ -7,7 +7,6 @@ pub mod components;
 pub mod connection;
 pub mod event_relayer;
 pub mod ibc_message_sender;
-pub mod packet_clearer;
 pub mod packet_filter;
 pub mod packet_lock;
 pub mod packet_relayer;

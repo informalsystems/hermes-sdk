@@ -1,12 +1,14 @@
 use core::str::FromStr;
 
-use cgp::core::Async;
+use cgp::prelude::*;
 use hdpath::StandardHDPath;
 
+use crate::bootstrap::components::cosmos_sdk::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::hd_path::WalletHdPathGetter;
 
 pub struct ProvideCosmosHdPath;
 
+#[cgp_provider(WalletHdPathComponent)]
 impl<Bootstrap> WalletHdPathGetter<Bootstrap> for ProvideCosmosHdPath
 where
     Bootstrap: Async,
