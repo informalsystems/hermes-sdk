@@ -4,8 +4,8 @@ use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnecti
 use crate::traits::types::channel::HasChannelEndType;
 
 #[cgp_component {
-  provider: CounterpartyConnectionIdQuerier,
-  context: Chain,
+    provider: CounterpartyConnectionIdQuerier,
+    context: Chain,
 }]
 #[async_trait]
 pub trait CanQueryCounterpartyConnectionId<Counterparty>:

@@ -33,9 +33,10 @@ where
             .clone()
             .try_into()
             .map_err(|_| {
-                Chain::raise_error(format!(
+                Chain::raise_error(
                     "channel end must have exactly one connection ID in connection_hops"
-                ))
+                        .to_string(),
+                )
             })?;
 
         let latest_height = chain.query_chain_height().await?;
