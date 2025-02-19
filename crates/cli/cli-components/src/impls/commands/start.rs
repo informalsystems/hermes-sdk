@@ -102,8 +102,8 @@ where
         let chain_id_b = app.parse_arg(args, PhantomData::<symbol!("chain_id_b")>)?;
         let client_id_b = app.parse_arg(args, PhantomData::<symbol!("client_id_b")>)?;
 
-        let clear_past_blocks = args.clear_past_blocks().clone();
-        let stop_after_blocks = args.stop_after_blocks().clone();
+        let clear_past_blocks = *args.clear_past_blocks();
+        let stop_after_blocks = *args.stop_after_blocks();
 
         let birelay = builder
             .build_birelay(&chain_id_a, &chain_id_b, &client_id_a, &client_id_b)

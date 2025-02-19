@@ -156,7 +156,7 @@ where
         + CanAutoRelayWithHeights<SourceTarget>
         + CanAutoRelayWithHeights<DestinationTarget>,
 {
-    async fn run(self) -> () {
+    async fn run(self) {
         match self {
             BiRelayTask::SourceAToB {
                 relay,
