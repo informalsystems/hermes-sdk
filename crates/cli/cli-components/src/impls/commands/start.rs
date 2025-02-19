@@ -53,6 +53,9 @@ pub struct StartRelayerArgs {
         help_heading = "REQUIRED"
     )]
     client_id_b: String,
+
+    #[clap(long = "clear-past-blocks", required = false)]
+    clear_past_blocks: Option<u64>,
 }
 
 #[new_cgp_provider(CommandRunnerComponent)]

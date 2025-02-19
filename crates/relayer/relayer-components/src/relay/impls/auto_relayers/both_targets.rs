@@ -6,7 +6,7 @@ use cgp::prelude::*;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
-use crate::relay::traits::auto_relayer::CanAutoRelay;
+use crate::relay::traits::auto_relayer::CanAutoRelayTarget;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayClientIds};
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 
@@ -27,8 +27,8 @@ where
     Relay: HasRelayClientIds
         + CanRaiseRelayChainErrors
         + HasRuntime
-        + CanAutoRelay<SourceTarget>
-        + CanAutoRelay<DestinationTarget>,
+        + CanAutoRelayTarget<SourceTarget>
+        + CanAutoRelayTarget<DestinationTarget>,
 {
     async fn run(self) {
         match self.target {
@@ -48,8 +48,8 @@ where
     Relay: Clone
         + HasRelayClientIds
         + HasRuntime
-        + CanAutoRelay<SourceTarget>
-        + CanAutoRelay<DestinationTarget>
+        + CanAutoRelayTarget<SourceTarget>
+        + CanAutoRelayTarget<DestinationTarget>
         + CanRaiseRelayChainErrors,
     Relay::Runtime: CanRunConcurrentTasks,
 {

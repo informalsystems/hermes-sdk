@@ -47,6 +47,13 @@ pub trait HasDestinationTargetChainTypes:
 
 impl<Relay> HasDestinationTargetChainTypes for Relay where Relay: HasRelayChainTypes {}
 
+pub trait HasChainTargets: HasSourceTargetChainTypes + HasDestinationTargetChainTypes {}
+
+impl<Relay> HasChainTargets for Relay where
+    Relay: HasSourceTargetChainTypes + HasDestinationTargetChainTypes
+{
+}
+
 pub type TargetChainOf<Relay, Target> = <Relay as HasTargetChainTypes<Target>>::TargetChain;
 
 pub type CounterpartyChainOf<Relay, Target> =

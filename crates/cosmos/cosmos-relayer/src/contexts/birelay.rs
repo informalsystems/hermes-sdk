@@ -3,9 +3,7 @@ use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
-use hermes_relayer_components::birelay::traits::two_way::{
-    TwoWayRelayGetter, TwoWayRelayGetterComponent,
-};
+use hermes_relayer_components::birelay::traits::{TwoWayRelayGetter, TwoWayRelayGetterComponent};
 use hermes_relayer_components::components::default::birelay::{
     DefaultBiRelayComponents, IsDefaultBiRelayComponents,
 };

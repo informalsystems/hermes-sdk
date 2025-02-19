@@ -7,7 +7,7 @@ use cgp::prelude::*;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
-use crate::birelay::traits::two_way::HasTwoWayRelay;
+use crate::birelay::traits::HasTwoWayRelay;
 use crate::multi::traits::relay_at::RelayAt;
 
 /// A concurrent two-way relay context that is composed of a `BiRelay` type that
