@@ -6,6 +6,7 @@ use hermes_error::traits::wrap::CanWrapError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
+use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
@@ -56,6 +57,16 @@ pub struct StartRelayerArgs {
 
     #[clap(long = "clear-past-blocks", required = false)]
     clear_past_blocks: Option<u64>,
+
+    #[clap(long = "stop-after-blocks", required = false)]
+    stop_after_blocks: Option<u64>,
+}
+
+#[cgp_auto_getter]
+pub trait HasClearPacketFields {
+    fn clear_past_blocks(&self) -> &Option<u64>;
+
+    fn stop_after_blocks(&self) -> &Option<u64>;
 }
 
 #[new_cgp_provider(CommandRunnerComponent)]
@@ -72,12 +83,12 @@ where
         + CanRaiseAsyncError<Build::Error>
         + CanRaiseAsyncError<BiRelay::Error>
         + CanWrapError<&'static str>,
-    Args: Async,
+    Args: Async + HasClearPacketFields,
     App::Logger: CanLog<LevelInfo>,
     Build: CanBuildBiRelay<TagA, TagB, BiRelay = BiRelay>
         + HasChainTypeAt<TagA, Chain = ChainA>
         + HasChainTypeAt<TagB, Chain = ChainB>,
-    BiRelay: CanRun,
+    BiRelay: CanRun + CanAutoBiRelay,
     ChainA: HasChainIdType + HasClientIdType<ChainB>,
     ChainB: HasChainIdType + HasClientIdType<ChainA>,
 {
@@ -90,6 +101,9 @@ where
 
         let chain_id_b = app.parse_arg(args, PhantomData::<symbol!("chain_id_b")>)?;
         let client_id_b = app.parse_arg(args, PhantomData::<symbol!("client_id_b")>)?;
+
+        let clear_past_blocks = args.clear_past_blocks().clone();
+        let stop_after_blocks = args.stop_after_blocks().clone();
 
         let birelay = builder
             .build_birelay(&chain_id_a, &chain_id_b, &client_id_a, &client_id_b)
@@ -104,7 +118,7 @@ where
             .await;
 
         birelay
-            .run()
+            .auto_bi_relay(clear_past_blocks, stop_after_blocks)
             .await
             .map_err(|e| App::wrap_error("Relayer failed to start", App::raise_error(e)))?;
 

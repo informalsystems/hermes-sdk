@@ -4,8 +4,8 @@ use cgp::prelude::*;
 use crate::traits::output::HasOutputType;
 
 #[cgp_component {
-  provider: CommandRunner,
-  context: App,
+    provider: CommandRunner,
+    context: App,
 }]
 #[async_trait]
 pub trait CanRunCommand<Args>: HasOutputType + HasAsyncErrorType
