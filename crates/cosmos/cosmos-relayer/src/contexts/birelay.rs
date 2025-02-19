@@ -1,9 +1,11 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
-use cgp::extra::run::CanRun;
+use cgp::extra::run::RunnerComponent;
 use cgp::prelude::*;
-use hermes_relayer_components::birelay::traits::{TwoWayRelayGetter, TwoWayRelayGetterComponent};
+use hermes_relayer_components::birelay::traits::{
+    AutoBiRelayerComponent, TwoWayRelayGetter, TwoWayRelayGetterComponent,
+};
 use hermes_relayer_components::components::default::birelay::{
     DefaultBiRelayComponents, IsDefaultBiRelayComponents,
 };
@@ -69,6 +71,9 @@ impl TwoWayRelayGetter<CosmosBiRelay> for CosmosBiRelayComponents {
     }
 }
 
-pub trait CanUseCosmosBiRelay: CanRun {}
+pub trait CanUseCosmosBiRelay:
+    CanUseComponent<RunnerComponent> + CanUseComponent<AutoBiRelayerComponent>
+{
+}
 
 impl CanUseCosmosBiRelay for CosmosBiRelay {}

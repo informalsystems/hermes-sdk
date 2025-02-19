@@ -6,7 +6,7 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::fields::height::{
-    HeightIncrementer, HeightIncrementerComponent,
+    HeightAdjuster, HeightAdjusterComponent, HeightIncrementer, HeightIncrementerComponent,
 };
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
 use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeComponent;
@@ -61,6 +61,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc::core::host::types::identifiers::{
@@ -129,6 +130,20 @@ where
 {
     fn increment_height(height: &Height) -> Result<Height, Chain::Error> {
         Ok(height.increment())
+    }
+}
+
+#[cgp_provider(HeightAdjusterComponent)]
+impl<Chain> HeightAdjuster<Chain> for ProvideCosmosChainTypes
+where
+    Chain: HasHeightType<Height = Height> + CanRaiseAsyncError<ClientError>,
+{
+    fn add_height(height: &Height, addition: u64) -> Result<Height, Chain::Error> {
+        Ok(height.add(addition))
+    }
+
+    fn sub_height(height: &Height, subtraction: u64) -> Result<Height, Chain::Error> {
+        height.sub(subtraction).map_err(Chain::raise_error)
     }
 }
 
