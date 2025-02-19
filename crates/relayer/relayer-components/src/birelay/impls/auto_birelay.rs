@@ -1,41 +1,43 @@
-use cgp::core::field::Index;
+use alloc::boxed::Box;
+use alloc::vec;
+use alloc::vec::Vec;
+
+use cgp::core::error::ErrorOf;
+use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_chain_components::traits::types::height::{CanAdjustHeight, HeightOf};
+use hermes_chain_components::traits::types::height::{CanAdjustHeight, HasHeightType, HeightOf};
+use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
-use crate::birelay::traits::{AutoBiRelayer, AutoBiRelayerComponent, HasTwoWayRelay};
-use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
+use crate::birelay::traits::{
+    AutoBiRelayer, AutoBiRelayerComponent, HasBiRelayTypes, HasTwoWayRelay,
+};
 use crate::relay::traits::auto_relayer::CanAutoRelayWithHeights;
-use crate::relay::traits::chains::{HasRelayChains, SrcChainOf};
+use crate::relay::traits::chains::{HasDstChain, HasRelayChains, HasSrcChain};
 use crate::relay::traits::target::{DestinationTarget, HasChainTargets, SourceTarget};
 
-pub enum BiRelayTask<BiRelay>
-where
-    BiRelay: HasRelayTypeAt<Index<0>, Index<1>> + HasRelayTypeAt<Index<1>, Index<0>>,
-{
-    AToBAtSource {
-        relay: RelayAt<BiRelay, Index<0>, Index<1>>,
-    },
-}
-
 #[new_cgp_provider(AutoBiRelayerComponent)]
-impl<BiRelay, RelayAToB, RelayBToA, ChainA, ChainB> AutoBiRelayer<BiRelay> for PerformAutoBiRelay
+impl<BiRelay> AutoBiRelayer<BiRelay> for PerformAutoBiRelay
 where
-    BiRelay: HasTwoWayRelay
-        + HasRelayTypeAt<Index<0>, Index<1>, Relay = RelayAToB>
-        + HasRelayTypeAt<Index<1>, Index<0>, Relay = RelayBToA>
-        + CanRaiseAsyncError<ChainA::Error>
-        + CanRaiseAsyncError<ChainB::Error>,
-    RelayAToB: HasRelayChains<SrcChain = ChainA, DstChain = ChainB>
+    BiRelay: HasRuntime
+        + HasTwoWayRelay
+        + HasBiRelayTypes
+        + CanRaiseAsyncError<ErrorOf<BiRelay::ChainA>>
+        + CanRaiseAsyncError<ErrorOf<BiRelay::ChainB>>,
+    BiRelay::RelayAToB: Clone
+        + HasSrcChain
+        + HasDstChain
         + HasChainTargets
         + CanAutoRelayWithHeights<SourceTarget>
         + CanAutoRelayWithHeights<DestinationTarget>,
-    RelayBToA: HasRelayChains<SrcChain = ChainB, DstChain = ChainA>
+    BiRelay::RelayBToA: Clone
+        + HasRelayChains
         + HasChainTargets
         + CanAutoRelayWithHeights<SourceTarget>
         + CanAutoRelayWithHeights<DestinationTarget>,
-    ChainA: CanQueryChainHeight + CanAdjustHeight,
-    ChainB: CanQueryChainHeight + CanAdjustHeight,
+    BiRelay::ChainA: CanQueryChainHeight + CanAdjustHeight,
+    BiRelay::ChainB: CanQueryChainHeight + CanAdjustHeight,
+    BiRelay::Runtime: CanRunConcurrentTasks,
 {
     async fn auto_bi_relay(
         bi_relay: &BiRelay,
@@ -58,29 +60,140 @@ where
             .map_err(BiRelay::raise_error)?;
 
         let end_height_a = if let Some(stop_after_blocks) = stop_after_blocks {
-            Some(ChainA::add_height(&height_a, stop_after_blocks).map_err(BiRelay::raise_error)?)
+            Some(
+                BiRelay::ChainA::add_height(&height_a, stop_after_blocks)
+                    .map_err(BiRelay::raise_error)?,
+            )
         } else {
             None
         };
 
         let end_height_b = if let Some(stop_after_blocks) = stop_after_blocks {
-            Some(ChainB::add_height(&height_b, stop_after_blocks).map_err(BiRelay::raise_error)?)
+            Some(
+                BiRelay::ChainB::add_height(&height_b, stop_after_blocks)
+                    .map_err(BiRelay::raise_error)?,
+            )
         } else {
             None
         };
 
         let start_height_a = if let Some(clear_past_blocks) = clear_past_blocks {
-            ChainA::sub_height(&height_a, clear_past_blocks).map_err(BiRelay::raise_error)?
+            BiRelay::ChainA::sub_height(&height_a, clear_past_blocks)
+                .map_err(BiRelay::raise_error)?
         } else {
             height_a
         };
 
         let start_height_b = if let Some(clear_past_blocks) = clear_past_blocks {
-            ChainB::sub_height(&height_b, clear_past_blocks).map_err(BiRelay::raise_error)?
+            BiRelay::ChainB::sub_height(&height_b, clear_past_blocks)
+                .map_err(BiRelay::raise_error)?
         } else {
             height_b
         };
 
+        let tasks: Vec<Box<BiRelayTask<BiRelay>>> = vec![
+            Box::new(BiRelayTask::SourceAToB {
+                relay: relay_a_to_b.clone(),
+                start_height: start_height_a.clone(),
+                end_height: end_height_a.clone(),
+            }),
+            Box::new(BiRelayTask::DestinationAToB {
+                relay: relay_a_to_b.clone(),
+                start_height: start_height_b.clone(),
+                end_height: end_height_b.clone(),
+            }),
+            Box::new(BiRelayTask::SourceBToA {
+                relay: relay_b_to_a.clone(),
+                start_height: start_height_b,
+                end_height: end_height_b,
+            }),
+            Box::new(BiRelayTask::DestinationBToA {
+                relay: relay_b_to_a.clone(),
+                start_height: start_height_a,
+                end_height: end_height_a,
+            }),
+        ];
+
+        bi_relay.runtime().run_concurrent_tasks(tasks).await;
+
         Ok(())
+    }
+}
+
+pub enum BiRelayTask<BiRelay>
+where
+    BiRelay: HasBiRelayTypes<ChainA: HasHeightType, ChainB: HasHeightType>,
+{
+    SourceAToB {
+        relay: BiRelay::RelayAToB,
+        start_height: HeightOf<BiRelay::ChainA>,
+        end_height: Option<HeightOf<BiRelay::ChainA>>,
+    },
+    DestinationAToB {
+        relay: BiRelay::RelayAToB,
+        start_height: HeightOf<BiRelay::ChainB>,
+        end_height: Option<HeightOf<BiRelay::ChainB>>,
+    },
+    SourceBToA {
+        relay: BiRelay::RelayBToA,
+        start_height: HeightOf<BiRelay::ChainB>,
+        end_height: Option<HeightOf<BiRelay::ChainB>>,
+    },
+    DestinationBToA {
+        relay: BiRelay::RelayBToA,
+        start_height: HeightOf<BiRelay::ChainA>,
+        end_height: Option<HeightOf<BiRelay::ChainA>>,
+    },
+}
+
+impl<BiRelay> Task for BiRelayTask<BiRelay>
+where
+    BiRelay: HasBiRelayTypes,
+    BiRelay::RelayAToB: HasChainTargets
+        + CanAutoRelayWithHeights<SourceTarget>
+        + CanAutoRelayWithHeights<DestinationTarget>,
+    BiRelay::RelayBToA: HasChainTargets
+        + CanAutoRelayWithHeights<SourceTarget>
+        + CanAutoRelayWithHeights<DestinationTarget>,
+{
+    async fn run(self) -> () {
+        match self {
+            BiRelayTask::SourceAToB {
+                relay,
+                start_height,
+                end_height,
+            } => {
+                let _ = relay
+                    .auto_relay_with_heights(SourceTarget, &start_height, end_height.as_ref())
+                    .await;
+            }
+            BiRelayTask::DestinationAToB {
+                relay,
+                start_height,
+                end_height,
+            } => {
+                let _ = relay
+                    .auto_relay_with_heights(DestinationTarget, &start_height, end_height.as_ref())
+                    .await;
+            }
+            BiRelayTask::SourceBToA {
+                relay,
+                start_height,
+                end_height,
+            } => {
+                let _ = relay
+                    .auto_relay_with_heights(SourceTarget, &start_height, end_height.as_ref())
+                    .await;
+            }
+            BiRelayTask::DestinationBToA {
+                relay,
+                start_height,
+                end_height,
+            } => {
+                let _ = relay
+                    .auto_relay_with_heights(DestinationTarget, &start_height, end_height.as_ref())
+                    .await;
+            }
+        }
     }
 }
