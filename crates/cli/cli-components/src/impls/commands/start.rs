@@ -1,6 +1,5 @@
 use std::marker::PhantomData;
 
-use cgp::core::field::Index;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use hermes_error::traits::wrap::CanWrapError;
@@ -17,13 +16,11 @@ use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
-pub struct RunStartRelayerCommand;
-
 #[derive(Debug, clap::Parser, HasField)]
 pub struct StartRelayerArgs {
     /// Identifier of chain A
     #[clap(
-        long = "chain-a",
+        long = "chain-id-a",
         required = true,
         value_name = "CHAIN_ID_A",
         help_heading = "REQUIRED"
@@ -32,7 +29,7 @@ pub struct StartRelayerArgs {
 
     /// Identifier of client A
     #[clap(
-        long = "client-a",
+        long = "client-id-a",
         required = true,
         value_name = "CLIENT_ID_A",
         help_heading = "REQUIRED"
@@ -41,7 +38,7 @@ pub struct StartRelayerArgs {
 
     /// Identifier of chain B
     #[clap(
-        long = "chain-b",
+        long = "chain-id-b",
         required = true,
         value_name = "CHAIN_ID_B",
         help_heading = "REQUIRED"
@@ -50,7 +47,7 @@ pub struct StartRelayerArgs {
 
     /// Identifier of client B
     #[clap(
-        long = "client-b",
+        long = "client-id-b",
         required = true,
         value_name = "CLIENT_ID_B",
         help_heading = "REQUIRED"
@@ -58,8 +55,9 @@ pub struct StartRelayerArgs {
     client_id_b: String,
 }
 
-#[cgp_provider(CommandRunnerComponent)]
-impl<App, Args, Build, BiRelay, ChainA, ChainB> CommandRunner<App, Args> for RunStartRelayerCommand
+#[new_cgp_provider(CommandRunnerComponent)]
+impl<App, Args, Build, BiRelay, ChainA, ChainB, TagA, TagB> CommandRunner<App, Args>
+    for RunStartRelayerCommand<TagA, TagB>
 where
     App: CanLoadBuilder<Builder = Build>
         + HasLogger
@@ -73,9 +71,9 @@ where
         + CanWrapError<&'static str>,
     Args: Async,
     App::Logger: CanLog<LevelInfo>,
-    Build: CanBuildBiRelay<Index<0>, Index<1>, BiRelay = BiRelay>
-        + HasChainTypeAt<Index<0>, Chain = ChainA>
-        + HasChainTypeAt<Index<1>, Chain = ChainB>,
+    Build: CanBuildBiRelay<TagA, TagB, BiRelay = BiRelay>
+        + HasChainTypeAt<TagA, Chain = ChainA>
+        + HasChainTypeAt<TagB, Chain = ChainB>,
     BiRelay: CanRun,
     ChainA: HasChainIdType + HasClientIdType<ChainB>,
     ChainB: HasChainIdType + HasClientIdType<ChainA>,
