@@ -31,7 +31,8 @@ where
                 &"".to_owned().into_bytes(),
                 &latest_height,
             )
-            .await?;
+            .await?
+            .ok_or_else(|| Chain::raise_error("failed to query for staking params"))?;
 
         let query_staking_params: QueryParamsResponse =
             QueryParamsResponse::decode(query_staking_params_bytes.as_ref())

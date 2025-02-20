@@ -38,6 +38,6 @@ where
             .query_abci_with_proofs(IBC_QUERY_PATH, commitment_path.as_bytes(), height)
             .await?;
 
-        Ok((Some(commitment), proof))
+        Ok((commitment, proof))
     }
 }
