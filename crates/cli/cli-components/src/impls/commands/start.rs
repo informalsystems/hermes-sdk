@@ -1,12 +1,12 @@
 use std::marker::PhantomData;
 
-use cgp::core::field::Index;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use hermes_error::traits::wrap::CanWrapError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
+use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
@@ -17,13 +17,11 @@ use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
-pub struct RunStartRelayerCommand;
-
 #[derive(Debug, clap::Parser, HasField)]
 pub struct StartRelayerArgs {
     /// Identifier of chain A
     #[clap(
-        long = "chain-a",
+        long = "chain-id-a",
         required = true,
         value_name = "CHAIN_ID_A",
         help_heading = "REQUIRED"
@@ -32,7 +30,7 @@ pub struct StartRelayerArgs {
 
     /// Identifier of client A
     #[clap(
-        long = "client-a",
+        long = "client-id-a",
         required = true,
         value_name = "CLIENT_ID_A",
         help_heading = "REQUIRED"
@@ -41,7 +39,7 @@ pub struct StartRelayerArgs {
 
     /// Identifier of chain B
     #[clap(
-        long = "chain-b",
+        long = "chain-id-b",
         required = true,
         value_name = "CHAIN_ID_B",
         help_heading = "REQUIRED"
@@ -50,16 +48,30 @@ pub struct StartRelayerArgs {
 
     /// Identifier of client B
     #[clap(
-        long = "client-b",
+        long = "client-id-b",
         required = true,
         value_name = "CLIENT_ID_B",
         help_heading = "REQUIRED"
     )]
     client_id_b: String,
+
+    #[clap(long = "clear-past-blocks", required = false)]
+    clear_past_blocks: Option<u64>,
+
+    #[clap(long = "stop-after-blocks", required = false)]
+    stop_after_blocks: Option<u64>,
 }
 
-#[cgp_provider(CommandRunnerComponent)]
-impl<App, Args, Build, BiRelay, ChainA, ChainB> CommandRunner<App, Args> for RunStartRelayerCommand
+#[cgp_auto_getter]
+pub trait HasClearPacketFields {
+    fn clear_past_blocks(&self) -> &Option<u64>;
+
+    fn stop_after_blocks(&self) -> &Option<u64>;
+}
+
+#[new_cgp_provider(CommandRunnerComponent)]
+impl<App, Args, Build, BiRelay, ChainA, ChainB, TagA, TagB> CommandRunner<App, Args>
+    for RunStartRelayerCommand<TagA, TagB>
 where
     App: CanLoadBuilder<Builder = Build>
         + HasLogger
@@ -71,12 +83,12 @@ where
         + CanRaiseAsyncError<Build::Error>
         + CanRaiseAsyncError<BiRelay::Error>
         + CanWrapError<&'static str>,
-    Args: Async,
+    Args: Async + HasClearPacketFields,
     App::Logger: CanLog<LevelInfo>,
-    Build: CanBuildBiRelay<Index<0>, Index<1>, BiRelay = BiRelay>
-        + HasChainTypeAt<Index<0>, Chain = ChainA>
-        + HasChainTypeAt<Index<1>, Chain = ChainB>,
-    BiRelay: CanRun,
+    Build: CanBuildBiRelay<TagA, TagB, BiRelay = BiRelay>
+        + HasChainTypeAt<TagA, Chain = ChainA>
+        + HasChainTypeAt<TagB, Chain = ChainB>,
+    BiRelay: CanRun + CanAutoBiRelay,
     ChainA: HasChainIdType + HasClientIdType<ChainB>,
     ChainB: HasChainIdType + HasClientIdType<ChainA>,
 {
@@ -89,6 +101,9 @@ where
 
         let chain_id_b = app.parse_arg(args, PhantomData::<symbol!("chain_id_b")>)?;
         let client_id_b = app.parse_arg(args, PhantomData::<symbol!("client_id_b")>)?;
+
+        let clear_past_blocks = *args.clear_past_blocks();
+        let stop_after_blocks = *args.stop_after_blocks();
 
         let birelay = builder
             .build_birelay(&chain_id_a, &chain_id_b, &client_id_a, &client_id_b)
@@ -103,7 +118,7 @@ where
             .await;
 
         birelay
-            .run()
+            .auto_bi_relay(clear_past_blocks, stop_after_blocks)
             .await
             .map_err(|e| App::wrap_error("Relayer failed to start", App::raise_error(e)))?;
 

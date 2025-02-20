@@ -32,7 +32,7 @@ mod preset {
     use crate::relay::impls::packet_relayers::timeout_unordered::timeout_unordered_packet::BaseTimeoutUnorderedPacketRelayer;
     use crate::relay::impls::update_client::default::DefaultTargetUpdateClientMessageBuilder;
     use crate::relay::traits::auto_relayer::{
-        AutoRelayerComponent, AutoRelayerWithHeightsComponent,
+        AutoRelayerWithHeightsComponent, TargetAutoRelayerComponent,
     };
     use crate::relay::traits::channel::open_ack::ChannelOpenAckRelayerComponent;
     use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerComponent;
@@ -65,7 +65,7 @@ mod preset {
             TimeoutUnorderedPacketRelayerComponent: SkipClearedPacket<BaseTimeoutUnorderedPacketRelayer>,
             EventRelayerComponent: PacketEventRelayer,
             RunnerComponent: RelayBothTargets,
-            AutoRelayerComponent: AutoRelayStartingCurrentHeight,
+            TargetAutoRelayerComponent: AutoRelayStartingCurrentHeight,
             AutoRelayerWithHeightsComponent: RelayWithPolledEvents,
             ClientCreatorComponent: CreateClientWithChains,
             ChannelInitializerComponent: InitializeChannel,

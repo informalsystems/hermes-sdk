@@ -6,7 +6,7 @@ use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
-use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
+use hermes_relayer_components::birelay::traits::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;

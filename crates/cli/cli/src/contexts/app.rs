@@ -223,7 +223,7 @@ delegate_components! {
 
 delegate_components! {
     HermesCommandRunnerComponents {
-        StartRelayerArgs: RunStartRelayerCommand,
+        StartRelayerArgs: RunStartRelayerCommand<Index<0>, Index<1>>,
 
         QueryChainSubCommand: RunQueryChainSubCommand,
         QueryChainStatusArgs: RunQueryChainStatusCommand,
