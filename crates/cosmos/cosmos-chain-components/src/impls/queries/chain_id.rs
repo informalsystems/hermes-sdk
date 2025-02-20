@@ -50,7 +50,10 @@ where
 
         let channel_end_bytes = chain
             .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &latest_height)
-            .await?;
+            .await?
+            .ok_or_else(|| {
+                Chain::raise_error(format!("channel not found: {channel_id}/{port_id}"))
+            })?;
 
         let channel_end = ChannelEnd::decode_vec(&channel_end_bytes).map_err(Chain::raise_error)?;
 
@@ -73,7 +76,8 @@ where
 
         let connnection_end_bytes = chain
             .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), &latest_height)
-            .await?;
+            .await?
+            .ok_or_else(|| Chain::raise_error(format!("connection not found: {connection_id}")))?;
 
         let connection_end =
             ConnectionEnd::decode_vec(&connnection_end_bytes).map_err(Chain::raise_error)?;
