@@ -43,6 +43,7 @@ use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::chain::impls::types::poll_interval::FixedPollIntervalMillis;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
@@ -97,6 +98,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
 };
+use hermes_relayer_components::chain::traits::types::poll_interval::PollIntervalGetterComponent;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
@@ -176,6 +178,9 @@ delegate_components! {
             WasmClientCodeUploaderComponent,
         ]:
             WasmChainComponents,
+
+        PollIntervalGetterComponent:
+            FixedPollIntervalMillis<200>,
     }
 }
 
