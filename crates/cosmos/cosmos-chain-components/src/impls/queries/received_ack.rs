@@ -42,6 +42,6 @@ where
 
         // Once a packet has been cleared, the chain would have removed its packet commitment
 
-        Ok(commitment.is_empty())
+        Ok(commitment.is_none())
     }
 }

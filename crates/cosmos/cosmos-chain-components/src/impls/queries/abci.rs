@@ -48,7 +48,7 @@ where
         path: &str,
         data: &[u8],
         height: &Height,
-    ) -> Result<Vec<u8>, Chain::Error> {
+    ) -> Result<Option<Vec<u8>>, Chain::Error> {
         let tm_height =
             TendermintHeight::try_from(height.revision_height()).map_err(Chain::raise_error)?;
         let response = chain
@@ -61,7 +61,11 @@ where
             return Err(Chain::raise_error(AbciQueryError { response }));
         }
 
-        Ok(response.value)
+        if response.value.is_empty() {
+            Ok(None)
+        } else {
+            Ok(Some(response.value))
+        }
     }
 
     async fn query_abci_with_proofs(
@@ -69,7 +73,7 @@ where
         path: &str,
         data: &[u8],
         query_height: &Height,
-    ) -> Result<(Vec<u8>, Chain::CommitmentProof), Chain::Error> {
+    ) -> Result<(Option<Vec<u8>>, Chain::CommitmentProof), Chain::Error> {
         let tm_height = TendermintHeight::try_from(query_height.revision_height())
             .map_err(Chain::raise_error)?;
         let response = chain
@@ -102,7 +106,11 @@ where
             proof_height,
         };
 
-        Ok((response.value, commitment_proof))
+        if response.value.is_empty() {
+            Ok((None, commitment_proof))
+        } else {
+            Ok((Some(response.value), commitment_proof))
+        }
     }
 }
 

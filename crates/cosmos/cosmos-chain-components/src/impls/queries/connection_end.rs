@@ -24,6 +24,7 @@ where
     Chain: HasConnectionEndType<Counterparty, ConnectionEnd = ConnectionEnd>
         + HasIbcChainTypes<Counterparty, Height = Height, ConnectionId = ConnectionId>
         + CanQueryAbci
+        + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<TendermintProtoError>,
 {
     async fn query_connection_end(
@@ -35,7 +36,10 @@ where
 
         let connnection_end_bytes = chain
             .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), height)
-            .await?;
+            .await?
+            .ok_or_else(|| {
+                Chain::raise_error(format!("connection end not found: {connection_id}"))
+            })?;
 
         let connection_end =
             ConnectionEnd::decode_vec(&connnection_end_bytes).map_err(Chain::raise_error)?;
@@ -52,6 +56,7 @@ where
         + HasIbcChainTypes<Counterparty, Height = Height, ConnectionId = ConnectionId>
         + HasCommitmentProofType
         + CanQueryAbci
+        + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<TendermintProtoError>,
 {
     async fn query_connection_end_with_proofs(
@@ -64,6 +69,10 @@ where
         let (connnection_end_bytes, proof) = chain
             .query_abci_with_proofs(IBC_QUERY_PATH, connection_path.as_bytes(), height)
             .await?;
+
+        let connnection_end_bytes = connnection_end_bytes.ok_or_else(|| {
+            Chain::raise_error(format!("connection end not found: {connection_id}"))
+        })?;
 
         let connection_end =
             ConnectionEnd::decode_vec(&connnection_end_bytes).map_err(Chain::raise_error)?;
