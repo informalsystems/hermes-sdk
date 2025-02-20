@@ -1826,6 +1826,8 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-tracing-logging-components",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

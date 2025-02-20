@@ -31,16 +31,16 @@ use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 #[cgp_context(HermesLoggerComponents)]
 pub struct HermesLogger;
 
-pub struct HermesLogHandlers;
+pub struct HandleHermesLogs;
 
 delegate_components! {
     HermesLoggerComponents {
-        LoggerComponent: DelegateLogger<HermesLogHandlers>,
+        LoggerComponent: DelegateLogger<HandleHermesLogs>,
     }
 }
 
 delegate_components! {
-    HermesLogHandlers {
+    HandleHermesLogs {
         [
             (),
             LevelTrace,
