@@ -1,6 +1,5 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
-use core::time::Duration;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
@@ -52,6 +51,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_logging_components::traits::logger::CanLog;
+use hermes_relayer_components::chain::impls::types::poll_interval::FixedPollIntervalMillis;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     HasCommitmentPrefixType, HasIbcCommitmentPrefix, IbcCommitmentPrefixGetter,
     IbcCommitmentPrefixGetterComponent,
@@ -90,9 +90,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::chain::traits::types::poll_interval::{
-    PollIntervalGetter, PollIntervalGetterComponent,
-};
+use hermes_relayer_components::chain::traits::types::poll_interval::PollIntervalGetterComponent;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
@@ -196,19 +194,15 @@ delegate_components! {
             WasmClientCodeUploaderComponent,
         ]:
             WasmChainComponents,
+
+        PollIntervalGetterComponent:
+            FixedPollIntervalMillis<200>,
     }
 }
 
 delegate_components! {
     DelegateCosmosChainComponents {
         CosmosChain: CosmosToCosmosComponents,
-    }
-}
-
-#[cgp_provider(PollIntervalGetterComponent)]
-impl PollIntervalGetter<CosmosChain> for CosmosChainContextComponents {
-    fn poll_interval(chain: &CosmosChain) -> &Duration {
-        &chain.chain_config.poll_interval
     }
 }
 

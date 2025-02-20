@@ -32,7 +32,7 @@ where
             if &current_height >= height {
                 break;
             } else {
-                runtime.sleep(*chain.poll_interval()).await;
+                runtime.sleep(chain.poll_interval()).await;
             }
         }
 

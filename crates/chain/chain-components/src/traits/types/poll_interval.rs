@@ -7,5 +7,5 @@ use cgp::prelude::*;
     context: Chain,
   }]
 pub trait HasPollInterval {
-    fn poll_interval(&self) -> &Duration;
+    fn poll_interval(&self) -> Duration;
 }
