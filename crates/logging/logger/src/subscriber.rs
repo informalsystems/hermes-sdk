@@ -1,10 +1,12 @@
-use tracing::{Level, Subscriber};
+use tracing::Level;
 use tracing_subscriber::filter::{LevelFilter, Targets};
-use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::fmt::Layer;
+use tracing_subscriber::layer::{Layered, SubscriberExt};
 use tracing_subscriber::util::SubscriberInitExt;
-use tracing_subscriber::{fmt, EnvFilter};
+use tracing_subscriber::{fmt, EnvFilter, Registry};
 
-pub fn build_tracing_subscriber() -> impl Subscriber + Send + Sync {
+pub fn build_tracing_subscriber(
+) -> Layered<EnvFilter, Layered<Targets, Layered<Layer<Registry>, Registry>>> {
     let env_filter = EnvFilter::builder()
         .with_default_directive(LevelFilter::INFO.into())
         .from_env_lossy();

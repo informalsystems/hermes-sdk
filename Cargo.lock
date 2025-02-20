@@ -1509,6 +1509,7 @@ dependencies = [
  "eyre",
  "hermes-cosmos-relayer",
  "hermes-error",
+ "hermes-logger",
  "hermes-runtime",
  "oneline-eyre",
  "serde",
