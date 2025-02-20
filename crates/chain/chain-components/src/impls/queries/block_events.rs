@@ -10,13 +10,14 @@ use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::traits::queries::block_events::{BlockEventsQuerier, BlockEventsQuerierComponent};
 use crate::traits::queries::chain_status::CanQueryChainHeight;
+use crate::traits::types::poll_interval::HasPollInterval;
 
 pub struct WaitBlockHeightAndQueryEvents<InQuerier>(pub PhantomData<InQuerier>);
 
 #[cgp_provider(BlockEventsQuerierComponent)]
 impl<Chain, InQuerier> BlockEventsQuerier<Chain> for WaitBlockHeightAndQueryEvents<InQuerier>
 where
-    Chain: HasRuntime + HasEventType + CanQueryChainHeight,
+    Chain: HasRuntime + HasEventType + CanQueryChainHeight + HasPollInterval,
     InQuerier: BlockEventsQuerier<Chain>,
     Chain::Runtime: CanSleep,
 {
@@ -31,7 +32,7 @@ where
             if &current_height >= height {
                 break;
             } else {
-                runtime.sleep(Duration::from_millis(200)).await;
+                runtime.sleep(*chain.poll_interval()).await;
             }
         }
 

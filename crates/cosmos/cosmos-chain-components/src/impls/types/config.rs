@@ -35,6 +35,8 @@ pub struct CosmosChainConfig {
 
     pub compat_mode: Option<String>,
     pub extension_options: Vec<Any>,
+
+    pub poll_interval: Duration,
 }
 
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
