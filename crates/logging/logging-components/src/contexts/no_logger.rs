@@ -4,7 +4,7 @@ use crate::impls::global::GetGlobalLogger;
 use crate::impls::ignore::IgnoreLog;
 use crate::traits::has_logger::{
     GlobalLoggerGetter, GlobalLoggerGetterComponent, HasLoggerType, LoggerGetterComponent,
-    LoggerTypeComponent, ProvideLoggerType,
+    LoggerTypeProvider, LoggerTypeProviderComponent,
 };
 use crate::traits::logger::{CanLog, LoggerComponent};
 
@@ -21,8 +21,8 @@ where
 
 impl<Details> CanUseNoLogger<Details> for NoLogger where Details: Send + Sync {}
 
-#[cgp_provider(LoggerTypeComponent)]
-impl<Context> ProvideLoggerType<Context> for ProvideNoLogger
+#[cgp_provider(LoggerTypeProviderComponent)]
+impl<Context> LoggerTypeProvider<Context> for ProvideNoLogger
 where
     Context: Async,
 {

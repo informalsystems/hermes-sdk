@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_logging_components::contexts::no_logger::ProvideNoLogger;
-use hermes_logging_components::traits::has_logger::{GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent};
+use hermes_logging_components::traits::has_logger::{GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent};
 use hermes_relayer_components::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use hermes_relayer_components::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use hermes_relayer_components::relay::impls::update_client::skip::SkipUpdateClient;
@@ -23,7 +23,7 @@ pub use crate::relayer_mock::contexts::relay::MockRelayComponents;
 delegate_components! {
     MockRelayComponents {
         [
-            LoggerTypeComponent,
+            LoggerTypeProviderComponent,
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:

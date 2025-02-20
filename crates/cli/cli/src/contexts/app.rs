@@ -90,9 +90,9 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_error::traits::wrap::WrapError;
 use hermes_error::types::{Error, HermesError};
-use hermes_logger::ProvideHermesLogger;
+use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -131,11 +131,11 @@ delegate_components! {
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
-            LoggerTypeComponent,
+            LoggerTypeProviderComponent,
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideHermesLogger,
+            UseHermesLogger,
         ConfigTypeComponent:
             WithType<RelayerConfig>,
         BootstrapTypeComponent:

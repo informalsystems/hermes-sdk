@@ -9,9 +9,9 @@ use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
-use hermes_logger::{HermesLogger, ProvideHermesLogger};
+use hermes_logger::{HermesLogger, UseHermesLogger};
 use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
@@ -80,11 +80,11 @@ delegate_components! {
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
-            LoggerTypeComponent,
+            LoggerTypeProviderComponent,
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideHermesLogger,
+            UseHermesLogger,
         [
             ChainTypeAtComponent<Src>,
             ChainGetterAtComponent<Src>,
