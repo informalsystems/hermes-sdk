@@ -1,5 +1,3 @@
-use core::fmt::Display;
-
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::{
     PacketReceiptQuerier, PacketReceiptQuerierComponent,
@@ -19,9 +17,9 @@ where
     Chain: HasIbcChainTypes<Counterparty>
         + HasPacketReceiptType<Counterparty, PacketReceipt = Vec<u8>>
         + HasCommitmentProofType
-        + CanQueryAbci,
+        + CanQueryAbci
+        + CanRaiseAsyncError<String>,
     Counterparty: HasIbcChainTypes<Chain>,
-    Chain::ChannelId: Display,
 {
     async fn query_packet_receipt(
         chain: &Chain,
@@ -36,6 +34,10 @@ where
         let (receipt, proof) = chain
             .query_abci_with_proofs(IBC_QUERY_PATH, receipt_path.as_bytes(), height)
             .await?;
+
+        let receipt = receipt.ok_or_else(|| {
+            Chain::raise_error(format!("packet receipt not found at: {receipt_path}"))
+        })?;
 
         // TODO: Use a more precise `PacketReceipt` type, i.e. `bool`
 

@@ -21,7 +21,7 @@ where
         + HasAcknowledgementType<Counterparty, Acknowledgement = Vec<u8>>
         + HasCommitmentProofType
         + CanQueryAbci
-        + HasAsyncErrorType,
+        + CanRaiseAsyncError<String>,
     Counterparty: HasIbcChainTypes<Chain>,
     Chain::ChannelId: Display,
 {
@@ -37,6 +37,8 @@ where
         let (ack, proof) = chain
             .query_abci_with_proofs(IBC_QUERY_PATH, ack_path.as_bytes(), height)
             .await?;
+
+        let ack = ack.ok_or_else(|| Chain::raise_error(format!("ack not found at: {ack_path}")))?;
 
         Ok((ack, proof))
     }

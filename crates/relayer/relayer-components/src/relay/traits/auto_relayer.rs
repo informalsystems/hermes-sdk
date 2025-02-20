@@ -5,15 +5,17 @@ use hermes_chain_components::types::aliases::HeightOf;
 use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
 #[cgp_component {
-    provider: AutoRelayer,
+    name: TargetAutoRelayerComponent,
+    provider: TargetAutoRelayer,
     context: Relay,
 }]
 #[async_trait]
-pub trait CanAutoRelay<Target: Async>: HasAsyncErrorType {
+pub trait CanAutoRelayTarget<Target: Async>: HasAsyncErrorType {
     async fn auto_relay(&self, target: Target) -> Result<(), Self::Error>;
 }
 
 #[cgp_component {
+    name: AutoRelayerWithHeightsComponent,
     provider: AutoRelayerWithHeights,
     context: Relay,
 }]

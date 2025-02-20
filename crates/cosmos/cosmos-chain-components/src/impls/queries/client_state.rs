@@ -32,6 +32,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + HasRawClientStateType<RawClientState = Any>
         + CanQueryAbci
+        + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<DecodeError>,
 {
     async fn query_raw_client_state(
@@ -43,7 +44,8 @@ where
 
         let client_state_bytes = chain
             .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), height)
-            .await?;
+            .await?
+            .ok_or_else(|| Chain::raise_error(format!("client state not found: {client_id}")))?;
 
         let client_state_any =
             Message::decode(client_state_bytes.as_ref()).map_err(Chain::raise_error)?;
@@ -59,6 +61,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + HasRawClientStateType<RawClientState = Any>
         + CanQueryAbci
+        + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<DecodeError>,
 {
     async fn query_raw_client_state_with_proofs(
@@ -71,6 +74,9 @@ where
         let (client_state_bytes, proofs) = chain
             .query_abci_with_proofs(IBC_QUERY_PATH, client_state_path.as_bytes(), height)
             .await?;
+
+        let client_state_bytes = client_state_bytes
+            .ok_or_else(|| Chain::raise_error(format!("client state not found: {client_id}")))?;
 
         let client_state_any =
             Message::decode(client_state_bytes.as_ref()).map_err(Chain::raise_error)?;
@@ -86,8 +92,9 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + CanQueryAbci
         + HasRawClientStateType<RawClientState = Any>
-        + CanRaiseAsyncError<DecodeError>
-        + CanParseClientStateEntryToAny<Counterparty>,
+        + CanParseClientStateEntryToAny<Counterparty>
+        + CanRaiseAsyncError<&'static str>
+        + CanRaiseAsyncError<DecodeError>,
 {
     async fn query_all_raw_client_states(
         chain: &Chain,
@@ -104,7 +111,8 @@ where
 
         let response = chain
             .query_abci("/ibc.core.client.v1.Query/ClientStates", &data, height)
-            .await?;
+            .await?
+            .ok_or_else(|| Chain::raise_error("failed to query for client states"))?;
 
         let response: QueryClientStatesResponse =
             QueryClientStatesResponse::decode(response.as_ref()).map_err(Chain::raise_error)?;

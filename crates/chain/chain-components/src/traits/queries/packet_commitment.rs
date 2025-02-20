@@ -27,5 +27,5 @@ pub trait CanQueryPacketCommitment<Counterparty>:
         port_id: &Self::PortId,
         sequence: &Self::Sequence,
         height: &Self::Height,
-    ) -> Result<(Self::PacketCommitment, Self::CommitmentProof), Self::Error>;
+    ) -> Result<(Option<Self::PacketCommitment>, Self::CommitmentProof), Self::Error>;
 }

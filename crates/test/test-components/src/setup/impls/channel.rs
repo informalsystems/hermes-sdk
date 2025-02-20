@@ -4,7 +4,7 @@ use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
 use cgp::core::field::Index;
 use cgp::core::Async;
 use cgp::prelude::*;
-use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
+use hermes_relayer_components::birelay::traits::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};

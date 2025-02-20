@@ -99,7 +99,10 @@ impl CommandRunner<HermesApp> for QueryChannelEnds {
 
         let channel_end_bytes: Vec<u8> = chain
             .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &query_height)
-            .await?;
+            .await?
+            .ok_or_else(|| {
+                HermesApp::raise_error(format!("channel not found: {channel_id}/{port_id}"))
+            })?;
 
         let channel_end = ChannelEnd::decode_vec(&channel_end_bytes)?;
 
@@ -134,7 +137,10 @@ impl CommandRunner<HermesApp> for QueryChannelEnds {
 
         let client_state_bytes = chain
             .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), &query_height)
-            .await?;
+            .await?
+            .ok_or_else(|| {
+                HermesApp::raise_error(format!("client state not found: {client_id}"))
+            })?;
 
         let any_client_state = Any {
             type_url: TENDERMINT_CLIENT_STATE_TYPE_URL.to_owned(),

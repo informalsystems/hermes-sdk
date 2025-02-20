@@ -30,7 +30,7 @@ where
         port_id: &Chain::PortId,
         sequence: &Chain::Sequence,
         height: &Chain::Height,
-    ) -> Result<(Chain::PacketCommitment, Chain::CommitmentProof), Chain::Error> {
+    ) -> Result<(Option<Chain::PacketCommitment>, Chain::CommitmentProof), Chain::Error> {
         let commitment_path =
             format!("commitments/ports/{port_id}/channels/{channel_id}/sequences/{sequence}");
 

@@ -23,6 +23,7 @@ where
     Chain: HasChannelEndType<Counterparty, ChannelEnd = ChannelEnd>
         + HasIbcChainTypes<Counterparty, Height = Height, ChannelId = ChannelId, PortId = PortId>
         + CanQueryAbci
+        + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<TendermintProtoError>,
 {
     async fn query_channel_end(
@@ -35,7 +36,10 @@ where
 
         let channel_end_bytes = chain
             .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), height)
-            .await?;
+            .await?
+            .ok_or_else(|| {
+                Chain::raise_error(format!("channel not found: {channel_id}/{port_id}"))
+            })?;
 
         let channel_end = ChannelEnd::decode_vec(&channel_end_bytes).map_err(Chain::raise_error)?;
 
@@ -51,6 +55,7 @@ where
         + HasIbcChainTypes<Counterparty, Height = Height, ChannelId = ChannelId, PortId = PortId>
         + HasCommitmentProofType
         + CanQueryAbci
+        + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<TendermintProtoError>,
 {
     async fn query_channel_end_with_proofs(
@@ -64,6 +69,10 @@ where
         let (channel_end_bytes, proof) = chain
             .query_abci_with_proofs(IBC_QUERY_PATH, channel_end_path.as_bytes(), height)
             .await?;
+
+        let channel_end_bytes = channel_end_bytes.ok_or_else(|| {
+            Chain::raise_error(format!("channel not found: {channel_id}/{port_id}"))
+        })?;
 
         let channel_end = ChannelEnd::decode_vec(&channel_end_bytes).map_err(Chain::raise_error)?;
 

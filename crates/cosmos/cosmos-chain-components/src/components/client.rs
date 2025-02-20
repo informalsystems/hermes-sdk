@@ -2,7 +2,9 @@
 mod preset {
     use cgp::core::component::UseDelegate;
     use cgp::prelude::*;
-    use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
+    use hermes_chain_type_components::traits::fields::height::{
+        HeightAdjusterComponent, HeightIncrementerComponent,
+    };
     use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
     use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
     use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
@@ -12,6 +14,7 @@ mod preset {
         RetryQueryBlockEvents, WaitBlockHeightAndQueryEvents,
     };
     use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
+    use hermes_relayer_components::chain::impls::queries::packet_is_cleared::QueryClearedPacketWithEmptyCommitment;
     use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
     use hermes_relayer_components::chain::traits::extract_data::{
         EventExtractorComponent, ExtractFromMessageResponseViaEvents,
@@ -164,7 +167,6 @@ mod preset {
     use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromAbci;
     use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
     use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
-    use crate::impls::queries::received_ack::QueryCosmosPacketIsCleared;
     use crate::impls::queries::received_packet::QueryCosmosPacketIsReceived;
     use crate::impls::queries::write_ack_event::QueryCosmosWriteAckEvent;
     use crate::impls::relay::packet_filter::FilterPacketWithConfig;
@@ -182,6 +184,7 @@ mod preset {
                 HeightTypeComponent,
                 HeightFieldComponent,
                 HeightIncrementerComponent,
+                HeightAdjusterComponent,
                 GenesisHeightGetterComponent,
                 TimeTypeComponent,
                 TimeMeasurerComponent,
@@ -291,7 +294,7 @@ mod preset {
             PacketIsReceivedQuerierComponent:
                 QueryCosmosPacketIsReceived,
             PacketIsClearedQuerierComponent:
-                QueryCosmosPacketIsCleared,
+                QueryClearedPacketWithEmptyCommitment,
 
             PacketCommitmentQuerierComponent:
                 QueryPacketCommitmentFromAbci,
