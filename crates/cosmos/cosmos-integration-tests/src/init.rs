@@ -14,7 +14,8 @@ use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;
 use tracing::level_filters::LevelFilter;
-use tracing::{info, Subscriber};
+use tracing::{info, Level, Subscriber};
+use tracing_subscriber::filter::Targets;
 use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{fmt, EnvFilter};
@@ -48,8 +49,11 @@ pub fn build_tracing_subscriber() -> impl Subscriber + Send + Sync {
         .with_default_directive(LevelFilter::INFO.into())
         .from_env_lossy();
 
+    let target_filter = Targets::new().with_target("hermes", Level::TRACE);
+
     tracing_subscriber::registry()
         .with(fmt::layer())
+        .with(target_filter)
         .with(env_filter)
 }
 
