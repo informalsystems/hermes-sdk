@@ -14,6 +14,7 @@ mod preset {
         RetryQueryBlockEvents, WaitBlockHeightAndQueryEvents,
     };
     use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
+    use hermes_relayer_components::chain::impls::queries::packet_is_cleared::QueryClearedPacketWithEmptyCommitment;
     use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
     use hermes_relayer_components::chain::traits::extract_data::{
         EventExtractorComponent, ExtractFromMessageResponseViaEvents,
@@ -166,7 +167,6 @@ mod preset {
     use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromAbci;
     use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
     use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
-    use crate::impls::queries::received_ack::QueryCosmosPacketIsCleared;
     use crate::impls::queries::received_packet::QueryCosmosPacketIsReceived;
     use crate::impls::queries::write_ack_event::QueryCosmosWriteAckEvent;
     use crate::impls::relay::packet_filter::FilterPacketWithConfig;
@@ -294,7 +294,7 @@ mod preset {
             PacketIsReceivedQuerierComponent:
                 QueryCosmosPacketIsReceived,
             PacketIsClearedQuerierComponent:
-                QueryCosmosPacketIsCleared,
+                QueryClearedPacketWithEmptyCommitment,
 
             PacketCommitmentQuerierComponent:
                 QueryPacketCommitmentFromAbci,
