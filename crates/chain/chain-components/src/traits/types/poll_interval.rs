@@ -1,3 +1,4 @@
+use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::prelude::*;
@@ -8,4 +9,14 @@ use cgp::prelude::*;
   }]
 pub trait HasPollInterval {
     fn poll_interval(&self) -> Duration;
+}
+
+#[cgp_provider(PollIntervalGetterComponent)]
+impl<Context, Tag> PollIntervalGetter<Context> for UseField<Tag>
+where
+    Context: HasField<Tag, Value = Duration>,
+{
+    fn poll_interval(context: &Context) -> Duration {
+        *context.get_field(PhantomData)
+    }
 }
