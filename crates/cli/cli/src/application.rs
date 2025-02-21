@@ -12,7 +12,7 @@ use crate::Result;
 
 #[derive(clap::Parser)]
 pub struct HermesCli {
-    #[clap(short = 'c', long = "config", default_value = "config.toml")]
+    #[clap(short = 'c', long = "config")]
     pub config_path: PathBuf,
 
     #[clap(long)]
