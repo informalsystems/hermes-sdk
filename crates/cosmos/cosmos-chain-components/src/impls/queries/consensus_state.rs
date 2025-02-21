@@ -24,6 +24,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + HasRawConsensusStateType<RawConsensusState = Any>
         + CanQueryAbci
+        + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<DecodeError>,
     Counterparty: HasHeightFields,
 {
@@ -45,7 +46,8 @@ where
                 consensus_state_path.as_bytes(),
                 query_height,
             )
-            .await?;
+            .await?
+            .ok_or_else(|| Chain::raise_error(format!("consensus state not found: {client_id}")))?;
 
         let consensus_state_any =
             Message::decode(consensus_state_bytes.as_ref()).map_err(Chain::raise_error)?;
@@ -62,6 +64,7 @@ where
         + HasRawConsensusStateType<RawConsensusState = Any>
         + HasCommitmentProofType
         + CanQueryAbci
+        + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<DecodeError>,
     Counterparty: HasHeightFields,
 {
@@ -84,6 +87,9 @@ where
                 query_height,
             )
             .await?;
+
+        let consensus_state_bytes = consensus_state_bytes
+            .ok_or_else(|| Chain::raise_error(format!("consensus state not found: {client_id}")))?;
 
         let consensus_state_any =
             Message::decode(consensus_state_bytes.as_ref()).map_err(Chain::raise_error)?;

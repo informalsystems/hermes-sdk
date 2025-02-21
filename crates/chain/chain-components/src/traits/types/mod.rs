@@ -18,6 +18,7 @@ pub mod ibc;
 pub mod ibc_events;
 pub mod message;
 pub mod packets;
+pub mod poll_interval;
 pub mod proof;
 pub mod status;
 pub mod timestamp;
