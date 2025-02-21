@@ -219,13 +219,13 @@ impl ChainProcessTaker<CosmosChainDriver> for CosmosChainDriverComponents {
 impl ConfigUpdater<CosmosChainDriver, RelayerConfig> for CosmosChainDriverComponents {
     fn update_config(
         chain_driver: &CosmosChainDriver,
-        _config: &mut RelayerConfig,
+        config: &mut RelayerConfig,
     ) -> Result<String, Error> {
         let chain_config_str = to_string_pretty(&chain_driver.chain.chain_config)?;
 
-        let _chain_config = chain_driver.chain.chain_config.clone();
+        let chain_config = chain_driver.chain.chain_config.clone();
 
-        //config.chains.push(ChainConfig::CosmosSdk(chain_config));
+        config.chains.push(chain_config);
 
         Ok(chain_config_str)
     }
