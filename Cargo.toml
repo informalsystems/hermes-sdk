@@ -113,7 +113,7 @@ futures-channel                 = { version = "0.3.31", default-features = false
 generic-array                   = { version = "0.14.7" }
 eyre                            = { version = "0.6.12" }
 stable-eyre                     = { version = "0.2.2" }
-itertools                       = { version = "0.13" }
+itertools                       = { version = "0.14" }
 http                            = { version = "1.0.0" }
 humantime                       = { version = "2.1.0" }
 flex-error                      = { version = "0.4.4", default-features = false }
