@@ -1504,7 +1504,6 @@ dependencies = [
  "http 1.2.0",
  "humantime",
  "ibc",
- "oneline-eyre",
  "prost",
  "serde",
  "serde_json",
@@ -1541,10 +1540,11 @@ dependencies = [
  "eyre",
  "hermes-cosmos-relayer",
  "hermes-error",
+ "hermes-logger",
  "hermes-runtime",
- "oneline-eyre",
  "serde",
  "serde_json",
+ "stable-eyre",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -1858,6 +1858,8 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-tracing-logging-components",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -3342,15 +3344,6 @@ name = "once_cell"
 version = "1.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "945462a4b81e43c4e3ba96bd7b49d834c6f61198356aa858733bc4acf3cbe62e"
-
-[[package]]
-name = "oneline-eyre"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "862f17a1e689c0ce8ca158ea48e776c5101c5d14fdfbed3e01c15f89604c3097"
-dependencies = [
- "eyre",
-]
 
 [[package]]
 name = "opaque-debug"

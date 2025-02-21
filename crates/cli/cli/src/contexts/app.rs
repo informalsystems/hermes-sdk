@@ -1,4 +1,5 @@
 use core::fmt::Debug;
+use core::time::Duration;
 use std::path::PathBuf;
 
 use cgp::core::component::{UseContext, UseDelegate};
@@ -90,15 +91,16 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_error::traits::wrap::WrapError;
 use hermes_error::types::{Error, HermesError};
-use hermes_logger::ProvideHermesLogger;
+use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
+use ibc::clients::tendermint::types::TrustThreshold;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
 use serde::Serialize;
@@ -131,11 +133,11 @@ delegate_components! {
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
-            LoggerTypeComponent,
+            LoggerTypeProviderComponent,
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideHermesLogger,
+            UseHermesLogger,
         ConfigTypeComponent:
             WithType<RelayerConfig>,
         BootstrapTypeComponent:
@@ -294,11 +296,14 @@ impl CreateClientOptionsParser<HermesApp, CreateClientArgs, Index<0>, Index<1>>
 
         let settings = CosmosCreateClientOptions {
             max_clock_drift,
-            trusting_period: args.trusting_period.map(|d| d.into()).unwrap_or_default(),
+            trusting_period: args
+                .trusting_period
+                .map(|d| d.into())
+                .unwrap_or_else(|| Duration::from_secs(14 * 24 * 3600)),
             trust_threshold: args
                 .trust_threshold
-                .map(|threshold| threshold.into())
-                .unwrap_or_default(),
+                .unwrap_or(TrustThreshold::TWO_THIRDS)
+                .into(),
         };
 
         Ok(((), settings))

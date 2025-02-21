@@ -13,6 +13,7 @@ description  = """
 
 [dependencies]
 hermes-runtime          = { workspace = true }
+hermes-logger           = { workspace = true }
 hermes-error            = { workspace = true }
 hermes-cosmos-relayer   = { workspace = true }
 
@@ -22,6 +23,6 @@ clap               = { workspace = true }
 tokio              = { workspace = true, features = ["full"] }
 tracing            = { workspace = true }
 tracing-subscriber = { workspace = true, features = ["env-filter", "json"] }
-oneline-eyre       = { workspace = true }
+stable-eyre        = { workspace = true }
 serde              = { workspace = true }
 serde_json         = { workspace = true, features = ["preserve_order"] }

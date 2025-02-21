@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 use cgp::prelude::*;
+use eyre::eyre;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_cli_components::traits::build::CanLoadBuilder;
@@ -19,7 +20,6 @@ use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
 use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc::primitives::proto::Protobuf;
-use oneline_eyre::eyre::eyre;
 use serde::{Deserialize, Serialize};
 
 use crate::contexts::app::HermesApp;

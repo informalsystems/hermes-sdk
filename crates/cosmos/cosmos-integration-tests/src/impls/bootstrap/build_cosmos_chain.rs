@@ -36,11 +36,9 @@ where
         chain_genesis_config: &Bootstrap::ChainGenesisConfig,
         relayer_wallet: &CosmosTestWallet,
     ) -> Result<CosmosChain, Bootstrap::Error> {
-        let relayer_chain_config = bootstrap.build_relayer_chain_config(
-            chain_node_config,
-            chain_genesis_config,
-            relayer_wallet,
-        )?;
+        let relayer_chain_config = bootstrap
+            .build_relayer_chain_config(chain_node_config, chain_genesis_config, relayer_wallet)
+            .await?;
 
         // TODO: Have a more reliable way to wait for the bootstrapped full node to
         // start up. If we don't wait, the building of the chain would fail during
@@ -50,10 +48,7 @@ where
 
         let chain = bootstrap
             .cosmos_builder()
-            .build_chain_with_config(
-                relayer_chain_config.clone(),
-                Some(&relayer_wallet.keypair.clone()),
-            )
+            .build_chain_with_config(relayer_chain_config.clone())
             .await
             .map_err(Bootstrap::raise_error)?;
 

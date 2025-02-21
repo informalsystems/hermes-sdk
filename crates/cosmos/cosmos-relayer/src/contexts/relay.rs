@@ -7,9 +7,9 @@ use cgp::core::field::{Index, UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_logger::ProvideHermesLogger;
+use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
 use hermes_relayer_components::components::default::relay::TargetAutoRelayerComponent;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
@@ -123,11 +123,11 @@ delegate_components! {
         ]:
             WithType<CosmosChain>,
         [
-            LoggerTypeComponent,
+            LoggerTypeProviderComponent,
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideHermesLogger,
+            UseHermesLogger,
         ChainGetterAtComponent<Index<0>>:
             UseField<symbol!("chain_a")>,
         ChainGetterAtComponent<Index<1>>:

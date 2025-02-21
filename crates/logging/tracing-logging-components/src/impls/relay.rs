@@ -30,6 +30,7 @@ where
 {
     async fn log(_logging: &Logging, message: &str, details: &LogSkipRelayLockedPacket<'a, Relay>) {
         trace!(
+            target: "hermes",
             packet = %details.packet,
             src_chain_id = %details.relay.src_chain().chain_id(),
             dst_chain_id = %details.relay.dst_chain().chain_id(),
@@ -49,6 +50,7 @@ where
 {
     async fn log(_logging: &Logging, message: &str, details: &LogRelayPacketAction<'a, Relay>) {
         trace!(
+            target: "hermes",
             packet = %details.packet,
             src_chain_id = %details.relay.src_chain().chain_id(),
             dst_chain_id = %details.relay.dst_chain().chain_id(),
@@ -71,6 +73,7 @@ where
         match details.relay_status {
             RelayPacketStatus::Start => {
                 trace!(
+                    target: "hermes",
                     packet = %details.packet,
                     src_chain_id = %details.relay.src_chain().chain_id(),
                     dst_chain_id = %details.relay.dst_chain().chain_id(),
@@ -80,6 +83,7 @@ where
             }
             RelayPacketStatus::Successful => {
                 trace!(
+                    target: "hermes",
                     packet = %details.packet,
                     src_chain_id = %details.relay.src_chain().chain_id(),
                     dst_chain_id = %details.relay.dst_chain().chain_id(),
@@ -89,6 +93,7 @@ where
             }
             RelayPacketStatus::Error { error } => {
                 error!(
+                    target: "hermes",
                     packet = %details.packet,
                     src_chain_id = %details.relay.src_chain().chain_id(),
                     dst_chain_id = %details.relay.dst_chain().chain_id(),
@@ -116,6 +121,7 @@ where
         details: &LogSkipBuildUpdateClientMessage<'a, Relay, Target>,
     ) {
         trace!(
+            target: "hermes",
             target_chain_id = %details.relay.target_chain().chain_id(),
             counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
             target_height = %details.target_height,
@@ -145,6 +151,7 @@ where
                 target_height,
             } => {
                 trace!(
+                    target: "hermes",
                     target_chain_id = %relay.target_chain().chain_id(),
                     counterparty_chain_id = %relay.counterparty_chain().chain_id(),
                     %target_height,
@@ -157,6 +164,7 @@ where
                 current_height,
             } => {
                 trace!(
+                    target: "hermes",
                     target_chain_id = %relay.target_chain().chain_id(),
                     counterparty_chain_id = %relay.counterparty_chain().chain_id(),
                     %target_height,
@@ -182,6 +190,7 @@ where
         match details.log_level {
             LogLevel::Error => {
                 error!(
+                    target: "hermes",
                     target_chain_id = %details.relay.target_chain().chain_id(),
                     counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
                     details = %details.details,
@@ -190,6 +199,7 @@ where
             }
             _ => {
                 trace!(
+                    target: "hermes",
                     target_chain_id = %details.relay.target_chain().chain_id(),
                     counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
                     details = %details.details,

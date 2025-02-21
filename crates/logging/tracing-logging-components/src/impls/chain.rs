@@ -30,6 +30,7 @@ where
         details: &LogSendMessagesWithSignerAndNonce<'a, Chain>,
     ) {
         trace!(
+            target: "hermes",
             chain_id = %details.chain.chain_id(),
             nonce = ?details.nonce,
             signer = ?details.signer,
@@ -47,6 +48,7 @@ where
 {
     async fn log(_logging: &Logging, message: &str, details: &TxNoResponseError<'a, Chain>) {
         error!(
+            target: "hermes",
             chain_id = %details.chain.chain_id(),
             tx_hash = %details.tx_hash,
             wait_timeout = ?details.wait_timeout,
@@ -66,6 +68,7 @@ where
 {
     async fn log(_logging: &Logging, message: &str, details: &LogRetryQueryTxResponse<'a, Chain>) {
         debug!(
+            target: "hermes",
             chain_id = %details.chain.chain_id(),
             tx_hash = %details.tx_hash,
             elapsed = ?details.elapsed,

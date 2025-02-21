@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
+use eyre::eyre;
 use hermes_runtime::types::runtime::HermesRuntime;
-use oneline_eyre::eyre::eyre;
 
 use crate::application::log::{enable_ansi, install_logger};
 use crate::application::Application;
@@ -11,7 +11,7 @@ pub fn boot<A>() -> Result<()>
 where
     A: Application,
 {
-    oneline_eyre::install()?;
+    let _ = stable_eyre::install();
 
     let app = A::parse_from_env();
 

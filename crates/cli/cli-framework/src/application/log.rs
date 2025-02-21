@@ -1,28 +1,38 @@
+use tracing::level_filters::LevelFilter;
+use tracing::Level;
+use tracing_subscriber::filter::Targets;
+use tracing_subscriber::EnvFilter;
+
 /**
    Install the [`tracing_subscriber`] logger handlers so that logs will
    be displayed during test.
 */
 pub fn install_logger(with_color: bool, with_json: bool) {
-    use tracing::level_filters::LevelFilter;
+    use tracing_subscriber::fmt;
     use tracing_subscriber::layer::SubscriberExt;
     use tracing_subscriber::util::SubscriberInitExt;
-    use tracing_subscriber::{fmt, registry, EnvFilter};
 
-    // Use log level INFO by default if RUST_LOG is not set.
     let env_filter = EnvFilter::builder()
         .with_default_directive(LevelFilter::INFO.into())
         .from_env_lossy();
 
+    let target_filter = Targets::new().with_target("hermes", Level::TRACE);
+
+    let subscriber = tracing_subscriber::registry()
+        .with(target_filter)
+        .with(env_filter);
+
     if with_json {
         let fmt_layer = fmt::layer().with_target(false).json();
-        registry().with(env_filter).with(fmt_layer).init();
+
+        let _ = subscriber.with(fmt_layer).try_init();
     } else {
         let fmt_layer = fmt::layer()
             .with_ansi(with_color)
             .with_target(false)
             .compact();
 
-        registry().with(env_filter).with(fmt_layer).init();
+        let _ = subscriber.with(fmt_layer).try_init();
     };
 }
 

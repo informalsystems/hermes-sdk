@@ -4,9 +4,7 @@ use std::collections::HashMap;
 
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_integration_tests::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use hermes_cosmos_integration_tests::init::{
-    build_tracing_subscriber, init_preset_bootstraps, init_test_runtime,
-};
+use hermes_cosmos_integration_tests::init::{init_preset_bootstraps, init_test_runtime};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_error::types::Error;
@@ -22,9 +20,6 @@ use ibc::core::host::types::identifiers::{ChannelId, PortId};
 
 #[test]
 fn packet_filter_test() -> Result<(), Error> {
-    let subscriber = build_tracing_subscriber();
-    let _ = tracing::subscriber::set_default(subscriber);
-
     let runtime = init_test_runtime();
 
     runtime.runtime.clone().block_on(async move {
@@ -95,9 +90,6 @@ fn packet_filter_test() -> Result<(), Error> {
 
 #[test]
 fn no_packet_filter_test() -> Result<(), Error> {
-    let subscriber = build_tracing_subscriber();
-    let _ = tracing::subscriber::set_default(subscriber);
-
     let runtime = init_test_runtime();
 
     runtime.runtime.clone().block_on(async move {

@@ -90,7 +90,6 @@ clap                            = { version = "4.5.20" }
 dirs-next                       = { version = "2.0.0" }
 num-bigint                      = { version = "0.4" }
 num-rational                    = { version = "0.4.1" }
-oneline-eyre                    = { version = "0.1.0" }
 prost                           = { version = "0.13.3" }
 prost-types                     = { version = "0.13.3" }
 reqwest                         = { version = "0.12.9", features = ["json"] }
@@ -113,6 +112,7 @@ futures-util                    = { version = "0.3.30", default-features = false
 futures-channel                 = { version = "0.3.31", default-features = false }
 generic-array                   = { version = "0.14.7" }
 eyre                            = { version = "0.6.12" }
+stable-eyre                     = { version = "0.2.2" }
 itertools                       = { version = "0.13" }
 http                            = { version = "1.0.0" }
 humantime                       = { version = "2.1.0" }
