@@ -3,6 +3,7 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 use cgp::prelude::*;
+use eyre::{eyre, WrapErr};
 use hdpath::StandardHDPath;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_components::traits::command::CommandRunnerComponent;
@@ -12,8 +13,6 @@ use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_cosmos_chain_components::types::key_types::keyring::KeyRing;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use ibc::core::host::types::identifiers::ChainId;
-use oneline_eyre::eyre;
-use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
 
 use crate::contexts::app::HermesApp;
