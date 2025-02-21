@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 use core::marker::PhantomData;
 use core::ops::Deref;
 use std::collections::HashMap;
-use std::fs::{self, File};
+use std::fs::File;
 use std::str::FromStr;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
@@ -167,16 +167,14 @@ impl CosmosBuilder {
             Report::msg(format!("missing configuration for chain ID `{chain_id}`"))
         })?;
 
-        self.build_chain_with_config(chain_config, self.key_map.get(chain_id))
-            .await
+        self.build_chain_with_config(chain_config).await
     }
 
     pub async fn build_chain_with_config(
         &self,
         chain_config: CosmosChainConfig,
-        m_keypair: Option<&Secp256k1KeyPair>,
     ) -> Result<CosmosChain, Error> {
-        let key = get_keypair(&chain_config, m_keypair)?;
+        let key = get_keypair(&chain_config)?;
 
         let mut rpc_client = HttpClient::new(chain_config.rpc_addr.clone())?;
 
@@ -226,10 +224,7 @@ impl CosmosBuilder {
     }
 }
 
-pub fn get_keypair(
-    chain_config: &CosmosChainConfig,
-    m_keypair: Option<&Secp256k1KeyPair>,
-) -> Result<Secp256k1KeyPair, Error> {
+pub fn get_keypair(chain_config: &CosmosChainConfig) -> Result<Secp256k1KeyPair, Error> {
     let ks_folder = &chain_config.key_store_folder;
 
     let ks_folder = match ks_folder {
@@ -240,17 +235,9 @@ pub fn get_keypair(
             home.join(KEYSTORE_DEFAULT_FOLDER)
         }
     };
-    // Create hermes_keyring folder if it does not exist
-    fs::create_dir_all(&ks_folder)?;
 
     let mut filename = ks_folder.join(chain_config.key_name.clone());
     filename.set_extension(KEYSTORE_FILE_EXTENSION);
-
-    let file = File::create(filename.clone())?;
-
-    if let Some(keypair) = m_keypair {
-        serde_json::to_writer_pretty(file, &keypair)?;
-    }
 
     let file = File::open(&filename)?;
 

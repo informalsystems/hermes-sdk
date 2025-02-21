@@ -15,6 +15,7 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Has
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
@@ -41,9 +42,10 @@ where
         + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasChainType<Chain = Chain>
         + CanRaiseAsyncError<TendermintRpcError>
+        + CanRaiseAsyncError<serde_json::Error>
         + CanRaiseAsyncError<ErrorOf<Bootstrap::Runtime>>,
     Chain: HasWalletType<Wallet = CosmosTestWallet>,
-    Bootstrap::Runtime: HasFilePathType<FilePath = PathBuf> + CanWriteStringToFile,
+    Bootstrap::Runtime: HasFilePathType<FilePath = PathBuf> + CanWriteStringToFile + CanCreateDir,
 {
     async fn build_relayer_chain_config(
         bootstrap: &Bootstrap,
@@ -82,15 +84,25 @@ where
         let key_name = relayer_wallet.id.clone();
         let key_store_folder = chain_node_config.chain_home_dir.join("hermes_keyring");
 
-        let mut file_path = key_store_folder.join(key_name.clone());
-        file_path.set_extension(KEYSTORE_FILE_EXTENSION);
+        {
+            let runtime = bootstrap.runtime();
 
-        let keypair_str = serde_json::to_string_pretty(keypair).unwrap();
-        bootstrap
-            .runtime()
-            .write_string_to_file(&file_path, &keypair_str)
-            .await
-            .map_err(Bootstrap::raise_error)?;
+            runtime
+                .create_dir(&key_store_folder)
+                .await
+                .map_err(Bootstrap::raise_error)?;
+
+            let mut file_path = key_store_folder.join(key_name.clone());
+            file_path.set_extension(KEYSTORE_FILE_EXTENSION);
+
+            let keypair_str =
+                serde_json::to_string_pretty(keypair).map_err(Bootstrap::raise_error)?;
+
+            runtime
+                .write_string_to_file(&file_path, &keypair_str)
+                .await
+                .map_err(Bootstrap::raise_error)?;
+        }
 
         let relayer_chain_config = CosmosChainConfig {
             id: chain_node_config.chain_id.to_string(),

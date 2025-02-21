@@ -48,10 +48,7 @@ where
 
         let chain = bootstrap
             .cosmos_builder()
-            .build_chain_with_config(
-                relayer_chain_config.clone(),
-                Some(&relayer_wallet.keypair.clone()),
-            )
+            .build_chain_with_config(relayer_chain_config.clone())
             .await
             .map_err(Bootstrap::raise_error)?;
 
