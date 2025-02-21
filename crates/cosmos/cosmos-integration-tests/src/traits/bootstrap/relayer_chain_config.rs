@@ -12,12 +12,13 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
   provider: RelayerChainConfigBuilder,
   context: Bootstrap,
 }]
+#[async_trait]
 pub trait CanBuildRelayerChainConfig:
     HasChainNodeConfigType + HasChainGenesisConfigType + HasChainType + HasAsyncErrorType
 where
     Self::Chain: HasWalletType,
 {
-    fn build_relayer_chain_config(
+    async fn build_relayer_chain_config(
         &self,
         chain_node_config: &Self::ChainNodeConfig,
         chain_genesis_config: &Self::ChainGenesisConfig,

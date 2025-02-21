@@ -1,9 +1,13 @@
 use core::str::FromStr;
 use core::time::Duration;
+use std::path::PathBuf;
 
+use cgp::core::error::ErrorOf;
+use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::{GasConfig, GasPrice};
+use hermes_cosmos_chain_components::types::key_types::secp256k1::KEYSTORE_FILE_EXTENSION;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
@@ -11,6 +15,8 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Has
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
@@ -27,16 +33,19 @@ pub struct BuildRelayerChainConfig;
 #[cgp_provider(RelayerChainConfigBuilderComponent)]
 impl<Bootstrap, Chain> RelayerChainConfigBuilder<Bootstrap> for BuildRelayerChainConfig
 where
-    Bootstrap: HasAccountPrefix
+    Bootstrap: HasRuntime
+        + HasAccountPrefix
         + HasCompatMode
         + HasDynamicGas
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
         + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasChainType<Chain = Chain>
-        + CanRaiseAsyncError<TendermintRpcError>,
+        + CanRaiseAsyncError<TendermintRpcError>
+        + CanRaiseAsyncError<ErrorOf<Bootstrap::Runtime>>,
     Chain: HasWalletType<Wallet = CosmosTestWallet>,
+    Bootstrap::Runtime: HasFilePathType<FilePath = PathBuf> + CanWriteStringToFile,
 {
-    fn build_relayer_chain_config(
+    async fn build_relayer_chain_config(
         bootstrap: &Bootstrap,
         chain_node_config: &CosmosChainNodeConfig,
         chain_genesis_config: &CosmosGenesisConfig,
@@ -69,6 +78,20 @@ where
             dynamic_gas_config: bootstrap.dynamic_gas().clone(),
         };
 
+        let keypair = &relayer_wallet.keypair;
+        let key_name = relayer_wallet.id.clone();
+        let key_store_folder = chain_node_config.chain_home_dir.join("hermes_keyring");
+
+        let mut file_path = key_store_folder.join(key_name.clone());
+        file_path.set_extension(KEYSTORE_FILE_EXTENSION);
+
+        let keypair_str = serde_json::to_string_pretty(keypair).unwrap();
+        bootstrap
+            .runtime()
+            .write_string_to_file(&file_path, &keypair_str)
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
         let relayer_chain_config = CosmosChainConfig {
             id: chain_node_config.chain_id.to_string(),
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))
@@ -77,8 +100,8 @@ where
                 .map_err(Bootstrap::raise_error)?,
             rpc_timeout: Duration::from_secs(10),
             account_prefix: bootstrap.account_prefix().into(),
-            key_name: relayer_wallet.id.clone(),
-            key_store_folder: Some(chain_node_config.chain_home_dir.join("hermes_keyring")),
+            key_name,
+            key_store_folder: Some(key_store_folder),
             store_prefix: "ibc".to_string(),
             max_msg_num: Default::default(),
             max_tx_size: Default::default(),
