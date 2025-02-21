@@ -29,7 +29,7 @@ mod preset {
     use crate::impls::transaction::encode_tx::EncodeCosmosTx;
     use crate::impls::transaction::estimate_fee::EstimateCosmosTxFee;
     use crate::impls::transaction::event::ParseCosmosTxResponseAsEvents;
-    use crate::impls::transaction::poll_timeout::DefaultPollTimeout;
+    use crate::impls::transaction::poll_timeout::FixedPollTimeoutSecs;
     use crate::impls::transaction::query_nonce::QueryCosmosAccount;
     use crate::impls::transaction::query_tx_response::QueryCosmosTxResponse;
     use crate::impls::transaction::submit_tx::BroadcastCosmosTx;
@@ -58,7 +58,7 @@ mod preset {
             ]:
                 DefaultTxComponents,
             PollTimeoutGetterComponent:
-                DefaultPollTimeout,
+                FixedPollTimeoutSecs<300>,
             TxMessageResponseParserComponent:
                 ParseCosmosTxResponseAsEvents,
             TxResponseQuerierComponent:
