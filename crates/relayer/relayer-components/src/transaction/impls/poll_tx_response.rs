@@ -1,7 +1,9 @@
 use core::fmt::Debug;
+use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::poll_interval::HasPollInterval;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -53,8 +55,16 @@ where
 }]
 pub trait HasPollTimeout {
     fn poll_timeout(&self) -> Duration;
+}
 
-    fn poll_backoff(&self) -> Duration;
+#[cgp_provider(PollTimeoutGetterComponent)]
+impl<Context, Tag> PollTimeoutGetter<Context> for UseField<Tag>
+where
+    Context: HasField<Tag, Value = Duration>,
+{
+    fn poll_timeout(context: &Context) -> Duration {
+        *context.get_field(PhantomData)
+    }
 }
 
 #[cgp_provider(TxResponsePollerComponent)]
@@ -62,6 +72,7 @@ impl<Chain> TxResponsePoller<Chain> for PollTxResponse
 where
     Chain: CanQueryTxResponse
         + HasPollTimeout
+        + HasPollInterval
         + HasRuntime
         + HasLogger
         + HasRetryableError
@@ -76,7 +87,7 @@ where
     ) -> Result<Chain::TxResponse, Chain::Error> {
         let runtime = chain.runtime();
         let wait_timeout = chain.poll_timeout();
-        let wait_backoff = chain.poll_backoff();
+        let wait_backoff = chain.poll_interval();
 
         let start_time = runtime.now();
 
