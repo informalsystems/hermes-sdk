@@ -31,9 +31,7 @@ impl TryFrom<Any> for SolomachineClientState {
         }
 
         match raw.type_url.as_str() {
-            SOLOMACHINE_CLIENT_STATE_TYPE_URL => {
-                decode_client_state(raw.value.deref()).map_err(Into::into)
-            }
+            SOLOMACHINE_CLIENT_STATE_TYPE_URL => decode_client_state(raw.value.deref()),
             _ => Err(eyre!("unknown client state: {}", raw.type_url).into()),
         }
     }
