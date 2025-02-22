@@ -1,7 +1,8 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientPayload;
-use hermes_cosmos_relayer::presets::chain::CreateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::create_client::{
+    CreateClientMessageBuilder, CreateClientMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
 };

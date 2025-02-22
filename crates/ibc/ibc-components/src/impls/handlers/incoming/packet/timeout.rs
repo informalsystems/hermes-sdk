@@ -4,7 +4,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::time::HasTimeType;
 
-use crate::components::chain::IncomingPacketHandlerComponent;
+use crate::components::chain::re_exports::IncomingPacketHandlerComponent;
 use crate::traits::fields::packet::header::timeout::HasPacketTimeout;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::timeout::CanCompareTimeoutTime;

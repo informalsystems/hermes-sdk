@@ -2,46 +2,56 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
-use hermes_chain_type_components::traits::types::event::HasEventType;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_cosmos_chain_components::components::client::{
-    MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
+use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
+use hermes_chain_type_components::traits::types::event::{EventTypeComponent, HasEventType};
+use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
+use hermes_chain_type_components::traits::types::message_response::{
+    HasMessageResponseType, MessageResponseTypeComponent,
 };
-use hermes_cosmos_relayer::presets::chain::{
-    AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
-    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
-    CommitmentPrefixTypeComponent, ConnectionOpenAckPayloadTypeComponent,
-    ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitEventComponent,
-    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
-    CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
-    CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
-    EventExtractorComponent, EventTypeComponent, InitChannelOptionsTypeComponent,
-    InitConnectionOptionsTypeComponent, MessageTypeComponent, ReceivePacketPayloadTypeComponent,
-    TimeoutUnorderedPacketPayloadTypeComponent, UpdateClientPayloadTypeComponent,
+use hermes_relayer_components::chain::traits::commitment_prefix::{
+    CommitmentPrefixTypeComponent, ProvideCommitmentPrefixType,
 };
-use hermes_relayer_components::chain::traits::commitment_prefix::ProvideCommitmentPrefixType;
-use hermes_relayer_components::chain::traits::extract_data::EventExtractor;
+use hermes_relayer_components::chain::traits::extract_data::{
+    EventExtractor, EventExtractorComponent,
+};
 use hermes_relayer_components::chain::traits::types::channel::{
-    ProvideChannelEndType, ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
-    ProvideChannelOpenTryPayloadType, ProvideInitChannelOptionsType,
+    ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
+    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
+    InitChannelOptionsTypeComponent, ProvideChannelEndType, ProvideChannelOpenAckPayloadType,
+    ProvideChannelOpenConfirmPayloadType, ProvideChannelOpenTryPayloadType,
+    ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
-    ProvideConnectionOpenInitPayloadType, ProvideConnectionOpenTryPayloadType,
-    ProvideInitConnectionOptionsType,
+    ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
+    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
+    InitConnectionOptionsTypeComponent, ProvideConnectionOpenAckPayloadType,
+    ProvideConnectionOpenConfirmPayloadType, ProvideConnectionOpenInitPayloadType,
+    ProvideConnectionOpenTryPayloadType, ProvideInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
+    CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
     ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
     ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasConnectionIdType};
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::ProvideConnectionOpenInitEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
+    ConnectionOpenInitEventComponent, ProvideConnectionOpenInitEvent,
+};
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
-use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
-use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
-use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
-use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::ack::{
+    AckPacketPayloadTypeComponent, ProvideAckPacketPayloadType,
+};
+use hermes_relayer_components::chain::traits::types::packets::receive::{
+    ProvideReceivePacketPayloadType, ReceivePacketPayloadTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::packets::timeout::{
+    ProvideTimeoutUnorderedPacketPayloadType, TimeoutUnorderedPacketPayloadTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::update_client::{
+    ProvideUpdateClientPayloadType, UpdateClientPayloadTypeComponent,
+};
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 

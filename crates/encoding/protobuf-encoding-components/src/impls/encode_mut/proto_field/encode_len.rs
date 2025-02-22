@@ -6,8 +6,7 @@ use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferTyp
 use prost::bytes::BufMut;
 use prost::encoding::{encode_key, encode_varint, encoded_len_varint, key_len, WireType};
 
-use crate::components::EncodedLengthGetterComponent;
-use crate::traits::length::EncodedLengthGetter;
+use crate::traits::length::{EncodedLengthGetter, EncodedLengthGetterComponent};
 
 pub struct EncodeProtoFieldWithKnownLength<const TAG: u32, InEncoder>(pub PhantomData<InEncoder>);
 

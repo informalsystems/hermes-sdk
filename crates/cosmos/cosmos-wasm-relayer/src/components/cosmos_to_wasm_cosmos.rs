@@ -1,13 +1,10 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_cosmos_chain_components::components::client::{
-        ClientStateFieldsComponent, ClientStateTypeComponent, ConsensusStateFieldComponent,
-        ConsensusStateTypeComponent, CreateClientPayloadBuilderComponent,
-        CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
-        UpdateClientPayloadBuilderComponent, UpdateClientPayloadTypeComponent,
+    use hermes_cosmos_chain_components::components::cosmos_to_cosmos::re_exports::*;
+    use hermes_cosmos_chain_components::components::cosmos_to_cosmos::{
+        with_cosmos_to_cosmos_components, CosmosToCosmosComponents,
     };
-    use hermes_cosmos_chain_components::components::cosmos_to_cosmos::*;
     use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
         ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
         ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,

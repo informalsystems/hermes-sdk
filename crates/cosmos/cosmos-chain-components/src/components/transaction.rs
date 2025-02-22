@@ -23,9 +23,7 @@ mod preset {
     use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
     use crate::impls::queries::eip::dispatch::DispatchQueryEip;
-    use crate::impls::transaction::convert_gas_to_fee::{
-        DynamicConvertCosmosGasToFee, StaticConvertCosmosGasToFee,
-    };
+    use crate::impls::transaction::convert_gas_to_fee::DynamicConvertCosmosGasToFee;
     use crate::impls::transaction::encode_tx::EncodeCosmosTx;
     use crate::impls::transaction::estimate_fee::EstimateCosmosTxFee;
     use crate::impls::transaction::event::ParseCosmosTxResponseAsEvents;

@@ -14,13 +14,10 @@ use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::presets::chain::{
-    ChannelEndQuerierComponent, ClientStateQuerierComponent, ConnectionEndQuerierComponent,
-    ConsensusStateQuerierComponent,
-};
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetterComponent, EncodingTypeComponent, HasDefaultEncoding,
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+    HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
@@ -37,13 +34,18 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
     CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
     CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
 };
-use hermes_relayer_components::chain::traits::queries::channel_end::ChannelEndQuerier;
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    ChannelEndQuerier, ChannelEndQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerier,
+    ClientStateQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerier;
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    ConnectionEndQuerier, ConnectionEndQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    CanQueryConsensusStateWithProofs, ConsensusStateQuerier,
+    CanQueryConsensusStateWithProofs, ConsensusStateQuerier, ConsensusStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdGetterComponent,

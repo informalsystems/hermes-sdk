@@ -1,12 +1,10 @@
 use cgp::prelude::*;
-use hermes_cosmos_relayer::presets::chain::{
-    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
-    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
-};
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
-    ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
-    ConnectionOpenInitMessageBuilder, ConnectionOpenTryMessageBuilder,
+    ConnectionOpenAckMessageBuilder, ConnectionOpenAckMessageBuilderComponent,
+    ConnectionOpenConfirmMessageBuilder, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilder, ConnectionOpenInitMessageBuilderComponent,
+    ConnectionOpenTryMessageBuilder, ConnectionOpenTryMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{

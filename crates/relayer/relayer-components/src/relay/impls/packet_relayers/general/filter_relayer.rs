@@ -2,10 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::components::default::relay::PacketRelayerComponent;
 use crate::relay::traits::chains::PacketOf;
 use crate::relay::traits::packet_filter::CanFilterRelayPackets;
-use crate::relay::traits::packet_relayer::PacketRelayer;
+use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent};
 
 pub struct FilterRelayer<InRelayer> {
     pub phantom: PhantomData<InRelayer>,

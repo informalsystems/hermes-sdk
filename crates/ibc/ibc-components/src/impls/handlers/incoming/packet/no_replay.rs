@@ -4,7 +4,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
-use crate::components::chain::IncomingPacketHandlerComponent;
+use crate::components::chain::re_exports::IncomingPacketHandlerComponent;
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::nonce::HasPacketNonce;

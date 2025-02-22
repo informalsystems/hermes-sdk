@@ -5,9 +5,8 @@ use ibc_proto::cosmos::base::v1beta1::DecProto;
 use prost::DecodeError;
 use subtle_encoding::base64;
 
-use crate::components::transaction::EipQuerierComponent;
 use crate::impls::queries::eip::types::{EipBaseFeeHTTPResult, EipQueryError};
-use crate::traits::eip::eip_query::EipQuerier;
+use crate::traits::eip::eip_query::{EipQuerier, EipQuerierComponent};
 use crate::traits::rpc_client::HasRpcClient;
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 

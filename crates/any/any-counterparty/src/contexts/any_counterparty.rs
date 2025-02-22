@@ -2,9 +2,7 @@ use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_components::encoding::components::{
-    CosmosClientEncodingComponents, DecodeBufferTypeComponent, EncodeBufferTypeComponent,
-};
+use hermes_cosmos_chain_components::encoding::components::CosmosClientEncodingComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
@@ -18,6 +16,8 @@ use hermes_encoding_components::traits::has_encoding::{
     EncodingTypeComponent, ProvideEncodingType,
 };
 pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
+use hermes_encoding_components::traits::types::decode_buffer::DecodeBufferTypeComponent;
+use hermes_encoding_components::traits::types::encode_buffer::EncodeBufferTypeComponent;
 use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
 pub use hermes_encoding_components::traits::types::schema::SchemaTypeComponent;
 use hermes_encoding_components::types::AsBytes;

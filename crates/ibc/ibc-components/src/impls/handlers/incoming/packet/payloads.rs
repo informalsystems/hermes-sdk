@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::components::chain::IncomingPacketHandlerComponent;
+use crate::components::chain::re_exports::IncomingPacketHandlerComponent;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::payloads::HasPacketPayloads;
 use crate::traits::fields::payload::data::HasPayloadData;

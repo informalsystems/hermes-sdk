@@ -177,24 +177,24 @@ hermes-ibc-token-transfer-components    = { version = "0.1.0" }
 hermes-ibc-mock-chain                   = { version = "0.1.0" }
 
 [patch.crates-io]
-cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
+cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "re-export-submodule" }
 
 hermes-chain-components             = { path = "./crates/chain/chain-components" }
 hermes-chain-type-components        = { path = "./crates/chain/chain-type-components" }

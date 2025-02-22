@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
-use crate::components::chain::IncomingPacketHandlerComponent;
+use crate::components::chain::re_exports::IncomingPacketHandlerComponent;
 use crate::traits::commitment::path::receive_packet::CanBuildReceivePacketCommitmentPath;
 use crate::traits::commitment::store::CanStoreCommitment;
 use crate::traits::commitment::value::receive_packet::CanBuildReceivePacketCommitmentValue;

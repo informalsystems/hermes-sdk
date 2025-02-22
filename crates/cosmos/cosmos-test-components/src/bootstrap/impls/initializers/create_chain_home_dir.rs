@@ -6,7 +6,7 @@ use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-use crate::bootstrap::components::cosmos_sdk::ChainHomeDirInitializerComponent;
+use crate::bootstrap::components::cosmos_sdk::re_exports::ChainHomeDirInitializerComponent;
 use crate::bootstrap::traits::fields::chain_store_dir::HasChainStoreDir;
 use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirInitializer;
 

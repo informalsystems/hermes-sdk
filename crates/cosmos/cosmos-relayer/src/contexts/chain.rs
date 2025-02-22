@@ -11,9 +11,6 @@ use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterCompone
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_chain_type_components::traits::types::event::HasEventType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_cosmos_chain_components::components::client::{
-    BlockEventsQuerierComponent, ChainStatusQuerierComponent, PacketIsClearedQuerierComponent,
-};
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
@@ -65,6 +62,8 @@ use hermes_relayer_components::chain::traits::packet::filter::{
     CanFilterIncomingPacket, CanFilterOutgoingPacket,
 };
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::queries::block_events::BlockEventsQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     CanQueryChannelEnd, CanQueryChannelEndWithProofs,
 };
@@ -79,6 +78,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 };
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
+use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;

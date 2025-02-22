@@ -10,7 +10,7 @@ use hermes_chain_components::traits::queries::packet_acknowledgement::CanQueryPa
 use crate::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::HeightOf;
-use crate::components::default::relay::ReceivePacketRelayerComponent;
+use crate::components::default::relay::re_exports::ReceivePacketRelayerComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayer;
 

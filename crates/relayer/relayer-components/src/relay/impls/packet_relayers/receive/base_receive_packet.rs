@@ -11,7 +11,7 @@ use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacke
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::HeightOf;
-use crate::components::default::relay::ReceivePacketRelayerComponent;
+use crate::components::default::relay::re_exports::ReceivePacketRelayerComponent;
 use crate::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasDstClientId, HasRelayChains, PacketOf,
 };

@@ -4,14 +4,12 @@ use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
-use hermes_cosmos_relayer::presets::chain::{
-    ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilderComponent,
-    ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenTryPayloadBuilderComponent,
-};
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
-    ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
-    ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
+    ConnectionOpenAckPayloadBuilder, ConnectionOpenAckPayloadBuilderComponent,
+    ConnectionOpenConfirmPayloadBuilder, ConnectionOpenConfirmPayloadBuilderComponent,
+    ConnectionOpenInitPayloadBuilder, ConnectionOpenInitPayloadBuilderComponent,
+    ConnectionOpenTryPayloadBuilder, ConnectionOpenTryPayloadBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;

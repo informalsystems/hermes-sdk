@@ -1,6 +1,7 @@
 use cgp::prelude::*;
-use hermes_cosmos_relayer::presets::chain::CreateClientMessageOptionsTypeComponent;
-use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientMessageOptionsType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientMessageOptionsTypeComponent, ProvideCreateClientMessageOptionsType,
+};
 
 #[derive(Clone)]
 pub struct CreateWasmTendermintMessageOptions {

@@ -1,9 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_test_components::bootstrap::traits::chain::{
-        CanBootstrapChain, ChainBootstrapperComponent,
-    };
+    use hermes_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
 
     use crate::bootstrap::components::cosmos_sdk::{CosmosSdkBootstrapComponents, *};
     use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
@@ -13,12 +11,9 @@ mod preset {
         GetStdOutOrElseStdErr, InitCosmosTestWallet,
     };
     use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
-    use crate::bootstrap::traits::fields::denom::{
-        DenomForStaking, DenomForTransfer, DenomPrefixGetter, GenesisDenomGetterComponent,
-    };
+    use crate::bootstrap::traits::fields::denom::GenesisDenomGetterComponent;
     use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
     use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
-    use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
     use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdderComponent;
     use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAdderComponent;
     use crate::bootstrap::traits::genesis::add_genesis_wallet::GenesisWalletAdderComponent;
@@ -28,15 +23,10 @@ mod preset {
     use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirInitializerComponent;
     use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializerComponent;
     use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
-    use crate::bootstrap::traits::types::chain_node_config::{
-        ChainNodeConfigTypeComponent, ProvideChainNodeConfigType,
-    };
-    use crate::bootstrap::traits::types::genesis_config::{
-        ChainGenesisConfigTypeComponent, ProvideChainGenesisConfigType,
-    };
+    use crate::bootstrap::traits::types::chain_node_config::ChainNodeConfigTypeComponent;
+    use crate::bootstrap::traits::types::genesis_config::ChainGenesisConfigTypeComponent;
     use crate::bootstrap::traits::types::wallet_config::{
-        ProvideWalletConfigType, WalletConfigFieldsComponent, WalletConfigFieldsGetter,
-        WalletConfigTypeComponent,
+        WalletConfigFieldsComponent, WalletConfigTypeComponent,
     };
 
     with_cosmos_sdk_bootstrap_components! {

@@ -10,13 +10,12 @@ use hermes_logging_components::traits::logger::CanLog;
 use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::types::aliases::EventOf;
-use crate::components::default::relay::EventRelayerComponent;
 use crate::relay::impls::packet_filters::target::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::event_relayer::EventRelayer;
+use crate::relay::traits::event_relayer::{EventRelayer, EventRelayerComponent};
 use crate::relay::traits::packet_filter::{CanFilterRelayPackets, RelayPacketFilter};
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::CanRelayPacket;

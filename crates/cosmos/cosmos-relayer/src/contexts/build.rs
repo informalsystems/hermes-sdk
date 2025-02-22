@@ -21,7 +21,9 @@ use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::{
     BiRelayFromRelayBuilder, BiRelayFromRelayBuilderComponent,
 };
-use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
+use hermes_relayer_components::build::traits::builders::chain_builder::{
+    ChainBuilder, ChainBuilderComponent,
+};
 use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAtComponent, HasChainTypeAt};
@@ -38,7 +40,7 @@ use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::{
     RelayWithBatchBuilder, RelayWithBatchBuilderComponent,
 };
 use hermes_relayer_components_extra::components::extra::build::{
-    ChainBuilderComponent, ExtraBuildComponents, IsExtraBuildComponents,
+    ExtraBuildComponents, IsExtraBuildComponents,
 };
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{

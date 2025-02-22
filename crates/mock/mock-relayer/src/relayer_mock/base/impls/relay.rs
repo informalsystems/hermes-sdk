@@ -5,7 +5,6 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
-use hermes_relayer_components::components::default::relay::TargetUpdateClientMessageBuilderComponent;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeAtComponent,
 };
@@ -16,7 +15,9 @@ use hermes_relayer_components::relay::traits::packet_lock::{
     PacketLockComponent, ProvidePacketLock,
 };
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
+use hermes_relayer_components::relay::traits::update_client_message_builder::{
+    TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
+};
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };

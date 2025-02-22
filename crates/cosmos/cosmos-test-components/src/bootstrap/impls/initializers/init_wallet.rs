@@ -10,10 +10,11 @@ use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use serde_json as json;
 
-use crate::bootstrap::components::cosmos_sdk::WalletInitializerComponent;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::fields::hd_path::HasWalletHdPath;
-use crate::bootstrap::traits::initializers::init_wallet::WalletInitializer;
+use crate::bootstrap::traits::initializers::init_wallet::{
+    WalletInitializer, WalletInitializerComponent,
+};
 use crate::chain::types::wallet::CosmosTestWallet;
 
 pub struct InitCosmosTestWallet<OutputGetter>(pub PhantomData<OutputGetter>);

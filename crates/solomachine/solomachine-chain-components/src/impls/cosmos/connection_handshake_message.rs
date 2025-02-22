@@ -1,14 +1,12 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
-use hermes_cosmos_relayer::presets::chain::{
-    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
-    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
-};
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
-    ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
-    ConnectionOpenInitMessageBuilder, ConnectionOpenTryMessageBuilder,
+    ConnectionOpenAckMessageBuilder, ConnectionOpenAckMessageBuilderComponent,
+    ConnectionOpenConfirmMessageBuilder, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilder, ConnectionOpenInitMessageBuilderComponent,
+    ConnectionOpenTryMessageBuilder, ConnectionOpenTryMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
