@@ -86,7 +86,7 @@ delegate_components! {
             IncomingPacketHandlerComponent,
             PacketSenderComponent,
         ]:
-            IbcChainComponents,
+            IbcChainComponents::Provider,
         ErrorTypeProviderComponent:
             WithType<String>,
         QuantityTypeComponent:

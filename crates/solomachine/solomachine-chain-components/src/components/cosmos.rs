@@ -42,7 +42,7 @@ delegate_components! {
             CreateClientPayloadBuilderComponent,
             UpdateClientPayloadBuilderComponent,
         ]:
-            CosmosToCosmosComponents,
+            CosmosToCosmosComponents::Provider,
         [
             CreateClientMessageBuilderComponent,
             CreateClientMessageOptionsTypeComponent,

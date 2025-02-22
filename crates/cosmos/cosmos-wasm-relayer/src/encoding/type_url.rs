@@ -16,13 +16,13 @@ delegate_components! {
             TendermintClientState,
             TendermintConsensusState,
         ]:
-            CosmosClientEncodingComponents,
+            CosmosClientEncodingComponents::Provider,
         [
             WasmClientState,
             WasmConsensusState,
             WasmClientMessage,
         ]:
-            WasmEncodingComponents,
+            WasmEncodingComponents::Provider,
 
     }
 }

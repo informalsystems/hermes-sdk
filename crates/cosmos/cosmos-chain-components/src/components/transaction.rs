@@ -54,7 +54,7 @@ mod preset {
                 NonceAllocatorComponent,
                 TxResponsePollerComponent,
             ]:
-                DefaultTxComponents,
+                DefaultTxComponents::Provider,
             PollTimeoutGetterComponent:
                 FixedPollTimeoutSecs<300>,
             TxMessageResponseParserComponent:

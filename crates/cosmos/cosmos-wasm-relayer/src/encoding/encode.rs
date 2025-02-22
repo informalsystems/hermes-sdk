@@ -39,7 +39,7 @@ delegate_components! {
 
             (ViaProtobuf, Height),
         ]:
-            CosmosClientEncodingComponents,
+            CosmosClientEncodingComponents::Provider,
         [
             (ViaAny, WasmClientState),
             (ViaAny, WasmConsensusState),
@@ -49,6 +49,6 @@ delegate_components! {
             (ViaProtobuf, WasmConsensusState),
             (ViaProtobuf, WasmClientMessage),
         ]:
-            WasmEncodingComponents,
+            WasmEncodingComponents::Provider,
     }
 }

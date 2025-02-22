@@ -136,7 +136,7 @@ use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
-use crate::presets::chain::{CosmosChainFullPreset, IsCosmosChainFullPreset};
+use crate::presets::chain::CosmosChainFullPreset;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[cgp_context(CosmosChainContextComponents: CosmosChainFullPreset)]
@@ -202,7 +202,7 @@ delegate_components! {
 
 delegate_components! {
     DelegateCosmosChainComponents {
-        CosmosChain: CosmosToCosmosComponents,
+        CosmosChain: CosmosToCosmosComponents::Provider,
     }
 }
 

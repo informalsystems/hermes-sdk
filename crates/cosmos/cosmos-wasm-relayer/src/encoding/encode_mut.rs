@@ -15,6 +15,6 @@ delegate_components! {
             (ViaProtobuf, WasmClientState),
             (ViaProtobuf, WasmConsensusState),
             (ViaProtobuf, WasmClientMessage),
-        ]: WasmEncodingComponents,
+        ]: WasmEncodingComponents::Provider,
     }
 }

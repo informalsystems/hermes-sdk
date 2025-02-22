@@ -40,7 +40,7 @@ mod preset {
                 DecodeBufferTypeComponent,
                 SchemaTypeComponent,
             ]:
-                CosmosEncodingComponents,
+                CosmosEncodingComponents::Provider,
             ConverterComponent:
                 UseDelegate<WasmConverterComponents>,
             [
@@ -83,7 +83,7 @@ mod preset {
         WasmEncodeMutComponents {
             [
                 (ViaProtobuf, Height),
-            ]: CosmosEncodingComponents,
+            ]: CosmosEncodingComponents::Provider,
 
             (ViaProtobuf, WasmClientState):
                 EncodeWasmClientState,

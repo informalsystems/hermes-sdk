@@ -2,9 +2,7 @@
 mod preset {
     use cgp::prelude::*;
     use hermes_cosmos_chain_components::components::cosmos_to_cosmos::re_exports::*;
-    use hermes_cosmos_chain_components::components::cosmos_to_cosmos::{
-        with_cosmos_to_cosmos_components, CosmosToCosmosComponents,
-    };
+    use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
     use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
         ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
         ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
@@ -30,7 +28,7 @@ mod preset {
     use crate::impls::update_client_message::BuildUpdateWasmTendermintClientMessage;
     use crate::types::create_client::ProvidCreateWasmTendermintMessageOptionsType;
 
-    with_cosmos_to_cosmos_components! {
+    CosmosToCosmosComponents::with_components! {
         [
             CreateClientMessageBuilderComponent,
             CreateClientMessageOptionsTypeComponent,
@@ -46,7 +44,7 @@ mod preset {
                     UpdateClientMessageBuilderComponent:
                         BuildUpdateWasmTendermintClientMessage,
                     Components:
-                        CosmosToCosmosComponents,
+                        CosmosToCosmosComponents::Provider,
                 }
             }
         }

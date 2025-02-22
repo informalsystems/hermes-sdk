@@ -149,7 +149,7 @@ delegate_components! {
             DecodeBufferTypeComponent,
             EncodedLengthGetterComponent,
         ]:
-            CosmosClientEncodingComponents,
+            CosmosClientEncodingComponents::Provider,
         ConverterComponent:
             UseDelegate<AnyClientConverterComponents>,
     }

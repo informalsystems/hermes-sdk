@@ -1,29 +1,23 @@
 #[cgp::re_export_imports]
 mod preset {
-    use hermes_cosmos_chain_components::components::client::re_exports::*;
-    use hermes_cosmos_chain_components::components::client::{
-        with_cosmos_chain_client_preset, CosmosChainClientPreset,
-    };
-    use hermes_cosmos_chain_components::components::transaction::re_exports::*;
-    use hermes_cosmos_chain_components::components::transaction::{
-        with_cosmos_chain_tx_preset, CosmosChainTxPreset,
-    };
-    use hermes_cosmos_test_components::chain::components::re_exports::*;
-    use hermes_cosmos_test_components::chain::components::{
-        with_cosmmos_chain_test_preset, CosmmosChainTestPreset,
-    };
+    use hermes_cosmos_chain_components::components::client::CosmosChainClientPreset;
+    use hermes_cosmos_chain_components::components::transaction::CosmosChainTxPreset;
+    use hermes_cosmos_test_components::chain::components::CosmmosChainTestPreset;
+    use CosmmosChainTestPreset::re_exports::*;
+    use CosmosChainClientPreset::re_exports::*;
+    use CosmosChainTxPreset::re_exports::*;
 
-    with_cosmos_chain_client_preset! {
+    CosmosChainClientPreset::with_components! {
         | ClientComponents | {
-            with_cosmos_chain_tx_preset! {
+            CosmosChainTxPreset::with_components! {
                 | TxComponents | {
-                    with_cosmmos_chain_test_preset! {
+                    CosmmosChainTestPreset::with_components! {
                         | TestComponents | {
                             cgp_preset! {
                                 CosmosChainFullPreset {
-                                    ClientComponents: CosmosChainClientPreset,
-                                    TestComponents: CosmmosChainTestPreset,
-                                    TxComponents: CosmosChainTxPreset,
+                                    ClientComponents: CosmosChainClientPreset::Provider,
+                                    TestComponents: CosmmosChainTestPreset::Provider,
+                                    TxComponents: CosmosChainTxPreset::Provider,
                                 }
                             }
                         }

@@ -17,7 +17,7 @@ mod preset {
                 RelayBuilderComponent,
                 BiRelayBuilderComponent,
             ]:
-                DefaultBuildComponents<BaseComponents>,
+                DefaultBuildComponents::Provider<BaseComponents>,
         }
     }
 }

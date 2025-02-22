@@ -30,7 +30,7 @@ mod preset {
                 DecodeBufferTypeComponent,
                 SchemaTypeComponent,
             ]:
-                ProtobufEncodingComponents,
+                ProtobufEncodingComponents::Provider,
             [
                 EncoderComponent,
                 DecoderComponent,
@@ -53,7 +53,7 @@ mod preset {
         CosmosEncoderComponents {
             [
                 (ViaProtobuf, Any),
-            ]: ProtobufEncodingComponents,
+            ]: ProtobufEncodingComponents::Provider,
         }
     }
 
@@ -61,7 +61,7 @@ mod preset {
         CosmosEncodeMutComponents {
             [
                 (ViaProtobuf, Any),
-            ]: ProtobufEncodingComponents,
+            ]: ProtobufEncodingComponents::Provider,
 
             (ViaProtobuf, Height):
                 EncodeHeight,
