@@ -85,7 +85,7 @@ tendermint-light-client-verifier = { version = "0.40" }
 tendermint-light-client         = { version = "0.40" }
 basecoin                        = { version = "0.2.0" }
 bitcoin                         = { version = "0.31.2" }
-cgp                             = { version = "0.3.1", default-features = false, features = ["provider-supertrait"] }
+cgp                             = { version = "0.3.1", default-features = false }
 clap                            = { version = "4.5.20" }
 dirs-next                       = { version = "2.0.0" }
 num-bigint                      = { version = "0.4" }
@@ -177,24 +177,24 @@ hermes-ibc-token-transfer-components    = { version = "0.1.0" }
 hermes-ibc-mock-chain                   = { version = "0.1.0" }
 
 [patch.crates-io]
-cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
-cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "preset-module" }
+cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
+cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "enable-provider-supertrait" }
 
 hermes-chain-components             = { path = "./crates/chain/chain-components" }
 hermes-chain-type-components        = { path = "./crates/chain/chain-type-components" }
