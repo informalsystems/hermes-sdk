@@ -3,8 +3,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_test_components::chain::traits::chain_id::CanBuildChainIdFromString;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-use crate::bootstrap::components::cosmos_sdk::re_exports::ChainIdGeneratorComponent;
-use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGenerator;
+use crate::bootstrap::traits::generator::generate_chain_id::{
+    ChainIdGenerator, ChainIdGeneratorComponent,
+};
 
 pub struct ReturnPrefixAsChainId;
 

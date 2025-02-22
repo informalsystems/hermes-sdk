@@ -5,10 +5,11 @@ use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use serde_json::{Error as JsonError, Value};
 
-use crate::bootstrap::components::cosmos_sdk::re_exports::ChainGenesisConfigInitializerComponent;
 use crate::bootstrap::traits::fields::denom::{DenomForStaking, DenomForTransfer, HasDenomPrefix};
 use crate::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
-use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializer;
+use crate::bootstrap::traits::initializers::init_genesis_config::{
+    ChainGenesisConfigInitializer, ChainGenesisConfigInitializerComponent,
+};
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;

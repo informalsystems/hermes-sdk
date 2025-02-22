@@ -1,7 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_cosmos_chain_components::components::cosmos_to_cosmos::re_exports::*;
     use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
     use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
         ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
@@ -23,6 +22,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
     use hermes_relayer_components::chain::traits::types::create_client::CreateClientMessageOptionsTypeComponent;
     use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
+    use CosmosToCosmosComponents::re_exports::*;
 
     use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
     use crate::impls::update_client_message::BuildUpdateWasmTendermintClientMessage;

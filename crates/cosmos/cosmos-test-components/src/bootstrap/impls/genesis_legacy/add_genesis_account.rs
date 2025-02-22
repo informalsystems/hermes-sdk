@@ -6,9 +6,10 @@ use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-use crate::bootstrap::components::cosmos_sdk::re_exports::GenesisAccountAdderComponent;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdder;
+use crate::bootstrap::traits::genesis::add_genesis_account::{
+    GenesisAccountAdder, GenesisAccountAdderComponent,
+};
 
 /**
    Implementation for adding genesis account to legacy Cosmos chains

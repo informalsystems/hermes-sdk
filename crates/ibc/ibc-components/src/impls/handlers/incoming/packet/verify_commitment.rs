@@ -4,7 +4,6 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 
-use crate::components::chain::re_exports::IncomingPacketHandlerComponent;
 use crate::traits::commitment::path::send_packet::CanBuildSendPacketCommitmentPath;
 use crate::traits::commitment::value::send_packet::CanBuildSendPacketCommitmentValue;
 use crate::traits::commitment::verify::CanVerifyCommitment;
@@ -12,7 +11,9 @@ use crate::traits::fields::commitment::proof_height::HasCommitmentProofHeight;
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::nonce::HasPacketNonce;
-use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
+use crate::traits::handlers::incoming::packet::{
+    IncomingPacketHandler, IncomingPacketHandlerComponent,
+};
 use crate::traits::queries::client_id::CanQueryClientIdFromChannelId;
 use crate::traits::queries::consensus_state::CanQueryConsensusState;
 use crate::types::tags::commitment::send::SendPacket;

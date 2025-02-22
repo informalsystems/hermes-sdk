@@ -2,12 +2,13 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::components::chain::re_exports::IncomingPacketHandlerComponent;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::payloads::HasPacketPayloads;
 use crate::traits::fields::payload::data::HasPayloadData;
 use crate::traits::fields::payload::header::HasPayloadHeader;
-use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
+use crate::traits::handlers::incoming::packet::{
+    IncomingPacketHandler, IncomingPacketHandlerComponent,
+};
 use crate::traits::handlers::incoming::payload::CanHandleIncomingPayload;
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::packet::HasPacketType;

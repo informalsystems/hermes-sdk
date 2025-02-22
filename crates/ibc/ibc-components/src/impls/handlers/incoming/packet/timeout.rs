@@ -4,11 +4,12 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::time::HasTimeType;
 
-use crate::components::chain::re_exports::IncomingPacketHandlerComponent;
 use crate::traits::fields::packet::header::timeout::HasPacketTimeout;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::timeout::CanCompareTimeoutTime;
-use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
+use crate::traits::handlers::incoming::packet::{
+    IncomingPacketHandler, IncomingPacketHandlerComponent,
+};
 use crate::traits::queries::time::CanQueryCurrentTime;
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::packet::HasPacketType;

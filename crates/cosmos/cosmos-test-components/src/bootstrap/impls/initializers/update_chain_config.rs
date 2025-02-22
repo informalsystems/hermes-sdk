@@ -12,8 +12,9 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc::core::host::types::identifiers::ChainId;
 use toml::Value;
 
-use crate::bootstrap::components::cosmos_sdk::re_exports::ChainNodeConfigInitializerComponent;
-use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializer;
+use crate::bootstrap::traits::initializers::init_chain_config::{
+    ChainNodeConfigInitializer, ChainNodeConfigInitializerComponent,
+};
 use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
 use crate::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CanModifyCosmosSdkConfig;
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
