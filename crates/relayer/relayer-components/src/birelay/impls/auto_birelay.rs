@@ -16,7 +16,7 @@ use crate::relay::traits::auto_relayer::CanAutoRelayWithHeights;
 use crate::relay::traits::chains::{HasDstChain, HasRelayChains, HasSrcChain};
 use crate::relay::traits::target::{DestinationTarget, HasChainTargets, SourceTarget};
 
-#[new_cgp_provider(AutoBiRelayerComponent)]
+#[cgp_new_provider(AutoBiRelayerComponent)]
 impl<BiRelay> AutoBiRelayer<BiRelay> for PerformAutoBiRelay
 where
     BiRelay: HasRuntime
