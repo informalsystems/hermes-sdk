@@ -1983,6 +1983,8 @@ dependencies = [
  "hermes-cosmos-relayer",
  "hermes-encoding-components",
  "hermes-error",
+ "hermes-logger",
+ "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",

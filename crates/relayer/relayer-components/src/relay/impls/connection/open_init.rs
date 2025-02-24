@@ -1,8 +1,13 @@
+use alloc::format;
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
+use hermes_chain_components::traits::types::chain_id::HasChainId;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::types::level::LevelInfo;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenInitPayload;
@@ -32,15 +37,18 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasRelayClientIds
         + for<'a> CanRaiseAsyncError<MissingConnectionInitEventError<'a, Relay>>
+        + HasLogger
         + CanRaiseRelayChainErrors,
     SrcChain: CanSendSingleMessage
         + HasInitConnectionOptionsType<DstChain>
         + CanBuildConnectionOpenInitMessage<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
         + HasConnectionOpenInitEvent<DstChain>
-        + CanExtractFromMessageResponse<SrcChain::ConnectionOpenInitEvent>,
+        + CanExtractFromMessageResponse<SrcChain::ConnectionOpenInitEvent>
+        + HasChainId,
     DstChain: CanBuildConnectionOpenInitPayload<SrcChain>,
     SrcChain::ConnectionId: Clone,
+    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn init_connection(
         relay: &Relay,
@@ -48,6 +56,17 @@ where
     ) -> Result<SrcChain::ConnectionId, Relay::Error> {
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Starting ICS03 ConnectionOpenInit on chain `{}`",
+                    src_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         let src_client_id = relay.src_client_id();
         let dst_client_id = relay.dst_client_id();
@@ -83,6 +102,17 @@ where
 
         let src_connection_id =
             SrcChain::connection_open_init_event_connection_id(&open_init_event);
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Successfully completed ICS03 ConnectionOpenInit on chain {} with ConnectionId `{src_connection_id}`",
+                    src_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         Ok(src_connection_id.clone())
     }
