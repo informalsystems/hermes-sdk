@@ -1,5 +1,5 @@
 use alloc::format;
-use core::fmt::{Debug, Display};
+use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -43,8 +43,7 @@ where
         + CanExtractFromMessageResponse<SrcChain::ChannelOpenInitEvent>
         + HasChainId,
     DstChain: HasIbcChainTypes<SrcChain> + HasAsyncErrorType,
-    SrcChain::ChannelId: Clone + Display,
-    SrcChain::ChainId: Display,
+    SrcChain::ChannelId: Clone,
     Relay::Logger: CanLog<LevelInfo>,
 {
     async fn init_channel(
@@ -59,7 +58,7 @@ where
             .logger()
             .log(
                 &format!(
-                    "Initialising channel open handshake on chain `{}`",
+                    "Starting ICS04 ChannelOpenInit on chain `{}`",
                     src_chain.chain_id()
                 ),
                 &LevelInfo,
@@ -86,7 +85,7 @@ where
             .logger()
             .log(
                 &format!(
-                    "Channel `{src_channel_id}` initialised on chain `{}`",
+                    "Successfully completed ICS04 ChannelOpenInit on chain {} with ChannelId `{src_channel_id}` and PortId `{src_port_id}`",
                     src_chain.chain_id()
                 ),
                 &LevelInfo,
