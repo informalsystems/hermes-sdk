@@ -1,4 +1,4 @@
-use core::fmt::Debug;
+use core::fmt::{Debug, Display};
 
 use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
@@ -13,7 +13,7 @@ pub trait HasClientIdType<Counterparty>: Sized + Async {
     /**
        The client ID of the counterparty chain, that is stored on the local chain.
     */
-    type ClientId: Debug + Async;
+    type ClientId: Debug + Display + Async;
 }
 
 #[cgp_provider(ClientIdTypeComponent)]
@@ -22,7 +22,7 @@ impl<Chain, Counterparty, Provider, ClientId> ProvideClientIdType<Chain, Counter
 where
     Chain: Async,
     Provider: ProvideType<Chain, ClientIdTypeComponent, Type = ClientId>,
-    ClientId: Debug + Async,
+    ClientId: Debug + Display + Async,
 {
     type ClientId = ClientId;
 }

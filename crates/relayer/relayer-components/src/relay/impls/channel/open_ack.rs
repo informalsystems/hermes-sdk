@@ -1,6 +1,11 @@
+use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::chain_id::HasChainId;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::types::level::LevelInfo;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenAckMessage;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenAckPayload;
@@ -35,10 +40,13 @@ where
         + HasSourceTargetChainTypes
         + HasRelayClientIds
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
+        + HasLogger
         + CanRaiseRelayChainErrors,
-    SrcChain:
-        CanQueryClientStateWithLatestHeight<DstChain> + CanBuildChannelOpenAckMessage<DstChain>,
+    SrcChain: CanQueryClientStateWithLatestHeight<DstChain>
+        + CanBuildChannelOpenAckMessage<DstChain>
+        + HasChainId,
     DstChain: CanQueryChainHeight + CanBuildChannelOpenAckPayload<SrcChain>,
+    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_channel_open_ack(
         relay: &Relay,
@@ -49,6 +57,17 @@ where
     ) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Starting ICS04 ChannelOpenAck on chain `{}`",
+                    src_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         let dst_proof_height = dst_chain
             .query_chain_height()
@@ -81,6 +100,17 @@ where
             .map_err(Relay::raise_error)?;
 
         relay.send_message(SourceTarget, open_ack_message).await?;
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Successfully completed ICS04 ChannelOpenAck on chain {} with ChannelId `{src_channel_id}` and PortId `{src_port_id}`",
+                    src_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         Ok(())
     }

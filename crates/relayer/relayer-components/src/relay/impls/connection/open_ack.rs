@@ -1,6 +1,11 @@
+use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::chain_id::HasChainId;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::types::level::LevelInfo;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenAckMessage;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenAckPayload;
@@ -38,11 +43,14 @@ where
         + HasRelayClientIds
         + CanSendTargetUpdateClientMessage<DestinationTarget>
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
+        + HasLogger
         + CanRaiseRelayChainErrors,
-    SrcChain:
-        CanBuildConnectionOpenAckMessage<DstChain> + CanQueryClientStateWithLatestHeight<DstChain>,
+    SrcChain: CanBuildConnectionOpenAckMessage<DstChain>
+        + CanQueryClientStateWithLatestHeight<DstChain>
+        + HasChainId,
     DstChain: CanQueryChainHeight + CanBuildConnectionOpenAckPayload<SrcChain>,
     DstChain::ConnectionId: Clone,
+    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_connection_open_ack(
         relay: &Relay,
@@ -52,7 +60,19 @@ where
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
 
+        let src_client_id = relay.src_client_id();
         let dst_client_id = relay.dst_client_id();
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Starting ICS03 ConnectionOpenAck on chain `{}` for clients `{src_client_id}` and `{dst_client_id}`",
+                    src_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         let dst_proof_height = dst_chain
             .query_chain_height()
@@ -84,6 +104,17 @@ where
             .map_err(Relay::raise_error)?;
 
         relay.send_message(SourceTarget, open_ack_message).await?;
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Successfully completed ICS03 ConnectionOpenAck on chain {} with ConnectionId `{src_connection_id}` for clients `{src_client_id}` and `{dst_client_id}`",
+                    src_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         Ok(())
     }

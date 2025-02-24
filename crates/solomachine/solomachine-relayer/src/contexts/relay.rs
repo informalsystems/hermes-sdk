@@ -5,6 +5,10 @@ use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
+use hermes_logger::UseHermesLogger;
+use hermes_logging_components::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
+};
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::relay::*;
 use hermes_relayer_components::multi::traits::chain_at::{
@@ -36,6 +40,12 @@ delegate_components! {
     SolomachineRelayComponents {
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        [
+            LoggerTypeProviderComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            UseHermesLogger,
         ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         [
