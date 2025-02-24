@@ -1,5 +1,4 @@
 use alloc::format;
-use core::fmt::Display;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -51,8 +50,6 @@ where
         + HasChainId,
     DstChain: CanQueryChainHeight + CanBuildConnectionOpenAckPayload<SrcChain>,
     DstChain::ConnectionId: Clone,
-    SrcChain::ClientId: Display,
-    DstChain::ClientId: Display,
     Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_connection_open_ack(

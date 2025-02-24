@@ -1,5 +1,5 @@
 use alloc::format;
-use core::fmt::{Debug, Display};
+use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -49,9 +49,6 @@ where
         + HasChainId,
     DstChain: CanBuildConnectionOpenInitPayload<SrcChain>,
     SrcChain::ConnectionId: Clone,
-    SrcChain::ClientId: Display,
-    // FIXME: associated type `ClientId` not found for `DstChain`
-    //DstChain::ClientId: Display,
     Relay::Logger: CanLog<LevelInfo>,
 {
     async fn init_connection(
@@ -68,7 +65,7 @@ where
             .logger()
             .log(
                 &format!(
-                    "Starting ICS03 ConnectionOpenInit on chain `{}` for client `{src_client_id}`",
+                    "Starting ICS03 ConnectionOpenInit on chain `{}` for clients `{src_client_id}` and `{dst_client_id}`",
                     src_chain.chain_id()
                 ),
                 &LevelInfo,
@@ -111,7 +108,7 @@ where
             .logger()
             .log(
                 &format!(
-                    "Successfully completed ICS03 ConnectionOpenInit on chain {} with ConnectionId `{src_connection_id}` for client `{src_client_id}`",
+                    "Successfully completed ICS03 ConnectionOpenInit on chain {} with ConnectionId `{src_connection_id}` for client `{src_client_id}` and `{dst_client_id}`",
                     src_chain.chain_id()
                 ),
                 &LevelInfo,

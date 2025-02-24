@@ -1,5 +1,5 @@
 use alloc::format;
-use core::fmt::{Debug, Display};
+use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -65,8 +65,6 @@ where
         + CanExtractFromMessageResponse<DstChain::ConnectionOpenTryEvent>
         + HasChainId,
     DstChain::ConnectionId: Clone,
-    SrcChain::ClientId: Display,
-    DstChain::ClientId: Display,
     Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_connection_open_try(
