@@ -7,7 +7,6 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use hermes_relayer_components::components::default::relay::PacketRelayerComponent;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
 use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
 use hermes_relayer_components::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
@@ -23,7 +22,9 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, HasRelayPacketType};
 use hermes_relayer_components::relay::traits::packet_filter::CanFilterRelayPackets;
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
-use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayer;
+use hermes_relayer_components::relay::traits::packet_relayer::{
+    PacketRelayer, PacketRelayerComponent,
+};
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
 use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;

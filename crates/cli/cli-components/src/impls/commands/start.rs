@@ -69,7 +69,7 @@ pub trait HasClearPacketFields {
     fn stop_after_blocks(&self) -> &Option<u64>;
 }
 
-#[new_cgp_provider(CommandRunnerComponent)]
+#[cgp_new_provider(CommandRunnerComponent)]
 impl<App, Args, Build, BiRelay, ChainA, ChainB, TagA, TagB> CommandRunner<App, Args>
     for RunStartRelayerCommand<TagA, TagB>
 where

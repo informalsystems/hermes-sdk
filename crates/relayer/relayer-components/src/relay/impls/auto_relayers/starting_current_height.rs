@@ -2,8 +2,9 @@ use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 
-use crate::components::default::relay::TargetAutoRelayerComponent;
-use crate::relay::traits::auto_relayer::{CanAutoRelayWithHeights, TargetAutoRelayer};
+use crate::relay::traits::auto_relayer::{
+    CanAutoRelayWithHeights, TargetAutoRelayer, TargetAutoRelayerComponent,
+};
 use crate::relay::traits::target::{HasTargetChains, RelayTarget};
 
 pub struct AutoRelayStartingCurrentHeight;

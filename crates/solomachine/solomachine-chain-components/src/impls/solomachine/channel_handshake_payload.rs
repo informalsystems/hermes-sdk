@@ -1,11 +1,9 @@
 use cgp::prelude::*;
-use hermes_cosmos_relayer::presets::chain::{
-    ChannelOpenAckPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilderComponent,
-    ChannelOpenTryPayloadBuilderComponent,
-};
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
-    ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
+    ChannelOpenAckPayloadBuilder, ChannelOpenAckPayloadBuilderComponent,
+    ChannelOpenConfirmPayloadBuilder, ChannelOpenConfirmPayloadBuilderComponent,
+    ChannelOpenTryPayloadBuilder, ChannelOpenTryPayloadBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::queries::channel_end::CanQueryChannelEnd;
 use hermes_relayer_components::chain::traits::types::channel::{

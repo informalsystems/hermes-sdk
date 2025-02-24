@@ -11,14 +11,15 @@ use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientP
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use crate::chain::traits::types::client_state::HasClientStateFields;
-use crate::components::default::relay::TargetUpdateClientMessageBuilderComponent;
 use crate::relay::impls::update_client::build::BuildUpdateClientMessages;
 use crate::relay::impls::update_client::skip::{LogSkipBuildUpdateClientMessage, SkipUpdateClient};
 use crate::relay::impls::update_client::wait::{LogWaitUpdateClientHeightStatus, WaitUpdateClient};
 use crate::relay::traits::target::{
     HasTargetChainTypes, HasTargetChains, HasTargetClientIds, RelayTarget,
 };
-use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
+use crate::relay::traits::update_client_message_builder::{
+    TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
+};
 
 pub struct DefaultTargetUpdateClientMessageBuilder;
 

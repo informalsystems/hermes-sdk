@@ -5,13 +5,11 @@ use hermes_cosmos_chain_components::types::messages::channel::open_ack::CosmosCh
 use hermes_cosmos_chain_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
-use hermes_cosmos_relayer::presets::chain::{
-    ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
-    ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
-};
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
-    ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
-    ChannelOpenTryMessageBuilder,
+    ChannelOpenAckMessageBuilder, ChannelOpenAckMessageBuilderComponent,
+    ChannelOpenConfirmMessageBuilder, ChannelOpenConfirmMessageBuilderComponent,
+    ChannelOpenInitMessageBuilder, ChannelOpenInitMessageBuilderComponent,
+    ChannelOpenTryMessageBuilder, ChannelOpenTryMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,

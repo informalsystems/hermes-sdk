@@ -132,7 +132,7 @@ use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;
 use tendermint_rpc::{HttpClient, Url};
 
-use crate::components::chain::{CosmosChainWasmPreset, IsCosmosChainWasmPreset};
+use crate::components::chain::CosmosChainWasmPreset;
 use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
 use crate::types::client_state::WasmTendermintClientState;
@@ -186,7 +186,7 @@ delegate_components! {
 
 delegate_components! {
     DelegateCosmosChainComponents {
-        WasmCosmosChain: CosmosToWasmCosmosComponents,
+        WasmCosmosChain: CosmosToWasmCosmosComponents::Provider,
     }
 }
 

@@ -6,7 +6,7 @@ use crate::traits::queries::packet_is_cleared::{
     PacketIsClearedQuerier, PacketIsClearedQuerierComponent,
 };
 
-#[new_cgp_provider(PacketIsClearedQuerierComponent)]
+#[cgp_new_provider(PacketIsClearedQuerierComponent)]
 impl<Chain, Counterparty> PacketIsClearedQuerier<Chain, Counterparty>
     for QueryClearedPacketWithEmptyCommitment
 where

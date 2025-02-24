@@ -1,13 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_cosmos_chain_components::components::client::{
-        ClientStateFieldsComponent, ClientStateTypeComponent, ConsensusStateFieldComponent,
-        ConsensusStateTypeComponent, CreateClientPayloadBuilderComponent,
-        CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
-        UpdateClientPayloadBuilderComponent, UpdateClientPayloadTypeComponent,
-    };
-    use hermes_cosmos_chain_components::components::cosmos_to_cosmos::*;
+    use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
     use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
         ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
         ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
@@ -28,12 +22,13 @@ mod preset {
     use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
     use hermes_relayer_components::chain::traits::types::create_client::CreateClientMessageOptionsTypeComponent;
     use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
+    use CosmosToCosmosComponents::re_exports::*;
 
     use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
     use crate::impls::update_client_message::BuildUpdateWasmTendermintClientMessage;
     use crate::types::create_client::ProvidCreateWasmTendermintMessageOptionsType;
 
-    with_cosmos_to_cosmos_components! {
+    CosmosToCosmosComponents::with_components! {
         [
             CreateClientMessageBuilderComponent,
             CreateClientMessageOptionsTypeComponent,
@@ -49,7 +44,7 @@ mod preset {
                     UpdateClientMessageBuilderComponent:
                         BuildUpdateWasmTendermintClientMessage,
                     Components:
-                        CosmosToCosmosComponents,
+                        CosmosToCosmosComponents::Provider,
                 }
             }
         }

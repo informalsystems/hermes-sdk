@@ -10,11 +10,12 @@ use crate::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLa
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::types::aliases::HeightOf;
-use crate::components::default::relay::TargetUpdateClientMessageBuilderComponent;
 use crate::relay::traits::target::{
     CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, HasTargetClientIds, RelayTarget,
 };
-use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
+use crate::relay::traits::update_client_message_builder::{
+    TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
+};
 
 pub struct SkipUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
 

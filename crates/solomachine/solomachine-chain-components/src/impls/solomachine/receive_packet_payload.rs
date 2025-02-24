@@ -1,7 +1,8 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
-use hermes_cosmos_relayer::presets::chain::ReceivePacketPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::receive_packet::{
+    ReceivePacketPayloadBuilder, ReceivePacketPayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;

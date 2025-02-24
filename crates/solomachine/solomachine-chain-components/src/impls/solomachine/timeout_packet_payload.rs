@@ -1,7 +1,8 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
-use hermes_cosmos_relayer::presets::chain::TimeoutUnorderedPacketPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::{
+    TimeoutUnorderedPacketPayloadBuilder, TimeoutUnorderedPacketPayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;

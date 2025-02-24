@@ -27,7 +27,7 @@ mod preset {
                 DecodeBufferTypeComponent,
                 SchemaTypeComponent,
             ]:
-                CosmosEncodingComponents,
+                CosmosEncodingComponents::Provider,
             ConverterComponent:
                 UseDelegate<CosmosConverterComponents>,
             [
@@ -40,7 +40,7 @@ mod preset {
                 MutDecoderComponent,
                 EncodedLengthGetterComponent,
             ]:
-                CosmosEncodingComponents,
+                CosmosEncodingComponents::Provider,
             SchemaGetterComponent:
                 CosmosTypeUrlSchemas,
         }

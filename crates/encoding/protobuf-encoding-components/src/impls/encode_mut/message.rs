@@ -6,11 +6,10 @@ use prost::bytes::BufMut;
 use prost::encoding::{encode_varint, WireType};
 use prost::{DecodeError, Message};
 
-use crate::components::EncodedLengthGetterComponent;
 use crate::impls::encode_mut::chunk::{
     CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, ProtoChunk, ProtoChunks,
 };
-use crate::traits::length::EncodedLengthGetter;
+use crate::traits::length::{EncodedLengthGetter, EncodedLengthGetterComponent};
 
 pub struct EncodeProstMessage;
 

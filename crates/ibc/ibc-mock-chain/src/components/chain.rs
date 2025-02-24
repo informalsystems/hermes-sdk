@@ -10,9 +10,7 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeC
 use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
 use hermes_chain_type_components::traits::types::quantity::QuantityTypeComponent;
 use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
-use hermes_ibc_components::components::chain::{
-    IbcChainComponents, IncomingPacketHandlerComponent,
-};
+use hermes_ibc_components::components::chain::IbcChainComponents;
 use hermes_ibc_components::traits::builders::packet::PacketBuilderComponent;
 use hermes_ibc_components::traits::fields::message::app_id::IbcMessageAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketChannelIdGetterComponent;
@@ -23,6 +21,7 @@ use hermes_ibc_components::traits::fields::packet::packet::payloads::PacketPaylo
 use hermes_ibc_components::traits::fields::payload::app_id::PayloadAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::payload::data::PayloadDataGetterComponent;
 use hermes_ibc_components::traits::fields::payload::header::PayloadHeaderGetterComponent;
+use hermes_ibc_components::traits::handlers::incoming::packet::IncomingPacketHandlerComponent;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandlerComponent;
 use hermes_ibc_components::traits::handlers::outgoing::message::IbcMessageHandlerComponent;
 use hermes_ibc_components::traits::handlers::outgoing::packet::PacketSenderComponent;
@@ -87,7 +86,7 @@ delegate_components! {
             IncomingPacketHandlerComponent,
             PacketSenderComponent,
         ]:
-            IbcChainComponents,
+            IbcChainComponents::Provider,
         ErrorTypeProviderComponent:
             WithType<String>,
         QuantityTypeComponent:

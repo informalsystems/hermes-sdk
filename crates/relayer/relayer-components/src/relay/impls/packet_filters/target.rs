@@ -5,9 +5,8 @@ use hermes_chain_components::traits::packet::fields::{
 
 use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
-use crate::components::default::relay::RelayPacketFilterComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
-use crate::relay::traits::packet_filter::RelayPacketFilter;
+use crate::relay::traits::packet_filter::{RelayPacketFilter, RelayPacketFilterComponent};
 
 pub struct MatchPacketSourceChain;
 

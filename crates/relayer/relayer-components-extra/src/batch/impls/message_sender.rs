@@ -5,9 +5,8 @@ use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::message_response::MessageResponseOf;
 use hermes_relayer_components::chain::types::aliases::MessageOf;
-use hermes_relayer_components::components::default::relay::IbcMessageSenderComponent;
 use hermes_relayer_components::relay::traits::ibc_message_sender::{
-    CanSendIbcMessages, IbcMessageSender,
+    CanSendIbcMessages, IbcMessageSender, IbcMessageSenderComponent,
 };
 use hermes_relayer_components::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 use hermes_runtime_components::traits::channel::CanUseChannels;

@@ -16,8 +16,7 @@ use tendermint::Error as TendermintError;
 use tendermint_rpc::endpoint::abci_query::AbciQuery;
 use tendermint_rpc::{Client, Error as RpcError};
 
-use crate::components::client::AbciQuerierComponent;
-use crate::traits::abci_query::AbciQuerier;
+use crate::traits::abci_query::{AbciQuerier, AbciQuerierComponent};
 use crate::traits::rpc_client::HasRpcClient;
 use crate::types::commitment_proof::CosmosCommitmentProof;
 

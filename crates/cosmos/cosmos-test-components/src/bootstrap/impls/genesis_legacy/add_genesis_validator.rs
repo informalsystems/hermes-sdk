@@ -6,9 +6,10 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-use crate::bootstrap::components::cosmos_sdk::GenesisValidatorAdderComponent;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAdder;
+use crate::bootstrap::traits::genesis::add_genesis_validator::{
+    GenesisValidatorAdder, GenesisValidatorAdderComponent,
+};
 
 /**
    Implementation for adding genesis validator to legacy Cosmos chains
