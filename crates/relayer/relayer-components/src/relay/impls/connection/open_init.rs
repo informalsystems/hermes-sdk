@@ -1,5 +1,5 @@
 use alloc::format;
-use core::fmt::Debug;
+use core::fmt::{Debug, Display};
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -48,6 +48,9 @@ where
         + HasChainId,
     DstChain: CanBuildConnectionOpenInitPayload<SrcChain>,
     SrcChain::ConnectionId: Clone,
+    SrcChain::ClientId: Display,
+    // FIXME: associated type `ClientId` not found for `DstChain`
+    //DstChain::ClientId: Display,
     Relay::Logger: CanLog<LevelInfo>,
 {
     async fn init_connection(
@@ -57,19 +60,19 @@ where
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
 
+        let src_client_id = relay.src_client_id();
+        let dst_client_id = relay.dst_client_id();
+
         relay
             .logger()
             .log(
                 &format!(
-                    "Starting ICS03 ConnectionOpenInit on chain `{}`",
+                    "Starting ICS03 ConnectionOpenInit on chain `{}` for client `{src_client_id}`",
                     src_chain.chain_id()
                 ),
                 &LevelInfo,
             )
             .await;
-
-        let src_client_id = relay.src_client_id();
-        let dst_client_id = relay.dst_client_id();
 
         let dst_client_state = src_chain
             .query_client_state_with_latest_height(PhantomData, src_client_id)
@@ -107,7 +110,7 @@ where
             .logger()
             .log(
                 &format!(
-                    "Successfully completed ICS03 ConnectionOpenInit on chain {} with ConnectionId `{src_connection_id}`",
+                    "Successfully completed ICS03 ConnectionOpenInit on chain {} with ConnectionId `{src_connection_id}` for client `{src_client_id}`",
                     src_chain.chain_id()
                 ),
                 &LevelInfo,
