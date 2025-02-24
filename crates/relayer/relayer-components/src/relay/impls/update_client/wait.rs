@@ -9,11 +9,12 @@ use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use crate::chain::types::aliases::HeightOf;
-use crate::components::default::relay::TargetUpdateClientMessageBuilderComponent;
 use crate::relay::traits::target::{
     CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, RelayTarget,
 };
-use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
+use crate::relay::traits::update_client_message_builder::{
+    TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
+};
 
 /**
    Wait for the chain to reach a height that is greater than or equal the required height,

@@ -3,14 +3,15 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
-use crate::components::chain::IncomingPacketHandlerComponent;
 use crate::traits::commitment::path::receive_packet::CanBuildReceivePacketCommitmentPath;
 use crate::traits::commitment::store::CanStoreCommitment;
 use crate::traits::commitment::value::receive_packet::CanBuildReceivePacketCommitmentValue;
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::nonce::HasPacketNonce;
-use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
+use crate::traits::handlers::incoming::packet::{
+    IncomingPacketHandler, IncomingPacketHandlerComponent,
+};
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::types::tags::commitment::receive::ReceivePacket;
 use crate::types::tags::commitment::send::SendPacket;

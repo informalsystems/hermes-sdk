@@ -4,9 +4,8 @@ use cgp::prelude::*;
 use prost::DecodeError;
 use subtle_encoding::base64;
 
-use crate::components::transaction::EipQuerierComponent;
 use crate::impls::queries::eip::types::{EipBaseFeeHTTPResult, EipQueryError, GasPriceResponse};
-use crate::traits::eip::eip_query::EipQuerier;
+use crate::traits::eip::eip_query::{EipQuerier, EipQuerierComponent};
 use crate::traits::rpc_client::HasRpcClient;
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 

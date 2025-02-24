@@ -1,22 +1,26 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::components::client::{
-    ClientStateFieldsComponent, ClientStateTypeComponent, CreateClientPayloadBuilderComponent,
-    CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
-    UpdateClientPayloadBuilderComponent, UpdateClientPayloadTypeComponent,
-};
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::create_client::CreateClientMessageOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::client_state::{
+    ClientStateFieldsComponent, ClientStateTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
+    CreateClientPayloadTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
 use crate::impls::cosmos::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
 use crate::impls::cosmos::create_client_message::BuildCreateSolomachineClientMessage;
@@ -38,7 +42,7 @@ delegate_components! {
             CreateClientPayloadBuilderComponent,
             UpdateClientPayloadBuilderComponent,
         ]:
-            CosmosToCosmosComponents,
+            CosmosToCosmosComponents::Provider,
         [
             CreateClientMessageBuilderComponent,
             CreateClientMessageOptionsTypeComponent,

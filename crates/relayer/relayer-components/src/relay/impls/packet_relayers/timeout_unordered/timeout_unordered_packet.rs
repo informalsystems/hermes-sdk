@@ -7,10 +7,11 @@ use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTi
 use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::types::aliases::HeightOf;
-use crate::components::default::relay::TimeoutUnorderedPacketRelayerComponent;
 use crate::relay::traits::chains::{HasRelayChains, HasSrcClientId, PacketOf};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayer;
+use crate::relay::traits::packet_relayers::timeout_unordered_packet::{
+    TimeoutUnorderedPacketRelayer, TimeoutUnorderedPacketRelayerComponent,
+};
 use crate::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
 
 /// The minimal component that implements timeout packet relayer

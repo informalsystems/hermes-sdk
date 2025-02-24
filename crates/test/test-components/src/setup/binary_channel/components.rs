@@ -15,9 +15,7 @@ mod preset {
     use crate::setup::traits::channel::ChannelSetupComponent;
     use crate::setup::traits::clients::ClientSetupComponent;
     use crate::setup::traits::connection::ConnectionSetupComponent;
-    use crate::setup::traits::driver::{
-        CanBuildTestDriver, DriverBuilderComponent, ProvideTestDriverType,
-    };
+    use crate::setup::traits::driver::DriverBuilderComponent;
     use crate::setup::traits::relay::RelaySetupComponent;
     use crate::setup::traits::run_test::TestRunnerComponent;
 

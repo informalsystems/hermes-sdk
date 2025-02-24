@@ -94,7 +94,7 @@ delegate_components! {
             BridgeAuthTokenGeneratorComponent,
             BridgeStarterComponent,
         ]:
-            BaseCelestiaBootstrapComponents,
+            BaseCelestiaBootstrapComponents::Provider,
         ErrorTypeProviderComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,

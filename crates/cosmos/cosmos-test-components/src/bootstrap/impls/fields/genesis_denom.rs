@@ -2,9 +2,8 @@ use cgp::prelude::*;
 use hermes_test_components::chain::traits::types::denom::HasDenomType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
-use crate::bootstrap::components::cosmos_sdk::GenesisDenomGetterComponent;
 use crate::bootstrap::traits::fields::denom::{
-    DenomForStaking, DenomForTransfer, GenesisDenomGetter,
+    DenomForStaking, DenomForTransfer, GenesisDenomGetter, GenesisDenomGetterComponent,
 };
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;

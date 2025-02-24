@@ -7,9 +7,8 @@ use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::components::default::relay::PacketRelayerComponent;
 use crate::relay::traits::chains::{HasRelayChains, HasRelayPacketType, PacketOf};
-use crate::relay::traits::packet_relayer::PacketRelayer;
+use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent};
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
 use crate::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;

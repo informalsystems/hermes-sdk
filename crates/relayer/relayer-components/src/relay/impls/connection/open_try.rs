@@ -15,9 +15,10 @@ use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenTryEvent;
 use crate::chain::types::aliases::ConnectionIdOf;
-use crate::components::default::relay::ConnectionOpenTryRelayerComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayer;
+use crate::relay::traits::connection::open_try::{
+    ConnectionOpenTryRelayer, ConnectionOpenTryRelayerComponent,
+};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::{
     DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,

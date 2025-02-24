@@ -31,7 +31,7 @@ delegate_components! {
             (TendermintClientState, Any),
             (Any, TendermintClientState),
         ]:
-            CosmosClientEncodingComponents,
+            CosmosClientEncodingComponents::Provider,
         [
             (WasmClientState, Any),
             (WasmConsensusState, Any),
@@ -41,7 +41,7 @@ delegate_components! {
             (Any, WasmConsensusState),
             (Any, WasmClientMessage),
         ]:
-            WasmEncodingComponents,
+            WasmEncodingComponents::Provider,
 
         [
             (Any, WasmTendermintClientState),

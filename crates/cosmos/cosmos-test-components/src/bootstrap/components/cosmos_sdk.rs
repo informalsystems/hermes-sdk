@@ -1,9 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_test_components::bootstrap::traits::chain::{
-        CanBootstrapChain, ChainBootstrapperComponent,
-    };
+    use hermes_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
 
     use crate::bootstrap::impls::chain::bootstrap_chain::BootstrapCosmosChain;
     use crate::bootstrap::impls::chain::start_chain::StartCosmosChain;
@@ -23,9 +21,7 @@ mod preset {
     use crate::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
     use crate::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
     use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
-    use crate::bootstrap::traits::fields::denom::{
-        DenomForStaking, DenomForTransfer, DenomPrefixGetter, GenesisDenomGetterComponent,
-    };
+    use crate::bootstrap::traits::fields::denom::GenesisDenomGetterComponent;
     use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
     use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
     use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdderComponent;
@@ -37,15 +33,10 @@ mod preset {
     use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirInitializerComponent;
     use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializerComponent;
     use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
-    use crate::bootstrap::traits::types::chain_node_config::{
-        ChainNodeConfigTypeComponent, ProvideChainNodeConfigType,
-    };
-    use crate::bootstrap::traits::types::genesis_config::{
-        ChainGenesisConfigTypeComponent, ProvideChainGenesisConfigType,
-    };
+    use crate::bootstrap::traits::types::chain_node_config::ChainNodeConfigTypeComponent;
+    use crate::bootstrap::traits::types::genesis_config::ChainGenesisConfigTypeComponent;
     use crate::bootstrap::traits::types::wallet_config::{
-        ProvideWalletConfigType, WalletConfigFieldsComponent, WalletConfigFieldsGetter,
-        WalletConfigTypeComponent,
+        WalletConfigFieldsComponent, WalletConfigTypeComponent,
     };
 
     cgp_preset! {

@@ -11,7 +11,6 @@ use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
-use hermes_relayer_components::components::default::relay::TargetAutoRelayerComponent;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainAt, ChainGetterAtComponent, ChainTypeAtComponent,
@@ -23,6 +22,7 @@ use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetterComponent, PacketMutexOf,
 };
 use hermes_relayer_components::relay::impls::selector::SelectRelayAToB;
+use hermes_relayer_components::relay::traits::auto_relayer::TargetAutoRelayerComponent;
 use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{
@@ -32,9 +32,7 @@ use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderG
 use hermes_relayer_components_extra::batch::traits::types::{
     CanUseMessageBatchChannel, MessageBatchSenderOf,
 };
-use hermes_relayer_components_extra::components::extra::relay::{
-    ExtraRelayPreset, IsExtraRelayPreset,
-};
+use hermes_relayer_components_extra::components::extra::relay::ExtraRelayPreset;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,

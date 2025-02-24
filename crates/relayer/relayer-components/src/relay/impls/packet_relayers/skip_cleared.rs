@@ -9,15 +9,17 @@ use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 use hermes_chain_components::traits::types::packets::ack::HasAcknowledgementType;
 
-use crate::components::default::relay::{
-    AckPacketRelayerComponent, PacketRelayerComponent, ReceivePacketRelayerComponent,
-    TimeoutUnorderedPacketRelayerComponent,
-};
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::packet_relayer::PacketRelayer;
-use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayer;
-use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayer;
-use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayer;
+use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent};
+use crate::relay::traits::packet_relayers::ack_packet::{
+    AckPacketRelayer, AckPacketRelayerComponent,
+};
+use crate::relay::traits::packet_relayers::receive_packet::{
+    ReceivePacketRelayer, ReceivePacketRelayerComponent,
+};
+use crate::relay::traits::packet_relayers::timeout_unordered_packet::{
+    TimeoutUnorderedPacketRelayer, TimeoutUnorderedPacketRelayerComponent,
+};
 
 pub struct SkipClearedPacket<InRelayer>(pub PhantomData<InRelayer>);
 

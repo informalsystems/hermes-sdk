@@ -4,9 +4,8 @@ use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
-use crate::components::default::relay::PacketRelayerComponent;
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
-use crate::relay::traits::packet_relayer::PacketRelayer;
+use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent};
 
 pub struct LoggerRelayer<InRelayer>(pub PhantomData<InRelayer>);
 

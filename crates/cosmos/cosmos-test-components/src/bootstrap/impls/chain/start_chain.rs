@@ -3,8 +3,9 @@ use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
-use crate::bootstrap::components::cosmos_sdk::ChainFullNodeStarterComponent;
-use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarter;
+use crate::bootstrap::traits::chain::start_chain::{
+    ChainFullNodeStarter, ChainFullNodeStarterComponent,
+};
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;

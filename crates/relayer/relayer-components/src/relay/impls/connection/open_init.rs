@@ -15,9 +15,10 @@ use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHe
 use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
-use crate::components::default::relay::ConnectionInitializerComponent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::connection::open_init::ConnectionInitializer;
+use crate::relay::traits::connection::open_init::{
+    ConnectionInitializer, ConnectionInitializerComponent,
+};
 
 /**
    A base implementation for [`ConnectionInitializer`] which submits a

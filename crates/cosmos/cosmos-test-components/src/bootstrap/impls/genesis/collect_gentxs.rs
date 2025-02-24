@@ -3,9 +3,10 @@ use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
-use crate::bootstrap::components::cosmos_sdk::GenesisTransactionsCollectorComponent;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::bootstrap::traits::genesis::collect_gentxs::GenesisTransactionsCollector;
+use crate::bootstrap::traits::genesis::collect_gentxs::{
+    GenesisTransactionsCollector, GenesisTransactionsCollectorComponent,
+};
 
 pub struct CollectCosmosGentxs;
 

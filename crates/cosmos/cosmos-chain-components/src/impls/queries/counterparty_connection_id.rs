@@ -10,7 +10,7 @@ use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc::core::host::types::identifiers::ConnectionId;
 
-#[new_cgp_provider(CounterpartyConnectionIdQuerierComponent)]
+#[cgp_new_provider(CounterpartyConnectionIdQuerierComponent)]
 impl<Chain, Counterparty> CounterpartyConnectionIdQuerier<Chain, Counterparty>
     for QueryCounterpartyConnectionId
 where

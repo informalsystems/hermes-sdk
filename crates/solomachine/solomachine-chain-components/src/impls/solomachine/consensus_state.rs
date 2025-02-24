@@ -1,6 +1,7 @@
 use cgp::prelude::*;
-use hermes_cosmos_relayer::presets::chain::ConsensusStateTypeComponent;
-use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateTypeComponent, ProvideConsensusStateType,
+};
 
 use crate::types::consensus_state::SolomachineConsensusState;
 

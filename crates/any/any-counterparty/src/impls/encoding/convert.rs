@@ -25,7 +25,7 @@ delegate_components! {
             (TendermintConsensusState, Any),
             (Any, TendermintConsensusState),
         ]:
-            CosmosClientEncodingComponents,
+            CosmosClientEncodingComponents::Provider,
 
         (Any, AnyClientState): EncodeAnyClientState,
         (Any, AnyConsensusState): EncodeAnyConsensusState,
