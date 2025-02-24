@@ -1,10 +1,15 @@
+use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
+use hermes_chain_components::traits::types::chain_id::HasChainId;
 use hermes_chain_components::traits::types::packets::ack::HasAcknowledgementType;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::types::level::LevelInfo;
 
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
 use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
@@ -29,6 +34,7 @@ where
         + HasDestinationTargetChainTypes
         + HasDstClientId
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
+        + HasLogger
         + CanRaiseRelayChainErrors,
     SrcChain: CanBuildReceivePacketPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
@@ -37,7 +43,9 @@ where
         + HasWriteAckEvent<SrcChain>
         + CanExtractFromEvent<DstChain::WriteAckEvent>
         + HasAcknowledgementType<SrcChain>
-        + CanBuildPacketFromWriteAck<SrcChain>,
+        + CanBuildPacketFromWriteAck<SrcChain>
+        + HasChainId,
+    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_receive_packet(
         relay: &Relay,
@@ -45,6 +53,14 @@ where
         packet: &PacketOf<Relay>,
     ) -> Result<Option<DstChain::Acknowledgement>, Relay::Error> {
         let dst_chain = relay.dst_chain();
+
+        relay
+            .logger()
+            .log(
+                &format!("Will relay RecvPacket to chain `{}`", dst_chain.chain_id()),
+                &LevelInfo,
+            )
+            .await;
 
         let src_client_state = dst_chain
             .query_client_state_with_latest_height(PhantomData, relay.dst_client_id())
