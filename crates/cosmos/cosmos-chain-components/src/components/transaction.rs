@@ -30,7 +30,7 @@ mod preset {
     use crate::impls::transaction::query_nonce::QueryCosmosAccount;
     use crate::impls::transaction::query_tx_response::QueryCosmosTxResponse;
     use crate::impls::transaction::submit_tx::BroadcastCosmosTx;
-    use crate::impls::types::transaction::ProvideCosmosTransactionTypes;
+    use crate::impls::types::transaction::UseCosmosTransactionTypes;
     use crate::traits::convert_gas_to_fee::GasToFeeConverterComponent;
     use crate::traits::eip::eip_query::EipQuerierComponent;
 
@@ -44,7 +44,7 @@ mod preset {
                 FeeTypeComponent,
                 TxResponseTypeComponent,
             ]:
-                ProvideCosmosTransactionTypes,
+                UseCosmosTransactionTypes,
             [
                 MessageSenderComponent,
                 MessagesWithSignerSenderComponent,
