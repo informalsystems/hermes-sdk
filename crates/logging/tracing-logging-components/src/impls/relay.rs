@@ -5,11 +5,13 @@ use hermes_logging_components::traits::logger::{Logger, LoggerComponent};
 use hermes_logging_components::types::level::LogLevel;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
     LogRelayPacketStatus, RelayPacketStatus,
 };
+use hermes_relayer_components::relay::impls::update_client::build::LogClientUpdateMessage;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, PacketOf};
@@ -207,5 +209,31 @@ where
                 );
             }
         }
+    }
+}
+
+#[cgp_provider(LoggerComponent)]
+impl<'a, Logging, Relay, Target> Logger<Logging, LogClientUpdateMessage<'a, Relay, Target>>
+    for TracingLogger
+where
+    Logging: Async,
+    Relay: HasTargetChains<Target>,
+    Target: RelayTarget,
+    Relay::TargetChain: HasChainId + HasClientIdType<Relay::CounterpartyChain>,
+    Relay::CounterpartyChain: HasChainId + HasHeightType,
+{
+    async fn log(
+        _logging: &Logging,
+        message: &str,
+        details: &LogClientUpdateMessage<'a, Relay, Target>,
+    ) {
+        debug!(
+            target: "hermes",
+            target_chain_id = %details.relay.target_chain().chain_id(),
+            counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
+            client_id = %details.client_id,
+            target_height = %details.target_height,
+            "{message}",
+        );
     }
 }
