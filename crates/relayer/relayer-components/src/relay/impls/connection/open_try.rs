@@ -1,8 +1,13 @@
+use alloc::format;
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
+use hermes_chain_components::traits::types::chain_id::HasChainId;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::types::level::LevelInfo;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenTryMessage;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenTryPayload;
@@ -51,13 +56,16 @@ where
         + CanSendTargetUpdateClientMessage<SourceTarget>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
         + for<'a> CanRaiseAsyncError<MissingConnectionTryEventError<'a, Relay>>
+        + HasLogger
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildConnectionOpenTryPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
         + CanBuildConnectionOpenTryMessage<SrcChain>
         + HasConnectionOpenTryEvent<SrcChain>
-        + CanExtractFromMessageResponse<DstChain::ConnectionOpenTryEvent>,
+        + CanExtractFromMessageResponse<DstChain::ConnectionOpenTryEvent>
+        + HasChainId,
     DstChain::ConnectionId: Clone,
+    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_connection_open_try(
         relay: &Relay,
@@ -68,6 +76,17 @@ where
 
         let src_client_id = relay.src_client_id();
         let dst_client_id = relay.dst_client_id();
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Starting ICS03 ConnectionOpenTry on chain `{}` for clients `{src_client_id}` and `{dst_client_id}`",
+                    dst_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         let src_proof_height = src_chain
             .query_chain_height()
@@ -113,6 +132,17 @@ where
             })?;
 
         let dst_connection_id = DstChain::connection_open_try_event_connection_id(&open_try_event);
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Successfully completed ICS03 ConnectionOpenTry on chain {} with ConnectionId `{dst_connection_id}` for clients `{src_client_id}` and `{dst_client_id}`",
+                    dst_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         Ok(dst_connection_id.clone())
     }

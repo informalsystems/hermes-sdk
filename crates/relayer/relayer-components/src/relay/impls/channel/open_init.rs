@@ -1,8 +1,13 @@
+use alloc::format;
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
+use hermes_chain_components::traits::types::chain_id::HasChainId;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::types::level::LevelInfo;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
 use crate::chain::traits::send_message::CanSendSingleMessage;
@@ -29,14 +34,17 @@ impl<Relay, SrcChain, DstChain> ChannelInitializer<Relay> for InitializeChannel
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + for<'a> CanRaiseAsyncError<MissingChannelInitEventError<'a, Relay>>
+        + HasLogger
         + CanRaiseAsyncError<SrcChain::Error>,
     SrcChain: CanSendSingleMessage
         + HasInitChannelOptionsType<DstChain>
         + CanBuildChannelOpenInitMessage<DstChain>
         + HasChannelOpenInitEvent<DstChain>
-        + CanExtractFromMessageResponse<SrcChain::ChannelOpenInitEvent>,
+        + CanExtractFromMessageResponse<SrcChain::ChannelOpenInitEvent>
+        + HasChainId,
     DstChain: HasIbcChainTypes<SrcChain> + HasAsyncErrorType,
     SrcChain::ChannelId: Clone,
+    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn init_channel(
         relay: &Relay,
@@ -45,6 +53,17 @@ where
         init_channel_options: &SrcChain::InitChannelOptions,
     ) -> Result<SrcChain::ChannelId, Relay::Error> {
         let src_chain = relay.src_chain();
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Starting ICS04 ChannelOpenInit on chain `{}`",
+                    src_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         let src_message = src_chain
             .build_channel_open_init_message(src_port_id, dst_port_id, init_channel_options)
@@ -61,6 +80,17 @@ where
             .ok_or_else(|| Relay::raise_error(MissingChannelInitEventError { relay }))?;
 
         let src_channel_id = SrcChain::channel_open_init_event_channel_id(&open_init_event);
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Successfully completed ICS04 ChannelOpenInit on chain {} with ChannelId `{src_channel_id}` and PortId `{src_port_id}`",
+                    src_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         Ok(src_channel_id.clone())
     }

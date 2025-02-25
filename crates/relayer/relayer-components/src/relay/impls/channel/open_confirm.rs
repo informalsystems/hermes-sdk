@@ -1,6 +1,11 @@
+use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::chain_id::HasChainId;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::types::level::LevelInfo;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenConfirmMessage;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenConfirmPayload;
@@ -35,10 +40,13 @@ where
         + HasDestinationTargetChainTypes
         + HasRelayClientIds
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
+        + HasLogger
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildChannelOpenConfirmPayload<DstChain>,
-    DstChain:
-        CanQueryClientStateWithLatestHeight<SrcChain> + CanBuildChannelOpenConfirmMessage<SrcChain>,
+    DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
+        + CanBuildChannelOpenConfirmMessage<SrcChain>
+        + HasChainId,
+    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_channel_open_confirm(
         relay: &Relay,
@@ -49,6 +57,17 @@ where
     ) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Starting ICS04 ChannelOpenConfirm on chain `{}`",
+                    dst_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         let src_proof_height = src_chain
             .query_chain_height()
@@ -78,6 +97,17 @@ where
         relay
             .send_message(DestinationTarget, open_confirm_message)
             .await?;
+
+        relay
+            .logger()
+            .log(
+                &format!(
+                    "Successfully completed ICS04 ChannelOpenConfirm on chain {} with ChannelId `{dst_channel_id}` and PortId `{dst_port_id}`",
+                    dst_chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         Ok(())
     }
