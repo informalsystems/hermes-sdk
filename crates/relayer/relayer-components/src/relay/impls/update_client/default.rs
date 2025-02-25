@@ -11,7 +11,9 @@ use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientP
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use crate::chain::traits::types::client_state::HasClientStateFields;
-use crate::relay::impls::update_client::build::BuildUpdateClientMessages;
+use crate::relay::impls::update_client::build::{
+    BuildUpdateClientMessages, LogClientUpdateMessage,
+};
 use crate::relay::impls::update_client::skip::{LogSkipBuildUpdateClientMessage, SkipUpdateClient};
 use crate::relay::impls::update_client::wait::{LogWaitUpdateClientHeightStatus, WaitUpdateClient};
 use crate::relay::traits::target::{
@@ -46,7 +48,8 @@ where
         + HasClientStateFields<TargetChain>,
     CounterpartyChain::Height: Clone,
     Relay::Logger: for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>
-        + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>,
+        + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>
+        + for<'a> CanLog<LogClientUpdateMessage<'a, Relay, Target>>,
 {
     async fn build_target_update_client_messages(
         relay: &Relay,
