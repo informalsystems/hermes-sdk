@@ -93,13 +93,12 @@ use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofTy
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
+use hermes_relayer_components::transaction::impls::global_nonce_mutex::GetGlobalNonceMutex;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
 use hermes_relayer_components::transaction::traits::default_signer::{
     DefaultSignerGetter, DefaultSignerGetterComponent,
 };
-use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::{
-    MutexForNonceAllocationComponent, ProvideMutexForNonceAllocation,
-};
+use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::NonceAllocationMutexGetterComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::simulation_fee::{
@@ -194,6 +193,9 @@ delegate_components! {
 
         PollIntervalGetterComponent:
             FixedPollIntervalMillis<200>,
+
+        NonceAllocationMutexGetterComponent:
+            GetGlobalNonceMutex<symbol!("nonce_mutex")>,
     }
 }
 
@@ -228,16 +230,6 @@ impl DefaultSignerGetter<CosmosChain> for CosmosChainContextComponents {
 impl FeeForSimulationGetter<CosmosChain> for CosmosChainContextComponents {
     fn fee_for_simulation(chain: &CosmosChain) -> &Fee {
         &chain.chain_config.gas_config.max_fee
-    }
-}
-
-#[cgp_provider(MutexForNonceAllocationComponent)]
-impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainContextComponents {
-    fn mutex_for_nonce_allocation<'a>(
-        chain: &'a CosmosChain,
-        _signer: &Secp256k1KeyPair,
-    ) -> &'a Mutex<()> {
-        &chain.nonce_mutex
     }
 }
 

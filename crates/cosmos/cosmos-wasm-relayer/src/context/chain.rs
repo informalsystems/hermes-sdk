@@ -4,7 +4,6 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
-use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
@@ -99,13 +98,12 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use hermes_relayer_components::chain::traits::types::poll_interval::PollIntervalGetterComponent;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
+use hermes_relayer_components::transaction::impls::global_nonce_mutex::GetGlobalNonceMutex;
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
 use hermes_relayer_components::transaction::traits::default_signer::{
     DefaultSignerGetter, DefaultSignerGetterComponent,
 };
-use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::{
-    MutexForNonceAllocationComponent, ProvideMutexForNonceAllocation,
-};
+use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::NonceAllocationMutexGetterComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::simulation_fee::{
@@ -178,6 +176,8 @@ delegate_components! {
 
         PollIntervalGetterComponent:
             FixedPollIntervalMillis<200>,
+        NonceAllocationMutexGetterComponent:
+            GetGlobalNonceMutex<symbol!("nonce_mutex")>,
     }
 }
 
@@ -212,16 +212,6 @@ impl DefaultSignerGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 impl FeeForSimulationGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn fee_for_simulation(chain: &WasmCosmosChain) -> &Fee {
         &chain.chain_config.gas_config.max_fee
-    }
-}
-
-#[cgp_provider(MutexForNonceAllocationComponent)]
-impl ProvideMutexForNonceAllocation<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn mutex_for_nonce_allocation<'a>(
-        chain: &'a WasmCosmosChain,
-        _signer: &Secp256k1KeyPair,
-    ) -> &'a Mutex<()> {
-        &chain.nonce_mutex
     }
 }
 
