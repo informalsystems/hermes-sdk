@@ -19,4 +19,4 @@ hermes-encoding-components      = { workspace = true }
 hermes-chain-components         = { workspace = true }
 hermes-chain-type-components    = { workspace = true }
 
-futures                         = { workspace = true }
+futures                         = { workspace = true, features = ["std"] }
