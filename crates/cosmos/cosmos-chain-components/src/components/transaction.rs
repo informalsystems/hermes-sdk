@@ -15,8 +15,8 @@ mod preset {
     use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
     use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
     use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
-    use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
-    use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
+    use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeProviderComponent;
+    use hermes_relayer_components::transaction::traits::types::signer::SignerTypeProviderComponent;
     use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
     use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
     use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
@@ -37,8 +37,8 @@ mod preset {
     cgp_preset! {
         CosmosChainTxPreset {
             [
-                SignerTypeComponent,
-                NonceTypeComponent,
+                SignerTypeProviderComponent,
+                NonceTypeProviderComponent,
                 TransactionTypeComponent,
                 TransactionHashTypeComponent,
                 FeeTypeComponent,

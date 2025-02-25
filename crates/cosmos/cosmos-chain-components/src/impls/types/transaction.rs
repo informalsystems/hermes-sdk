@@ -3,10 +3,10 @@ use hermes_relayer_components::transaction::traits::types::fee::{
     FeeTypeComponent, ProvideFeeType,
 };
 use hermes_relayer_components::transaction::traits::types::nonce::{
-    NonceTypeComponent, ProvideNonceType,
+    NonceTypeProvider, NonceTypeProviderComponent,
 };
 use hermes_relayer_components::transaction::traits::types::signer::{
-    ProvideSignerType, SignerTypeComponent,
+    SignerTypeProvider, SignerTypeProviderComponent,
 };
 use hermes_relayer_components::transaction::traits::types::transaction::{
     ProvideTransactionType, TransactionTypeComponent,
@@ -28,16 +28,16 @@ use crate::types::transaction::signed_tx::SignedTx;
 
 pub struct ProvideCosmosTransactionTypes;
 
-#[cgp_provider(SignerTypeComponent)]
-impl<Chain> ProvideSignerType<Chain> for ProvideCosmosTransactionTypes
+#[cgp_provider(SignerTypeProviderComponent)]
+impl<Chain> SignerTypeProvider<Chain> for ProvideCosmosTransactionTypes
 where
     Chain: Async,
 {
     type Signer = Secp256k1KeyPair;
 }
 
-#[cgp_provider(NonceTypeComponent)]
-impl<Chain> ProvideNonceType<Chain> for ProvideCosmosTransactionTypes
+#[cgp_provider(NonceTypeProviderComponent)]
+impl<Chain> NonceTypeProvider<Chain> for ProvideCosmosTransactionTypes
 where
     Chain: Async,
 {
