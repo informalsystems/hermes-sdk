@@ -7,7 +7,6 @@ mod preset {
     use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
     use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
     use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
-    use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
     use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
     use hermes_relayer_components::transaction::traits::parse_events::TxMessageResponseParserComponent;
     use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
@@ -40,7 +39,6 @@ mod preset {
             [
                 SignerTypeComponent,
                 NonceTypeComponent,
-                NonceGuardComponent,
                 TransactionTypeComponent,
                 TransactionHashTypeComponent,
                 FeeTypeComponent,

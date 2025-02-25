@@ -1,8 +1,6 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::mutex::{HasMutex, MutexGuardOf, MutexOf};
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use futures::lock::Mutex;
 
-use crate::transaction::traits::nonce::nonce_guard::HasNonceGuard;
 use crate::transaction::traits::types::signer::HasSignerType;
 
 /**
@@ -19,16 +17,6 @@ use crate::transaction::traits::types::signer::HasSignerType;
   provider: ProvideMutexForNonceAllocation,
   context: Chain,
 }]
-pub trait HasMutexForNonceAllocation:
-    HasRuntime<Runtime: HasMutex> + HasNonceGuard + HasSignerType
-{
-    fn mutex_for_nonce_allocation<'a>(
-        &'a self,
-        signer: &Self::Signer,
-    ) -> &'a MutexOf<Self::Runtime, ()>;
-
-    fn mutex_to_nonce_guard<'a>(
-        mutex_guard: MutexGuardOf<'a, Self::Runtime, ()>,
-        nonce: Self::Nonce,
-    ) -> Self::NonceGuard<'a>;
+pub trait HasMutexForNonceAllocation: HasSignerType {
+    fn mutex_for_nonce_allocation<'a>(&'a self, signer: &Self::Signer) -> &'a Mutex<()>;
 }

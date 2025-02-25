@@ -1901,6 +1901,7 @@ name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "futures",
  "hermes-chain-components",
  "hermes-chain-type-components",
  "hermes-encoding-components",

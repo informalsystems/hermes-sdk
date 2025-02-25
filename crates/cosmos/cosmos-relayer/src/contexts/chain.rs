@@ -34,12 +34,10 @@ use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::events::client::CosmosCreateClientEvent;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
-use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
-use hermes_cosmos_chain_components::types::transaction::account::Account;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
@@ -110,7 +108,6 @@ use hermes_relayer_components::transaction::traits::simulation_fee::{
 use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
@@ -241,16 +238,6 @@ impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainContextComponent
         _signer: &Secp256k1KeyPair,
     ) -> &'a Mutex<()> {
         &chain.nonce_mutex
-    }
-
-    fn mutex_to_nonce_guard<'a>(
-        mutex_guard: MutexGuardOf<'a, HermesRuntime, ()>,
-        account: Account,
-    ) -> NonceGuard<'a> {
-        NonceGuard {
-            mutex_guard,
-            account,
-        }
     }
 }
 

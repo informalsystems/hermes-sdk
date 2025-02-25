@@ -1,12 +1,9 @@
 use cgp::prelude::*;
-use hermes_relayer_components::transaction::traits::nonce::nonce_guard::{
-    NonceGuardComponent, ProvideNonceGuard,
-};
 use hermes_relayer_components::transaction::traits::types::fee::{
     FeeTypeComponent, ProvideFeeType,
 };
 use hermes_relayer_components::transaction::traits::types::nonce::{
-    HasNonceType, NonceTypeComponent, ProvideNonceType,
+    NonceTypeComponent, ProvideNonceType,
 };
 use hermes_relayer_components::transaction::traits::types::signer::{
     ProvideSignerType, SignerTypeComponent,
@@ -26,7 +23,6 @@ use tendermint::hash::Hash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 use crate::types::key_types::secp256k1::Secp256k1KeyPair;
-use crate::types::nonce_guard::NonceGuard;
 use crate::types::transaction::account::Account;
 use crate::types::transaction::signed_tx::SignedTx;
 
@@ -88,12 +84,4 @@ where
     Chain: Async,
 {
     type TxResponse = TxResponse;
-}
-
-#[cgp_provider(NonceGuardComponent)]
-impl<Chain> ProvideNonceGuard<Chain> for ProvideCosmosTransactionTypes
-where
-    Chain: HasNonceType<Nonce = Account>,
-{
-    type NonceGuard<'a> = NonceGuard<'a>;
 }
