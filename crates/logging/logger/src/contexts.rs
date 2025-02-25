@@ -10,10 +10,12 @@ use hermes_logging_components::types::level::{
     LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
+use hermes_relayer_components::relay::impls::update_client::build::LogClientUpdateMessage;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
@@ -62,6 +64,8 @@ delegate_components! {
                 LogRelayPacketStatus<'a, Relay>,
             <'a, Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>, Target: RelayTarget>
                 LogSkipBuildUpdateClientMessage<'a, Relay, Target>,
+            <'a, Relay: HasTargetChainTypes<Target, TargetChain: HasClientIdType<Relay::CounterpartyChain>, CounterpartyChain: HasHeightType>, Target: RelayTarget>
+                LogClientUpdateMessage<'a, Relay, Target>,
             <'a, Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>, Target: RelayTarget>
                 LogWaitUpdateClientHeightStatus<'a, Relay, Target>,
             <'a, Relay: HasRelayChains, Target: RelayTarget>
