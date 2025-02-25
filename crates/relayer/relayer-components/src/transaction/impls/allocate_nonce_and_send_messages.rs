@@ -25,7 +25,7 @@ where
         signer: &Chain::Signer,
         messages: &[Chain::Message],
     ) -> Result<Vec<Chain::MessageResponse>, Chain::Error> {
-        let nonce = chain.allocate_nonce(signer).await?;
+        let (_guard, nonce) = chain.allocate_nonce(signer).await?;
 
         let response = chain
             .send_messages_with_signer_and_nonce(signer, &nonce, messages)

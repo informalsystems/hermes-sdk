@@ -34,12 +34,10 @@ use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::events::client::CosmosCreateClientEvent;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
-use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
-use hermes_cosmos_chain_components::types::transaction::account::Account;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
@@ -48,7 +46,6 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_relayer_components::chain::impls::types::poll_interval::FixedPollIntervalMillis;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     HasCommitmentPrefixType, HasIbcCommitmentPrefix, IbcCommitmentPrefixGetter,
     IbcCommitmentPrefixGetterComponent,
@@ -90,18 +87,16 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::chain::traits::types::poll_interval::PollIntervalGetterComponent;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
+use hermes_relayer_components::transaction::impls::global_nonce_mutex::GetGlobalNonceMutex;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
 use hermes_relayer_components::transaction::traits::default_signer::{
     DefaultSignerGetter, DefaultSignerGetterComponent,
 };
-use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::{
-    MutexForNonceAllocationComponent, ProvideMutexForNonceAllocation,
-};
+use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::NonceAllocationMutexGetterComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::simulation_fee::{
@@ -110,7 +105,6 @@ use hermes_relayer_components::transaction::traits::simulation_fee::{
 use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
@@ -156,7 +150,7 @@ pub struct BaseCosmosChain {
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
     pub packet_filter: PacketFilterConfig,
-    pub nonce_mutex: Mutex<()>,
+    pub nonce_mutex: Arc<Mutex<()>>,
 }
 
 impl Deref for CosmosChain {
@@ -195,8 +189,8 @@ delegate_components! {
         ]:
             WasmChainComponents,
 
-        PollIntervalGetterComponent:
-            FixedPollIntervalMillis<200>,
+        NonceAllocationMutexGetterComponent:
+            GetGlobalNonceMutex<symbol!("nonce_mutex")>,
     }
 }
 
@@ -234,26 +228,6 @@ impl FeeForSimulationGetter<CosmosChain> for CosmosChainContextComponents {
     }
 }
 
-#[cgp_provider(MutexForNonceAllocationComponent)]
-impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainContextComponents {
-    fn mutex_for_nonce_allocation<'a>(
-        chain: &'a CosmosChain,
-        _signer: &Secp256k1KeyPair,
-    ) -> &'a Mutex<()> {
-        &chain.nonce_mutex
-    }
-
-    fn mutex_to_nonce_guard<'a>(
-        mutex_guard: MutexGuardOf<'a, HermesRuntime, ()>,
-        account: Account,
-    ) -> NonceGuard<'a> {
-        NonceGuard {
-            mutex_guard,
-            account,
-        }
-    }
-}
-
 #[cgp_provider(IbcCommitmentPrefixGetterComponent)]
 impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainContextComponents {
     fn ibc_commitment_prefix(chain: &CosmosChain) -> &Vec<u8> {
@@ -285,7 +259,7 @@ impl CosmosChain {
                 ibc_commitment_prefix,
                 rpc_client,
                 key_entry,
-                nonce_mutex: Mutex::new(()),
+                nonce_mutex: Arc::new(Mutex::new(())),
                 packet_filter,
             }),
         };

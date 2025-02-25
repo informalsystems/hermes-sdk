@@ -7,7 +7,6 @@ mod preset {
     use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
     use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
     use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
-    use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
     use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
     use hermes_relayer_components::transaction::traits::parse_events::TxMessageResponseParserComponent;
     use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
@@ -16,8 +15,8 @@ mod preset {
     use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
     use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
     use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
-    use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
-    use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
+    use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeProviderComponent;
+    use hermes_relayer_components::transaction::traits::types::signer::SignerTypeProviderComponent;
     use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
     use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
     use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
@@ -31,22 +30,21 @@ mod preset {
     use crate::impls::transaction::query_nonce::QueryCosmosAccount;
     use crate::impls::transaction::query_tx_response::QueryCosmosTxResponse;
     use crate::impls::transaction::submit_tx::BroadcastCosmosTx;
-    use crate::impls::types::transaction::ProvideCosmosTransactionTypes;
+    use crate::impls::types::transaction::UseCosmosTransactionTypes;
     use crate::traits::convert_gas_to_fee::GasToFeeConverterComponent;
     use crate::traits::eip::eip_query::EipQuerierComponent;
 
     cgp_preset! {
         CosmosChainTxPreset {
             [
-                SignerTypeComponent,
-                NonceTypeComponent,
-                NonceGuardComponent,
+                SignerTypeProviderComponent,
+                NonceTypeProviderComponent,
                 TransactionTypeComponent,
                 TransactionHashTypeComponent,
                 FeeTypeComponent,
                 TxResponseTypeComponent,
             ]:
-                ProvideCosmosTransactionTypes,
+                UseCosmosTransactionTypes,
             [
                 MessageSenderComponent,
                 MessagesWithSignerSenderComponent,

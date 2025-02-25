@@ -1,16 +1,9 @@
 use cgp::prelude::*;
-use hermes_relayer_components::transaction::traits::nonce::nonce_guard::{
-    NonceGuardComponent, ProvideNonceGuard,
-};
 use hermes_relayer_components::transaction::traits::types::fee::{
     FeeTypeComponent, ProvideFeeType,
 };
-use hermes_relayer_components::transaction::traits::types::nonce::{
-    HasNonceType, NonceTypeComponent, ProvideNonceType,
-};
-use hermes_relayer_components::transaction::traits::types::signer::{
-    ProvideSignerType, SignerTypeComponent,
-};
+use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeProviderComponent;
+use hermes_relayer_components::transaction::traits::types::signer::SignerTypeProviderComponent;
 use hermes_relayer_components::transaction::traits::types::transaction::{
     ProvideTransactionType, TransactionTypeComponent,
 };
@@ -26,30 +19,20 @@ use tendermint::hash::Hash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 use crate::types::key_types::secp256k1::Secp256k1KeyPair;
-use crate::types::nonce_guard::NonceGuard;
 use crate::types::transaction::account::Account;
 use crate::types::transaction::signed_tx::SignedTx;
 
-pub struct ProvideCosmosTransactionTypes;
+pub struct UseCosmosTransactionTypes;
 
-#[cgp_provider(SignerTypeComponent)]
-impl<Chain> ProvideSignerType<Chain> for ProvideCosmosTransactionTypes
-where
-    Chain: Async,
-{
-    type Signer = Secp256k1KeyPair;
-}
-
-#[cgp_provider(NonceTypeComponent)]
-impl<Chain> ProvideNonceType<Chain> for ProvideCosmosTransactionTypes
-where
-    Chain: Async,
-{
-    type Nonce = Account;
+delegate_components! {
+    UseCosmosTransactionTypes {
+        SignerTypeProviderComponent: UseType<Secp256k1KeyPair>,
+        NonceTypeProviderComponent: UseType<Account>,
+    }
 }
 
 #[cgp_provider(TransactionTypeComponent)]
-impl<Chain> ProvideTransactionType<Chain> for ProvideCosmosTransactionTypes
+impl<Chain> ProvideTransactionType<Chain> for UseCosmosTransactionTypes
 where
     Chain: Async,
 {
@@ -67,7 +50,7 @@ where
 }
 
 #[cgp_provider(FeeTypeComponent)]
-impl<Chain> ProvideFeeType<Chain> for ProvideCosmosTransactionTypes
+impl<Chain> ProvideFeeType<Chain> for UseCosmosTransactionTypes
 where
     Chain: Async,
 {
@@ -75,7 +58,7 @@ where
 }
 
 #[cgp_provider(TransactionHashTypeComponent)]
-impl<Chain> ProvideTransactionHashType<Chain> for ProvideCosmosTransactionTypes
+impl<Chain> ProvideTransactionHashType<Chain> for UseCosmosTransactionTypes
 where
     Chain: Async,
 {
@@ -83,17 +66,9 @@ where
 }
 
 #[cgp_provider(TxResponseTypeComponent)]
-impl<Chain> ProvideTxResponseType<Chain> for ProvideCosmosTransactionTypes
+impl<Chain> ProvideTxResponseType<Chain> for UseCosmosTransactionTypes
 where
     Chain: Async,
 {
     type TxResponse = TxResponse;
-}
-
-#[cgp_provider(NonceGuardComponent)]
-impl<Chain> ProvideNonceGuard<Chain> for ProvideCosmosTransactionTypes
-where
-    Chain: HasNonceType<Nonce = Account>,
-{
-    type NonceGuard<'a> = NonceGuard<'a>;
 }

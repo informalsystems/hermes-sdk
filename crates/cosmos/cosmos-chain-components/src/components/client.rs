@@ -15,6 +15,7 @@ mod preset {
     };
     use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
     use hermes_relayer_components::chain::impls::queries::packet_is_cleared::QueryClearedPacketWithEmptyCommitment;
+    use hermes_relayer_components::chain::impls::types::poll_interval::FixedPollIntervalMillis;
     use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
     use hermes_relayer_components::chain::traits::extract_data::{
         EventExtractorComponent, ExtractFromMessageResponseViaEvents,
@@ -139,6 +140,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::types::packets::timeout::{
         PacketReceiptTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
     };
+    use hermes_relayer_components::chain::traits::types::poll_interval::PollIntervalGetterComponent;
     use hermes_relayer_components::chain::traits::types::proof::{
         CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
         CommitmentProofTypeComponent,
@@ -322,6 +324,9 @@ mod preset {
                 QueryAbci,
             UnbondingPeriodQuerierComponent:
                 StakingParamsUnbondingPeriod,
+            PollIntervalGetterComponent:
+                FixedPollIntervalMillis<200>,
+
             [
                 ConnectionEndQuerierComponent,
                 ConnectionEndWithProofsQuerierComponent,

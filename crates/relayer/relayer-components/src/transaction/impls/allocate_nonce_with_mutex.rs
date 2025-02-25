@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::mutex::HasMutex;
+use futures::lock::MutexGuard;
 
 use crate::transaction::traits::nonce::allocate_nonce::{NonceAllocator, NonceAllocatorComponent};
 use crate::transaction::traits::nonce::nonce_mutex::HasMutexForNonceAllocation;
@@ -15,15 +15,13 @@ where
     async fn allocate_nonce<'a>(
         context: &'a Context,
         signer: &'a Context::Signer,
-    ) -> Result<Context::NonceGuard<'a>, Context::Error> {
+    ) -> Result<(MutexGuard<'a, ()>, Context::Nonce), Context::Error> {
         let mutex = context.mutex_for_nonce_allocation(signer);
 
-        let mutex_guard = Context::Runtime::acquire_mutex(mutex).await;
+        let mutex_guard = mutex.lock().await;
 
         let nonce = context.query_nonce(signer).await?;
 
-        let nonce_guard = Context::mutex_to_nonce_guard(mutex_guard, nonce);
-
-        Ok(nonce_guard)
+        Ok((mutex_guard, nonce))
     }
 }

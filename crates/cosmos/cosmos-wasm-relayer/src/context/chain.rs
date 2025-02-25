@@ -4,7 +4,6 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
-use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
@@ -23,14 +22,12 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::{
 use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
-use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
-use hermes_cosmos_chain_components::types::transaction::account::Account;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
@@ -43,7 +40,6 @@ use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
-use hermes_relayer_components::chain::impls::types::poll_interval::FixedPollIntervalMillis;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
@@ -98,16 +94,14 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
 };
-use hermes_relayer_components::chain::traits::types::poll_interval::PollIntervalGetterComponent;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
+use hermes_relayer_components::transaction::impls::global_nonce_mutex::GetGlobalNonceMutex;
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
 use hermes_relayer_components::transaction::traits::default_signer::{
     DefaultSignerGetter, DefaultSignerGetterComponent,
 };
-use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::{
-    MutexForNonceAllocationComponent, ProvideMutexForNonceAllocation,
-};
+use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::NonceAllocationMutexGetterComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::simulation_fee::{
@@ -116,7 +110,6 @@ use hermes_relayer_components::transaction::traits::simulation_fee::{
 use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{
     HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
@@ -178,9 +171,8 @@ delegate_components! {
             WasmClientCodeUploaderComponent,
         ]:
             WasmChainComponents,
-
-        PollIntervalGetterComponent:
-            FixedPollIntervalMillis<200>,
+        NonceAllocationMutexGetterComponent:
+            GetGlobalNonceMutex<symbol!("nonce_mutex")>,
     }
 }
 
@@ -215,26 +207,6 @@ impl DefaultSignerGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 impl FeeForSimulationGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn fee_for_simulation(chain: &WasmCosmosChain) -> &Fee {
         &chain.chain_config.gas_config.max_fee
-    }
-}
-
-#[cgp_provider(MutexForNonceAllocationComponent)]
-impl ProvideMutexForNonceAllocation<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn mutex_for_nonce_allocation<'a>(
-        chain: &'a WasmCosmosChain,
-        _signer: &Secp256k1KeyPair,
-    ) -> &'a Mutex<()> {
-        &chain.nonce_mutex
-    }
-
-    fn mutex_to_nonce_guard(
-        mutex_guard: MutexGuardOf<'_, HermesRuntime, ()>,
-        account: Account,
-    ) -> NonceGuard<'_> {
-        NonceGuard {
-            mutex_guard,
-            account,
-        }
     }
 }
 
