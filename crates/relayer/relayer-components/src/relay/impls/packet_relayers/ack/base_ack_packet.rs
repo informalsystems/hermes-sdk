@@ -1,14 +1,9 @@
-use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::chain_id::HasChainId;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 use hermes_chain_components::traits::types::packets::ack::AcknowledgementOf;
 use hermes_chain_components::types::aliases::HeightOf;
-use hermes_logging_components::traits::has_logger::HasLogger;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
@@ -33,16 +28,13 @@ where
     Relay: HasSourceTargetChainTypes
         + HasRelayClientIds
         + CanRaiseRelayChainErrors
-        + CanSendSingleIbcMessage<MainSink, SourceTarget>
-        + HasLogger,
+        + CanSendSingleIbcMessage<MainSink, SourceTarget>,
     Relay::SrcChain: CanQueryClientStateWithLatestHeight<Relay::DstChain>
         + CanBuildAckPacketMessage<Relay::DstChain>
-        + HasOutgoingPacketType<Relay::DstChain>
-        + HasChainId,
+        + HasOutgoingPacketType<Relay::DstChain>,
     Relay::DstChain: HasClientStateType<Relay::SrcChain>
         + CanBuildAckPacketPayload<Relay::SrcChain>
         + HasWriteAckEvent<Relay::SrcChain>,
-    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_ack_packet(
         relay: &Relay,
@@ -50,17 +42,6 @@ where
         packet: &PacketOf<Relay>,
         ack: &AcknowledgementOf<Relay::DstChain, Relay::SrcChain>,
     ) -> Result<(), Relay::Error> {
-        relay
-            .logger()
-            .log(
-                &format!(
-                    "Will relay AckPacket to chain `{}`",
-                    relay.src_chain().chain_id()
-                ),
-                &LevelInfo,
-            )
-            .await;
-
         let src_client_state = relay
             .src_chain()
             .query_client_state_with_latest_height(PhantomData, relay.src_client_id())

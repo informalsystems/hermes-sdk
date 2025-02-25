@@ -15,7 +15,7 @@ use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateC
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, PacketOf};
 use hermes_relayer_components::relay::traits::target::{HasTargetChains, RelayTarget};
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
-use tracing::{error, trace};
+use tracing::{debug, error, trace};
 
 use crate::contexts::logger::TracingLogger;
 
@@ -49,7 +49,7 @@ where
     Relay::DstChain: HasChainId,
 {
     async fn log(_logging: &Logging, message: &str, details: &LogRelayPacketAction<'a, Relay>) {
-        trace!(
+        debug!(
             target: "hermes",
             packet = %details.packet,
             src_chain_id = %details.relay.src_chain().chain_id(),
