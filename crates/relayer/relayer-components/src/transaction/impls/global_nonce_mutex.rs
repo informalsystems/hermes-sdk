@@ -1,3 +1,4 @@
+use alloc::sync::Arc;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -19,7 +20,7 @@ use crate::transaction::traits::types::signer::HasSignerType;
 #[cgp_new_provider(NonceAllocationMutexGetterComponent)]
 impl<Chain, Tag> NonceAllocationMutexGetter<Chain> for GetGlobalNonceMutex<Tag>
 where
-    Chain: HasSignerType + HasField<Tag, Value = Mutex<()>>,
+    Chain: HasSignerType + HasField<Tag, Value = Arc<Mutex<()>>>,
 {
     fn mutex_for_nonce_allocation<'a>(chain: &'a Chain, _signer: &Chain::Signer) -> &'a Mutex<()> {
         chain.get_field(PhantomData)

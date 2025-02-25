@@ -150,7 +150,7 @@ pub struct BaseCosmosChain {
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
     pub packet_filter: PacketFilterConfig,
-    pub nonce_mutex: Mutex<()>,
+    pub nonce_mutex: Arc<Mutex<()>>,
 }
 
 impl Deref for CosmosChain {
@@ -259,7 +259,7 @@ impl CosmosChain {
                 ibc_commitment_prefix,
                 rpc_client,
                 key_entry,
-                nonce_mutex: Mutex::new(()),
+                nonce_mutex: Arc::new(Mutex::new(())),
                 packet_filter,
             }),
         };
