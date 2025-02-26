@@ -9,6 +9,8 @@ use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_logging_components::types::level::{
     LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,
 };
+use hermes_relayer_components::birelay::impls::auto_birelay::LogAutoBiRelay;
+use hermes_relayer_components::birelay::traits::HasBiRelayTypes;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
@@ -70,6 +72,8 @@ delegate_components! {
                 LogWaitUpdateClientHeightStatus<'a, Relay, Target>,
             <'a, Relay: HasRelayChains, Target: RelayTarget>
                 LogBatchWorker<'a, Relay, Target>,
+            <'a, BiRelay: HasBiRelayTypes<ChainA: HasHeightType, ChainB: HasHeightType>>
+                LogAutoBiRelay<'a, BiRelay>,
         ]: TracingLogger,
     }
 }

@@ -3,6 +3,10 @@ use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::extra::run::RunnerComponent;
 use cgp::prelude::*;
+use hermes_logger::UseHermesLogger;
+use hermes_logging_components::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
+};
 use hermes_relayer_components::birelay::traits::{
     AutoBiRelayerComponent, TwoWayRelayGetter, TwoWayRelayGetterComponent,
 };
@@ -35,6 +39,12 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        [
+            LoggerTypeProviderComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            UseHermesLogger,
         ChainTypeAtComponent<Index<0>>: WithType<CosmosChain>,
         ChainTypeAtComponent<Index<1>>: WithType<CosmosChain>,
         [

@@ -10,6 +10,8 @@ use cgp::prelude::*;
 use hermes_chain_components::traits::queries::block_time::CanQueryBlockTime;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::types::height::{CanAdjustHeight, HasHeightType, HeightOf};
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 use crate::birelay::traits::{
@@ -19,10 +21,24 @@ use crate::relay::traits::auto_relayer::CanAutoRelayWithHeights;
 use crate::relay::traits::chains::{HasDstChain, HasRelayChains, HasSrcChain};
 use crate::relay::traits::target::{DestinationTarget, HasChainTargets, SourceTarget};
 
+pub struct LogAutoBiRelay<'a, BiRelay>
+where
+    BiRelay: HasBiRelayTypes<ChainA: HasHeightType, ChainB: HasHeightType>,
+{
+    pub bi_relay: &'a BiRelay,
+    pub clear_past_blocks: &'a Option<Duration>,
+    pub stop_after_blocks: &'a Option<Duration>,
+    pub start_height_a: &'a HeightOf<BiRelay::ChainA>,
+    pub start_height_b: &'a HeightOf<BiRelay::ChainB>,
+    pub end_height_a: &'a Option<HeightOf<BiRelay::ChainA>>,
+    pub end_height_b: &'a Option<HeightOf<BiRelay::ChainB>>,
+}
+
 #[cgp_new_provider(AutoBiRelayerComponent)]
 impl<BiRelay> AutoBiRelayer<BiRelay> for PerformAutoBiRelay
 where
     BiRelay: HasRuntime
+        + HasLogger
         + HasTwoWayRelay
         + HasBiRelayTypes
         + CanRaiseAsyncError<TryFromIntError>
@@ -42,6 +58,7 @@ where
     BiRelay::ChainA: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight,
     BiRelay::ChainB: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight,
     BiRelay::Runtime: CanRunConcurrentTasks,
+    BiRelay::Logger: for<'a> CanLog<LogAutoBiRelay<'a, BiRelay>>,
 {
     async fn auto_bi_relay(
         bi_relay: &BiRelay,
@@ -119,6 +136,22 @@ where
         } else {
             height_b
         };
+
+        bi_relay
+            .logger()
+            .log(
+                "starting auto bi-relaying",
+                &LogAutoBiRelay {
+                    bi_relay,
+                    clear_past_blocks: &clear_past_blocks,
+                    stop_after_blocks: &stop_after_blocks,
+                    start_height_a: &start_height_a,
+                    start_height_b: &start_height_b,
+                    end_height_a: &end_height_a,
+                    end_height_b: &end_height_b,
+                },
+            )
+            .await;
 
         let tasks: Vec<Box<BiRelayTask<BiRelay>>> = vec![
             Box::new(BiRelayTask::SourceAToB {
