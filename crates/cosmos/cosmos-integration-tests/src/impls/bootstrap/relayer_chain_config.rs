@@ -125,7 +125,7 @@ where
             compat_mode: bootstrap
                 .compat_mode()
                 .map(|compat_mode| compat_mode.to_string()),
-            poll_interval: Duration::from_millis(200),
+            block_time: Duration::from_secs(1),
         };
 
         Ok(relayer_chain_config)

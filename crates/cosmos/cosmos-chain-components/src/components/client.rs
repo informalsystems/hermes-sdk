@@ -326,7 +326,6 @@ mod preset {
                 StakingParamsUnbondingPeriod,
             PollIntervalGetterComponent:
                 FixedPollIntervalMillis<200>,
-
             [
                 ConnectionEndQuerierComponent,
                 ConnectionEndWithProofsQuerierComponent,

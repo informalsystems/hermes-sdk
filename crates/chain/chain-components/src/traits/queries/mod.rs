@@ -1,5 +1,6 @@
 pub mod block;
 pub mod block_events;
+pub mod block_time;
 pub mod chain_status;
 pub mod channel_end;
 pub mod client_state;

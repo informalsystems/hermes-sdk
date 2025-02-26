@@ -1,12 +1,17 @@
 use alloc::boxed::Box;
 use alloc::vec;
 use alloc::vec::Vec;
+use core::num::TryFromIntError;
+use core::time::Duration;
 
 use cgp::core::error::ErrorOf;
 use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
+use hermes_chain_components::traits::queries::block_time::CanQueryBlockTime;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::types::height::{CanAdjustHeight, HasHeightType, HeightOf};
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 use crate::birelay::traits::{
@@ -16,12 +21,27 @@ use crate::relay::traits::auto_relayer::CanAutoRelayWithHeights;
 use crate::relay::traits::chains::{HasDstChain, HasRelayChains, HasSrcChain};
 use crate::relay::traits::target::{DestinationTarget, HasChainTargets, SourceTarget};
 
+pub struct LogAutoBiRelay<'a, BiRelay>
+where
+    BiRelay: HasBiRelayTypes<ChainA: HasHeightType, ChainB: HasHeightType>,
+{
+    pub bi_relay: &'a BiRelay,
+    pub clear_past_blocks: &'a Option<Duration>,
+    pub stop_after_blocks: &'a Option<Duration>,
+    pub start_height_a: &'a HeightOf<BiRelay::ChainA>,
+    pub start_height_b: &'a HeightOf<BiRelay::ChainB>,
+    pub end_height_a: &'a Option<HeightOf<BiRelay::ChainA>>,
+    pub end_height_b: &'a Option<HeightOf<BiRelay::ChainB>>,
+}
+
 #[cgp_new_provider(AutoBiRelayerComponent)]
 impl<BiRelay> AutoBiRelayer<BiRelay> for PerformAutoBiRelay
 where
     BiRelay: HasRuntime
+        + HasLogger
         + HasTwoWayRelay
         + HasBiRelayTypes
+        + CanRaiseAsyncError<TryFromIntError>
         + CanRaiseAsyncError<ErrorOf<BiRelay::ChainA>>
         + CanRaiseAsyncError<ErrorOf<BiRelay::ChainB>>,
     BiRelay::RelayAToB: Clone
@@ -35,14 +55,15 @@ where
         + HasChainTargets
         + CanAutoRelayWithHeights<SourceTarget>
         + CanAutoRelayWithHeights<DestinationTarget>,
-    BiRelay::ChainA: CanQueryChainHeight + CanAdjustHeight,
-    BiRelay::ChainB: CanQueryChainHeight + CanAdjustHeight,
+    BiRelay::ChainA: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight,
+    BiRelay::ChainB: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight,
     BiRelay::Runtime: CanRunConcurrentTasks,
+    BiRelay::Logger: for<'a> CanLog<LogAutoBiRelay<'a, BiRelay>>,
 {
     async fn auto_bi_relay(
         bi_relay: &BiRelay,
-        clear_past_blocks: Option<u64>,
-        stop_after_blocks: Option<u64>,
+        clear_past_blocks: Option<Duration>,
+        stop_after_blocks: Option<Duration>,
     ) -> Result<(), BiRelay::Error> {
         let relay_a_to_b = bi_relay.relay_a_to_b();
         let relay_b_to_a = bi_relay.relay_b_to_a();
@@ -50,18 +71,33 @@ where
         let chain_a = relay_a_to_b.src_chain();
         let chain_b = relay_a_to_b.dst_chain();
 
+        let block_time_a = chain_a
+            .query_block_time()
+            .await
+            .map_err(BiRelay::raise_error)?;
+
+        let block_time_b = chain_b
+            .query_block_time()
+            .await
+            .map_err(BiRelay::raise_error)?;
+
         let height_a = chain_a
             .query_chain_height()
             .await
             .map_err(BiRelay::raise_error)?;
+
         let height_b = chain_b
             .query_chain_height()
             .await
             .map_err(BiRelay::raise_error)?;
 
         let end_height_a = if let Some(stop_after_blocks) = stop_after_blocks {
+            let relative_height = (stop_after_blocks.as_millis() / block_time_a.as_millis())
+                .try_into()
+                .map_err(BiRelay::raise_error)?;
+
             Some(
-                BiRelay::ChainA::add_height(&height_a, stop_after_blocks)
+                BiRelay::ChainA::add_height(&height_a, relative_height)
                     .map_err(BiRelay::raise_error)?,
             )
         } else {
@@ -69,8 +105,12 @@ where
         };
 
         let end_height_b = if let Some(stop_after_blocks) = stop_after_blocks {
+            let relative_height = (stop_after_blocks.as_millis() / block_time_b.as_millis())
+                .try_into()
+                .map_err(BiRelay::raise_error)?;
+
             Some(
-                BiRelay::ChainB::add_height(&height_b, stop_after_blocks)
+                BiRelay::ChainB::add_height(&height_b, relative_height)
                     .map_err(BiRelay::raise_error)?,
             )
         } else {
@@ -78,18 +118,40 @@ where
         };
 
         let start_height_a = if let Some(clear_past_blocks) = clear_past_blocks {
-            BiRelay::ChainA::sub_height(&height_a, clear_past_blocks)
-                .map_err(BiRelay::raise_error)?
+            let relative_height = (clear_past_blocks.as_millis() / block_time_a.as_millis())
+                .try_into()
+                .map_err(BiRelay::raise_error)?;
+
+            BiRelay::ChainA::sub_height(&height_a, relative_height).map_err(BiRelay::raise_error)?
         } else {
             height_a
         };
 
         let start_height_b = if let Some(clear_past_blocks) = clear_past_blocks {
-            BiRelay::ChainB::sub_height(&height_b, clear_past_blocks)
-                .map_err(BiRelay::raise_error)?
+            let relative_height = (clear_past_blocks.as_millis() / block_time_b.as_millis())
+                .try_into()
+                .map_err(BiRelay::raise_error)?;
+
+            BiRelay::ChainB::sub_height(&height_b, relative_height).map_err(BiRelay::raise_error)?
         } else {
             height_b
         };
+
+        bi_relay
+            .logger()
+            .log(
+                "starting auto bi-relaying",
+                &LogAutoBiRelay {
+                    bi_relay,
+                    clear_past_blocks: &clear_past_blocks,
+                    stop_after_blocks: &stop_after_blocks,
+                    start_height_a: &start_height_a,
+                    start_height_b: &start_height_b,
+                    end_height_a: &end_height_a,
+                    end_height_b: &end_height_b,
+                },
+            )
+            .await;
 
         let tasks: Vec<Box<BiRelayTask<BiRelay>>> = vec![
             Box::new(BiRelayTask::SourceAToB {

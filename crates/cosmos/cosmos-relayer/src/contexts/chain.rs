@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use core::time::Duration;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
@@ -60,6 +61,9 @@ use hermes_relayer_components::chain::traits::packet::filter::{
 };
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::queries::block_events::BlockEventsQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::block_time::{
+    BlockTimeQuerierComponent, CanQueryBlockTime,
+};
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     CanQueryChannelEnd, CanQueryChannelEndWithProofs,
@@ -150,6 +154,7 @@ pub struct BaseCosmosChain {
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
     pub packet_filter: PacketFilterConfig,
+    pub block_time: Duration,
     pub nonce_mutex: Arc<Mutex<()>>,
 }
 
@@ -191,6 +196,8 @@ delegate_components! {
 
         NonceAllocationMutexGetterComponent:
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
+        BlockTimeQuerierComponent:
+            UseField<symbol!("block_time")>,
     }
 }
 
@@ -249,6 +256,8 @@ impl CosmosChain {
 
         let ibc_commitment_prefix = chain_config.store_prefix.clone().into();
 
+        let block_time = chain_config.block_time;
+
         let chain = Self {
             base_chain: Arc::new(BaseCosmosChain {
                 chain_config,
@@ -261,6 +270,7 @@ impl CosmosChain {
                 key_entry,
                 nonce_mutex: Arc::new(Mutex::new(())),
                 packet_filter,
+                block_time,
             }),
         };
 
@@ -341,6 +351,7 @@ pub trait CanUseCosmosChain:
     + CanSubmitTx
     + CanPollTxResponse
     + CanQueryTxResponse
+    + CanQueryBlockTime
     + CanAssertEventualAmount
     + CanUploadWasmClientCode
     + CanQueryProposalStatus
