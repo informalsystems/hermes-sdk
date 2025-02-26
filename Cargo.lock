@@ -2012,6 +2012,7 @@ version = "0.1.0"
 dependencies = [
  "cgp",
  "hermes-chain-type-components",
+ "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-runtime-components",
