@@ -256,7 +256,7 @@ impl CosmosChain {
 
         let ibc_commitment_prefix = chain_config.store_prefix.clone().into();
 
-        let block_time = chain_config.block_time.clone();
+        let block_time = chain_config.block_time;
 
         let chain = Self {
             base_chain: Arc::new(BaseCosmosChain {
