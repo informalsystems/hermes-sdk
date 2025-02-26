@@ -29,5 +29,5 @@ pub trait CanQueryPacketReceipt<Counterparty>:
         port_id: &Self::PortId,
         sequence: &SequenceOf<Counterparty, Self>,
         height: &Self::Height,
-    ) -> Result<(Self::PacketReceipt, Self::CommitmentProof), Self::Error>;
+    ) -> Result<(Option<Self::PacketReceipt>, Self::CommitmentProof), Self::Error>;
 }

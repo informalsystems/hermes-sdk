@@ -27,17 +27,13 @@ where
         port_id: &Chain::PortId,
         sequence: &Counterparty::Sequence,
         height: &Chain::Height,
-    ) -> Result<(Chain::PacketReceipt, Chain::CommitmentProof), Chain::Error> {
+    ) -> Result<(Option<Chain::PacketReceipt>, Chain::CommitmentProof), Chain::Error> {
         let receipt_path =
             format!("receipts/ports/{port_id}/channels/{channel_id}/sequences/{sequence}");
 
         let (receipt, proof) = chain
             .query_abci_with_proofs(IBC_QUERY_PATH, receipt_path.as_bytes(), height)
             .await?;
-
-        let receipt = receipt.ok_or_else(|| {
-            Chain::raise_error(format!("packet receipt not found at: {receipt_path}"))
-        })?;
 
         // TODO: Use a more precise `PacketReceipt` type, i.e. `bool`
 
