@@ -182,7 +182,7 @@ where
     pub packet: &'a Counterparty::OutgoingPacket,
 }
 
-impl<'a, Chain, Counterparty> Debug for InvalidTimeoutReceipt<'a, Chain, Counterparty>
+impl<Chain, Counterparty> Debug for InvalidTimeoutReceipt<'_, Chain, Counterparty>
 where
     Chain: HasHeightType,
     Counterparty: HasOutgoingPacketType<Chain>
