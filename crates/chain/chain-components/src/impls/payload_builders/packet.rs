@@ -1,5 +1,9 @@
+use core::fmt::Debug;
+
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
 
 use crate::traits::packet::fields::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence, HasPacketSrcChannelId,
@@ -129,7 +133,7 @@ where
         + CanQueryPacketReceipt<Counterparty>
         + HasCommitmentProofHeight
         + HasCommitmentProofType
-        + HasAsyncErrorType,
+        + for<'a> CanRaiseAsyncError<InvalidTimeoutReceipt<'a, Chain, Counterparty>>,
     Counterparty:
         HasPacketDstChannelId<Chain> + HasPacketDstPortId<Chain> + HasPacketSequence<Chain>,
 {
@@ -139,7 +143,7 @@ where
         height: &Chain::Height,
         packet: &Counterparty::OutgoingPacket,
     ) -> Result<TimeoutUnorderedPacketPayload<Chain>, Chain::Error> {
-        let (_, proof_unreceived) = chain
+        let (receipt, proof_unreceived) = chain
             .query_packet_receipt(
                 &Counterparty::packet_dst_channel_id(packet),
                 &Counterparty::packet_dst_port_id(packet),
@@ -148,7 +152,13 @@ where
             )
             .await?;
 
-        // TODO: validate packet receipt
+        if receipt.is_some() {
+            return Err(Chain::raise_error(InvalidTimeoutReceipt {
+                chain,
+                height,
+                packet,
+            }));
+        }
 
         // TODO: check that all commitment proof heights are the same
         let update_height = Chain::commitment_proof_height(&proof_unreceived).clone();
@@ -159,5 +169,34 @@ where
         };
 
         Ok(payload)
+    }
+}
+
+pub struct InvalidTimeoutReceipt<'a, Chain, Counterparty>
+where
+    Chain: HasHeightType,
+    Counterparty: HasOutgoingPacketType<Chain>,
+{
+    pub chain: &'a Chain,
+    pub height: &'a Chain::Height,
+    pub packet: &'a Counterparty::OutgoingPacket,
+}
+
+impl<'a, Chain, Counterparty> Debug for InvalidTimeoutReceipt<'a, Chain, Counterparty>
+where
+    Chain: HasHeightType,
+    Counterparty: HasOutgoingPacketType<Chain>
+        + HasPacketDstChannelId<Chain>
+        + HasPacketDstPortId<Chain>
+        + HasPacketSequence<Chain>,
+{
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f,
+            "cannot construct a timeout packet payload as a packet receipt exists at height {} for packet {}/{}/{}",
+            self.height,
+            Counterparty::packet_dst_channel_id(self.packet),
+            Counterparty::packet_dst_port_id(self.packet),
+            Counterparty::packet_sequence(self.packet),
+        )
     }
 }

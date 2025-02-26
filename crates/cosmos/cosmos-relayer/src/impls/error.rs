@@ -28,12 +28,14 @@ use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
     InvalidWireType, UnsupportedWireType,
 };
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
+use hermes_relayer_components::chain::impls::payload_builders::packet::InvalidTimeoutReceipt;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::NoConsensusStateAtLessThanHeight;
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionNotFoundError;
 use hermes_relayer_components::chain::traits::send_message::EmptyMessageResponse;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::error::impls::error::{
     MaxRetryExceededError, UnwrapMaxRetryExceededError,
 };
@@ -166,6 +168,8 @@ delegate_components! {
                 MissingCreateClientEventError<'a, Chain, Counterparty>,
             <'a, Chain: HasIbcChainTypes<Counterparty>, Counterparty>
                 ConnectionNotFoundError<'a, Chain, Counterparty>,
+            <'a, Chain: HasHeightType, Counterparty: HasOutgoingPacketType<Chain>>
+                InvalidTimeoutReceipt<'a, Chain, Counterparty>,
             <'a, Chain>
                 ProposalFailed<'a, Chain>,
             <'a, Relay>
