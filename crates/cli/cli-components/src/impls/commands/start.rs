@@ -56,17 +56,17 @@ pub struct StartRelayerArgs {
     client_id_b: String,
 
     #[clap(long = "clear-past-blocks", required = false)]
-    clear_past_blocks: Option<u64>,
+    clear_past_blocks: Option<humantime::Duration>,
 
     #[clap(long = "stop-after-blocks", required = false)]
-    stop_after_blocks: Option<u64>,
+    stop_after_blocks: Option<humantime::Duration>,
 }
 
 #[cgp_auto_getter]
 pub trait HasClearPacketFields {
-    fn clear_past_blocks(&self) -> &Option<u64>;
+    fn clear_past_blocks(&self) -> &Option<humantime::Duration>;
 
-    fn stop_after_blocks(&self) -> &Option<u64>;
+    fn stop_after_blocks(&self) -> &Option<humantime::Duration>;
 }
 
 #[cgp_new_provider(CommandRunnerComponent)]
@@ -118,7 +118,10 @@ where
             .await;
 
         birelay
-            .auto_bi_relay(clear_past_blocks, stop_after_blocks)
+            .auto_bi_relay(
+                clear_past_blocks.map(Into::into),
+                stop_after_blocks.map(Into::into),
+            )
             .await
             .map_err(|e| App::wrap_error("Relayer failed to start", App::raise_error(e)))?;
 

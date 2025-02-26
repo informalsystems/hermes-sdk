@@ -15,9 +15,6 @@ use hermes_chain_type_components::traits::types::message_response::HasMessageRes
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
-use hermes_cosmos_chain_components::traits::block_time::{
-    BlockTimeQuerierComponent, CanQueryBlockTime,
-};
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
 use hermes_cosmos_chain_components::traits::gas_config::{
@@ -64,6 +61,9 @@ use hermes_relayer_components::chain::traits::packet::filter::{
 };
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::queries::block_events::BlockEventsQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::block_time::{
+    BlockTimeQuerierComponent, CanQueryBlockTime,
+};
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     CanQueryChannelEnd, CanQueryChannelEndWithProofs,

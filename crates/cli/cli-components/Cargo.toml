@@ -25,4 +25,5 @@ http                = { workspace = true }
 ibc                 = { workspace = true }
 serde               = { workspace = true, features = ["derive"] }
 toml                = { workspace = true }
+humantime           = { workspace = true }
 clap                = { workspace = true, features = ["derive"] }

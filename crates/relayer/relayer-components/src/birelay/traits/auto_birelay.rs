@@ -1,3 +1,5 @@
+use core::time::Duration;
+
 use cgp::prelude::*;
 
 #[cgp_component {
@@ -8,7 +10,7 @@ use cgp::prelude::*;
 pub trait CanAutoBiRelay: HasAsyncErrorType {
     async fn auto_bi_relay(
         &self,
-        clear_past_blocks: Option<u64>,
-        stop_after_blocks: Option<u64>,
+        clear_past_blocks: Option<Duration>,
+        stop_after_blocks: Option<Duration>,
     ) -> Result<(), Self::Error>;
 }
