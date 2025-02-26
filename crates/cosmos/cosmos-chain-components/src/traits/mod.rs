@@ -1,4 +1,5 @@
 pub mod abci_query;
+pub mod block_time;
 pub mod convert_gas_to_fee;
 pub mod eip;
 pub mod gas_config;

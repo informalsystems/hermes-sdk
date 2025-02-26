@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use core::time::Duration;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
@@ -14,6 +15,9 @@ use hermes_chain_type_components::traits::types::message_response::HasMessageRes
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
+use hermes_cosmos_chain_components::traits::block_time::{
+    BlockTimeQuerierComponent, CanQueryBlockTime,
+};
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
 use hermes_cosmos_chain_components::traits::gas_config::{
@@ -150,6 +154,7 @@ pub struct BaseCosmosChain {
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
     pub packet_filter: PacketFilterConfig,
+    pub block_time: Duration,
     pub nonce_mutex: Arc<Mutex<()>>,
 }
 
@@ -191,6 +196,8 @@ delegate_components! {
 
         NonceAllocationMutexGetterComponent:
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
+        BlockTimeQuerierComponent:
+            UseField<symbol!("block_time")>,
     }
 }
 
@@ -249,6 +256,8 @@ impl CosmosChain {
 
         let ibc_commitment_prefix = chain_config.store_prefix.clone().into();
 
+        let block_time = chain_config.block_time.clone();
+
         let chain = Self {
             base_chain: Arc::new(BaseCosmosChain {
                 chain_config,
@@ -261,6 +270,7 @@ impl CosmosChain {
                 key_entry,
                 nonce_mutex: Arc::new(Mutex::new(())),
                 packet_filter,
+                block_time,
             }),
         };
 
@@ -341,6 +351,7 @@ pub trait CanUseCosmosChain:
     + CanSubmitTx
     + CanPollTxResponse
     + CanQueryTxResponse
+    + CanQueryBlockTime
     + CanAssertEventualAmount
     + CanUploadWasmClientCode
     + CanQueryProposalStatus
