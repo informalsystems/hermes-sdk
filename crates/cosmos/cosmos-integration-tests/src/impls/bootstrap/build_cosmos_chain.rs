@@ -44,12 +44,6 @@ where
             .build_relayer_chain_config(chain_node_config, chain_genesis_config, relayer_wallet)
             .await?;
 
-        // TODO: Have a more reliable way to wait for the bootstrapped full node to
-        // start up. If we don't wait, the building of the chain would fail during
-        // the spawning of `ChainHandle`, as the v1 relayer tries to perform health
-        // check on building.
-        bootstrap.runtime().sleep(Duration::from_secs(6)).await;
-
         let chain = bootstrap
             .cosmos_builder()
             .build_chain_with_config(relayer_chain_config.clone())
