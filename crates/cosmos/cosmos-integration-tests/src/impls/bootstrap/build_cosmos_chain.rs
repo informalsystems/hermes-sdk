@@ -44,7 +44,7 @@ where
         // start up. If we don't wait, the building of the chain would fail during
         // the spawning of `ChainHandle`, as the v1 relayer tries to perform health
         // check on building.
-        bootstrap.runtime().sleep(Duration::from_secs(2)).await;
+        bootstrap.runtime().sleep(Duration::from_secs(6)).await;
 
         let chain = bootstrap
             .cosmos_builder()
