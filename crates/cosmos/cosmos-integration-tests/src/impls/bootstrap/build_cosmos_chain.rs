@@ -6,6 +6,7 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::H
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_error::types::HermesError;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
@@ -15,6 +16,8 @@ use crate::traits::bootstrap::build_chain::{
 };
 use crate::traits::bootstrap::cosmos_builder::HasCosmosBuilder;
 use crate::traits::bootstrap::relayer_chain_config::CanBuildRelayerChainConfig;
+
+const RETRY_START: u64 = 20;
 
 pub struct BuildCosmosChainWithNodeConfig;
 
@@ -29,6 +32,7 @@ where
         + HasDynamicGas
         + CanRaiseAsyncError<HermesError>,
     Bootstrap::Runtime: CanSleep,
+    Bootstrap::Chain: CanQueryChainStatus,
 {
     async fn build_chain_with_node_config(
         bootstrap: &Bootstrap,
@@ -51,6 +55,14 @@ where
             .build_chain_with_config(relayer_chain_config.clone())
             .await
             .map_err(Bootstrap::raise_error)?;
+
+        for _ in 0..RETRY_START {
+            if chain.query_chain_status().await.is_ok() {
+                break;
+            }
+
+            bootstrap.runtime().sleep(Duration::from_millis(500)).await;
+        }
 
         Ok(chain)
     }
