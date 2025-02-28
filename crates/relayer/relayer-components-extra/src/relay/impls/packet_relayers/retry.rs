@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
-use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
+use hermes_relayer_components::error::traits::{HasMaxErrorRetry, HasRetryableError};
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, PacketOf};
 use hermes_relayer_components::relay::traits::packet_relayer::{
     PacketRelayer, PacketRelayerComponent,

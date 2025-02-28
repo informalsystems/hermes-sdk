@@ -95,7 +95,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
+use hermes_relayer_components::error::traits::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::global_nonce_mutex::GetGlobalNonceMutex;
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
 use hermes_relayer_components::transaction::traits::default_signer::{

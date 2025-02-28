@@ -40,7 +40,7 @@ use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketTy
 use hermes_relayer_components::error::impls::error::{
     MaxRetryExceededError, UnwrapMaxRetryExceededError,
 };
-use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
+use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
 use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
 use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;

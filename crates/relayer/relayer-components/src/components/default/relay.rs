@@ -4,7 +4,7 @@ mod preset {
     use cgp::prelude::*;
 
     use crate::error::impls::retry::ReturnMaxRetry;
-    use crate::error::traits::retry::MaxErrorRetryGetterComponent;
+    use crate::error::traits::MaxErrorRetryGetterComponent;
     use crate::relay::impls::auto_relayers::both_targets::RelayBothTargets;
     use crate::relay::impls::auto_relayers::poll_event::RelayWithPolledEvents;
     use crate::relay::impls::auto_relayers::starting_current_height::AutoRelayStartingCurrentHeight;

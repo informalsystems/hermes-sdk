@@ -8,7 +8,7 @@ use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQue
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
-use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
+use hermes_relayer_components::error::traits::{HasMaxErrorRetry, HasRetryableError};
 use hermes_relayer_components::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::{
     FullCycleRelayer, LogRelayPacketAction,

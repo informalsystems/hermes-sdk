@@ -12,7 +12,7 @@ use hermes_error::handlers::infallible::HandleInfallible;
 use hermes_error::handlers::report::ReportError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
-use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
+use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_runtime::types::error::TokioRuntimeError;
 use ibc::clients::tendermint::types::error::TendermintClientError;
 use ibc::core::host::types::error::{DecodingError, IdentifierError};

@@ -1,1 +1,3 @@
-pub mod retry;
+mod retry;
+
+pub use retry::*;
