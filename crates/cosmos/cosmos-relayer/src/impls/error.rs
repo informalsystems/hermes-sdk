@@ -37,9 +37,6 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-use hermes_relayer_components::error::impls::error::{
-    MaxRetryExceededError, UnwrapMaxRetryExceededError,
-};
 use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
 use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
@@ -84,7 +81,6 @@ pub trait CanHandleCosmosError<Context>:
     + for<'a> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, BroadcastTxError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosChain>>
-    + for<'a> ErrorRaiser<Context, MaxRetryExceededError<'a, Context>>
 where
     Context: HasAsyncErrorType<Error = Error>,
 {
@@ -185,7 +181,5 @@ delegate_components! {
                 MissingChannelTryEventError<'a, Relay>,
         ]:
             DebugError,
-        <'a, Context: HasAsyncErrorType> MaxRetryExceededError<'a, Context>:
-            UnwrapMaxRetryExceededError,
     }
 }

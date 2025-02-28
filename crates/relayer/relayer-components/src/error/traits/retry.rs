@@ -11,7 +11,7 @@ pub trait CanPerformRetry: HasAsyncErrorType {
         &self,
         task_name: &str,
         num_retries: usize,
-        cont: impl Cont<Result<T, Self::Error>>,
+        cont: impl AsyncCont<Result<T, Self::Error>>,
     ) -> Result<T, Self::Error>;
 }
 
@@ -31,11 +31,11 @@ pub trait HasMaxErrorRetry: Async {
 }
 
 #[async_trait]
-pub trait Cont<T: Send + Sync>: Send + Sync {
+pub trait AsyncCont<T: Send + Sync>: Send + Sync {
     async fn run(&self) -> T;
 }
 
-impl<F, T, Fut> Cont<T> for F
+impl<F, T, Fut> AsyncCont<T> for F
 where
     T: Send + Sync,
     F: Fn() -> Fut + Send + Sync,

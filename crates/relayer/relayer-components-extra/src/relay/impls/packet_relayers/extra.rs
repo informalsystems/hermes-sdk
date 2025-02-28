@@ -7,8 +7,9 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
-use hermes_relayer_components::error::traits::{HasMaxErrorRetry, HasRetryableError};
+use hermes_relayer_components::error::traits::{
+    CanPerformRetry, HasMaxErrorRetry, HasRetryableError,
+};
 use hermes_relayer_components::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::{
     FullCycleRelayer, LogRelayPacketAction,
@@ -29,7 +30,7 @@ use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRe
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
 use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;
 
-use crate::relay::impls::packet_relayers::retry::RetryRelayer;
+use crate::relay::impls::packet_relayers::retry::RelayPacketWithRetry;
 
 pub struct ExtraPacketRelayer;
 
@@ -45,10 +46,10 @@ where
         + CanFilterRelayPackets
         + HasPacketLock
         + HasMaxErrorRetry
+        + CanPerformRetry
         + HasRetryableError
         + CanRaiseAsyncError<SrcChain::Error>
-        + CanRaiseAsyncError<DstChain::Error>
-        + for<'a> CanRaiseAsyncError<MaxRetryExceededError<'a, Relay>>,
+        + CanRaiseAsyncError<DstChain::Error>,
     SrcChain:
         CanQueryChainStatus + CanQueryPacketIsCleared<DstChain> + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
@@ -60,7 +61,7 @@ where
         + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
-        <LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>>::
+        <LockPacketRelayer<LoggerRelayer<FilterRelayer<RelayPacketWithRetry<FullCycleRelayer>>>>>::
             relay_packet(relay, packet).await
     }
 }

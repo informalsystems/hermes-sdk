@@ -2,7 +2,7 @@ use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 use core::ops::Deref;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::core::field::{Index, UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -11,7 +11,7 @@ use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
-use hermes_relayer_components::error::traits::RetryableErrorComponent;
+use hermes_relayer_components::error::traits::{CanPerformRetry, RetryableErrorComponent};
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainAt, ChainGetterAtComponent, ChainTypeAtComponent,
 };
@@ -110,6 +110,7 @@ delegate_components! {
         [
             ErrorTypeProviderComponent,
             ErrorRaiserComponent,
+            ErrorWrapperComponent,
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
@@ -157,6 +158,7 @@ delegate_components! {
 pub trait CanUseCosmosRelay:
     HasRelayClientIds
     + HasRuntime
+    + CanPerformRetry
     + CanUseComponent<TargetAutoRelayerComponent, SourceTarget>
     + CanUseComponent<TargetAutoRelayerComponent, DestinationTarget>
     + HasSourceTargetChainTypes

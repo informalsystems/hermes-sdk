@@ -5,7 +5,7 @@ use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
-use crate::error::traits::{Cont, HasRetryableError, RetryPerformer, RetryPerformerComponent};
+use crate::error::traits::{AsyncCont, HasRetryableError, RetryPerformer, RetryPerformerComponent};
 
 #[cgp_new_provider(RetryPerformerComponent)]
 impl<Context> RetryPerformer<Context> for PerformRetryWithRetryableError
@@ -19,7 +19,7 @@ where
         context: &Context,
         task_name: &str,
         num_retries: usize,
-        cont: impl Cont<Result<T, Context::Error>>,
+        cont: impl AsyncCont<Result<T, Context::Error>>,
     ) -> Result<T, Context::Error> {
         let runtime = context.runtime();
 
