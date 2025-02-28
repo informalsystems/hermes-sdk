@@ -1,6 +1,6 @@
 use core::ops::Deref;
 
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -149,6 +149,7 @@ delegate_components! {
         [
             ErrorTypeProviderComponent,
             ErrorRaiserComponent,
+            ErrorWrapperComponent,
             RetryableErrorComponent,
         ]:
             HandleCosmosError,

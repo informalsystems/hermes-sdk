@@ -150,13 +150,19 @@ mod preset {
         TimeMeasurerComponent, TimeTypeComponent, TimeoutTypeComponent,
     };
     use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+    use hermes_relayer_components::error::impls::retry::{
+        PerformRetryWithRetryableError, ReturnMaxRetry,
+    };
+    use hermes_relayer_components::error::traits::{
+        MaxErrorRetryGetterComponent, RetryPerformerComponent,
+    };
 
     use crate::components::delegate::DelegateCosmosChainComponents;
     use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
     use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
     use crate::impls::events::ProvideCosmosEvents;
     use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
-    use crate::impls::queries::abci::QueryAbci;
+    use crate::impls::queries::abci::{QueryAbci, QueryAbciWithRetry};
     use crate::impls::queries::block::QueryCometBlock;
     use crate::impls::queries::block_events::QueryCosmosBlockEvents;
     use crate::impls::queries::chain_id::QueryChainIdFromAbci;
@@ -321,11 +327,15 @@ mod preset {
                         QueryCosmosBlockEvents
                     >>,
             AbciQuerierComponent:
-                QueryAbci,
+                QueryAbciWithRetry<QueryAbci>,
             UnbondingPeriodQuerierComponent:
                 StakingParamsUnbondingPeriod,
             PollIntervalGetterComponent:
                 FixedPollIntervalMillis<200>,
+            MaxErrorRetryGetterComponent:
+                ReturnMaxRetry<3>,
+            RetryPerformerComponent:
+                PerformRetryWithRetryableError,
             [
                 ConnectionEndQuerierComponent,
                 ConnectionEndWithProofsQuerierComponent,
