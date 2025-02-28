@@ -49,6 +49,7 @@ where
     ) -> Result<Option<Vec<u8>>, Chain::Error> {
         let tm_height =
             TendermintHeight::try_from(height.revision_height()).map_err(Chain::raise_error)?;
+
         let response = chain
             .rpc_client()
             .abci_query(Some(path.to_owned()), data, Some(tm_height), false)

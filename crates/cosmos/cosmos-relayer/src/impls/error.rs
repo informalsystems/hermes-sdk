@@ -16,11 +16,11 @@ use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
 use hermes_cosmos_chain_components::impls::queries::eip::types::EipQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
 use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::debug::{DebugError, DebugRetryableError};
 use hermes_error::handlers::display::DisplayError;
 use hermes_error::handlers::identity::ReturnError;
 use hermes_error::handlers::infallible::HandleInfallible;
-use hermes_error::handlers::report::ReportError;
+use hermes_error::handlers::report::{ReportError, ReportRetryableError};
 use hermes_error::handlers::wrap::WrapErrorDetail;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
@@ -114,7 +114,6 @@ delegate_components! {
             TendermintError,
             TendermintClientError,
             TendermintProtoError,
-            TendermintRpcError,
             TimestampError,
             ChannelError,
             DecodingError,
@@ -138,6 +137,10 @@ delegate_components! {
             TransportError,
         ]: ReportError,
         [
+            TendermintRpcError,
+        ]:
+            ReportRetryableError,
+        [
             <'a> &'a str,
             String,
         ]:
@@ -149,7 +152,6 @@ delegate_components! {
             RequiredFieldTagNotFound,
             UnknownClientStateType,
             UnknownConsensusStateType,
-            AbciQueryError,
             EipQueryError,
             Status,
             MissingSendPacketEventError,
@@ -181,5 +183,9 @@ delegate_components! {
                 MissingChannelTryEventError<'a, Relay>,
         ]:
             DebugError,
+        [
+            AbciQueryError,
+        ]:
+            DebugRetryableError,
     }
 }
