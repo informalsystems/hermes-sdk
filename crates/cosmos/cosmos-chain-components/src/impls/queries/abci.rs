@@ -6,6 +6,7 @@ use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::error::traits::{CanPerformRetry, HasMaxErrorRetry};
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ics23::CommitmentProof;
@@ -20,14 +21,12 @@ use crate::traits::abci_query::{AbciQuerier, AbciQuerierComponent};
 use crate::traits::rpc_client::HasRpcClient;
 use crate::types::commitment_proof::CosmosCommitmentProof;
 
-pub struct QueryAbci;
-
 #[derive(Debug)]
 pub struct AbciQueryError {
     pub response: AbciQuery,
 }
 
-#[cgp_provider(AbciQuerierComponent)]
+#[cgp_new_provider(AbciQuerierComponent)]
 impl<Chain, Encoding> AbciQuerier<Chain> for QueryAbci
 where
     Chain: HasRpcClient
@@ -110,6 +109,39 @@ where
         } else {
             Ok((Some(response.value), commitment_proof))
         }
+    }
+}
+
+#[cgp_new_provider(AbciQuerierComponent)]
+impl<Chain, InQuerier> AbciQuerier<Chain> for QueryAbciWithRetry<InQuerier>
+where
+    Chain: HasHeightType + HasCommitmentProofType + HasMaxErrorRetry + CanPerformRetry,
+    InQuerier: AbciQuerier<Chain>,
+{
+    async fn query_abci(
+        chain: &Chain,
+        path: &str,
+        data: &[u8],
+        height: &Chain::Height,
+    ) -> Result<Option<Vec<u8>>, Chain::Error> {
+        chain
+            .perform_retry("query_abci", 5, async || {
+                InQuerier::query_abci(chain, path, data, height).await
+            })
+            .await
+    }
+
+    async fn query_abci_with_proofs(
+        chain: &Chain,
+        path: &str,
+        data: &[u8],
+        height: &Chain::Height,
+    ) -> Result<(Option<Vec<u8>>, Chain::CommitmentProof), Chain::Error> {
+        chain
+            .perform_retry("query_abci", 5, async || {
+                InQuerier::query_abci_with_proofs(chain, path, data, height).await
+            })
+            .await
     }
 }
 
