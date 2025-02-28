@@ -13,7 +13,7 @@ where
 {
     async fn relay_packet(relay: &Relay, packet: &PacketOf<Relay>) -> Result<(), Relay::Error> {
         relay
-            .perform_retry("relay_packet", relay.max_retry(), async || {
+            .perform_with_retry("relay_packet", relay.max_retry(), async || {
                 InRelayer::relay_packet(relay, packet).await
             })
             .await

@@ -3,6 +3,8 @@ use core::time::Duration;
 
 use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::error::traits::{AsyncCont, HasRetryableError, RetryPerformer, RetryPerformerComponent};
@@ -11,17 +13,20 @@ use crate::error::traits::{AsyncCont, HasRetryableError, RetryPerformer, RetryPe
 impl<Context> RetryPerformer<Context> for PerformRetryWithRetryableError
 where
     Context: HasRuntime
+        + HasLogger
         + HasRetryableError
         + for<'a> CanWrapAsyncError<ErrMaxRetryExceeded<'a, Context>>,
     Context::Runtime: CanSleep,
+    Context::Logger: for<'a> CanLog<LogPerformRetry<'a, Context>>,
 {
-    async fn perform_retry<T: Send + Sync>(
+    async fn perform_with_retry<T: Send + Sync>(
         context: &Context,
         task_name: &str,
-        num_retries: usize,
+        max_retries: usize,
         cont: impl AsyncCont<Result<T, Context::Error>>,
     ) -> Result<T, Context::Error> {
         let runtime = context.runtime();
+        let logger = context.logger();
 
         let mut attempts: usize = 0;
         let mut retry_interval = Duration::from_millis(500);
@@ -36,16 +41,30 @@ where
                 Err(e) => {
                     if !Context::is_retryable_error(&e) {
                         return Err(e);
-                    } else if attempts >= num_retries {
+                    } else if attempts >= max_retries {
                         return Err(Context::wrap_error(
                             e,
                             ErrMaxRetryExceeded {
                                 context,
                                 task_name,
-                                num_retries,
+                                max_retries,
                             },
                         ));
                     } else {
+                        logger
+                            .log(
+                                "sleeping and retrying operation after encountering error",
+                                &LogPerformRetry {
+                                    context,
+                                    error: &e,
+                                    task_name,
+                                    attempts,
+                                    max_retries,
+                                    retry_interval,
+                                },
+                            )
+                            .await;
+
                         runtime.sleep(retry_interval).await;
                         attempts += 1;
                         retry_interval = retry_interval * 2;
@@ -56,10 +75,22 @@ where
     }
 }
 
+pub struct LogPerformRetry<'a, Context>
+where
+    Context: HasErrorType,
+{
+    pub context: &'a Context,
+    pub error: &'a Context::Error,
+    pub task_name: &'a str,
+    pub attempts: usize,
+    pub max_retries: usize,
+    pub retry_interval: Duration,
+}
+
 pub struct ErrMaxRetryExceeded<'a, Context> {
     pub context: &'a Context,
     pub task_name: &'a str,
-    pub num_retries: usize,
+    pub max_retries: usize,
 }
 
 impl<'a, Context> Debug for ErrMaxRetryExceeded<'a, Context> {
@@ -67,7 +98,7 @@ impl<'a, Context> Debug for ErrMaxRetryExceeded<'a, Context> {
         write!(
             f,
             "operation failed after max retry of {}: {}",
-            self.num_retries, self.task_name
+            self.max_retries, self.task_name
         )
     }
 }

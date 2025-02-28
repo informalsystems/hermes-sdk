@@ -14,6 +14,7 @@ use hermes_relayer_components::birelay::traits::HasBiRelayTypes;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::error::impls::retry::LogPerformRetry;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
@@ -52,6 +53,8 @@ delegate_components! {
             LevelInfo,
             LevelWarn,
             LevelError,
+            <'a, Context: HasErrorType>
+                LogPerformRetry<'a, Context>,
             <'a, Chain: HasSignerType + HasNonceType + HasMessageType,>
                 LogSendMessagesWithSignerAndNonce<'a, Chain>,
             <'a, Chain: HasTransactionHashType>

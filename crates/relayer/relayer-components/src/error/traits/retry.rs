@@ -7,7 +7,7 @@ use cgp::prelude::*;
 }]
 #[async_trait]
 pub trait CanPerformRetry: HasAsyncErrorType {
-    async fn perform_retry<T: Send + Sync>(
+    async fn perform_with_retry<T: Send + Sync>(
         &self,
         task_name: &str,
         num_retries: usize,

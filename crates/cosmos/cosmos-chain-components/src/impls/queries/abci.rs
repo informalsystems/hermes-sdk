@@ -126,7 +126,7 @@ where
         height: &Chain::Height,
     ) -> Result<Option<Vec<u8>>, Chain::Error> {
         chain
-            .perform_retry("query_abci", 5, async || {
+            .perform_with_retry("query_abci", 5, async || {
                 InQuerier::query_abci(chain, path, data, height).await
             })
             .await
@@ -139,7 +139,7 @@ where
         height: &Chain::Height,
     ) -> Result<(Option<Vec<u8>>, Chain::CommitmentProof), Chain::Error> {
         chain
-            .perform_retry("query_abci_with_proofs", 5, async || {
+            .perform_with_retry("query_abci_with_proofs", 5, async || {
                 InQuerier::query_abci_with_proofs(chain, path, data, height).await
             })
             .await
