@@ -5,7 +5,9 @@ use core::num::{ParseFloatError, ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
 
 use cgp::core::component::UseDelegate;
-use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent};
+use cgp::core::error::{
+    ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent,
+};
 use cgp::prelude::*;
 use eyre::Report;
 use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateType;
@@ -14,14 +16,13 @@ use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
 use hermes_cosmos_chain_components::impls::queries::eip::types::EipQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
 use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::debug::{DebugError, DebugRetryableError};
 use hermes_error::handlers::display::DisplayError;
 use hermes_error::handlers::identity::ReturnError;
 use hermes_error::handlers::infallible::HandleInfallible;
-use hermes_error::handlers::report::ReportError;
+use hermes_error::handlers::report::{ReportError, ReportRetryableError};
 use hermes_error::handlers::wrap::WrapErrorDetail;
-use hermes_error::impls::ProvideHermesError;
-use hermes_error::traits::wrap::WrapError;
+use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
 use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
@@ -36,10 +37,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-use hermes_relayer_components::error::impls::error::{
-    MaxRetryExceededError, UnwrapMaxRetryExceededError,
-};
-use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
+use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
 use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
 use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;
@@ -83,7 +81,6 @@ pub trait CanHandleCosmosError<Context>:
     + for<'a> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, BroadcastTxError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosChain>>
-    + for<'a> ErrorRaiser<Context, MaxRetryExceededError<'a, Context>>
 where
     Context: HasAsyncErrorType<Error = Error>,
 {
@@ -99,7 +96,9 @@ delegate_components! {
         [
             ErrorTypeProviderComponent,
             RetryableErrorComponent,
-        ]: ProvideHermesError,
+        ]: UseHermesError,
+        ErrorWrapperComponent:
+            WrapErrorDetail,
         ErrorRaiserComponent:
             UseDelegate<CosmosErrorHandlers>,
     }
@@ -115,7 +114,6 @@ delegate_components! {
             TendermintError,
             TendermintClientError,
             TendermintProtoError,
-            TendermintRpcError,
             TimestampError,
             ChannelError,
             DecodingError,
@@ -139,6 +137,10 @@ delegate_components! {
             TransportError,
         ]: ReportError,
         [
+            TendermintRpcError,
+        ]:
+            ReportRetryableError,
+        [
             <'a> &'a str,
             String,
         ]:
@@ -150,7 +152,6 @@ delegate_components! {
             RequiredFieldTagNotFound,
             UnknownClientStateType,
             UnknownConsensusStateType,
-            AbciQueryError,
             EipQueryError,
             Status,
             MissingSendPacketEventError,
@@ -183,11 +184,8 @@ delegate_components! {
         ]:
             DebugError,
         [
-            WrapError<&'static str, Error>,
-            WrapError<String, Error>,
+            AbciQueryError,
         ]:
-            WrapErrorDetail,
-        <'a, Context: HasAsyncErrorType> MaxRetryExceededError<'a, Context>:
-            UnwrapMaxRetryExceededError,
+            DebugRetryableError,
     }
 }

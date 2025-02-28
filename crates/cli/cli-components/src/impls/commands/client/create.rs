@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_error::traits::wrap::CanWrapError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
@@ -99,11 +98,11 @@ where
         .await
         .map_err(|e| {
             App::wrap_error(
+                App::raise_error(e),
                 format!(
                     "Failed to create client on target chain {}",
                     target_chain_id
                 ),
-                App::raise_error(e),
             )
         })?;
 

@@ -4,7 +4,7 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_error::handlers::debug::DebugError;
-use hermes_error::impls::ProvideHermesError;
+use hermes_error::impls::UseHermesError;
 use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
@@ -42,7 +42,7 @@ pub struct CosmosBinaryChannelTestDriver {
 
 delegate_components! {
     CosmosBinaryChannelTestDriverComponents {
-        ErrorTypeProviderComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         [
             ChainTypeAtComponent<Index<0>>,

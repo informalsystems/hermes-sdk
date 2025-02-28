@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_error::traits::wrap::CanWrapError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
@@ -170,8 +169,8 @@ where
             .await
             .map_err(|e| {
                 Chain::wrap_error(
-                    format!("Failed to query client state for client `{client_id}`"),
                     e,
+                    format!("Failed to query client state for client `{client_id}`"),
                 )
             })?;
 
@@ -186,8 +185,8 @@ where
             .await
             .map_err(|e| {
                 Chain::wrap_error(
-                    format!("Failed to query consensus state at height {client_latest_height}"),
                     e,
+                    format!("Failed to query consensus state at height {client_latest_height}"),
                 )
             })?;
 
@@ -197,7 +196,7 @@ where
         let chain_status = self
             .query_chain_status()
             .await
-            .map_err(|e| Chain::wrap_error("Failed to query chain status".to_owned(), e))?;
+            .map_err(|e| Chain::wrap_error(e, "Failed to query chain status".to_owned()))?;
 
         let current_network_time = Self::chain_status_time(&chain_status);
 

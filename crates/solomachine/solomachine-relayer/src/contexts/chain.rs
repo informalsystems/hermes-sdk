@@ -21,7 +21,7 @@ use hermes_encoding_components::traits::has_encoding::{
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
-use hermes_error::impls::ProvideHermesError;
+use hermes_error::impls::UseHermesError;
 use hermes_error::Error;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
@@ -97,7 +97,7 @@ impl DelegateComponent<MockSolomachine> for DelegateCosmosChainComponents {
 delegate_components! {
     SolomachineChainContextComponents {
         ErrorTypeProviderComponent:
-            ProvideHermesError,
+            UseHermesError,
         ErrorRaiserComponent:
             DebugError,
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,

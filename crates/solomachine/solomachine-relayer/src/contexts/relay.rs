@@ -4,7 +4,7 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_error::handlers::debug::DebugError;
-use hermes_error::impls::ProvideHermesError;
+use hermes_error::impls::UseHermesError;
 use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
@@ -46,7 +46,7 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             UseHermesLogger,
-        ErrorTypeProviderComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         [
             ChainTypeAtComponent<Src>,

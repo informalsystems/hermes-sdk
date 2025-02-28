@@ -2,7 +2,7 @@ use core::fmt::{Debug, Display};
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_relayer_components::error::traits::retry::HasRetryableError;
+use hermes_relayer_components::error::traits::HasRetryableError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain::traits::proposal::poll_status::{

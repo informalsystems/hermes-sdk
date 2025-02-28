@@ -7,7 +7,7 @@ use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
-use hermes_error::impls::ProvideHermesError;
+use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_relayer_components::multi::traits::birelay_at::{
     BiRelayGetterAtComponent, BiRelayTypeAtComponent,
@@ -27,7 +27,7 @@ pub struct CosmosRelayDriver {
 
 delegate_components! {
     CosmosRelayDriverComponents {
-        ErrorTypeProviderComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         [
             ChainTypeAtComponent<Index<0>>,

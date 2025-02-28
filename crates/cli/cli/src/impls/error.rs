@@ -1,18 +1,18 @@
 use core::convert::Infallible;
 
 use cgp::core::component::UseDelegate;
-use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent};
+use cgp::core::error::{
+    ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent,
+};
 use cgp::prelude::*;
 use eyre::Report;
 use hermes_error::handlers::display::DisplayError;
 use hermes_error::handlers::identity::ReturnError;
 use hermes_error::handlers::infallible::HandleInfallible;
 use hermes_error::handlers::report::ReportError;
-use hermes_error::handlers::wrap::WrapErrorDetail;
-use hermes_error::impls::ProvideHermesError;
-use hermes_error::traits::wrap::WrapError;
+use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
-use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
+use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_runtime::types::error::TokioRuntimeError;
 use ibc::clients::tendermint::types::error::TendermintClientError;
 use ibc::core::host::types::error::{DecodingError, IdentifierError};
@@ -37,8 +37,9 @@ delegate_components! {
     ProvideCliError {
         [
             ErrorTypeProviderComponent,
+            ErrorWrapperComponent,
             RetryableErrorComponent,
-        ]: ProvideHermesError,
+        ]: UseHermesError,
         ErrorRaiserComponent: UseDelegate<CliErrorHandlers>,
     }
 }
@@ -62,10 +63,5 @@ delegate_components! {
             String,
         ]:
             DisplayError,
-        [
-            WrapError<&'static str, Error>,
-            WrapError<String, Error>,
-        ]:
-            WrapErrorDetail,
     }
 }

@@ -46,7 +46,7 @@ use hermes_comet_light_client_components::traits::verify_update_header::{
 };
 use hermes_comet_light_client_components::types::status::VerificationStatus;
 use hermes_comet_light_client_components::types::verdict::Verdict;
-use hermes_error::impls::ProvideHermesError;
+use hermes_error::impls::UseHermesError;
 use tendermint::block::Height;
 use tendermint::Time;
 use tendermint_light_client_verifier::options::Options;
@@ -91,7 +91,7 @@ pub struct CometLightClient {
 delegate_components! {
     CometLightClientComponents {
         ErrorTypeProviderComponent:
-            ProvideHermesError,
+            UseHermesError,
         ErrorRaiserComponent:
             UseDelegate<HandleLightClientError>,
         [
