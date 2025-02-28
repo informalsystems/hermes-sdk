@@ -2,7 +2,6 @@ use std::marker::PhantomData;
 
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
-use hermes_error::traits::wrap::CanWrapError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
@@ -123,7 +122,7 @@ where
                 stop_after_blocks.map(Into::into),
             )
             .await
-            .map_err(|e| App::wrap_error("Relayer failed to start", App::raise_error(e)))?;
+            .map_err(|e| App::wrap_error(App::raise_error(e), "Relayer failed to start"))?;
 
         Ok(app.produce_output("Relayer exited successfully."))
     }

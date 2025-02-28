@@ -1,22 +1,24 @@
-use cgp::core::error::{ErrorTypeProviderComponent, HasAsyncErrorType};
+use cgp::core::error::{ErrorTypeProviderComponent, ErrorWrapperComponent, HasAsyncErrorType};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_relayer_components::error::traits::retry::{
     ProvideRetryableError, RetryableErrorComponent,
 };
 
+use crate::handlers::wrap::WrapErrorDetail;
 use crate::types::Error;
 
-pub struct ProvideHermesError;
+pub struct UseHermesError;
 
 delegate_components! {
-    ProvideHermesError {
-        ErrorTypeProviderComponent: WithType<Error>
+    UseHermesError {
+        ErrorTypeProviderComponent: WithType<Error>,
+        ErrorWrapperComponent: WrapErrorDetail,
     }
 }
 
 #[cgp_provider(RetryableErrorComponent)]
-impl<Context> ProvideRetryableError<Context> for ProvideHermesError
+impl<Context> ProvideRetryableError<Context> for UseHermesError
 where
     Context: HasAsyncErrorType<Error = Error>,
 {

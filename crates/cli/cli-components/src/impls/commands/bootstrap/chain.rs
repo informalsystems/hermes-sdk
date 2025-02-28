@@ -2,7 +2,6 @@ use core::marker::PhantomData;
 use std::path::PathBuf;
 
 use cgp::prelude::*;
-use hermes_error::traits::wrap::CanWrapError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
@@ -94,7 +93,7 @@ where
             Runtime::wait_child_process(chain_process)
                 .await
                 .map_err(|e| {
-                    App::wrap_error("chain process exited with error", App::raise_error(e))
+                    App::wrap_error(App::raise_error(e), "chain process exited with error")
                 })?;
 
             logger

@@ -3,7 +3,7 @@ use core::time::Duration;
 use std::path::PathBuf;
 
 use cgp::core::component::{UseContext, UseDelegate};
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
@@ -89,7 +89,6 @@ use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
-use hermes_error::traits::wrap::WrapError;
 use hermes_error::types::{Error, HermesError};
 use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
@@ -127,6 +126,7 @@ delegate_components! {
         [
             ErrorTypeProviderComponent,
             ErrorRaiserComponent,
+            ErrorWrapperComponent,
             RetryableErrorComponent,
         ]:
             ProvideCliError,
@@ -332,7 +332,6 @@ pub trait CanUseHermesApp:
     + CanProduceOutput<&'static str>
     + CanProduceOutput<ClientId>
     + CanRaiseAsyncError<HermesError>
-    + CanRaiseAsyncError<WrapError<&'static str, HermesError>>
 {
 }
 

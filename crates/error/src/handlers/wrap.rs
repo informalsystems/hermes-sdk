@@ -2,21 +2,20 @@ use alloc::format;
 use alloc::sync::Arc;
 use core::fmt::Debug;
 
-use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, HasAsyncErrorType};
+use cgp::core::error::{ErrorWrapper, ErrorWrapperComponent, HasAsyncErrorType};
 use cgp::prelude::*;
 
-use crate::traits::wrap::WrapError;
 use crate::types::{Error, ErrorDetail};
 
 pub struct WrapErrorDetail;
 
-#[cgp_provider(ErrorRaiserComponent)]
-impl<Context, Detail> ErrorRaiser<Context, WrapError<Detail, Error>> for WrapErrorDetail
+#[cgp_provider(ErrorWrapperComponent)]
+impl<Context, Detail> ErrorWrapper<Context, Detail> for WrapErrorDetail
 where
     Context: HasAsyncErrorType<Error = Error>,
     Detail: Debug,
 {
-    fn raise_error(WrapError { detail, error }: WrapError<Detail, Error>) -> Error {
+    fn wrap_error(error: Error, detail: Detail) -> Error {
         Error {
             is_retryable: error.is_retryable,
             detail: ErrorDetail::Wrapped(format!("{:?}", detail), Arc::new(error.detail)),

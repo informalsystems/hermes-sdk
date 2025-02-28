@@ -5,7 +5,9 @@ use core::num::{ParseFloatError, ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
 
 use cgp::core::component::UseDelegate;
-use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent};
+use cgp::core::error::{
+    ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent,
+};
 use cgp::prelude::*;
 use eyre::Report;
 use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateType;
@@ -20,8 +22,7 @@ use hermes_error::handlers::identity::ReturnError;
 use hermes_error::handlers::infallible::HandleInfallible;
 use hermes_error::handlers::report::ReportError;
 use hermes_error::handlers::wrap::WrapErrorDetail;
-use hermes_error::impls::ProvideHermesError;
-use hermes_error::traits::wrap::WrapError;
+use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
 use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
@@ -99,7 +100,9 @@ delegate_components! {
         [
             ErrorTypeProviderComponent,
             RetryableErrorComponent,
-        ]: ProvideHermesError,
+        ]: UseHermesError,
+        ErrorWrapperComponent:
+            WrapErrorDetail,
         ErrorRaiserComponent:
             UseDelegate<CosmosErrorHandlers>,
     }
@@ -182,11 +185,6 @@ delegate_components! {
                 MissingChannelTryEventError<'a, Relay>,
         ]:
             DebugError,
-        [
-            WrapError<&'static str, Error>,
-            WrapError<String, Error>,
-        ]:
-            WrapErrorDetail,
         <'a, Context: HasAsyncErrorType> MaxRetryExceededError<'a, Context>:
             UnwrapMaxRetryExceededError,
     }

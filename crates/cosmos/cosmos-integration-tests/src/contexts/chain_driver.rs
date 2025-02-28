@@ -22,7 +22,7 @@ use hermes_cosmos_test_components::chain_driver::traits::rpc_port::{
     RpcPortGetter, RpcPortGetterComponent,
 };
 use hermes_error::handlers::debug::DebugError;
-use hermes_error::impls::ProvideHermesError;
+use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -74,7 +74,7 @@ pub struct CosmosChainDriver {
 
 delegate_components! {
     CosmosChainDriverComponents {
-        ErrorTypeProviderComponent: ProvideHermesError,
+        ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeProviderComponent:
             ProvideHermesRuntime,
