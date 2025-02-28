@@ -67,7 +67,7 @@ where
 
                         runtime.sleep(retry_interval).await;
                         attempts += 1;
-                        retry_interval = retry_interval * 2;
+                        retry_interval *= 2;
                     }
                 }
             }

@@ -30,6 +30,9 @@ pub trait HasMaxErrorRetry: Async {
     fn max_retry(&self) -> usize;
 }
 
+/**
+   The `AsyncCont` trait is mainly an alias to an async closure that returns a `Future` with `Send`.
+*/
 #[async_trait]
 pub trait AsyncCont<T: Send + Sync>: Send + Sync {
     async fn run(&self) -> T;
