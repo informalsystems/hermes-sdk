@@ -8,8 +8,9 @@ use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_error::types::HermesError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelDebug;
+use hermes_logging_components::types::level::{LevelDebug, LevelTrace};
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
@@ -35,7 +36,9 @@ where
         + HasDynamicGas
         + CanRaiseAsyncError<HermesError>,
     Bootstrap::Runtime: CanSleep,
-    Bootstrap::Chain: CanQueryChainStatus + HasLogger<Logger: CanLog<LevelDebug>>,
+    Bootstrap::Chain: CanQueryChainStatus
+        + HasChainId
+        + HasLogger<Logger: CanLog<LevelDebug> + CanLog<LevelTrace>>,
 {
     async fn build_chain_with_node_config(
         bootstrap: &Bootstrap,
@@ -53,16 +56,28 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
+        chain
+            .logger()
+            .log(
+                &format!(
+                    "Waiting for chain `{}` to reach height 5`",
+                    chain.chain_id()
+                ),
+                &LevelDebug,
+            )
+            .await;
+
+        // Wait for both RPC and gRPC servers to start before resuming bootstrapping
         for _ in 0..RETRY_START {
             if let Ok(status) = chain.query_chain_status().await {
                 let current_height = status.height.revision_height();
                 if current_height > 4 {
                     break;
                 }
-                chain.logger().log(
-                    &format!("Waiting for chain to reach height 5, current height `{current_height}`"),
-                    &LevelDebug,
-                ).await;
+                chain
+                    .logger()
+                    .log(&format!("Current height `{current_height}`"), &LevelTrace)
+                    .await;
             }
 
             bootstrap.runtime().sleep(Duration::from_millis(500)).await;
