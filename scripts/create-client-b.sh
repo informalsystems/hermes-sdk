@@ -3,5 +3,5 @@
 cargo run --bin hermes -- \
     --config test-data/config.toml \
     client create \
-    --target-chain chain-b \
-    --counterparty-chain chain-a
+    --target-chain-id chain-b \
+    --counterparty-chain-id chain-a
