@@ -64,7 +64,6 @@ use hermes_cli_components::impls::commands::start::{RunStartRelayerCommand, Star
 use hermes_cli_components::impls::config::get_config_path::GetDefaultConfigField;
 use hermes_cli_components::impls::config::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
-use hermes_cli_components::impls::parse::identifier::{ParseInitCosmosChannelOptions, ParsePortId};
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
 use hermes_cli_components::traits::any_counterparty::{
     AnyCounterpartyComponent, ProvideAnyCounterparty,
@@ -109,6 +108,7 @@ use crate::commands::bootstrap::subcommand::{BootstrapSubCommand, RunBootstrapSu
 use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
+use crate::impls::parse::{ParseInitCosmosChannelOptions, ParsePortId};
 
 #[cgp_context(HermesAppComponents)]
 #[derive(HasField)]

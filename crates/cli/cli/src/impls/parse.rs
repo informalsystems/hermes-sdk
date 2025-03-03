@@ -1,13 +1,12 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_cli_components::traits::parse::{ArgParser, ArgParserComponent};
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use ibc::core::channel::types::channel::Order;
 use ibc::core::channel::types::Version;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::{ConnectionId, PortId};
-
-use crate::traits::parse::{ArgParser, ArgParserComponent};
 
 const DEFAULT_VERSION: &str = "ics20-1";
 
