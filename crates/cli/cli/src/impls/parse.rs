@@ -18,9 +18,7 @@ pub trait HasCosmosCreateChannelFields {
     fn ordering(&self) -> &String;
 }
 
-pub struct ParseInitCosmosChannelOptions;
-
-#[cgp_provider(ArgParserComponent)]
+#[cgp_new_provider(ArgParserComponent)]
 impl<App, Args, Tag> ArgParser<App, Args, Tag> for ParseInitCosmosChannelOptions
 where
     App: CanRaiseAsyncError<IdentifierError> + CanRaiseAsyncError<ChannelError>,

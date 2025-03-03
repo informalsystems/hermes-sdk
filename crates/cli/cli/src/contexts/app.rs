@@ -9,9 +9,7 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainCommand;
-use hermes_cli_components::impls::commands::channel::create::{
-    CreateChannelArgs, RunCreateChannelCommand,
-};
+use hermes_cli_components::impls::commands::channel::create::RunCreateChannelCommand;
 use hermes_cli_components::impls::commands::client::create::{
     CreateClientOptionsParser, CreateClientOptionsParserComponent, RunCreateClientCommand,
 };
@@ -105,6 +103,7 @@ use serde::Serialize;
 
 use crate::commands::bootstrap::chain::{BootstrapChainArgs, LoadCosmosBootstrap};
 use crate::commands::bootstrap::subcommand::{BootstrapSubCommand, RunBootstrapSubCommand};
+use crate::commands::channel::CreateChannelArgs;
 use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
