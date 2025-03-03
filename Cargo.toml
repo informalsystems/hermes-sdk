@@ -73,7 +73,7 @@ rust-version    = "1.81"
 overflow-checks = true
 
 [workspace.dependencies]
-async-trait                     = { version = "0.1.83" }
+async-trait                     = { version = "0.1.87" }
 ibc                             = { version = "0.56.0", default-features = false }
 ibc-client-tendermint           = { version = "0.56.0", default-features = false }
 ibc-proto                       = { version = "0.51.1", default-features = false }
