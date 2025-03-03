@@ -6,7 +6,7 @@ use ibc::clients::tendermint::types::TrustThreshold;
 pub struct CreateClientArgs {
     /// Identifier of the chain that hosts the client
     #[clap(
-        long = "target-chain",
+        long = "target-chain-id",
         required = true,
         value_name = "TARGET_CHAIN_ID",
         help_heading = "REQUIRED"
@@ -15,7 +15,7 @@ pub struct CreateClientArgs {
 
     /// Identifier of the chain targeted by the client
     #[clap(
-        long = "counterparty-chain",
+        long = "counterparty-chain-id",
         required = true,
         value_name = "COUNTERPARTY_CHAIN_ID",
         help_heading = "REQUIRED"

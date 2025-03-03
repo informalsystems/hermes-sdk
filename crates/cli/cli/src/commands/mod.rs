@@ -30,7 +30,7 @@ pub enum HermesCommand {
 
     /// Work with channels
     #[clap(subcommand)]
-    Channel(channel::ChannelCommands),
+    Channel(channel::ChannelSubCommands),
 
     /// Query information about IBC objects
     #[clap(subcommand)]
