@@ -108,7 +108,7 @@ use crate::commands::bootstrap::subcommand::{BootstrapSubCommand, RunBootstrapSu
 use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
-use crate::impls::parse::{ParseInitCosmosChannelOptions, ParsePortId};
+use crate::impls::parse::ParseInitCosmosChannelOptions;
 
 #[cgp_context(HermesAppComponents)]
 #[derive(HasField)]
@@ -205,10 +205,10 @@ delegate_components! {
 
         (CreateChannelArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateChannelArgs, symbol!("target_client_id")): ParseFromString<ClientId>,
-        (CreateChannelArgs, symbol!("target_port_id")): ParsePortId,
+        (CreateChannelArgs, symbol!("target_port_id")): ParseFromString<PortId>,
         (CreateChannelArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
         (CreateChannelArgs, symbol!("counterparty_client_id")): ParseFromString<ClientId>,
-        (CreateChannelArgs, symbol!("counterparty_port_id")): ParsePortId,
+        (CreateChannelArgs, symbol!("counterparty_port_id")): ParseFromString<PortId>,
         (CreateChannelArgs, symbol!("init_channel_options")): ParseInitCosmosChannelOptions,
 
         (CreateConnectionArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,

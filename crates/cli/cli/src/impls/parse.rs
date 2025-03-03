@@ -5,33 +5,9 @@ use hermes_cli_components::traits::parse::{ArgParser, ArgParserComponent};
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use ibc::core::channel::types::channel::Order;
 use ibc::core::channel::types::Version;
-use ibc::core::host::types::error::IdentifierError;
-use ibc::core::host::types::identifiers::{ConnectionId, PortId};
+use ibc::core::host::types::identifiers::ConnectionId;
 
 const DEFAULT_VERSION: &str = "ics20-1";
-
-pub struct ParsePortId;
-
-#[cgp_provider(ArgParserComponent)]
-impl<App, Args, Tag> ArgParser<App, Args, Tag> for ParsePortId
-where
-    App: CanRaiseAsyncError<IdentifierError>,
-    Args: HasField<Tag, Value = String>,
-{
-    type Parsed = PortId;
-
-    fn parse_arg(
-        _app: &App,
-        args: &Args,
-        _tag: PhantomData<Tag>,
-    ) -> Result<Self::Parsed, App::Error> {
-        if let Ok(port_id) = args.get_field(PhantomData).parse::<PortId>() {
-            Ok(port_id)
-        } else {
-            Ok(PortId::transfer())
-        }
-    }
-}
 
 pub struct ParseInitCosmosChannelOptions;
 
