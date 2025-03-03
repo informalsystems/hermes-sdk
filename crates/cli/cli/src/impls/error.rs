@@ -15,6 +15,7 @@ use hermes_error::types::Error;
 use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_runtime::types::error::TokioRuntimeError;
 use ibc::clients::tendermint::types::error::TendermintClientError;
+use ibc::core::channel::types::error::ChannelError;
 use ibc::core::host::types::error::{DecodingError, IdentifierError};
 use tonic::transport::Error as TransportError;
 
@@ -53,6 +54,7 @@ delegate_components! {
             TokioRuntimeError,
             TendermintClientError,
             IdentifierError,
+            ChannelError,
             DecodingError,
             toml::de::Error,
             toml::ser::Error,
