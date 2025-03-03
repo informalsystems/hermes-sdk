@@ -20,3 +20,12 @@ pub trait HasAcknowledgementType<Counterparty>: Async {
 
 pub type AcknowledgementOf<Chain, Counterparty> =
     <Chain as HasAcknowledgementType<Counterparty>>::Acknowledgement;
+
+#[cgp_type{
+  name: AckCommitmentHashTypeComponent,
+  provider: ProvideAckCommitmentHashType,
+  context: Chain,
+}]
+pub trait HasAckCommitmentHashType {
+    type AckCommitmentHash: Async;
+}

@@ -57,7 +57,7 @@ where
                 .await
                 .map_err(Relay::raise_error)?;
 
-            let (ack, _) = dst_chain
+            let ack = dst_chain
                 .query_packet_acknowledgement(
                     &SrcChain::packet_dst_channel_id(packet),
                     &SrcChain::packet_dst_port_id(packet),

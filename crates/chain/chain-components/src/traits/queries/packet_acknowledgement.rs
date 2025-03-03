@@ -5,7 +5,7 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
 use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
 
-use crate::traits::types::packets::ack::HasAcknowledgementType;
+use crate::traits::types::packets::ack::{HasAckCommitmentHashType, HasAcknowledgementType};
 use crate::traits::types::proof::HasCommitmentProofType;
 use crate::types::aliases::SequenceOf;
 
@@ -18,6 +18,7 @@ pub trait CanQueryPacketAcknowledgement<Counterparty>:
     HasHeightType
     + HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
+    + HasAckCommitmentHashType
     + HasAcknowledgementType<Counterparty>
     + HasCommitmentProofType
     + HasAsyncErrorType
@@ -29,5 +30,13 @@ pub trait CanQueryPacketAcknowledgement<Counterparty>:
         port_id: &Self::PortId,
         sequence: &SequenceOf<Counterparty, Self>,
         height: &Self::Height,
-    ) -> Result<(Self::Acknowledgement, Self::CommitmentProof), Self::Error>;
+    ) -> Result<Self::Acknowledgement, Self::Error>;
+
+    async fn query_packet_acknowledgement_with_proof(
+        &self,
+        channel_id: &Self::ChannelId,
+        port_id: &Self::PortId,
+        sequence: &SequenceOf<Counterparty, Self>,
+        height: &Self::Height,
+    ) -> Result<(Self::AckCommitmentHash, Self::CommitmentProof), Self::Error>;
 }

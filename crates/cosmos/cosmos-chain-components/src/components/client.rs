@@ -132,7 +132,7 @@ mod preset {
     };
     use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
     use hermes_relayer_components::chain::traits::types::packets::ack::{
-        AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
+        AckCommitmentHashTypeComponent, AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
     };
     use hermes_relayer_components::chain::traits::types::packets::receive::{
         PacketCommitmentTypeComponent, ReceivePacketPayloadTypeComponent,
@@ -220,6 +220,7 @@ mod preset {
                 CommitmentProofBytesGetterComponent,
                 PacketCommitmentTypeComponent,
                 AcknowledgementTypeComponent,
+                AckCommitmentHashTypeComponent,
                 PacketReceiptTypeComponent,
             ]:
                 ProvideCosmosChainTypes,

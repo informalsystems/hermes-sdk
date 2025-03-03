@@ -316,6 +316,16 @@ impl PacketAcknowledgementQuerier<MockChainContext, MockChainContext> for MockCh
         _port_id: &PortId,
         _sequence: &Sequence,
         _height: &MockHeight,
+    ) -> Result<Vec<u8>, Error> {
+        todo!()
+    }
+
+    async fn query_packet_acknowledgement_with_proof(
+        _chain: &MockChainContext,
+        _channel_id: &ChannelId,
+        _port_id: &PortId,
+        _sequence: &Sequence,
+        _height: &MockHeight,
     ) -> Result<(Vec<u8>, ()), Error> {
         todo!()
     }
