@@ -66,12 +66,18 @@ where
         let target_chain_id = app.parse_arg(args, PhantomData::<symbol!("target_chain_id")>)?;
         let target_client_id = app.parse_arg(args, PhantomData::<symbol!("target_client_id")>)?;
         let target_port_id = app.parse_arg(args, PhantomData::<symbol!("target_port_id")>)?;
+
         let counterparty_chain_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_chain_id")>)?;
+
         let counterparty_client_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_client_id")>)?;
+
         let counterparty_port_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_port_id")>)?;
+
+        let init_channel_options =
+            app.parse_arg(args, PhantomData::<symbol!("init_channel_options")>)?;
 
         let relay = builder
             .build_relay(
@@ -98,7 +104,11 @@ where
             .await;
 
         let (target_channel_id, counterparty_channel_id) = relay
-            .bootstrap_channel(&target_port_id, &counterparty_port_id, &Default::default())
+            .bootstrap_channel(
+                &target_port_id,
+                &counterparty_port_id,
+                &init_channel_options,
+            )
             .await
             .map_err(App::raise_error)?;
 
