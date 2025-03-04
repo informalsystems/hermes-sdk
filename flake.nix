@@ -46,6 +46,8 @@
 
       rust-wasm = nixpkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain-wasm.toml;
 
+      rust-nightly = nixpkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain-nightly.toml;
+
       cosmos-nix = inputs.cosmos-nix.packages.${system};
 
       tendermint-wasm-client = import ./nix/tendermint-wasm-client {
@@ -71,6 +73,8 @@
         rust = rust;
 
         rust-wasm = rust-wasm;
+
+        rust-nightly = rust-nightly;
 
         inherit
           (nixpkgs)

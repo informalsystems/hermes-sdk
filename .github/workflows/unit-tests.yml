@@ -28,7 +28,7 @@ jobs:
             experimental-features = nix-command flakes
       - name: Run Formatter
         run: |
-          cargo +nightly fmt --all -- --check
+          nix shell .#rust-nightly -c cargo +nightly fmt --all -- --check
 
   clippy-all-features:
     runs-on: ubuntu-latest
