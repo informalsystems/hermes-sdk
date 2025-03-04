@@ -26,11 +26,6 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          override: true
-          components: rustfmt
       - name: Run Formatter
         run: |
           cargo +nightly fmt --all -- --check
@@ -43,11 +38,6 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          components: clippy
-          override: true
       - uses: Swatinem/rust-cache@v2
       - name: Run Clippy
         run: |
@@ -63,11 +53,6 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          components: clippy
-          override: true
       - uses: Swatinem/rust-cache@v2
       - name: Run Clippy
         run: |
@@ -84,10 +69,6 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
       - uses: Swatinem/rust-cache@v2
       - name: Run unit tests
         run: |
