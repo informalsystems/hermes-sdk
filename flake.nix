@@ -44,8 +44,6 @@
 
       rust = nixpkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain-stable.toml;
 
-      rust-wasm = nixpkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain-wasm.toml;
-
       rust-nightly = nixpkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain-nightly.toml;
 
       cosmos-nix = inputs.cosmos-nix.packages.${system};
@@ -71,8 +69,6 @@
         gaia = cosmos-nix.gaia18;
 
         rust = rust;
-
-        rust-wasm = rust-wasm;
 
         rust-nightly = rust-nightly;
 

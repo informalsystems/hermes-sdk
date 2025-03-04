@@ -60,7 +60,7 @@ jobs:
         run: |
             export WASM_FILE_PATH=$(nix build .#tendermint-wasm-client --print-out-paths --no-link)/ibc_client_tendermint_cw.wasm
 
-            nix shell .#rust-wasm .#cargo-nextest .#protobuf .#gaia .#ibc-go-v8-wasm-simapp -c \
+            nix shell .#rust .#cargo-nextest .#protobuf .#gaia .#ibc-go-v8-wasm-simapp -c \
               cargo nextest run -p hermes-cosmos-wasm-relayer \
               --test-threads=2
 
