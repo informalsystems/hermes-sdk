@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   cosmos-integration-tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 60
     strategy:
       fail-fast: false
@@ -45,7 +45,7 @@ jobs:
               --test-threads=2
 
   wasm-cosmos-integration-tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
@@ -73,7 +73,7 @@ jobs:
               --test-threads=2
 
   celestia-integration-tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
