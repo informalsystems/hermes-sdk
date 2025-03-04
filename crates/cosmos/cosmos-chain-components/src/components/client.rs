@@ -86,7 +86,6 @@ mod preset {
     use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerierComponent;
     use hermes_relayer_components::chain::traits::queries::packet_is_received::PacketIsReceivedQuerierComponent;
     use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
-    use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
     use hermes_relayer_components::chain::traits::types::block::{
         BlockHashComponent, BlockTypeComponent,
     };
@@ -132,7 +131,7 @@ mod preset {
     };
     use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
     use hermes_relayer_components::chain::traits::types::packets::ack::{
-        AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
+        AckCommitmentHashTypeComponent, AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
     };
     use hermes_relayer_components::chain::traits::types::packets::receive::{
         PacketCommitmentTypeComponent, ReceivePacketPayloadTypeComponent,
@@ -176,7 +175,6 @@ mod preset {
     use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
     use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
     use crate::impls::queries::received_packet::QueryCosmosPacketIsReceived;
-    use crate::impls::queries::write_ack_event::QueryCosmosWriteAckEvent;
     use crate::impls::relay::packet_filter::FilterPacketWithConfig;
     use crate::impls::types::chain::ProvideCosmosChainTypes;
     use crate::impls::types::client_state::ProvideAnyRawClientState;
@@ -220,6 +218,7 @@ mod preset {
                 CommitmentProofBytesGetterComponent,
                 PacketCommitmentTypeComponent,
                 AcknowledgementTypeComponent,
+                AckCommitmentHashTypeComponent,
                 PacketReceiptTypeComponent,
             ]:
                 ProvideCosmosChainTypes,
@@ -257,8 +256,6 @@ mod preset {
                 ProvideAnyRawConsensusState,
             ConsensusStateHeightQuerierComponent:
                 QueryConsensusStateHeightsAndFindHeightBefore,
-            WriteAckQuerierComponent:
-                QueryCosmosWriteAckEvent,
             [
                 RawClientStateQuerierComponent,
                 RawClientStateWithProofsQuerierComponent,

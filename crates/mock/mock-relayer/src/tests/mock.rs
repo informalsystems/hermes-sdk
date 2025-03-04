@@ -1,7 +1,6 @@
 use alloc::string::String;
 use std::time::Duration;
 
-use hermes_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAckEvent;
 use hermes_relayer_components::relay::traits::chains::{HasDstClientId, HasSrcClientId};
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_runtime_components::traits::sleep::CanSleep;
@@ -73,17 +72,6 @@ async fn test_mock_chain_relay() -> Result<(), Error> {
                 packet.sequence
             )),
             "Packet not received on destination chain"
-        );
-    }
-
-    {
-        info!("Check that the acknowledgment has been received by the source chain");
-
-        let state = src_chain.get_current_state();
-
-        assert!(
-            state.check_acknowledged((packet.src_port_id, packet.src_channel_id, packet.sequence)),
-            "Acknowledgment not found on source chain"
         );
     }
 
@@ -247,98 +235,6 @@ async fn test_mock_chain_timeout_height() -> Result<(), Error> {
         assert!(
             state.check_timeout(packet, dst_height, elapsed_time),
             "Packet should be registered as timed out"
-        );
-    }
-
-    Ok(())
-}
-
-#[tokio::test]
-async fn test_mock_chain_query_write_ack() -> Result<(), Error> {
-    let (relay_context, src_chain, dst_chain) = build_mock_relay_context();
-
-    let src_channel_id = "channel-0".to_owned();
-    let dst_channel_id = "channel-1".to_owned();
-
-    let source_client_id = relay_context.src_client_id().clone();
-    let src_port_id = String::from("transfer");
-    let destination_client_id = relay_context.dst_client_id().clone();
-    let dst_port_id = String::from("transfer");
-
-    src_chain.map_channel_to_client(src_channel_id.clone(), source_client_id);
-    dst_chain.map_channel_to_client(dst_channel_id.clone(), destination_client_id);
-
-    let packet = src_chain.build_send_packet(
-        src_channel_id.clone(),
-        src_port_id.clone(),
-        dst_channel_id.clone(),
-        dst_port_id.clone(),
-        1,
-        MockHeight(10),
-        MockTimestamp(60000),
-    );
-
-    {
-        info!("Check that the packet has not yet been received");
-
-        let state = dst_chain.get_current_state();
-
-        assert!(
-            !state.check_received((
-                packet.dst_port_id.clone(),
-                packet.dst_channel_id.clone(),
-                packet.sequence
-            )),
-            "Packet already received on destination chain before relaying it"
-        );
-
-        info!("Check that no WriteAcknowledgmentEvent is returned by query_write_ack");
-
-        let write_ack = dst_chain.query_write_ack_event(&packet).await;
-        assert!(write_ack.is_ok(), "query_write_ack_event returned an error");
-        assert!(
-            write_ack.unwrap().is_none(),
-            "WriteAcknowlegmentEvent should be None as the chain hasn't received the packet yet"
-        );
-    }
-
-    let height = src_chain.get_current_height();
-
-    src_chain.send_packet(height, packet.clone())?;
-
-    let events = relay_context.relay_packet(&packet).await;
-
-    assert!(events.is_ok(), "{}", events.err().unwrap());
-
-    {
-        info!("Check that the packet has been received by the destination chain");
-
-        let state = dst_chain.get_current_state();
-
-        assert!(
-            state.check_received((
-                packet.dst_port_id.clone(),
-                packet.dst_channel_id.clone(),
-                packet.sequence
-            )),
-            "Packet not received on destination chain"
-        );
-
-        info!("Check that a WriteAcknowledgmentEvent is returned by query_write_ack");
-
-        let write_ack = dst_chain.query_write_ack_event(&packet).await;
-        assert!(write_ack.is_ok(), "query_write_ack_event returned an error");
-        assert!(write_ack.unwrap().is_some(), "A WriteAcknowlegmentEvent should be returned by query_write_ack_event since the chain received the packet");
-    }
-
-    {
-        info!("Check that the acknowledgment has been received by the source chain");
-
-        let state = src_chain.get_current_state();
-
-        assert!(
-            state.check_acknowledged((packet.src_port_id, packet.src_channel_id, packet.sequence)),
-            "Acknowledgment not found on source chain"
         );
     }
 

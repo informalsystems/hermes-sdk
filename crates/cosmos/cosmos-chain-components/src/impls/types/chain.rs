@@ -46,7 +46,9 @@ use hermes_relayer_components::chain::traits::types::message::{
 use hermes_relayer_components::chain::traits::types::packet::{
     OutgoingPacketTypeComponent, ProvideOutgoingPacketType,
 };
-use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::{
+    AckCommitmentHashTypeComponent, AcknowledgementTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::{
@@ -104,6 +106,8 @@ delegate_components! {
             ProvideBytesPacketCommitment,
         AcknowledgementTypeComponent:
             ProvideBytesAcknowlegement,
+        AckCommitmentHashTypeComponent:
+            WithType<Vec<u8>>,
         PacketReceiptTypeComponent:
             ProvideBytesPacketReceipt,
     }

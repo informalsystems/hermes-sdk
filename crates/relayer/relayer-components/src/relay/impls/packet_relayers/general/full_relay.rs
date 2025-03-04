@@ -103,7 +103,7 @@ where
             relay
                 .relay_timeout_unordered_packet(destination_height, packet)
                 .await?;
-        } else {
+        } else if !is_packet_received {
             let src_chain_status = src_chain
                 .query_chain_status()
                 .await
@@ -120,47 +120,23 @@ where
                 )
                 .await;
 
-            let m_ack = relay
+            relay
                 .relay_receive_packet(
                     Relay::SrcChain::chain_status_height(&src_chain_status),
                     packet,
                 )
                 .await?;
-
-            let destination_status = dst_chain
-                .query_chain_status()
-                .await
-                .map_err(Relay::raise_error)?;
-
-            let destination_height = DstChain::chain_status_height(&destination_status);
-
-            if let Some(ack) = m_ack {
-                logger
-                    .log(
-                        "relaying ack packet",
-                        &LogRelayPacketAction {
-                            relay,
-                            packet,
-                            relay_progress: RelayPacketProgress::RelayAckPacket,
-                        },
-                    )
-                    .await;
-
-                relay
-                    .relay_ack_packet(destination_height, packet, &ack)
-                    .await?;
-            } else {
-                logger
-                    .log(
-                        "skip relaying ack packet due to lack of ack event",
-                        &LogRelayPacketAction {
-                            relay,
-                            packet,
-                            relay_progress: RelayPacketProgress::SkipRelayAckPacket,
-                        },
-                    )
-                    .await;
-            }
+        } else {
+            logger
+                .log(
+                    "skip relaying receive packet as it has already been received",
+                    &LogRelayPacketAction {
+                        relay,
+                        packet,
+                        relay_progress: RelayPacketProgress::SkipRelayAckPacket,
+                    },
+                )
+                .await;
         }
 
         Ok(())

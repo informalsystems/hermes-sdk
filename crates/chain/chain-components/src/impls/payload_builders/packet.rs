@@ -99,7 +99,7 @@ where
         ack: &Chain::Acknowledgement,
     ) -> Result<Chain::AckPacketPayload, Chain::Error> {
         let (_, proof_ack) = chain
-            .query_packet_acknowledgement(
+            .query_packet_acknowledgement_with_proof(
                 &Counterparty::packet_dst_channel_id(packet),
                 &Counterparty::packet_dst_port_id(packet),
                 &Counterparty::packet_sequence(packet),

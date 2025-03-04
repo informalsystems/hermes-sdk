@@ -13,6 +13,9 @@ use crate::chain::types::aliases::EventOf;
 use crate::relay::impls::packet_filters::target::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
+use crate::relay::impls::packet_relayers::general::full_relay::{
+    LogRelayPacketAction, RelayPacketProgress,
+};
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
 use crate::relay::traits::event_relayer::{EventRelayer, EventRelayerComponent};
@@ -89,7 +92,8 @@ where
         + CanBuildPacketFromWriteAck<Relay::SrcChain>
         + CanExtractFromEvent<DstChain::WriteAckEvent>,
     MatchPacketSourceChain: RelayPacketFilter<Relay>,
-    Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
+    Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
+        + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
     async fn relay_chain_event(
         relay: &Relay,
@@ -143,6 +147,18 @@ where
                             .query_chain_height()
                             .await
                             .map_err(Relay::raise_error)?;
+
+                        relay
+                            .logger()
+                            .log(
+                                "relaying ack packet",
+                                &LogRelayPacketAction {
+                                    relay,
+                                    packet: &packet,
+                                    relay_progress: RelayPacketProgress::RelayAckPacket,
+                                },
+                            )
+                            .await;
 
                         relay.relay_ack_packet(&height, &packet, &ack).await?;
                     }
