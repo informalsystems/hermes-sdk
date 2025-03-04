@@ -14,4 +14,3 @@ pub mod packet_commitment;
 pub mod packet_is_cleared;
 pub mod packet_is_received;
 pub mod packet_receipt;
-pub mod write_ack;
