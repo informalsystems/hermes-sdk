@@ -42,6 +42,10 @@
         ];
       };
 
+      rust = nixpkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain-stable.toml;
+
+      rust-wasm = nixpkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain-wasm.toml;
+
       cosmos-nix = inputs.cosmos-nix.packages.${system};
 
       tendermint-wasm-client = import ./nix/tendermint-wasm-client {
@@ -63,6 +67,10 @@
         inherit tendermint-wasm-client celestia-app celestia-node;
 
         gaia = cosmos-nix.gaia18;
+
+        rust = rust;
+
+        rust-wasm = rust-wasm;
 
         inherit
           (nixpkgs)
