@@ -50,7 +50,7 @@ significantly more complicated. Since batched messages in a transaction would
 all fail when one message fails, it is unclear what caused the errors,
 and how the retry should be done.
 
-The current relayer rely on ad-hoc retry mechanisms at various levels of
+The current relayer relies on ad-hoc retry mechanisms at various levels of
 code. There is no clear understanding of how the errors propagate, and
 we are playing whack-a-mole to hammer down errors when relaying fail.
 
