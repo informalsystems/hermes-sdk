@@ -36,9 +36,10 @@ jobs:
           RUST_BACKTRACE: 1
           TEST_PRESET: ${{ matrix.preset }}
         run: |
-            nix shell .#rust .#cargo-nextest .#protobuf .#gaia .#celestia-app .#ibc-go-v8-simapp .#osmosis -c \
-              cargo nextest run -p hermes-cosmos-integration-tests \
-              --test-threads=2
+            nix develop -c \
+              nix shell .#gaia .#celestia-app .#ibc-go-v8-simapp .#osmosis -c \
+                cargo nextest run -p hermes-cosmos-integration-tests \
+                --test-threads=2
 
   wasm-cosmos-integration-tests:
     runs-on: ubuntu-22.04
@@ -60,9 +61,10 @@ jobs:
         run: |
             export WASM_FILE_PATH=$(nix build .#tendermint-wasm-client --print-out-paths --no-link)/ibc_client_tendermint_cw.wasm
 
-            nix shell .#rust .#cargo-nextest .#protobuf .#gaia .#ibc-go-v8-wasm-simapp -c \
-              cargo nextest run -p hermes-cosmos-wasm-relayer \
-              --test-threads=2
+            nix develop -c \
+              nix shell .#gaia .#ibc-go-v8-wasm-simapp -c \
+                cargo nextest run -p hermes-cosmos-wasm-relayer \
+                --test-threads=2
 
   celestia-integration-tests:
     runs-on: ubuntu-22.04
@@ -82,7 +84,8 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-            nix shell .#rust .#cargo-nextest .#protobuf .#gaia .#celestia-app .#celestia-node -c \
-              cargo nextest run -p hermes-celestia-integration-tests \
-              --test-threads=2 \
-              --failure-output final
+            nix develop -c \
+              nix shell .#gaia .#celestia-app .#celestia-node -c \
+                cargo nextest run -p hermes-celestia-integration-tests \
+                --test-threads=2 \
+                --failure-output final

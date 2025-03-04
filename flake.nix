@@ -62,21 +62,21 @@
         inherit nixpkgs;
         inherit (inputs) celestia-node-src;
       };
+
+      inherit
+        (nixpkgs)
+        protobuf
+        openssl
+        cargo-nextest
+      ;
+
     in {
       packages = {
         inherit tendermint-wasm-client celestia-app celestia-node;
 
         gaia = cosmos-nix.gaia18;
 
-        rust = rust;
-
-        rust-nightly = rust-nightly;
-
-        inherit
-          (nixpkgs)
-          protobuf
-          cargo-nextest
-        ;
+        inherit rust rust-nightly;
 
         inherit
           (cosmos-nix)
@@ -89,5 +89,18 @@
           osmosis
         ;
       };
+
+
+        devShells = {
+          default = nixpkgs.mkShell {
+            PKG_CONFIG_PATH = "${nixpkgs.openssl.dev}/lib/pkgconfig";
+            buildInputs = [
+              rust
+              cargo-nextest
+              protobuf
+              openssl
+            ];
+          };
+        };
     });
 }
