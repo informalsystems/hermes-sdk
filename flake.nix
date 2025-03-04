@@ -76,7 +76,7 @@
 
         gaia = cosmos-nix.gaia18;
 
-        inherit rust rust-nightly;
+        inherit rust rust-nightly protobuf cargo-nextest;
 
         inherit
           (cosmos-nix)
@@ -90,17 +90,16 @@
         ;
       };
 
-
-        devShells = {
-          default = nixpkgs.mkShell {
-            PKG_CONFIG_PATH = "${nixpkgs.openssl.dev}/lib/pkgconfig";
-            buildInputs = [
-              rust
-              cargo-nextest
-              protobuf
-              openssl
-            ];
-          };
+      devShells = {
+        default = nixpkgs.mkShell {
+          PKG_CONFIG_PATH = "${nixpkgs.openssl.dev}/lib/pkgconfig";
+          buildInputs = [
+            rust
+            cargo-nextest
+            protobuf
+            openssl
+          ];
         };
+      };
     });
 }
