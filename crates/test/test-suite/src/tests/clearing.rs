@@ -1,32 +1,31 @@
-use alloc::format;
+use alloc::vec::Vec;
+use alloc::{format, vec};
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
-use hermes_relayer_components::birelay::traits::HasTwoWayRelay;
+use hermes_relayer_components::birelay::traits::{CanAutoBiRelay, HasTwoWayRelay};
 use hermes_relayer_components::chain::traits::packet::fields::{
     CanReadPacketFields, HasPacketSequence,
 };
-use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainHeight, CanQueryChainStatus,
-};
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
+//use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::RelayAt;
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelayWithHeights;
-use hermes_relayer_components::relay::traits::chains::HasRelayChainTypes;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
-use hermes_relayer_components::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
+use hermes_relayer_components::relay::traits::target::{
+    DestinationTarget, HasChainTargets, SourceTarget,
+};
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
-use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
 use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
@@ -57,48 +56,39 @@ where
     ChainDriverA: HasChain<Chain = ChainA>
         + HasDenomAt<TransferDenom, Index<0>>
         + HasWalletAt<UserWallet, Index<0>>
-        + HasWalletAt<UserWallet, Index<1>>
         + CanGenerateRandomAmount,
     ChainDriverB: HasChain<Chain = ChainB>
         + HasWalletAt<UserWallet, Index<0>>
         + HasDenomAt<TransferDenom, Index<0>>
         + CanGenerateRandomAmount,
     RelayDriver: HasBiRelayAt<Index<0>, Index<1>, BiRelay = BiRelay>,
-    ChainA: HasIbcChainTypes<ChainB>
-        + HasChainId
-        + HasOutgoingPacketType<ChainB>
-        + CanQueryChainHeight
+    ChainA: HasChainId
         + CanQueryBalance
         + HasAmountMethods
-        + CanConvertIbcTransferredAmount<ChainB>
         + CanIbcTransferToken<ChainB>
         + CanQueryPacketIsReceived<ChainB>
         + CanQueryPacketIsCleared<ChainB>
         + CanReadPacketFields<ChainB>
         + HasDefaultMemo
         + CanQueryChainStatus,
-    ChainB: HasIbcChainTypes<ChainA>
-        + HasChainId
-        + HasOutgoingPacketType<ChainA>
-        + CanQueryChainHeight
+    ChainB: HasChainId
         + HasAmountMethods
         + CanQueryBalance
         + CanIbcTransferToken<ChainA>
-        + CanConvertIbcTransferredAmount<ChainA>
         + CanQueryPacketIsReceived<ChainA>
         + CanQueryPacketIsCleared<ChainA>
         + CanReadPacketFields<ChainA>
         + HasDefaultMemo
         + CanQueryChainStatus,
-    BiRelay: HasTwoWayRelay,
-    RelayAt<BiRelay, Index<0>, Index<1>>: HasRelayChainTypes<SrcChain = ChainA, DstChain = ChainB>
-        + HasSourceTargetChainTypes
+    BiRelay: HasTwoWayRelay + CanAutoBiRelay,
+    RelayAt<BiRelay, Index<0>, Index<1>>: HasChainTargets<SrcChain = ChainA, DstChain = ChainB>
         + CanRelayReceivePacket
-        + CanAutoRelayWithHeights<SourceTarget>,
-    RelayAt<BiRelay, Index<1>, Index<0>>: HasRelayChainTypes<SrcChain = ChainB, DstChain = ChainA>
-        + HasSourceTargetChainTypes
+        + CanAutoRelayWithHeights<SourceTarget>
+        + CanAutoRelayWithHeights<DestinationTarget>,
+    RelayAt<BiRelay, Index<1>, Index<0>>: HasChainTargets<SrcChain = ChainB, DstChain = ChainA>
         + CanRelayReceivePacket
-        + CanAutoRelayWithHeights<SourceTarget>,
+        + CanAutoRelayWithHeights<SourceTarget>
+        + CanAutoRelayWithHeights<DestinationTarget>,
     Logger: CanLogMessage,
     Driver::Error: From<ChainA::Error>
         + From<ChainB::Error>
@@ -142,7 +132,10 @@ where
             ))
             .await;
 
-        run_one_way_clearing_test::<
+        //let start_height_a = chain_driver_a.chain().query_chain_height().await?;
+        //let start_height_b = chain_driver_b.chain().query_chain_height().await?;
+
+        let a_to_b_sequences = run_one_way_clearing_test::<
             Driver,
             RelayAt<BiRelay, Index<0>, Index<1>>,
             ChainA,
@@ -166,7 +159,7 @@ where
             ))
             .await;
 
-        run_one_way_clearing_test::<
+        let b_to_a_sequences = run_one_way_clearing_test::<
             Driver,
             RelayAt<BiRelay, Index<1>, Index<0>>,
             ChainB,
@@ -183,6 +176,63 @@ where
             port_id_a,
         )
         .await?;
+
+        /*let end_height_a = chain_driver_a.chain().query_chain_height().await?;
+        let end_height_b = chain_driver_b.chain().query_chain_height().await?;
+
+        relay_a_to_b
+            .auto_relay_with_heights(SourceTarget, &start_height_a, Some(&end_height_a))
+            .await?;
+        relay_b_to_a
+            .auto_relay_with_heights(SourceTarget, &start_height_b, Some(&end_height_b))
+            .await?;
+
+        relay_a_to_b
+            .auto_relay_with_heights(DestinationTarget, &start_height_b, Some(&end_height_b))
+            .await?;
+        relay_b_to_a
+            .auto_relay_with_heights(DestinationTarget, &start_height_a, Some(&end_height_a))
+            .await?;*/
+
+        birelay
+            .auto_bi_relay(Some(Duration::from_secs(20)), Some(Duration::from_secs(0)))
+            .await
+            .unwrap();
+
+        // Assert both recv and ack have been cleared for packet with sequence 1 and 2
+        {
+            let is_received = chain_driver_a
+                .chain()
+                .query_packet_is_received(port_id_a, channel_id_a, &b_to_a_sequences[1])
+                .await?;
+
+            assert!(is_received);
+
+            let is_received = chain_driver_b
+                .chain()
+                .query_packet_is_received(port_id_b, channel_id_b, &a_to_b_sequences[1])
+                .await?;
+
+            assert!(is_received);
+
+            birelay
+                .auto_bi_relay(Some(Duration::from_secs(10)), Some(Duration::from_secs(0)))
+                .await
+                .unwrap();
+            let is_cleared = chain_driver_a
+                .chain()
+                .query_packet_is_cleared(port_id_a, channel_id_a, &a_to_b_sequences[0])
+                .await?;
+
+            assert!(is_cleared);
+
+            let is_cleared = chain_driver_b
+                .chain()
+                .query_packet_is_cleared(port_id_b, channel_id_b, &b_to_a_sequences[0])
+                .await?;
+
+            assert!(is_cleared);
+        }
 
         logger
             .log_message(&format!(
@@ -209,13 +259,10 @@ async fn run_one_way_clearing_test<
     src_port_id: &SrcChain::PortId,
     dst_channel_id: &DstChain::ChannelId,
     dst_port_id: &DstChain::PortId,
-) -> Result<(), Driver::Error>
+) -> Result<Vec<SrcChain::Sequence>, Driver::Error>
 where
     Driver: HasAsyncErrorType,
-    Relay: HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
-        + HasSourceTargetChainTypes
-        + CanRelayReceivePacket
-        + CanAutoRelayWithHeights<SourceTarget>,
+    Relay: CanRelayReceivePacket<SrcChain = SrcChain, DstChain = DstChain>,
     SrcChainDriver: HasChain<Chain = SrcChain>
         + HasDenomAt<TransferDenom, Index<0>>
         + HasWalletAt<UserWallet, Index<0>>
@@ -249,8 +296,6 @@ where
     let transfer_amount_1 = src_chain_driver
         .random_amount(1000, &initial_balance_sender)
         .await;
-
-    let start_height = src_chain.query_chain_height().await?;
 
     let packet_1 = src_chain
         .ibc_transfer_token(
@@ -332,38 +377,5 @@ where
         assert!(!is_cleared);
     }
 
-    let end_height = src_chain.query_chain_height().await?;
-
-    relay
-        .auto_relay_with_heights(SourceTarget, &start_height, Some(&end_height))
-        .await?;
-
-    // Assert both recv and ack have been cleared for packet with sequence 1 and 2
-    {
-        let is_received = dst_chain
-            .query_packet_is_received(dst_port_id, dst_channel_id, &sequence_1)
-            .await?;
-
-        assert!(is_received);
-
-        let is_cleared = src_chain
-            .query_packet_is_cleared(src_port_id, src_channel_id, &sequence_1)
-            .await?;
-
-        assert!(is_cleared);
-
-        let is_received = dst_chain
-            .query_packet_is_received(dst_port_id, dst_channel_id, &sequence_2)
-            .await?;
-
-        assert!(is_received);
-
-        let is_cleared = src_chain
-            .query_packet_is_cleared(src_port_id, src_channel_id, &sequence_2)
-            .await?;
-
-        assert!(is_cleared);
-    }
-
-    Ok(())
+    Ok(vec![sequence_1, sequence_2])
 }

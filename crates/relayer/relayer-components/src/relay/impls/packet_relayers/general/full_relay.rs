@@ -103,7 +103,7 @@ where
             relay
                 .relay_timeout_unordered_packet(destination_height, packet)
                 .await?;
-        } else {
+        } else if !is_packet_received {
             let src_chain_status = src_chain
                 .query_chain_status()
                 .await
@@ -120,14 +120,15 @@ where
                 )
                 .await;
 
-            let m_ack = relay
+            let _m_ack = relay
                 .relay_receive_packet(
                     Relay::SrcChain::chain_status_height(&src_chain_status),
                     packet,
                 )
                 .await?;
 
-            let destination_status = dst_chain
+            // TODO: Should we remove this?
+            /*let destination_status = dst_chain
                 .query_chain_status()
                 .await
                 .map_err(Relay::raise_error)?;
@@ -160,7 +161,18 @@ where
                         },
                     )
                     .await;
-            }
+            }*/
+        } else {
+            logger
+                .log(
+                    "skip relaying receive packet as it has already been received",
+                    &LogRelayPacketAction {
+                        relay,
+                        packet,
+                        relay_progress: RelayPacketProgress::SkipRelayAckPacket,
+                    },
+                )
+                .await;
         }
 
         Ok(())

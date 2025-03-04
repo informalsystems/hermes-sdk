@@ -310,16 +310,6 @@ impl PacketFromWriteAckEventBuilder<MockChainContext, MockChainContext> for Mock
 
 #[cgp_provider(PacketAcknowledgementQuerierComponent)]
 impl PacketAcknowledgementQuerier<MockChainContext, MockChainContext> for MockChainComponents {
-    async fn query_packet_acknowledgement(
-        _chain: &MockChainContext,
-        _channel_id: &ChannelId,
-        _port_id: &PortId,
-        _sequence: &Sequence,
-        _height: &MockHeight,
-    ) -> Result<Vec<u8>, Error> {
-        todo!()
-    }
-
     async fn query_packet_acknowledgement_with_proof(
         _chain: &MockChainContext,
         _channel_id: &ChannelId,
