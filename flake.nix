@@ -42,6 +42,10 @@
         ];
       };
 
+      rust = nixpkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain-stable.toml;
+
+      rust-nightly = nixpkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain-nightly.toml;
+
       cosmos-nix = inputs.cosmos-nix.packages.${system};
 
       tendermint-wasm-client = import ./nix/tendermint-wasm-client {
@@ -58,17 +62,21 @@
         inherit nixpkgs;
         inherit (inputs) celestia-node-src;
       };
+
+      inherit
+        (nixpkgs)
+        protobuf
+        openssl
+        cargo-nextest
+      ;
+
     in {
       packages = {
         inherit tendermint-wasm-client celestia-app celestia-node;
 
         gaia = cosmos-nix.gaia18;
 
-        inherit
-          (nixpkgs)
-          protobuf
-          cargo-nextest
-        ;
+        inherit rust rust-nightly protobuf cargo-nextest;
 
         inherit
           (cosmos-nix)
@@ -80,6 +88,18 @@
           gaia14
           osmosis
         ;
+      };
+
+      devShells = {
+        default = nixpkgs.mkShell {
+          PKG_CONFIG_PATH = "${nixpkgs.openssl.dev}/lib/pkgconfig";
+          buildInputs = [
+            rust
+            cargo-nextest
+            protobuf
+            openssl
+          ];
+        };
       };
     });
 }

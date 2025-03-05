@@ -14,7 +14,6 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
-use eyre::eyre;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterComponent;
 use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
@@ -80,9 +79,6 @@ use hermes_relayer_components::chain::traits::queries::packet_is_cleared::{
 };
 use hermes_relayer_components::chain::traits::queries::packet_is_received::{
     PacketIsReceivedQuerier, PacketIsReceivedQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::write_ack::{
-    WriteAckQuerier, WriteAckQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::send_message::{
     MessageSender, MessageSenderComponent,
@@ -310,7 +306,7 @@ impl PacketFromWriteAckEventBuilder<MockChainContext, MockChainContext> for Mock
 
 #[cgp_provider(PacketAcknowledgementQuerierComponent)]
 impl PacketAcknowledgementQuerier<MockChainContext, MockChainContext> for MockChainComponents {
-    async fn query_packet_acknowledgement(
+    async fn query_packet_acknowledgement_with_proof(
         _chain: &MockChainContext,
         _channel_id: &ChannelId,
         _port_id: &PortId,
@@ -468,35 +464,6 @@ impl PacketIsReceivedQuerier<MockChainContext, MockChainContext> for MockChainCo
     ) -> Result<bool, Error> {
         let state = chain.get_current_state();
         Ok(state.check_received((port_id.clone(), channel_id.clone(), *sequence)))
-    }
-}
-
-#[cgp_provider(WriteAckQuerierComponent)]
-impl WriteAckQuerier<MockChainContext, MockChainContext> for MockChainComponents {
-    async fn query_write_ack_event(
-        chain: &MockChainContext,
-        packet: &Packet,
-    ) -> Result<Option<WriteAckEvent>, Error> {
-        let received = chain.get_received_packet_information(
-            packet.dst_port_id.clone(),
-            packet.dst_channel_id.clone(),
-            packet.sequence,
-        );
-
-        if let Some((packet2, height)) = received {
-            if &packet2 == packet {
-                Ok(Some(WriteAckEvent::new(height)))
-            } else {
-                Err(BaseError::generic(eyre!(
-                    "mismatch between packet in state {} and packet: {}",
-                    packet2,
-                    packet
-                ))
-                .into())
-            }
-        } else {
-            Ok(None)
-        }
     }
 }
 
