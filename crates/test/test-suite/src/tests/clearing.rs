@@ -13,7 +13,6 @@ use hermes_relayer_components::chain::traits::packet::fields::{
     CanReadPacketFields, HasPacketSequence,
 };
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-//use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
@@ -132,9 +131,6 @@ where
             ))
             .await;
 
-        //let start_height_a = chain_driver_a.chain().query_chain_height().await?;
-        //let start_height_b = chain_driver_b.chain().query_chain_height().await?;
-
         let a_to_b_sequences = run_one_way_clearing_test::<
             Driver,
             RelayAt<BiRelay, Index<0>, Index<1>>,
@@ -176,23 +172,6 @@ where
             port_id_a,
         )
         .await?;
-
-        /*let end_height_a = chain_driver_a.chain().query_chain_height().await?;
-        let end_height_b = chain_driver_b.chain().query_chain_height().await?;
-
-        relay_a_to_b
-            .auto_relay_with_heights(SourceTarget, &start_height_a, Some(&end_height_a))
-            .await?;
-        relay_b_to_a
-            .auto_relay_with_heights(SourceTarget, &start_height_b, Some(&end_height_b))
-            .await?;
-
-        relay_a_to_b
-            .auto_relay_with_heights(DestinationTarget, &start_height_b, Some(&end_height_b))
-            .await?;
-        relay_b_to_a
-            .auto_relay_with_heights(DestinationTarget, &start_height_a, Some(&end_height_a))
-            .await?;*/
 
         birelay
             .auto_bi_relay(Some(Duration::from_secs(20)), Some(Duration::from_secs(0)))
