@@ -3,7 +3,7 @@ use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_type]
-pub trait HasBootstrapType: Async {
+pub trait HasBootstrapType<Tag>: Async {
     type Bootstrap: Async;
 }
 
@@ -12,6 +12,6 @@ pub trait HasBootstrapType: Async {
     context: App,
 }]
 #[async_trait]
-pub trait CanLoadBootstrap<Args: Async>: HasBootstrapType + HasAsyncErrorType {
+pub trait CanLoadBootstrap<Tag, Args: Async>: HasBootstrapType<Tag> + HasAsyncErrorType {
     async fn load_bootstrap(&self, args: &Args) -> Result<Self::Bootstrap, Self::Error>;
 }

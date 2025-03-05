@@ -37,9 +37,9 @@ pub struct BootstrapChainArgs {
 pub struct LoadCosmosBootstrap;
 
 #[cgp_provider(BootstrapLoaderComponent)]
-impl<App> BootstrapLoader<App, BootstrapChainArgs> for LoadCosmosBootstrap
+impl<App, Tag> BootstrapLoader<App, Tag, BootstrapChainArgs> for LoadCosmosBootstrap
 where
-    App: HasBootstrapType<Bootstrap = CosmosBootstrap>
+    App: HasBootstrapType<Tag, Bootstrap = CosmosBootstrap>
         + HasRuntime<Runtime = HermesRuntime>
         + CanRaiseAsyncError<HermesError>,
 {

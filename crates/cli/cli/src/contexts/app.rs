@@ -243,7 +243,7 @@ delegate_components! {
         UpdateClientArgs: RunUpdateClientCommand,
 
         BootstrapSubCommand: RunBootstrapSubCommand,
-        BootstrapChainArgs: RunBootstrapChainCommand<UseContext>,
+        BootstrapChainArgs: RunBootstrapChainCommand<(), UseContext>,
 
         QueryClientsArgs: RunQueryClientsCommand,
 
