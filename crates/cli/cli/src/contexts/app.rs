@@ -69,7 +69,9 @@ use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, Parse
 use hermes_cli_components::traits::any_counterparty::{
     AnyCounterpartyComponent, ProvideAnyCounterparty,
 };
-use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, BootstrapTypeComponent};
+use hermes_cli_components::traits::bootstrap::{
+    BootstrapLoaderComponent, BootstrapTypeProviderComponent,
+};
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, BuilderTypeComponent, CanLoadBuilder,
 };
@@ -140,7 +142,7 @@ delegate_components! {
             UseHermesLogger,
         ConfigTypeComponent:
             WithType<RelayerConfig>,
-        BootstrapTypeComponent:
+        BootstrapTypeProviderComponent:
             WithType<CosmosBootstrap>,
         BuilderTypeComponent:
             WithType<CosmosBuilder>,
