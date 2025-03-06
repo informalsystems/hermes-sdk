@@ -9,9 +9,7 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainCommand;
-use hermes_cli_components::impls::commands::channel::create::{
-    CreateChannelArgs, RunCreateChannelCommand,
-};
+use hermes_cli_components::impls::commands::channel::create::RunCreateChannelCommand;
 use hermes_cli_components::impls::commands::client::create::{
     CreateClientOptionsParser, CreateClientOptionsParserComponent, RunCreateClientCommand,
 };
@@ -64,7 +62,6 @@ use hermes_cli_components::impls::commands::start::{RunStartRelayerCommand, Star
 use hermes_cli_components::impls::config::get_config_path::GetDefaultConfigField;
 use hermes_cli_components::impls::config::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
-use hermes_cli_components::impls::parse::identifier::{ParseInitCosmosChannelOptions, ParsePortId};
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
 use hermes_cli_components::traits::any_counterparty::{
     AnyCounterpartyComponent, ProvideAnyCounterparty,
@@ -106,9 +103,11 @@ use serde::Serialize;
 
 use crate::commands::bootstrap::chain::{BootstrapChainArgs, LoadCosmosBootstrap};
 use crate::commands::bootstrap::subcommand::{BootstrapSubCommand, RunBootstrapSubCommand};
+use crate::commands::channel::CreateChannelArgs;
 use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
+use crate::impls::parse::ParseInitCosmosChannelOptions;
 
 #[cgp_context(HermesAppComponents)]
 #[derive(HasField)]
@@ -205,10 +204,10 @@ delegate_components! {
 
         (CreateChannelArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateChannelArgs, symbol!("target_client_id")): ParseFromString<ClientId>,
-        (CreateChannelArgs, symbol!("target_port_id")): ParsePortId,
+        (CreateChannelArgs, symbol!("target_port_id")): ParseFromString<PortId>,
         (CreateChannelArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
         (CreateChannelArgs, symbol!("counterparty_client_id")): ParseFromString<ClientId>,
-        (CreateChannelArgs, symbol!("counterparty_port_id")): ParsePortId,
+        (CreateChannelArgs, symbol!("counterparty_port_id")): ParseFromString<PortId>,
         (CreateChannelArgs, symbol!("init_channel_options")): ParseInitCosmosChannelOptions,
 
         (CreateConnectionArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,

@@ -20,64 +20,7 @@ use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::{CanProduceOutput, HasOutputType};
 use crate::traits::parse::CanParseArg;
 
-pub struct RunCreateChannelCommand;
-
-#[derive(Debug, clap::Parser, HasField)]
-pub struct CreateChannelArgs {
-    #[clap(
-        long = "target-chain-id",
-        required = true,
-        value_name = "TARGET_CHAIN_ID",
-        help_heading = "REQUIRED"
-    )]
-    target_chain_id: String,
-
-    #[clap(
-        long = "target-client-id",
-        required = true,
-        value_name = "TARGET_CLIENT_ID",
-        help_heading = "REQUIRED"
-    )]
-    target_client_id: String,
-
-    #[clap(
-        long = "target-connection-id",
-        required = true,
-        value_name = "TARGET_CONNECTION_ID",
-        help_heading = "REQUIRED"
-    )]
-    target_connection_id: String,
-
-    #[clap(long = "target-port-id", value_name = "TARGET_PORT_ID")]
-    target_port_id: String,
-
-    #[clap(
-        long = "counterparty-chain-id",
-        required = true,
-        value_name = "COUNTERPARTY_CHAIN_ID",
-        help_heading = "REQUIRED"
-    )]
-    counterparty_chain_id: String,
-
-    #[clap(
-        long = "counterparty-client-id",
-        required = true,
-        value_name = "COUNTERPARTY_CLIENT_ID",
-        help_heading = "REQUIRED"
-    )]
-    counterparty_client_id: String,
-
-    #[clap(long = "counterparty-port-id", value_name = "COUNTERPARTY_PORT_ID")]
-    counterparty_port_id: String,
-
-    #[clap(long = "ordering", value_name = "ORDERING")]
-    ordering: String,
-
-    #[clap(long = "version", value_name = "VERSION")]
-    version: String,
-}
-
-#[cgp_provider(CommandRunnerComponent)]
+#[cgp_new_provider(CommandRunnerComponent)]
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
     for RunCreateChannelCommand
 where
@@ -123,12 +66,18 @@ where
         let target_chain_id = app.parse_arg(args, PhantomData::<symbol!("target_chain_id")>)?;
         let target_client_id = app.parse_arg(args, PhantomData::<symbol!("target_client_id")>)?;
         let target_port_id = app.parse_arg(args, PhantomData::<symbol!("target_port_id")>)?;
+
         let counterparty_chain_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_chain_id")>)?;
+
         let counterparty_client_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_client_id")>)?;
+
         let counterparty_port_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_port_id")>)?;
+
+        let init_channel_options =
+            app.parse_arg(args, PhantomData::<symbol!("init_channel_options")>)?;
 
         let relay = builder
             .build_relay(
@@ -155,7 +104,11 @@ where
             .await;
 
         let (target_channel_id, counterparty_channel_id) = relay
-            .bootstrap_channel(&target_port_id, &counterparty_port_id, &Default::default())
+            .bootstrap_channel(
+                &target_port_id,
+                &counterparty_port_id,
+                &init_channel_options,
+            )
             .await
             .map_err(App::raise_error)?;
 
