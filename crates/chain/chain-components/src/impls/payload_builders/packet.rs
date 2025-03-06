@@ -18,7 +18,7 @@ use crate::traits::payload_builders::receive_packet::{
 use crate::traits::payload_builders::timeout_unordered_packet::{
     TimeoutUnorderedPacketPayloadBuilder, TimeoutUnorderedPacketPayloadBuilderComponent,
 };
-use crate::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
+use crate::traits::queries::packet_acknowledgement::CanQueryPacketAckCommitment;
 use crate::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use crate::traits::queries::packet_receipt::CanQueryPacketReceipt;
 use crate::traits::types::client_state::HasClientStateType;
@@ -83,7 +83,7 @@ where
             AckPacketPayload = AckPacketPayload<Chain, Counterparty>,
         > + HasAcknowledgementType<Counterparty>
         + HasClientStateType<Counterparty>
-        + CanQueryPacketAcknowledgement<Counterparty>
+        + CanQueryPacketAckCommitment<Counterparty>
         + CanIncrementHeight
         + HasCommitmentProofHeight
         + HasAsyncErrorType,
@@ -99,7 +99,7 @@ where
         ack: &Chain::Acknowledgement,
     ) -> Result<Chain::AckPacketPayload, Chain::Error> {
         let (_, proof_ack) = chain
-            .query_packet_acknowledgement_with_proof(
+            .query_packet_ack_commitment_with_proof(
                 &Counterparty::packet_dst_channel_id(packet),
                 &Counterparty::packet_dst_port_id(packet),
                 &Counterparty::packet_sequence(packet),

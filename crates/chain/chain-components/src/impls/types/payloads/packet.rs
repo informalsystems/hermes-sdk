@@ -2,7 +2,7 @@ use cgp::prelude::*;
 
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::packets::ack::{
-    AckPacketPayloadTypeComponent, HasAcknowledgementType, ProvideAckPacketPayloadType,
+    AckPacketPayloadTypeProvider, AckPacketPayloadTypeProviderComponent, HasAcknowledgementType,
 };
 use crate::traits::types::packets::receive::{
     ProvideReceivePacketPayloadType, ReceivePacketPayloadTypeComponent,
@@ -26,8 +26,8 @@ where
     type ReceivePacketPayload = ReceivePacketPayload<Chain>;
 }
 
-#[cgp_provider(AckPacketPayloadTypeComponent)]
-impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
+#[cgp_provider(AckPacketPayloadTypeProviderComponent)]
+impl<Chain, Counterparty> AckPacketPayloadTypeProvider<Chain, Counterparty>
     for ProvidePacketPayloadTypes
 where
     Chain: HasHeightType + HasCommitmentProofType + HasAcknowledgementType<Counterparty>,

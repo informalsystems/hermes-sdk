@@ -10,11 +10,11 @@ use crate::traits::types::proof::HasCommitmentProofType;
 use crate::types::aliases::SequenceOf;
 
 #[cgp_component {
-  provider: PacketAcknowledgementQuerier,
-  context: Chain,
+    provider: PacketAckCommitmentQuerier,
+    context: Chain,
 }]
 #[async_trait]
-pub trait CanQueryPacketAcknowledgement<Counterparty>:
+pub trait CanQueryPacketAckCommitment<Counterparty>:
     HasHeightType
     + HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
@@ -23,7 +23,7 @@ pub trait CanQueryPacketAcknowledgement<Counterparty>:
     + HasAsyncErrorType
     + CanUseCounterparty<Counterparty, Counterparty: HasSequenceType<Self>>
 {
-    async fn query_packet_acknowledgement_with_proof(
+    async fn query_packet_ack_commitment_with_proof(
         &self,
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,

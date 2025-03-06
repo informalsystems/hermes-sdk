@@ -41,7 +41,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 };
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packets::ack::{
-    AckPacketPayloadTypeComponent, ProvideAckPacketPayloadType,
+    AckPacketPayloadTypeProvider, AckPacketPayloadTypeProviderComponent,
 };
 use hermes_relayer_components::chain::traits::types::packets::receive::{
     ProvideReceivePacketPayloadType, ReceivePacketPayloadTypeComponent,
@@ -246,8 +246,8 @@ where
     type ReceivePacketPayload = SolomachineReceivePacketPayload;
 }
 
-#[cgp_provider(AckPacketPayloadTypeComponent)]
-impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
+#[cgp_provider(AckPacketPayloadTypeProviderComponent)]
+impl<Chain, Counterparty> AckPacketPayloadTypeProvider<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
     Chain: Async,

@@ -79,7 +79,7 @@ use hermes_relayer_components::chain::traits::queries::connection_end::{
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusState, CanQueryConsensusStateWithProofs, CanQueryRawConsensusState,
 };
-use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAckCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
 use hermes_relayer_components::chain::traits::types::chain_id::{
@@ -274,7 +274,7 @@ pub trait CanUseWasmCosmosChain:
     + CanQueryChannelEndWithProofs<WasmCosmosChain>
     + CanQueryConnectionEndWithProofs<WasmCosmosChain>
     + CanQueryPacketCommitment<WasmCosmosChain>
-    + CanQueryPacketAcknowledgement<WasmCosmosChain>
+    + CanQueryPacketAckCommitment<WasmCosmosChain>
     + CanQueryPacketReceipt<WasmCosmosChain>
     + HasChannelEndType<WasmCosmosChain, ChannelEnd = ChannelEnd>
     + HasRawClientStateType<RawClientState = Any>

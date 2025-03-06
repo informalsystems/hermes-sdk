@@ -68,7 +68,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
     use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
     use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
-    use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
+    use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
     use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
     use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
@@ -130,7 +130,7 @@ mod preset {
                 ChannelOpenAckPayloadTypeComponent,
                 ChannelOpenConfirmPayloadTypeComponent,
                 ReceivePacketPayloadTypeComponent,
-                AckPacketPayloadTypeComponent,
+                AckPacketPayloadTypeProviderComponent,
                 TimeoutUnorderedPacketPayloadTypeComponent,
                 CreateClientEventComponent,
                 ConnectionOpenInitEventComponent,

@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
-    PacketAcknowledgementQuerier, PacketAcknowledgementQuerierComponent,
+    PacketAckCommitmentQuerier, PacketAckCommitmentQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckCommitmentHashType;
@@ -11,8 +11,8 @@ use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryPacketAcknowledgementFromAbci;
 
-#[cgp_provider(PacketAcknowledgementQuerierComponent)]
-impl<Chain, Counterparty> PacketAcknowledgementQuerier<Chain, Counterparty>
+#[cgp_provider(PacketAckCommitmentQuerierComponent)]
+impl<Chain, Counterparty> PacketAckCommitmentQuerier<Chain, Counterparty>
     for QueryPacketAcknowledgementFromAbci
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId: PartialEq, PortId: PartialEq>
@@ -22,7 +22,7 @@ where
         + CanRaiseAsyncError<String>,
     Counterparty: HasIbcChainTypes<Chain, Sequence: PartialEq>,
 {
-    async fn query_packet_acknowledgement_with_proof(
+    async fn query_packet_ack_commitment_with_proof(
         chain: &Chain,
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,

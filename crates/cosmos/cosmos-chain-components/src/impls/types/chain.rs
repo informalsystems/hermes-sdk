@@ -16,7 +16,6 @@ use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
 use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
 use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
 use hermes_chain_type_components::traits::types::timeout::TimeoutTypeComponent;
-use hermes_relayer_components::chain::impls::types::ack::ProvideBytesAcknowlegement;
 use hermes_relayer_components::chain::impls::types::commitment::ProvideBytesPacketCommitment;
 use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCommitmentPrefixBytes;
 use hermes_relayer_components::chain::impls::types::receipt::ProvideBytesPacketReceipt;
@@ -47,7 +46,7 @@ use hermes_relayer_components::chain::traits::types::packet::{
     OutgoingPacketTypeComponent, ProvideOutgoingPacketType,
 };
 use hermes_relayer_components::chain::traits::types::packets::ack::{
-    AckCommitmentHashTypeComponent, AcknowledgementTypeComponent,
+    AckCommitmentHashTypeProviderComponent, AcknowledgementTypeProviderComponent,
 };
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
@@ -104,10 +103,11 @@ delegate_components! {
             ProvideCosmosCommitmentProof,
         PacketCommitmentTypeComponent:
             ProvideBytesPacketCommitment,
-        AcknowledgementTypeComponent:
-            ProvideBytesAcknowlegement,
-        AckCommitmentHashTypeComponent:
-            WithType<Vec<u8>>,
+        [
+            AcknowledgementTypeProviderComponent,
+            AckCommitmentHashTypeProviderComponent,
+        ]:
+            UseType<Vec<u8>>,
         PacketReceiptTypeComponent:
             ProvideBytesPacketReceipt,
     }
