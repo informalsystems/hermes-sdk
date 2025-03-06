@@ -1,10 +1,6 @@
 use cgp::prelude::*;
 
-#[cgp_component {
-  name: AnyCounterpartyComponent,
-  provider: ProvideAnyCounterparty,
-  context: App,
-}]
-pub trait HasAnyCounterparty: Async {
+#[cgp_type]
+pub trait HasAnyCounterpartyType {
     type AnyCounterparty: Async;
 }

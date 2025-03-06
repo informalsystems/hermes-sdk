@@ -66,9 +66,7 @@ use hermes_cli_components::impls::config::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
 use hermes_cli_components::impls::parse::identifier::{ParseInitCosmosChannelOptions, ParsePortId};
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
-use hermes_cli_components::traits::any_counterparty::{
-    AnyCounterpartyComponent, ProvideAnyCounterparty,
-};
+use hermes_cli_components::traits::any_counterparty::AnyCounterpartyTypeProviderComponent;
 use hermes_cli_components::traits::bootstrap::{
     BootstrapLoaderComponent, BootstrapTypeProviderComponent,
 };
@@ -140,6 +138,8 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             UseHermesLogger,
+        AnyCounterpartyTypeProviderComponent:
+            UseType<AnyCounterparty>,
         ConfigTypeComponent:
             WithType<RelayerConfig>,
         BootstrapTypeProviderComponent:
@@ -256,14 +256,6 @@ delegate_components! {
         QueryWalletSubCommand: RunQueryWalletSubCommand,
         QueryBalanceArgs: RunQueryBalanceCommand,
     }
-}
-
-#[cgp_provider(AnyCounterpartyComponent)]
-impl<App> ProvideAnyCounterparty<App> for HermesAppComponents
-where
-    App: Async,
-{
-    type AnyCounterparty = AnyCounterparty;
 }
 
 #[cgp_provider(OutputProducerComponent)]
