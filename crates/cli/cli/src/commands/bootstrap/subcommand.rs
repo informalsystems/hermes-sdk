@@ -3,11 +3,11 @@ use hermes_cli_components::traits::command::{
     CanRunCommand, CommandRunner, CommandRunnerComponent,
 };
 
-use crate::commands::bootstrap::chain::BootstrapChainArgs;
+use crate::commands::bootstrap::chain::BootstrapCosmosChainArgs;
 
 #[derive(Debug, clap::Subcommand)]
 pub enum BootstrapSubCommand {
-    Chain(BootstrapChainArgs),
+    Chain(BootstrapCosmosChainArgs),
 }
 
 pub struct RunBootstrapSubCommand;
@@ -15,7 +15,7 @@ pub struct RunBootstrapSubCommand;
 #[cgp_provider(CommandRunnerComponent)]
 impl<App> CommandRunner<App, BootstrapSubCommand> for RunBootstrapSubCommand
 where
-    App: CanRunCommand<BootstrapChainArgs>,
+    App: CanRunCommand<BootstrapCosmosChainArgs>,
 {
     async fn run_command(
         app: &App,

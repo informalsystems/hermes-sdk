@@ -104,7 +104,7 @@ use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
 use serde::Serialize;
 
-use crate::commands::bootstrap::chain::{BootstrapChainArgs, LoadCosmosBootstrap};
+use crate::commands::bootstrap::chain::{BootstrapCosmosChainArgs, LoadCosmosBootstrap};
 use crate::commands::bootstrap::subcommand::{BootstrapSubCommand, RunBootstrapSubCommand};
 use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
@@ -243,7 +243,7 @@ delegate_components! {
         UpdateClientArgs: RunUpdateClientCommand,
 
         BootstrapSubCommand: RunBootstrapSubCommand,
-        BootstrapChainArgs: RunBootstrapChainCommand<(), UseContext>,
+        BootstrapCosmosChainArgs: RunBootstrapChainCommand<(), UseContext>,
 
         QueryClientsArgs: RunQueryClientsCommand,
 
@@ -320,7 +320,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<CreateConnectionArgs>
     // + CanRunCommand<CreateChannelArgs>
     + CanRunCommand<UpdateClientArgs>
-    + CanRunCommand<BootstrapChainArgs>
+    + CanRunCommand<BootstrapCosmosChainArgs>
     + CanRunCommand<QueryChannelSubCommand>
     + CanRunCommand<QueryChannelEndArgs>
     + CanProduceOutput<&'static str>

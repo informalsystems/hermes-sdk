@@ -14,7 +14,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
 #[derive(Debug, clap::Parser, HasField)]
-pub struct BootstrapChainArgs {
+pub struct BootstrapCosmosChainArgs {
     #[clap(long = "chain-id", required = true)]
     pub chain_id: String,
 
@@ -37,7 +37,7 @@ pub struct BootstrapChainArgs {
 pub struct LoadCosmosBootstrap;
 
 #[cgp_provider(BootstrapLoaderComponent)]
-impl<App, Tag> BootstrapLoader<App, Tag, BootstrapChainArgs> for LoadCosmosBootstrap
+impl<App, Tag> BootstrapLoader<App, Tag, BootstrapCosmosChainArgs> for LoadCosmosBootstrap
 where
     App: HasBootstrapType<Tag, Bootstrap = CosmosBootstrap>
         + HasRuntime<Runtime = HermesRuntime>
@@ -45,7 +45,7 @@ where
 {
     async fn load_bootstrap(
         app: &App,
-        args: &BootstrapChainArgs,
+        args: &BootstrapCosmosChainArgs,
     ) -> Result<App::Bootstrap, App::Error> {
         let runtime = app.runtime();
 
