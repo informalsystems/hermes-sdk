@@ -433,7 +433,7 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 [[package]]
 name = "cgp"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-async",
  "cgp-core",
@@ -443,7 +443,7 @@ dependencies = [
 [[package]]
 name = "cgp-async"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-async-macro",
  "cgp-sync",
@@ -452,7 +452,7 @@ dependencies = [
 [[package]]
 name = "cgp-async-macro"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -462,12 +462,12 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 
 [[package]]
 name = "cgp-component-macro"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-component-macro-lib",
  "syn 2.0.98",
@@ -476,7 +476,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro-lib"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "itertools",
  "prettyplease",
@@ -488,7 +488,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -502,7 +502,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -513,7 +513,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-extra"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-core",
 ]
@@ -521,7 +521,7 @@ dependencies = [
 [[package]]
 name = "cgp-extra"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-error-extra",
  "cgp-inner",
@@ -532,7 +532,7 @@ dependencies = [
 [[package]]
 name = "cgp-field"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-component",
  "cgp-component-macro",
@@ -542,7 +542,7 @@ dependencies = [
 [[package]]
 name = "cgp-field-macro"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-field-macro-lib",
  "proc-macro2",
@@ -551,7 +551,7 @@ dependencies = [
 [[package]]
 name = "cgp-field-macro-lib"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "prettyplease",
  "proc-macro2",
@@ -562,7 +562,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-component",
  "cgp-component-macro",
@@ -571,7 +571,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -582,7 +582,7 @@ dependencies = [
 [[package]]
 name = "cgp-runtime"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-core",
 ]
@@ -590,7 +590,7 @@ dependencies = [
 [[package]]
 name = "cgp-sync"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-async-macro",
 ]
@@ -598,7 +598,7 @@ dependencies = [
 [[package]]
 name = "cgp-type"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=trait-alias#f018e48116e46e1695e41aaa929e86431de879ea"
+source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
 dependencies = [
  "cgp-component",
  "cgp-component-macro",
