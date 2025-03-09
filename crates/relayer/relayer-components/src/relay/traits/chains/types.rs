@@ -8,12 +8,12 @@ use crate::multi::types::tags::{Dst, Src};
 
 #[trait_alias]
 pub trait HasSrcChainType: HasChainTypeAt<Src, Chain = Self::SrcChain> {
-    type SrcChain = Self::Chain;
+    type SrcChain;
 }
 
 #[trait_alias]
 pub trait HasDstChainType: HasChainTypeAt<Dst, Chain = Self::DstChain> {
-    type DstChain = Self::Chain;
+    type DstChain;
 }
 
 #[trait_alias]

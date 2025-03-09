@@ -11,5 +11,5 @@ pub type PacketOf<Relay> =
 pub trait HasRelayPacketType:
     HasRelayChains<SrcChain: HasOutgoingPacketType<Self::DstChain, OutgoingPacket = Self::Packet>>
 {
-    type Packet: Async = PacketOf<Self>;
+    type Packet: Async;
 }
