@@ -236,7 +236,7 @@ delegate_components! {
         QueryClientStatusArgs: RunQueryClientStatusCommand,
         QueryConsensusStateArgs: RunQueryConsensusStateCommand,
 
-        CreateClientArgs: RunCreateClientCommand,
+        CreateClientArgs: RunCreateClientCommand<Index<0>, Index<1>>,
         CreateConnectionArgs: RunCreateConnectionCommand,
         CreateChannelArgs: RunCreateChannelCommand,
         UpdateClientArgs: RunUpdateClientCommand,
