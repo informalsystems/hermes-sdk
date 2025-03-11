@@ -2,6 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::field::FieldGetter;
+use cgp::core::macros::trait_alias;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
@@ -13,6 +14,7 @@ use hermes_chain_type_components::traits::types::timeout::{HasTimeoutType, Timeo
 
 use crate::types::aliases::{ChannelIdOf, HeightOf, PortIdOf};
 
+#[trait_alias]
 pub trait CanReadPacketFields<Counterparty>:
     HasPacketSrcChannelId<Counterparty>
     + HasPacketSrcPortId<Counterparty>
@@ -21,17 +23,6 @@ pub trait CanReadPacketFields<Counterparty>:
     + HasPacketSequence<Counterparty>
     + HasPacketTimeoutHeight<Counterparty>
     + HasPacketTimeoutTimestamp<Counterparty>
-{
-}
-
-impl<Chain, Counterparty> CanReadPacketFields<Counterparty> for Chain where
-    Chain: HasPacketSrcChannelId<Counterparty>
-        + HasPacketSrcPortId<Counterparty>
-        + HasPacketDstChannelId<Counterparty>
-        + HasPacketDstPortId<Counterparty>
-        + HasPacketSequence<Counterparty>
-        + HasPacketTimeoutHeight<Counterparty>
-        + HasPacketTimeoutTimestamp<Counterparty>
 {
 }
 

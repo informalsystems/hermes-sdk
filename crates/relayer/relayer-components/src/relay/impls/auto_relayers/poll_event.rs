@@ -6,7 +6,7 @@ use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
 use hermes_chain_components::traits::queries::block_events::CanQueryBlockEvents;
 use hermes_chain_components::traits::types::event::HasEventType;
-use hermes_chain_components::traits::types::height::CanIncrementHeight;
+use hermes_chain_components::traits::types::height::{CanIncrementHeight, HasHeightType};
 use hermes_chain_components::types::aliases::{EventOf, HeightOf};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -18,9 +18,7 @@ use crate::relay::traits::auto_relayer::{AutoRelayerWithHeights, AutoRelayerWith
 use crate::relay::traits::event_relayer::CanRelayEvent;
 use crate::relay::traits::target::{HasTargetChainTypes, HasTargetChains, RelayTarget};
 
-pub struct RelayWithPolledEvents;
-
-#[cgp_provider(AutoRelayerWithHeightsComponent)]
+#[cgp_new_provider(AutoRelayerWithHeightsComponent)]
 impl<Relay, Target> AutoRelayerWithHeights<Relay, Target> for RelayWithPolledEvents
 where
     Relay: Clone
@@ -32,7 +30,9 @@ where
     Target: RelayTarget,
     Relay::TargetChain: CanIncrementHeight + CanQueryBlockEvents,
     Relay::Runtime: CanRunConcurrentTasks,
-    Relay::Logger: CanLog<LevelInfo> + CanLog<LevelTrace>,
+    Relay::Logger: CanLog<LevelInfo>
+        + CanLog<LevelTrace>
+        + for<'a> CanLog<LogAutoRelayWithHeights<'a, Relay, Target>>,
 {
     async fn auto_relay_with_heights(
         relay: &Relay,
@@ -48,8 +48,13 @@ where
         relay
             .logger()
             .log(
-                &format!("Will start relaying at height `{height}`"),
-                &LevelInfo,
+                "starting auto relay with heights",
+                &LogAutoRelayWithHeights {
+                    relay,
+                    start_height,
+                    end_height,
+                    phantom: PhantomData,
+                },
             )
             .await;
 
@@ -116,4 +121,16 @@ where
     async fn run(self) {
         let _ = self.relay.relay_chain_event(&self.event).await;
     }
+}
+
+pub struct LogAutoRelayWithHeights<'a, Relay, Target>
+where
+    Relay: HasTargetChainTypes<Target>,
+    Target: RelayTarget,
+    Relay::TargetChain: HasHeightType,
+{
+    pub relay: &'a Relay,
+    pub start_height: &'a HeightOf<Relay::TargetChain>,
+    pub end_height: Option<&'a HeightOf<Relay::TargetChain>>,
+    pub phantom: PhantomData<Target>,
 }

@@ -1,3 +1,4 @@
+use cgp::core::macros::trait_alias;
 use cgp::prelude::{HasAsyncErrorType, HasErrorType};
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
@@ -5,28 +6,17 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::chain_at::HasChainTypeAt;
 use crate::multi::types::tags::{Dst, Src};
 
+#[trait_alias]
 pub trait HasSrcChainType: HasChainTypeAt<Src, Chain = Self::SrcChain> {
     type SrcChain;
 }
 
+#[trait_alias]
 pub trait HasDstChainType: HasChainTypeAt<Dst, Chain = Self::DstChain> {
     type DstChain;
 }
 
-impl<Relay> HasSrcChainType for Relay
-where
-    Relay: HasChainTypeAt<Src>,
-{
-    type SrcChain = Relay::Chain;
-}
-
-impl<Relay> HasDstChainType for Relay
-where
-    Relay: HasChainTypeAt<Dst>,
-{
-    type DstChain = Relay::Chain;
-}
-
+#[trait_alias]
 pub trait HasRelayChainTypes:
     HasAsyncErrorType
     + HasSrcChainType<
@@ -34,16 +24,6 @@ pub trait HasRelayChainTypes:
                       + HasIbcChainTypes<Self::DstChain>
                       + HasOutgoingPacketType<Self::DstChain>,
     > + HasDstChainType<DstChain: HasErrorType + HasIbcChainTypes<Self::SrcChain>>
-{
-}
-
-impl<Relay, SrcChain, DstChain> HasRelayChainTypes for Relay
-where
-    Relay: HasChainTypeAt<Src, Chain = SrcChain>
-        + HasChainTypeAt<Dst, Chain = DstChain>
-        + HasAsyncErrorType,
-    SrcChain: HasErrorType + HasIbcChainTypes<DstChain> + HasOutgoingPacketType<DstChain>,
-    DstChain: HasErrorType + HasIbcChainTypes<SrcChain>,
 {
 }
 
