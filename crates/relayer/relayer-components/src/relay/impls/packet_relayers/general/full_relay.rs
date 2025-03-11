@@ -152,7 +152,7 @@ where
             if let Some(ack) = m_ack {
                 logger
                     .log(
-                        "relaying ack packet",
+                        "relaying ack packet using ack event returned from recv-packet event",
                         &LogRelayPacketAction {
                             relay,
                             packet,
@@ -174,7 +174,7 @@ where
 
                 logger
                     .log(
-                        "successfully ack packet",
+                        "successfully relayed ack packet",
                         &LogRelayPacketAction {
                             relay,
                             packet,
