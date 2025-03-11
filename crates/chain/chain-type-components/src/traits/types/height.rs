@@ -1,4 +1,4 @@
-use core::fmt::Display;
+use core::fmt::{Debug, Display};
 
 use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
@@ -24,5 +24,5 @@ pub trait HasHeightType: Sized + Async {
        `u8` or `u128` as the `Height` type during testing, and use the
        more complex Cosmos height type during production.
     */
-    type Height: Ord + Display + Clone + Async;
+    type Height: Ord + Display + Debug + Clone + Async;
 }

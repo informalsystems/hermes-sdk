@@ -8,6 +8,7 @@ use hermes_relayer_components::birelay::traits::{HasBiRelayTypes, HasTwoWayRelay
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
+use hermes_relayer_components::relay::impls::auto_relayers::poll_event::LogAutoRelayWithHeights;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
@@ -127,7 +128,7 @@ where
         details: &LogSkipBuildUpdateClientMessage<'a, Relay, Target>,
     ) {
         trace!(
-            target: "hermes",
+            target: "hermes::update_client",
             target_chain_id = %details.relay.target_chain().chain_id(),
             counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
             target_height = %details.target_height,
@@ -157,7 +158,7 @@ where
                 target_height,
             } => {
                 trace!(
-                    target: "hermes",
+                    target: "hermes::update_client",
                     target_chain_id = %relay.target_chain().chain_id(),
                     counterparty_chain_id = %relay.counterparty_chain().chain_id(),
                     %target_height,
@@ -170,7 +171,7 @@ where
                 current_height,
             } => {
                 trace!(
-                    target: "hermes",
+                    target: "hermes::update_client",
                     target_chain_id = %relay.target_chain().chain_id(),
                     counterparty_chain_id = %relay.counterparty_chain().chain_id(),
                     %target_height,
@@ -196,7 +197,7 @@ where
         match details.log_level {
             LogLevel::Error => {
                 error!(
-                    target: "hermes",
+                    target: "hermes::batch",
                     target_chain_id = %details.relay.target_chain().chain_id(),
                     counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
                     details = %details.details,
@@ -205,7 +206,7 @@ where
             }
             _ => {
                 trace!(
-                    target: "hermes",
+                    target: "hermes::batch",
                     target_chain_id = %details.relay.target_chain().chain_id(),
                     counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
                     details = %details.details,
@@ -232,7 +233,7 @@ where
         details: &LogClientUpdateMessage<'a, Relay, Target>,
     ) {
         debug!(
-            target: "hermes",
+            target: "hermes::update_client",
             target_chain_id = %details.relay.target_chain().chain_id(),
             counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
             client_id = %details.client_id,
@@ -254,7 +255,7 @@ where
 {
     async fn log(_logging: &Logging, message: &str, details: &LogAutoBiRelay<'a, BiRelay>) {
         info!(
-            target: "hermes",
+            target: "hermes::relay",
             chain_id_a = %details.bi_relay.relay_a_to_b().src_chain().chain_id(),
             chain_id_b = %details.bi_relay.relay_a_to_b().dst_chain().chain_id(),
             start_height_a = %details.start_height_a,
@@ -263,6 +264,32 @@ where
             end_height_b = ?details.end_height_b,
             clear_past_blocks = ?details.clear_past_blocks,
             stop_after_blocks = ?details.stop_after_blocks,
+            "{message}",
+        );
+    }
+}
+
+#[cgp_provider(LoggerComponent)]
+impl<'a, Logging, Relay, Target> Logger<Logging, LogAutoRelayWithHeights<'a, Relay, Target>>
+    for TracingLogger
+where
+    Logging: Async,
+    Relay: HasTargetChains<Target>,
+    Target: RelayTarget,
+    Relay::TargetChain: HasChainId + HasHeightType,
+    Relay::CounterpartyChain: HasChainId,
+{
+    async fn log(
+        _logging: &Logging,
+        message: &str,
+        details: &LogAutoRelayWithHeights<'a, Relay, Target>,
+    ) {
+        debug!(
+            target: "hermes::relay",
+            target_chain_id = %details.relay.target_chain().chain_id(),
+            counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
+            start_height = %details.start_height,
+            end_height = ?details.end_height,
             "{message}",
         );
     }
