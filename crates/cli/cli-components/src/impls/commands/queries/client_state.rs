@@ -12,7 +12,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::CanQueryCli
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 
-use crate::traits::any_counterparty::HasAnyCounterparty;
+use crate::traits::any_counterparty::HasAnyCounterpartyType;
 use crate::traits::build::{CanLoadBuilder, HasBuilderType};
 use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
@@ -54,7 +54,7 @@ where
     App: HasBuilderType<Builder = Build>
         + CanLoadBuilder
         + HasLogger
-        + HasAnyCounterparty<AnyCounterparty = Counterparty>
+        + HasAnyCounterpartyType<AnyCounterparty = Counterparty>
         + CanProduceOutput<Counterparty::ClientState>
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>

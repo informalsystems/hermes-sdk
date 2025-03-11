@@ -21,15 +21,15 @@ use crate::traits::config::load_config::CanLoadConfig;
 use crate::traits::config::write_config::CanWriteConfig;
 use crate::traits::output::CanProduceOutput;
 
-pub struct RunBootstrapChainCommand<UpdateConfig>(pub PhantomData<UpdateConfig>);
+pub struct RunBootstrapChainCommand<Tag, UpdateConfig>(pub PhantomData<(Tag, UpdateConfig)>);
 
 #[cgp_provider(CommandRunnerComponent)]
-impl<App, Args, Bootstrap, ChainDriver, Chain, Runtime, UpdateConfig> CommandRunner<App, Args>
-    for RunBootstrapChainCommand<UpdateConfig>
+impl<App, Tag, Args, Bootstrap, ChainDriver, Chain, Runtime, UpdateConfig> CommandRunner<App, Args>
+    for RunBootstrapChainCommand<Tag, UpdateConfig>
 where
     App: HasLogger
         + CanProduceOutput<()>
-        + CanLoadBootstrap<Args, Bootstrap = Bootstrap>
+        + CanLoadBootstrap<Tag, Args, Bootstrap = Bootstrap>
         + HasConfigPath
         + CanLoadConfig
         + CanWriteConfig

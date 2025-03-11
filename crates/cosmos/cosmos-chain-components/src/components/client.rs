@@ -81,7 +81,7 @@ mod preset {
     };
     use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
     use hermes_relayer_components::chain::traits::queries::counterparty_connection_id::CounterpartyConnectionIdQuerierComponent;
-    use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
+    use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAckCommitmentQuerierComponent;
     use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
     use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerierComponent;
     use hermes_relayer_components::chain::traits::queries::packet_is_received::PacketIsReceivedQuerierComponent;
@@ -131,7 +131,8 @@ mod preset {
     };
     use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
     use hermes_relayer_components::chain::traits::types::packets::ack::{
-        AckCommitmentHashTypeComponent, AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
+        AckCommitmentHashTypeProviderComponent, AckPacketPayloadTypeProviderComponent,
+        AcknowledgementTypeProviderComponent,
     };
     use hermes_relayer_components::chain::traits::types::packets::receive::{
         PacketCommitmentTypeComponent, ReceivePacketPayloadTypeComponent,
@@ -217,8 +218,8 @@ mod preset {
                 CommitmentProofHeightGetterComponent,
                 CommitmentProofBytesGetterComponent,
                 PacketCommitmentTypeComponent,
-                AcknowledgementTypeComponent,
-                AckCommitmentHashTypeComponent,
+                AcknowledgementTypeProviderComponent,
+                AckCommitmentHashTypeProviderComponent,
                 PacketReceiptTypeComponent,
             ]:
                 ProvideCosmosChainTypes,
@@ -244,7 +245,7 @@ mod preset {
                 ChannelOpenAckPayloadTypeComponent,
                 ChannelOpenConfirmPayloadTypeComponent,
                 ReceivePacketPayloadTypeComponent,
-                AckPacketPayloadTypeComponent,
+                AckPacketPayloadTypeProviderComponent,
                 TimeoutUnorderedPacketPayloadTypeComponent,
             ]:
                 ProvideCosmosPayloadTypes,
@@ -303,7 +304,7 @@ mod preset {
 
             PacketCommitmentQuerierComponent:
                 QueryPacketCommitmentFromAbci,
-            PacketAcknowledgementQuerierComponent:
+            PacketAckCommitmentQuerierComponent:
                 QueryPacketAcknowledgementFromAbci,
             PacketReceiptQuerierComponent:
                 QueryPacketReceiptFromAbci,

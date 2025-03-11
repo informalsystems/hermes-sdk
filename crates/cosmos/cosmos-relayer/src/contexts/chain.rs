@@ -81,7 +81,7 @@ use hermes_relayer_components::chain::traits::queries::connection_end::{
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAckCommitmentQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
@@ -373,7 +373,7 @@ check_components! {
             ChannelEndQuerierComponent,
             ChannelEndWithProofsQuerierComponent,
             PacketCommitmentQuerierComponent,
-            PacketAcknowledgementQuerierComponent,
+            PacketAckCommitmentQuerierComponent,
             PacketReceiptQuerierComponent,
 
             CreateClientPayloadBuilderComponent,

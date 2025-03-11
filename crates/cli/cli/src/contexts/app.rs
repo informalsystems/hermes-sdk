@@ -63,10 +63,10 @@ use hermes_cli_components::impls::config::get_config_path::GetDefaultConfigField
 use hermes_cli_components::impls::config::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
-use hermes_cli_components::traits::any_counterparty::{
-    AnyCounterpartyComponent, ProvideAnyCounterparty,
+use hermes_cli_components::traits::any_counterparty::AnyCounterpartyTypeProviderComponent;
+use hermes_cli_components::traits::bootstrap::{
+    BootstrapLoaderComponent, BootstrapTypeProviderComponent,
 };
-use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, BootstrapTypeComponent};
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, BuilderTypeComponent, CanLoadBuilder,
 };
@@ -101,7 +101,7 @@ use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
 use serde::Serialize;
 
-use crate::commands::bootstrap::chain::{BootstrapChainArgs, LoadCosmosBootstrap};
+use crate::commands::bootstrap::chain::{BootstrapCosmosChainArgs, LoadCosmosBootstrap};
 use crate::commands::bootstrap::subcommand::{BootstrapSubCommand, RunBootstrapSubCommand};
 use crate::commands::channel::CreateChannelArgs;
 use crate::commands::client::create::CreateClientArgs;
@@ -137,9 +137,11 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             UseHermesLogger,
+        AnyCounterpartyTypeProviderComponent:
+            UseType<AnyCounterparty>,
         ConfigTypeComponent:
             WithType<RelayerConfig>,
-        BootstrapTypeComponent:
+        BootstrapTypeProviderComponent:
             WithType<CosmosBootstrap>,
         BuilderTypeComponent:
             WithType<CosmosBuilder>,
@@ -240,7 +242,7 @@ delegate_components! {
         UpdateClientArgs: RunUpdateClientCommand,
 
         BootstrapSubCommand: RunBootstrapSubCommand,
-        BootstrapChainArgs: RunBootstrapChainCommand<UseContext>,
+        BootstrapCosmosChainArgs: RunBootstrapChainCommand<(), UseContext>,
 
         QueryClientsArgs: RunQueryClientsCommand,
 
@@ -253,14 +255,6 @@ delegate_components! {
         QueryWalletSubCommand: RunQueryWalletSubCommand,
         QueryBalanceArgs: RunQueryBalanceCommand,
     }
-}
-
-#[cgp_provider(AnyCounterpartyComponent)]
-impl<App> ProvideAnyCounterparty<App> for HermesAppComponents
-where
-    App: Async,
-{
-    type AnyCounterparty = AnyCounterparty;
 }
 
 #[cgp_provider(OutputProducerComponent)]
@@ -325,7 +319,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<CreateConnectionArgs>
     // + CanRunCommand<CreateChannelArgs>
     + CanRunCommand<UpdateClientArgs>
-    + CanRunCommand<BootstrapChainArgs>
+    + CanRunCommand<BootstrapCosmosChainArgs>
     + CanRunCommand<QueryChannelSubCommand>
     + CanRunCommand<QueryChannelEndArgs>
     + CanProduceOutput<&'static str>

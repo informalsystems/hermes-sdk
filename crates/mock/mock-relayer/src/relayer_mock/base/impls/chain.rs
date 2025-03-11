@@ -72,7 +72,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerier, ConsensusStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
-    PacketAcknowledgementQuerier, PacketAcknowledgementQuerierComponent,
+    PacketAckCommitmentQuerier, PacketAckCommitmentQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::{
     PacketIsClearedQuerier, PacketIsClearedQuerierComponent,
@@ -115,7 +115,7 @@ use hermes_relayer_components::chain::traits::types::packet::{
     OutgoingPacketTypeComponent, ProvideOutgoingPacketType,
 };
 use hermes_relayer_components::chain::traits::types::packets::ack::{
-    AckPacketPayloadTypeComponent, ProvideAckPacketPayloadType,
+    AckPacketPayloadTypeProvider, AckPacketPayloadTypeProviderComponent,
 };
 use hermes_relayer_components::chain::traits::types::packets::receive::{
     ProvideReceivePacketPayloadType, ReceivePacketPayloadTypeComponent,
@@ -304,9 +304,9 @@ impl PacketFromWriteAckEventBuilder<MockChainContext, MockChainContext> for Mock
     }
 }
 
-#[cgp_provider(PacketAcknowledgementQuerierComponent)]
-impl PacketAcknowledgementQuerier<MockChainContext, MockChainContext> for MockChainComponents {
-    async fn query_packet_acknowledgement_with_proof(
+#[cgp_provider(PacketAckCommitmentQuerierComponent)]
+impl PacketAckCommitmentQuerier<MockChainContext, MockChainContext> for MockChainComponents {
+    async fn query_packet_ack_commitment_with_proof(
         _chain: &MockChainContext,
         _channel_id: &ChannelId,
         _port_id: &PortId,
@@ -520,8 +520,8 @@ impl PacketIsClearedQuerier<MockChainContext, MockChainContext> for MockChainCom
     }
 }
 
-#[cgp_provider(AckPacketPayloadTypeComponent)]
-impl ProvideAckPacketPayloadType<MockChainContext, MockChainContext> for MockChainComponents {
+#[cgp_provider(AckPacketPayloadTypeProviderComponent)]
+impl AckPacketPayloadTypeProvider<MockChainContext, MockChainContext> for MockChainComponents {
     type AckPacketPayload = MockMessage;
 }
 
