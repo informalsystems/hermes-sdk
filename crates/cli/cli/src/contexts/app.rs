@@ -104,7 +104,7 @@ use serde::Serialize;
 use crate::commands::bootstrap::chain::{BootstrapCosmosChainArgs, LoadCosmosBootstrap};
 use crate::commands::bootstrap::subcommand::{BootstrapSubCommand, RunBootstrapSubCommand};
 use crate::commands::channel::CreateChannelArgs;
-use crate::commands::client::create::CreateClientArgs;
+use crate::commands::client::create::CreateCosmosClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
 use crate::impls::parse::ParseInitCosmosChannelOptions;
@@ -201,8 +201,8 @@ delegate_components! {
         (QueryClientStatusArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryClientStatusArgs, symbol!("client_id")): ParseFromString<ClientId>,
 
-        (CreateClientArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
-        (CreateClientArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
+        (CreateCosmosClientArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
+        (CreateCosmosClientArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
 
         (CreateChannelArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
         (CreateChannelArgs, symbol!("target_client_id")): ParseFromString<ClientId>,
@@ -236,7 +236,7 @@ delegate_components! {
         QueryClientStatusArgs: RunQueryClientStatusCommand,
         QueryConsensusStateArgs: RunQueryConsensusStateCommand,
 
-        CreateClientArgs: RunCreateClientCommand<Index<0>, Index<1>>,
+        CreateCosmosClientArgs: RunCreateClientCommand<Index<0>, Index<1>>,
         CreateConnectionArgs: RunCreateConnectionCommand,
         CreateChannelArgs: RunCreateChannelCommand,
         UpdateClientArgs: RunUpdateClientCommand,
@@ -269,12 +269,12 @@ where
 }
 
 #[cgp_provider(CreateClientOptionsParserComponent)]
-impl CreateClientOptionsParser<HermesApp, CreateClientArgs, Index<0>, Index<1>>
+impl CreateClientOptionsParser<HermesApp, CreateCosmosClientArgs, Index<0>, Index<1>>
     for HermesAppComponents
 {
     async fn parse_create_client_options(
         _app: &HermesApp,
-        args: &CreateClientArgs,
+        args: &CreateCosmosClientArgs,
         target_chain: &CosmosChain,
         counterparty_chain: &CosmosChain,
     ) -> Result<((), CosmosCreateClientOptions), Error> {
@@ -315,7 +315,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<QueryClientStatusArgs>
     + CanRunCommand<QueryChainStatusArgs>
     + CanRunCommand<QueryBalanceArgs>
-    + CanRunCommand<CreateClientArgs>
+    + CanRunCommand<CreateCosmosClientArgs>
     + CanRunCommand<CreateConnectionArgs>
     // + CanRunCommand<CreateChannelArgs>
     + CanRunCommand<UpdateClientArgs>

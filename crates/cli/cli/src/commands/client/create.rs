@@ -3,7 +3,7 @@ use eyre::eyre;
 use ibc::clients::tendermint::types::TrustThreshold;
 
 #[derive(Debug, clap::Parser, HasField)]
-pub struct CreateClientArgs {
+pub struct CreateCosmosClientArgs {
     /// Identifier of the chain that hosts the client
     #[clap(
         long = "target-chain-id",
