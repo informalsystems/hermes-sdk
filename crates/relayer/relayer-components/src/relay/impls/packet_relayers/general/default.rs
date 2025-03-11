@@ -10,7 +10,7 @@ use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
 use crate::relay::impls::packet_relayers::general::full_relay::{
-    FullCycleRelayer, LogRelayPacketAction,
+    LogRelayPacketAction, PerformFullRelay,
 };
 use crate::relay::impls::packet_relayers::general::lock::{
     LockPacketRelayer, LogSkipRelayLockedPacket,
@@ -51,7 +51,7 @@ where
         + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
-        <LockPacketRelayer<LoggerRelayer<FilterRelayer<SkipClearedPacket<FullCycleRelayer>>>>>::relay_packet(
+        <LockPacketRelayer<LoggerRelayer<FilterRelayer<SkipClearedPacket<PerformFullRelay>>>>>::relay_packet(
             relay, packet,
         )
         .await

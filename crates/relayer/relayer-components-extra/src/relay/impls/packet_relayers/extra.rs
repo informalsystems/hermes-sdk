@@ -12,7 +12,7 @@ use hermes_relayer_components::error::traits::{
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::{
-    FullCycleRelayer, LogRelayPacketAction,
+    LogRelayPacketAction, PerformFullRelay,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::{
     LockPacketRelayer, LogSkipRelayLockedPacket,
@@ -61,7 +61,7 @@ where
         + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
-        <LockPacketRelayer<LoggerRelayer<FilterRelayer<RelayPacketWithRetry<FullCycleRelayer>>>>>::
+        <LockPacketRelayer<LoggerRelayer<FilterRelayer<RelayPacketWithRetry<PerformFullRelay>>>>>::
             relay_packet(relay, packet).await
     }
 }

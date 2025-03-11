@@ -14,8 +14,6 @@ use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
 use crate::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;
 
-pub struct FullCycleRelayer;
-
 pub struct LogRelayPacketAction<'a, Relay>
 where
     Relay: HasRelayChains,
@@ -33,8 +31,8 @@ pub enum RelayPacketProgress {
     SkipRelayAckPacket,
 }
 
-#[cgp_provider(PacketRelayerComponent)]
-impl<Relay, SrcChain, DstChain> PacketRelayer<Relay> for FullCycleRelayer
+#[cgp_new_provider(PacketRelayerComponent)]
+impl<Relay, SrcChain, DstChain> PacketRelayer<Relay> for PerformFullRelay
 where
     Relay: CanRelayAckPacket
         + CanRelayReceivePacket
