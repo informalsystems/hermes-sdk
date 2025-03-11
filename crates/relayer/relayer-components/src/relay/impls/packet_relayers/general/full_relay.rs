@@ -1,6 +1,7 @@
 use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
+use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -12,8 +13,6 @@ use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
 use crate::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;
-
-pub struct FullCycleRelayer;
 
 pub struct LogRelayPacketAction<'a, Relay>
 where
@@ -32,8 +31,8 @@ pub enum RelayPacketProgress {
     SkipRelayAckPacket,
 }
 
-#[cgp_provider(PacketRelayerComponent)]
-impl<Relay, SrcChain, DstChain> PacketRelayer<Relay> for FullCycleRelayer
+#[cgp_new_provider(PacketRelayerComponent)]
+impl<Relay, SrcChain, DstChain> PacketRelayer<Relay> for PerformFullRelay
 where
     Relay: CanRelayAckPacket
         + CanRelayReceivePacket
@@ -45,6 +44,7 @@ where
         + CanRaiseAsyncError<DstChain::Error>,
     SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
+        + CanQueryChainHeight
         + HasWriteAckEvent<SrcChain>
         + CanBuildPacketFromWriteAck<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>,
@@ -103,6 +103,17 @@ where
             relay
                 .relay_timeout_unordered_packet(destination_height, packet)
                 .await?;
+
+            logger
+                .log(
+                    "successfully relayed timeout unordered packet",
+                    &LogRelayPacketAction {
+                        relay,
+                        packet,
+                        relay_progress: RelayPacketProgress::RelayTimeoutUnorderedPacket,
+                    },
+                )
+                .await;
         } else if !is_packet_received {
             let src_chain_status = src_chain
                 .query_chain_status()
@@ -120,12 +131,58 @@ where
                 )
                 .await;
 
-            relay
+            let m_ack = relay
                 .relay_receive_packet(
                     Relay::SrcChain::chain_status_height(&src_chain_status),
                     packet,
                 )
                 .await?;
+
+            logger
+                .log(
+                    "successfully relayed receive packet",
+                    &LogRelayPacketAction {
+                        relay,
+                        packet,
+                        relay_progress: RelayPacketProgress::RelayRecvPacket,
+                    },
+                )
+                .await;
+
+            if let Some(ack) = m_ack {
+                logger
+                    .log(
+                        "relaying ack packet using ack event returned from recv-packet event",
+                        &LogRelayPacketAction {
+                            relay,
+                            packet,
+                            relay_progress: RelayPacketProgress::RelayAckPacket,
+                        },
+                    )
+                    .await;
+
+                relay
+                    .relay_ack_packet(
+                        &dst_chain
+                            .query_chain_height()
+                            .await
+                            .map_err(Relay::raise_error)?,
+                        packet,
+                        &ack,
+                    )
+                    .await?;
+
+                logger
+                    .log(
+                        "successfully relayed ack packet",
+                        &LogRelayPacketAction {
+                            relay,
+                            packet,
+                            relay_progress: RelayPacketProgress::RelayAckPacket,
+                        },
+                    )
+                    .await;
+            }
         } else {
             logger
                 .log(

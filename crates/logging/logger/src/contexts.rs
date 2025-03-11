@@ -15,6 +15,7 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::error::impls::retry::LogPerformRetry;
+use hermes_relayer_components::relay::impls::auto_relayers::poll_event::LogAutoRelayWithHeights;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
@@ -77,6 +78,8 @@ delegate_components! {
                 LogBatchWorker<'a, Relay, Target>,
             <'a, BiRelay: HasBiRelayTypes<ChainA: HasHeightType, ChainB: HasHeightType>>
                 LogAutoBiRelay<'a, BiRelay>,
+            <'a, Relay: HasTargetChainTypes<Target, TargetChain: HasHeightType>, Target: RelayTarget>
+                LogAutoRelayWithHeights<'a, Relay, Target>,
         ]: TracingLogger,
     }
 }

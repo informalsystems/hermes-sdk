@@ -151,7 +151,7 @@ where
                         relay
                             .logger()
                             .log(
-                                "relaying ack packet",
+                                "relaying ack packet extracted from ack event",
                                 &LogRelayPacketAction {
                                     relay,
                                     packet: &packet,
@@ -161,6 +161,18 @@ where
                             .await;
 
                         relay.relay_ack_packet(&height, &packet, &ack).await?;
+
+                        relay
+                            .logger()
+                            .log(
+                                "successfully relayed ack packet extracted from ack event",
+                                &LogRelayPacketAction {
+                                    relay,
+                                    packet: &packet,
+                                    relay_progress: RelayPacketProgress::RelayAckPacket,
+                                },
+                            )
+                            .await;
                     }
                     None => {
                         relay.logger().log(
