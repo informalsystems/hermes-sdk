@@ -20,7 +20,9 @@ use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateC
 use hermes_relayer_components::relay::traits::chains::{
     HasDstChain, HasRelayChains, HasSrcChain, PacketOf,
 };
-use hermes_relayer_components::relay::traits::target::{HasTargetChains, RelayTarget};
+use hermes_relayer_components::relay::traits::target::{
+    HasTargetChains, HasTargetClientIds, RelayTarget,
+};
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use tracing::{debug, error, info, trace};
 
@@ -274,7 +276,7 @@ impl<'a, Logging, Relay, Target> Logger<Logging, LogAutoRelayWithHeights<'a, Rel
     for TracingLogger
 where
     Logging: Async,
-    Relay: HasTargetChains<Target>,
+    Relay: HasTargetChains<Target> + HasTargetClientIds<Target>,
     Target: RelayTarget,
     Relay::TargetChain: HasChainId + HasHeightType,
     Relay::CounterpartyChain: HasChainId,
@@ -284,10 +286,12 @@ where
         message: &str,
         details: &LogAutoRelayWithHeights<'a, Relay, Target>,
     ) {
-        debug!(
+        info!(
             target: "hermes::relay",
             target_chain_id = %details.relay.target_chain().chain_id(),
             counterparty_chain_id = %details.relay.counterparty_chain().chain_id(),
+            target_client_id = %details.relay.target_client_id(),
+            counterparty_client_id = %details.relay.counterparty_client_id(),
             start_height = %details.start_height,
             end_height = ?details.end_height,
             "{message}",
