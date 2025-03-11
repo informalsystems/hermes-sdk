@@ -1,6 +1,7 @@
 use cgp::prelude::*;
 use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
+use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -45,6 +46,7 @@ where
         + CanRaiseAsyncError<DstChain::Error>,
     SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
     DstChain: CanQueryChainStatus
+        + CanQueryChainHeight
         + HasWriteAckEvent<SrcChain>
         + CanBuildPacketFromWriteAck<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>,
@@ -120,12 +122,25 @@ where
                 )
                 .await;
 
-            relay
+            let m_ack = relay
                 .relay_receive_packet(
                     Relay::SrcChain::chain_status_height(&src_chain_status),
                     packet,
                 )
                 .await?;
+
+            if let Some(ack) = m_ack {
+                relay
+                    .relay_ack_packet(
+                        &dst_chain
+                            .query_chain_height()
+                            .await
+                            .map_err(Relay::raise_error)?,
+                        packet,
+                        &ack,
+                    )
+                    .await?;
+            }
         } else {
             logger
                 .log(
