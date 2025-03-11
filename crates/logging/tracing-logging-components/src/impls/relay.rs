@@ -36,7 +36,7 @@ where
 {
     async fn log(_logging: &Logging, message: &str, details: &LogSkipRelayLockedPacket<'a, Relay>) {
         trace!(
-            target: "hermes",
+            target: "hermes::packet",
             packet = %details.packet,
             src_chain_id = %details.relay.src_chain().chain_id(),
             dst_chain_id = %details.relay.dst_chain().chain_id(),
@@ -56,7 +56,7 @@ where
 {
     async fn log(_logging: &Logging, message: &str, details: &LogRelayPacketAction<'a, Relay>) {
         debug!(
-            target: "hermes",
+            target: "hermes::packet",
             packet = %details.packet,
             src_chain_id = %details.relay.src_chain().chain_id(),
             dst_chain_id = %details.relay.dst_chain().chain_id(),
@@ -79,7 +79,7 @@ where
         match details.relay_status {
             RelayPacketStatus::Start => {
                 trace!(
-                    target: "hermes",
+                    target: "hermes::packet",
                     packet = %details.packet,
                     src_chain_id = %details.relay.src_chain().chain_id(),
                     dst_chain_id = %details.relay.dst_chain().chain_id(),
@@ -99,7 +99,7 @@ where
             }
             RelayPacketStatus::Error { error } => {
                 error!(
-                    target: "hermes",
+                    target: "hermes::packet",
                     packet = %details.packet,
                     src_chain_id = %details.relay.src_chain().chain_id(),
                     dst_chain_id = %details.relay.dst_chain().chain_id(),
