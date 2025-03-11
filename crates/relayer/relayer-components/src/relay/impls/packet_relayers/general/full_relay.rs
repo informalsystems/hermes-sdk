@@ -103,6 +103,17 @@ where
             relay
                 .relay_timeout_unordered_packet(destination_height, packet)
                 .await?;
+
+            logger
+                .log(
+                    "successfully relayed timeout unordered packet",
+                    &LogRelayPacketAction {
+                        relay,
+                        packet,
+                        relay_progress: RelayPacketProgress::RelayTimeoutUnorderedPacket,
+                    },
+                )
+                .await;
         } else if !is_packet_received {
             let src_chain_status = src_chain
                 .query_chain_status()
@@ -127,7 +138,29 @@ where
                 )
                 .await?;
 
+            logger
+                .log(
+                    "successfully relayed receive packet",
+                    &LogRelayPacketAction {
+                        relay,
+                        packet,
+                        relay_progress: RelayPacketProgress::RelayRecvPacket,
+                    },
+                )
+                .await;
+
             if let Some(ack) = m_ack {
+                logger
+                    .log(
+                        "relaying ack packet",
+                        &LogRelayPacketAction {
+                            relay,
+                            packet,
+                            relay_progress: RelayPacketProgress::RelayAckPacket,
+                        },
+                    )
+                    .await;
+
                 relay
                     .relay_ack_packet(
                         &dst_chain
@@ -138,6 +171,17 @@ where
                         &ack,
                     )
                     .await?;
+
+                logger
+                    .log(
+                        "successfully ack packet",
+                        &LogRelayPacketAction {
+                            relay,
+                            packet,
+                            relay_progress: RelayPacketProgress::RelayAckPacket,
+                        },
+                    )
+                    .await;
             }
         } else {
             logger
