@@ -14,7 +14,10 @@ where
     Logging: Async,
 {
     async fn log(_logging: &Logging, message: &str, _details: &()) {
-        info!("{message}");
+        info!(
+            target: "hermes",
+            "{message}",
+        );
     }
 }
 
@@ -24,7 +27,10 @@ where
     Logging: Async,
 {
     async fn log(_logging: &Logging, message: &str, _details: &LevelTrace) {
-        trace!("{message}");
+        trace!(
+            target: "hermes",
+            "{message}",
+        );
     }
 }
 
@@ -34,7 +40,10 @@ where
     Logging: Async,
 {
     async fn log(_logging: &Logging, message: &str, _details: &LevelDebug) {
-        debug!("{message}");
+        debug!(
+            target: "hermes",
+            "{message}",
+        );
     }
 }
 
@@ -44,7 +53,10 @@ where
     Logging: Async,
 {
     async fn log(_logging: &Logging, message: &str, _details: &LevelInfo) {
-        info!("{message}");
+        info!(
+            target: "hermes",
+            "{message}",
+        );
     }
 }
 
@@ -54,7 +66,10 @@ where
     Logging: Async,
 {
     async fn log(_logging: &Logging, message: &str, _details: &LevelWarn) {
-        warn!("{message}");
+        warn!(
+            target: "hermes",
+            "{message}",
+        );
     }
 }
 
@@ -64,7 +79,10 @@ where
     Logging: Async,
 {
     async fn log(_logging: &Logging, message: &str, _details: &LevelError) {
-        error!("{message}");
+        error!(
+            target: "hermes",
+            "{message}",
+        );
     }
 }
 
@@ -76,6 +94,7 @@ where
 {
     async fn log(_logging: &Logging, message: &str, details: &LogPerformRetry<'a, Context>) {
         info!(
+            target: "hermes",
             task_name = %details.task_name,
             error = ?details.error,
             attempts = %details.attempts,
