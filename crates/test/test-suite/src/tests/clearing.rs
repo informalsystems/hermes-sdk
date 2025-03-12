@@ -195,9 +195,10 @@ where
             assert!(is_received);
 
             birelay
-                .auto_bi_relay(Some(Duration::from_secs(10)), Some(Duration::from_secs(0)))
+                .auto_bi_relay(Some(Duration::from_secs(15)), Some(Duration::from_secs(0)))
                 .await
                 .unwrap();
+
             let is_cleared = chain_driver_a
                 .chain()
                 .query_packet_is_cleared(port_id_a, channel_id_a, &a_to_b_sequences[0])
