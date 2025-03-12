@@ -1,6 +1,5 @@
-use core::time::Duration;
-
 use cgp::prelude::*;
+use hermes_cosmos_chain_components::traits::grpc_address::CanQueryGrpcServiceStatus;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
@@ -11,6 +10,7 @@ use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::{LevelDebug, LevelTrace};
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::chain::traits::types::poll_interval::HasPollInterval;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
@@ -21,11 +21,9 @@ use crate::traits::bootstrap::build_chain::{
 use crate::traits::bootstrap::cosmos_builder::HasCosmosBuilder;
 use crate::traits::bootstrap::relayer_chain_config::CanBuildRelayerChainConfig;
 
-const RETRY_START: u64 = 40;
+const RETRY_COUNT: u64 = 40;
 
-pub struct BuildCosmosChainWithNodeConfig;
-
-#[cgp_provider(ChainBuilderWithNodeConfigComponent)]
+#[cgp_new_provider(ChainBuilderWithNodeConfigComponent)]
 impl<Bootstrap> ChainBuilderWithNodeConfig<Bootstrap> for BuildCosmosChainWithNodeConfig
 where
     Bootstrap: HasChainType<Chain = CosmosChain>
@@ -37,6 +35,8 @@ where
         + CanRaiseAsyncError<HermesError>,
     Bootstrap::Runtime: CanSleep,
     Bootstrap::Chain: CanQueryChainStatus
+        + CanQueryGrpcServiceStatus
+        + HasPollInterval
         + HasChainId
         + HasLogger<Logger: CanLog<LevelDebug> + CanLog<LevelTrace>>,
 {
@@ -60,7 +60,7 @@ where
             .logger()
             .log(
                 &format!(
-                    "Waiting for chain `{}` to reach height 5`",
+                    "waiting for chain `{}` RPC and GRPC services to become ready`",
                     chain.chain_id()
                 ),
                 &LevelDebug,
@@ -68,20 +68,31 @@ where
             .await;
 
         // Wait for both RPC and gRPC servers to start before resuming bootstrapping
-        for _ in 0..RETRY_START {
-            if let Ok(status) = chain.query_chain_status().await {
-                let current_height = status.height.revision_height();
-                if current_height > 4 {
-                    break;
-                }
-                chain
-                    .logger()
-                    .log(&format!("Current height `{current_height}`"), &LevelTrace)
-                    .await;
+        for _ in 0..RETRY_COUNT {
+            let rpc_server_is_ready = chain.query_chain_status().await.is_ok();
+
+            let grpc_server_is_ready = chain
+                .query_grpc_service_status_is_ready()
+                .await
+                .map_err(Bootstrap::raise_error)?;
+
+            if rpc_server_is_ready && grpc_server_is_ready {
+                break;
             }
 
-            bootstrap.runtime().sleep(Duration::from_millis(500)).await;
+            bootstrap.runtime().sleep(chain.poll_interval()).await;
         }
+
+        chain
+            .logger()
+            .log(
+                &format!(
+                    "chain `{}` RPC and GRPC services to are now ready`",
+                    chain.chain_id()
+                ),
+                &LevelDebug,
+            )
+            .await;
 
         Ok(chain)
     }
