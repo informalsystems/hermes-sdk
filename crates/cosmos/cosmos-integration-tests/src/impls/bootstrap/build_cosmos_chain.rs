@@ -74,7 +74,7 @@ where
             let grpc_server_is_ready = chain
                 .query_grpc_service_status_is_ready()
                 .await
-                .map_err(Bootstrap::raise_error)?;
+                .unwrap_or(false);
 
             if rpc_server_is_ready && grpc_server_is_ready {
                 break;
