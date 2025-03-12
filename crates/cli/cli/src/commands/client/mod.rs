@@ -4,7 +4,7 @@ use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerCompone
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
-use crate::commands::client::create::CreateClientArgs;
+use crate::commands::client::create::CreateCosmosClientArgs;
 use crate::contexts::app::HermesApp;
 use crate::Result;
 
@@ -13,7 +13,7 @@ pub mod create;
 #[derive(Debug, clap::Subcommand)]
 pub enum ClientCommands {
     /// Create a new client
-    Create(CreateClientArgs),
+    Create(CreateCosmosClientArgs),
 
     /// Update a client
     Update(UpdateClientArgs),

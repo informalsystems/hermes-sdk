@@ -1,7 +1,6 @@
 use core::fmt::{Debug, Display};
 use core::marker::PhantomData;
 
-use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -24,24 +23,58 @@ use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
-pub struct RunCreateClientCommand;
+#[cgp_component {
+  provider: CreateClientOptionsParser,
+  context: App,
+}]
+#[async_trait]
+pub trait CanParseCreateClientOptions<Args: Async, Target: Async, Counterparty: Async>:
+    HasBuilderType<
+        Builder: HasChainTypeAt<
+            Target,
+            Chain: HasCreateClientMessageOptionsType<ChainAt<BuilderOf<Self>, Counterparty>>,
+        > + HasChainTypeAt<
+            Counterparty,
+            Chain: HasCreateClientPayloadOptionsType<ChainAt<BuilderOf<Self>, Target>>,
+        >,
+    > + HasAsyncErrorType
+{
+    async fn parse_create_client_options(
+        &self,
+        args: &Args,
+        target_chain: &ChainAt<BuilderOf<Self>, Target>,
+        counterparty_chain: &ChainAt<BuilderOf<Self>, Counterparty>,
+    ) -> Result<
+        (
+            CreateClientMessageOptionsOf<
+                ChainAt<BuilderOf<Self>, Target>,
+                ChainAt<BuilderOf<Self>, Counterparty>,
+            >,
+            CreateClientPayloadOptionsOf<
+                ChainAt<BuilderOf<Self>, Counterparty>,
+                ChainAt<BuilderOf<Self>, Target>,
+            >,
+        ),
+        Self::Error,
+    >;
+}
 
-#[cgp_provider(CommandRunnerComponent)]
-impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
-    for RunCreateClientCommand
+#[cgp_new_provider(CommandRunnerComponent)]
+impl<App, Args, Builder, Chain, Counterparty, Relay, TargetTag, CounterpartyTag>
+    CommandRunner<App, Args> for RunCreateClientCommand<TargetTag, CounterpartyTag>
 where
     App: CanLoadBuilder<Builder = Builder>
         + CanProduceOutput<Chain::ClientId>
         + HasLogger
-        + CanParseCreateClientOptions<Args, Index<0>, Index<1>>
+        + CanParseCreateClientOptions<Args, TargetTag, CounterpartyTag>
         + CanParseArg<Args, symbol!("target_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("counterparty_chain_id"), Parsed = Counterparty::ChainId>
         + CanRaiseAsyncError<Relay::Error>
         + CanRaiseAsyncError<Builder::Error>
         + CanWrapError<String>,
-    Builder: CanBuildChain<Index<0>, Chain = Chain>
-        + CanBuildChain<Index<1>, Chain = Counterparty>
-        + CanBuildRelay<Index<0>, Index<1>, Relay = Relay>,
+    Builder: CanBuildChain<TargetTag, Chain = Chain>
+        + CanBuildChain<CounterpartyTag, Chain = Counterparty>
+        + CanBuildRelay<TargetTag, CounterpartyTag, Relay = Relay>,
     Chain: HasIbcChainTypes<Counterparty>
         + HasCreateClientMessageOptionsType<Counterparty>
         + HasAsyncErrorType,
@@ -51,6 +84,8 @@ where
         + HasRelayClientIds
         + CanCreateClient<SourceTarget>,
     Args: Async,
+    TargetTag: Async,
+    CounterpartyTag: Async,
     Chain::CreateClientMessageOptions: Debug,
     Counterparty::CreateClientPayloadOptions: Debug,
     App::Logger: CanLog<LevelInfo>,
@@ -65,12 +100,12 @@ where
         let builder = app.load_builder().await?;
 
         let target_chain = builder
-            .build_chain(PhantomData::<Index<0>>, &target_chain_id)
+            .build_chain(PhantomData::<TargetTag>, &target_chain_id)
             .await
             .map_err(App::raise_error)?;
 
         let counterparty_chain = builder
-            .build_chain(PhantomData::<Index<1>>, &counterparty_chain_id)
+            .build_chain(PhantomData::<CounterpartyTag>, &counterparty_chain_id)
             .await
             .map_err(App::raise_error)?;
 
@@ -118,40 +153,4 @@ where
 
         Ok(app.produce_output(client_id))
     }
-}
-
-#[cgp_component {
-  provider: CreateClientOptionsParser,
-  context: App,
-}]
-#[async_trait]
-pub trait CanParseCreateClientOptions<Args: Async, Target: Async, Counterparty: Async>:
-    HasBuilderType<
-        Builder: HasChainTypeAt<
-            Target,
-            Chain: HasCreateClientMessageOptionsType<ChainAt<BuilderOf<Self>, Counterparty>>,
-        > + HasChainTypeAt<
-            Counterparty,
-            Chain: HasCreateClientPayloadOptionsType<ChainAt<BuilderOf<Self>, Target>>,
-        >,
-    > + HasAsyncErrorType
-{
-    async fn parse_create_client_options(
-        &self,
-        args: &Args,
-        target_chain: &ChainAt<BuilderOf<Self>, Target>,
-        counterparty_chain: &ChainAt<BuilderOf<Self>, Counterparty>,
-    ) -> Result<
-        (
-            CreateClientMessageOptionsOf<
-                ChainAt<BuilderOf<Self>, Target>,
-                ChainAt<BuilderOf<Self>, Counterparty>,
-            >,
-            CreateClientPayloadOptionsOf<
-                ChainAt<BuilderOf<Self>, Counterparty>,
-                ChainAt<BuilderOf<Self>, Target>,
-            >,
-        ),
-        Self::Error,
-    >;
 }
