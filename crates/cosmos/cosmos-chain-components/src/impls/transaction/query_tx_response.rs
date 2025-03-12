@@ -1,9 +1,8 @@
-use core::time::Duration;
-
 use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
+use hermes_relayer_components::chain::traits::types::poll_interval::HasPollInterval;
 use hermes_relayer_components::transaction::traits::query_tx_response::{
     TxResponseQuerier, TxResponseQuerierComponent,
 };
@@ -26,6 +25,7 @@ where
         + HasRpcClient
         + CanQueryChainHeight
         + HasHeightFields
+        + HasPollInterval
         + CanRaiseAsyncError<TendermintRpcError>,
     Chain::Runtime: CanSleep,
 {
@@ -75,7 +75,7 @@ where
                     if Chain::revision_height(&chain_height) > response_height {
                         break;
                     } else {
-                        chain.runtime().sleep(Duration::from_millis(500)).await;
+                        chain.runtime().sleep(chain.poll_interval()).await;
                     }
                 }
 
