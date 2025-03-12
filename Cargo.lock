@@ -1596,6 +1596,7 @@ dependencies = [
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-runtime-components",
  "http 1.2.0",
  "ibc",
  "ibc-client-tendermint",
