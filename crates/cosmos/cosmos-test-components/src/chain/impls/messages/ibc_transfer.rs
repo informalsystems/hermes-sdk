@@ -17,9 +17,7 @@ use ibc::primitives::Timestamp;
 use crate::chain::types::amount::Amount;
 use crate::chain::types::messages::token_transfer::TokenTransferMessage;
 
-pub struct BuildCosmosIbcTransferMessage;
-
-#[cgp_provider(IbcTokenTransferMessageBuilderComponent)]
+#[cgp_new_provider(IbcTokenTransferMessageBuilderComponent)]
 impl<Chain, Counterparty> IbcTokenTransferMessageBuilder<Chain, Counterparty>
     for BuildCosmosIbcTransferMessage
 where
@@ -44,7 +42,7 @@ where
         memo: &Option<String>,
         timeout_height: Option<&Height>,
         timeout_time: Option<&Timestamp>,
-    ) -> Result<Chain::Message, Chain::Error> {
+    ) -> Result<Vec<Chain::Message>, Chain::Error> {
         let message = TokenTransferMessage {
             channel_id: channel_id.clone(),
             port_id: port_id.clone(),
@@ -55,6 +53,8 @@ where
             timeout_time: timeout_time.cloned(),
         };
 
-        Ok(message.to_cosmos_message().into())
+        let messages = vec![message.to_cosmos_message().into()];
+
+        Ok(messages)
     }
 }

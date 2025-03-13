@@ -8,8 +8,8 @@ use crate::chain::traits::types::memo::HasMemoType;
 use crate::chain::traits::types::wallet::HasWalletType;
 
 #[cgp_component {
-  provider: TokenIbcTransferrer,
-  context: Chain,
+    provider: TokenIbcTransferrer,
+    context: Chain,
 }]
 #[async_trait]
 pub trait CanIbcTransferToken<Counterparty>:

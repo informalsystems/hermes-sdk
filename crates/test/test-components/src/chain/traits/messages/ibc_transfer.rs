@@ -1,3 +1,5 @@
+use alloc::vec::Vec;
+
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
@@ -34,5 +36,5 @@ where
         memo: &Self::Memo,
         timeout_height: Option<&Self::Height>,
         timeout_time: Option<&Self::Timeout>,
-    ) -> Result<Self::Message, Self::Error>;
+    ) -> Result<Vec<Self::Message>, Self::Error>;
 }

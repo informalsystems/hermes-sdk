@@ -7,7 +7,7 @@ use hermes_relayer_components::chain::traits::packet::from_send_packet::CanBuild
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::transaction::impls::send_single_message_with_signer::CanSendSingleMessageWithSigner;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 
 use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
 use crate::chain::traits::transfer::ibc_transfer::{
@@ -19,12 +19,10 @@ use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::memo::HasMemoType;
 use crate::chain::traits::types::wallet::{HasWalletSigner, HasWalletType};
 
-pub struct SendIbcTransferMessage;
-
 #[derive(Debug)]
 pub struct MissingSendPacketEventError;
 
-#[cgp_provider(TokenIbcTransferrerComponent)]
+#[cgp_new_provider(TokenIbcTransferrerComponent)]
 impl<Chain, Counterparty> TokenIbcTransferrer<Chain, Counterparty> for SendIbcTransferMessage
 where
     Chain: HasWalletType
@@ -40,7 +38,7 @@ where
         + CanBuildPacketFromSendPacket<Counterparty>
         + CanExtractFromEvent<Chain::SendPacketEvent>
         + CanRaiseAsyncError<MissingSendPacketEventError>
-        + CanSendSingleMessageWithSigner,
+        + CanSendMessagesWithSigner,
     Counterparty: HasAddressType,
 {
     async fn ibc_transfer_token(
@@ -62,7 +60,7 @@ where
 
         let timeout_time = chain.ibc_transfer_timeout_time(current_time);
 
-        let message = chain
+        let messages = chain
             .build_ibc_token_transfer_message(
                 channel_id,
                 port_id,
@@ -76,10 +74,11 @@ where
 
         let signer = Chain::wallet_signer(sender_wallet);
 
-        let response = chain.send_message_with_signer(signer, message).await?;
+        let responses = chain.send_messages_with_signer(signer, &messages).await?;
 
-        let send_packet_event = Chain::message_response_events(&response)
+        let send_packet_event = responses
             .iter()
+            .flat_map(Chain::message_response_events)
             .find_map(|event| chain.try_extract_from_event(PhantomData, event))
             .ok_or_else(|| Chain::raise_error(MissingSendPacketEventError))?;
 
