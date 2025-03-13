@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
@@ -24,6 +26,7 @@ where
 {
     async fn ibc_transfer_token(
         &self,
+        _counterparty: PhantomData<Counterparty>,
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,
         sender_wallet: &Self::Wallet,

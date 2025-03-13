@@ -279,6 +279,7 @@ where
 
     let packet_1 = src_chain
         .ibc_transfer_token(
+            PhantomData,
             src_channel_id,
             src_port_id,
             sender_wallet,
@@ -324,6 +325,7 @@ where
 
     let packet_2 = src_chain
         .ibc_transfer_token(
+            PhantomData,
             src_channel_id,
             src_port_id,
             sender_wallet,

@@ -1,5 +1,6 @@
 #![recursion_limit = "256"]
 
+use core::marker::PhantomData;
 use std::collections::HashMap;
 
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
@@ -47,16 +48,19 @@ fn packet_filter_test() -> Result<(), Error> {
 
         let _relayer = setup.relay_driver.run_relayer_in_background().await?;
 
-        let packet = <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
-            &setup.chain_driver_a.chain,
-            &setup.channel_id_a,
-            &setup.port_id_a,
-            &setup.chain_driver_a.user_wallet_a,
-            &setup.chain_driver_b.user_wallet_b.address,
-            &a_to_b_amount,
-            &setup.chain_driver_a.chain.default_memo(),
-        )
-        .await?;
+        let packet = setup
+            .chain_driver_a
+            .chain
+            .ibc_transfer_token(
+                PhantomData::<CosmosChain>,
+                &setup.channel_id_a,
+                &setup.port_id_a,
+                &setup.chain_driver_a.user_wallet_a,
+                &setup.chain_driver_b.user_wallet_b.address,
+                &a_to_b_amount,
+                &setup.chain_driver_a.chain.default_memo(),
+            )
+            .await?;
 
         // Assert tokens have been escrowed
         setup
@@ -121,16 +125,19 @@ fn no_packet_filter_test() -> Result<(), Error> {
             balance_a.denom.clone(),
         );
 
-        let packet = <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
-            &setup.chain_driver_a.chain,
-            &setup.channel_id_a,
-            &setup.port_id_a,
-            &setup.chain_driver_a.user_wallet_a,
-            &setup.chain_driver_b.user_wallet_b.address,
-            &a_to_b_amount,
-            &setup.chain_driver_a.chain.default_memo(),
-        )
-        .await?;
+        let packet = setup
+            .chain_driver_a
+            .chain
+            .ibc_transfer_token(
+                PhantomData::<CosmosChain>,
+                &setup.channel_id_a,
+                &setup.port_id_a,
+                &setup.chain_driver_a.user_wallet_a,
+                &setup.chain_driver_b.user_wallet_b.address,
+                &a_to_b_amount,
+                &setup.chain_driver_a.chain.default_memo(),
+            )
+            .await?;
 
         // Assert tokens have been escrowed
         setup

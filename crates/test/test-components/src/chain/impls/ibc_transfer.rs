@@ -43,6 +43,7 @@ where
 {
     async fn ibc_transfer_token(
         chain: &Chain,
+        _counterparty: PhantomData<Counterparty>,
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,
         sender_wallet: &Chain::Wallet,

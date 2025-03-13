@@ -118,6 +118,7 @@ where
 
         chain_a
             .ibc_transfer_token(
+                PhantomData,
                 channel_id_a,
                 port_id_a,
                 wallet_a1,
@@ -161,6 +162,7 @@ where
 
         chain_b
             .ibc_transfer_token(
+                PhantomData,
                 channel_id_b,
                 port_id_b,
                 wallet_b,
