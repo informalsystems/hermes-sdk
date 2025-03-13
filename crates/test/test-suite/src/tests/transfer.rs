@@ -134,7 +134,8 @@ where
 
         assert_eq!(balance_a2, balance_a3);
 
-        let balance_b1 = ChainB::ibc_transfer_amount_from(&a_to_b_amount, channel_id_b, port_id_b)?;
+        let balance_b1 =
+            ChainB::ibc_transfer_amount_from(PhantomData, &a_to_b_amount, channel_id_b, port_id_b)?;
 
         logger
             .log_message(&format!(
@@ -184,7 +185,7 @@ where
 
         let balance_a5 = ChainA::add_amount(
             &balance_a4,
-            &ChainA::transmute_counterparty_amount(&b_to_a_amount, denom_a),
+            &ChainA::transmute_counterparty_amount(PhantomData, &b_to_a_amount, denom_a),
         )?;
 
         chain_a
