@@ -6,7 +6,7 @@ use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
@@ -34,7 +34,8 @@ where
         + HasMessageResponseEvents
         + CanCalculateIbcTransferTimeout<Counterparty>
         + CanBuildIbcTokenTransferMessage<Counterparty>
-        + HasIbcChainTypes<Counterparty>
+        + HasPortIdType<Counterparty>
+        + HasChannelIdType<Counterparty>
         + HasSendPacketEvent<Counterparty>
         + CanBuildPacketFromSendPacket<Counterparty>
         + CanExtractFromEvent<Chain::SendPacketEvent>

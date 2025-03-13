@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 
@@ -19,7 +19,8 @@ pub trait CanIbcTransferToken<Counterparty>:
     HasAsyncErrorType
     + HasWalletType
     + HasAmountType
-    + HasIbcChainTypes<Counterparty>
+    + HasPortIdType<Counterparty>
+    + HasChannelIdType<Counterparty>
     + HasOutgoingPacketType<Counterparty>
     + HasMemoType
 where
