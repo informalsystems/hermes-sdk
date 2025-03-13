@@ -1,3 +1,4 @@
+use core::marker::PhantomData;
 use std::string::FromUtf8Error;
 
 use cgp::prelude::*;
@@ -25,6 +26,7 @@ where
     Counterparty: HasAmountType<Amount = Amount>,
 {
     fn ibc_transfer_amount_from(
+        _counterparty: PhantomData<Counterparty>,
         counterparty_amount: &Amount,
         channel_id: &ChannelId,
         port_id: &PortId,
@@ -38,7 +40,11 @@ where
         })
     }
 
-    fn transmute_counterparty_amount(counterparty_amount: &Amount, denom: &Denom) -> Amount {
+    fn transmute_counterparty_amount(
+        _counterparty: PhantomData<Counterparty>,
+        counterparty_amount: &Amount,
+        denom: &Denom,
+    ) -> Amount {
         Amount {
             quantity: counterparty_amount.quantity,
             denom: denom.clone(),

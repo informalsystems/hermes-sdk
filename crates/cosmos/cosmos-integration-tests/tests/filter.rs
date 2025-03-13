@@ -1,5 +1,6 @@
 #![recursion_limit = "256"]
 
+use core::marker::PhantomData;
 use std::collections::HashMap;
 
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
@@ -8,6 +9,7 @@ use hermes_cosmos_integration_tests::init::{init_preset_bootstraps, init_test_ru
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_error::types::Error;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
@@ -47,16 +49,20 @@ fn packet_filter_test() -> Result<(), Error> {
 
         let _relayer = setup.relay_driver.run_relayer_in_background().await?;
 
-        let packet = <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
-            &setup.chain_driver_a.chain,
-            &setup.channel_id_a,
-            &setup.port_id_a,
-            &setup.chain_driver_a.user_wallet_a,
-            &setup.chain_driver_b.user_wallet_b.address,
-            &a_to_b_amount,
-            &setup.chain_driver_a.chain.default_memo(),
-        )
-        .await?;
+        let packet = setup
+            .chain_driver_a
+            .chain
+            .ibc_transfer_token(
+                PhantomData::<CosmosChain>,
+                &setup.channel_id_a,
+                &setup.port_id_a,
+                &setup.chain_driver_a.user_wallet_a,
+                &setup.chain_driver_b.user_wallet_b.address,
+                &a_to_b_amount,
+                &setup.chain_driver_a.chain.default_memo(),
+                &setup.chain_driver_b.chain.query_chain_status().await?,
+            )
+            .await?;
 
         // Assert tokens have been escrowed
         setup
@@ -109,28 +115,32 @@ fn no_packet_filter_test() -> Result<(), Error> {
 
         let a_to_b_amount = setup.chain_driver_a.random_amount(1000, &balance_a).await;
 
-        let balance_b =
-            <CosmosChain as CanConvertIbcTransferredAmount<CosmosChain>>::ibc_transfer_amount_from(
-                &a_to_b_amount,
-                &setup.channel_id_b,
-                &setup.port_id_b,
-            )?;
+        let balance_b = CosmosChain::ibc_transfer_amount_from(
+            PhantomData::<CosmosChain>,
+            &a_to_b_amount,
+            &setup.channel_id_b,
+            &setup.port_id_b,
+        )?;
 
         let balance_after_escrow = Amount::new(
             balance_a.quantity - a_to_b_amount.quantity,
             balance_a.denom.clone(),
         );
 
-        let packet = <CosmosChain as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
-            &setup.chain_driver_a.chain,
-            &setup.channel_id_a,
-            &setup.port_id_a,
-            &setup.chain_driver_a.user_wallet_a,
-            &setup.chain_driver_b.user_wallet_b.address,
-            &a_to_b_amount,
-            &setup.chain_driver_a.chain.default_memo(),
-        )
-        .await?;
+        let packet = setup
+            .chain_driver_a
+            .chain
+            .ibc_transfer_token(
+                PhantomData::<CosmosChain>,
+                &setup.channel_id_a,
+                &setup.port_id_a,
+                &setup.chain_driver_a.user_wallet_a,
+                &setup.chain_driver_b.user_wallet_b.address,
+                &a_to_b_amount,
+                &setup.chain_driver_a.chain.default_memo(),
+                &setup.chain_driver_b.chain.query_chain_status().await?,
+            )
+            .await?;
 
         // Assert tokens have been escrowed
         setup
