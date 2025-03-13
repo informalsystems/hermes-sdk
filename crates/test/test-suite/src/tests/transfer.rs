@@ -5,6 +5,7 @@ use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
@@ -51,6 +52,7 @@ where
         + HasChainId
         + HasOutgoingPacketType<ChainB>
         + CanQueryBalance
+        + CanQueryChainStatus
         + HasAmountMethods
         + CanConvertIbcTransferredAmount<ChainB>
         + CanIbcTransferToken<ChainB>
@@ -61,6 +63,7 @@ where
         + HasOutgoingPacketType<ChainA>
         + HasAmountMethods
         + CanQueryBalance
+        + CanQueryChainStatus
         + CanIbcTransferToken<ChainA>
         + CanConvertIbcTransferredAmount<ChainA>
         + CanAssertEventualAmount
@@ -125,6 +128,7 @@ where
                 address_b,
                 &a_to_b_amount,
                 &chain_a.default_memo(),
+                &chain_b.query_chain_status().await?,
             )
             .await?;
 
@@ -170,6 +174,7 @@ where
                 address_a2,
                 &b_to_a_amount,
                 &chain_b.default_memo(),
+                &chain_a.query_chain_status().await?,
             )
             .await?;
 

@@ -9,6 +9,7 @@ use hermes_cosmos_integration_tests::init::{init_preset_bootstraps, init_test_ru
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_error::types::Error;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
@@ -59,6 +60,7 @@ fn packet_filter_test() -> Result<(), Error> {
                 &setup.chain_driver_b.user_wallet_b.address,
                 &a_to_b_amount,
                 &setup.chain_driver_a.chain.default_memo(),
+                &setup.chain_driver_b.chain.query_chain_status().await?,
             )
             .await?;
 
@@ -136,6 +138,7 @@ fn no_packet_filter_test() -> Result<(), Error> {
                 &setup.chain_driver_b.user_wallet_b.address,
                 &a_to_b_amount,
                 &setup.chain_driver_a.chain.default_memo(),
+                &setup.chain_driver_b.chain.query_chain_status().await?,
             )
             .await?;
 

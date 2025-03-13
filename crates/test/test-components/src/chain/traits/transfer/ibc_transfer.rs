@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
+use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
@@ -22,7 +23,7 @@ pub trait CanIbcTransferToken<Counterparty>:
     + HasOutgoingPacketType<Counterparty>
     + HasMemoType
 where
-    Counterparty: HasAddressType,
+    Counterparty: HasAddressType + HasChainStatusType,
 {
     async fn ibc_transfer_token(
         &self,
@@ -33,5 +34,6 @@ where
         recipient_address: &Counterparty::Address,
         amount: &Self::Amount,
         memo: &Self::Memo,
+        counterparty_chain_status: &Counterparty::ChainStatus,
     ) -> Result<Self::OutgoingPacket, Self::Error>;
 }

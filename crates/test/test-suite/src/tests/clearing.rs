@@ -255,7 +255,7 @@ where
         + CanQueryChainStatus
         + HasPacketSequence<DstChain>
         + HasAmountMethods,
-    DstChain: HasWalletType + CanQueryPacketIsReceived<SrcChain>,
+    DstChain: HasWalletType + CanQueryChainStatus + CanQueryPacketIsReceived<SrcChain>,
     Driver::Error: From<SrcChain::Error> + From<DstChain::Error> + From<Relay::Error>,
 {
     let sender_wallet = src_chain_driver.wallet_at(UserWallet, PhantomData::<Index<0>>);
@@ -286,6 +286,7 @@ where
             receiver_address,
             &transfer_amount_1,
             &src_chain.default_memo(),
+            &dst_chain.query_chain_status().await?,
         )
         .await?;
 
@@ -332,6 +333,7 @@ where
             receiver_address,
             &transfer_amount_2,
             &src_chain.default_memo(),
+            &dst_chain.query_chain_status().await?,
         )
         .await?;
 

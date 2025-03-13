@@ -7,6 +7,7 @@ use hermes_relayer_components::chain::traits::packet::from_send_packet::CanBuild
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 
 use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
@@ -39,7 +40,7 @@ where
         + CanExtractFromEvent<Chain::SendPacketEvent>
         + CanRaiseAsyncError<MissingSendPacketEventError>
         + CanSendMessagesWithSigner,
-    Counterparty: HasAddressType,
+    Counterparty: HasAddressType + HasChainStatusType,
 {
     async fn ibc_transfer_token(
         chain: &Chain,
@@ -50,6 +51,7 @@ where
         recipient_address: &Counterparty::Address,
         amount: &Chain::Amount,
         memo: &Chain::Memo,
+        counterparty_chain_status: &Counterparty::ChainStatus,
     ) -> Result<Chain::OutgoingPacket, Chain::Error> {
         let chain_status = chain.query_chain_status().await?;
 
