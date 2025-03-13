@@ -1,4 +1,5 @@
 use alloc::vec::Vec;
+use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -29,6 +30,7 @@ where
 {
     async fn build_ibc_token_transfer_message(
         &self,
+        _counterparty: PhantomData<Counterparty>,
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,
         recipient_address: &Counterparty::Address,

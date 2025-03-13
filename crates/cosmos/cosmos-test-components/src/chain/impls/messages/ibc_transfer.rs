@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -35,6 +37,7 @@ where
 {
     async fn build_ibc_token_transfer_message(
         _chain: &Chain,
+        _counterparty: PhantomData<Counterparty>,
         channel_id: &ChannelId,
         port_id: &PortId,
         recipient_address: &Counterparty::Address,

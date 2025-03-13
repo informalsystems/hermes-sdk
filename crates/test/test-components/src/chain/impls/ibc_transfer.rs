@@ -63,6 +63,7 @@ where
 
         let messages = chain
             .build_ibc_token_transfer_message(
+                PhantomData,
                 channel_id,
                 port_id,
                 recipient_address,
