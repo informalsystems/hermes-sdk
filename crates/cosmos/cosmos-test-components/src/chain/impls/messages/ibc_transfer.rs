@@ -26,13 +26,12 @@ where
     Chain: HasAsyncErrorType
         + HasAddressType
         + HasMessageType
-        + HasHeightType<Height = Height>
-        + HasTimeoutType<Timeout = Timestamp>
         + HasAmountType<Amount = Amount>
         + HasMemoType<Memo = Option<String>>
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
         + HasPortIdType<Counterparty, PortId = PortId>,
-    Counterparty: HasAddressType,
+    Counterparty:
+        HasAddressType + HasHeightType<Height = Height> + HasTimeoutType<Timeout = Timestamp>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_ibc_token_transfer_message(

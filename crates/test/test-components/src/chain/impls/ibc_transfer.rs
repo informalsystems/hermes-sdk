@@ -2,9 +2,10 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
@@ -30,9 +31,8 @@ where
         + HasAmountType
         + HasMemoType
         + HasWalletSigner
-        + CanQueryChainStatus
-        + CanCalculateIbcTransferTimeout
         + HasMessageResponseEvents
+        + CanCalculateIbcTransferTimeout<Counterparty>
         + CanBuildIbcTokenTransferMessage<Counterparty>
         + HasIbcChainTypes<Counterparty>
         + HasSendPacketEvent<Counterparty>
@@ -40,7 +40,7 @@ where
         + CanExtractFromEvent<Chain::SendPacketEvent>
         + CanRaiseAsyncError<MissingSendPacketEventError>
         + CanSendMessagesWithSigner,
-    Counterparty: HasAddressType + HasChainStatusType,
+    Counterparty: HasAddressType + HasChainStatusType + HasTimeoutType + HasHeightType,
 {
     async fn ibc_transfer_token(
         chain: &Chain,
@@ -51,17 +51,13 @@ where
         recipient_address: &Counterparty::Address,
         amount: &Chain::Amount,
         memo: &Chain::Memo,
-        counterparty_chain_status: &Counterparty::ChainStatus,
+        counterparty_status: &Counterparty::ChainStatus,
     ) -> Result<Chain::OutgoingPacket, Chain::Error> {
-        let chain_status = chain.query_chain_status().await?;
+        let timeout_height = chain
+            .ibc_transfer_timeout_height(Counterparty::chain_status_height(counterparty_status));
 
-        let current_height = Chain::chain_status_height(&chain_status);
-
-        let current_time = Chain::chain_status_time(&chain_status);
-
-        let timeout_height = chain.ibc_transfer_timeout_height(current_height);
-
-        let timeout_time = chain.ibc_transfer_timeout_time(current_time);
+        let timeout_time =
+            chain.ibc_transfer_timeout_time(Counterparty::chain_status_time(counterparty_status));
 
         let messages = chain
             .build_ibc_token_transfer_message(

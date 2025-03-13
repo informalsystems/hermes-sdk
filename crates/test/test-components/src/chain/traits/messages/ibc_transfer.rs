@@ -21,12 +21,10 @@ pub trait CanBuildIbcTokenTransferMessage<Counterparty>:
     + HasAmountType
     + HasMemoType
     + HasMessageType
-    + HasHeightType
-    + HasTimeoutType
     + HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
 where
-    Counterparty: HasAddressType,
+    Counterparty: HasAddressType + HasHeightType + HasTimeoutType,
 {
     async fn build_ibc_token_transfer_message(
         &self,
@@ -36,7 +34,7 @@ where
         recipient_address: &Counterparty::Address,
         amount: &Self::Amount,
         memo: &Self::Memo,
-        timeout_height: Option<&Self::Height>,
-        timeout_time: Option<&Self::Timeout>,
+        timeout_height: Option<&Counterparty::Height>,
+        timeout_time: Option<&Counterparty::Timeout>,
     ) -> Result<Vec<Self::Message>, Self::Error>;
 }
