@@ -13,10 +13,10 @@ use time::OffsetDateTime;
 pub struct IbcTransferTimeoutAfterSeconds<const SECS: u64>;
 
 #[cgp_provider(IbcTransferTimeoutCalculatorComponent)]
-impl<Chain, const SECS: u64> IbcTransferTimeoutCalculator<Chain>
+impl<Chain, Counterparty, const SECS: u64> IbcTransferTimeoutCalculator<Chain, Counterparty>
     for IbcTransferTimeoutAfterSeconds<SECS>
 where
-    Chain: HasTimeType<Time = Time> + HasTimeoutType<Timeout = Timestamp> + HasHeightType,
+    Counterparty: HasTimeType<Time = Time> + HasTimeoutType<Timeout = Timestamp> + HasHeightType,
 {
     fn ibc_transfer_timeout_time(_chain: &Chain, current_time: &Time) -> Option<Timestamp> {
         let time = (*current_time + Duration::from_secs(SECS)).unwrap();
@@ -25,8 +25,8 @@ where
 
     fn ibc_transfer_timeout_height(
         _chain: &Chain,
-        _current_height: &Chain::Height,
-    ) -> Option<Chain::Height> {
+        _current_height: &Counterparty::Height,
+    ) -> Option<Counterparty::Height> {
         None
     }
 }

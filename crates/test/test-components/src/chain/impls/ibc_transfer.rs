@@ -2,14 +2,16 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
 use hermes_relayer_components::chain::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::transaction::impls::send_single_message_with_signer::CanSendSingleMessageWithSigner;
+use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 
-use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
+use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessages;
 use crate::chain::traits::transfer::ibc_transfer::{
     TokenIbcTransferrer, TokenIbcTransferrerComponent,
 };
@@ -19,51 +21,48 @@ use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::memo::HasMemoType;
 use crate::chain::traits::types::wallet::{HasWalletSigner, HasWalletType};
 
-pub struct SendIbcTransferMessage;
-
 #[derive(Debug)]
 pub struct MissingSendPacketEventError;
 
-#[cgp_provider(TokenIbcTransferrerComponent)]
+#[cgp_new_provider(TokenIbcTransferrerComponent)]
 impl<Chain, Counterparty> TokenIbcTransferrer<Chain, Counterparty> for SendIbcTransferMessage
 where
     Chain: HasWalletType
         + HasAmountType
         + HasMemoType
         + HasWalletSigner
-        + CanQueryChainStatus
-        + CanCalculateIbcTransferTimeout
         + HasMessageResponseEvents
-        + CanBuildIbcTokenTransferMessage<Counterparty>
-        + HasIbcChainTypes<Counterparty>
+        + CanCalculateIbcTransferTimeout<Counterparty>
+        + CanBuildIbcTokenTransferMessages<Counterparty>
+        + HasPortIdType<Counterparty>
+        + HasChannelIdType<Counterparty>
         + HasSendPacketEvent<Counterparty>
         + CanBuildPacketFromSendPacket<Counterparty>
         + CanExtractFromEvent<Chain::SendPacketEvent>
         + CanRaiseAsyncError<MissingSendPacketEventError>
-        + CanSendSingleMessageWithSigner,
-    Counterparty: HasAddressType,
+        + CanSendMessagesWithSigner,
+    Counterparty: HasAddressType + HasChainStatusType + HasTimeoutType + HasHeightType,
 {
     async fn ibc_transfer_token(
         chain: &Chain,
+        _counterparty: PhantomData<Counterparty>,
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,
         sender_wallet: &Chain::Wallet,
         recipient_address: &Counterparty::Address,
         amount: &Chain::Amount,
         memo: &Chain::Memo,
+        counterparty_status: &Counterparty::ChainStatus,
     ) -> Result<Chain::OutgoingPacket, Chain::Error> {
-        let chain_status = chain.query_chain_status().await?;
+        let timeout_height = chain
+            .ibc_transfer_timeout_height(Counterparty::chain_status_height(counterparty_status));
 
-        let current_height = Chain::chain_status_height(&chain_status);
+        let timeout_time =
+            chain.ibc_transfer_timeout_time(Counterparty::chain_status_time(counterparty_status));
 
-        let current_time = Chain::chain_status_time(&chain_status);
-
-        let timeout_height = chain.ibc_transfer_timeout_height(current_height);
-
-        let timeout_time = chain.ibc_transfer_timeout_time(current_time);
-
-        let message = chain
-            .build_ibc_token_transfer_message(
+        let messages = chain
+            .build_ibc_token_transfer_messages(
+                PhantomData,
                 channel_id,
                 port_id,
                 recipient_address,
@@ -76,10 +75,11 @@ where
 
         let signer = Chain::wallet_signer(sender_wallet);
 
-        let response = chain.send_message_with_signer(signer, message).await?;
+        let responses = chain.send_messages_with_signer(signer, &messages).await?;
 
-        let send_packet_event = Chain::message_response_events(&response)
+        let send_packet_event = responses
             .iter()
+            .flat_map(Chain::message_response_events)
             .find_map(|event| chain.try_extract_from_event(PhantomData, event))
             .ok_or_else(|| Chain::raise_error(MissingSendPacketEventError))?;
 

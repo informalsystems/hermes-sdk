@@ -1,3 +1,6 @@
+use alloc::vec::Vec;
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
@@ -13,26 +16,25 @@ use crate::chain::traits::types::memo::HasMemoType;
   context: ChainDriver,
 }]
 #[async_trait]
-pub trait CanBuildIbcTokenTransferMessage<Counterparty>:
+pub trait CanBuildIbcTokenTransferMessages<Counterparty>:
     HasAsyncErrorType
     + HasAmountType
     + HasMemoType
     + HasMessageType
-    + HasHeightType
-    + HasTimeoutType
     + HasChannelIdType<Counterparty>
     + HasPortIdType<Counterparty>
 where
-    Counterparty: HasAddressType,
+    Counterparty: HasAddressType + HasHeightType + HasTimeoutType,
 {
-    async fn build_ibc_token_transfer_message(
+    async fn build_ibc_token_transfer_messages(
         &self,
+        _counterparty: PhantomData<Counterparty>,
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,
         recipient_address: &Counterparty::Address,
         amount: &Self::Amount,
         memo: &Self::Memo,
-        timeout_height: Option<&Self::Height>,
-        timeout_time: Option<&Self::Timeout>,
-    ) -> Result<Self::Message, Self::Error>;
+        timeout_height: Option<&Counterparty::Height>,
+        timeout_time: Option<&Counterparty::Timeout>,
+    ) -> Result<Vec<Self::Message>, Self::Error>;
 }

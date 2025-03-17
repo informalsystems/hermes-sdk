@@ -5,6 +5,7 @@ use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
@@ -51,6 +52,7 @@ where
         + HasChainId
         + HasOutgoingPacketType<ChainB>
         + CanQueryBalance
+        + CanQueryChainStatus
         + HasAmountMethods
         + CanConvertIbcTransferredAmount<ChainB>
         + CanIbcTransferToken<ChainB>
@@ -61,6 +63,7 @@ where
         + HasOutgoingPacketType<ChainA>
         + HasAmountMethods
         + CanQueryBalance
+        + CanQueryChainStatus
         + CanIbcTransferToken<ChainA>
         + CanConvertIbcTransferredAmount<ChainA>
         + CanAssertEventualAmount
@@ -118,12 +121,14 @@ where
 
         chain_a
             .ibc_transfer_token(
+                PhantomData,
                 channel_id_a,
                 port_id_a,
                 wallet_a1,
                 address_b,
                 &a_to_b_amount,
                 &chain_a.default_memo(),
+                &chain_b.query_chain_status().await?,
             )
             .await?;
 
@@ -133,7 +138,8 @@ where
 
         assert_eq!(balance_a2, balance_a3);
 
-        let balance_b1 = ChainB::ibc_transfer_amount_from(&a_to_b_amount, channel_id_b, port_id_b)?;
+        let balance_b1 =
+            ChainB::ibc_transfer_amount_from(PhantomData, &a_to_b_amount, channel_id_b, port_id_b)?;
 
         logger
             .log_message(&format!(
@@ -161,12 +167,14 @@ where
 
         chain_b
             .ibc_transfer_token(
+                PhantomData,
                 channel_id_b,
                 port_id_b,
                 wallet_b,
                 address_a2,
                 &b_to_a_amount,
                 &chain_b.default_memo(),
+                &chain_a.query_chain_status().await?,
             )
             .await?;
 
@@ -182,7 +190,7 @@ where
 
         let balance_a5 = ChainA::add_amount(
             &balance_a4,
-            &ChainA::transmute_counterparty_amount(&b_to_a_amount, denom_a),
+            &ChainA::transmute_counterparty_amount(PhantomData, &b_to_a_amount, denom_a),
         )?;
 
         chain_a

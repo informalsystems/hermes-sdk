@@ -1,6 +1,8 @@
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
@@ -10,6 +12,7 @@ use hermes_test_components::chain::traits::messages::ibc_transfer::{
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::memo::HasMemoType;
+use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use ibc::primitives::Timestamp;
@@ -17,44 +20,54 @@ use ibc::primitives::Timestamp;
 use crate::chain::types::amount::Amount;
 use crate::chain::types::messages::token_transfer::TokenTransferMessage;
 
-pub struct BuildCosmosIbcTransferMessage;
-
-#[cgp_provider(IbcTokenTransferMessageBuilderComponent)]
+#[cgp_new_provider(IbcTokenTransferMessageBuilderComponent)]
 impl<Chain, Counterparty> IbcTokenTransferMessageBuilder<Chain, Counterparty>
     for BuildCosmosIbcTransferMessage
 where
-    Chain: HasAsyncErrorType
-        + HasAddressType
+    Chain: HasAddressType
         + HasMessageType
-        + HasHeightType<Height = Height>
-        + HasTimeoutType<Timeout = Timestamp>
         + HasAmountType<Amount = Amount>
         + HasMemoType<Memo = Option<String>>
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
-        + HasPortIdType<Counterparty, PortId = PortId>,
-    Counterparty: HasAddressType,
+        + HasPortIdType<Counterparty, PortId = PortId>
+        + CanRaiseAsyncError<ClientError>,
+    Counterparty: HasAddressType + HasHeightFields + HasTimeoutType<Timeout = Timestamp>,
     Chain::Message: From<CosmosMessage>,
 {
-    async fn build_ibc_token_transfer_message(
+    async fn build_ibc_token_transfer_messages(
         _chain: &Chain,
+        _counterparty: PhantomData<Counterparty>,
         channel_id: &ChannelId,
         port_id: &PortId,
         recipient_address: &Counterparty::Address,
         amount: &Amount,
         memo: &Option<String>,
-        timeout_height: Option<&Height>,
+        timeout_height: Option<&Counterparty::Height>,
         timeout_time: Option<&Timestamp>,
-    ) -> Result<Chain::Message, Chain::Error> {
+    ) -> Result<Vec<Chain::Message>, Chain::Error> {
+        let timeout_height = match timeout_height {
+            Some(height) => Some(
+                Height::new(
+                    Counterparty::revision_number(height),
+                    Counterparty::revision_height(height),
+                )
+                .map_err(Chain::raise_error)?,
+            ),
+            None => None,
+        };
+
         let message = TokenTransferMessage {
             channel_id: channel_id.clone(),
             port_id: port_id.clone(),
             recipient_address: recipient_address.to_string(),
             amount: amount.clone(),
             memo: memo.clone(),
-            timeout_height: timeout_height.cloned(),
+            timeout_height,
             timeout_time: timeout_time.cloned(),
         };
 
-        Ok(message.to_cosmos_message().into())
+        let messages = vec![message.to_cosmos_message().into()];
+
+        Ok(messages)
     }
 }
