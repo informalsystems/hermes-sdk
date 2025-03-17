@@ -118,7 +118,7 @@ use hermes_runtime_components::traits::runtime::{
 };
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
 use hermes_test_components::chain::traits::messages::ibc_transfer::{
-    CanBuildIbcTokenTransferMessage, IbcTokenTransferMessageBuilderComponent,
+    CanBuildIbcTokenTransferMessages, IbcTokenTransferMessageBuilderComponent,
 };
 use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerierComponent;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
@@ -327,7 +327,7 @@ pub trait CanUseCosmosChain:
         CosmosChain,
         CreateClientPayloadOptions = CosmosCreateClientOptions,
     > + HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
-    + CanBuildIbcTokenTransferMessage<CosmosChain>
+    + CanBuildIbcTokenTransferMessages<CosmosChain>
     + HasRawClientStateType<RawClientState = Any>
     + CanExtractFromMessageResponse<CosmosCreateClientEvent>
 {

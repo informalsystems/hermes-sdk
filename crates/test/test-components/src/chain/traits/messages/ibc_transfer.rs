@@ -16,7 +16,7 @@ use crate::chain::traits::types::memo::HasMemoType;
   context: ChainDriver,
 }]
 #[async_trait]
-pub trait CanBuildIbcTokenTransferMessage<Counterparty>:
+pub trait CanBuildIbcTokenTransferMessages<Counterparty>:
     HasAsyncErrorType
     + HasAmountType
     + HasMemoType
@@ -26,7 +26,7 @@ pub trait CanBuildIbcTokenTransferMessage<Counterparty>:
 where
     Counterparty: HasAddressType + HasHeightType + HasTimeoutType,
 {
-    async fn build_ibc_token_transfer_message(
+    async fn build_ibc_token_transfer_messages(
         &self,
         _counterparty: PhantomData<Counterparty>,
         channel_id: &Self::ChannelId,

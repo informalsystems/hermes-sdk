@@ -34,7 +34,7 @@ where
     Counterparty: HasAddressType + HasHeightFields + HasTimeoutType<Timeout = Timestamp>,
     Chain::Message: From<CosmosMessage>,
 {
-    async fn build_ibc_token_transfer_message(
+    async fn build_ibc_token_transfer_messages(
         _chain: &Chain,
         _counterparty: PhantomData<Counterparty>,
         channel_id: &ChannelId,

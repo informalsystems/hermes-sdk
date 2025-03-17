@@ -11,7 +11,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::Ha
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 
-use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
+use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessages;
 use crate::chain::traits::transfer::ibc_transfer::{
     TokenIbcTransferrer, TokenIbcTransferrerComponent,
 };
@@ -33,7 +33,7 @@ where
         + HasWalletSigner
         + HasMessageResponseEvents
         + CanCalculateIbcTransferTimeout<Counterparty>
-        + CanBuildIbcTokenTransferMessage<Counterparty>
+        + CanBuildIbcTokenTransferMessages<Counterparty>
         + HasPortIdType<Counterparty>
         + HasChannelIdType<Counterparty>
         + HasSendPacketEvent<Counterparty>
@@ -61,7 +61,7 @@ where
             chain.ibc_transfer_timeout_time(Counterparty::chain_status_time(counterparty_status));
 
         let messages = chain
-            .build_ibc_token_transfer_message(
+            .build_ibc_token_transfer_messages(
                 PhantomData,
                 channel_id,
                 port_id,
