@@ -5,9 +5,9 @@ use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: BiRelayTypeAtComponent<TagA, TagB>,
-  provider: ProvideBiRelayTypeAt,
-  context: Setup,
+    name: BiRelayTypeAtComponent<TagA, TagB>,
+    provider: ProvideBiRelayTypeAt,
+    context: Setup,
 }]
 pub trait HasBiRelayTypeAt<TagA, TagB>: Async {
     type BiRelay: Async;

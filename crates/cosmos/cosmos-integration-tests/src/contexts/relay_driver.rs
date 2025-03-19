@@ -13,7 +13,7 @@ use hermes_relayer_components::multi::traits::birelay_at::{
     BiRelayGetterAtComponent, BiRelayTypeAtComponent,
 };
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
+use hermes_relayer_components::multi::traits::relay_at::RelayAtTypeProviderComponent;
 use hermes_test_components::relay_driver::run::{
     RelayerBackgroundRunner, RelayerBackgroundRunnerComponent,
 };
@@ -35,8 +35,8 @@ delegate_components! {
         ]:
             WithType<CosmosChain>,
         [
-            RelayTypeAtComponent<Index<0>, Index<1>>,
-            RelayTypeAtComponent<Index<1>, Index<0>>,
+            RelayAtTypeProviderComponent<Index<0>, Index<1>>,
+            RelayAtTypeProviderComponent<Index<1>, Index<0>>,
         ]: WithType<CosmosRelay>,
         BiRelayTypeAtComponent<Index<0>, Index<1>>:
             WithType<CosmosBiRelay>,

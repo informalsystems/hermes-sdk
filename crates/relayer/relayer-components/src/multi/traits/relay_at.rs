@@ -8,9 +8,9 @@ use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use crate::multi::types::tags::{Dst, Src};
 use crate::relay::traits::chains::HasRelayChainTypes;
 
-#[cgp_component {
-    name: RelayTypeAtComponent<SrcTag, DstTag>,
-    provider: ProvideRelayTypeAt,
+#[cgp_type {
+    name: RelayAtTypeProviderComponent<SrcTag, DstTag>,
+    provider: RelayAtTypeProvider,
 }]
 pub trait HasRelayTypeAt<SrcTag, DstTag>: Async {
     type Relay: Async;
@@ -47,15 +47,4 @@ impl<Context, SrcTag, DstTag> HasBoundedRelayTypeAt<SrcTag, DstTag> for Context 
         > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>> + HasAsyncErrorType>
         + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>> + HasAsyncErrorType>
 {
-}
-
-#[cgp_provider(RelayTypeAtComponent<SrcTag, DstTag>)]
-impl<Context, SrcTag, DstTag, Provider, Relay> ProvideRelayTypeAt<Context, SrcTag, DstTag>
-    for WithProvider<Provider>
-where
-    Context: Async,
-    Provider: ProvideType<Context, RelayTypeAtComponent<SrcTag, DstTag>, Type = Relay>,
-    Relay: Async,
-{
-    type Relay = Relay;
 }

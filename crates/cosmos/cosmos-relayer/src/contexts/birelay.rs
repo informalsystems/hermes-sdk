@@ -12,7 +12,7 @@ use hermes_relayer_components::birelay::traits::{
 };
 use hermes_relayer_components::components::default::birelay::DefaultBiRelayComponents;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
+use hermes_relayer_components::multi::traits::relay_at::RelayAtTypeProviderComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
@@ -48,8 +48,8 @@ delegate_components! {
         ChainTypeAtComponent<Index<0>>: WithType<CosmosChain>,
         ChainTypeAtComponent<Index<1>>: WithType<CosmosChain>,
         [
-            RelayTypeAtComponent<Index<0>, Index<1>>,
-            RelayTypeAtComponent<Index<1>, Index<0>>,
+            RelayAtTypeProviderComponent<Index<0>, Index<1>>,
+            RelayAtTypeProviderComponent<Index<1>, Index<0>>,
         ]: WithType<CosmosRelay>,
     }
 }

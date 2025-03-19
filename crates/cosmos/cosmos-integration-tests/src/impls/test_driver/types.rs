@@ -10,7 +10,7 @@ use hermes_relayer_components::multi::traits::chain_at::{
     ChainTypeAtComponent, HasChainTypeAt, ProvideChainTypeAt,
 };
 use hermes_relayer_components::multi::traits::relay_at::{
-    HasRelayTypeAt, ProvideRelayTypeAt, RelayTypeAtComponent,
+    HasRelayTypeAt, RelayAtTypeProvider, RelayAtTypeProviderComponent,
 };
 use hermes_test_components::driver::traits::types::chain_driver_at::{
     ChainDriverTypeAtComponent, ProvideChainDriverTypeAt,
@@ -40,8 +40,8 @@ where
     type ChainDriver = CosmosChainDriver;
 }
 
-#[cgp_provider(RelayTypeAtComponent<I, J>)]
-impl<Context, I: Async, J: Async> ProvideRelayTypeAt<Context, I, J> for ProvideCosmosTestTypes
+#[cgp_provider(RelayAtTypeProviderComponent<I, J>)]
+impl<Context, I: Async, J: Async> RelayAtTypeProvider<Context, I, J> for ProvideCosmosTestTypes
 where
     Context: HasChainTypeAt<I, Chain = CosmosChain> + HasChainTypeAt<J, Chain = CosmosChain>,
 {
