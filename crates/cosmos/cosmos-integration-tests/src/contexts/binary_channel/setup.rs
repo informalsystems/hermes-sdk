@@ -15,12 +15,12 @@ use hermes_error::impls::UseHermesError;
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
-use hermes_test_components::driver::traits::types::builder_at::BuilderTypeAtComponent;
+use hermes_test_components::driver::traits::types::builder_at::BuilderAtTypeProviderComponent;
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
 use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
 use hermes_test_components::setup::traits::bootstrap_at::BootstrapAtComponent;
-use hermes_test_components::setup::traits::builder_at::BuilderAtComponent;
+use hermes_test_components::setup::traits::builder_at::BuilderAtGetterComponent;
 use hermes_test_components::setup::traits::create_client_options_at::{
     CreateClientMessageOptionsAtComponent, CreateClientPayloadOptionsAtComponent,
 };
@@ -62,8 +62,8 @@ delegate_components! {
             ChainDriverTypeAtComponent,
         ]: UseBinarySetupFields,
         TestDriverTypeComponent: WithType<CosmosBinaryChannelTestDriver>,
-        BuilderTypeAtComponent: WithType<CosmosBuilder>,
-        BuilderAtComponent: UseField<symbol!("builder")>,
+        BuilderAtTypeProviderComponent: WithType<CosmosBuilder>,
+        BuilderAtGetterComponent: UseField<symbol!("builder")>,
         PortIdAtComponent: UseField<symbol!("port_id")>,
         InitConnectionOptionsAtComponent: UseField<symbol!("init_connection_options")>,
         CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,

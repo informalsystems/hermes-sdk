@@ -3,23 +3,11 @@ use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 
-#[cgp_component {
-  name: BuilderTypeAtComponent,
-  provider: ProvideBuilderTypeAt,
+#[cgp_type {
+    provider: BuilderAtTypeProvider,
 }]
-pub trait HasBuilderTypeAt<A: Async, B: Async>: HasBiRelayTypeAt<A, B> {
+pub trait HasBuilderTypeAt<A, B>: HasBiRelayTypeAt<A, B> {
     type Builder: Async;
 }
 
-pub type BuilderTypeAt<Context, A, B> = <Context as HasBuilderTypeAt<A, B>>::Builder;
-
-#[cgp_provider(BuilderTypeAtComponent)]
-impl<Context, A: Async, B: Async, Provider, Builder> ProvideBuilderTypeAt<Context, A, B>
-    for WithProvider<Provider>
-where
-    Context: HasBiRelayTypeAt<A, B>,
-    Provider: ProvideType<Context, BuilderTypeAtComponent, Type = Builder>,
-    Builder: Async,
-{
-    type Builder = Builder;
-}
+pub type BuilderAt<Context, A, B> = <Context as HasBuilderTypeAt<A, B>>::Builder;
