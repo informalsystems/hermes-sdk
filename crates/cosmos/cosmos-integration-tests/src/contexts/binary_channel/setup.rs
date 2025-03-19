@@ -12,7 +12,7 @@ use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayAtTypeProviderComponent;
 use hermes_test_components::driver::traits::types::builder_at::BuilderAtTypeProviderComponent;
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
@@ -56,8 +56,8 @@ delegate_components! {
         ErrorRaiserComponent: DebugError,
         [
             BootstrapAtComponent,
-            ChainTypeAtComponent<Index<0>>,
-            ChainTypeAtComponent<Index<1>>,
+            ChainTypeProviderAtComponent<Index<0>>,
+            ChainTypeProviderAtComponent<Index<1>>,
             ChainDriverTypeAtComponent,
         ]: UseBinarySetupFields,
         TestDriverTypeProviderComponent:

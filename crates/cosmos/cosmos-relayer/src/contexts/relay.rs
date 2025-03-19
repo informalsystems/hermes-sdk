@@ -13,7 +13,7 @@ use hermes_logging_components::traits::has_logger::{
 };
 use hermes_relayer_components::error::traits::{CanPerformRetry, RetryableErrorComponent};
 use hermes_relayer_components::multi::traits::chain_at::{
-    ChainAt, ChainGetterAtComponent, ChainTypeAtComponent,
+    ChainAt, ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;
@@ -117,8 +117,8 @@ delegate_components! {
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
-            ChainTypeAtComponent<Index<0>>,
-            ChainTypeAtComponent<Index<1>>,
+            ChainTypeProviderAtComponent<Index<0>>,
+            ChainTypeProviderAtComponent<Index<1>>,
         ]:
             WithType<CosmosChain>,
         [
@@ -142,8 +142,8 @@ delegate_components! {
         MessageBatchSenderGetterComponent<Index<1>>:
             UseField<symbol!("message_batch_sender_b")>,
         [
-            ChainTypeAtComponent<Src>,
-            ChainTypeAtComponent<Dst>,
+            ChainTypeProviderAtComponent<Src>,
+            ChainTypeProviderAtComponent<Dst>,
             ChainGetterAtComponent<Src>,
             ChainGetterAtComponent<Dst>,
             ClientIdAtGetterComponent<Src, Dst>,

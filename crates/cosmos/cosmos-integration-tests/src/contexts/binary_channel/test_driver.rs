@@ -10,7 +10,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayAtTypeProviderComponent;
 use hermes_test_components::driver::traits::channel_at::{
     ChannelGetterAt, ChannelGetterAtComponent,
@@ -45,8 +45,8 @@ delegate_components! {
         ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         [
-            ChainTypeAtComponent<Index<0>>,
-            ChainTypeAtComponent<Index<1>>,
+            ChainTypeProviderAtComponent<Index<0>>,
+            ChainTypeProviderAtComponent<Index<1>>,
             ChainDriverTypeAtComponent,
             RelayAtTypeProviderComponent<Index<0>, Index<1>>,
             RelayAtTypeProviderComponent<Index<1>, Index<0>>,

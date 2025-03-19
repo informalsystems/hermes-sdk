@@ -6,7 +6,7 @@ use cgp::core::field::{UseField, WithField};
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_relayer_components::multi::traits::chain_at::{
-    ChainGetterAtComponent, ChainTypeAtComponent,
+    ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
@@ -41,12 +41,12 @@ delegate_components! {
         RuntimeTypeProviderComponent: WithType<MockRuntimeContext>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         [
-            ChainTypeAtComponent<Src>,
+            ChainTypeProviderAtComponent<Src>,
             ChainGetterAtComponent<Src>,
         ]:
             UseField<symbol!("src_chain")>,
         [
-            ChainTypeAtComponent<Dst>,
+            ChainTypeProviderAtComponent<Dst>,
             ChainGetterAtComponent<Dst>,
         ]:
             UseField<symbol!("dst_chain")>,

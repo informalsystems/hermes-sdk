@@ -12,7 +12,7 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::relay::*;
 use hermes_relayer_components::multi::traits::chain_at::{
-    ChainGetterAtComponent, ChainTypeAtComponent,
+    ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
@@ -49,12 +49,12 @@ delegate_components! {
         ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         [
-            ChainTypeAtComponent<Src>,
+            ChainTypeProviderAtComponent<Src>,
             ChainGetterAtComponent<Src>,
         ]:
             UseField<symbol!("src_chain")>,
         [
-            ChainTypeAtComponent<Dst>,
+            ChainTypeProviderAtComponent<Dst>,
             ChainGetterAtComponent<Dst>,
         ]:
             UseField<symbol!("dst_chain")>,

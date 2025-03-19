@@ -11,7 +11,7 @@ use hermes_relayer_components::birelay::traits::{
     AutoBiRelayerComponent, TwoWayRelayGetter, TwoWayRelayGetterComponent,
 };
 use hermes_relayer_components::components::default::birelay::DefaultBiRelayComponents;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayAtTypeProviderComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
@@ -45,8 +45,8 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             UseHermesLogger,
-        ChainTypeAtComponent<Index<0>>: WithType<CosmosChain>,
-        ChainTypeAtComponent<Index<1>>: WithType<CosmosChain>,
+        ChainTypeProviderAtComponent<Index<0>>: WithType<CosmosChain>,
+        ChainTypeProviderAtComponent<Index<1>>: WithType<CosmosChain>,
         [
             RelayAtTypeProviderComponent<Index<0>, Index<1>>,
             RelayAtTypeProviderComponent<Index<1>, Index<0>>,

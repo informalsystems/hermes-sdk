@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_relayer_components::multi::traits::chain_at::{
-    ChainTypeAtComponent, ProvideChainTypeAt,
+    ChainTypeProviderAt, ChainTypeProviderAtComponent,
 };
 
 use crate::chain_driver::traits::types::chain::HasChainType;
@@ -41,8 +41,8 @@ where
     }
 }
 
-#[cgp_provider(ChainTypeAtComponent<Index<0>>)]
-impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, Index<0>> for UseBinarySetupFields
+#[cgp_provider(ChainTypeProviderAtComponent<Index<0>>)]
+impl<Setup, Bootstrap, Chain> ChainTypeProviderAt<Setup, Index<0>> for UseBinarySetupFields
 where
     Setup: Async + HasField<symbol!("bootstrap_a"), Value = Bootstrap>,
     Bootstrap: HasChainType<Chain = Chain>,
@@ -51,8 +51,8 @@ where
     type Chain = Chain;
 }
 
-#[cgp_provider(ChainTypeAtComponent<Index<1>>)]
-impl<Setup, Bootstrap, Chain> ProvideChainTypeAt<Setup, Index<1>> for UseBinarySetupFields
+#[cgp_provider(ChainTypeProviderAtComponent<Index<1>>)]
+impl<Setup, Bootstrap, Chain> ChainTypeProviderAt<Setup, Index<1>> for UseBinarySetupFields
 where
     Setup: Async + HasField<symbol!("bootstrap_b"), Value = Bootstrap>,
     Bootstrap: HasChainType<Chain = Chain>,

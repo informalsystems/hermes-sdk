@@ -7,7 +7,7 @@ use hermes_relayer_components::multi::traits::birelay_at::{
     BiRelayTypeProviderAt, BiRelayTypeProviderAtComponent, HasBiRelayTypeAt,
 };
 use hermes_relayer_components::multi::traits::chain_at::{
-    ChainTypeAtComponent, HasChainTypeAt, ProvideChainTypeAt,
+    ChainTypeProviderAt, ChainTypeProviderAtComponent, HasChainTypeAt,
 };
 use hermes_relayer_components::multi::traits::relay_at::{
     HasRelayTypeAt, RelayAtTypeProvider, RelayAtTypeProviderComponent,
@@ -24,8 +24,8 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
 
 pub struct ProvideCosmosTestTypes;
 
-#[cgp_provider(ChainTypeAtComponent<I>)]
-impl<Context, I: Async> ProvideChainTypeAt<Context, I> for ProvideCosmosTestTypes
+#[cgp_provider(ChainTypeProviderAtComponent<I>)]
+impl<Context, I: Async> ChainTypeProviderAt<Context, I> for ProvideCosmosTestTypes
 where
     Context: Async,
 {
