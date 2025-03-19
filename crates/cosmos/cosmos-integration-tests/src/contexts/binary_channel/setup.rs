@@ -62,8 +62,14 @@ delegate_components! {
             ChainDriverTypeAtComponent,
         ]: UseBinarySetupFields,
         TestDriverTypeComponent: WithType<CosmosBinaryChannelTestDriver>,
-        BuilderAtTypeProviderComponent: WithType<CosmosBuilder>,
-        BuilderAtGetterComponent: UseField<symbol!("builder")>,
+        [
+            BuilderAtTypeProviderComponent<Index<0>, Index<1>>,
+            BuilderAtTypeProviderComponent<Index<1>, Index<0>>,
+        ]: UseType<CosmosBuilder>,
+        [
+            BuilderAtGetterComponent<Index<0>, Index<1>>,
+            BuilderAtGetterComponent<Index<1>, Index<0>>,
+        ]: UseField<symbol!("builder")>,
         PortIdAtComponent: UseField<symbol!("port_id")>,
         InitConnectionOptionsAtComponent: UseField<symbol!("init_connection_options")>,
         CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
