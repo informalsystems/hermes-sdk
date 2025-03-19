@@ -7,29 +7,28 @@ use hermes_relayer_components::chain::types::aliases::PortIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
 #[cgp_component {
-  name: PortIdAtComponent,
-  provider: ProvidePortIdAt,
+    name: PortIdGetterAtComponent<A, B>,
+    provider: PortIdGetterAt,
 }]
-pub trait HasPortIdAt<TargetTag: Async, CounterpartyTag: Async>:
-    HasChainTypeAt<TargetTag, Chain: HasPortIdType<ChainAt<Self, CounterpartyTag>>>
-    + HasChainTypeAt<CounterpartyTag>
+pub trait HasPortIdAt<A, B>:
+    HasChainTypeAt<A, Chain: HasPortIdType<ChainAt<Self, B>>> + HasChainTypeAt<B>
 {
     fn port_id_at(
         &self,
-        _index: PhantomData<(TargetTag, CounterpartyTag)>,
-    ) -> &PortIdOf<ChainAt<Self, TargetTag>, ChainAt<Self, CounterpartyTag>>;
+        _index: PhantomData<(A, B)>,
+    ) -> &PortIdOf<ChainAt<Self, A>, ChainAt<Self, B>>;
 }
 
-#[cgp_provider(PortIdAtComponent)]
-impl<Context, TargetTag: Async, CounterpartyTag: Async, Tag, Chain, Counterparty, PortId>
-    ProvidePortIdAt<Context, TargetTag, CounterpartyTag> for UseField<Tag>
+#[cgp_provider(PortIdGetterAtComponent<A, B>)]
+impl<Context, A, B, Tag, Chain, Counterparty, PortId> PortIdGetterAt<Context, A, B>
+    for UseField<Tag>
 where
-    Context: HasChainTypeAt<TargetTag, Chain = Chain>
-        + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>
+    Context: HasChainTypeAt<A, Chain = Chain>
+        + HasChainTypeAt<B, Chain = Counterparty>
         + HasField<Tag, Value = PortId>,
     Chain: HasPortIdType<Counterparty, PortId = PortId>,
 {
-    fn port_id_at(context: &Context, _index: PhantomData<(TargetTag, CounterpartyTag)>) -> &PortId {
+    fn port_id_at(context: &Context, _index: PhantomData<(A, B)>) -> &PortId {
         context.get_field(PhantomData)
     }
 }

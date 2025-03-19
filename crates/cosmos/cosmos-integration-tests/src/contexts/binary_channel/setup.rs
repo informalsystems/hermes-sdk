@@ -28,7 +28,7 @@ use hermes_test_components::setup::traits::driver::TestDriverTypeProviderCompone
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilderComponent;
 use hermes_test_components::setup::traits::init_channel_options_at::InitChannelOptionsAtComponent;
 use hermes_test_components::setup::traits::init_connection_options_at::InitConnectionOptionsAtComponent;
-use hermes_test_components::setup::traits::port_id_at::PortIdAtComponent;
+use hermes_test_components::setup::traits::port_id_at::PortIdGetterAtComponent;
 use ibc::core::host::types::identifiers::PortId;
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
@@ -71,7 +71,11 @@ delegate_components! {
             BuilderAtGetterComponent<Index<0>, Index<1>>,
             BuilderAtGetterComponent<Index<1>, Index<0>>,
         ]: UseField<symbol!("builder")>,
-        PortIdAtComponent: UseField<symbol!("port_id")>,
+        [
+            PortIdGetterAtComponent<Index<0>, Index<1>>,
+            PortIdGetterAtComponent<Index<1>, Index<0>>,
+        ]:
+            UseField<symbol!("port_id")>,
         InitConnectionOptionsAtComponent: UseField<symbol!("init_connection_options")>,
         CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
         CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
