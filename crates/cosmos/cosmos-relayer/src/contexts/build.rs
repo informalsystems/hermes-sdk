@@ -30,7 +30,7 @@ use hermes_relayer_components::multi::traits::chain_at::{
     ChainTypeProviderAtComponent, HasChainTypeAt,
 };
 use hermes_relayer_components::multi::traits::relay_at::{
-    HasRelayTypeAt, RelayAtTypeProviderComponent,
+    HasRelayTypeAt, RelayTypeProviderAtComponent,
 };
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::traits::target::SourceTarget;
@@ -117,8 +117,8 @@ delegate_components! {
         ]:
             WithType<CosmosChain>,
         [
-            RelayAtTypeProviderComponent<Index<0>, Index<1>>,
-            RelayAtTypeProviderComponent<Index<1>, Index<0>>,
+            RelayTypeProviderAtComponent<Index<0>, Index<1>>,
+            RelayTypeProviderAtComponent<Index<1>, Index<0>>,
         ]: WithType<CosmosRelay>,
         BatchSenderCacheGetterComponent:
             UseField<symbol!("batch_senders")>,
