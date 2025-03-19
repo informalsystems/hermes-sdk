@@ -22,7 +22,7 @@ use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetup
 use hermes_test_components::setup::traits::bootstrap_at::BootstrapAtComponent;
 use hermes_test_components::setup::traits::builder_at::BuilderAtGetterComponent;
 use hermes_test_components::setup::traits::create_client_options_at::{
-    CreateClientMessageOptionsAtComponent, CreateClientPayloadOptionsAtComponent,
+    CreateClientMessageOptionsGetterAtComponent, CreateClientPayloadOptionsGetterAtComponent,
 };
 use hermes_test_components::setup::traits::driver::TestDriverTypeProviderComponent;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilderComponent;
@@ -80,8 +80,14 @@ delegate_components! {
             InitConnectionOptionsGetterAtComponent<Index<0>, Index<1>>,
             InitConnectionOptionsGetterAtComponent<Index<1>, Index<0>>,
         ]: UseField<symbol!("init_connection_options")>,
-        CreateClientMessageOptionsAtComponent: UseField<symbol!("create_client_message_options")>,
-        CreateClientPayloadOptionsAtComponent: UseField<symbol!("create_client_payload_options")>,
+        [
+            CreateClientMessageOptionsGetterAtComponent<Index<0>, Index<1>>,
+            CreateClientMessageOptionsGetterAtComponent<Index<1>, Index<0>>,
+        ]: UseField<symbol!("create_client_message_options")>,
+        [
+            CreateClientPayloadOptionsGetterAtComponent<Index<0>, Index<1>>,
+            CreateClientPayloadOptionsGetterAtComponent<Index<1>, Index<0>>,
+        ]: UseField<symbol!("create_client_payload_options")>,
         InitChannelOptionsAtComponent: UseCosmosInitChannelOptions,
         [
             RelayAtTypeProviderComponent<Index<0>, Index<1>>,
@@ -89,7 +95,8 @@ delegate_components! {
         ]: UseType<CosmosRelay>,
         BiRelayAtTypeProviderComponent<Index<0>, Index<1>>:
             WithType<CosmosBiRelay>,
-        BinaryChannelDriverBuilderComponent: BuildCosmosBinaryChannelDriver,
+        BinaryChannelDriverBuilderComponent:
+            BuildCosmosBinaryChannelDriver,
     }
 }
 

@@ -476,7 +476,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro-lib"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git#bd315a3747aa92c6081f28af71337a954404b6ec"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=fix-with-provider-component-generics#f26b3fbc648d9914f0064524bb73f5fda6349fbe"
 dependencies = [
  "itertools",
  "prettyplease",
