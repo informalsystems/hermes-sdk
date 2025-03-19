@@ -10,7 +10,7 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_relayer_components::multi::traits::birelay_at::{
-    BiRelayGetterAtComponent, BiRelayTypeAtComponent,
+    BiRelayAtTypeProviderComponent, BiRelayGetterAtComponent,
 };
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayAtTypeProviderComponent;
@@ -38,7 +38,7 @@ delegate_components! {
             RelayAtTypeProviderComponent<Index<0>, Index<1>>,
             RelayAtTypeProviderComponent<Index<1>, Index<0>>,
         ]: WithType<CosmosRelay>,
-        BiRelayTypeAtComponent<Index<0>, Index<1>>:
+        BiRelayAtTypeProviderComponent<Index<0>, Index<1>>:
             WithType<CosmosBiRelay>,
         BiRelayGetterAtComponent<Index<0>, Index<1>>:
             WithField<symbol!("birelay")>,
@@ -71,7 +71,7 @@ impl Drop for AbortOnDrop {
 }
 
 pub trait CanUseCosmosRelayDriver:
-    CanUseComponent<BiRelayTypeAtComponent<Index<0>, Index<1>>, (Index<0>, Index<1>)>
+    CanUseComponent<BiRelayAtTypeProviderComponent<Index<0>, Index<1>>, (Index<0>, Index<1>)>
     + CanUseComponent<BiRelayGetterAtComponent<Index<0>, Index<1>>, (Index<0>, Index<1>)>
 {
 }

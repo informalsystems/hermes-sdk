@@ -4,7 +4,7 @@ use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::multi::traits::birelay_at::{
-    BiRelayTypeAtComponent, HasBiRelayTypeAt, ProvideBiRelayTypeAt,
+    BiRelayAtTypeProvider, BiRelayAtTypeProviderComponent, HasBiRelayTypeAt,
 };
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainTypeAtComponent, HasChainTypeAt, ProvideChainTypeAt,
@@ -48,8 +48,8 @@ where
     type Relay = CosmosRelay;
 }
 
-#[cgp_provider(BiRelayTypeAtComponent<Index<0>, Index<1>>)]
-impl<Context> ProvideBiRelayTypeAt<Context, Index<0>, Index<1>> for ProvideCosmosTestTypes
+#[cgp_provider(BiRelayAtTypeProviderComponent<Index<0>, Index<1>>)]
+impl<Context> BiRelayAtTypeProvider<Context, Index<0>, Index<1>> for ProvideCosmosTestTypes
 where
     Context: HasChainTypeAt<Index<0>, Chain = CosmosChain>
         + HasChainTypeAt<Index<1>, Chain = CosmosChain>

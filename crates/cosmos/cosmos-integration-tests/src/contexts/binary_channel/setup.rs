@@ -12,7 +12,7 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
-use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
+use hermes_relayer_components::multi::traits::birelay_at::BiRelayAtTypeProviderComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayAtTypeProviderComponent;
 use hermes_test_components::driver::traits::types::builder_at::BuilderAtTypeProviderComponent;
@@ -79,7 +79,8 @@ delegate_components! {
             RelayAtTypeProviderComponent<Index<0>, Index<1>>,
             RelayAtTypeProviderComponent<Index<1>, Index<0>>,
         ]: UseType<CosmosRelay>,
-        BiRelayTypeAtComponent<Index<0>, Index<1>>: WithType<CosmosBiRelay>,
+        BiRelayAtTypeProviderComponent<Index<0>, Index<1>>:
+            WithType<CosmosBiRelay>,
         BinaryChannelDriverBuilderComponent: BuildCosmosBinaryChannelDriver,
     }
 }
