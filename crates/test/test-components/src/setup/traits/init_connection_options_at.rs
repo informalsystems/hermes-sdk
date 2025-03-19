@@ -8,39 +8,29 @@ use hermes_relayer_components::chain::traits::types::connection::{
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
 #[cgp_component {
-  name: InitConnectionOptionsAtComponent,
-  provider: ProvideInitConnectionOptionsAt,
-  context: Setup,
+    name: InitConnectionOptionsGetterAtComponent<A, B>,
+    provider: InitConnectionOptionsGetterAt,
 }]
-pub trait HasInitConnectionOptionsAt<Target: Async, Counterparty: Async>:
-    HasChainTypeAt<Target, Chain: HasInitConnectionOptionsType<ChainAt<Self, Counterparty>>>
-    + HasChainTypeAt<Counterparty>
+pub trait HasInitConnectionOptionsAt<A, B>:
+    HasChainTypeAt<A, Chain: HasInitConnectionOptionsType<ChainAt<Self, B>>> + HasChainTypeAt<B>
 {
     fn init_connection_options(
         &self,
-    ) -> &InitConnectionOptionsOf<ChainAt<Self, Target>, ChainAt<Self, Counterparty>>;
+    ) -> &InitConnectionOptionsOf<ChainAt<Self, A>, ChainAt<Self, B>>;
 }
 
-#[cgp_provider(InitConnectionOptionsAtComponent)]
-impl<
-        Setup,
-        Target: Async,
-        CounterpartyTag: Async,
-        Tag,
-        Chain,
-        Counterparty,
-        InitConnectionOptions,
-    > ProvideInitConnectionOptionsAt<Setup, Target, CounterpartyTag> for UseField<Tag>
+#[cgp_provider(InitConnectionOptionsGetterAtComponent<A, B>)]
+impl<Setup, A, B, Tag, Chain, Counterparty, InitConnectionOptions>
+    InitConnectionOptionsGetterAt<Setup, A, B> for UseField<Tag>
 where
-    Setup: HasChainTypeAt<Target, Chain = Chain>
-        + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>,
+    Setup: HasChainTypeAt<A, Chain = Chain> + HasChainTypeAt<B, Chain = Counterparty>,
     Chain:
         HasInitConnectionOptionsType<Counterparty, InitConnectionOptions = InitConnectionOptions>,
     Setup: HasField<Tag, Value = InitConnectionOptions>,
 {
     fn init_connection_options(
         setup: &Setup,
-    ) -> &InitConnectionOptionsOf<ChainAt<Setup, Target>, ChainAt<Setup, CounterpartyTag>> {
+    ) -> &InitConnectionOptionsOf<ChainAt<Setup, A>, ChainAt<Setup, B>> {
         setup.get_field(PhantomData)
     }
 }
