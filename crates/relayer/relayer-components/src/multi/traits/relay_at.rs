@@ -1,4 +1,5 @@
 use cgp::core::component::WithProvider;
+use cgp::core::macros::trait_alias;
 use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
@@ -21,6 +22,7 @@ pub type RelayAt<Context, SrcTag, DstTag> = <Context as HasRelayTypeAt<SrcTag, D
 pub type ClientIdAt<Context, SrcTag, DstTag> =
     ClientIdOf<ChainAt<Context, SrcTag>, ChainAt<Context, DstTag>>;
 
+#[trait_alias]
 pub trait HasBoundedRelayTypeAt<SrcTag, DstTag>:
     HasRelayTypeAt<
         SrcTag,
@@ -33,18 +35,5 @@ pub trait HasBoundedRelayTypeAt<SrcTag, DstTag>:
         >,
     > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>> + HasAsyncErrorType>
     + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>> + HasAsyncErrorType>
-{
-}
-
-impl<Context, SrcTag, DstTag> HasBoundedRelayTypeAt<SrcTag, DstTag> for Context where
-    Context: HasRelayTypeAt<
-            SrcTag,
-            DstTag,
-            Relay: HasRelayChainTypes<
-                SrcChain = ChainAt<Self, SrcTag>,
-                DstChain = ChainAt<Self, DstTag>,
-            >,
-        > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>> + HasAsyncErrorType>
-        + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>> + HasAsyncErrorType>
 {
 }
