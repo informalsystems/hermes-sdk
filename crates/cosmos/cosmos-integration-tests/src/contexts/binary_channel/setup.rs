@@ -2,7 +2,6 @@ use core::marker::PhantomData;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField};
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
@@ -12,7 +11,7 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
-use hermes_relayer_components::multi::traits::birelay_at::BiRelayAtTypeProviderComponent;
+use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayAtTypeProviderComponent;
 use hermes_test_components::driver::traits::types::builder_at::BuilderAtTypeProviderComponent;
@@ -94,8 +93,8 @@ delegate_components! {
             RelayAtTypeProviderComponent<Index<0>, Index<1>>,
             RelayAtTypeProviderComponent<Index<1>, Index<0>>,
         ]: UseType<CosmosRelay>,
-        BiRelayAtTypeProviderComponent<Index<0>, Index<1>>:
-            WithType<CosmosBiRelay>,
+        BiRelayTypeProviderAtComponent<Index<0>, Index<1>>:
+            UseType<CosmosBiRelay>,
         BinaryChannelDriverBuilderComponent:
             BuildCosmosBinaryChannelDriver,
     }

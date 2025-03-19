@@ -25,7 +25,7 @@ use hermes_relayer_components::build::traits::builders::chain_builder::{
     ChainBuilder, ChainBuilderComponent,
 };
 use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
-use hermes_relayer_components::multi::traits::birelay_at::BiRelayAtTypeProviderComponent;
+use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAtComponent, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{
     HasRelayTypeAt, RelayAtTypeProviderComponent,
@@ -107,7 +107,7 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        BiRelayAtTypeProviderComponent<Index<0>, Index<1>>:
+        BiRelayTypeProviderAtComponent<Index<0>, Index<1>>:
             WithType<CosmosBiRelay>,
         [
             ChainTypeAtComponent<Index<0>>,
