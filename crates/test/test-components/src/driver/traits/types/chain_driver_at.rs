@@ -2,21 +2,19 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-#[cgp_component {
-  name: ChainDriverTypeAtComponent,
-  provider: ProvideChainDriverTypeAt,
-  context: Driver,
+#[cgp_type {
+    name: ChainDriverTypeProviderAtComponent<I>,
+    provider: ChainDriverTypeProviderAt,
 }]
-pub trait HasChainDriverTypeAt<Tag>: Async {
+pub trait HasChainDriverTypeAt<I>: Async {
     type ChainDriver: Async;
 }
 
-pub type ChainDriverTypeAt<Driver, Tag> = <Driver as HasChainDriverTypeAt<Tag>>::ChainDriver;
+pub type ChainDriverAt<Driver, I> = <Driver as HasChainDriverTypeAt<I>>::ChainDriver;
 
 #[cgp_component {
-  provider: ChainDriverGetterAt,
-  context: Driver,
+    provider: ChainDriverGetterAt,
 }]
-pub trait HasChainDriverAt<Tag>: HasChainDriverTypeAt<Tag> {
-    fn chain_driver_at(&self, _tag: PhantomData<Tag>) -> &Self::ChainDriver;
+pub trait HasChainDriverAt<I>: HasChainDriverTypeAt<I> {
+    fn chain_driver_at(&self, _tag: PhantomData<I>) -> &Self::ChainDriver;
 }

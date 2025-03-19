@@ -16,7 +16,7 @@ use hermes_test_components::driver::traits::channel_at::{
     ChannelGetterAt, ChannelGetterAtComponent,
 };
 use hermes_test_components::driver::traits::types::chain_driver_at::{
-    ChainDriverGetterAt, ChainDriverGetterAtComponent, ChainDriverTypeAtComponent,
+    ChainDriverGetterAt, ChainDriverGetterAtComponent, ChainDriverTypeProviderAtComponent,
 };
 use hermes_test_components::driver::traits::types::relay_driver_at::{
     RelayDriverGetterAt, RelayDriverGetterAtComponent, RelayDriverTypeAtComponent,
@@ -47,7 +47,8 @@ delegate_components! {
         [
             ChainTypeProviderAtComponent<Index<0>>,
             ChainTypeProviderAtComponent<Index<1>>,
-            ChainDriverTypeAtComponent,
+            ChainDriverTypeProviderAtComponent<Index<0>>,
+            ChainDriverTypeProviderAtComponent<Index<1>>,
             RelayAtTypeProviderComponent<Index<0>, Index<1>>,
             RelayAtTypeProviderComponent<Index<1>, Index<0>>,
             BiRelayTypeProviderAtComponent<Index<0>, Index<1>>,

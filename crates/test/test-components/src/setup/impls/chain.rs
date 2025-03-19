@@ -6,7 +6,7 @@ use cgp::core::field::Index;
 use cgp::prelude::*;
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
-use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
+use crate::driver::traits::types::chain_driver_at::ChainDriverAt;
 use crate::setup::traits::bootstrap_at::HasBootstrapAt;
 use crate::setup::traits::chain::{ChainSetup, ChainSetupComponent};
 
@@ -21,7 +21,7 @@ where
     async fn setup_chain(
         setup: &Setup,
         _index: PhantomData<Index<I>>,
-    ) -> Result<ChainDriverTypeAt<Setup, Index<I>>, Setup::Error> {
+    ) -> Result<ChainDriverAt<Setup, Index<I>>, Setup::Error> {
         let bootstrap = setup.chain_bootstrap(PhantomData);
 
         let chain_name = format!("chain-{}", I);

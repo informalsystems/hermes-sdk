@@ -15,7 +15,7 @@ use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtC
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayAtTypeProviderComponent;
 use hermes_test_components::driver::traits::types::builder_at::BuilderAtTypeProviderComponent;
-use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
+use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeProviderAtComponent;
 use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
 use hermes_test_components::setup::traits::bootstrap_at::BootstrapAtComponent;
@@ -58,7 +58,8 @@ delegate_components! {
             BootstrapAtComponent,
             ChainTypeProviderAtComponent<Index<0>>,
             ChainTypeProviderAtComponent<Index<1>>,
-            ChainDriverTypeAtComponent,
+            ChainDriverTypeProviderAtComponent<Index<0>>,
+            ChainDriverTypeProviderAtComponent<Index<1>>,
         ]: UseBinarySetupFields,
         TestDriverTypeProviderComponent:
             UseType<CosmosBinaryChannelTestDriver>,

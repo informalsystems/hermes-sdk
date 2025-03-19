@@ -6,7 +6,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
 use crate::chain_driver::traits::types::chain::HasChain;
-use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
+use crate::driver::traits::types::chain_driver_at::ChainDriverAt;
 use crate::setup::traits::birelay::CanSetupBiRelay;
 use crate::setup::traits::chain::CanSetupChain;
 use crate::setup::traits::channel::CanSetupChannel;
@@ -31,8 +31,8 @@ where
         + CanSetupConnection<Index<0>, Index<1>>
         + CanSetupChannel<Index<0>, Index<1>>
         + CanBuildTestDriverWithBinaryChannel,
-    ChainDriverTypeAt<Setup, Index<0>>: HasChain<Chain = ChainA>,
-    ChainDriverTypeAt<Setup, Index<1>>: HasChain<Chain = ChainB>,
+    ChainDriverAt<Setup, Index<0>>: HasChain<Chain = ChainA>,
+    ChainDriverAt<Setup, Index<1>>: HasChain<Chain = ChainB>,
     ChainA: HasIbcChainTypes<ChainB> + HasAsyncErrorType,
     ChainB: HasIbcChainTypes<ChainA> + HasAsyncErrorType,
 {

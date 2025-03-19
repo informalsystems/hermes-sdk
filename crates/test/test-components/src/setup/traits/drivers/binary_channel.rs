@@ -6,7 +6,7 @@ use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelay
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::HasBoundedRelayTypeAt;
 
-use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
+use crate::driver::traits::types::chain_driver_at::{ChainDriverAt, HasChainDriverTypeAt};
 use crate::setup::traits::driver::HasTestDriverType;
 
 #[cgp_component {
@@ -29,8 +29,8 @@ where
     async fn build_driver_with_binary_channel(
         &self,
         birelay: BiRelayAt<Self, Index<0>, Index<1>>,
-        chain_driver_a: ChainDriverTypeAt<Self, Index<0>>,
-        chain_driver_b: ChainDriverTypeAt<Self, Index<1>>,
+        chain_driver_a: ChainDriverAt<Self, Index<0>>,
+        chain_driver_b: ChainDriverAt<Self, Index<1>>,
         connection_id_a: ConnectionIdOf<ChainAt<Self, Index<0>>, ChainAt<Self, Index<1>>>,
         connection_id_b: ConnectionIdOf<ChainAt<Self, Index<1>>, ChainAt<Self, Index<0>>>,
         channel_id_a: ChannelIdOf<ChainAt<Self, Index<0>>, ChainAt<Self, Index<1>>>,
