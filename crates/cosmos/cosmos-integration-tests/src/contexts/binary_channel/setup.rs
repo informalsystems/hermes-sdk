@@ -24,7 +24,7 @@ use hermes_test_components::setup::traits::builder_at::BuilderAtGetterComponent;
 use hermes_test_components::setup::traits::create_client_options_at::{
     CreateClientMessageOptionsAtComponent, CreateClientPayloadOptionsAtComponent,
 };
-use hermes_test_components::setup::traits::driver::TestDriverTypeComponent;
+use hermes_test_components::setup::traits::driver::TestDriverTypeProviderComponent;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilderComponent;
 use hermes_test_components::setup::traits::init_channel_options_at::InitChannelOptionsAtComponent;
 use hermes_test_components::setup::traits::init_connection_options_at::InitConnectionOptionsAtComponent;
@@ -61,7 +61,8 @@ delegate_components! {
             ChainTypeAtComponent<Index<1>>,
             ChainDriverTypeAtComponent,
         ]: UseBinarySetupFields,
-        TestDriverTypeComponent: WithType<CosmosBinaryChannelTestDriver>,
+        TestDriverTypeProviderComponent:
+            UseType<CosmosBinaryChannelTestDriver>,
         [
             BuilderAtTypeProviderComponent<Index<0>, Index<1>>,
             BuilderAtTypeProviderComponent<Index<1>, Index<0>>,
