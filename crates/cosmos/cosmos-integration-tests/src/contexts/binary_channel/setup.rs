@@ -55,7 +55,8 @@ delegate_components! {
         ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         [
-            BootstrapAtComponent,
+            BootstrapAtComponent<Index<0>>,
+            BootstrapAtComponent<Index<1>>,
             ChainTypeProviderAtComponent<Index<0>>,
             ChainTypeProviderAtComponent<Index<1>>,
             ChainDriverTypeProviderAtComponent<Index<0>>,

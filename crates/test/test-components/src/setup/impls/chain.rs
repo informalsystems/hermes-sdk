@@ -6,17 +6,19 @@ use cgp::core::field::Index;
 use cgp::prelude::*;
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
-use crate::driver::traits::types::chain_driver_at::ChainDriverAt;
+use crate::driver::traits::types::chain_driver_at::{ChainDriverAt, HasChainDriverTypeAt};
 use crate::setup::traits::bootstrap_at::HasBootstrapAt;
 use crate::setup::traits::chain::{ChainSetup, ChainSetupComponent};
 
 pub struct SetupChainWithBootstrap;
 
 #[cgp_provider(ChainSetupComponent)]
-impl<Setup, const I: usize> ChainSetup<Setup, Index<I>> for SetupChainWithBootstrap
+impl<Setup, ChainDriver, const I: usize> ChainSetup<Setup, Index<I>> for SetupChainWithBootstrap
 where
-    Setup: HasBootstrapAt<Index<I>> + CanRaiseAsyncError<ErrorOf<Setup::Bootstrap>>,
-    Setup::Bootstrap: CanBootstrapChain,
+    Setup: HasBootstrapAt<Index<I>>
+        + HasChainDriverTypeAt<Index<I>, ChainDriver = ChainDriver>
+        + CanRaiseAsyncError<ErrorOf<Setup::Bootstrap>>,
+    Setup::Bootstrap: CanBootstrapChain<ChainDriver = ChainDriver>,
 {
     async fn setup_chain(
         setup: &Setup,

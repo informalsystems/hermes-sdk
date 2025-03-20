@@ -15,7 +15,7 @@ use crate::setup::traits::bootstrap_at::{BootstrapAtComponent, ProvideBootstrapA
 
 pub struct UseBinarySetupFields;
 
-#[cgp_provider(BootstrapAtComponent)]
+#[cgp_provider(BootstrapAtComponent<Index<0>>)]
 impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<0>> for UseBinarySetupFields
 where
     Setup: HasChainDriverTypeAt<Index<0>> + HasField<symbol!("bootstrap_a"), Value = Bootstrap>,
@@ -28,7 +28,7 @@ where
     }
 }
 
-#[cgp_provider(BootstrapAtComponent)]
+#[cgp_provider(BootstrapAtComponent<Index<1>>)]
 impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<1>> for UseBinarySetupFields
 where
     Setup: HasChainDriverTypeAt<Index<1>> + HasField<symbol!("bootstrap_b"), Value = Bootstrap>,
