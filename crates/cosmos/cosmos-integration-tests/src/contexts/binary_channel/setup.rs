@@ -1,13 +1,14 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::{Index, UseField};
+use cgp::core::field::{Index, UseField, WithField};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
@@ -17,7 +18,6 @@ use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtCompo
 use hermes_test_components::driver::traits::types::builder_at::BuilderAtTypeProviderComponent;
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeProviderAtComponent;
 use hermes_test_components::setup::binary_channel::components::*;
-use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
 use hermes_test_components::setup::traits::bootstrap_at::{
     BootstrapGetterAtComponent, BootstrapTypeProviderAtComponent,
 };
@@ -33,6 +33,7 @@ use hermes_test_components::setup::traits::port_id_at::PortIdGetterAtComponent;
 use ibc::core::host::types::identifiers::PortId;
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
+use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::impls::binary_channel_driver::BuildCosmosBinaryChannelDriver;
 use crate::impls::init_channel_options::UseCosmosInitChannelOptions;
 
@@ -56,18 +57,27 @@ delegate_components! {
     CosmosBinaryChannelSetupComponents {
         ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
-        [
-            BootstrapTypeProviderAtComponent<Index<0>>,
-            BootstrapTypeProviderAtComponent<Index<1>>,
-            BootstrapGetterAtComponent<Index<0>>,
-            BootstrapGetterAtComponent<Index<1>>,
-            ChainTypeProviderAtComponent<Index<0>>,
-            ChainTypeProviderAtComponent<Index<1>>,
-            ChainDriverTypeProviderAtComponent<Index<0>>,
-            ChainDriverTypeProviderAtComponent<Index<1>>,
-        ]: UseBinarySetupFields,
         TestDriverTypeProviderComponent:
             UseType<CosmosBinaryChannelTestDriver>,
+        [
+            BootstrapTypeProviderAtComponent<Index<0>>,
+            BootstrapGetterAtComponent<Index<0>>,
+        ]:
+            WithField<symbol!("bootstrap_a")>,
+        [
+            BootstrapTypeProviderAtComponent<Index<1>>,
+            BootstrapGetterAtComponent<Index<1>>,
+        ]:
+            WithField<symbol!("bootstrap_b")>,
+        [
+            ChainTypeProviderAtComponent<Index<0>>,
+            ChainTypeProviderAtComponent<Index<1>>,
+        ]:
+            UseType<CosmosChain>,
+        [
+            ChainDriverTypeProviderAtComponent<Index<0>>,
+            ChainDriverTypeProviderAtComponent<Index<1>>,
+        ]: UseType<CosmosChainDriver>,
         [
             BuilderAtTypeProviderComponent<Index<0>, Index<1>>,
             BuilderAtTypeProviderComponent<Index<1>, Index<0>>,

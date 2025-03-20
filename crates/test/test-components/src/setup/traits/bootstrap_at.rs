@@ -10,7 +10,7 @@ pub trait HasBootstrapTypeAt<I>: Async {
     type Bootstrap: Async;
 }
 
-#[cgp_component {
+#[cgp_getter {
     name: BootstrapGetterAtComponent<I>,
     provider: BootstrapGetterAt,
 }]
@@ -19,13 +19,3 @@ pub trait HasBootstrapAt<I>: HasBootstrapTypeAt<I> {
 }
 
 pub type BootstrapAt<Context, Tag> = <Context as HasBootstrapTypeAt<Tag>>::Bootstrap;
-
-#[cgp_provider(BootstrapGetterAtComponent<I>)]
-impl<Setup, I, Tag> BootstrapGetterAt<Setup, I> for UseField<Tag>
-where
-    Setup: HasBootstrapTypeAt<I> + HasField<Tag, Value = Setup::Bootstrap>,
-{
-    fn chain_bootstrap(setup: &Setup, _tag: PhantomData<I>) -> &Setup::Bootstrap {
-        setup.get_field(PhantomData)
-    }
-}
