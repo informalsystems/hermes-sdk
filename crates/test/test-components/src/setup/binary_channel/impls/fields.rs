@@ -11,31 +11,47 @@ use crate::driver::traits::types::chain_driver::HasChainDriverType;
 use crate::driver::traits::types::chain_driver_at::{
     ChainDriverTypeProviderAt, ChainDriverTypeProviderAtComponent, HasChainDriverTypeAt,
 };
-use crate::setup::traits::bootstrap_at::{BootstrapAtComponent, ProvideBootstrapAt};
-
+use crate::setup::traits::bootstrap_at::{
+    BootstrapGetterAt, BootstrapGetterAtComponent, BootstrapTypeProviderAt,
+    BootstrapTypeProviderAtComponent, HasBootstrapTypeAt,
+};
 pub struct UseBinarySetupFields;
 
-#[cgp_provider(BootstrapAtComponent<Index<0>>)]
-impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<0>> for UseBinarySetupFields
+#[cgp_provider(BootstrapTypeProviderAtComponent<Index<0>>)]
+impl<Setup, Bootstrap> BootstrapTypeProviderAt<Setup, Index<0>> for UseBinarySetupFields
 where
     Setup: HasChainDriverTypeAt<Index<0>> + HasField<symbol!("bootstrap_a"), Value = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = Setup::ChainDriver>,
 {
     type Bootstrap = Bootstrap;
+}
 
+#[cgp_provider(BootstrapGetterAtComponent<Index<0>>)]
+impl<Setup, Bootstrap> BootstrapGetterAt<Setup, Index<0>> for UseBinarySetupFields
+where
+    Setup: HasBootstrapTypeAt<Index<0>, Bootstrap = Bootstrap>
+        + HasField<symbol!("bootstrap_a"), Value = Bootstrap>,
+{
     fn chain_bootstrap(setup: &Setup, _index: PhantomData<Index<0>>) -> &Bootstrap {
         setup.get_field(PhantomData)
     }
 }
 
-#[cgp_provider(BootstrapAtComponent<Index<1>>)]
-impl<Setup, Bootstrap> ProvideBootstrapAt<Setup, Index<1>> for UseBinarySetupFields
+#[cgp_provider(BootstrapTypeProviderAtComponent<Index<1>>)]
+impl<Setup, Bootstrap> BootstrapTypeProviderAt<Setup, Index<1>> for UseBinarySetupFields
 where
     Setup: HasChainDriverTypeAt<Index<1>> + HasField<symbol!("bootstrap_b"), Value = Bootstrap>,
     Bootstrap: HasChainDriverType<ChainDriver = Setup::ChainDriver>,
 {
     type Bootstrap = Bootstrap;
+}
 
+#[cgp_provider(BootstrapGetterAtComponent<Index<1>>)]
+impl<Setup, Bootstrap> BootstrapGetterAt<Setup, Index<1>> for UseBinarySetupFields
+where
+    Setup: HasBootstrapTypeAt<Index<1>, Bootstrap = Bootstrap>
+        + HasField<symbol!("bootstrap_b"), Value = Bootstrap>,
+{
     fn chain_bootstrap(setup: &Setup, _index: PhantomData<Index<1>>) -> &Bootstrap {
         setup.get_field(PhantomData)
     }

@@ -18,7 +18,9 @@ use hermes_test_components::driver::traits::types::builder_at::BuilderAtTypeProv
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeProviderAtComponent;
 use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::binary_channel::impls::fields::UseBinarySetupFields;
-use hermes_test_components::setup::traits::bootstrap_at::BootstrapAtComponent;
+use hermes_test_components::setup::traits::bootstrap_at::{
+    BootstrapGetterAtComponent, BootstrapTypeProviderAtComponent,
+};
 use hermes_test_components::setup::traits::builder_at::BuilderAtGetterComponent;
 use hermes_test_components::setup::traits::create_client_options_at::{
     CreateClientMessageOptionsGetterAtComponent, CreateClientPayloadOptionsGetterAtComponent,
@@ -55,8 +57,10 @@ delegate_components! {
         ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         [
-            BootstrapAtComponent<Index<0>>,
-            BootstrapAtComponent<Index<1>>,
+            BootstrapTypeProviderAtComponent<Index<0>>,
+            BootstrapTypeProviderAtComponent<Index<1>>,
+            BootstrapGetterAtComponent<Index<0>>,
+            BootstrapGetterAtComponent<Index<1>>,
             ChainTypeProviderAtComponent<Index<0>>,
             ChainTypeProviderAtComponent<Index<1>>,
             ChainDriverTypeProviderAtComponent<Index<0>>,
