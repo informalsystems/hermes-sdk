@@ -121,7 +121,10 @@ delegate_components! {
             CreateClientPayloadOptionsGetterAtComponent<Index<0>, Index<1>>,
             CreateClientPayloadOptionsGetterAtComponent<Index<1>, Index<0>>,
         ]: UseField<symbol!("create_client_payload_options")>,
-        InitChannelOptionsGetterAtComponent:
+        [
+            InitChannelOptionsGetterAtComponent<Index<0>, Index<1>>,
+            InitChannelOptionsGetterAtComponent<Index<1>, Index<0>>,
+        ]:
             UseCosmosInitChannelOptions<symbol!("init_channel_options")>,
         [
             RelayTypeProviderAtComponent<Index<0>, Index<1>>,

@@ -10,7 +10,7 @@ use hermes_test_components::setup::traits::init_channel_options_at::{
 };
 use ibc::core::host::types::identifiers::ConnectionId;
 
-#[cgp_new_provider(InitChannelOptionsGetterAtComponent)]
+#[cgp_new_provider(InitChannelOptionsGetterAtComponent<A, B>)]
 impl<Context, Chain, Counterparty, A, B, Tag> InitChannelOptionsGetterAt<Context, A, B>
     for UseCosmosInitChannelOptions<Tag>
 where

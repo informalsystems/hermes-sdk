@@ -7,7 +7,7 @@ use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
 #[cgp_component {
-    name: InitChannelOptionsGetterAtComponent,
+    name: InitChannelOptionsGetterAtComponent<A, B>,
     provider: InitChannelOptionsGetterAt,
 }]
 pub trait HasInitChannelOptionsAt<A, B>:
