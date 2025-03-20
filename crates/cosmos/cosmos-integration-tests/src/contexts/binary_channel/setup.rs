@@ -1,5 +1,3 @@
-use core::marker::PhantomData;
-
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField, WithField};
 use cgp::prelude::*;
@@ -51,6 +49,26 @@ pub struct CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
     pub init_channel_options: CosmosInitChannelOptions,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub create_client_payload_options: CosmosCreateClientOptions,
+    pub create_client_message_options: (),
+}
+
+impl<BootstrapA, BootstrapB> CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
+    pub fn new_with_defaults(
+        bootstrap_a: BootstrapA,
+        bootstrap_b: BootstrapB,
+        builder: CosmosBuilder,
+    ) -> Self {
+        Self {
+            bootstrap_a,
+            bootstrap_b,
+            builder,
+            create_client_payload_options: Default::default(),
+            create_client_message_options: Default::default(),
+            init_connection_options: Default::default(),
+            init_channel_options: Default::default(),
+            port_id: PortId::transfer(),
+        }
+    }
 }
 
 delegate_components! {
@@ -113,15 +131,5 @@ delegate_components! {
             UseType<CosmosBiRelay>,
         BinaryChannelDriverBuilderComponent:
             BuildCosmosBinaryChannelDriver,
-    }
-}
-
-impl<BootstrapA, BootstrapB> HasField<symbol!("create_client_message_options")>
-    for CosmosBinaryChannelSetup<BootstrapA, BootstrapB>
-{
-    type Value = ();
-
-    fn get_field(&self, _phantom: PhantomData<symbol!("create_client_message_options")>) -> &() {
-        &()
     }
 }
