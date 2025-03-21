@@ -96,14 +96,10 @@ delegate_components! {
             ChainDriverTypeProviderAtComponent<Index<0>>,
             ChainDriverTypeProviderAtComponent<Index<1>>,
         ]: UseType<CosmosChainDriver>,
-        [
-            BuilderAtTypeProviderComponent<Index<0>, Index<1>>,
-            BuilderAtTypeProviderComponent<Index<1>, Index<0>>,
-        ]: UseType<CosmosBuilder>,
-        [
-            BuilderAtGetterComponent<Index<0>, Index<1>>,
-            BuilderAtGetterComponent<Index<1>, Index<0>>,
-        ]: UseField<symbol!("builder")>,
+        BuilderAtTypeProviderComponent<Index<0>, Index<1>>:
+            UseType<CosmosBuilder>,
+        BuilderAtGetterComponent<Index<0>, Index<1>>:
+            UseField<symbol!("builder")>,
         [
             PortIdGetterAtComponent<Index<0>, Index<1>>,
             PortIdGetterAtComponent<Index<1>, Index<0>>,

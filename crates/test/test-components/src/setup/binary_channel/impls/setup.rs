@@ -15,9 +15,7 @@ use crate::setup::traits::connection::CanSetupConnection;
 use crate::setup::traits::driver::{DriverBuilder, DriverBuilderComponent, HasTestDriverType};
 use crate::setup::traits::drivers::binary_channel::CanBuildTestDriverWithBinaryChannel;
 
-pub struct SetupBinaryChannelDriver;
-
-#[cgp_provider(DriverBuilderComponent)]
+#[cgp_new_provider(DriverBuilderComponent)]
 impl<Setup, ChainA, ChainB> DriverBuilder<Setup> for SetupBinaryChannelDriver
 where
     Setup: HasTestDriverType
