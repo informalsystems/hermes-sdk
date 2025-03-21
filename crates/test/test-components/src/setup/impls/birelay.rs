@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
-use cgp::core::field::Index;
 use cgp::core::Async;
 use cgp::prelude::*;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
@@ -17,9 +16,7 @@ use crate::setup::traits::birelay::{BiRelaySetup, BiRelaySetupComponent};
 use crate::setup::traits::builder_at::HasBuilderAt;
 use crate::setup::traits::relay::CanSetupRelays;
 
-pub struct SetupBiRelayWithBuilder;
-
-#[cgp_provider(BiRelaySetupComponent)]
+#[cgp_new_provider(BiRelaySetupComponent)]
 impl<Setup, A: Async, B: Async> BiRelaySetup<Setup, A, B> for SetupBiRelayWithBuilder
 where
     Setup: HasBiRelayTypeAt<A, B>
@@ -30,9 +27,9 @@ where
         + CanRaiseAsyncError<ErrorOf<Setup::Builder>>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>> + Clone,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>> + Clone,
-    Setup::Builder: CanBuildBiRelayFromRelays<Index<0>, Index<1>, BiRelay = Setup::BiRelay>
-        + HasRelayTypeAt<Index<0>, Index<1>, Relay = RelayAt<Setup, A, B>>
-        + HasRelayTypeAt<Index<1>, Index<0>, Relay = RelayAt<Setup, B, A>>,
+    Setup::Builder: CanBuildBiRelayFromRelays<A, B, BiRelay = Setup::BiRelay>
+        + HasRelayTypeAt<A, B, Relay = RelayAt<Setup, A, B>>
+        + HasRelayTypeAt<B, A, Relay = RelayAt<Setup, B, A>>,
 {
     async fn setup_birelay(
         setup: &Setup,
