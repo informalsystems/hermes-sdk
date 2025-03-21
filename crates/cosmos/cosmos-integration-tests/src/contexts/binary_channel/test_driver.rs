@@ -9,23 +9,23 @@ use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
 };
-use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
+use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
+use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
 use hermes_test_components::driver::traits::channel_at::{
     ChannelGetterAt, ChannelGetterAtComponent,
 };
 use hermes_test_components::driver::traits::types::chain_driver_at::{
-    ChainDriverGetterAt, ChainDriverGetterAtComponent, ChainDriverTypeAtComponent,
+    ChainDriverGetterAt, ChainDriverGetterAtComponent, ChainDriverTypeProviderAtComponent,
 };
 use hermes_test_components::driver::traits::types::relay_driver_at::{
-    RelayDriverGetterAt, RelayDriverGetterAtComponent, RelayDriverTypeAtComponent,
+    RelayDriverGetterAt, RelayDriverGetterAtComponent, RelayDriverTypeProviderAtComponent,
 };
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;
-use crate::impls::test_driver::types::ProvideCosmosTestTypes;
+use crate::impls::test_driver::types::UseCosmosTestTypes;
 
 #[cgp_context(CosmosBinaryChannelTestDriverComponents)]
 pub struct CosmosBinaryChannelTestDriver {
@@ -45,15 +45,16 @@ delegate_components! {
         ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         [
-            ChainTypeAtComponent<Index<0>>,
-            ChainTypeAtComponent<Index<1>>,
-            ChainDriverTypeAtComponent,
-            RelayTypeAtComponent<Index<0>, Index<1>>,
-            RelayTypeAtComponent<Index<1>, Index<0>>,
-            BiRelayTypeAtComponent<Index<0>, Index<1>>,
-            RelayDriverTypeAtComponent,
+            ChainTypeProviderAtComponent<Index<0>>,
+            ChainTypeProviderAtComponent<Index<1>>,
+            ChainDriverTypeProviderAtComponent<Index<0>>,
+            ChainDriverTypeProviderAtComponent<Index<1>>,
+            RelayTypeProviderAtComponent<Index<0>, Index<1>>,
+            RelayTypeProviderAtComponent<Index<1>, Index<0>>,
+            BiRelayTypeProviderAtComponent<Index<0>, Index<1>>,
+            RelayDriverTypeProviderAtComponent<Index<0>, Index<1>>,
         ]:
-            ProvideCosmosTestTypes,
+            UseCosmosTestTypes,
         [
             LoggerTypeProviderComponent,
             LoggerGetterComponent,

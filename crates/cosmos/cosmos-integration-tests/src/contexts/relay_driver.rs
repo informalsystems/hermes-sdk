@@ -10,10 +10,10 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_relayer_components::multi::traits::birelay_at::{
-    BiRelayGetterAtComponent, BiRelayTypeAtComponent,
+    BiRelayGetterAtComponent, BiRelayTypeProviderAtComponent,
 };
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeAtComponent;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
+use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
 use hermes_test_components::relay_driver::run::{
     RelayerBackgroundRunner, RelayerBackgroundRunnerComponent,
 };
@@ -30,15 +30,15 @@ delegate_components! {
         ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
         [
-            ChainTypeAtComponent<Index<0>>,
-            ChainTypeAtComponent<Index<1>>,
+            ChainTypeProviderAtComponent<Index<0>>,
+            ChainTypeProviderAtComponent<Index<1>>,
         ]:
             WithType<CosmosChain>,
         [
-            RelayTypeAtComponent<Index<0>, Index<1>>,
-            RelayTypeAtComponent<Index<1>, Index<0>>,
+            RelayTypeProviderAtComponent<Index<0>, Index<1>>,
+            RelayTypeProviderAtComponent<Index<1>, Index<0>>,
         ]: WithType<CosmosRelay>,
-        BiRelayTypeAtComponent<Index<0>, Index<1>>:
+        BiRelayTypeProviderAtComponent<Index<0>, Index<1>>:
             WithType<CosmosBiRelay>,
         BiRelayGetterAtComponent<Index<0>, Index<1>>:
             WithField<symbol!("birelay")>,
@@ -71,7 +71,7 @@ impl Drop for AbortOnDrop {
 }
 
 pub trait CanUseCosmosRelayDriver:
-    CanUseComponent<BiRelayTypeAtComponent<Index<0>, Index<1>>, (Index<0>, Index<1>)>
+    CanUseComponent<BiRelayTypeProviderAtComponent<Index<0>, Index<1>>, (Index<0>, Index<1>)>
     + CanUseComponent<BiRelayGetterAtComponent<Index<0>, Index<1>>, (Index<0>, Index<1>)>
 {
 }

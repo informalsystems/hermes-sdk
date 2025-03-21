@@ -8,7 +8,7 @@ use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt
   context: Setup,
 }]
 #[async_trait]
-pub trait CanSetupClients<A: Async, B: Async>:
+pub trait CanSetupClients<A, B>:
     HasChainTypeAt<A, Chain: HasClientIdType<ChainAt<Self, B>>>
     + HasChainTypeAt<B, Chain: HasClientIdType<ChainAt<Self, A>>>
     + HasAsyncErrorType

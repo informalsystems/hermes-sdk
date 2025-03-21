@@ -1,5 +1,3 @@
-use core::marker::PhantomData;
-
 use cgp::core::field::UseField;
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::connection::{
@@ -7,40 +5,14 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
-#[cgp_component {
-  name: InitConnectionOptionsAtComponent,
-  provider: ProvideInitConnectionOptionsAt,
-  context: Setup,
+#[cgp_getter {
+    name: InitConnectionOptionsGetterAtComponent<A, B>,
+    provider: InitConnectionOptionsGetterAt,
 }]
-pub trait HasInitConnectionOptionsAt<Target: Async, Counterparty: Async>:
-    HasChainTypeAt<Target, Chain: HasInitConnectionOptionsType<ChainAt<Self, Counterparty>>>
-    + HasChainTypeAt<Counterparty>
+pub trait HasInitConnectionOptionsAt<A, B>:
+    HasChainTypeAt<A, Chain: HasInitConnectionOptionsType<ChainAt<Self, B>>> + HasChainTypeAt<B>
 {
     fn init_connection_options(
         &self,
-    ) -> &InitConnectionOptionsOf<ChainAt<Self, Target>, ChainAt<Self, Counterparty>>;
-}
-
-#[cgp_provider(InitConnectionOptionsAtComponent)]
-impl<
-        Setup,
-        Target: Async,
-        CounterpartyTag: Async,
-        Tag,
-        Chain,
-        Counterparty,
-        InitConnectionOptions,
-    > ProvideInitConnectionOptionsAt<Setup, Target, CounterpartyTag> for UseField<Tag>
-where
-    Setup: HasChainTypeAt<Target, Chain = Chain>
-        + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>,
-    Chain:
-        HasInitConnectionOptionsType<Counterparty, InitConnectionOptions = InitConnectionOptions>,
-    Setup: HasField<Tag, Value = InitConnectionOptions>,
-{
-    fn init_connection_options(
-        setup: &Setup,
-    ) -> &InitConnectionOptionsOf<ChainAt<Setup, Target>, ChainAt<Setup, CounterpartyTag>> {
-        setup.get_field(PhantomData)
-    }
+    ) -> &InitConnectionOptionsOf<ChainAt<Self, A>, ChainAt<Self, B>>;
 }

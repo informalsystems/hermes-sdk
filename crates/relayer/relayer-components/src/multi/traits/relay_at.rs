@@ -1,4 +1,5 @@
 use cgp::core::component::WithProvider;
+use cgp::core::macros::trait_alias;
 use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
@@ -8,9 +9,9 @@ use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use crate::multi::types::tags::{Dst, Src};
 use crate::relay::traits::chains::HasRelayChainTypes;
 
-#[cgp_component {
-  name: RelayTypeAtComponent<SrcTag, DstTag>,
-  provider: ProvideRelayTypeAt,
+#[cgp_type {
+    name: RelayTypeProviderAtComponent<SrcTag, DstTag>,
+    provider: RelayTypeProviderAt,
 }]
 pub trait HasRelayTypeAt<SrcTag, DstTag>: Async {
     type Relay: Async;
@@ -21,6 +22,7 @@ pub type RelayAt<Context, SrcTag, DstTag> = <Context as HasRelayTypeAt<SrcTag, D
 pub type ClientIdAt<Context, SrcTag, DstTag> =
     ClientIdOf<ChainAt<Context, SrcTag>, ChainAt<Context, DstTag>>;
 
+#[trait_alias]
 pub trait HasBoundedRelayTypeAt<SrcTag, DstTag>:
     HasRelayTypeAt<
         SrcTag,
@@ -34,28 +36,4 @@ pub trait HasBoundedRelayTypeAt<SrcTag, DstTag>:
     > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>> + HasAsyncErrorType>
     + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>> + HasAsyncErrorType>
 {
-}
-
-impl<Context, SrcTag, DstTag> HasBoundedRelayTypeAt<SrcTag, DstTag> for Context where
-    Context: HasRelayTypeAt<
-            SrcTag,
-            DstTag,
-            Relay: HasRelayChainTypes<
-                SrcChain = ChainAt<Self, SrcTag>,
-                DstChain = ChainAt<Self, DstTag>,
-            >,
-        > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>> + HasAsyncErrorType>
-        + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>> + HasAsyncErrorType>
-{
-}
-
-#[cgp_provider(RelayTypeAtComponent<SrcTag, DstTag>)]
-impl<Context, SrcTag, DstTag, Provider, Relay> ProvideRelayTypeAt<Context, SrcTag, DstTag>
-    for WithProvider<Provider>
-where
-    Context: Async,
-    Provider: ProvideType<Context, RelayTypeAtComponent<SrcTag, DstTag>, Type = Relay>,
-    Relay: Async,
-{
-    type Relay = Relay;
 }

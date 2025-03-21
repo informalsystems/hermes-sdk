@@ -4,8 +4,8 @@ use cgp::core::field::Index;
 use cgp::prelude::*;
 
 use crate::multi::traits::chain_at::{
-    ChainGetterAt, ChainGetterAtComponent, ChainTypeAtComponent, HasChainAt, HasChainTypeAt,
-    ProvideChainTypeAt,
+    ChainGetterAt, ChainGetterAtComponent, ChainTypeProviderAt, ChainTypeProviderAtComponent,
+    HasChainAt, HasChainTypeAt,
 };
 use crate::multi::traits::client_id_at::{
     ClientIdAtGetter, ClientIdAtGetterComponent, HasClientIdAt,
@@ -15,16 +15,16 @@ use crate::multi::types::tags::{Dst, Src};
 
 pub struct SelectRelayChains<SrcTag, DstTag>(pub PhantomData<(SrcTag, DstTag)>);
 
-#[cgp_provider(ChainTypeAtComponent<Src>)]
-impl<Relay, SrcTag, DstTag> ProvideChainTypeAt<Relay, Src> for SelectRelayChains<SrcTag, DstTag>
+#[cgp_provider(ChainTypeProviderAtComponent<Src>)]
+impl<Relay, SrcTag, DstTag> ChainTypeProviderAt<Relay, Src> for SelectRelayChains<SrcTag, DstTag>
 where
     Relay: HasChainTypeAt<SrcTag>,
 {
     type Chain = Relay::Chain;
 }
 
-#[cgp_provider(ChainTypeAtComponent<Dst>)]
-impl<Relay, SrcTag, DstTag> ProvideChainTypeAt<Relay, Dst> for SelectRelayChains<SrcTag, DstTag>
+#[cgp_provider(ChainTypeProviderAtComponent<Dst>)]
+impl<Relay, SrcTag, DstTag> ChainTypeProviderAt<Relay, Dst> for SelectRelayChains<SrcTag, DstTag>
 where
     Relay: HasChainTypeAt<DstTag>,
 {

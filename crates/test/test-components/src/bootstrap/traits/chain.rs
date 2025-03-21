@@ -3,8 +3,8 @@ use cgp::prelude::*;
 use crate::driver::traits::types::chain_driver::HasChainDriverType;
 
 #[cgp_component {
-  provider: ChainBootstrapper,
-  context: Bootstrap,
+    provider: ChainBootstrapper,
+    context: Bootstrap,
 }]
 #[async_trait]
 pub trait CanBootstrapChain: HasChainDriverType + HasAsyncErrorType {

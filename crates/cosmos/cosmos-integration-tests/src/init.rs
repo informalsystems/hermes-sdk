@@ -10,7 +10,6 @@ use hermes_error::types::Error;
 use hermes_logger::subscriber::init_tracing_subscriber;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::setup::traits::driver::CanBuildTestDriver;
-use ibc::core::host::types::identifiers::PortId;
 use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;
@@ -152,15 +151,8 @@ async fn setup_gaia_to_gaia(
         packet_filter,
     );
 
-    let setup = CosmosBinaryChannelSetup {
-        bootstrap_a: bootstrap_chain_0,
-        bootstrap_b: bootstrap_chain_1,
-        builder,
-        create_client_payload_options: Default::default(),
-        init_connection_options: Default::default(),
-        init_channel_options: Default::default(),
-        port_id: PortId::transfer(),
-    };
+    let setup =
+        CosmosBinaryChannelSetup::new_with_defaults(bootstrap_chain_0, bootstrap_chain_1, builder);
 
     setup.build_driver().await
 }
@@ -190,15 +182,8 @@ async fn setup_osmosis_to_osmosis(
         packet_filter,
     );
 
-    let setup = CosmosBinaryChannelSetup {
-        bootstrap_a: bootstrap_chain_0,
-        bootstrap_b: bootstrap_chain_1,
-        builder,
-        create_client_payload_options: Default::default(),
-        init_connection_options: Default::default(),
-        init_channel_options: Default::default(),
-        port_id: PortId::transfer(),
-    };
+    let setup =
+        CosmosBinaryChannelSetup::new_with_defaults(bootstrap_chain_0, bootstrap_chain_1, builder);
 
     setup.build_driver().await
 }
@@ -228,15 +213,8 @@ async fn setup_osmosis_to_gaia(
         packet_filter,
     );
 
-    let setup = CosmosBinaryChannelSetup {
-        bootstrap_a: bootstrap_chain_0,
-        bootstrap_b: bootstrap_chain_1,
-        builder,
-        create_client_payload_options: Default::default(),
-        init_connection_options: Default::default(),
-        init_channel_options: Default::default(),
-        port_id: PortId::transfer(),
-    };
+    let setup =
+        CosmosBinaryChannelSetup::new_with_defaults(bootstrap_chain_0, bootstrap_chain_1, builder);
 
     setup.build_driver().await
 }
