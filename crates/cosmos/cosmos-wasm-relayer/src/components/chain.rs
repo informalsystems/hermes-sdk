@@ -14,7 +14,7 @@ mod preset {
         | Components | {
             cgp_preset! {
                 CosmosChainWasmPreset {
-                    Components : CosmosChainFullPreset::Provider,
+                    Components : CosmosChainPreset::Provider,
                     [
                         ClientStateTypeComponent,
                         ClientStateFieldsComponent,
