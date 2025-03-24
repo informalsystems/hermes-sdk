@@ -10,23 +10,26 @@ use crate::chain::traits::types::amount::HasAmountType;
     provider: IbcTransferredAmountConverter,
     context: Chain,
 }]
+#[async_trait]
 pub trait CanConvertIbcTransferredAmount<Counterparty>:
     HasAmountType + HasIbcChainTypes<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasAmountType,
 {
-    fn ibc_transfer_amount_from(
+    async fn ibc_transfer_amount_from(
+        &self,
         _counterparty: PhantomData<Counterparty>,
         counterparty_amount: &Counterparty::Amount,
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,
     ) -> Result<Self::Amount, Self::Error>;
 
-    fn transmute_counterparty_amount(
+    async fn transmute_counterparty_amount(
+        &self,
         _counterparty: PhantomData<Counterparty>,
         counterparty_amount: &Counterparty::Amount,
         denom: &Self::Denom,
-    ) -> Self::Amount;
+    ) -> Result<Self::Amount, Self::Error>;
 }
 
 #[cgp_provider(IbcTransferredAmountConverterComponent)]
@@ -38,29 +41,35 @@ where
     Components: DelegateComponent<Counterparty>,
     Components::Delegate: IbcTransferredAmountConverter<Chain, Counterparty>,
 {
-    fn ibc_transfer_amount_from(
+    async fn ibc_transfer_amount_from(
+        chain: &Chain,
         counterparty: PhantomData<Counterparty>,
         counterparty_amount: &Counterparty::Amount,
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,
     ) -> Result<Chain::Amount, Chain::Error> {
         Components::Delegate::ibc_transfer_amount_from(
+            chain,
             counterparty,
             counterparty_amount,
             channel_id,
             port_id,
         )
+        .await
     }
 
-    fn transmute_counterparty_amount(
+    async fn transmute_counterparty_amount(
+        chain: &Chain,
         counterparty: PhantomData<Counterparty>,
         counterparty_amount: &Counterparty::Amount,
         denom: &Chain::Denom,
-    ) -> Chain::Amount {
+    ) -> Result<Chain::Amount, Chain::Error> {
         Components::Delegate::transmute_counterparty_amount(
+            chain,
             counterparty,
             counterparty_amount,
             denom,
         )
+        .await
     }
 }

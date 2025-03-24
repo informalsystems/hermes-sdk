@@ -25,7 +25,8 @@ where
         + HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>,
     Counterparty: HasAmountType<Amount = Amount>,
 {
-    fn ibc_transfer_amount_from(
+    async fn ibc_transfer_amount_from(
+        _chain: &Chain,
         _counterparty: PhantomData<Counterparty>,
         counterparty_amount: &Amount,
         channel_id: &ChannelId,
@@ -40,15 +41,16 @@ where
         })
     }
 
-    fn transmute_counterparty_amount(
+    async fn transmute_counterparty_amount(
+        _chain: &Chain,
         _counterparty: PhantomData<Counterparty>,
         counterparty_amount: &Amount,
         denom: &Denom,
-    ) -> Amount {
-        Amount {
+    ) -> Result<Amount, Chain::Error> {
+        Ok(Amount {
             quantity: counterparty_amount.quantity,
             denom: denom.clone(),
-        }
+        })
     }
 }
 

@@ -115,12 +115,16 @@ fn no_packet_filter_test() -> Result<(), Error> {
 
         let a_to_b_amount = setup.chain_driver_a.random_amount(1000, &balance_a).await;
 
-        let balance_b = CosmosChain::ibc_transfer_amount_from(
-            PhantomData::<CosmosChain>,
-            &a_to_b_amount,
-            &setup.channel_id_b,
-            &setup.port_id_b,
-        )?;
+        let balance_b = setup
+            .chain_driver_b
+            .chain
+            .ibc_transfer_amount_from(
+                PhantomData::<CosmosChain>,
+                &a_to_b_amount,
+                &setup.channel_id_b,
+                &setup.port_id_b,
+            )
+            .await?;
 
         let balance_after_escrow = Amount::new(
             balance_a.quantity - a_to_b_amount.quantity,
