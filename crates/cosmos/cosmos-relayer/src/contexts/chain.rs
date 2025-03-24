@@ -12,8 +12,6 @@ use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterCompone
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
 use hermes_chain_type_components::traits::types::event::HasEventType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
-use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_cosmos_chain_components::traits::eip::eip_query::EipQuerierComponent;
 use hermes_cosmos_chain_components::traits::gas_config::{
@@ -44,6 +42,8 @@ use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
+use hermes_cosmos_chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
@@ -136,10 +136,9 @@ use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
-use crate::presets::chain::CosmosChainFullPreset;
 use crate::types::telemetry::CosmosTelemetry;
 
-#[cgp_context(CosmosChainContextComponents: CosmosChainFullPreset)]
+#[cgp_context(CosmosChainContextComponents: CosmosChainPreset)]
 #[derive(Clone)]
 pub struct CosmosChain {
     pub base_chain: Arc<BaseCosmosChain>,

@@ -5,7 +5,6 @@ use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
-use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
 use hermes_cosmos_chain_components::traits::gas_config::{
     GasConfigGetter, GasConfigGetterComponent,
@@ -28,6 +27,7 @@ use hermes_cosmos_chain_components::types::payloads::client::{
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
+use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
