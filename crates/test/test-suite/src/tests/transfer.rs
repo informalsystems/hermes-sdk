@@ -20,10 +20,11 @@ use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRan
 use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use hermes_test_components::driver::traits::channel_at::HasChannelAt;
+use hermes_test_components::driver::traits::channel_at::HasChannelIdAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
 use hermes_test_components::driver::traits::types::relay_driver_at::HasRelayDriverAt;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
+use hermes_test_components::setup::traits::port_id_at::HasPortIdAt;
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
 pub struct TestIbcTransfer;
@@ -38,8 +39,10 @@ where
         + HasChainDriverAt<Index<0>, ChainDriver = ChainDriverA>
         + HasChainDriverAt<Index<1>, ChainDriver = ChainDriverB>
         + HasRelayDriverAt<Index<0>, Index<1>, RelayDriver = RelayDriver>
-        + HasChannelAt<Index<0>, Index<1>>
-        + HasChannelAt<Index<1>, Index<0>>,
+        + HasChannelIdAt<Index<0>, Index<1>>
+        + HasChannelIdAt<Index<1>, Index<0>>
+        + HasPortIdAt<Index<0>, Index<1>>
+        + HasPortIdAt<Index<1>, Index<0>>,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasDenomAt<TransferDenom, Index<0>>
         + HasWalletAt<UserWallet, Index<0>>

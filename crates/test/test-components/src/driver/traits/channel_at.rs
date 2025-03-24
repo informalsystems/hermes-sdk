@@ -1,26 +1,19 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
+use hermes_relayer_components::chain::traits::types::ibc::HasChannelIdType;
+use hermes_relayer_components::chain::types::aliases::ChannelIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
-#[cgp_component {
-  provider: ChannelGetterAt,
-  context: ChainDriver,
+#[cgp_getter {
+    name: ChannelIdGetterAtComponent<A, B>,
+    provider: ChannelIdGetterAt,
 }]
-pub trait HasChannelAt<Chain: Async, Counterparty: Async>:
-    HasChainTypeAt<Chain> + HasChainTypeAt<Counterparty>
-where
-    ChainAt<Self, Chain>: HasIbcChainTypes<ChainAt<Self, Counterparty>>,
+pub trait HasChannelIdAt<A, B>:
+    HasChainTypeAt<A, Chain: HasChannelIdType<ChainAt<Self, B>>> + HasChainTypeAt<B>
 {
     fn channel_id_at(
         &self,
-        _index: PhantomData<(Chain, Counterparty)>,
-    ) -> &ChannelIdOf<ChainAt<Self, Chain>, ChainAt<Self, Counterparty>>;
-
-    fn port_id_at(
-        &self,
-        _index: PhantomData<(Chain, Counterparty)>,
-    ) -> &PortIdOf<ChainAt<Self, Chain>, ChainAt<Self, Counterparty>>;
+        _index: PhantomData<(A, B)>,
+    ) -> &ChannelIdOf<ChainAt<Self, A>, ChainAt<Self, B>>;
 }
