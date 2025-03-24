@@ -1628,6 +1628,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-cosmos-chain-preset"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-chain-type-components",
+ "hermes-cosmos-chain-components",
+ "hermes-cosmos-test-components",
+ "hermes-relayer-components",
+ "hermes-runtime",
+ "hermes-runtime-components",
+ "hermes-test-components",
+]
+
+[[package]]
 name = "hermes-cosmos-encoding-components"
 version = "0.1.0"
 dependencies = [

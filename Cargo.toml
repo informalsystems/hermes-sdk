@@ -33,6 +33,7 @@ members = [
     "crates/logging/logger",
 
     "crates/cosmos/cosmos-chain-components",
+    "crates/cosmos/cosmos-chain-preset",
     "crates/cosmos/cosmos-encoding-components",
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
