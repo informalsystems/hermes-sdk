@@ -2,7 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    HasChannelIdType, HasIbcChainTypes, HasPortIdType,
+};
 
 use crate::chain::traits::types::amount::HasAmountType;
 
@@ -12,7 +14,7 @@ use crate::chain::traits::types::amount::HasAmountType;
 }]
 #[async_trait]
 pub trait CanConvertIbcTransferredAmount<Counterparty>:
-    HasAmountType + HasIbcChainTypes<Counterparty> + HasAsyncErrorType
+    HasAmountType + HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasAsyncErrorType
 where
     Counterparty: HasAmountType,
 {

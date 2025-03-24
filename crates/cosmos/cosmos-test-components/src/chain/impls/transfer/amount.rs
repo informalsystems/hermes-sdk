@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 use std::string::FromUtf8Error;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_test_components::chain::traits::transfer::amount::{
     IbcTransferredAmountConverter, IbcTransferredAmountConverterComponent,
 };
@@ -14,15 +14,14 @@ use subtle_encoding::hex;
 use crate::chain::types::amount::Amount;
 use crate::chain::types::denom::Denom;
 
-pub struct ConvertCosmosIbcAmount;
-
-#[cgp_provider(IbcTransferredAmountConverterComponent)]
+#[cgp_new_provider(IbcTransferredAmountConverterComponent)]
 impl<Chain, Counterparty> IbcTransferredAmountConverter<Chain, Counterparty>
     for ConvertCosmosIbcAmount
 where
     Chain: HasAmountType<Amount = Amount, Denom = Denom>
         + CanRaiseAsyncError<FromUtf8Error>
-        + HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>,
+        + HasChannelIdType<Counterparty, ChannelId = ChannelId>
+        + HasPortIdType<Counterparty, PortId = PortId>,
     Counterparty: HasAmountType<Amount = Amount>,
 {
     async fn ibc_transfer_amount_from(
