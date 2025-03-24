@@ -52,7 +52,6 @@ mod preset {
     use hermes_cosmos_test_components::chain::impls::proposal::poll_status::PollProposalStatus;
     use hermes_cosmos_test_components::chain::impls::proposal::query_status::QueryProposalStatusWithGrpc;
     use hermes_cosmos_test_components::chain::impls::queries::balance::QueryCosmosBalance;
-    use hermes_cosmos_test_components::chain::impls::transfer::amount::ConvertCosmosIbcAmount;
     use hermes_cosmos_test_components::chain::impls::transfer::timeout::IbcTransferTimeoutAfterSeconds;
     use hermes_cosmos_test_components::chain::impls::types::address::ProvideStringAddress;
     use hermes_cosmos_test_components::chain::impls::types::amount::ProvideU128AmountWithDenom;
@@ -494,8 +493,6 @@ mod preset {
                 IbcTransferTimeoutAfterSeconds<90>,
             IbcTokenTransferMessageBuilderComponent:
                 BuildCosmosIbcTransferMessage,
-            IbcTransferredAmountConverterComponent:
-                ConvertCosmosIbcAmount,
             BalanceQuerierComponent:
                 QueryCosmosBalance,
             EventualAmountAsserterComponent:
@@ -559,6 +556,8 @@ mod preset {
                 PacketSequenceGetterComponent,
                 PacketTimeoutHeightGetterComponent,
                 PacketTimeoutTimestampGetterComponent,
+
+                IbcTransferredAmountConverterComponent,
             ]:
                 UseDelegate<DelegateCosmosChainComponents>,
         }

@@ -17,6 +17,7 @@ mod preset {
         ProvideCosmosCreateClientSettings, ProvideNoCreateClientMessageOptionsType,
     };
     use hermes_cosmos_chain_components::impls::types::payload::ProvideCosmosPayloadTypes;
+    use hermes_cosmos_test_components::chain::impls::transfer::amount::ConvertCosmosIbcAmount;
     use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
     use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
     use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
@@ -60,6 +61,7 @@ mod preset {
     };
     use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
     use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+    use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
 
     cgp_preset! {
         CosmosToCosmosComponents {
@@ -135,6 +137,9 @@ mod preset {
                 TimeoutUnorderedPacketMessageBuilderComponent,
             ]:
                 BuildCosmosPacketMessages,
+
+            IbcTransferredAmountConverterComponent:
+                ConvertCosmosIbcAmount,
         }
     }
 }
