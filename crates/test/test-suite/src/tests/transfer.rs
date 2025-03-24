@@ -18,7 +18,7 @@ use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
 use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
 use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, TransferDenom};
-use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
+use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, UserWallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::channel_at::HasChannelIdAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
@@ -45,11 +45,10 @@ where
         + HasPortIdAt<Index<1>, Index<0>>,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasDenom<TransferDenom>
-        + HasWalletAt<UserWallet, Index<0>>
-        + HasWalletAt<UserWallet, Index<1>>
+        + HasWallet<UserWallet>
+        + HasWallet<UserWallet>
         + CanGenerateRandomAmount,
-    ChainDriverB:
-        HasChain<Chain = ChainB> + HasWalletAt<UserWallet, Index<0>> + CanGenerateRandomAmount,
+    ChainDriverB: HasChain<Chain = ChainB> + HasWallet<UserWallet> + CanGenerateRandomAmount,
     RelayDriver: CanRunRelayerInBackground,
     ChainA: HasIbcChainTypes<ChainB>
         + HasChainId
@@ -91,11 +90,11 @@ where
 
         let chain_id_b = chain_b.chain_id();
 
-        let wallet_a1 = chain_driver_a.wallet_at(UserWallet, PhantomData::<Index<0>>);
+        let wallet_a1 = chain_driver_a.wallet(PhantomData::<UserWallet>);
 
         let address_a1 = ChainA::wallet_address(wallet_a1);
 
-        let wallet_b = chain_driver_b.wallet_at(UserWallet, PhantomData::<Index<0>>);
+        let wallet_b = chain_driver_b.wallet(PhantomData::<UserWallet>);
 
         let address_b = ChainB::wallet_address(wallet_b);
 
@@ -155,7 +154,7 @@ where
             .assert_eventual_amount(address_b, &balance_b1)
             .await?;
 
-        let wallet_a2 = chain_driver_a.wallet_at(UserWallet, PhantomData::<Index<1>>);
+        let wallet_a2 = chain_driver_a.wallet(PhantomData::<UserWallet>);
 
         let address_a2 = ChainA::wallet_address(wallet_a2);
 

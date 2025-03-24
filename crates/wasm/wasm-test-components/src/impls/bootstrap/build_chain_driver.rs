@@ -2,7 +2,6 @@ use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use core::time::Duration;
 
-use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::{
     ChainDriverBuilder, ChainDriverBuilderComponent,
@@ -27,7 +26,7 @@ use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVot
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletSigner;
 use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, StakingDenom};
-use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, ValidatorWallet};
+use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, ValidatorWallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
@@ -60,8 +59,7 @@ where
         + CanBuildDepositProposalMessage
         + CanBuildVoteProposalMessage
         + CanSendMessagesWithSigner,
-    ChainDriver:
-        HasChain<Chain = Chain> + HasWalletAt<ValidatorWallet, Index<0>> + HasDenom<StakingDenom>,
+    ChainDriver: HasChain<Chain = Chain> + HasWallet<ValidatorWallet> + HasDenom<StakingDenom>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
 {
     async fn build_chain_driver(
@@ -82,7 +80,7 @@ where
 
         let chain = chain_driver.chain();
 
-        let validator_wallet = chain_driver.wallet_at(ValidatorWallet, PhantomData::<Index<0>>);
+        let validator_wallet = chain_driver.wallet(PhantomData::<ValidatorWallet>);
 
         let staking_denom = chain_driver.denom(PhantomData::<StakingDenom>);
 

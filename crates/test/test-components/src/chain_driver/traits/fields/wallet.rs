@@ -8,7 +8,7 @@ use crate::chain::traits::types::wallet::{HasWalletType, WalletOf};
 use crate::chain_driver::traits::types::chain::HasChainType;
 
 #[derive(Copy, Clone)]
-pub struct UserWallet;
+pub struct UserWallet<const I: usize = 0>;
 
 #[derive(Copy, Clone)]
 pub struct RelayerWallet;
@@ -16,25 +16,17 @@ pub struct RelayerWallet;
 #[derive(Copy, Clone)]
 pub struct ValidatorWallet;
 
-#[cgp_component {
-  name: WalletGetterComponent,
-  provider: WalletGetterAt,
-  context: ChainDriver,
+#[cgp_getter {
+    name: WalletGetterComponent<Tag>,
+    provider: WalletGetter,
 }]
-pub trait HasWalletAt<WalletKind, I: Async>: HasChainType
-where
-    Self::Chain: HasWalletType,
-{
-    fn wallet_at(&self, _kind: WalletKind, _index: PhantomData<I>) -> &WalletOf<Self::Chain>;
+pub trait HasWallet<Tag>: HasChainType<Chain: HasWalletType> {
+    fn wallet(&self, _tag: PhantomData<Tag>) -> &WalletOf<Self::Chain>;
 }
 
-#[cgp_component {
-  provider: WalletsGetter,
-  context: ChainDriver,
+#[cgp_getter {
+    provider: WalletsGetter,
 }]
-pub trait HasWallets: HasChainType
-where
-    Self::Chain: HasWalletType,
-{
+pub trait HasWallets: HasChainType<Chain: HasWalletType> {
     fn wallets(&self) -> &BTreeMap<String, WalletOf<Self::Chain>>;
 }

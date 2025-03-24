@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -43,15 +42,12 @@ use hermes_test_components::chain_driver::traits::fields::denom::{
     DenomGetter, DenomGetterComponent, StakingDenom, TransferDenom,
 };
 use hermes_test_components::chain_driver::traits::fields::wallet::{
-    RelayerWallet, UserWallet, ValidatorWallet, WalletGetterAt, WalletGetterComponent,
-    WalletsGetter, WalletsGetterComponent,
+    RelayerWallet, UserWallet, ValidatorWallet, WalletGetterComponent, WalletsGetterComponent,
 };
 use hermes_test_components::chain_driver::traits::types::chain::{
     ChainGetter, ChainGetterComponent, ChainTypeComponent, ProvideChainType,
 };
-use hermes_test_components::chain_driver::traits::wait::{
-    CanWaitChainStartup, ChainStartupWaiterComponent,
-};
+use hermes_test_components::chain_driver::traits::wait::ChainStartupWaiterComponent;
 use tokio::process::Child;
 use toml::to_string_pretty;
 
@@ -59,6 +55,7 @@ use toml::to_string_pretty;
    A chain driver for adding test functionalities to a Cosmos chain.
 */
 #[cgp_context(CosmosChainDriverComponents)]
+#[derive(HasField)]
 pub struct CosmosChainDriver {
     pub chain: CosmosChain,
     pub chain_command_path: PathBuf,
@@ -85,6 +82,16 @@ delegate_components! {
             ProposalStatusTypeComponent,
         ]:
             BaseCosmosChainDriverComponents,
+        WalletsGetterComponent:
+            UseField<symbol!("wallets")>,
+        WalletGetterComponent<RelayerWallet>:
+            UseField<symbol!("relayer_wallet")>,
+        WalletGetterComponent<ValidatorWallet>:
+            UseField<symbol!("validator_wallet")>,
+        WalletGetterComponent<UserWallet<0>>:
+            UseField<symbol!("user_wallet_a")>,
+        WalletGetterComponent<UserWallet<1>>:
+            UseField<symbol!("user_wallet_b")>,
     }
 }
 
@@ -125,57 +132,6 @@ impl RpcPortGetter<CosmosChainDriver> for CosmosChainDriverComponents {
 impl GrpcPortGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn grpc_port(chain_driver: &CosmosChainDriver) -> u16 {
         chain_driver.chain_node_config.grpc_port
-    }
-}
-
-#[cgp_provider(WalletGetterComponent)]
-impl WalletGetterAt<CosmosChainDriver, RelayerWallet, Index<0>> for CosmosChainDriverComponents {
-    fn wallet_at(
-        driver: &CosmosChainDriver,
-        _kind: RelayerWallet,
-        _index: PhantomData<Index<0>>,
-    ) -> &CosmosTestWallet {
-        &driver.relayer_wallet
-    }
-}
-
-#[cgp_provider(WalletGetterComponent)]
-impl WalletGetterAt<CosmosChainDriver, UserWallet, Index<0>> for CosmosChainDriverComponents {
-    fn wallet_at(
-        driver: &CosmosChainDriver,
-        _kind: UserWallet,
-        _index: PhantomData<Index<0>>,
-    ) -> &CosmosTestWallet {
-        &driver.user_wallet_a
-    }
-}
-
-#[cgp_provider(WalletGetterComponent)]
-impl WalletGetterAt<CosmosChainDriver, UserWallet, Index<1>> for CosmosChainDriverComponents {
-    fn wallet_at(
-        driver: &CosmosChainDriver,
-        _kind: UserWallet,
-        _index: PhantomData<Index<1>>,
-    ) -> &CosmosTestWallet {
-        &driver.user_wallet_b
-    }
-}
-
-#[cgp_provider(WalletGetterComponent)]
-impl WalletGetterAt<CosmosChainDriver, ValidatorWallet, Index<0>> for CosmosChainDriverComponents {
-    fn wallet_at(
-        driver: &CosmosChainDriver,
-        _kind: ValidatorWallet,
-        _index: PhantomData<Index<0>>,
-    ) -> &CosmosTestWallet {
-        &driver.validator_wallet
-    }
-}
-
-#[cgp_provider(WalletsGetterComponent)]
-impl WalletsGetter<CosmosChainDriver> for CosmosChainDriverComponents {
-    fn wallets(chain_driver: &CosmosChainDriver) -> &BTreeMap<String, CosmosTestWallet> {
-        &chain_driver.wallets
     }
 }
 
@@ -223,6 +179,8 @@ impl ConfigUpdater<CosmosChainDriver, RelayerConfig> for CosmosChainDriverCompon
     }
 }
 
-pub trait CanUseCosmosChainDriver: CanWaitChainStartup {}
-
-impl CanUseCosmosChainDriver for CosmosChainDriver {}
+check_components! {
+    CanUseCosmosChainDriver for CosmosChainDriver {
+        ChainStartupWaiterComponent,
+    }
+}

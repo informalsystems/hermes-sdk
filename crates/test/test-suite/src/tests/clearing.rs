@@ -31,7 +31,7 @@ use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
 use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, TransferDenom};
-use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
+use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, UserWallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::channel_at::HasChannelIdAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
@@ -57,10 +57,10 @@ where
         + HasPortIdAt<Index<1>, Index<0>>,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasDenom<TransferDenom>
-        + HasWalletAt<UserWallet, Index<0>>
+        + HasWallet<UserWallet>
         + CanGenerateRandomAmount,
     ChainDriverB: HasChain<Chain = ChainB>
-        + HasWalletAt<UserWallet, Index<0>>
+        + HasWallet<UserWallet>
         + HasDenom<TransferDenom>
         + CanGenerateRandomAmount,
     RelayDriver: HasBiRelayAt<Index<0>, Index<1>, BiRelay = BiRelay>,
@@ -248,9 +248,9 @@ where
     Relay: CanRelayReceivePacket<SrcChain = SrcChain, DstChain = DstChain>,
     SrcChainDriver: HasChain<Chain = SrcChain>
         + HasDenom<TransferDenom>
-        + HasWalletAt<UserWallet, Index<0>>
+        + HasWallet<UserWallet>
         + CanGenerateRandomAmount,
-    DstChainDriver: HasChain<Chain = DstChain> + HasWalletAt<UserWallet, Index<0>>,
+    DstChainDriver: HasChain<Chain = DstChain> + HasWallet<UserWallet>,
     SrcChain: CanQueryBalance
         + HasDefaultMemo
         + CanIbcTransferToken<DstChain>
@@ -261,11 +261,11 @@ where
     DstChain: HasWalletType + CanQueryChainStatus + CanQueryPacketIsReceived<SrcChain>,
     Driver::Error: From<SrcChain::Error> + From<DstChain::Error> + From<Relay::Error>,
 {
-    let sender_wallet = src_chain_driver.wallet_at(UserWallet, PhantomData::<Index<0>>);
+    let sender_wallet = src_chain_driver.wallet(PhantomData::<UserWallet>);
 
     let sender_address = SrcChain::wallet_address(sender_wallet);
 
-    let receiver_wallet = dst_chain_driver.wallet_at(UserWallet, PhantomData::<Index<0>>);
+    let receiver_wallet = dst_chain_driver.wallet(PhantomData::<UserWallet>);
 
     let receiver_address = DstChain::wallet_address(receiver_wallet);
 
