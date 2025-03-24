@@ -17,7 +17,7 @@ use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransfe
 use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
 use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
-use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, TransferDenom};
+use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::channel_at::HasChannelIdAt;
@@ -44,7 +44,7 @@ where
         + HasPortIdAt<Index<0>, Index<1>>
         + HasPortIdAt<Index<1>, Index<0>>,
     ChainDriverA: HasChain<Chain = ChainA>
-        + HasDenomAt<TransferDenom, Index<0>>
+        + HasDenom<TransferDenom>
         + HasWalletAt<UserWallet, Index<0>>
         + HasWalletAt<UserWallet, Index<1>>
         + CanGenerateRandomAmount,
@@ -99,7 +99,7 @@ where
 
         let address_b = ChainB::wallet_address(wallet_b);
 
-        let denom_a = chain_driver_a.denom_at(TransferDenom, PhantomData::<Index<0>>);
+        let denom_a = chain_driver_a.denom(PhantomData::<TransferDenom>);
 
         let balance_a1 = chain_a.query_balance(address_a1, denom_a).await?;
 

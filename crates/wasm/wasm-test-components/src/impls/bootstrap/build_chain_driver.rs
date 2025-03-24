@@ -26,7 +26,7 @@ use hermes_test_components::chain::traits::proposal::types::proposal_status::Has
 use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletSigner;
-use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, StakingDenom};
+use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, StakingDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, ValidatorWallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
@@ -60,9 +60,8 @@ where
         + CanBuildDepositProposalMessage
         + CanBuildVoteProposalMessage
         + CanSendMessagesWithSigner,
-    ChainDriver: HasChain<Chain = Chain>
-        + HasWalletAt<ValidatorWallet, Index<0>>
-        + HasDenomAt<StakingDenom, Index<0>>,
+    ChainDriver:
+        HasChain<Chain = Chain> + HasWalletAt<ValidatorWallet, Index<0>> + HasDenom<StakingDenom>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
 {
     async fn build_chain_driver(
@@ -85,7 +84,7 @@ where
 
         let validator_wallet = chain_driver.wallet_at(ValidatorWallet, PhantomData::<Index<0>>);
 
-        let staking_denom = chain_driver.denom_at(StakingDenom, PhantomData::<Index<0>>);
+        let staking_denom = chain_driver.denom(PhantomData::<StakingDenom>);
 
         let proposal_id = chain
             .upload_wasm_client_code(

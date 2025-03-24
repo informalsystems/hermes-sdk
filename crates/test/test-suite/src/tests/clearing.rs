@@ -30,7 +30,7 @@ use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
 use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
-use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, TransferDenom};
+use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::channel_at::HasChannelIdAt;
@@ -56,12 +56,12 @@ where
         + HasPortIdAt<Index<0>, Index<1>>
         + HasPortIdAt<Index<1>, Index<0>>,
     ChainDriverA: HasChain<Chain = ChainA>
-        + HasDenomAt<TransferDenom, Index<0>>
+        + HasDenom<TransferDenom>
         + HasWalletAt<UserWallet, Index<0>>
         + CanGenerateRandomAmount,
     ChainDriverB: HasChain<Chain = ChainB>
         + HasWalletAt<UserWallet, Index<0>>
-        + HasDenomAt<TransferDenom, Index<0>>
+        + HasDenom<TransferDenom>
         + CanGenerateRandomAmount,
     RelayDriver: HasBiRelayAt<Index<0>, Index<1>, BiRelay = BiRelay>,
     ChainA: HasChainId
@@ -247,7 +247,7 @@ where
     Driver: HasAsyncErrorType,
     Relay: CanRelayReceivePacket<SrcChain = SrcChain, DstChain = DstChain>,
     SrcChainDriver: HasChain<Chain = SrcChain>
-        + HasDenomAt<TransferDenom, Index<0>>
+        + HasDenom<TransferDenom>
         + HasWalletAt<UserWallet, Index<0>>
         + CanGenerateRandomAmount,
     DstChainDriver: HasChain<Chain = DstChain> + HasWalletAt<UserWallet, Index<0>>,
@@ -269,7 +269,7 @@ where
 
     let receiver_address = DstChain::wallet_address(receiver_wallet);
 
-    let denom = src_chain_driver.denom_at(TransferDenom, PhantomData::<Index<0>>);
+    let denom = src_chain_driver.denom(PhantomData::<TransferDenom>);
 
     let src_chain = src_chain_driver.chain();
     let dst_chain = dst_chain_driver.chain();

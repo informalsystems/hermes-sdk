@@ -39,8 +39,8 @@ use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGe
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::{
     ChainHomeDirGetter, ChainHomeDirGetterComponent,
 };
-use hermes_test_components::chain_driver::traits::fields::denom_at::{
-    DenomGetterAt, DenomGetterComponent, StakingDenom, TransferDenom,
+use hermes_test_components::chain_driver::traits::fields::denom::{
+    DenomGetter, DenomGetterComponent, StakingDenom, TransferDenom,
 };
 use hermes_test_components::chain_driver::traits::fields::wallet::{
     RelayerWallet, UserWallet, ValidatorWallet, WalletGetterAt, WalletGetterComponent,
@@ -179,24 +179,16 @@ impl WalletsGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     }
 }
 
-#[cgp_provider(DenomGetterComponent)]
-impl DenomGetterAt<CosmosChainDriver, TransferDenom, Index<0>> for CosmosChainDriverComponents {
-    fn denom_at(
-        driver: &CosmosChainDriver,
-        _kind: TransferDenom,
-        _index: PhantomData<Index<0>>,
-    ) -> &Denom {
+#[cgp_provider(DenomGetterComponent<TransferDenom>)]
+impl DenomGetter<CosmosChainDriver, TransferDenom> for CosmosChainDriverComponents {
+    fn denom(driver: &CosmosChainDriver, _index: PhantomData<TransferDenom>) -> &Denom {
         &driver.genesis_config.transfer_denom
     }
 }
 
-#[cgp_provider(DenomGetterComponent)]
-impl DenomGetterAt<CosmosChainDriver, StakingDenom, Index<0>> for CosmosChainDriverComponents {
-    fn denom_at(
-        driver: &CosmosChainDriver,
-        _kind: StakingDenom,
-        _index: PhantomData<Index<0>>,
-    ) -> &Denom {
+#[cgp_provider(DenomGetterComponent<StakingDenom>)]
+impl DenomGetter<CosmosChainDriver, StakingDenom> for CosmosChainDriverComponents {
+    fn denom(driver: &CosmosChainDriver, _index: PhantomData<StakingDenom>) -> &Denom {
         &driver.genesis_config.staking_denom
     }
 }
