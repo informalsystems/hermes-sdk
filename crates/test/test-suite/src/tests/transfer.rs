@@ -129,6 +129,10 @@ where
             ))
             .await;
 
+        let balance_b1 = chain_b
+            .ibc_transfer_amount_from(PhantomData, &a_to_b_amount, channel_id_b, port_id_b)
+            .await?;
+
         chain_a
             .ibc_transfer_token(
                 PhantomData,
@@ -147,10 +151,6 @@ where
         let balance_a3 = chain_a.query_balance(address_a1, denom_a).await?;
 
         assert_eq!(balance_a2, balance_a3);
-
-        let balance_b1 = chain_b
-            .ibc_transfer_amount_from(PhantomData, &a_to_b_amount, channel_id_b, port_id_b)
-            .await?;
 
         logger
             .log_message(&format!(
