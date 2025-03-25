@@ -3,7 +3,7 @@ use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
-use hermes_ibc_test_suite::traits::HasTestDriverTypes;
+use hermes_ibc_test_suite::traits::CanUseBinaryTestDriverMethods;
 use hermes_logger::UseHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
@@ -77,6 +77,6 @@ delegate_components! {
     }
 }
 
-pub trait CanUseCosmosTestDriver: HasTestDriverTypes<Index<0>, Index<1>> {}
+pub trait CanUseCosmosTestDriver: CanUseBinaryTestDriverMethods<Index<0>, Index<1>> {}
 
 impl CanUseCosmosTestDriver for CosmosBinaryChannelTestDriver {}

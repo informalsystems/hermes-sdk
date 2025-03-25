@@ -29,19 +29,14 @@ use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_test_components::setup::traits::port_id_at::HasPortIdAt;
 
 #[trait_alias]
-pub trait HasTestDriverTypes<A, B>:
+pub trait HasBinaryTestDriverFields<A, B>:
     HasChainDriverAt<A, ChainDriver = Self::ChainDriverA>
     + HasChainDriverAt<B, ChainDriver = Self::ChainDriverB>
     + HasRelayDriverAt<
         A,
         B,
-        RelayDriver: CanRunRelayerInBackground
-                         + HasBiRelayAt<Index<0>, Index<1>, BiRelay = Self::BiRelay>,
-    > + HasChannelIdAt<A, B>
-    + HasChannelIdAt<B, A>
-    + HasPortIdAt<A, B>
-    + HasPortIdAt<B, A>
-    + HasLogger<Logger: CanLogMessage>
+        RelayDriver: HasErrorType + HasBiRelayAt<Index<0>, Index<1>, BiRelay = Self::BiRelay>,
+    > + HasLogger<Logger: CanLogMessage>
     + CanRaiseError<ErrorOf<Self::ChainA>>
     + CanRaiseError<ErrorOf<Self::ChainB>>
     + CanRaiseError<ErrorOf<Self::RelayAToB>>
@@ -51,39 +46,13 @@ pub trait HasTestDriverTypes<A, B>:
     + CanRaiseError<ErrorOf<Self::ChainDriverA>>
     + CanRaiseError<ErrorOf<Self::ChainDriverB>>
 {
-    type ChainDriverA: HasErrorType
-        + HasChain<Chain = Self::ChainA>
-        + HasDenom<TransferDenom>
-        + HasWallet<UserWallet<0>>
-        + HasWallet<UserWallet<1>>
-        + CanGenerateRandomAmount;
+    type ChainDriverA: HasErrorType + HasChain<Chain = Self::ChainA>;
 
-    type ChainDriverB: HasErrorType
-        + HasChain<Chain = Self::ChainB>
-        + HasDenom<TransferDenom>
-        + HasWallet<UserWallet<0>>
-        + HasWallet<UserWallet<1>>
-        + CanGenerateRandomAmount;
+    type ChainDriverB: HasErrorType + HasChain<Chain = Self::ChainB>;
 
-    type ChainA: HasIbcChainTypes<Self::ChainB>
-        + HasWalletType
-        + CanQueryBalance
-        + CanQueryChainStatus
-        + HasAmountMethods
-        + CanAssertEventualAmount
-        + HasDefaultMemo
-        + CanIbcTransferToken<Self::ChainB>
-        + CanConvertIbcTransferredAmount<Self::ChainB>;
+    type ChainA: HasErrorType;
 
-    type ChainB: HasIbcChainTypes<Self::ChainA>
-        + HasWalletType
-        + CanQueryBalance
-        + CanQueryChainStatus
-        + HasAmountMethods
-        + CanAssertEventualAmount
-        + HasDefaultMemo
-        + CanIbcTransferToken<Self::ChainA>
-        + CanConvertIbcTransferredAmount<Self::ChainA>;
+    type ChainB: HasErrorType;
 
     type RelayAToB: HasErrorType
         + HasSrcChain<SrcChain = Self::ChainA>
@@ -125,4 +94,43 @@ pub trait HasTestDriverTypes<A, B>:
     fn relay_b_to_a(&self) -> &Self::RelayBToA {
         self.birelay().relay_at(PhantomData::<(Index<1>, Index<0>)>)
     }
+}
+
+#[trait_alias]
+pub trait CanUseBinaryTestDriverMethods<A, B>:
+    HasBinaryTestDriverFields<
+        A,
+        B,
+        RelayDriver: CanRunRelayerInBackground,
+        ChainDriverA: HasDenom<TransferDenom>
+                          + HasWallet<UserWallet<0>>
+                          + HasWallet<UserWallet<1>>
+                          + CanGenerateRandomAmount,
+        ChainDriverB: HasDenom<TransferDenom>
+                          + HasWallet<UserWallet<0>>
+                          + HasWallet<UserWallet<1>>
+                          + CanGenerateRandomAmount,
+        ChainA: HasIbcChainTypes<Self::ChainB>
+                    + HasWalletType
+                    + CanQueryBalance
+                    + CanQueryChainStatus
+                    + HasAmountMethods
+                    + CanAssertEventualAmount
+                    + HasDefaultMemo
+                    + CanIbcTransferToken<Self::ChainB>
+                    + CanConvertIbcTransferredAmount<Self::ChainB>,
+        ChainB: HasIbcChainTypes<Self::ChainA>
+                    + HasWalletType
+                    + CanQueryBalance
+                    + CanQueryChainStatus
+                    + HasAmountMethods
+                    + CanAssertEventualAmount
+                    + HasDefaultMemo
+                    + CanIbcTransferToken<Self::ChainA>
+                    + CanConvertIbcTransferredAmount<Self::ChainA>,
+    > + HasChannelIdAt<A, B>
+    + HasChannelIdAt<B, A>
+    + HasPortIdAt<A, B>
+    + HasPortIdAt<B, A>
+{
 }
