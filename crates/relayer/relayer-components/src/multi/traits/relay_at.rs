@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::component::WithProvider;
 use cgp::core::macros::trait_alias;
 use cgp::core::types::ProvideType;
@@ -10,11 +12,19 @@ use crate::multi::types::tags::{Dst, Src};
 use crate::relay::traits::chains::HasRelayChainTypes;
 
 #[cgp_type {
-    name: RelayTypeProviderAtComponent<SrcTag, DstTag>,
+    name: RelayTypeProviderAtComponent<A, B>,
     provider: RelayTypeProviderAt,
 }]
-pub trait HasRelayTypeAt<SrcTag, DstTag>: Async {
+pub trait HasRelayTypeAt<A, B>: Async {
     type Relay: Async;
+}
+
+#[cgp_getter {
+    name: RelayGetterAtComponent<A, B>,
+    provider: RelayGetterAt,
+}]
+pub trait HasRelayAt<A, B>: HasRelayTypeAt<A, B> {
+    fn relay_at(&self, _phantom: PhantomData<(A, B)>) -> &Self::Relay;
 }
 
 pub type RelayAt<Context, SrcTag, DstTag> = <Context as HasRelayTypeAt<SrcTag, DstTag>>::Relay;

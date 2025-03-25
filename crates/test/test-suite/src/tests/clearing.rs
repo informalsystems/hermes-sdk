@@ -114,7 +114,7 @@ where
 
         let relay_driver = driver.relay_driver_at(PhantomData::<(A, B)>);
 
-        let birelay = relay_driver.birelay_at();
+        let birelay = relay_driver.birelay_at(PhantomData);
 
         let relay_a_to_b = birelay.relay_a_to_b();
 

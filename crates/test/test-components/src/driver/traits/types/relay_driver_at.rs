@@ -1,13 +1,12 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 
 #[cgp_type {
     name: RelayDriverTypeProviderAtComponent<A, B>,
     provider: RelayDriverTypeProviderAt,
 }]
-pub trait HasRelayDriverTypeAt<A, B>: HasBiRelayTypeAt<A, B> {
+pub trait HasRelayDriverTypeAt<A, B>: Async {
     type RelayDriver: Async;
 }
 

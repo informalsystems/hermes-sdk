@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
 use cgp::prelude::*;
@@ -15,7 +17,7 @@ pub trait HasBiRelayTypeAt<A, B>: Async {
     provider: BiRelayGetterAt,
 }]
 pub trait HasBiRelayAt<A, B>: HasBiRelayTypeAt<A, B> {
-    fn birelay_at(&self) -> &Self::BiRelay;
+    fn birelay_at(&self, _phantom: PhantomData<(A, B)>) -> &Self::BiRelay;
 }
 
 pub type BiRelayAt<Context, TagA, TagB> = <Context as HasBiRelayTypeAt<TagA, TagB>>::BiRelay;

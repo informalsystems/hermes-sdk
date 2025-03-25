@@ -51,8 +51,8 @@ where
         + HasPortIdAt<B, A>,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasDenom<TransferDenom>
-        + HasWallet<UserWallet>
-        + HasWallet<UserWallet>
+        + HasWallet<UserWallet<0>>
+        + HasWallet<UserWallet<1>>
         + CanGenerateRandomAmount,
     ChainDriverB: HasChain<Chain = ChainB> + HasWallet<UserWallet> + CanGenerateRandomAmount,
     RelayDriver: CanRunRelayerInBackground,
@@ -98,11 +98,11 @@ where
 
         let chain_id_b = chain_b.chain_id();
 
-        let wallet_a1 = chain_driver_a.wallet(PhantomData::<UserWallet>);
+        let wallet_a1 = chain_driver_a.wallet(PhantomData::<UserWallet<0>>);
 
         let address_a1 = ChainA::wallet_address(wallet_a1);
 
-        let wallet_b = chain_driver_b.wallet(PhantomData::<UserWallet>);
+        let wallet_b = chain_driver_b.wallet(PhantomData::<UserWallet<0>>);
 
         let address_b = ChainB::wallet_address(wallet_b);
 
@@ -163,7 +163,7 @@ where
             .assert_eventual_amount(address_b, &balance_b1)
             .await?;
 
-        let wallet_a2 = chain_driver_a.wallet(PhantomData::<UserWallet>);
+        let wallet_a2 = chain_driver_a.wallet(PhantomData::<UserWallet<1>>);
 
         let address_a2 = ChainA::wallet_address(wallet_a2);
 
