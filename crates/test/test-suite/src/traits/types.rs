@@ -3,12 +3,15 @@ use core::marker::PhantomData;
 use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::core::macros::trait_alias;
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::{CanRaiseError, HasAsyncErrorType, HasErrorType};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayAt;
+use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayAt;
 use hermes_relayer_components::relay::traits::chains::{HasDstChain, HasSrcChain};
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
@@ -30,7 +33,10 @@ use hermes_test_components::setup::traits::port_id_at::HasPortIdAt;
 
 #[trait_alias]
 pub trait HasBinaryTestDriverFields<A, B>:
-    HasChainDriverAt<A, ChainDriver = Self::ChainDriverA>
+    HasAsyncErrorType
+    + HasChainTypeAt<A, Chain = Self::ChainA>
+    + HasChainTypeAt<B, Chain = Self::ChainB>
+    + HasChainDriverAt<A, ChainDriver = Self::ChainDriverA>
     + HasChainDriverAt<B, ChainDriver = Self::ChainDriverB>
     + HasRelayDriverAt<
         A,
@@ -111,6 +117,8 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                           + HasWallet<UserWallet<1>>
                           + CanGenerateRandomAmount,
         ChainA: HasIbcChainTypes<Self::ChainB>
+                    + HasOutgoingPacketType<Self::ChainB>
+                    + HasChainId
                     + HasWalletType
                     + CanQueryBalance
                     + CanQueryChainStatus
@@ -120,6 +128,8 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + CanIbcTransferToken<Self::ChainB>
                     + CanConvertIbcTransferredAmount<Self::ChainB>,
         ChainB: HasIbcChainTypes<Self::ChainA>
+                    + HasOutgoingPacketType<Self::ChainA>
+                    + HasChainId
                     + HasWalletType
                     + CanQueryBalance
                     + CanQueryChainStatus
