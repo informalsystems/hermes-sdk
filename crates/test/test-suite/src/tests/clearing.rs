@@ -69,7 +69,7 @@ where
         + HasWallet<UserWallet>
         + HasDenom<TransferDenom>
         + CanGenerateRandomAmount,
-    RelayDriver: HasBiRelayAt<A, B, BiRelay = BiRelay>,
+    RelayDriver: HasBiRelayAt<Index<0>, Index<1>, BiRelay = BiRelay>,
     ChainA: HasChainId
         + CanQueryBalance
         + HasAmountMethods
