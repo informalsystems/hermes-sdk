@@ -39,22 +39,28 @@ use hermes_test_components::driver::traits::types::relay_driver_at::HasRelayDriv
 use hermes_test_components::setup::traits::port_id_at::HasPortIdAt;
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
-pub struct TestPacketClearing;
+pub struct TestPacketClearing<A = Index<0>, B = Index<1>>(pub PhantomData<(A, B)>);
 
-impl<Driver, ChainA, ChainB, BiRelay, ChainDriverA, ChainDriverB, RelayDriver, Logger>
-    TestCase<Driver> for TestPacketClearing
+impl<A, B> Default for TestPacketClearing<A, B> {
+    fn default() -> Self {
+        Self(PhantomData)
+    }
+}
+
+impl<Driver, A, B, ChainA, ChainB, BiRelay, ChainDriverA, ChainDriverB, RelayDriver, Logger>
+    TestCase<Driver> for TestPacketClearing<A, B>
 where
     Driver: HasAsyncErrorType
         + HasLogger<Logger = Logger>
-        + HasChainTypeAt<Index<0>, Chain = ChainA>
-        + HasChainTypeAt<Index<1>, Chain = ChainB>
-        + HasChainDriverAt<Index<0>, ChainDriver = ChainDriverA>
-        + HasChainDriverAt<Index<1>, ChainDriver = ChainDriverB>
-        + HasRelayDriverAt<Index<0>, Index<1>, RelayDriver = RelayDriver>
-        + HasChannelIdAt<Index<0>, Index<1>>
-        + HasChannelIdAt<Index<1>, Index<0>>
-        + HasPortIdAt<Index<0>, Index<1>>
-        + HasPortIdAt<Index<1>, Index<0>>,
+        + HasChainTypeAt<A, Chain = ChainA>
+        + HasChainTypeAt<B, Chain = ChainB>
+        + HasChainDriverAt<A, ChainDriver = ChainDriverA>
+        + HasChainDriverAt<B, ChainDriver = ChainDriverB>
+        + HasRelayDriverAt<A, B, RelayDriver = RelayDriver>
+        + HasChannelIdAt<A, B>
+        + HasChannelIdAt<B, A>
+        + HasPortIdAt<A, B>
+        + HasPortIdAt<B, A>,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasDenom<TransferDenom>
         + HasWallet<UserWallet>
@@ -63,7 +69,7 @@ where
         + HasWallet<UserWallet>
         + HasDenom<TransferDenom>
         + CanGenerateRandomAmount,
-    RelayDriver: HasBiRelayAt<Index<0>, Index<1>, BiRelay = BiRelay>,
+    RelayDriver: HasBiRelayAt<A, B, BiRelay = BiRelay>,
     ChainA: HasChainId
         + CanQueryBalance
         + HasAmountMethods
@@ -96,15 +102,17 @@ where
         + From<ChainB::Error>
         + From<ErrorOf<RelayAt<BiRelay, Index<0>, Index<1>>>>
         + From<ErrorOf<RelayAt<BiRelay, Index<1>, Index<0>>>>,
+    A: Async,
+    B: Async,
 {
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
         let logger = driver.logger();
 
-        let chain_driver_a = driver.chain_driver_at(PhantomData::<Index<0>>);
+        let chain_driver_a = driver.chain_driver_at(PhantomData::<A>);
 
-        let chain_driver_b = driver.chain_driver_at(PhantomData::<Index<1>>);
+        let chain_driver_b = driver.chain_driver_at(PhantomData::<B>);
 
-        let relay_driver = driver.relay_driver_at(PhantomData::<(Index<0>, Index<1>)>);
+        let relay_driver = driver.relay_driver_at(PhantomData::<(A, B)>);
 
         let birelay = relay_driver.birelay_at();
 
@@ -120,13 +128,13 @@ where
 
         let chain_id_b = chain_b.chain_id();
 
-        let channel_id_a = driver.channel_id_at(PhantomData::<(Index<0>, Index<1>)>);
+        let channel_id_a = driver.channel_id_at(PhantomData::<(A, B)>);
 
-        let port_id_a = driver.port_id_at(PhantomData::<(Index<0>, Index<1>)>);
+        let port_id_a = driver.port_id_at(PhantomData::<(A, B)>);
 
-        let channel_id_b = driver.channel_id_at(PhantomData::<(Index<1>, Index<0>)>);
+        let channel_id_b = driver.channel_id_at(PhantomData::<(B, A)>);
 
-        let port_id_b = driver.port_id_at(PhantomData::<(Index<1>, Index<0>)>);
+        let port_id_b = driver.port_id_at(PhantomData::<(B, A)>);
 
         logger
             .log_message(&format!(

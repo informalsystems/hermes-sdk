@@ -59,7 +59,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
         CosmosBinaryChannelSetup::new_with_defaults(celestia_bootstrap, cosmos_bootstrap, builder);
 
     runtime.runtime.clone().block_on(async move {
-        setup.run_test(&TestIbcTransfer).await?;
+        setup.run_test(&TestIbcTransfer::default()).await?;
 
         <Result<(), Error>>::Ok(())
     })?;

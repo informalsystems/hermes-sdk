@@ -15,7 +15,7 @@ fn test_ibc_transfer() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        TestIbcTransfer.run_test(&setup).await?;
+        TestIbcTransfer::default().run_test(&setup).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
@@ -31,7 +31,7 @@ fn test_packet_clearing() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        TestPacketClearing.run_test(&setup).await?;
+        TestPacketClearing::default().run_test(&setup).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
