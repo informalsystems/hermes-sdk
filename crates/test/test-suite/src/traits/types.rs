@@ -10,6 +10,7 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
+use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayAt;
@@ -19,8 +20,9 @@ use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
+use hermes_test_components::chain::traits::types::denom::DenomOf;
 use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
 use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, UserWallet};
@@ -88,9 +90,12 @@ pub trait HasBinaryTestDriverFields<A, B>:
         self.chain_driver_b().chain()
     }
 
+    fn relay_driver(&self) -> &Self::RelayDriver {
+        self.relay_driver_at(PhantomData)
+    }
+
     fn birelay(&self) -> &Self::BiRelay {
-        self.relay_driver_at(PhantomData::<(A, B)>)
-            .birelay_at(PhantomData)
+        self.relay_driver().birelay_at(PhantomData)
     }
 
     fn relay_a_to_b(&self) -> &Self::RelayAToB {
@@ -143,4 +148,43 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
     + HasPortIdAt<A, B>
     + HasPortIdAt<B, A>
 {
+    fn channel_id_a(&self) -> &ChannelIdOf<Self::ChainA, Self::ChainB> {
+        self.channel_id_at(PhantomData::<(A, B)>)
+    }
+
+    fn channel_id_b(&self) -> &ChannelIdOf<Self::ChainB, Self::ChainA> {
+        self.channel_id_at(PhantomData::<(B, A)>)
+    }
+
+    fn port_id_a(&self) -> &PortIdOf<Self::ChainA, Self::ChainB> {
+        self.port_id_at(PhantomData::<(A, B)>)
+    }
+
+    fn port_id_b(&self) -> &PortIdOf<Self::ChainB, Self::ChainA> {
+        self.port_id_at(PhantomData::<(B, A)>)
+    }
+
+    fn transfer_denom_a(&self) -> &DenomOf<Self::ChainA> {
+        self.chain_driver_a().denom(PhantomData::<TransferDenom>)
+    }
+
+    fn transfer_denom_b(&self) -> &DenomOf<Self::ChainB> {
+        self.chain_driver_b().denom(PhantomData::<TransferDenom>)
+    }
+
+    fn user_wallet_a1(&self) -> &WalletOf<Self::ChainA> {
+        self.chain_driver_a().wallet(PhantomData::<UserWallet<0>>)
+    }
+
+    fn user_wallet_a2(&self) -> &WalletOf<Self::ChainA> {
+        self.chain_driver_a().wallet(PhantomData::<UserWallet<1>>)
+    }
+
+    fn user_wallet_b1(&self) -> &WalletOf<Self::ChainB> {
+        self.chain_driver_b().wallet(PhantomData::<UserWallet<0>>)
+    }
+
+    fn user_wallet_b2(&self) -> &WalletOf<Self::ChainB> {
+        self.chain_driver_b().wallet(PhantomData::<UserWallet<1>>)
+    }
 }

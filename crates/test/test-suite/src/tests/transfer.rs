@@ -14,9 +14,7 @@ use hermes_test_components::chain::traits::types::amount::{HasAmountMethods, Has
 use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
-use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, UserWallet};
-use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
@@ -39,29 +37,29 @@ where
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
         let logger = driver.logger();
 
-        let chain_driver_a = driver.chain_driver_at(PhantomData::<A>);
+        let chain_driver_a = driver.chain_driver_a();
 
-        let chain_driver_b = driver.chain_driver_at(PhantomData::<B>);
+        let chain_driver_b = driver.chain_driver_b();
 
-        let relay_driver = driver.relay_driver_at(PhantomData::<(A, B)>);
+        let relay_driver = driver.relay_driver();
 
-        let chain_a = chain_driver_a.chain();
+        let chain_a = driver.chain_a();
 
         let chain_id_a = chain_a.chain_id();
 
-        let chain_b = chain_driver_b.chain();
+        let chain_b = driver.chain_b();
 
         let chain_id_b = chain_b.chain_id();
 
-        let wallet_a1 = chain_driver_a.wallet(PhantomData::<UserWallet<0>>);
+        let wallet_a1 = driver.user_wallet_a1();
 
         let address_a1 = Driver::ChainA::wallet_address(wallet_a1);
 
-        let wallet_b = chain_driver_b.wallet(PhantomData::<UserWallet<0>>);
+        let wallet_b = driver.user_wallet_b1();
 
         let address_b = Driver::ChainB::wallet_address(wallet_b);
 
-        let denom_a = chain_driver_a.denom(PhantomData::<TransferDenom>);
+        let denom_a = driver.transfer_denom_a();
 
         let balance_a1 = chain_a
             .query_balance(address_a1, denom_a)
@@ -70,13 +68,13 @@ where
 
         let a_to_b_amount = chain_driver_a.random_amount(1000, &balance_a1).await;
 
-        let channel_id_a = driver.channel_id_at(PhantomData::<(A, B)>);
+        let channel_id_a = driver.channel_id_a();
 
-        let port_id_a = driver.port_id_at(PhantomData::<(A, B)>);
+        let port_id_a = driver.port_id_a();
 
-        let channel_id_b = driver.channel_id_at(PhantomData::<(B, A)>);
+        let channel_id_b = driver.channel_id_b();
 
-        let port_id_b = driver.port_id_at(PhantomData::<(B, A)>);
+        let port_id_b = driver.port_id_b();
 
         let _relayer = relay_driver
             .run_relayer_in_background()
