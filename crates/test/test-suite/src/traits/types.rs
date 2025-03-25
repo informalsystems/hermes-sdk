@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
-use cgp::core::macros::trait_alias;
+use cgp::core::macros::blanket_trait;
 use cgp::prelude::{CanRaiseError, HasAsyncErrorType, HasErrorType};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
@@ -33,7 +33,7 @@ use hermes_test_components::driver::traits::types::relay_driver_at::HasRelayDriv
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_test_components::setup::traits::port_id_at::HasPortIdAt;
 
-#[trait_alias]
+#[blanket_trait]
 pub trait HasBinaryTestDriverFields<A, B>:
     HasAsyncErrorType
     + HasChainTypeAt<A, Chain = Self::ChainA>
@@ -107,7 +107,7 @@ pub trait HasBinaryTestDriverFields<A, B>:
     }
 }
 
-#[trait_alias]
+#[blanket_trait]
 pub trait CanUseBinaryTestDriverMethods<A, B>:
     HasBinaryTestDriverFields<
         A,

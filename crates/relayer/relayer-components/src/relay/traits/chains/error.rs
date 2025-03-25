@@ -1,10 +1,10 @@
 use cgp::core::error::ErrorOf;
-use cgp::core::macros::trait_alias;
+use cgp::core::macros::blanket_trait;
 use cgp::prelude::*;
 
 use crate::relay::traits::chains::types::HasRelayChainTypes;
 
-#[trait_alias]
+#[blanket_trait]
 pub trait CanRaiseRelayChainErrors:
     HasRelayChainTypes
     + CanRaiseAsyncError<ErrorOf<Self::SrcChain>>

@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
-use cgp::core::macros::trait_alias;
+use cgp::core::macros::blanket_trait;
 use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
@@ -32,7 +32,7 @@ pub type RelayAt<Context, SrcTag, DstTag> = <Context as HasRelayTypeAt<SrcTag, D
 pub type ClientIdAt<Context, SrcTag, DstTag> =
     ClientIdOf<ChainAt<Context, SrcTag>, ChainAt<Context, DstTag>>;
 
-#[trait_alias]
+#[blanket_trait]
 pub trait HasBoundedRelayTypeAt<SrcTag, DstTag>:
     HasRelayTypeAt<
         SrcTag,
