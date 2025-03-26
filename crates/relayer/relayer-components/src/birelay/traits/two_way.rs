@@ -14,8 +14,12 @@ use crate::multi::traits::relay_at::{HasRelayAt, HasRelayTypeAt, RelayAt};
 /// other that relays from chain B to chain A.
 #[blanket_trait]
 pub trait HasTwoWayRelayTypes:
-    HasRelayTypeAt<Index<0>, Index<1>> + HasRelayTypeAt<Index<1>, Index<0>>
+    HasRelayTypeAt<Index<0>, Index<1>, Relay = Self::RelayAToB>
+    + HasRelayTypeAt<Index<1>, Index<0>, Relay = Self::RelayBToA>
 {
+    type RelayAToB;
+
+    type RelayBToA;
 }
 
 #[blanket_trait]
