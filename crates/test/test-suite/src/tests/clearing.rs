@@ -5,13 +5,11 @@ use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_logging_components::traits::logger::CanLogMessage;
-use hermes_relayer_components::birelay::traits::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::packet::fields::HasPacketSequence;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayAt;
 use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelayWithHeights;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -45,31 +43,27 @@ where
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
         let logger = driver.logger();
 
-        let chain_driver_a = driver.chain_driver_at(PhantomData::<A>);
+        let chain_driver_a = driver.chain_driver_a();
 
-        let chain_driver_b = driver.chain_driver_at(PhantomData::<B>);
+        let chain_driver_b = driver.chain_driver_b();
 
-        let relay_driver = driver.relay_driver_at(PhantomData::<(A, B)>);
+        let relay_a_to_b = driver.relay_a_to_b();
 
-        let birelay = relay_driver.birelay_at(PhantomData);
-
-        let relay_a_to_b = birelay.relay_a_to_b();
-
-        let chain_a = chain_driver_a.chain();
+        let chain_a = driver.chain_a();
 
         let chain_id_a = chain_a.chain_id();
 
-        let chain_b = chain_driver_b.chain();
+        let chain_b = driver.chain_b();
 
         let chain_id_b = chain_b.chain_id();
 
-        let channel_id_a = driver.channel_id_at(PhantomData::<(A, B)>);
+        let channel_id_a = driver.channel_id_a();
 
-        let port_id_a = driver.port_id_at(PhantomData::<(A, B)>);
+        let port_id_a = driver.port_id_a();
 
-        let channel_id_b = driver.channel_id_at(PhantomData::<(B, A)>);
+        let channel_id_b = driver.channel_id_b();
 
-        let port_id_b = driver.port_id_at(PhantomData::<(B, A)>);
+        let port_id_b = driver.port_id_b();
 
         logger
             .log_message(&format!(
