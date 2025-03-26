@@ -3,27 +3,17 @@ use alloc::{format, vec};
 use core::marker::PhantomData;
 use core::time::Duration;
 
-use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::birelay::traits::{CanAutoBiRelay, HasTwoWayRelay};
-use hermes_relayer_components::chain::traits::packet::fields::{
-    CanReadPacketFields, HasPacketSequence,
-};
+use hermes_relayer_components::chain::traits::packet::fields::HasPacketSequence;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayAt;
-use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_relayer_components::multi::traits::relay_at::RelayAt;
-use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelayWithHeights;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
-use hermes_relayer_components::relay::traits::target::{
-    DestinationTarget, HasChainTargets, SourceTarget,
-};
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
@@ -33,11 +23,9 @@ use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRan
 use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, UserWallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use hermes_test_components::driver::traits::channel_at::HasChannelIdAt;
-use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
-use hermes_test_components::driver::traits::types::relay_driver_at::HasRelayDriverAt;
-use hermes_test_components::setup::traits::port_id_at::HasPortIdAt;
 use hermes_test_components::test_case::traits::test_case::TestCase;
+
+use crate::traits::CanUseBinaryTestDriverMethods;
 
 pub struct TestPacketClearing<A = Index<0>, B = Index<1>>(pub PhantomData<(A, B)>);
 
@@ -47,61 +35,9 @@ impl<A, B> Default for TestPacketClearing<A, B> {
     }
 }
 
-impl<Driver, A, B, ChainA, ChainB, BiRelay, ChainDriverA, ChainDriverB, RelayDriver, Logger>
-    TestCase<Driver> for TestPacketClearing<A, B>
+impl<Driver, A, B> TestCase<Driver> for TestPacketClearing<A, B>
 where
-    Driver: HasAsyncErrorType
-        + HasLogger<Logger = Logger>
-        + HasChainTypeAt<A, Chain = ChainA>
-        + HasChainTypeAt<B, Chain = ChainB>
-        + HasChainDriverAt<A, ChainDriver = ChainDriverA>
-        + HasChainDriverAt<B, ChainDriver = ChainDriverB>
-        + HasRelayDriverAt<A, B, RelayDriver = RelayDriver>
-        + HasChannelIdAt<A, B>
-        + HasChannelIdAt<B, A>
-        + HasPortIdAt<A, B>
-        + HasPortIdAt<B, A>,
-    ChainDriverA: HasChain<Chain = ChainA>
-        + HasDenom<TransferDenom>
-        + HasWallet<UserWallet>
-        + CanGenerateRandomAmount,
-    ChainDriverB: HasChain<Chain = ChainB>
-        + HasWallet<UserWallet>
-        + HasDenom<TransferDenom>
-        + CanGenerateRandomAmount,
-    RelayDriver: HasBiRelayAt<Index<0>, Index<1>, BiRelay = BiRelay>,
-    ChainA: HasChainId
-        + CanQueryBalance
-        + HasAmountMethods
-        + CanIbcTransferToken<ChainB>
-        + CanQueryPacketIsReceived<ChainB>
-        + CanQueryPacketIsCleared<ChainB>
-        + CanReadPacketFields<ChainB>
-        + HasDefaultMemo
-        + CanQueryChainStatus,
-    ChainB: HasChainId
-        + HasAmountMethods
-        + CanQueryBalance
-        + CanIbcTransferToken<ChainA>
-        + CanQueryPacketIsReceived<ChainA>
-        + CanQueryPacketIsCleared<ChainA>
-        + CanReadPacketFields<ChainA>
-        + HasDefaultMemo
-        + CanQueryChainStatus,
-    BiRelay: HasTwoWayRelay + CanAutoBiRelay,
-    RelayAt<BiRelay, Index<0>, Index<1>>: HasChainTargets<SrcChain = ChainA, DstChain = ChainB>
-        + CanRelayReceivePacket
-        + CanAutoRelayWithHeights<SourceTarget>
-        + CanAutoRelayWithHeights<DestinationTarget>,
-    RelayAt<BiRelay, Index<1>, Index<0>>: HasChainTargets<SrcChain = ChainB, DstChain = ChainA>
-        + CanRelayReceivePacket
-        + CanAutoRelayWithHeights<SourceTarget>
-        + CanAutoRelayWithHeights<DestinationTarget>,
-    Logger: CanLogMessage,
-    Driver::Error: From<ChainA::Error>
-        + From<ChainB::Error>
-        + From<ErrorOf<RelayAt<BiRelay, Index<0>, Index<1>>>>
-        + From<ErrorOf<RelayAt<BiRelay, Index<1>, Index<0>>>>,
+    Driver: CanUseBinaryTestDriverMethods<A, B>,
     A: Async,
     B: Async,
 {
@@ -144,11 +80,11 @@ where
 
         let a_to_b_sequences = run_one_way_clearing_test::<
             Driver,
-            RelayAt<BiRelay, Index<0>, Index<1>>,
-            ChainA,
-            ChainDriverA,
-            ChainB,
-            ChainDriverB,
+            Driver::RelayAToB,
+            Driver::ChainA,
+            Driver::ChainDriverA,
+            Driver::ChainB,
+            Driver::ChainDriverB,
         >(
             chain_driver_a,
             chain_driver_b,
@@ -168,11 +104,11 @@ where
 
         let b_to_a_sequences = run_one_way_clearing_test::<
             Driver,
-            RelayAt<BiRelay, Index<1>, Index<0>>,
-            ChainB,
-            ChainDriverB,
-            ChainA,
-            ChainDriverA,
+            Driver::RelayBToA,
+            Driver::ChainB,
+            Driver::ChainDriverB,
+            Driver::ChainA,
+            Driver::ChainDriverA,
         >(
             chain_driver_b,
             chain_driver_a,
@@ -194,14 +130,16 @@ where
             let is_received = chain_driver_a
                 .chain()
                 .query_packet_is_received(port_id_a, channel_id_a, &b_to_a_sequences[1])
-                .await?;
+                .await
+                .map_err(Driver::raise_error)?;
 
             assert!(is_received);
 
             let is_received = chain_driver_b
                 .chain()
                 .query_packet_is_received(port_id_b, channel_id_b, &a_to_b_sequences[1])
-                .await?;
+                .await
+                .map_err(Driver::raise_error)?;
 
             assert!(is_received);
 
@@ -213,14 +151,16 @@ where
             let is_cleared = chain_driver_a
                 .chain()
                 .query_packet_is_cleared(port_id_a, channel_id_a, &a_to_b_sequences[0])
-                .await?;
+                .await
+                .map_err(Driver::raise_error)?;
 
             assert!(is_cleared);
 
             let is_cleared = chain_driver_b
                 .chain()
                 .query_packet_is_cleared(port_id_b, channel_id_b, &b_to_a_sequences[0])
-                .await?;
+                .await
+                .map_err(Driver::raise_error)?;
 
             assert!(is_cleared);
         }
@@ -252,7 +192,9 @@ async fn run_one_way_clearing_test<
     dst_port_id: &DstChain::PortId,
 ) -> Result<Vec<SrcChain::Sequence>, Driver::Error>
 where
-    Driver: HasAsyncErrorType,
+    Driver: CanRaiseAsyncError<Relay::Error>
+        + CanRaiseAsyncError<SrcChain::Error>
+        + CanRaiseAsyncError<DstChain::Error>,
     Relay: CanRelayReceivePacket<SrcChain = SrcChain, DstChain = DstChain>,
     SrcChainDriver: HasChain<Chain = SrcChain>
         + HasDenom<TransferDenom>
@@ -267,7 +209,6 @@ where
         + HasPacketSequence<DstChain>
         + HasAmountMethods,
     DstChain: HasWalletType + CanQueryChainStatus + CanQueryPacketIsReceived<SrcChain>,
-    Driver::Error: From<SrcChain::Error> + From<DstChain::Error> + From<Relay::Error>,
 {
     let sender_wallet = src_chain_driver.wallet(PhantomData::<UserWallet>);
 
@@ -282,7 +223,10 @@ where
     let src_chain = src_chain_driver.chain();
     let dst_chain = dst_chain_driver.chain();
 
-    let initial_balance_sender = src_chain.query_balance(sender_address, denom).await?;
+    let initial_balance_sender = src_chain
+        .query_balance(sender_address, denom)
+        .await
+        .map_err(Driver::raise_error)?;
 
     let transfer_amount_1 = src_chain_driver
         .random_amount(1000, &initial_balance_sender)
@@ -297,22 +241,34 @@ where
             receiver_address,
             &transfer_amount_1,
             &src_chain.default_memo(),
-            &dst_chain.query_chain_status().await?,
+            &dst_chain
+                .query_chain_status()
+                .await
+                .map_err(Driver::raise_error)?,
         )
-        .await?;
+        .await
+        .map_err(Driver::raise_error)?;
 
     let sequence_1 = SrcChain::packet_sequence(&packet_1);
 
-    let src_chain_status = src_chain.query_chain_status().await?;
+    let src_chain_status = src_chain
+        .query_chain_status()
+        .await
+        .map_err(Driver::raise_error)?;
 
     let _ = relay
         .relay_receive_packet(SrcChain::chain_status_height(&src_chain_status), &packet_1)
-        .await?;
+        .await
+        .map_err(Driver::raise_error)?;
 
     let expected_sender_balance =
-        SrcChain::subtract_amount(&initial_balance_sender, &transfer_amount_1)?;
+        SrcChain::subtract_amount(&initial_balance_sender, &transfer_amount_1)
+            .map_err(Driver::raise_error)?;
 
-    let current_sender_balance = src_chain.query_balance(sender_address, denom).await?;
+    let current_sender_balance = src_chain
+        .query_balance(sender_address, denom)
+        .await
+        .map_err(Driver::raise_error)?;
 
     assert_eq!(expected_sender_balance, current_sender_balance);
 
@@ -320,13 +276,15 @@ where
     {
         let is_received = dst_chain
             .query_packet_is_received(dst_port_id, dst_channel_id, &sequence_1)
-            .await?;
+            .await
+            .map_err(Driver::raise_error)?;
 
         assert!(is_received);
 
         let is_cleared = src_chain
             .query_packet_is_cleared(src_port_id, src_channel_id, &sequence_1)
-            .await?;
+            .await
+            .map_err(Driver::raise_error)?;
 
         assert!(!is_cleared);
     }
@@ -344,16 +302,24 @@ where
             receiver_address,
             &transfer_amount_2,
             &src_chain.default_memo(),
-            &dst_chain.query_chain_status().await?,
+            &dst_chain
+                .query_chain_status()
+                .await
+                .map_err(Driver::raise_error)?,
         )
-        .await?;
+        .await
+        .map_err(Driver::raise_error)?;
 
     let sequence_2 = SrcChain::packet_sequence(&packet_2);
 
     let expected_balance_sender =
-        SrcChain::subtract_amount(&current_sender_balance, &transfer_amount_2)?;
+        SrcChain::subtract_amount(&current_sender_balance, &transfer_amount_2)
+            .map_err(Driver::raise_error)?;
 
-    let current_sender_balance = src_chain.query_balance(sender_address, denom).await?;
+    let current_sender_balance = src_chain
+        .query_balance(sender_address, denom)
+        .await
+        .map_err(Driver::raise_error)?;
 
     assert_eq!(expected_balance_sender, current_sender_balance);
 
@@ -361,13 +327,15 @@ where
     {
         let is_received = dst_chain
             .query_packet_is_received(dst_port_id, dst_channel_id, &sequence_2)
-            .await?;
+            .await
+            .map_err(Driver::raise_error)?;
 
         assert!(!is_received);
 
         let is_cleared = src_chain
             .query_packet_is_cleared(src_port_id, src_channel_id, &sequence_2)
-            .await?;
+            .await
+            .map_err(Driver::raise_error)?;
 
         assert!(!is_cleared);
     }
