@@ -1,19 +1,20 @@
 use alloc::format;
 use core::marker::PhantomData;
-use core::time::Duration;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_logging_components::traits::logger::CanLogMessage;
-use hermes_relayer_components::birelay::traits::{CanAutoBiRelay, HasTwoWayRelay};
+use hermes_relayer_components::birelay::traits::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::packet::fields::HasPacketSequence;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayAt;
+use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelayWithHeights;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
@@ -85,6 +86,16 @@ where
         let receiver_address = Driver::ChainB::wallet_address(receiver_wallet);
 
         let denom = chain_driver_a.denom(PhantomData::<TransferDenom>);
+
+        let start_height_a = chain_a
+            .query_chain_height()
+            .await
+            .map_err(Driver::raise_error)?;
+
+        let start_height_b = chain_b
+            .query_chain_height()
+            .await
+            .map_err(Driver::raise_error)?;
 
         let initial_balance_sender = chain_a
             .query_balance(sender_address, denom)
@@ -208,8 +219,25 @@ where
             assert!(!is_cleared);
         }
 
-        birelay
-            .auto_bi_relay(Some(Duration::from_secs(20)), Some(Duration::from_secs(0)))
+        let end_height_a = chain_a
+            .query_chain_height()
+            .await
+            .map_err(Driver::raise_error)?;
+
+        let end_height_b = chain_b
+            .query_chain_height()
+            .await
+            .map_err(Driver::raise_error)?;
+
+        // Perform clearing on the start-end height ranges
+
+        relay_a_to_b
+            .auto_relay_with_heights(SourceTarget, &start_height_a, Some(&end_height_a))
+            .await
+            .map_err(Driver::raise_error)?;
+
+        relay_a_to_b
+            .auto_relay_with_heights(DestinationTarget, &start_height_b, Some(&end_height_b))
             .await
             .map_err(Driver::raise_error)?;
 

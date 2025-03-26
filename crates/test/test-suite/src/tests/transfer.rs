@@ -76,7 +76,7 @@ where
 
         let port_id_b = driver.port_id_b();
 
-        let _relayer = relay_driver
+        relay_driver
             .run_relayer_in_background()
             .await
             .map_err(Driver::raise_error)?;
