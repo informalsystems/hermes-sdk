@@ -1853,6 +1853,7 @@ name = "hermes-ibc-test-suite"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-chain-components",
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-test-components",
