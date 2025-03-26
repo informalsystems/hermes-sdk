@@ -1,12 +1,12 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_cosmos_relayer::presets::chain::CosmosChainFullPreset;
-    use CosmosChainFullPreset::re_exports::*;
+    use hermes_cosmos_chain_preset::presets::CosmosChainPreset;
+    use CosmosChainPreset::re_exports::*;
 
     use crate::impls::client_state::ProvideWrappedTendermintClientState;
 
-    CosmosChainFullPreset::with_components! {
+    CosmosChainPreset::with_components! {
         [
             ClientStateTypeComponent,
             ClientStateFieldsComponent,
@@ -14,7 +14,7 @@ mod preset {
         | Components | {
             cgp_preset! {
                 CosmosChainWasmPreset {
-                    Components : CosmosChainFullPreset::Provider,
+                    Components : CosmosChainPreset::Provider,
                     [
                         ClientStateTypeComponent,
                         ClientStateFieldsComponent,

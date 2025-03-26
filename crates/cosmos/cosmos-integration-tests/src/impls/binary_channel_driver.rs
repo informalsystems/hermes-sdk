@@ -17,9 +17,7 @@ use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;
 
-pub struct BuildCosmosBinaryChannelDriver;
-
-#[cgp_provider(BinaryChannelDriverBuilderComponent)]
+#[cgp_new_provider(BinaryChannelDriverBuilderComponent)]
 impl<Setup> BinaryChannelDriverBuilder<Setup> for BuildCosmosBinaryChannelDriver
 where
     Setup: HasBiRelayTypeAt<Index<0>, Index<1>, BiRelay = CosmosBiRelay>

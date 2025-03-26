@@ -1,4 +1,7 @@
+use core::marker::PhantomData;
+
 use cgp::core::component::WithProvider;
+use cgp::core::macros::blanket_trait;
 use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
@@ -8,12 +11,20 @@ use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use crate::multi::types::tags::{Dst, Src};
 use crate::relay::traits::chains::HasRelayChainTypes;
 
-#[cgp_component {
-  name: RelayTypeAtComponent<SrcTag, DstTag>,
-  provider: ProvideRelayTypeAt,
+#[cgp_type {
+    name: RelayTypeProviderAtComponent<A, B>,
+    provider: RelayTypeProviderAt,
 }]
-pub trait HasRelayTypeAt<SrcTag, DstTag>: Async {
+pub trait HasRelayTypeAt<A, B>: Async {
     type Relay: Async;
+}
+
+#[cgp_getter {
+    name: RelayGetterAtComponent<A, B>,
+    provider: RelayGetterAt,
+}]
+pub trait HasRelayAt<A, B>: HasRelayTypeAt<A, B> {
+    fn relay_at(&self, _phantom: PhantomData<(A, B)>) -> &Self::Relay;
 }
 
 pub type RelayAt<Context, SrcTag, DstTag> = <Context as HasRelayTypeAt<SrcTag, DstTag>>::Relay;
@@ -21,6 +32,7 @@ pub type RelayAt<Context, SrcTag, DstTag> = <Context as HasRelayTypeAt<SrcTag, D
 pub type ClientIdAt<Context, SrcTag, DstTag> =
     ClientIdOf<ChainAt<Context, SrcTag>, ChainAt<Context, DstTag>>;
 
+#[blanket_trait]
 pub trait HasBoundedRelayTypeAt<SrcTag, DstTag>:
     HasRelayTypeAt<
         SrcTag,
@@ -34,28 +46,4 @@ pub trait HasBoundedRelayTypeAt<SrcTag, DstTag>:
     > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>> + HasAsyncErrorType>
     + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>> + HasAsyncErrorType>
 {
-}
-
-impl<Context, SrcTag, DstTag> HasBoundedRelayTypeAt<SrcTag, DstTag> for Context where
-    Context: HasRelayTypeAt<
-            SrcTag,
-            DstTag,
-            Relay: HasRelayChainTypes<
-                SrcChain = ChainAt<Self, SrcTag>,
-                DstChain = ChainAt<Self, DstTag>,
-            >,
-        > + HasChainTypeAt<SrcTag, Chain: HasIbcChainTypes<ChainAt<Self, DstTag>> + HasAsyncErrorType>
-        + HasChainTypeAt<DstTag, Chain: HasIbcChainTypes<ChainAt<Self, SrcTag>> + HasAsyncErrorType>
-{
-}
-
-#[cgp_provider(RelayTypeAtComponent<SrcTag, DstTag>)]
-impl<Context, SrcTag, DstTag, Provider, Relay> ProvideRelayTypeAt<Context, SrcTag, DstTag>
-    for WithProvider<Provider>
-where
-    Context: Async,
-    Provider: ProvideType<Context, RelayTypeAtComponent<SrcTag, DstTag>, Type = Relay>,
-    Relay: Async,
-{
-    type Relay = Relay;
 }

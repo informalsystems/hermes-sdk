@@ -1,7 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
+    use hermes_cosmos_chain_preset::presets::CosmosToCosmosComponents;
     use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
         ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
         ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,

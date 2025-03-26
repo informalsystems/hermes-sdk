@@ -1,11 +1,11 @@
 use cgp::core::field::Index;
-use cgp::core::macros::trait_alias;
+use cgp::core::macros::blanket_trait;
 
 use crate::multi::traits::chain_at::HasChainTypeAt;
 use crate::multi::traits::relay_at::HasRelayTypeAt;
 use crate::relay::traits::chains::{HasDstChainType, HasSrcChainType};
 
-#[trait_alias]
+#[blanket_trait]
 pub trait HasBiRelayTypes:
     HasChainTypeAt<Index<0>, Chain = Self::ChainA>
     + HasChainTypeAt<Index<1>, Chain = Self::ChainB>

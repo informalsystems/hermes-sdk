@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
+use crate::driver::traits::types::chain_driver_at::{ChainDriverAt, HasChainDriverTypeAt};
 
 #[cgp_component {
   provider: ChainSetup,
@@ -13,5 +13,5 @@ pub trait CanSetupChain<Tag: Async>: HasChainDriverTypeAt<Tag> + HasAsyncErrorTy
     async fn setup_chain(
         &self,
         _tag: PhantomData<Tag>,
-    ) -> Result<ChainDriverTypeAt<Self, Tag>, Self::Error>;
+    ) -> Result<ChainDriverAt<Self, Tag>, Self::Error>;
 }

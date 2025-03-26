@@ -7,39 +7,28 @@ use cgp::prelude::*;
 
 use crate::chain::types::aliases::ChainIdOf;
 
-#[cgp_component {
-  name: ChainTypeAtComponent<Tag>,
-  provider: ProvideChainTypeAt,
+#[cgp_type {
+    name: ChainTypeProviderAtComponent<I>,
+    provider: ChainTypeProviderAt,
 }]
-pub trait HasChainTypeAt<Tag>: Async {
+pub trait HasChainTypeAt<I>: Async {
     type Chain: Async;
 }
 
 #[cgp_component {
-  name: ChainGetterAtComponent<Tag>,
-  provider: ChainGetterAt,
+    name: ChainGetterAtComponent<I>,
+    provider: ChainGetterAt,
 }]
-pub trait HasChainAt<Tag>: HasChainTypeAt<Tag> {
-    fn chain_at(&self, _tag: PhantomData<Tag>) -> &Self::Chain;
+pub trait HasChainAt<I>: HasChainTypeAt<I> {
+    fn chain_at(&self, _tag: PhantomData<I>) -> &Self::Chain;
 }
 
-pub type ChainAt<Context, Tag> = <Context as HasChainTypeAt<Tag>>::Chain;
+pub type ChainAt<Context, I> = <Context as HasChainTypeAt<I>>::Chain;
 
-pub type ChainIdAt<Context, Tag> = ChainIdOf<ChainAt<Context, Tag>>;
+pub type ChainIdAt<Context, I> = ChainIdOf<ChainAt<Context, I>>;
 
-#[cgp_provider(ChainTypeAtComponent<Tag>)]
-impl<Context, Tag, Provider, Chain> ProvideChainTypeAt<Context, Tag> for WithProvider<Provider>
-where
-    Provider: ProvideType<Context, ChainTypeAtComponent<Tag>, Type = Chain>,
-    Context: Async,
-    Chain: Async,
-{
-    type Chain = Chain;
-}
-
-#[cgp_provider(ChainTypeAtComponent<ChainTag>)]
-impl<Context, ChainTag, FieldTag, Chain> ProvideChainTypeAt<Context, ChainTag>
-    for UseField<FieldTag>
+#[cgp_provider(ChainTypeProviderAtComponent<I>)]
+impl<Context, I, FieldTag, Chain> ChainTypeProviderAt<Context, I> for UseField<FieldTag>
 where
     Context: Async + HasField<FieldTag, Value = Chain>,
     Chain: Async,
@@ -47,12 +36,12 @@ where
     type Chain = Chain;
 }
 
-#[cgp_provider(ChainGetterAtComponent<ChainTag>)]
-impl<Context, ChainTag, FieldTag, Chain> ChainGetterAt<Context, ChainTag> for UseField<FieldTag>
+#[cgp_provider(ChainGetterAtComponent<I>)]
+impl<Context, I, FieldTag, Chain> ChainGetterAt<Context, I> for UseField<FieldTag>
 where
-    Context: HasChainTypeAt<ChainTag, Chain = Chain> + HasField<FieldTag, Value = Chain>,
+    Context: HasChainTypeAt<I, Chain = Chain> + HasField<FieldTag, Value = Chain>,
 {
-    fn chain_at(context: &Context, _tag: PhantomData<ChainTag>) -> &Context::Chain {
+    fn chain_at(context: &Context, _tag: PhantomData<I>) -> &Context::Chain {
         context.get_field(PhantomData)
     }
 }

@@ -33,6 +33,7 @@ members = [
     "crates/logging/logger",
 
     "crates/cosmos/cosmos-chain-components",
+    "crates/cosmos/cosmos-chain-preset",
     "crates/cosmos/cosmos-encoding-components",
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
@@ -153,6 +154,7 @@ hermes-cli-components                   = { version = "0.1.0" }
 hermes-cli-framework                    = { version = "0.1.0" }
 
 hermes-cosmos-chain-components          = { version = "0.1.0" }
+hermes-cosmos-chain-preset              = { version = "0.1.0" }
 hermes-cosmos-encoding-components       = { version = "0.1.0" }
 hermes-cosmos-relayer                   = { version = "0.1.0" }
 hermes-cosmos-wasm-relayer              = { version = "0.1.0" }
@@ -226,6 +228,7 @@ hermes-cli-components               = { path = "./crates/cli/cli-components" }
 hermes-cli-framework                = { path = "./crates/cli/cli-framework" }
 
 hermes-cosmos-chain-components      = { path = "./crates/cosmos/cosmos-chain-components" }
+hermes-cosmos-chain-preset          = { path = "./crates/cosmos/cosmos-chain-preset" }
 hermes-cosmos-encoding-components   = { path = "./crates/cosmos/cosmos-encoding-components" }
 hermes-cosmos-relayer               = { path = "./crates/cosmos/cosmos-relayer" }
 hermes-cosmos-wasm-relayer          = { path = "./crates/cosmos/cosmos-wasm-relayer" }

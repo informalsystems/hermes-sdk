@@ -1,0 +1,22 @@
+[package]
+name         = "hermes-cosmos-chain-preset"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+description  = """
+    Implementation of an IBC Relayer in Rust, as a library
+"""
+
+[dependencies]
+cgp                                 = { workspace = true }
+hermes-runtime                      = { workspace = true }
+hermes-relayer-components           = { workspace = true }
+hermes-test-components              = { workspace = true }
+hermes-runtime-components           = { workspace = true }
+hermes-chain-type-components        = { workspace = true }
+hermes-cosmos-chain-components      = { workspace = true }
+hermes-cosmos-test-components       = { workspace = true }

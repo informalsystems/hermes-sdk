@@ -1,10 +1,10 @@
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::CosmosClientEncodingComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, ConverterComponent};
 use hermes_encoding_components::traits::decode::{CanDecode, DecoderComponent};

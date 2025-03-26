@@ -29,7 +29,7 @@ where
         HasIbcChainTypes<ChainAt<Setup, B>> + HasInitConnectionOptionsType<ChainAt<Setup, B>>,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,
     RelayAt<Setup, A, B>: CanBootstrapConnection,
-    BiRelayAt<Setup, A, B>:
+    Setup::BiRelay:
         HasTwoWayRelay + HasRelayTypeAt<Index<0>, Index<1>, Relay = RelayAt<Setup, A, B>>,
 {
     async fn setup_connection(

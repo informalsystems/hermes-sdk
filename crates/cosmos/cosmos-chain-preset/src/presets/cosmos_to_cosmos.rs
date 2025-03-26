@@ -1,6 +1,23 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
+    use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
+    use hermes_cosmos_chain_components::impls::client::create_client_message::BuildAnyCreateClientMessage;
+    use hermes_cosmos_chain_components::impls::client::create_client_payload::BuildCosmosCreateClientPayload;
+    use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
+    use hermes_cosmos_chain_components::impls::client::update_client_payload::BuildTendermintUpdateClientPayload;
+    use hermes_cosmos_chain_components::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
+    use hermes_cosmos_chain_components::impls::message_height::GetCosmosCounterpartyMessageHeight;
+    use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
+    use hermes_cosmos_chain_components::impls::packet::packet_message::BuildCosmosPacketMessages;
+    use hermes_cosmos_chain_components::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
+    use hermes_cosmos_chain_components::impls::types::client_state::ProvideTendermintClientState;
+    use hermes_cosmos_chain_components::impls::types::consensus_state::ProvideTendermintConsensusState;
+    use hermes_cosmos_chain_components::impls::types::create_client_options::{
+        ProvideCosmosCreateClientSettings, ProvideNoCreateClientMessageOptionsType,
+    };
+    use hermes_cosmos_chain_components::impls::types::payload::ProvideCosmosPayloadTypes;
+    use hermes_cosmos_test_components::chain::impls::transfer::amount::ConvertCosmosIbcAmount;
     use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
     use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
     use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
@@ -44,23 +61,7 @@ mod preset {
     };
     use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
     use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-
-    use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
-    use crate::impls::client::create_client_message::BuildAnyCreateClientMessage;
-    use crate::impls::client::create_client_payload::BuildCosmosCreateClientPayload;
-    use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
-    use crate::impls::client::update_client_payload::BuildTendermintUpdateClientPayload;
-    use crate::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
-    use crate::impls::message_height::GetCosmosCounterpartyMessageHeight;
-    use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
-    use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
-    use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
-    use crate::impls::types::client_state::ProvideTendermintClientState;
-    use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
-    use crate::impls::types::create_client_options::{
-        ProvideCosmosCreateClientSettings, ProvideNoCreateClientMessageOptionsType,
-    };
-    use crate::impls::types::payload::ProvideCosmosPayloadTypes;
+    use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
 
     cgp_preset! {
         CosmosToCosmosComponents {
@@ -136,6 +137,9 @@ mod preset {
                 TimeoutUnorderedPacketMessageBuilderComponent,
             ]:
                 BuildCosmosPacketMessages,
+
+            IbcTransferredAmountConverterComponent:
+                ConvertCosmosIbcAmount,
         }
     }
 }

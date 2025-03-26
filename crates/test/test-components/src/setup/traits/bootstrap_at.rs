@@ -2,18 +2,20 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::driver::traits::types::chain_driver::HasChainDriverType;
-use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
-
-#[cgp_component {
-  name: BootstrapAtComponent,
-  provider: ProvideBootstrapAt,
-  context: Setup,
+#[cgp_type {
+    name: BootstrapTypeProviderAtComponent<I>,
+    provider: BootstrapTypeProviderAt,
 }]
-pub trait HasBootstrapAt<Tag>: HasChainDriverTypeAt<Tag> {
-    type Bootstrap: HasChainDriverType<ChainDriver = ChainDriverTypeAt<Self, Tag>>;
-
-    fn chain_bootstrap(&self, _tag: PhantomData<Tag>) -> &Self::Bootstrap;
+pub trait HasBootstrapTypeAt<I>: Async {
+    type Bootstrap: Async;
 }
 
-pub type BootstrapAt<Context, Tag> = <Context as HasBootstrapAt<Tag>>::Bootstrap;
+#[cgp_getter {
+    name: BootstrapGetterAtComponent<I>,
+    provider: BootstrapGetterAt,
+}]
+pub trait HasBootstrapAt<I>: HasBootstrapTypeAt<I> {
+    fn chain_bootstrap(&self, _tag: PhantomData<I>) -> &Self::Bootstrap;
+}
+
+pub type BootstrapAt<Context, Tag> = <Context as HasBootstrapTypeAt<Tag>>::Bootstrap;

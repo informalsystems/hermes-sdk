@@ -6,19 +6,17 @@ use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOpti
 use hermes_relayer_components::chain::traits::types::ibc::HasConnectionIdType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_test_components::setup::traits::init_channel_options_at::{
-    InitChannelOptionsAtComponent, ProvideInitChannelOptionsAt,
+    InitChannelOptionsGetterAt, InitChannelOptionsGetterAtComponent,
 };
 use ibc::core::host::types::identifiers::ConnectionId;
 
-pub struct UseCosmosInitChannelOptions;
-
-#[cgp_provider(InitChannelOptionsAtComponent)]
-impl<Context, Chain, Counterparty, TargetTag: Async, CounterpartyTag: Async>
-    ProvideInitChannelOptionsAt<Context, TargetTag, CounterpartyTag> for UseCosmosInitChannelOptions
+#[cgp_new_provider(InitChannelOptionsGetterAtComponent<A, B>)]
+impl<Context, Chain, Counterparty, A, B, Tag> InitChannelOptionsGetterAt<Context, A, B>
+    for UseCosmosInitChannelOptions<Tag>
 where
-    Context: HasChainTypeAt<TargetTag, Chain = Chain>
-        + HasChainTypeAt<CounterpartyTag, Chain = Counterparty>
-        + HasField<symbol!("init_channel_options"), Value = CosmosInitChannelOptions>,
+    Context: HasChainTypeAt<A, Chain = Chain>
+        + HasChainTypeAt<B, Chain = Counterparty>
+        + HasField<Tag, Value = CosmosInitChannelOptions>,
     Chain: HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>
         + HasInitChannelOptionsType<Counterparty, InitChannelOptions = CosmosInitChannelOptions>,
     Counterparty: HasConnectionIdType<Chain>,

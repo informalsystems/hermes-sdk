@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -14,9 +13,7 @@ use hermes_relayer_components::multi::traits::relay_at::{
 use crate::setup::traits::builder_at::HasBuilderAt;
 use crate::setup::traits::relay::{RelaySetup, RelaySetupComponent};
 
-pub struct SetupRelayWithBuilder;
-
-#[cgp_provider(RelaySetupComponent)]
+#[cgp_new_provider(RelaySetupComponent)]
 impl<Setup, A: Async, B: Async> RelaySetup<Setup, A, B> for SetupRelayWithBuilder
 where
     Setup: HasBoundedRelayTypeAt<A, B>
@@ -25,12 +22,12 @@ where
         + CanRaiseAsyncError<ErrorOf<Setup::Builder>>,
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>> + Clone,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>> + Clone,
-    Setup::Builder: CanBuildRelayFromChains<Index<0>, Index<1>>
-        + CanBuildRelayFromChains<Index<1>, Index<0>>
-        + HasChainTypeAt<Index<0>, Chain = ChainAt<Setup, A>>
-        + HasChainTypeAt<Index<1>, Chain = ChainAt<Setup, B>>
-        + HasRelayTypeAt<Index<0>, Index<1>, Relay = RelayAt<Setup, A, B>>
-        + HasRelayTypeAt<Index<1>, Index<0>, Relay = RelayAt<Setup, B, A>>,
+    Setup::Builder: CanBuildRelayFromChains<A, B>
+        + CanBuildRelayFromChains<B, A>
+        + HasChainTypeAt<A, Chain = ChainAt<Setup, A>>
+        + HasChainTypeAt<B, Chain = ChainAt<Setup, B>>
+        + HasRelayTypeAt<A, B, Relay = RelayAt<Setup, A, B>>
+        + HasRelayTypeAt<B, A, Relay = RelayAt<Setup, B, A>>,
 {
     async fn setup_relays(
         setup: &Setup,
@@ -44,7 +41,7 @@ where
 
         let relay_a_to_b = build
             .build_relay_from_chains(
-                PhantomData::<(Index<0>, Index<1>)>,
+                PhantomData::<(A, B)>,
                 client_id_a,
                 client_id_b,
                 chain_a.clone(),
@@ -55,7 +52,7 @@ where
 
         let relay_b_to_a = build
             .build_relay_from_chains(
-                PhantomData::<(Index<1>, Index<0>)>,
+                PhantomData::<(B, A)>,
                 client_id_b,
                 client_id_a,
                 chain_b.clone(),

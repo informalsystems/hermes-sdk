@@ -1,8 +1,11 @@
+use cgp::core::macros::blanket_trait;
+
 use crate::multi::traits::chain_at::HasChainTypeAt;
 use crate::relay::traits::chains::HasRelayChainTypes;
 use crate::relay::traits::target::relay_target::RelayTarget;
 use crate::relay::traits::target::types::{DestinationTarget, SourceTarget};
 
+#[blanket_trait]
 pub trait HasTargetChainTypes<Target: RelayTarget>:
     HasChainTypeAt<Target::Chain, Chain = Self::TargetChain>
     + HasChainTypeAt<Target::Counterparty, Chain = Self::CounterpartyChain>
@@ -12,17 +15,7 @@ pub trait HasTargetChainTypes<Target: RelayTarget>:
     type CounterpartyChain;
 }
 
-impl<Relay, Target, TargetChain, CounterpartyChain> HasTargetChainTypes<Target> for Relay
-where
-    Target: RelayTarget,
-    Relay: HasChainTypeAt<Target::Chain, Chain = TargetChain>
-        + HasChainTypeAt<Target::Counterparty, Chain = CounterpartyChain>,
-{
-    type TargetChain = TargetChain;
-
-    type CounterpartyChain = CounterpartyChain;
-}
-
+#[blanket_trait]
 pub trait HasSourceTargetChainTypes:
     HasRelayChainTypes
     + HasTargetChainTypes<
@@ -33,8 +26,7 @@ pub trait HasSourceTargetChainTypes:
 {
 }
 
-impl<Relay> HasSourceTargetChainTypes for Relay where Relay: HasRelayChainTypes {}
-
+#[blanket_trait]
 pub trait HasDestinationTargetChainTypes:
     HasRelayChainTypes
     + HasTargetChainTypes<
@@ -45,14 +37,8 @@ pub trait HasDestinationTargetChainTypes:
 {
 }
 
-impl<Relay> HasDestinationTargetChainTypes for Relay where Relay: HasRelayChainTypes {}
-
+#[blanket_trait]
 pub trait HasChainTargets: HasSourceTargetChainTypes + HasDestinationTargetChainTypes {}
-
-impl<Relay> HasChainTargets for Relay where
-    Relay: HasSourceTargetChainTypes + HasDestinationTargetChainTypes
-{
-}
 
 pub type TargetChainOf<Relay, Target> = <Relay as HasTargetChainTypes<Target>>::TargetChain;
 

@@ -29,6 +29,7 @@ hermes-relayer-components-extra         = { workspace = true }
 hermes-test-components                  = { workspace = true }
 hermes-async-runtime-components         = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
+hermes-cosmos-chain-preset              = { workspace = true }
 hermes-cosmos-test-components           = { workspace = true }
 hermes-cosmos-integration-tests         = { workspace = true }
 hermes-cosmos-relayer                   = { workspace = true }

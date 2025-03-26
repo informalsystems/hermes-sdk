@@ -11,14 +11,10 @@ pub struct TransferDenom;
 #[derive(Clone, Copy, Default)]
 pub struct StakingDenom;
 
-#[cgp_component {
-  name: DenomGetterComponent,
-  provider: DenomGetterAt,
-  context: ChainDriver,
+#[cgp_getter {
+    name: DenomGetterComponent<DenomKind>,
+    provider: DenomGetter,
 }]
-pub trait HasDenomAt<DenomKind, I: Async>: HasChainType
-where
-    Self::Chain: HasDenomType,
-{
-    fn denom_at(&self, _kind: DenomKind, _index: PhantomData<I>) -> &DenomOf<Self::Chain>;
+pub trait HasDenom<DenomKind>: HasChainType<Chain: HasDenomType> {
+    fn denom(&self, _phantom: PhantomData<DenomKind>) -> &DenomOf<Self::Chain>;
 }
