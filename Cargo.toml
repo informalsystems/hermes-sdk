@@ -179,24 +179,24 @@ hermes-ibc-token-transfer-components    = { version = "0.1.0" }
 hermes-ibc-mock-chain                   = { version = "0.1.0" }
 
 [patch.crates-io]
-cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
-cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "remove-self-path" }
+cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
 
 hermes-chain-components             = { path = "./crates/chain/chain-components" }
 hermes-chain-type-components        = { path = "./crates/chain/chain-type-components" }
