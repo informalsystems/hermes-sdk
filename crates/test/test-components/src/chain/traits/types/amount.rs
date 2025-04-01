@@ -1,19 +1,12 @@
-use core::fmt::{Debug, Display};
-
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
 
 use crate::chain::traits::types::denom::HasDenomType;
 
-pub type AmountOf<Chain> = <Chain as HasAmountType>::Amount;
-
 #[cgp_component {
-  name: AmountTypeComponent,
-  provider: ProvideAmountType,
-  context: Chain,
+    provider: AmountDenomGetter,
 }]
-pub trait HasAmountType: HasDenomType {
-    type Amount: Debug + Display + Eq + PartialOrd + Clone + Async;
-
+pub trait HasAmountDenom: HasAmountType + HasDenomType {
     fn amount_denom(amount: &Self::Amount) -> &Self::Denom;
 }
 

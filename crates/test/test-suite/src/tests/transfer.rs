@@ -10,7 +10,7 @@ use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEve
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
-use hermes_test_components::chain::traits::types::amount::{HasAmountMethods, HasAmountType};
+use hermes_test_components::chain::traits::types::amount::{HasAmountDenom, HasAmountMethods};
 use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
