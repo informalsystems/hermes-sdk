@@ -1,8 +1,6 @@
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
-use cgp::core::field::WithField;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
@@ -20,7 +18,6 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::{
 };
 use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
-use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
@@ -98,9 +95,7 @@ use hermes_relayer_components::chain::traits::types::update_client::HasUpdateCli
 use hermes_relayer_components::error::traits::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::global_nonce_mutex::GetGlobalNonceMutex;
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
-use hermes_relayer_components::transaction::traits::default_signer::{
-    DefaultSignerGetter, DefaultSignerGetterComponent,
-};
+use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetterComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::NonceAllocationMutexGetterComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
@@ -153,8 +148,10 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        RuntimeTypeProviderComponent:
+            UseType<HermesRuntime>,
+        RuntimeGetterComponent:
+            UseField<symbol!("runtime")>,
         [
             LoggerTypeProviderComponent,
             LoggerGetterComponent,
@@ -174,6 +171,8 @@ delegate_components! {
             WasmChainComponents,
         NonceAllocationMutexGetterComponent:
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
+        DefaultSignerGetterComponent:
+            UseField<symbol!("key_entry")>,
     }
 }
 
@@ -194,13 +193,6 @@ impl TxExtensionOptionsGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 impl GasConfigGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn gas_config(chain: &WasmCosmosChain) -> &GasConfig {
         &chain.chain_config.gas_config
-    }
-}
-
-#[cgp_provider(DefaultSignerGetterComponent)]
-impl DefaultSignerGetter<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn get_default_signer(chain: &WasmCosmosChain) -> &Secp256k1KeyPair {
-        &chain.key_entry
     }
 }
 

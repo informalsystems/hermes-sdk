@@ -101,9 +101,7 @@ use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::global_nonce_mutex::GetGlobalNonceMutex;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
-use hermes_relayer_components::transaction::traits::default_signer::{
-    DefaultSignerGetter, DefaultSignerGetterComponent,
-};
+use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetterComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::NonceAllocationMutexGetterComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
@@ -200,6 +198,8 @@ delegate_components! {
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
         BlockTimeQuerierComponent:
             UseField<symbol!("block_time")>,
+        DefaultSignerGetterComponent:
+            UseField<symbol!("key_entry")>,
     }
 }
 
@@ -220,13 +220,6 @@ impl TxExtensionOptionsGetter<CosmosChain> for CosmosChainContextComponents {
 impl GasConfigGetter<CosmosChain> for CosmosChainContextComponents {
     fn gas_config(chain: &CosmosChain) -> &GasConfig {
         &chain.chain_config.gas_config
-    }
-}
-
-#[cgp_provider(DefaultSignerGetterComponent)]
-impl DefaultSignerGetter<CosmosChain> for CosmosChainContextComponents {
-    fn get_default_signer(chain: &CosmosChain) -> &Secp256k1KeyPair {
-        &chain.key_entry
     }
 }
 
