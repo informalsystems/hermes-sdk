@@ -99,12 +99,7 @@ impl<Chain, Counterparty> Eq for MockAmount<Chain, Counterparty> {}
 
 impl<Chain, Counterparty> PartialOrd for MockAmount<Chain, Counterparty> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        let ordering_a = self.quantity.partial_cmp(&other.quantity)?;
-        let ordering_b = self.denom.partial_cmp(&other.denom)?;
-
-        let ordering = ordering_a.then(ordering_b);
-
-        Some(ordering)
+        Some(self.cmp(other))
     }
 }
 
