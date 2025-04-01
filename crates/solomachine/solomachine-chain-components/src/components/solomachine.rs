@@ -57,16 +57,16 @@ mod preset {
         CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
         CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
     };
-    use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+    use hermes_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::height::{
-        HeightFieldComponent, HeightTypeComponent,
+        HeightFieldComponent, HeightTypeProviderComponent,
     };
     use hermes_relayer_components::chain::traits::types::ibc::{
         ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
         PortIdTypeComponent, SequenceTypeComponent,
     };
     use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
-    use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
+    use hermes_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
     use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
@@ -93,7 +93,7 @@ mod preset {
     cgp_preset! {
         SolomachineChainComponents {
             [
-                HeightTypeComponent,
+                HeightTypeProviderComponent,
                 HeightFieldComponent,
                 TimeTypeComponent,
                 TimeoutTypeComponent,
@@ -110,10 +110,10 @@ mod preset {
             ]:
                 ProvideCosmosChainTypes,
             [
-                MessageTypeComponent,
+                MessageTypeProviderComponent,
                 MessageResponseTypeComponent,
                 MessageResponseEventsGetterComponent,
-                EventTypeComponent,
+                EventTypeProviderComponent,
                 ChannelEndTypeComponent,
                 CommitmentPrefixTypeComponent,
                 CreateClientPayloadOptionsTypeComponent,

@@ -2,7 +2,7 @@ use cgp::core::component::{UseContext, UseDelegate};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::WithDelegatedType;
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::height::{HasHeightType, HeightTypeComponent};
+use hermes_chain_components::traits::types::height::{HasHeightType, HeightTypeProviderComponent};
 use hermes_comet_light_client_components::impls::verify_target_height::verify_forward::DoVerifyForward;
 use hermes_comet_light_client_components::traits::compute_verification_height::{
     CanComputeNextVerificationHeight, NextVerificationHeightComputerComponent,
@@ -100,7 +100,7 @@ delegate_components! {
         ]:
             UseTendermintLightBlock,
         [
-            HeightTypeComponent,
+            HeightTypeProviderComponent,
             VerificationStatusTypeComponent,
             VerdictTypeComponent,
         ]:

@@ -18,7 +18,7 @@ use hermes_relayer_components::chain::impls::queries::query_and_convert_client_s
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use hermes_relayer_components::chain::traits::types::ibc::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
     SequenceTypeComponent,
@@ -37,7 +37,7 @@ pub struct WasmCounterparty;
 delegate_components! {
     WasmCounterpartyComponents {
         [
-            HeightTypeComponent,
+            HeightTypeProviderComponent,
             TimeoutTypeComponent,
             ChainIdTypeProviderComponent,
             ClientIdTypeComponent,

@@ -42,7 +42,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateFieldComponent, ConsensusStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::height::{
-    HeightFieldComponent, HeightTypeComponent,
+    HeightFieldComponent, HeightTypeProviderComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
@@ -65,7 +65,7 @@ pub struct AnyCounterparty;
 delegate_components! {
     AnyCounterpartyComponents {
         [
-            HeightTypeComponent,
+            HeightTypeProviderComponent,
             HeightFieldComponent,
             TimeoutTypeComponent,
             ChainIdTypeProviderComponent,

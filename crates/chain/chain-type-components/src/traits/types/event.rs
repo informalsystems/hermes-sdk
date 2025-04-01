@@ -17,11 +17,7 @@ use cgp::prelude::*;
    we want to avoid defining multiple associated `Event` types so that
    they can never be ambiguous.
 */
-#[cgp_component {
-  name: EventTypeComponent,
-  provider: ProvideEventType,
-  context: Chain,
-}]
+#[cgp_type]
 pub trait HasEventType: Sized + Async {
     /**
        The events that are emitted from a transaction being committed to a
@@ -49,14 +45,4 @@ pub trait HasEventType: Sized + Async {
        and _extraction_ methods to parse the variant information from the event.
     */
     type Event: Async;
-}
-
-#[cgp_provider(EventTypeComponent)]
-impl<Chain, Provider, Event> ProvideEventType<Chain> for WithProvider<Provider>
-where
-    Chain: Async,
-    Provider: ProvideType<Chain, EventTypeComponent, Type = Event>,
-    Event: Async,
-{
-    type Event = Event;
 }

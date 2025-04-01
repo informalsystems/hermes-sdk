@@ -22,9 +22,9 @@ use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeProviderCo
 use hermes_chain_type_components::traits::types::commitment_proof::{
     CommitmentProofTypeComponent, ProvideCommitmentProofType,
 };
-use hermes_chain_type_components::traits::types::event::EventTypeComponent;
-use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
-use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
+use hermes_chain_type_components::traits::types::event::EventTypeProviderComponent;
+use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
+use hermes_chain_type_components::traits::types::message::MessageTypeProviderComponent;
 use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
 use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
 use hermes_chain_type_components::traits::types::timeout::TimeoutTypeComponent;
@@ -90,9 +90,9 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateTypeComponent, ProvideConsensusStateType,
 };
-use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
+use hermes_relayer_components::chain::traits::types::event::EventTypeProvider;
 use hermes_relayer_components::chain::traits::types::height::{
-    HeightIncrementer, ProvideHeightType,
+    HeightIncrementer, HeightTypeProvider,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
@@ -107,7 +107,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::{
     ProvideWriteAckEvent, WriteAckEventComponent,
 };
 use hermes_relayer_components::chain::traits::types::message::{
-    MessageSizeEstimator, MessageSizeEstimatorComponent, ProvideMessageType,
+    MessageSizeEstimator, MessageSizeEstimatorComponent, MessageTypeProvider,
 };
 use hermes_relayer_components::chain::traits::types::packet::{
     OutgoingPacketTypeComponent, ProvideOutgoingPacketType,
@@ -164,13 +164,13 @@ delegate_components! {
     }
 }
 
-#[cgp_provider(HeightTypeComponent)]
-impl ProvideHeightType<MockChainContext> for MockChainComponents {
+#[cgp_provider(HeightTypeProviderComponent)]
+impl HeightTypeProvider<MockChainContext> for MockChainComponents {
     type Height = MockHeight;
 }
 
-#[cgp_provider(EventTypeComponent)]
-impl ProvideEventType<MockChainContext> for MockChainComponents {
+#[cgp_provider(EventTypeProviderComponent)]
+impl EventTypeProvider<MockChainContext> for MockChainComponents {
     type Event = Event;
 }
 
@@ -188,8 +188,8 @@ impl ProvideTimeoutType<MockChainContext> for MockChainComponents {
     }
 }
 
-#[cgp_provider(MessageTypeComponent)]
-impl ProvideMessageType<MockChainContext> for MockChainComponents {
+#[cgp_provider(MessageTypeProviderComponent)]
+impl MessageTypeProvider<MockChainContext> for MockChainComponents {
     type Message = MockMessage;
 }
 

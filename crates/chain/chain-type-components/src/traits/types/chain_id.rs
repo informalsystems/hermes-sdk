@@ -10,10 +10,7 @@ use cgp::prelude::*;
    corresponds to a given chain, based on the chain ID information that is
    queried from a channel ID.
 */
-#[cgp_type {
-    provider: ChainIdTypeProvider,
-    context: Chain,
-}]
+#[cgp_type]
 pub trait HasChainIdType: Async {
     /**
     The ID of a chain, which should implement [`Eq`] to differentiate chain

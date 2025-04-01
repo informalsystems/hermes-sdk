@@ -3,8 +3,10 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
-use hermes_chain_type_components::traits::types::event::{EventTypeComponent, HasEventType};
-use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
+use hermes_chain_type_components::traits::types::event::{
+    EventTypeProviderComponent, HasEventType,
+};
+use hermes_chain_type_components::traits::types::message::MessageTypeProviderComponent;
 use hermes_chain_type_components::traits::types::message_response::{
     HasMessageResponseType, MessageResponseTypeComponent,
 };
@@ -34,12 +36,12 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
     ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
-use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
+use hermes_relayer_components::chain::traits::types::event::EventTypeProvider;
 use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasConnectionIdType};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ProvideConnectionOpenInitEvent,
 };
-use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
+use hermes_relayer_components::chain::traits::types::message::MessageTypeProvider;
 use hermes_relayer_components::chain::traits::types::packets::ack::{
     AckPacketPayloadTypeProvider, AckPacketPayloadTypeProviderComponent,
 };
@@ -87,16 +89,16 @@ delegate_components! {
     }
 }
 
-#[cgp_provider(MessageTypeComponent)]
-impl<Chain> ProvideMessageType<Chain> for ProvideSolomachineChainTypes
+#[cgp_provider(MessageTypeProviderComponent)]
+impl<Chain> MessageTypeProvider<Chain> for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
     type Message = SolomachineMessage;
 }
 
-#[cgp_provider(EventTypeComponent)]
-impl<Chain> ProvideEventType<Chain> for ProvideSolomachineChainTypes
+#[cgp_provider(EventTypeProviderComponent)]
+impl<Chain> EventTypeProvider<Chain> for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {

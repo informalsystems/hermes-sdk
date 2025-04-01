@@ -4,11 +4,7 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
-#[cgp_type {
-    name: HeightTypeComponent,
-    provider: ProvideHeightType,
-    context: Chain,
-}]
+#[cgp_type]
 pub trait HasHeightType: Sized + Async {
     /**
        The height of the chain, which should behave like natural numbers.

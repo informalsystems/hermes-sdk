@@ -162,9 +162,9 @@ mod preset {
         CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
         CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
     };
-    use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+    use hermes_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::height::{
-        GenesisHeightGetterComponent, HeightFieldComponent, HeightTypeComponent,
+        GenesisHeightGetterComponent, HeightFieldComponent, HeightTypeProviderComponent,
     };
     use hermes_relayer_components::chain::traits::types::ibc::{
         ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
@@ -179,7 +179,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::SendPacketEventComponent;
     use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::WriteAckEventComponent;
     use hermes_relayer_components::chain::traits::types::message::{
-        MessageSizeEstimatorComponent, MessageTypeComponent,
+        MessageSizeEstimatorComponent, MessageTypeProviderComponent,
     };
     use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
     use hermes_relayer_components::chain::traits::types::packets::ack::{
@@ -263,7 +263,7 @@ mod preset {
     cgp_preset! {
         CosmosChainPreset {
             [
-                HeightTypeComponent,
+                HeightTypeProviderComponent,
                 HeightFieldComponent,
                 HeightIncrementerComponent,
                 HeightAdjusterComponent,
@@ -272,11 +272,11 @@ mod preset {
                 TimeMeasurerComponent,
                 TimeoutTypeComponent,
                 ChainIdTypeProviderComponent,
-                MessageTypeComponent,
+                MessageTypeProviderComponent,
                 MessageResponseTypeComponent,
                 MessageResponseEventsGetterComponent,
                 MessageSizeEstimatorComponent,
-                EventTypeComponent,
+                EventTypeProviderComponent,
                 ClientIdTypeComponent,
                 ConnectionIdTypeComponent,
                 ChannelIdTypeComponent,

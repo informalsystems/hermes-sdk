@@ -2,7 +2,6 @@ use alloc::sync::Arc;
 use core::time::Duration;
 
 use cgp::core::error::CanRaiseAsyncError;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::fields::height::{
@@ -10,9 +9,9 @@ use hermes_chain_type_components::traits::fields::height::{
 };
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
 use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeProviderComponent;
-use hermes_chain_type_components::traits::types::event::EventTypeComponent;
-use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
-use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
+use hermes_chain_type_components::traits::types::event::EventTypeProviderComponent;
+use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
+use hermes_chain_type_components::traits::types::message::MessageTypeProviderComponent;
 use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
 use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
 use hermes_chain_type_components::traits::types::timeout::TimeoutTypeComponent;
@@ -84,12 +83,12 @@ delegate_components! {
     ProvideCosmosChainTypes {
         ChainIdTypeProviderComponent:
             UseType<ChainId>,
-        HeightTypeComponent:
+        HeightTypeProviderComponent:
             UseType<Height>,
-        MessageTypeComponent:
-            WithType<CosmosMessage>,
-        EventTypeComponent:
-            WithType<Arc<AbciEvent>>,
+        MessageTypeProviderComponent:
+            UseType<CosmosMessage>,
+        EventTypeProviderComponent:
+            UseType<Arc<AbciEvent>>,
         [
             MessageResponseTypeComponent,
             MessageResponseEventsGetterComponent,
