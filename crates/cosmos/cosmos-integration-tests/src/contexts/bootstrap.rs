@@ -2,7 +2,6 @@ use alloc::sync::Arc;
 use core::ops::Deref;
 use std::path::PathBuf;
 
-use cgp::core::component::UseContext;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
@@ -16,7 +15,9 @@ use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver:
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetterComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::denom::DenomPrefixGetterComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
+    DenomForStaking, DenomForTransfer, DenomPrefixGetterComponent,
+};
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
@@ -30,9 +31,8 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_test_components::chain_driver::traits::types::chain::{
-    ChainTypeProviderComponent, HasChainType,
-};
+use hermes_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
+use hermes_test_components::chain_driver::traits::types::chain::ChainTypeProviderComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
@@ -95,18 +95,26 @@ delegate_components! {
             UseType<CosmosChain>,
         ChainDriverTypeProviderComponent:
             UseType<CosmosChainDriver>,
-        [
-            ChainStoreDirGetterComponent,
-            ChainCommandPathGetterComponent,
-            AccountPrefixGetterComponent,
-            DenomPrefixGetterComponent,
-            DynamicGasGetterComponent,
-            RandomIdFlagGetterComponent,
-            CosmosBuilderGetterComponent,
-            CometConfigModifierComponent,
-            CosmosGenesisConfigModifierComponent,
-        ]:
-            UseContext,
+        ChainStoreDirGetterComponent:
+            UseField<symbol!("chain_store_dir")>,
+        ChainCommandPathGetterComponent:
+            UseField<symbol!("chain_command_path")>,
+        AccountPrefixGetterComponent:
+            UseField<symbol!("account_prefix")>,
+        DenomPrefixGetterComponent<DenomForStaking>:
+            UseField<symbol!("staking_denom_prefix")>,
+        DenomPrefixGetterComponent<DenomForTransfer>:
+            UseField<symbol!("transfer_denom_prefix")>,
+        DynamicGasGetterComponent:
+            UseField<symbol!("dynamic_gas")>,
+        RandomIdFlagGetterComponent:
+            UseField<symbol!("should_randomize_identifiers")>,
+        CosmosBuilderGetterComponent:
+            UseField<symbol!("cosmos_builder")>,
+        CosmosGenesisConfigModifierComponent:
+            UseField<symbol!("genesis_config_modifier")>,
+        CometConfigModifierComponent:
+            UseField<symbol!("comet_config_modifier")>,
         CompatModeGetterComponent:
             UseCompatMode37,
         CosmosSdkConfigModifierComponent:
@@ -120,6 +128,8 @@ delegate_components! {
     }
 }
 
-pub trait CanUseCosmosBootstrap: HasChainType<Chain = CosmosChain> {}
-
-impl CanUseCosmosBootstrap for CosmosBootstrap {}
+check_components! {
+    CanUseCosmosBootstrap for CosmosBootstrap {
+        ChainBootstrapperComponent,
+    }
+}

@@ -1,4 +1,5 @@
 use alloc::collections::BTreeMap;
+use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
@@ -32,9 +33,11 @@ where
         _bootstrap: &Bootstrap,
         genesis_config: &Bootstrap::ChainGenesisConfig,
     ) -> Result<BTreeMap<String, CosmosWalletConfig>, Bootstrap::Error> {
-        let denom_for_staking = Bootstrap::genesis_denom(DenomForStaking, genesis_config);
+        let denom_for_staking =
+            Bootstrap::genesis_denom(genesis_config, PhantomData::<DenomForStaking>);
 
-        let denom_for_transfer = Bootstrap::genesis_denom(DenomForTransfer, genesis_config);
+        let denom_for_transfer =
+            Bootstrap::genesis_denom(genesis_config, PhantomData::<DenomForTransfer>);
 
         let validator = CosmosWalletConfig {
             wallet_id: "validator".to_owned(),

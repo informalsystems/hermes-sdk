@@ -6,10 +6,10 @@ use cgp::core::field::WithField;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
-use hermes_cosmos_integration_tests::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use hermes_cosmos_integration_tests::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
 use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
     CompatModeGetterComponent, UseCompatMode37,
@@ -17,6 +17,7 @@ use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
 use hermes_cosmos_test_components::bootstrap::impls::chain::build_wait::BuildAndWaitChainDriver;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
@@ -27,7 +28,9 @@ use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver:
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetterComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::denom::DenomPrefixGetterComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
+    DenomForStaking, DenomForTransfer, DenomPrefixGetterComponent,
+};
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
@@ -75,21 +78,29 @@ delegate_components! {
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
+        ChainTypeProviderComponent:
+            UseType<CosmosChain>,
+        ChainDriverTypeProviderComponent:
+            UseType<CosmosChainDriver>,
+        ChainStoreDirGetterComponent:
+            UseField<symbol!("chain_store_dir")>,
+        ChainCommandPathGetterComponent:
+            UseField<symbol!("chain_command_path")>,
+        AccountPrefixGetterComponent:
+            UseField<symbol!("account_prefix")>,
+        DenomPrefixGetterComponent<DenomForStaking>:
+            UseField<symbol!("staking_denom_prefix")>,
+        DenomPrefixGetterComponent<DenomForTransfer>:
+            UseField<symbol!("transfer_denom_prefix")>,
+        DynamicGasGetterComponent:
+            UseField<symbol!("dynamic_gas")>,
+        RandomIdFlagGetterComponent:
+            UseField<symbol!("should_randomize_identifiers")>,
+        CosmosBuilderGetterComponent:
+            UseField<symbol!("cosmos_builder")>,
         [
-            ChainTypeProviderComponent,
-            ChainDriverTypeProviderComponent,
-        ]:
-            ProvideCosmosBootstrapChainTypes,
-        [
-            ChainStoreDirGetterComponent,
-            ChainCommandPathGetterComponent,
-            AccountPrefixGetterComponent,
-            DenomPrefixGetterComponent,
-            DynamicGasGetterComponent,
-            RandomIdFlagGetterComponent,
             WasmClientByteCodeGetterComponent,
             GovernanceProposalAuthorityGetterComponent,
-            CosmosBuilderGetterComponent,
         ]:
             UseContext,
         CompatModeGetterComponent:

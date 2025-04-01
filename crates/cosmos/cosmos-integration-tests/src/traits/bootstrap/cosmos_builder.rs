@@ -4,11 +4,10 @@ use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 
-#[cgp_component {
-  provider: CosmosBuilderGetter,
-  context: Bootstrap,
+#[cgp_getter {
+    provider: CosmosBuilderGetter,
 }]
-pub trait HasCosmosBuilder: Async {
+pub trait HasCosmosBuilder {
     fn cosmos_builder(&self) -> &CosmosBuilder;
 }
 

@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use toml::Value;
 
@@ -14,10 +13,10 @@ pub trait CanModifyCometConfig: HasAsyncErrorType {
 }
 
 #[cgp_provider(CometConfigModifierComponent)]
-impl<Bootstrap, Modifier> CometConfigModifier<Bootstrap> for UseContext
+impl<Bootstrap, Tag> CometConfigModifier<Bootstrap> for UseField<Tag>
 where
-    Bootstrap: HasAsyncErrorType + HasField<symbol!("comet_config_modifier"), Value = Modifier>,
-    Modifier: Fn(&mut Value) -> Result<(), Bootstrap::Error> + Send + Sync + 'static,
+    Bootstrap: HasAsyncErrorType + HasField<Tag>,
+    Bootstrap::Value: Fn(&mut Value) -> Result<(), Bootstrap::Error> + Send + Sync + 'static,
 {
     fn modify_comet_config(
         bootstrap: &Bootstrap,

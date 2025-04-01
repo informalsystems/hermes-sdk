@@ -2,10 +2,7 @@ use core::ops::Deref;
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use cgp::core::component::UseContext;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::WithField;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
@@ -18,7 +15,9 @@ use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver:
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetterComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::denom::DenomPrefixGetterComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
+    DenomForStaking, DenomForTransfer, DenomPrefixGetterComponent,
+};
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
@@ -83,26 +82,42 @@ impl Deref for LegacyCosmosBootstrap {
 
 delegate_components! {
     LegacyCosmosBootstrapComponents {
-        ErrorTypeProviderComponent: UseHermesError,
-        ErrorRaiserComponent: DebugError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
-        ChainTypeProviderComponent: UseType<CosmosChain>,
-        ChainDriverTypeProviderComponent: UseType<CosmosChainDriver>,
-        [
-            ChainStoreDirGetterComponent,
-            ChainCommandPathGetterComponent,
-            AccountPrefixGetterComponent,
-            DenomPrefixGetterComponent,
-            DynamicGasGetterComponent,
-            RandomIdFlagGetterComponent,
-            CompatModeGetterComponent,
-            CosmosBuilderGetterComponent,
-            CometConfigModifierComponent,
-            CosmosGenesisConfigModifierComponent,
-        ]:
-            UseContext,
+        ErrorTypeProviderComponent:
+            UseHermesError,
+        ErrorRaiserComponent:
+            DebugError,
+        RuntimeTypeProviderComponent:
+            UseType<HermesRuntime>,
+        RuntimeGetterComponent:
+            UseField<symbol!("runtime")>,
+        WalletConfigGeneratorComponent:
+            GenerateStandardWalletConfig,
+        ChainTypeProviderComponent:
+            UseType<CosmosChain>,
+        ChainDriverTypeProviderComponent:
+            UseType<CosmosChainDriver>,
+        ChainStoreDirGetterComponent:
+            UseField<symbol!("chain_store_dir")>,
+        ChainCommandPathGetterComponent:
+            UseField<symbol!("chain_command_path")>,
+        AccountPrefixGetterComponent:
+            UseField<symbol!("account_prefix")>,
+        DenomPrefixGetterComponent<DenomForStaking>:
+            UseField<symbol!("staking_denom_prefix")>,
+        DenomPrefixGetterComponent<DenomForTransfer>:
+            UseField<symbol!("transfer_denom_prefix")>,
+        DynamicGasGetterComponent:
+            UseField<symbol!("dynamic_gas")>,
+        RandomIdFlagGetterComponent:
+            UseField<symbol!("should_randomize_identifiers")>,
+        CompatModeGetterComponent:
+            UseField<symbol!("compat_mode")>,
+        CosmosBuilderGetterComponent:
+            UseField<symbol!("cosmos_builder")>,
+        CosmosGenesisConfigModifierComponent:
+            UseField<symbol!("genesis_config_modifier")>,
+        CometConfigModifierComponent:
+            UseField<symbol!("comet_config_modifier")>,
         CosmosSdkConfigModifierComponent:
             NoModifyCosmosSdkConfig,
         RelayerChainConfigBuilderComponent:

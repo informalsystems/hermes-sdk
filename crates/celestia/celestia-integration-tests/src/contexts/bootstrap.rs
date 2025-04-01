@@ -1,7 +1,7 @@
+use core::marker::PhantomData;
 use std::path::PathBuf;
 use std::sync::OnceLock;
 
-use cgp::core::component::UseContext;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
@@ -25,10 +25,10 @@ use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::{
 };
 use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
-use hermes_cosmos_integration_tests::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use hermes_cosmos_integration_tests::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
 use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
     CompatModeGetterComponent, UseCompatMode34,
@@ -36,6 +36,7 @@ use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
@@ -53,7 +54,7 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
 };
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::{
-    RandomIdFlagGetterComponent, ReturnRandomIdFlag,
+    RandomIdFlagGetterComponent, UseRandomIdFlag,
 };
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
@@ -66,6 +67,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
+use hermes_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeProviderComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
 use tokio::process::Child;
@@ -99,19 +101,18 @@ delegate_components! {
         ErrorRaiserComponent: DebugError,
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        [
-            ChainTypeProviderComponent,
-            ChainDriverTypeProviderComponent,
-        ]:
-            ProvideCosmosBootstrapChainTypes,
-        [
-            ChainStoreDirGetterComponent,
-            CosmosBuilderGetterComponent,
-            DynamicGasGetterComponent,
-        ]:
-            UseContext,
+        ChainTypeProviderComponent:
+            UseType<CosmosChain>,
+        ChainDriverTypeProviderComponent:
+            UseType<CosmosChainDriver>,
+        ChainStoreDirGetterComponent:
+            UseField<symbol!("chain_store_dir")>,
+        CosmosBuilderGetterComponent:
+            UseField<symbol!("cosmos_builder")>,
+        DynamicGasGetterComponent:
+            UseField<symbol!("dynamic_gas")>,
         RandomIdFlagGetterComponent:
-            ReturnRandomIdFlag<false>,
+            UseRandomIdFlag<false>,
         CompatModeGetterComponent:
             UseCompatMode34,
         CosmosGenesisConfigModifierComponent:
@@ -166,16 +167,16 @@ impl ChainCommandPathGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
     }
 }
 
-#[cgp_provider(DenomPrefixGetterComponent)]
+#[cgp_provider(DenomPrefixGetterComponent<DenomForStaking>)]
 impl DenomPrefixGetter<CelestiaBootstrap, DenomForStaking> for CelestiaBootstrapComponents {
-    fn denom_prefix(_bootstrap: &CelestiaBootstrap, _label: DenomForStaking) -> &str {
+    fn denom_prefix(_bootstrap: &CelestiaBootstrap, _label: PhantomData<DenomForStaking>) -> &str {
         "utia"
     }
 }
 
-#[cgp_provider(DenomPrefixGetterComponent)]
+#[cgp_provider(DenomPrefixGetterComponent<DenomForTransfer>)]
 impl DenomPrefixGetter<CelestiaBootstrap, DenomForTransfer> for CelestiaBootstrapComponents {
-    fn denom_prefix(_bootstrap: &CelestiaBootstrap, _label: DenomForTransfer) -> &str {
+    fn denom_prefix(_bootstrap: &CelestiaBootstrap, _label: PhantomData<DenomForTransfer>) -> &str {
         "coin"
     }
 }
@@ -184,5 +185,11 @@ impl DenomPrefixGetter<CelestiaBootstrap, DenomForTransfer> for CelestiaBootstra
 impl AccountPrefixGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn account_prefix(_bootstrap: &CelestiaBootstrap) -> &str {
         "celestia"
+    }
+}
+
+check_components! {
+    CanUseCelestiaBootstrap for CelestiaBootstrap {
+        ChainBootstrapperComponent,
     }
 }

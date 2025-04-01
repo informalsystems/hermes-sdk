@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use serde_json::Value;
 
@@ -13,10 +12,10 @@ pub trait CanModifyCosmosGenesisConfig: HasAsyncErrorType {
 }
 
 #[cgp_provider(CosmosGenesisConfigModifierComponent)]
-impl<Bootstrap, Modifier> CosmosGenesisConfigModifier<Bootstrap> for UseContext
+impl<Bootstrap, Tag> CosmosGenesisConfigModifier<Bootstrap> for UseField<Tag>
 where
-    Bootstrap: HasAsyncErrorType + HasField<symbol!("genesis_config_modifier"), Value = Modifier>,
-    Modifier: Fn(&mut Value) -> Result<(), Bootstrap::Error> + Send + Sync + 'static,
+    Bootstrap: HasAsyncErrorType + HasField<Tag>,
+    Bootstrap::Value: Fn(&mut Value) -> Result<(), Bootstrap::Error> + Send + Sync + 'static,
 {
     fn modify_genesis_config(
         bootstrap: &Bootstrap,

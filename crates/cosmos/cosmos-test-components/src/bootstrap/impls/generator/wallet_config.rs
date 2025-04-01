@@ -1,4 +1,5 @@
 use alloc::collections::BTreeMap;
+use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_test_components::chain::traits::types::denom::HasDenomType;
@@ -40,9 +41,11 @@ where
     ) -> Result<BTreeMap<String, CosmosWalletConfig>, Bootstrap::Error> {
         // TODO: allow for randomization of denoms and amount
 
-        let denom_for_staking = Bootstrap::genesis_denom(DenomForStaking, genesis_config);
+        let denom_for_staking =
+            Bootstrap::genesis_denom(genesis_config, PhantomData::<DenomForStaking>);
 
-        let denom_for_transfer = Bootstrap::genesis_denom(DenomForTransfer, genesis_config);
+        let denom_for_transfer =
+            Bootstrap::genesis_denom(genesis_config, PhantomData::<DenomForTransfer>);
 
         let validator = CosmosWalletConfig {
             wallet_id: "validator".to_owned(),
