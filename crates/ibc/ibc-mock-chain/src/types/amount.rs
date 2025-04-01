@@ -1,3 +1,4 @@
+use core::cmp::Ordering;
 use core::fmt::{Debug, Display};
 
 use cgp::prelude::*;
@@ -10,7 +11,9 @@ use hermes_chain_type_components::traits::fields::amount::denom::{
 use hermes_chain_type_components::traits::fields::amount::quantity::{
     AmountQuantityGetter, AmountQuantityGetterComponent,
 };
-use hermes_chain_type_components::traits::types::amount::{AmountTypeComponent, ProvideAmountType};
+use hermes_chain_type_components::traits::types::amount::{
+    AmountTypeProvider, AmountTypeProviderComponent,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -22,8 +25,8 @@ pub struct MockAmount<Chain, Counterparty> {
     pub denom: MockDenom<Chain, Counterparty>,
 }
 
-#[cgp_provider(AmountTypeComponent)]
-impl<Chain: Async, Counterparty: Async> ProvideAmountType<MockChain<Chain, Counterparty>>
+#[cgp_provider(AmountTypeProviderComponent)]
+impl<Chain: Async, Counterparty: Async> AmountTypeProvider<MockChain<Chain, Counterparty>>
     for MockChainComponents
 {
     type Amount = MockAmount<Chain, Counterparty>;
@@ -93,3 +96,23 @@ impl<Chain, Counterparty> PartialEq for MockAmount<Chain, Counterparty> {
 }
 
 impl<Chain, Counterparty> Eq for MockAmount<Chain, Counterparty> {}
+
+impl<Chain, Counterparty> PartialOrd for MockAmount<Chain, Counterparty> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        let ordering_a = self.quantity.partial_cmp(&other.quantity)?;
+        let ordering_b = self.denom.partial_cmp(&other.denom)?;
+
+        let ordering = ordering_a.then(ordering_b);
+
+        Ok(ordering)
+    }
+}
+
+impl<Chain, Counterparty> Ord for MockAmount<Chain, Counterparty> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        let ordering_a = self.quantity.cmp(&other.quantity);
+        let ordering_b = self.denom.cmp(&other.denom);
+
+        ordering_a.then(ordering_b)
+    }
+}
