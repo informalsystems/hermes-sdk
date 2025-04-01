@@ -2,10 +2,12 @@
 mod preset {
     use cgp::core::component::UseDelegate;
     use cgp::prelude::*;
+    use hermes_chain_type_components::traits::fields::amount::denom::AmountDenomGetterComponent;
     use hermes_chain_type_components::traits::fields::height::{
         HeightAdjusterComponent, HeightIncrementerComponent,
     };
     use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
+    use hermes_chain_type_components::traits::types::amount::AmountTypeProviderComponent;
     use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
     use hermes_cosmos_chain_components::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
     use hermes_cosmos_chain_components::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
@@ -54,7 +56,7 @@ mod preset {
     use hermes_cosmos_test_components::chain::impls::queries::balance::QueryCosmosBalance;
     use hermes_cosmos_test_components::chain::impls::transfer::timeout::IbcTransferTimeoutAfterSeconds;
     use hermes_cosmos_test_components::chain::impls::types::address::ProvideStringAddress;
-    use hermes_cosmos_test_components::chain::impls::types::amount::ProvideU128AmountWithDenom;
+    use hermes_cosmos_test_components::chain::impls::types::amount::UseCosmosAmount;
     use hermes_cosmos_test_components::chain::impls::types::denom::ProvideIbcDenom;
     use hermes_cosmos_test_components::chain::impls::types::proposal::ProvideCosmosProposalTypes;
     use hermes_cosmos_test_components::chain::impls::types::wallet::ProvideCosmosTestWallet;
@@ -247,9 +249,7 @@ mod preset {
     use hermes_test_components::chain::traits::transfer::string_memo::ProvideStringMemoType;
     use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
     use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
-    use hermes_test_components::chain::traits::types::amount::{
-        AmountMethodsComponent, AmountTypeComponent,
-    };
+    use hermes_test_components::chain::traits::types::amount::AmountMethodsComponent;
     use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
     use hermes_test_components::chain::traits::types::memo::{
         DefaultMemoGetterComponent, MemoTypeComponent,
@@ -469,10 +469,11 @@ mod preset {
             ChainIdFromStringBuilderComponent:
                 BuildCosmosChainIdFromString,
             [
-                AmountTypeComponent,
+                AmountTypeProviderComponent,
+                AmountDenomGetterComponent,
                 AmountMethodsComponent,
             ]:
-                ProvideU128AmountWithDenom,
+                UseCosmosAmount,
             [
                 ProposalIdTypeComponent,
                 ProposalStatusTypeComponent,

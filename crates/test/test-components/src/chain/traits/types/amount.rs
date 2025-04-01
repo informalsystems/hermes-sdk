@@ -1,15 +1,6 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 
-use crate::chain::traits::types::denom::HasDenomType;
-
-#[cgp_component {
-    provider: AmountDenomGetter,
-}]
-pub trait HasAmountDenom: HasAmountType + HasDenomType {
-    fn amount_denom(amount: &Self::Amount) -> &Self::Denom;
-}
-
 #[cgp_component {
   name: AmountMethodsComponent,
   provider: ProvideAmountMethods,

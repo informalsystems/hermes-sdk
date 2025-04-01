@@ -104,7 +104,7 @@ impl<Chain, Counterparty> PartialOrd for MockAmount<Chain, Counterparty> {
 
         let ordering = ordering_a.then(ordering_b);
 
-        Ok(ordering)
+        Some(ordering)
     }
 }
 

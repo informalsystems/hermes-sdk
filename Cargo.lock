@@ -1742,6 +1742,7 @@ version = "0.1.0"
 dependencies = [
  "cgp",
  "hdpath",
+ "hermes-chain-type-components",
  "hermes-cosmos-chain-components",
  "hermes-relayer-components",
  "hermes-runtime",
@@ -1854,6 +1855,7 @@ version = "0.1.0"
 dependencies = [
  "cgp",
  "hermes-chain-components",
+ "hermes-chain-type-components",
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-test-components",

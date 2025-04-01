@@ -1,12 +1,13 @@
 use core::num::ParseIntError;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
+use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_test_components::chain::traits::queries::balance::{
     BalanceQuerier, BalanceQuerierComponent,
 };
 use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc_proto::cosmos::bank::v1beta1::query_client::QueryClient;
@@ -23,7 +24,8 @@ pub struct QueryCosmosBalance;
 impl<Chain> BalanceQuerier<Chain> for QueryCosmosBalance
 where
     Chain: HasAddressType
-        + HasAmountType<Amount = Amount, Denom = Denom>
+        + HasAmountType<Amount = Amount>
+        + HasDenomType<Denom = Denom>
         + HasGrpcAddress
         + CanRaiseAsyncError<InvalidUri>
         + CanRaiseAsyncError<TransportError>

@@ -4,6 +4,7 @@ use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::core::macros::blanket_trait;
 use cgp::prelude::{CanRaiseError, HasAsyncErrorType, HasErrorType};
+use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
@@ -27,7 +28,7 @@ use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEve
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
-use hermes_test_components::chain::traits::types::amount::{HasAmountDenom, HasAmountMethods};
+use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
 use hermes_test_components::chain::traits::types::denom::DenomOf;
 use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
