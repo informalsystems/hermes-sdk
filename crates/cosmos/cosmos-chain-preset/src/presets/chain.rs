@@ -141,7 +141,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::types::block::{
         BlockHashComponent, BlockTypeComponent,
     };
-    use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+    use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::channel::{
         ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
         ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
@@ -271,7 +271,7 @@ mod preset {
                 TimeTypeComponent,
                 TimeMeasurerComponent,
                 TimeoutTypeComponent,
-                ChainIdTypeComponent,
+                ChainIdTypeProviderComponent,
                 MessageTypeComponent,
                 MessageResponseTypeComponent,
                 MessageResponseEventsGetterComponent,

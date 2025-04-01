@@ -79,9 +79,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAckCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
-use hermes_relayer_components::chain::traits::types::chain_id::{
-    ChainIdGetter, ChainIdGetterComponent,
-};
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetterComponent;
 use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
@@ -115,7 +113,6 @@ use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
-use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;
 use tendermint_rpc::{HttpClient, Url};
@@ -173,6 +170,8 @@ delegate_components! {
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
         DefaultSignerGetterComponent:
             UseField<symbol!("key_entry")>,
+        ChainIdGetterComponent:
+            UseField<symbol!("chain_id")>,
     }
 }
 
@@ -233,13 +232,6 @@ impl HasTelemetry for WasmCosmosChain {
 
     fn telemetry(&self) -> &CosmosTelemetry {
         &self.telemetry
-    }
-}
-
-#[cgp_provider(ChainIdGetterComponent)]
-impl ChainIdGetter<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn chain_id(chain: &WasmCosmosChain) -> &ChainId {
-        &chain.chain_id
     }
 }
 

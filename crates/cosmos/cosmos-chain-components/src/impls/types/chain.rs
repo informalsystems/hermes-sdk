@@ -9,7 +9,7 @@ use hermes_chain_type_components::traits::fields::height::{
     HeightAdjuster, HeightAdjusterComponent, HeightIncrementer, HeightIncrementerComponent,
 };
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
-use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeProviderComponent;
 use hermes_chain_type_components::traits::types::event::EventTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
@@ -23,7 +23,7 @@ use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefi
 use hermes_relayer_components::chain::traits::types::block::{
     BlockHashComponent, BlockTypeComponent, HasBlockType, ProvideBlockHash, ProvideBlockType,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, ProvideChainIdType};
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelEndTypeComponent, ProvideChannelEndType,
 };
@@ -82,8 +82,10 @@ pub struct ProvideCosmosChainTypes;
 
 delegate_components! {
     ProvideCosmosChainTypes {
+        ChainIdTypeProviderComponent:
+            UseType<ChainId>,
         HeightTypeComponent:
-            WithType<Height>,
+            UseType<Height>,
         MessageTypeComponent:
             WithType<CosmosMessage>,
         EventTypeComponent:
@@ -219,14 +221,6 @@ where
     fn chain_status_time(status: &ChainStatus) -> &Time {
         &status.time
     }
-}
-
-#[cgp_provider(ChainIdTypeComponent)]
-impl<Chain> ProvideChainIdType<Chain> for ProvideCosmosChainTypes
-where
-    Chain: Async,
-{
-    type ChainId = ChainId;
 }
 
 #[cgp_provider(ClientIdTypeComponent)]

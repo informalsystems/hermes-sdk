@@ -18,7 +18,7 @@ use hermes_chain_type_components::impls::types::message_response::UseEventsMessa
 use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterComponent;
 use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
-use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeProviderComponent;
 use hermes_chain_type_components::traits::types::commitment_proof::{
     CommitmentProofTypeComponent, ProvideCommitmentProofType,
 };
@@ -83,9 +83,7 @@ use hermes_relayer_components::chain::traits::queries::packet_is_received::{
 use hermes_relayer_components::chain::traits::send_message::{
     MessageSender, MessageSenderComponent,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::{
-    ChainIdGetter, ProvideChainIdType,
-};
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProvider;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateTypeComponent, ProvideClientStateType,
 };
@@ -161,6 +159,8 @@ delegate_components! {
             MessageResponseEventsGetterComponent,
         ]:
             UseEventsMessageResponse,
+        ChainIdGetterComponent:
+            UseField<symbol!("name")>,
     }
 }
 
@@ -193,8 +193,8 @@ impl ProvideMessageType<MockChainContext> for MockChainComponents {
     type Message = MockMessage;
 }
 
-#[cgp_provider(ChainIdTypeComponent)]
-impl ProvideChainIdType<MockChainContext> for MockChainComponents {
+#[cgp_provider(ChainIdTypeProviderComponent)]
+impl ChainIdTypeProvider<MockChainContext> for MockChainComponents {
     type ChainId = String;
 }
 
@@ -382,13 +382,6 @@ impl MessageSizeEstimator<MockChainContext> for MockChainComponents {
     fn estimate_message_size(_message: &MockMessage) -> Result<usize, Error> {
         // Only single messages are sent by the Mock Chain
         Ok(1)
-    }
-}
-
-#[cgp_provider(ChainIdGetterComponent)]
-impl ChainIdGetter<MockChainContext> for MockChainComponents {
-    fn chain_id(chain: &MockChainContext) -> &String {
-        &chain.name
     }
 }
 

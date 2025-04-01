@@ -34,7 +34,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsComponent, ClientStateTypeComponent,
 };
@@ -68,7 +68,7 @@ delegate_components! {
             HeightTypeComponent,
             HeightFieldComponent,
             TimeoutTypeComponent,
-            ChainIdTypeComponent,
+            ChainIdTypeProviderComponent,
             ClientIdTypeComponent,
             ConnectionIdTypeComponent,
             ChannelIdTypeComponent,

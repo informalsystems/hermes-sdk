@@ -5,9 +5,9 @@ use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
 #[cgp_type {
-  name: HeightTypeComponent,
-  provider: ProvideHeightType,
-  context: Chain,
+    name: HeightTypeComponent,
+    provider: ProvideHeightType,
+    context: Chain,
 }]
 pub trait HasHeightType: Sized + Async {
     /**

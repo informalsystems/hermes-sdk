@@ -85,7 +85,6 @@ use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::P
 use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
@@ -200,6 +199,8 @@ delegate_components! {
             UseField<symbol!("block_time")>,
         DefaultSignerGetterComponent:
             UseField<symbol!("key_entry")>,
+        ChainIdGetterComponent:
+            UseField<symbol!("chain_id")>,
     }
 }
 
@@ -296,13 +297,6 @@ impl RpcClientGetter<CosmosChain> for CosmosChainContextComponents {
 
     fn rpc_address(chain: &CosmosChain) -> &Url {
         &chain.chain_config.rpc_addr
-    }
-}
-
-#[cgp_provider(ChainIdGetterComponent)]
-impl ChainIdGetter<CosmosChain> for CosmosChainContextComponents {
-    fn chain_id(chain: &CosmosChain) -> &ChainId {
-        &chain.chain_id
     }
 }
 

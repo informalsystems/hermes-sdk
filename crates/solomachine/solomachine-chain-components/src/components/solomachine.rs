@@ -38,7 +38,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
     use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
     use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
-    use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+    use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::channel::{
         ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
         ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
@@ -97,7 +97,7 @@ mod preset {
                 HeightFieldComponent,
                 TimeTypeComponent,
                 TimeoutTypeComponent,
-                ChainIdTypeComponent,
+                ChainIdTypeProviderComponent,
                 ClientIdTypeComponent,
                 ConnectionIdTypeComponent,
                 ChannelIdTypeComponent,

@@ -47,9 +47,7 @@ use hermes_relayer_components::chain::traits::queries::connection_end::{
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusStateWithProofs, ConsensusStateQuerier, ConsensusStateQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::{
-    ChainIdGetter, ChainIdGetterComponent,
-};
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetterComponent;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -108,6 +106,8 @@ delegate_components! {
             DefaultEncodingGetterComponent,
         ]:
             ProvideSolomachineEncoding,
+        ChainIdGetterComponent:
+            UseField<symbol!("chain_id")>,
     }
 }
 
@@ -132,13 +132,6 @@ impl MockSolomachine {
             telemetry,
             connections: Arc::new(Mutex::new(HashMap::new())),
         }
-    }
-}
-
-#[cgp_provider(ChainIdGetterComponent)]
-impl ChainIdGetter<MockSolomachine> for SolomachineChainContextComponents {
-    fn chain_id(chain: &MockSolomachine) -> &ChainId {
-        &chain.chain_id
     }
 }
 
