@@ -1,6 +1,5 @@
 use std::path::PathBuf;
 
-use cgp::core::component::UseContext;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
@@ -98,11 +97,10 @@ delegate_components! {
             UseField<symbol!("should_randomize_identifiers")>,
         CosmosBuilderGetterComponent:
             UseField<symbol!("cosmos_builder")>,
-        [
-            WasmClientByteCodeGetterComponent,
-            GovernanceProposalAuthorityGetterComponent,
-        ]:
-            UseContext,
+        WasmClientByteCodeGetterComponent:
+            UseField<symbol!("wasm_client_byte_code")>,
+        GovernanceProposalAuthorityGetterComponent:
+            UseField<symbol!("governance_proposal_authority")>,
         CompatModeGetterComponent:
             UseCompatMode37,
         CosmosSdkConfigModifierComponent:
