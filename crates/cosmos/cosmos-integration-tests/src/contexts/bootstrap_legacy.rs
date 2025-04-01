@@ -9,6 +9,7 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::impls::chain::build_wait::BuildAndWaitChainDriver;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
@@ -31,14 +32,14 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
-use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
+use hermes_test_components::chain_driver::traits::types::chain::ChainTypeProviderComponent;
+use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
 use tendermint_rpc::client::CompatMode;
 
+use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use crate::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
-use crate::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
 use crate::traits::bootstrap::compat_mode::CompatModeGetterComponent;
 use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
@@ -87,11 +88,8 @@ delegate_components! {
         RuntimeTypeProviderComponent: WithType<HermesRuntime>,
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
-        [
-            ChainTypeComponent,
-            ChainDriverTypeComponent,
-        ]:
-            ProvideCosmosBootstrapChainTypes,
+        ChainTypeProviderComponent: UseType<CosmosChain>,
+        ChainDriverTypeProviderComponent: UseType<CosmosChainDriver>,
         [
             ChainStoreDirGetterComponent,
             ChainCommandPathGetterComponent,

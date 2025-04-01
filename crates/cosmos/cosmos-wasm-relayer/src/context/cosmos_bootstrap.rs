@@ -40,8 +40,8 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
-use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
+use hermes_test_components::chain_driver::traits::types::chain::ChainTypeProviderComponent;
+use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
 use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
 use hermes_wasm_test_components::impls::bootstrap::genesis_config::ModifyWasmGenesisConfig;
 use hermes_wasm_test_components::impls::bootstrap::node_config::ModifyWasmNodeConfig;
@@ -76,8 +76,8 @@ delegate_components! {
         RuntimeGetterComponent: WithField<symbol!("runtime")>,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
         [
-            ChainTypeComponent,
-            ChainDriverTypeComponent,
+            ChainTypeProviderComponent,
+            ChainDriverTypeProviderComponent,
         ]:
             ProvideCosmosBootstrapChainTypes,
         [

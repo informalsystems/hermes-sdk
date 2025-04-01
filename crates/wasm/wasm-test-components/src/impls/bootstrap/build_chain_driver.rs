@@ -27,7 +27,7 @@ use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletSigner;
 use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, StakingDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, ValidatorWallet};
-use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::traits::bootstrap::client_byte_code::HasWasmClientByteCode;
@@ -41,7 +41,8 @@ impl<Bootstrap, ChainDriver, Chain, Runtime, InBuilder> ChainDriverBuilder<Boots
     for BuildChainDriverAndInitWasmClient<InBuilder>
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasChainDriverType<ChainDriver = ChainDriver, Chain = Chain>
+        + HasChainType<Chain = Chain>
+        + HasChainDriverType<ChainDriver = ChainDriver>
         + HasChainGenesisConfigType
         + HasChainNodeConfigType
         + HasWasmClientByteCode

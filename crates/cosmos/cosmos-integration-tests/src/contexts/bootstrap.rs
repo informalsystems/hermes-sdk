@@ -4,8 +4,6 @@ use std::path::PathBuf;
 
 use cgp::core::component::UseContext;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::WithField;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
@@ -33,14 +31,14 @@ use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain_driver::traits::types::chain::{
-    ChainTypeComponent, HasChainType,
+    ChainTypeProviderComponent, HasChainType,
 };
-use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
+use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
 
+use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use crate::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
-use crate::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
 use crate::traits::bootstrap::compat_mode::{CompatModeGetterComponent, UseCompatMode37};
 use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
@@ -83,16 +81,20 @@ impl Deref for CosmosBootstrap {
 
 delegate_components! {
     CosmosBootstrapComponents {
-        ErrorTypeProviderComponent: UseHermesError,
-        ErrorRaiserComponent: DebugError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
-        [
-            ChainTypeComponent,
-            ChainDriverTypeComponent,
-        ]:
-            ProvideCosmosBootstrapChainTypes,
+        ErrorTypeProviderComponent:
+            UseHermesError,
+        ErrorRaiserComponent:
+            DebugError,
+        RuntimeTypeProviderComponent:
+            UseType<HermesRuntime>,
+        RuntimeGetterComponent:
+            UseField<symbol!("runtime")>,
+        WalletConfigGeneratorComponent:
+            GenerateStandardWalletConfig,
+        ChainTypeProviderComponent:
+            UseType<CosmosChain>,
+        ChainDriverTypeProviderComponent:
+            UseType<CosmosChainDriver>,
         [
             ChainStoreDirGetterComponent,
             ChainCommandPathGetterComponent,
