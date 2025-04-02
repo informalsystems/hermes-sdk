@@ -5,7 +5,7 @@ use core::time::Duration;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::{LevelError, LevelTrace};
+use hermes_logging_components::types::level::LevelError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
@@ -28,7 +28,7 @@ where
         + HasLogger
         + for<'a> CanRaiseAsyncError<EventualAmountTimeoutError<'a, Chain>>,
     Chain::Runtime: CanSleep,
-    Chain::Logger: CanLog<LevelError> + CanLog<LevelTrace>,
+    Chain::Logger: CanLog<LevelError>,
 {
     async fn assert_eventual_amount(
         chain: &Chain,
@@ -55,12 +55,12 @@ where
             balance_result = chain.query_balance(address, denom).await;
         }
 
-        let balance = balance_result?;
+        let final_balance = balance_result?;
 
         chain
             .logger()
             .log(
-                &format!("Expected balance `{amount}`, found finally `{balance}`"),
+                &format!("Expected balance `{amount}`, found `{final_balance}`"),
                 &LevelError,
             )
             .await;
