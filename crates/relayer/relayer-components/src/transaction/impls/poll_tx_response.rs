@@ -13,13 +13,13 @@ use hermes_runtime_components::traits::time::HasTime;
 use crate::error::traits::HasRetryableError;
 use crate::transaction::traits::poll_tx_response::{TxResponsePoller, TxResponsePollerComponent};
 use crate::transaction::traits::query_tx_response::CanQueryTxResponse;
-use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
+use crate::transaction::traits::types::tx_hash::HasTxHashType;
 
 pub struct PollTxResponse;
 
 pub struct TxNoResponseError<'a, Chain>
 where
-    Chain: HasTransactionHashType,
+    Chain: HasTxHashType,
 {
     pub chain: &'a Chain,
     pub tx_hash: &'a Chain::TxHash,
@@ -29,7 +29,7 @@ where
 
 pub struct LogRetryQueryTxResponse<'a, Chain>
 where
-    Chain: HasTransactionHashType + HasAsyncErrorType,
+    Chain: HasTxHashType + HasAsyncErrorType,
 {
     pub chain: &'a Chain,
     pub tx_hash: &'a Chain::TxHash,
@@ -39,7 +39,7 @@ where
 
 impl<'a, Chain> Debug for TxNoResponseError<'a, Chain>
 where
-    Chain: HasTransactionHashType,
+    Chain: HasTxHashType,
     Chain::TxHash: Debug,
 {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {

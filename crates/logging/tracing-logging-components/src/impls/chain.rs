@@ -10,7 +10,7 @@ use hermes_relayer_components::transaction::impls::poll_tx_response::{
 };
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
-use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
+use hermes_relayer_components::transaction::traits::types::tx_hash::HasTxHashType;
 use tracing::{debug, error, trace};
 
 use crate::contexts::logger::TracingLogger;
@@ -43,7 +43,7 @@ where
 impl<'a, Logging, Chain> Logger<Logging, TxNoResponseError<'a, Chain>> for TracingLogger
 where
     Logging: Async,
-    Chain: HasTransactionHashType + HasChainId,
+    Chain: HasTxHashType + HasChainId,
     Chain::TxHash: Display,
 {
     async fn log(_logging: &Logging, message: &str, details: &TxNoResponseError<'a, Chain>) {
@@ -62,7 +62,7 @@ where
 impl<'a, Logging, Chain> Logger<Logging, LogRetryQueryTxResponse<'a, Chain>> for TracingLogger
 where
     Logging: Async,
-    Chain: HasTransactionHashType + HasChainId + HasAsyncErrorType,
+    Chain: HasTxHashType + HasChainId + HasAsyncErrorType,
     Chain::TxHash: Display,
     Chain::Error: Debug,
 {

@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
+use crate::transaction::traits::types::tx_hash::HasTxHashType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
 #[cgp_component {
@@ -8,9 +8,7 @@ use crate::transaction::traits::types::tx_response::HasTxResponseType;
   context: TxContext,
 }]
 #[async_trait]
-pub trait CanQueryTxResponse:
-    HasTransactionHashType + HasTxResponseType + HasAsyncErrorType
-{
+pub trait CanQueryTxResponse: HasTxHashType + HasTxResponseType + HasAsyncErrorType {
     async fn query_tx_response(
         &self,
         tx_hash: &Self::TxHash,

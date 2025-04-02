@@ -1,10 +1,6 @@
 use cgp::prelude::*;
 
-#[cgp_component {
-  name: FeeTypeComponent,
-  provider: ProvideFeeType,
-  context: Chain,
-}]
+#[cgp_type]
 pub trait HasFeeType: Async {
     type Fee: Async;
 }

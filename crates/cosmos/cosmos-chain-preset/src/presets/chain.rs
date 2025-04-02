@@ -222,12 +222,12 @@ mod preset {
     use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
     use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
     use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
-    use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
+    use hermes_relayer_components::transaction::traits::types::fee::FeeTypeProviderComponent;
     use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeProviderComponent;
     use hermes_relayer_components::transaction::traits::types::signer::SignerTypeProviderComponent;
     use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
-    use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
-    use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
+    use hermes_relayer_components::transaction::traits::types::tx_hash::TxHashTypeProviderComponent;
+    use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeProviderComponent;
     use hermes_test_components::chain::impls::assert::default_assert_duration::ProvideDefaultPollAssertDuration;
     use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::PollAssertEventualAmount;
     use hermes_test_components::chain::impls::default_memo::ProvideDefaultMemo;
@@ -429,9 +429,9 @@ mod preset {
                 SignerTypeProviderComponent,
                 NonceTypeProviderComponent,
                 TransactionTypeComponent,
-                TransactionHashTypeComponent,
-                FeeTypeComponent,
-                TxResponseTypeComponent,
+                TxHashTypeProviderComponent,
+                FeeTypeProviderComponent,
+                TxResponseTypeProviderComponent,
             ]:
                 UseCosmosTransactionTypes,
             [

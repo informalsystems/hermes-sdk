@@ -46,7 +46,7 @@ use hermes_relayer_components::relay::impls::connection::open_try::MissingConnec
 use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
-use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
+use hermes_relayer_components::transaction::traits::types::tx_hash::HasTxHashType;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
@@ -161,7 +161,7 @@ delegate_components! {
                 EventualAmountTimeoutError<'a, Chain>,
             <'a, Chain>
                 BroadcastTxError<'a, Chain>,
-            <'a, Chain: HasTransactionHashType>
+            <'a, Chain: HasTxHashType>
                 TxNoResponseError<'a, Chain>,
             <'a, Chain: HasIbcChainTypes<Counterparty>, Counterparty: HasHeightType>
                 NoConsensusStateAtLessThanHeight<'a, Chain, Counterparty>,
