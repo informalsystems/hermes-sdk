@@ -41,42 +41,31 @@ where
         let denom = Chain::amount_denom(amount);
         let runtime = chain.runtime();
 
-        for _ in 0..poll_attempts {
-            let balance_result = chain.query_balance(address, denom).await;
+        let mut balance = chain.query_balance(address, denom).await?;
 
-            match balance_result {
-                Ok(balance) if &balance == amount => {
-                    return Ok(());
-                }
-                Ok(balance) => {
-                    chain
+        for _ in 1..poll_attempts {
+            if &balance == amount {
+                return Ok(());
+            } else {
+                chain
                     .logger()
                     .log(
-                        &format!("queried balance `{balance}` doesn't match desired amout `{amount}`"),
+                        &format!(
+                            "queried balance `{balance}` doesn't match desired amount `{amount}`"
+                        ),
                         &LevelTrace,
                     )
                     .await;
-                    runtime.sleep(poll_interval).await;
-                }
-                Err(e) => {
-                    chain
-                        .logger()
-                        .log(
-                            &format!("query_balance call failed, cause: {e}"),
-                            &LevelError,
-                        )
-                        .await;
-                    break;
-                }
-            };
-        }
+                runtime.sleep(poll_interval).await;
+            }
 
-        let final_balance = chain.query_balance(address, denom).await?;
+            balance = chain.query_balance(address, denom).await?;
+        }
 
         chain
             .logger()
             .log(
-                &format!("Expected balance `{amount}`, found `{final_balance}`"),
+                &format!("Expected balance `{amount}`, found finally `{balance}`"),
                 &LevelError,
             )
             .await;
