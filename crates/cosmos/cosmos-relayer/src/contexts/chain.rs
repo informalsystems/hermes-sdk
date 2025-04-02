@@ -45,7 +45,7 @@ use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
 };
 use hermes_logger::{HermesLogger, UseHermesLogger};
 use hermes_logging_components::traits::has_logger::{
@@ -182,7 +182,7 @@ delegate_components! {
         ]:
             UseHermesLogger,
         [
-            EncodingTypeComponent,
+            EncodingTypeProviderComponent,
             EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:

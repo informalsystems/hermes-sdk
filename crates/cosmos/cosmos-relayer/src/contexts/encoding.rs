@@ -10,7 +10,7 @@ use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::encode_and_decode_mut::CanEncodeAndDecodeMut;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeComponent, HasEncodingType, ProvideEncodingType,
+    EncodingTypeProviderComponent, HasEncodingType,
 };
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
@@ -44,16 +44,9 @@ pub struct ProvideCosmosEncoding;
 
 delegate_components! {
     ProvideCosmosEncoding {
+        EncodingTypeProviderComponent: UseType<CosmosEncoding>,
         EncodingGetterComponent: GetDefaultEncoding,
     }
-}
-
-#[cgp_provider(EncodingTypeComponent)]
-impl<Context> ProvideEncodingType<Context, AsBytes> for ProvideCosmosEncoding
-where
-    Context: Async,
-{
-    type Encoding = CosmosEncoding;
 }
 
 #[cgp_provider(DefaultEncodingGetterComponent)]

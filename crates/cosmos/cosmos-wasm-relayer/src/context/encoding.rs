@@ -10,7 +10,7 @@ use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeComponent, HasEncodingType, ProvideEncodingType,
+    EncodingTypeProvider, EncodingTypeProviderComponent, HasEncodingType,
 };
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
@@ -45,8 +45,8 @@ delegate_components! {
     }
 }
 
-#[cgp_provider(EncodingTypeComponent)]
-impl<Context> ProvideEncodingType<Context, AsBytes> for ProvideWasmCosmosEncoding
+#[cgp_provider(EncodingTypeProviderComponent)]
+impl<Context> EncodingTypeProvider<Context, AsBytes> for ProvideWasmCosmosEncoding
 where
     Context: Async,
 {

@@ -29,7 +29,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
     HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
@@ -156,7 +156,7 @@ delegate_components! {
         ]:
             UseHermesLogger,
         [
-            EncodingTypeComponent,
+            EncodingTypeProviderComponent,
             EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:

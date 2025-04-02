@@ -7,7 +7,7 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::decode::CanDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeComponent, ProvideEncodingType,
+    EncodingTypeProvider, EncodingTypeProviderComponent,
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
@@ -70,8 +70,8 @@ delegate_components! {
     }
 }
 
-#[cgp_provider(EncodingTypeComponent)]
-impl ProvideEncodingType<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
+#[cgp_provider(EncodingTypeProviderComponent)]
+impl EncodingTypeProvider<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
     type Encoding = WasmClientEncoding;
 }
 
