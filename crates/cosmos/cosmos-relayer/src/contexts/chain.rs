@@ -47,6 +47,7 @@ use hermes_cosmos_chain_preset::presets::{CosmosChainPreset, CosmosToCosmosCompo
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
 };
+use hermes_encoding_components::types::AsBytes;
 use hermes_logger::{HermesLogger, UseHermesLogger};
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
@@ -131,7 +132,7 @@ use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{HttpClient, Url};
 
-use crate::contexts::encoding::ProvideCosmosEncoding;
+use crate::contexts::encoding::UseCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
 use crate::types::telemetry::CosmosTelemetry;
 
@@ -182,11 +183,11 @@ delegate_components! {
         ]:
             UseHermesLogger,
         [
-            EncodingTypeProviderComponent,
+            EncodingTypeProviderComponent<AsBytes>,
             EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:
-            ProvideCosmosEncoding,
+            UseCosmosEncoding,
         [
             StoreCodeMessageBuilderComponent,
             WasmClientCodeUploaderComponent,

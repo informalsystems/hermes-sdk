@@ -1,6 +1,8 @@
 use cgp::prelude::*;
 
-#[cgp_type]
+#[cgp_type {
+    name: EncodingTypeProviderComponent<Kind>
+}]
 pub trait HasEncodingType<Kind>: Async {
     type Encoding: Async;
 }

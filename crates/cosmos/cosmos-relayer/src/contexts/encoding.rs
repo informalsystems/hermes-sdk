@@ -40,17 +40,17 @@ delegate_components! {
     }
 }
 
-pub struct ProvideCosmosEncoding;
+pub struct UseCosmosEncoding;
 
 delegate_components! {
-    ProvideCosmosEncoding {
-        EncodingTypeProviderComponent: UseType<CosmosEncoding>,
+    UseCosmosEncoding {
+        EncodingTypeProviderComponent<AsBytes>: UseType<CosmosEncoding>,
         EncodingGetterComponent: GetDefaultEncoding,
     }
 }
 
 #[cgp_provider(DefaultEncodingGetterComponent)]
-impl<Context> DefaultEncodingGetter<Context, AsBytes> for ProvideCosmosEncoding
+impl<Context> DefaultEncodingGetter<Context, AsBytes> for UseCosmosEncoding
 where
     Context: HasEncodingType<AsBytes, Encoding = CosmosEncoding>,
 {

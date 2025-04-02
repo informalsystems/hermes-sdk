@@ -5,8 +5,6 @@ use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::WithField;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use eyre::eyre;
 use hermes_cosmos_chain_components::types::tendermint::{
@@ -98,10 +96,12 @@ delegate_components! {
             UseHermesError,
         ErrorRaiserComponent:
             DebugError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        RuntimeTypeProviderComponent:
+            UseType<HermesRuntime>,
+        RuntimeGetterComponent:
+            UseField<symbol!("runtime")>,
         [
-            EncodingTypeProviderComponent,
+            EncodingTypeProviderComponent<AsBytes>,
             EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:

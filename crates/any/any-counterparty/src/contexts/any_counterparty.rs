@@ -13,7 +13,7 @@ use hermes_encoding_components::traits::encode::EncoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeProvider, EncodingTypeProviderComponent,
+    EncodingTypeProviderComponent,
 };
 pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
 use hermes_encoding_components::traits::types::decode_buffer::DecodeBufferTypeComponent;
@@ -64,6 +64,8 @@ pub struct AnyCounterparty;
 
 delegate_components! {
     AnyCounterpartyComponents {
+        EncodingTypeProviderComponent<AsBytes>:
+            UseType<AnyClientEncoding>,
         [
             HeightTypeProviderComponent,
             HeightFieldComponent,
@@ -113,11 +115,6 @@ delegate_components! {
     DelegateCosmosChainComponents {
         AnyCounterparty: AnyCounterpartyCosmosComponents,
     }
-}
-
-#[cgp_provider(EncodingTypeProviderComponent)]
-impl EncodingTypeProvider<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
-    type Encoding = AnyClientEncoding;
 }
 
 #[cgp_provider(DefaultEncodingGetterComponent)]

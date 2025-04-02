@@ -119,7 +119,7 @@ use tendermint_rpc::{HttpClient, Url};
 
 use crate::components::chain::CosmosChainWasmPreset;
 use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
-use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
+use crate::context::encoding::{UseWasmCosmosEncoding, WasmCosmosEncoding};
 use crate::types::client_state::WasmTendermintClientState;
 
 #[cgp_context(WasmCosmosChainComponents: CosmosChainWasmPreset)]
@@ -156,11 +156,11 @@ delegate_components! {
         ]:
             UseHermesLogger,
         [
-            EncodingTypeProviderComponent,
+            EncodingTypeProviderComponent<AsBytes>,
             EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:
-            ProvideWasmCosmosEncoding,
+            UseWasmCosmosEncoding,
         [
             StoreCodeMessageBuilderComponent,
             WasmClientCodeUploaderComponent,

@@ -5,7 +5,7 @@ use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeProvider, EncodingTypeProviderComponent, HasEncodingType,
+    EncodingTypeProviderComponent, HasEncodingType,
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
@@ -28,12 +28,12 @@ delegate_components! {
 
 pub struct ProvideSolomachineEncoding;
 
-#[cgp_provider(EncodingTypeProviderComponent)]
-impl<Chain> EncodingTypeProvider<Chain, AsBytes> for ProvideSolomachineEncoding
-where
-    Chain: Async,
-{
-    type Encoding = SolomachineEncoding;
+delegate_components! {
+    ProvideSolomachineEncoding {
+        EncodingTypeProviderComponent<AsBytes>:
+            UseType<SolomachineEncoding>,
+        EncodingGetterComponent: GetDefaultEncoding,
+    }
 }
 
 #[cgp_provider(DefaultEncodingGetterComponent)]
@@ -43,12 +43,6 @@ where
 {
     fn default_encoding() -> &'static SolomachineEncoding {
         &SolomachineEncoding
-    }
-}
-
-delegate_components! {
-    ProvideSolomachineEncoding {
-        EncodingGetterComponent: GetDefaultEncoding,
     }
 }
 
