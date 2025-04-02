@@ -24,7 +24,7 @@ impl<Chain> EventualAmountAsserter<Chain> for PollAssertEventualAmount
 where
     Chain: HasRuntime
         + HasPollAssertDuration
-        + CanQueryBalance<Error: core::fmt::Display>
+        + CanQueryBalance
         + HasLogger
         + for<'a> CanRaiseAsyncError<EventualAmountTimeoutError<'a, Chain>>,
     Chain::Runtime: CanSleep,
@@ -41,26 +41,21 @@ where
         let denom = Chain::amount_denom(amount);
         let runtime = chain.runtime();
 
-        let mut balance = chain.query_balance(address, denom).await?;
+        let mut balance_result = chain.query_balance(address, denom).await;
 
         for _ in 1..poll_attempts {
-            if &balance == amount {
-                return Ok(());
-            } else {
-                chain
-                    .logger()
-                    .log(
-                        &format!(
-                            "queried balance `{balance}` doesn't match desired amount `{amount}`"
-                        ),
-                        &LevelTrace,
-                    )
-                    .await;
-                runtime.sleep(poll_interval).await;
-            }
-
-            balance = chain.query_balance(address, denom).await?;
+            match balance_result {
+                Ok(balance) if &balance == amount => {
+                    return Ok(());
+                }
+                _ => {
+                    runtime.sleep(poll_interval).await;
+                }
+            };
+            balance_result = chain.query_balance(address, denom).await;
         }
+
+        let balance = balance_result?;
 
         chain
             .logger()
