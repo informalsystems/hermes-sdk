@@ -44,12 +44,14 @@ pub struct UseCosmosEncoding;
 
 delegate_components! {
     UseCosmosEncoding {
-        EncodingTypeProviderComponent<AsBytes>: UseType<CosmosEncoding>,
-        EncodingGetterComponent: GetDefaultEncoding,
+        EncodingTypeProviderComponent<AsBytes>:
+            UseType<CosmosEncoding>,
+        EncodingGetterComponent<AsBytes>:
+            GetDefaultEncoding,
     }
 }
 
-#[cgp_provider(DefaultEncodingGetterComponent)]
+#[cgp_provider(DefaultEncodingGetterComponent<AsBytes>)]
 impl<Context> DefaultEncodingGetter<Context, AsBytes> for UseCosmosEncoding
 where
     Context: HasEncodingType<AsBytes, Encoding = CosmosEncoding>,

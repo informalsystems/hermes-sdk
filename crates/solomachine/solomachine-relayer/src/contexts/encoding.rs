@@ -32,11 +32,12 @@ delegate_components! {
     ProvideSolomachineEncoding {
         EncodingTypeProviderComponent<AsBytes>:
             UseType<SolomachineEncoding>,
-        EncodingGetterComponent: GetDefaultEncoding,
+        EncodingGetterComponent<AsBytes>:
+            GetDefaultEncoding,
     }
 }
 
-#[cgp_provider(DefaultEncodingGetterComponent)]
+#[cgp_provider(DefaultEncodingGetterComponent<AsBytes>)]
 impl<Chain> DefaultEncodingGetter<Chain, AsBytes> for ProvideSolomachineEncoding
 where
     Chain: HasEncodingType<AsBytes, Encoding = SolomachineEncoding>,

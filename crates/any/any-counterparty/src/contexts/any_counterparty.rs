@@ -90,7 +90,7 @@ delegate_components! {
             ConsensusStateFieldComponent,
         ]:
             ProvideAnyConsensusState,
-        EncodingGetterComponent:
+        EncodingGetterComponent<AsBytes>:
             GetDefaultEncoding,
     }
 }
@@ -117,7 +117,7 @@ delegate_components! {
     }
 }
 
-#[cgp_provider(DefaultEncodingGetterComponent)]
+#[cgp_provider(DefaultEncodingGetterComponent<AsBytes>)]
 impl DefaultEncodingGetter<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
     fn default_encoding() -> &'static AnyClientEncoding {
         &AnyClientEncoding

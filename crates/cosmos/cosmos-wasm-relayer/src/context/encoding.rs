@@ -43,12 +43,12 @@ delegate_components! {
     UseWasmCosmosEncoding {
         EncodingTypeProviderComponent<AsBytes>:
             UseType<WasmCosmosEncoding>,
-        EncodingGetterComponent:
+        EncodingGetterComponent<AsBytes>:
             GetDefaultEncoding,
     }
 }
 
-#[cgp_provider(DefaultEncodingGetterComponent)]
+#[cgp_provider(DefaultEncodingGetterComponent<AsBytes>)]
 impl<Context> DefaultEncodingGetter<Context, AsBytes> for UseWasmCosmosEncoding
 where
     Context: HasEncodingType<AsBytes, Encoding = WasmCosmosEncoding>,

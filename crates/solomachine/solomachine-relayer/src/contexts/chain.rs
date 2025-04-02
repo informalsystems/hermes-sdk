@@ -102,8 +102,8 @@ delegate_components! {
             UseField<symbol!("runtime")>,
         [
             EncodingTypeProviderComponent<AsBytes>,
-            EncodingGetterComponent,
-            DefaultEncodingGetterComponent,
+            EncodingGetterComponent<AsBytes>,
+            DefaultEncodingGetterComponent<AsBytes>,
         ]:
             ProvideSolomachineEncoding,
         ChainIdGetterComponent:

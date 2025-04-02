@@ -53,7 +53,7 @@ delegate_components! {
             ProvideCosmosChainTypes,
         ClientStateTypeComponent:
             ProvideWasmClientState,
-        EncodingGetterComponent:
+        EncodingGetterComponent<AsBytes>:
             GetDefaultEncoding,
     }
 }
@@ -72,7 +72,7 @@ delegate_components! {
     }
 }
 
-#[cgp_provider(DefaultEncodingGetterComponent)]
+#[cgp_provider(DefaultEncodingGetterComponent<AsBytes>)]
 impl DefaultEncodingGetter<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
     fn default_encoding() -> &'static WasmClientEncoding {
         &WasmClientEncoding

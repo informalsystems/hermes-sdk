@@ -157,8 +157,8 @@ delegate_components! {
             UseHermesLogger,
         [
             EncodingTypeProviderComponent<AsBytes>,
-            EncodingGetterComponent,
-            DefaultEncodingGetterComponent,
+            EncodingGetterComponent<AsBytes>,
+            DefaultEncodingGetterComponent<AsBytes>,
         ]:
             UseWasmCosmosEncoding,
         [
