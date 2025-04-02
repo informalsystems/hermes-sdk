@@ -5,7 +5,7 @@ use core::time::Duration;
 use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelError;
+use hermes_logging_components::types::level::{LevelError, LevelTrace};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
@@ -24,11 +24,11 @@ impl<Chain> EventualAmountAsserter<Chain> for PollAssertEventualAmount
 where
     Chain: HasRuntime
         + HasPollAssertDuration
-        + CanQueryBalance
+        + CanQueryBalance<Error: core::fmt::Display>
         + HasLogger
         + for<'a> CanRaiseAsyncError<EventualAmountTimeoutError<'a, Chain>>,
     Chain::Runtime: CanSleep,
-    Chain::Logger: CanLog<LevelError>,
+    Chain::Logger: CanLog<LevelError> + CanLog<LevelTrace>,
 {
     async fn assert_eventual_amount(
         chain: &Chain,
@@ -48,8 +48,25 @@ where
                 Ok(balance) if &balance == amount => {
                     return Ok(());
                 }
-                _ => {
+                Ok(balance) => {
+                    chain
+                    .logger()
+                    .log(
+                        &format!("queried balance `{balance}` doesn't match desired amout `{amount}`"),
+                        &LevelTrace,
+                    )
+                    .await;
                     runtime.sleep(poll_interval).await;
+                }
+                Err(e) => {
+                    chain
+                        .logger()
+                        .log(
+                            &format!("query_balance call failed, cause: {e}"),
+                            &LevelError,
+                        )
+                        .await;
+                    break;
                 }
             };
         }
