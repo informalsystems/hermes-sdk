@@ -12,8 +12,9 @@ description  = """
 """
 
 [dependencies]
-cgp                         = { workspace = true }
-hermes-relayer-components   = { workspace = true }
-hermes-logging-components   = { workspace = true }
-hermes-test-components      = { workspace = true }
-hermes-chain-components     = { workspace = true }
+cgp                             = { workspace = true }
+hermes-relayer-components       = { workspace = true }
+hermes-logging-components       = { workspace = true }
+hermes-test-components          = { workspace = true }
+hermes-chain-components         = { workspace = true }
+hermes-chain-type-components    = { workspace = true }

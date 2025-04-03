@@ -4,6 +4,7 @@ use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::core::macros::blanket_trait;
 use cgp::prelude::{CanRaiseError, HasAsyncErrorType, HasErrorType};
+use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
@@ -134,6 +135,7 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + CanQueryBalance
                     + CanQueryChainStatus
                     + HasAmountMethods
+                    + HasAmountDenom
                     + CanAssertEventualAmount
                     + HasDefaultMemo
                     + HasIbcChainTypes<Self::ChainB>
@@ -147,6 +149,7 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + CanQueryBalance
                     + CanQueryChainStatus
                     + HasAmountMethods
+                    + HasAmountDenom
                     + CanAssertEventualAmount
                     + HasDefaultMemo
                     + HasIbcChainTypes<Self::ChainA>

@@ -1,11 +1,6 @@
 use cgp::prelude::*;
 
-use crate::chain_driver::traits::types::chain::HasChainType;
-
-#[cgp_component {
-  name: ChainDriverTypeComponent,
-  provider: ProvideChainDriverType,
-}]
-pub trait HasChainDriverType: HasChainType {
-    type ChainDriver: HasChainType;
+#[cgp_type]
+pub trait HasChainDriverType: Async {
+    type ChainDriver: Async;
 }

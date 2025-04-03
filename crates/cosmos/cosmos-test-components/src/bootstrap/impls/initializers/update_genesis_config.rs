@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
@@ -68,8 +70,16 @@ where
             .map_err(Bootstrap::raise_error)?;
 
         // TODO: generate random denom
-        let staking_denom = Denom::Base(bootstrap.denom_prefix(DenomForStaking).into());
-        let transfer_denom = Denom::Base(bootstrap.denom_prefix(DenomForTransfer).into());
+        let staking_denom = Denom::Base(
+            bootstrap
+                .denom_prefix(PhantomData::<DenomForStaking>)
+                .into(),
+        );
+        let transfer_denom = Denom::Base(
+            bootstrap
+                .denom_prefix(PhantomData::<DenomForTransfer>)
+                .into(),
+        );
 
         let genesis_config = CosmosGenesisConfig {
             config_json,

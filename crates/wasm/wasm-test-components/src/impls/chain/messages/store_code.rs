@@ -1,11 +1,11 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_cosmos_chain_components::traits::message::{
     CosmosMessage, DynCosmosMessage, ToCosmosMessage,
 };
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::gov::v1::MsgSubmitProposal;

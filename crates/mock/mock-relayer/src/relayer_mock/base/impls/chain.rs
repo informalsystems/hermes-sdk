@@ -18,13 +18,13 @@ use hermes_chain_type_components::impls::types::message_response::UseEventsMessa
 use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterComponent;
 use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
-use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeProviderComponent;
 use hermes_chain_type_components::traits::types::commitment_proof::{
-    CommitmentProofTypeComponent, ProvideCommitmentProofType,
+    CommitmentProofTypeProvider, CommitmentProofTypeProviderComponent,
 };
-use hermes_chain_type_components::traits::types::event::EventTypeComponent;
-use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
-use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
+use hermes_chain_type_components::traits::types::event::EventTypeProviderComponent;
+use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
+use hermes_chain_type_components::traits::types::message::MessageTypeProviderComponent;
 use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
 use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
 use hermes_chain_type_components::traits::types::timeout::TimeoutTypeComponent;
@@ -83,18 +83,16 @@ use hermes_relayer_components::chain::traits::queries::packet_is_received::{
 use hermes_relayer_components::chain::traits::send_message::{
     MessageSender, MessageSenderComponent,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::{
-    ChainIdGetter, ProvideChainIdType,
-};
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProvider;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateTypeComponent, ProvideClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateTypeComponent, ProvideConsensusStateType,
 };
-use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
+use hermes_relayer_components::chain::traits::types::event::EventTypeProvider;
 use hermes_relayer_components::chain::traits::types::height::{
-    HeightIncrementer, ProvideHeightType,
+    HeightIncrementer, HeightTypeProvider,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
@@ -109,7 +107,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::{
     ProvideWriteAckEvent, WriteAckEventComponent,
 };
 use hermes_relayer_components::chain::traits::types::message::{
-    MessageSizeEstimator, MessageSizeEstimatorComponent, ProvideMessageType,
+    MessageSizeEstimator, MessageSizeEstimatorComponent, MessageTypeProvider,
 };
 use hermes_relayer_components::chain::traits::types::packet::{
     OutgoingPacketTypeComponent, ProvideOutgoingPacketType,
@@ -161,16 +159,18 @@ delegate_components! {
             MessageResponseEventsGetterComponent,
         ]:
             UseEventsMessageResponse,
+        ChainIdGetterComponent:
+            UseField<symbol!("name")>,
     }
 }
 
-#[cgp_provider(HeightTypeComponent)]
-impl ProvideHeightType<MockChainContext> for MockChainComponents {
+#[cgp_provider(HeightTypeProviderComponent)]
+impl HeightTypeProvider<MockChainContext> for MockChainComponents {
     type Height = MockHeight;
 }
 
-#[cgp_provider(EventTypeComponent)]
-impl ProvideEventType<MockChainContext> for MockChainComponents {
+#[cgp_provider(EventTypeProviderComponent)]
+impl EventTypeProvider<MockChainContext> for MockChainComponents {
     type Event = Event;
 }
 
@@ -188,13 +188,13 @@ impl ProvideTimeoutType<MockChainContext> for MockChainComponents {
     }
 }
 
-#[cgp_provider(MessageTypeComponent)]
-impl ProvideMessageType<MockChainContext> for MockChainComponents {
+#[cgp_provider(MessageTypeProviderComponent)]
+impl MessageTypeProvider<MockChainContext> for MockChainComponents {
     type Message = MockMessage;
 }
 
-#[cgp_provider(ChainIdTypeComponent)]
-impl ProvideChainIdType<MockChainContext> for MockChainComponents {
+#[cgp_provider(ChainIdTypeProviderComponent)]
+impl ChainIdTypeProvider<MockChainContext> for MockChainComponents {
     type ChainId = String;
 }
 
@@ -282,8 +282,8 @@ impl ProvideWriteAckEvent<MockChainContext, MockChainContext> for MockChainCompo
     type WriteAckEvent = WriteAckEvent;
 }
 
-#[cgp_provider(CommitmentProofTypeComponent)]
-impl ProvideCommitmentProofType<MockChainContext> for MockChainComponents {
+#[cgp_provider(CommitmentProofTypeProviderComponent)]
+impl CommitmentProofTypeProvider<MockChainContext> for MockChainComponents {
     type CommitmentProof = ();
 }
 
@@ -382,13 +382,6 @@ impl MessageSizeEstimator<MockChainContext> for MockChainComponents {
     fn estimate_message_size(_message: &MockMessage) -> Result<usize, Error> {
         // Only single messages are sent by the Mock Chain
         Ok(1)
-    }
-}
-
-#[cgp_provider(ChainIdGetterComponent)]
-impl ChainIdGetter<MockChainContext> for MockChainComponents {
-    fn chain_id(chain: &MockChainContext) -> &String {
-        &chain.name
     }
 }
 

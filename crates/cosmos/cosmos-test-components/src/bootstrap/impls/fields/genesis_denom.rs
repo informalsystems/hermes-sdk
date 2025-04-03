@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
 use hermes_test_components::chain::traits::types::denom::HasDenomType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
@@ -18,7 +20,10 @@ where
         + HasChainType<Chain = Chain>,
     Chain: HasDenomType<Denom = Denom>,
 {
-    fn genesis_denom(_label: DenomForStaking, genesis_config: &CosmosGenesisConfig) -> &Denom {
+    fn genesis_denom(
+        genesis_config: &CosmosGenesisConfig,
+        _label: PhantomData<DenomForStaking>,
+    ) -> &Denom {
         &genesis_config.staking_denom
     }
 }
@@ -30,7 +35,10 @@ where
         + HasChainType<Chain = Chain>,
     Chain: HasDenomType<Denom = Denom>,
 {
-    fn genesis_denom(_label: DenomForTransfer, genesis_config: &CosmosGenesisConfig) -> &Denom {
+    fn genesis_denom(
+        genesis_config: &CosmosGenesisConfig,
+        _label: PhantomData<DenomForTransfer>,
+    ) -> &Denom {
         &genesis_config.transfer_denom
     }
 }

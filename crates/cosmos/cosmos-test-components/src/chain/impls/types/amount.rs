@@ -1,29 +1,38 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::fields::amount::denom::{
+    AmountDenomGetter, AmountDenomGetterComponent,
+};
+use hermes_chain_type_components::traits::types::amount::{
+    AmountTypeProviderComponent, HasAmountType,
+};
 use hermes_test_components::chain::traits::types::amount::{
-    AmountMethodsComponent, AmountTypeComponent, HasAmountType, ProvideAmountMethods,
-    ProvideAmountType,
+    AmountMethodsComponent, ProvideAmountMethods,
 };
 use hermes_test_components::chain::traits::types::denom::HasDenomType;
 
 use crate::chain::types::amount::Amount;
 use crate::chain::types::denom::Denom;
 
-pub struct ProvideU128AmountWithDenom;
+pub struct UseCosmosAmount;
 
-#[cgp_provider(AmountTypeComponent)]
-impl<ChainDriver> ProvideAmountType<ChainDriver> for ProvideU128AmountWithDenom
+delegate_components! {
+    UseCosmosAmount {
+        AmountTypeProviderComponent: UseType<Amount>
+    }
+}
+
+#[cgp_provider(AmountDenomGetterComponent)]
+impl<Chain> AmountDenomGetter<Chain> for UseCosmosAmount
 where
-    ChainDriver: HasDenomType<Denom = Denom>,
+    Chain: HasAmountType<Amount = Amount> + HasDenomType<Denom = Denom>,
 {
-    type Amount = Amount;
-
-    fn amount_denom(amount: &Amount) -> &<ChainDriver as HasDenomType>::Denom {
+    fn amount_denom(amount: &Amount) -> &Denom {
         &amount.denom
     }
 }
 
 #[cgp_provider(AmountMethodsComponent)]
-impl<ChainDriver> ProvideAmountMethods<ChainDriver> for ProvideU128AmountWithDenom
+impl<ChainDriver> ProvideAmountMethods<ChainDriver> for UseCosmosAmount
 where
     ChainDriver: HasAmountType<Amount = Amount> + CanRaiseAsyncError<&'static str>,
 {

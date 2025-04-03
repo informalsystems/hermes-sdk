@@ -2,10 +2,12 @@
 mod preset {
     use cgp::core::component::UseDelegate;
     use cgp::prelude::*;
+    use hermes_chain_type_components::traits::fields::amount::denom::AmountDenomGetterComponent;
     use hermes_chain_type_components::traits::fields::height::{
         HeightAdjusterComponent, HeightIncrementerComponent,
     };
     use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
+    use hermes_chain_type_components::traits::types::amount::AmountTypeProviderComponent;
     use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
     use hermes_cosmos_chain_components::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
     use hermes_cosmos_chain_components::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
@@ -54,7 +56,7 @@ mod preset {
     use hermes_cosmos_test_components::chain::impls::queries::balance::QueryCosmosBalance;
     use hermes_cosmos_test_components::chain::impls::transfer::timeout::IbcTransferTimeoutAfterSeconds;
     use hermes_cosmos_test_components::chain::impls::types::address::ProvideStringAddress;
-    use hermes_cosmos_test_components::chain::impls::types::amount::ProvideU128AmountWithDenom;
+    use hermes_cosmos_test_components::chain::impls::types::amount::UseCosmosAmount;
     use hermes_cosmos_test_components::chain::impls::types::denom::ProvideIbcDenom;
     use hermes_cosmos_test_components::chain::impls::types::proposal::ProvideCosmosProposalTypes;
     use hermes_cosmos_test_components::chain::impls::types::wallet::ProvideCosmosTestWallet;
@@ -141,7 +143,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::types::block::{
         BlockHashComponent, BlockTypeComponent,
     };
-    use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+    use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::channel::{
         ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
         ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
@@ -162,9 +164,9 @@ mod preset {
         CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
         CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
     };
-    use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+    use hermes_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::height::{
-        GenesisHeightGetterComponent, HeightFieldComponent, HeightTypeComponent,
+        GenesisHeightGetterComponent, HeightFieldComponent, HeightTypeProviderComponent,
     };
     use hermes_relayer_components::chain::traits::types::ibc::{
         ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
@@ -179,7 +181,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::SendPacketEventComponent;
     use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::WriteAckEventComponent;
     use hermes_relayer_components::chain::traits::types::message::{
-        MessageSizeEstimatorComponent, MessageTypeComponent,
+        MessageSizeEstimatorComponent, MessageTypeProviderComponent,
     };
     use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
     use hermes_relayer_components::chain::traits::types::packets::ack::{
@@ -195,7 +197,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::types::poll_interval::PollIntervalGetterComponent;
     use hermes_relayer_components::chain::traits::types::proof::{
         CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
-        CommitmentProofTypeComponent,
+        CommitmentProofTypeProviderComponent,
     };
     use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
     use hermes_relayer_components::chain::traits::types::timestamp::{
@@ -220,12 +222,12 @@ mod preset {
     use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
     use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
     use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
-    use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
+    use hermes_relayer_components::transaction::traits::types::fee::FeeTypeProviderComponent;
     use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeProviderComponent;
     use hermes_relayer_components::transaction::traits::types::signer::SignerTypeProviderComponent;
     use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
-    use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
-    use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
+    use hermes_relayer_components::transaction::traits::types::tx_hash::TxHashTypeProviderComponent;
+    use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeProviderComponent;
     use hermes_test_components::chain::impls::assert::assert_duration::ProvidePollAssertDuration;
     use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::PollAssertEventualAmount;
     use hermes_test_components::chain::impls::default_memo::ProvideDefaultMemo;
@@ -247,9 +249,7 @@ mod preset {
     use hermes_test_components::chain::traits::transfer::string_memo::ProvideStringMemoType;
     use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
     use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
-    use hermes_test_components::chain::traits::types::amount::{
-        AmountMethodsComponent, AmountTypeComponent,
-    };
+    use hermes_test_components::chain::traits::types::amount::AmountMethodsComponent;
     use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
     use hermes_test_components::chain::traits::types::memo::{
         DefaultMemoGetterComponent, MemoTypeComponent,
@@ -263,7 +263,7 @@ mod preset {
     cgp_preset! {
         CosmosChainPreset {
             [
-                HeightTypeComponent,
+                HeightTypeProviderComponent,
                 HeightFieldComponent,
                 HeightIncrementerComponent,
                 HeightAdjusterComponent,
@@ -271,12 +271,12 @@ mod preset {
                 TimeTypeComponent,
                 TimeMeasurerComponent,
                 TimeoutTypeComponent,
-                ChainIdTypeComponent,
-                MessageTypeComponent,
+                ChainIdTypeProviderComponent,
+                MessageTypeProviderComponent,
                 MessageResponseTypeComponent,
                 MessageResponseEventsGetterComponent,
                 MessageSizeEstimatorComponent,
-                EventTypeComponent,
+                EventTypeProviderComponent,
                 ClientIdTypeComponent,
                 ConnectionIdTypeComponent,
                 ChannelIdTypeComponent,
@@ -289,7 +289,7 @@ mod preset {
                 BlockTypeComponent,
                 BlockHashComponent,
                 CommitmentPrefixTypeComponent,
-                CommitmentProofTypeComponent,
+                CommitmentProofTypeProviderComponent,
                 CommitmentProofHeightGetterComponent,
                 CommitmentProofBytesGetterComponent,
                 PacketCommitmentTypeComponent,
@@ -429,9 +429,9 @@ mod preset {
                 SignerTypeProviderComponent,
                 NonceTypeProviderComponent,
                 TransactionTypeComponent,
-                TransactionHashTypeComponent,
-                FeeTypeComponent,
-                TxResponseTypeComponent,
+                TxHashTypeProviderComponent,
+                FeeTypeProviderComponent,
+                TxResponseTypeProviderComponent,
             ]:
                 UseCosmosTransactionTypes,
             [
@@ -469,10 +469,11 @@ mod preset {
             ChainIdFromStringBuilderComponent:
                 BuildCosmosChainIdFromString,
             [
-                AmountTypeComponent,
+                AmountTypeProviderComponent,
+                AmountDenomGetterComponent,
                 AmountMethodsComponent,
             ]:
-                ProvideU128AmountWithDenom,
+                UseCosmosAmount,
             [
                 ProposalIdTypeComponent,
                 ProposalStatusTypeComponent,

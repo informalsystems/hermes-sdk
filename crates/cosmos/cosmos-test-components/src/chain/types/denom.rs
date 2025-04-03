@@ -3,7 +3,7 @@ use std::str::FromStr;
 
 use serde::Serialize;
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialOrd, Ord)]
 pub enum Denom {
     Base(String),
     Ibc {

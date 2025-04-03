@@ -3,6 +3,8 @@ use core::fmt::Debug;
 use core::time::Duration;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelError;
@@ -15,7 +17,6 @@ use crate::chain::traits::assert::eventual_amount::{
 use crate::chain::traits::assert::poll_assert::HasPollAssertDuration;
 use crate::chain::traits::queries::balance::CanQueryBalance;
 use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::amount::HasAmountType;
 
 pub struct PollAssertEventualAmount;
 
@@ -25,6 +26,7 @@ where
     Chain: HasRuntime
         + HasPollAssertDuration
         + CanQueryBalance
+        + HasAmountDenom
         + HasLogger
         + for<'a> CanRaiseAsyncError<EventualAmountTimeoutError<'a, Chain>>,
     Chain::Runtime: CanSleep,

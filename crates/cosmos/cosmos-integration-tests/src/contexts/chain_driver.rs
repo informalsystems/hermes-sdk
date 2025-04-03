@@ -45,7 +45,7 @@ use hermes_test_components::chain_driver::traits::fields::wallet::{
     RelayerWallet, UserWallet, ValidatorWallet, WalletGetterComponent, WalletsGetterComponent,
 };
 use hermes_test_components::chain_driver::traits::types::chain::{
-    ChainGetter, ChainGetterComponent, ChainTypeComponent, ProvideChainType,
+    ChainGetter, ChainGetterComponent, ChainTypeProvider, ChainTypeProviderComponent,
 };
 use hermes_test_components::chain_driver::traits::wait::ChainStartupWaiterComponent;
 use tokio::process::Child;
@@ -95,8 +95,8 @@ delegate_components! {
     }
 }
 
-#[cgp_provider(ChainTypeComponent)]
-impl ProvideChainType<CosmosChainDriver> for CosmosChainDriverComponents {
+#[cgp_provider(ChainTypeProviderComponent)]
+impl ChainTypeProvider<CosmosChainDriver> for CosmosChainDriverComponents {
     type Chain = CosmosChain;
 }
 

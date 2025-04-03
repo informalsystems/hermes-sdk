@@ -3,6 +3,8 @@ use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
+use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::{
     ChainDriverBuilder, ChainDriverBuilderComponent,
 };
@@ -23,11 +25,10 @@ use hermes_test_components::chain::traits::proposal::poll_status::CanPollProposa
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
-use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletSigner;
 use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, StakingDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, ValidatorWallet};
-use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::traits::bootstrap::client_byte_code::HasWasmClientByteCode;
@@ -41,7 +42,8 @@ impl<Bootstrap, ChainDriver, Chain, Runtime, InBuilder> ChainDriverBuilder<Boots
     for BuildChainDriverAndInitWasmClient<InBuilder>
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasChainDriverType<ChainDriver = ChainDriver, Chain = Chain>
+        + HasChainType<Chain = Chain>
+        + HasChainDriverType<ChainDriver = ChainDriver>
         + HasChainGenesisConfigType
         + HasChainNodeConfigType
         + HasWasmClientByteCode
@@ -52,7 +54,8 @@ where
         + HasProposalIdType
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasProposalVoteType<ProposalVote = ProposalVote>
-        + HasAmountType<Amount = Amount, Denom = Denom>
+        + HasAmountType<Amount = Amount>
+        + HasDenomType<Denom = Denom>
         + CanUploadWasmClientCode
         + CanUploadWasmClientCode
         + CanPollProposalStatus
