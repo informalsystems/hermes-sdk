@@ -87,7 +87,7 @@ tendermint-light-client         = { version = "0.40" }
 basecoin                        = { version = "0.2.0" }
 bitcoin                         = { version = "0.31.2" }
 cgp                             = { version = "0.4.0", default-features = false }
-clap                            = { version = "4.5.20" }
+clap                            = { version = "4.5.34" }
 dirs-next                       = { version = "2.0.0" }
 num-bigint                      = { version = "0.4" }
 num-rational                    = { version = "0.4.1" }
