@@ -51,7 +51,7 @@ use hermes_relayer_components::chain::traits::types::packets::receive::PacketCom
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
-    CommitmentProofTypeComponent,
+    CommitmentProofTypeProviderComponent,
 };
 use hermes_relayer_components::chain::traits::types::status::{
     ChainStatusTypeComponent, ProvideChainStatusType,
@@ -75,8 +75,9 @@ use tendermint::{Hash, Time};
 use time::OffsetDateTime;
 
 use crate::traits::message::CosmosMessage;
-use crate::types::commitment_proof::ProvideCosmosCommitmentProof;
+use crate::types::commitment_proof::UseCosmosCommitmentProof;
 use crate::types::status::ChainStatus;
+
 pub struct ProvideCosmosChainTypes;
 
 delegate_components! {
@@ -97,11 +98,11 @@ delegate_components! {
         CommitmentPrefixTypeComponent:
             ProvideCommitmentPrefixBytes,
         [
-            CommitmentProofTypeComponent,
+            CommitmentProofTypeProviderComponent,
             CommitmentProofHeightGetterComponent,
             CommitmentProofBytesGetterComponent,
         ]:
-            ProvideCosmosCommitmentProof,
+            UseCosmosCommitmentProof,
         PacketCommitmentTypeComponent:
             ProvideBytesPacketCommitment,
         [

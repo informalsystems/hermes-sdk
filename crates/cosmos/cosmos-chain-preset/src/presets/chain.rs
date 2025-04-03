@@ -197,7 +197,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::types::poll_interval::PollIntervalGetterComponent;
     use hermes_relayer_components::chain::traits::types::proof::{
         CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
-        CommitmentProofTypeComponent,
+        CommitmentProofTypeProviderComponent,
     };
     use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
     use hermes_relayer_components::chain::traits::types::timestamp::{
@@ -289,7 +289,7 @@ mod preset {
                 BlockTypeComponent,
                 BlockHashComponent,
                 CommitmentPrefixTypeComponent,
-                CommitmentProofTypeComponent,
+                CommitmentProofTypeProviderComponent,
                 CommitmentProofHeightGetterComponent,
                 CommitmentProofBytesGetterComponent,
                 PacketCommitmentTypeComponent,

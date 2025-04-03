@@ -71,7 +71,7 @@ mod preset {
     use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
     use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
-    use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+    use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeProviderComponent;
     use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
     use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
     use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -105,7 +105,7 @@ mod preset {
                 SequenceTypeComponent,
                 OutgoingPacketTypeComponent,
                 ChainStatusTypeComponent,
-                CommitmentProofTypeComponent,
+                CommitmentProofTypeProviderComponent,
                 ConnectionEndTypeComponent,
             ]:
                 ProvideCosmosChainTypes,

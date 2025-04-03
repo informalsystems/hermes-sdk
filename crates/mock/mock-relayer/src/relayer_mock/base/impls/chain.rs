@@ -20,7 +20,7 @@ use hermes_chain_type_components::traits::fields::height::HeightIncrementerCompo
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
 use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeProviderComponent;
 use hermes_chain_type_components::traits::types::commitment_proof::{
-    CommitmentProofTypeComponent, ProvideCommitmentProofType,
+    CommitmentProofTypeProvider, CommitmentProofTypeProviderComponent,
 };
 use hermes_chain_type_components::traits::types::event::EventTypeProviderComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
@@ -282,8 +282,8 @@ impl ProvideWriteAckEvent<MockChainContext, MockChainContext> for MockChainCompo
     type WriteAckEvent = WriteAckEvent;
 }
 
-#[cgp_provider(CommitmentProofTypeComponent)]
-impl ProvideCommitmentProofType<MockChainContext> for MockChainComponents {
+#[cgp_provider(CommitmentProofTypeProviderComponent)]
+impl CommitmentProofTypeProvider<MockChainContext> for MockChainComponents {
     type CommitmentProof = ();
 }
 
