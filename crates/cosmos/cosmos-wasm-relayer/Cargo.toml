@@ -58,6 +58,6 @@ http            = { workspace = true }
 rand            = { workspace = true }
 sha2            = { workspace = true }
 
-opentelemetry   = { version = "0.17.0", features = ["metrics"] }
+opentelemetry   = { version = "0.29.0", features = ["metrics"] }
 moka            = { version = "0.12", features = ["future"] }
 stable-eyre     = { version = "0.2.2" }
