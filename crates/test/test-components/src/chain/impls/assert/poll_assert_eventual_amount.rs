@@ -41,9 +41,9 @@ where
         let denom = Chain::amount_denom(amount);
         let runtime = chain.runtime();
 
-        for _ in 0..poll_attempts {
-            let balance_result = chain.query_balance(address, denom).await;
+        let mut balance_result = chain.query_balance(address, denom).await;
 
+        for _ in 1..poll_attempts {
             match balance_result {
                 Ok(balance) if &balance == amount => {
                     return Ok(());
@@ -52,9 +52,10 @@ where
                     runtime.sleep(poll_interval).await;
                 }
             };
+            balance_result = chain.query_balance(address, denom).await;
         }
 
-        let final_balance = chain.query_balance(address, denom).await?;
+        let final_balance = balance_result?;
 
         chain
             .logger()

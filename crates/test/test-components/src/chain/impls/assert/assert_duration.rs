@@ -6,18 +6,19 @@ use crate::chain::traits::assert::poll_assert::{
     PollAssertDurationGetter, PollAssertDurationGetterComponent,
 };
 
-pub struct ProvideDefaultPollAssertDuration;
+pub struct ProvidePollAssertDuration<const INTERVAL: u64, const ATTEMPTS: u32>;
 
 #[cgp_provider(PollAssertDurationGetterComponent)]
-impl<Chain> PollAssertDurationGetter<Chain> for ProvideDefaultPollAssertDuration
+impl<Chain, const INTERVAL: u64, const ATTEMPTS: u32> PollAssertDurationGetter<Chain>
+    for ProvidePollAssertDuration<INTERVAL, ATTEMPTS>
 where
     Chain: Async,
 {
     fn poll_assert_interval(_chain: &Chain) -> Duration {
-        Duration::from_secs(1)
+        Duration::from_secs(INTERVAL)
     }
 
     fn poll_assert_attempts(_chain: &Chain) -> u32 {
-        90
+        ATTEMPTS
     }
 }
