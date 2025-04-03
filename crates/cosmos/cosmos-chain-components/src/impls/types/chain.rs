@@ -2,17 +2,16 @@ use alloc::sync::Arc;
 use core::time::Duration;
 
 use cgp::core::error::CanRaiseAsyncError;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::fields::height::{
     HeightAdjuster, HeightAdjusterComponent, HeightIncrementer, HeightIncrementerComponent,
 };
 use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
-use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_chain_type_components::traits::types::event::EventTypeComponent;
-use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
-use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
+use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeProviderComponent;
+use hermes_chain_type_components::traits::types::event::EventTypeProviderComponent;
+use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
+use hermes_chain_type_components::traits::types::message::MessageTypeProviderComponent;
 use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
 use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
 use hermes_chain_type_components::traits::types::timeout::TimeoutTypeComponent;
@@ -23,7 +22,7 @@ use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefi
 use hermes_relayer_components::chain::traits::types::block::{
     BlockHashComponent, BlockTypeComponent, HasBlockType, ProvideBlockHash, ProvideBlockType,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, ProvideChainIdType};
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelEndTypeComponent, ProvideChannelEndType,
 };
@@ -52,7 +51,7 @@ use hermes_relayer_components::chain::traits::types::packets::receive::PacketCom
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
-    CommitmentProofTypeComponent,
+    CommitmentProofTypeProviderComponent,
 };
 use hermes_relayer_components::chain::traits::types::status::{
     ChainStatusTypeComponent, ProvideChainStatusType,
@@ -76,18 +75,21 @@ use tendermint::{Hash, Time};
 use time::OffsetDateTime;
 
 use crate::traits::message::CosmosMessage;
-use crate::types::commitment_proof::ProvideCosmosCommitmentProof;
+use crate::types::commitment_proof::UseCosmosCommitmentProof;
 use crate::types::status::ChainStatus;
+
 pub struct ProvideCosmosChainTypes;
 
 delegate_components! {
     ProvideCosmosChainTypes {
-        HeightTypeComponent:
-            WithType<Height>,
-        MessageTypeComponent:
-            WithType<CosmosMessage>,
-        EventTypeComponent:
-            WithType<Arc<AbciEvent>>,
+        ChainIdTypeProviderComponent:
+            UseType<ChainId>,
+        HeightTypeProviderComponent:
+            UseType<Height>,
+        MessageTypeProviderComponent:
+            UseType<CosmosMessage>,
+        EventTypeProviderComponent:
+            UseType<Arc<AbciEvent>>,
         [
             MessageResponseTypeComponent,
             MessageResponseEventsGetterComponent,
@@ -96,11 +98,11 @@ delegate_components! {
         CommitmentPrefixTypeComponent:
             ProvideCommitmentPrefixBytes,
         [
-            CommitmentProofTypeComponent,
+            CommitmentProofTypeProviderComponent,
             CommitmentProofHeightGetterComponent,
             CommitmentProofBytesGetterComponent,
         ]:
-            ProvideCosmosCommitmentProof,
+            UseCosmosCommitmentProof,
         PacketCommitmentTypeComponent:
             ProvideBytesPacketCommitment,
         [
@@ -219,14 +221,6 @@ where
     fn chain_status_time(status: &ChainStatus) -> &Time {
         &status.time
     }
-}
-
-#[cgp_provider(ChainIdTypeComponent)]
-impl<Chain> ProvideChainIdType<Chain> for ProvideCosmosChainTypes
-where
-    Chain: Async,
-{
-    type ChainId = ChainId;
 }
 
 #[cgp_provider(ClientIdTypeComponent)]

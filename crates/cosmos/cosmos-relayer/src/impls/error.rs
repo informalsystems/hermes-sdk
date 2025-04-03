@@ -12,6 +12,7 @@ use cgp::prelude::*;
 use eyre::Report;
 use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateType;
 use hermes_any_counterparty::impls::encoding::consensus_state::UnknownConsensusStateType;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
 use hermes_cosmos_chain_components::impls::queries::eip::types::EipQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
@@ -45,12 +46,11 @@ use hermes_relayer_components::relay::impls::connection::open_try::MissingConnec
 use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
-use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
+use hermes_relayer_components::transaction::traits::types::tx_hash::HasTxHashType;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_wasm_test_components::impls::chain::upload_client_code::ProposalIdNotFound;
 use http::uri::InvalidUri;
 use ibc::clients::tendermint::types::error::TendermintClientError;
@@ -161,7 +161,7 @@ delegate_components! {
                 EventualAmountTimeoutError<'a, Chain>,
             <'a, Chain>
                 BroadcastTxError<'a, Chain>,
-            <'a, Chain: HasTransactionHashType>
+            <'a, Chain: HasTxHashType>
                 TxNoResponseError<'a, Chain>,
             <'a, Chain: HasIbcChainTypes<Counterparty>, Counterparty: HasHeightType>
                 NoConsensusStateAtLessThanHeight<'a, Chain, Counterparty>,

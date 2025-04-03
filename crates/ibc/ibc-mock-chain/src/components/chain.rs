@@ -5,7 +5,7 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::{UseDelegatedType, WithType};
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
-use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
+use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
 use hermes_chain_type_components::traits::types::quantity::QuantityTypeComponent;
@@ -57,7 +57,7 @@ use crate::types::quantity::MockQuantity;
 delegate_components! {
     MockChainComponents {
         [
-            HeightTypeComponent,
+            HeightTypeProviderComponent,
             TimeTypeComponent,
             AddressTypeComponent,
             AppIdTypeComponent,

@@ -4,7 +4,7 @@ use crate::traits::has_encoding::{EncodingGetter, EncodingGetterComponent, HasDe
 
 pub struct GetDefaultEncoding;
 
-#[cgp_provider(EncodingGetterComponent)]
+#[cgp_provider(EncodingGetterComponent<Kind>)]
 impl<Context, Kind> EncodingGetter<Context, Kind> for GetDefaultEncoding
 where
     Context: HasDefaultEncoding<Kind>,

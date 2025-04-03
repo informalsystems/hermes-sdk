@@ -6,7 +6,7 @@ use hermes_relayer_components::chain::traits::types::poll_interval::HasPollInter
 use hermes_relayer_components::transaction::traits::query_tx_response::{
     TxResponseQuerier, TxResponseQuerierComponent,
 };
-use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
+use hermes_relayer_components::transaction::traits::types::tx_hash::HasTxHashType;
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use tendermint::Hash as TxHash;
@@ -20,7 +20,7 @@ use crate::traits::rpc_client::HasRpcClient;
 impl<Chain> TxResponseQuerier<Chain> for QueryCosmosTxResponse
 where
     Chain: HasRuntime
-        + HasTransactionHashType<TxHash = TxHash>
+        + HasTxHashType<TxHash = TxHash>
         + HasTxResponseType<TxResponse = TxResponse>
         + HasRpcClient
         + CanQueryChainHeight

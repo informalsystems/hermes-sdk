@@ -6,9 +6,9 @@ use crate::traits::types::chain_id::HasChainIdType;
    This implements the accessor method to get a chain context's
    [chain ID](HasChainIdType::ChainId).
 */
-#[cgp_component {
-  provider: ChainIdGetter,
-  context: Chain,
+#[cgp_getter {
+   provider: ChainIdGetter,
+   context: Chain,
 }]
 pub trait HasChainId: HasChainIdType {
     /**

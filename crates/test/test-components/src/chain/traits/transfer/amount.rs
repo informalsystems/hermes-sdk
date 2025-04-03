@@ -2,11 +2,11 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
+use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_relayer_components::chain::traits::types::ibc::{
     HasChannelIdType, HasIbcChainTypes, HasPortIdType,
 };
-
-use crate::chain::traits::types::amount::HasAmountType;
 
 #[cgp_component {
     provider: IbcTransferredAmountConverter,
@@ -14,7 +14,11 @@ use crate::chain::traits::types::amount::HasAmountType;
 }]
 #[async_trait]
 pub trait CanConvertIbcTransferredAmount<Counterparty>:
-    HasAmountType + HasChannelIdType<Counterparty> + HasPortIdType<Counterparty> + HasAsyncErrorType
+    HasAmountType
+    + HasDenomType
+    + HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
+    + HasAsyncErrorType
 where
     Counterparty: HasAmountType,
 {
@@ -38,7 +42,7 @@ where
 impl<Chain, Counterparty, Components> IbcTransferredAmountConverter<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasAmountType + HasIbcChainTypes<Counterparty> + HasAsyncErrorType,
+    Chain: HasAmountType + HasDenomType + HasIbcChainTypes<Counterparty> + HasAsyncErrorType,
     Counterparty: HasAmountType,
     Components: DelegateComponent<Counterparty>,
     Components::Delegate: IbcTransferredAmountConverter<Chain, Counterparty>,

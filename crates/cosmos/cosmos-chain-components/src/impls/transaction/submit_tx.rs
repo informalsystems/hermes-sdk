@@ -5,7 +5,7 @@ use hermes_relayer_components::transaction::traits::submit_tx::{
     TxSubmitter, TxSubmitterComponent,
 };
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
-use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
+use hermes_relayer_components::transaction::traits::types::tx_hash::HasTxHashType;
 use ibc_proto::cosmos::tx::v1beta1::TxRaw;
 use prost::Message;
 use tendermint::Hash as TxHash;
@@ -35,7 +35,7 @@ impl<Chain> Debug for BroadcastTxError<'_, Chain> {
 impl<Chain> TxSubmitter<Chain> for BroadcastCosmosTx
 where
     Chain: HasTransactionType<Transaction = SignedTx>
-        + HasTransactionHashType<TxHash = TxHash>
+        + HasTxHashType<TxHash = TxHash>
         + HasRpcClient
         + CanRaiseAsyncError<RpcError>
         + for<'a> CanRaiseAsyncError<BroadcastTxError<'a, Chain>>,

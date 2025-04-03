@@ -1,17 +1,12 @@
 use cgp::prelude::*;
 
-#[cgp_component {
-  name: ChainTypeComponent,
-  provider: ProvideChainType,
-  context: Bootstrap,
-}]
+#[cgp_type]
 pub trait HasChainType: Async {
     type Chain: Async;
 }
 
-#[cgp_component {
-  provider: ChainGetter,
-  context: Driver,
+#[cgp_getter {
+    provider: ChainGetter,
 }]
 pub trait HasChain: HasChainType {
     fn chain(&self) -> &Self::Chain;

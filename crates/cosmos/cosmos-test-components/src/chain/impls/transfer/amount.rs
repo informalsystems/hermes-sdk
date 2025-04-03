@@ -2,11 +2,12 @@ use core::marker::PhantomData;
 use std::string::FromUtf8Error;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
+use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_test_components::chain::traits::transfer::amount::{
     IbcTransferredAmountConverter, IbcTransferredAmountConverterComponent,
 };
-use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use sha2::{Digest, Sha256};
 use subtle_encoding::hex;
@@ -18,7 +19,8 @@ use crate::chain::types::denom::Denom;
 impl<Chain, Counterparty> IbcTransferredAmountConverter<Chain, Counterparty>
     for ConvertCosmosIbcAmount
 where
-    Chain: HasAmountType<Amount = Amount, Denom = Denom>
+    Chain: HasAmountType<Amount = Amount>
+        + HasDenomType<Denom = Denom>
         + CanRaiseAsyncError<FromUtf8Error>
         + HasChannelIdType<Counterparty, ChannelId = ChannelId>
         + HasPortIdType<Counterparty, PortId = PortId>,

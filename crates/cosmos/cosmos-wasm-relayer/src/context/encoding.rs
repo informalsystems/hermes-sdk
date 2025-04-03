@@ -10,7 +10,7 @@ use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeComponent, HasEncodingType, ProvideEncodingType,
+    EncodingTypeProviderComponent, HasEncodingType,
 };
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
@@ -37,24 +37,19 @@ delegate_components! {
     }
 }
 
-pub struct ProvideWasmCosmosEncoding;
+pub struct UseWasmCosmosEncoding;
 
 delegate_components! {
-    ProvideWasmCosmosEncoding {
-        EncodingGetterComponent: GetDefaultEncoding,
+    UseWasmCosmosEncoding {
+        EncodingTypeProviderComponent<AsBytes>:
+            UseType<WasmCosmosEncoding>,
+        EncodingGetterComponent<AsBytes>:
+            GetDefaultEncoding,
     }
 }
 
-#[cgp_provider(EncodingTypeComponent)]
-impl<Context> ProvideEncodingType<Context, AsBytes> for ProvideWasmCosmosEncoding
-where
-    Context: Async,
-{
-    type Encoding = WasmCosmosEncoding;
-}
-
-#[cgp_provider(DefaultEncodingGetterComponent)]
-impl<Context> DefaultEncodingGetter<Context, AsBytes> for ProvideWasmCosmosEncoding
+#[cgp_provider(DefaultEncodingGetterComponent<AsBytes>)]
+impl<Context> DefaultEncodingGetter<Context, AsBytes> for UseWasmCosmosEncoding
 where
     Context: HasEncodingType<AsBytes, Encoding = WasmCosmosEncoding>,
 {

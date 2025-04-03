@@ -1,18 +1,12 @@
 use cgp::prelude::*;
-use hermes_relayer_components::transaction::traits::types::fee::{
-    FeeTypeComponent, ProvideFeeType,
-};
+use hermes_relayer_components::transaction::traits::types::fee::FeeTypeProviderComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeProviderComponent;
 use hermes_relayer_components::transaction::traits::types::signer::SignerTypeProviderComponent;
 use hermes_relayer_components::transaction::traits::types::transaction::{
     ProvideTransactionType, TransactionTypeComponent,
 };
-use hermes_relayer_components::transaction::traits::types::tx_hash::{
-    ProvideTransactionHashType, TransactionHashTypeComponent,
-};
-use hermes_relayer_components::transaction::traits::types::tx_response::{
-    ProvideTxResponseType, TxResponseTypeComponent,
-};
+use hermes_relayer_components::transaction::traits::types::tx_hash::TxHashTypeProviderComponent;
+use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeProviderComponent;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use prost::Message as _;
 use tendermint::hash::Hash;
@@ -26,8 +20,16 @@ pub struct UseCosmosTransactionTypes;
 
 delegate_components! {
     UseCosmosTransactionTypes {
-        SignerTypeProviderComponent: UseType<Secp256k1KeyPair>,
-        NonceTypeProviderComponent: UseType<Account>,
+        SignerTypeProviderComponent:
+            UseType<Secp256k1KeyPair>,
+        NonceTypeProviderComponent:
+            UseType<Account>,
+        TxResponseTypeProviderComponent:
+            UseType<TxResponse>,
+        FeeTypeProviderComponent:
+            UseType<Fee>,
+        TxHashTypeProviderComponent:
+            UseType<Hash>,
     }
 }
 
@@ -47,28 +49,4 @@ where
 
         tx_raw.encoded_len()
     }
-}
-
-#[cgp_provider(FeeTypeComponent)]
-impl<Chain> ProvideFeeType<Chain> for UseCosmosTransactionTypes
-where
-    Chain: Async,
-{
-    type Fee = Fee;
-}
-
-#[cgp_provider(TransactionHashTypeComponent)]
-impl<Chain> ProvideTransactionHashType<Chain> for UseCosmosTransactionTypes
-where
-    Chain: Async,
-{
-    type TxHash = Hash;
-}
-
-#[cgp_provider(TxResponseTypeComponent)]
-impl<Chain> ProvideTxResponseType<Chain> for UseCosmosTransactionTypes
-where
-    Chain: Async,
-{
-    type TxResponse = TxResponse;
 }

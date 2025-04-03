@@ -2,6 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
 use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
@@ -17,7 +18,6 @@ use crate::chain::traits::transfer::ibc_transfer::{
 };
 use crate::chain::traits::transfer::timeout::CanCalculateIbcTransferTimeout;
 use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::memo::HasMemoType;
 use crate::chain::traits::types::wallet::{HasWalletSigner, HasWalletType};
 

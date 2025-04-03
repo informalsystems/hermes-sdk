@@ -7,7 +7,7 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::decode::CanDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeComponent, ProvideEncodingType,
+    EncodingTypeProviderComponent,
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
@@ -16,9 +16,9 @@ use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use hermes_relayer_components::chain::traits::types::ibc::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
     SequenceTypeComponent,
@@ -36,10 +36,12 @@ pub struct WasmCounterparty;
 
 delegate_components! {
     WasmCounterpartyComponents {
+        EncodingTypeProviderComponent<AsBytes>:
+            UseType<WasmClientEncoding>,
         [
-            HeightTypeComponent,
+            HeightTypeProviderComponent,
             TimeoutTypeComponent,
-            ChainIdTypeComponent,
+            ChainIdTypeProviderComponent,
             ClientIdTypeComponent,
             ConnectionIdTypeComponent,
             ChannelIdTypeComponent,
@@ -51,7 +53,7 @@ delegate_components! {
             ProvideCosmosChainTypes,
         ClientStateTypeComponent:
             ProvideWasmClientState,
-        EncodingGetterComponent:
+        EncodingGetterComponent<AsBytes>:
             GetDefaultEncoding,
     }
 }
@@ -70,12 +72,7 @@ delegate_components! {
     }
 }
 
-#[cgp_provider(EncodingTypeComponent)]
-impl ProvideEncodingType<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
-    type Encoding = WasmClientEncoding;
-}
-
-#[cgp_provider(DefaultEncodingGetterComponent)]
+#[cgp_provider(DefaultEncodingGetterComponent<AsBytes>)]
 impl DefaultEncodingGetter<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
     fn default_encoding() -> &'static WasmClientEncoding {
         &WasmClientEncoding

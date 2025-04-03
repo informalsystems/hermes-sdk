@@ -1,10 +1,6 @@
 use cgp::prelude::*;
 
-#[cgp_component {
-  name: TransactionHashTypeComponent,
-  provider: ProvideTransactionHashType,
-  context: Chain,
-}]
-pub trait HasTransactionHashType: Async {
+#[cgp_type]
+pub trait HasTxHashType: Async {
     type TxHash: Async;
 }

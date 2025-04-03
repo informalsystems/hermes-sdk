@@ -13,7 +13,7 @@ use hermes_encoding_components::traits::encode::EncoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeComponent, ProvideEncodingType,
+    EncodingTypeProviderComponent,
 };
 pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
 use hermes_encoding_components::traits::types::decode_buffer::DecodeBufferTypeComponent;
@@ -34,7 +34,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsComponent, ClientStateTypeComponent,
 };
@@ -42,7 +42,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateFieldComponent, ConsensusStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::height::{
-    HeightFieldComponent, HeightTypeComponent,
+    HeightFieldComponent, HeightTypeProviderComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
@@ -64,11 +64,13 @@ pub struct AnyCounterparty;
 
 delegate_components! {
     AnyCounterpartyComponents {
+        EncodingTypeProviderComponent<AsBytes>:
+            UseType<AnyClientEncoding>,
         [
-            HeightTypeComponent,
+            HeightTypeProviderComponent,
             HeightFieldComponent,
             TimeoutTypeComponent,
-            ChainIdTypeComponent,
+            ChainIdTypeProviderComponent,
             ClientIdTypeComponent,
             ConnectionIdTypeComponent,
             ChannelIdTypeComponent,
@@ -88,7 +90,7 @@ delegate_components! {
             ConsensusStateFieldComponent,
         ]:
             ProvideAnyConsensusState,
-        EncodingGetterComponent:
+        EncodingGetterComponent<AsBytes>:
             GetDefaultEncoding,
     }
 }
@@ -115,12 +117,7 @@ delegate_components! {
     }
 }
 
-#[cgp_provider(EncodingTypeComponent)]
-impl ProvideEncodingType<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
-    type Encoding = AnyClientEncoding;
-}
-
-#[cgp_provider(DefaultEncodingGetterComponent)]
+#[cgp_provider(DefaultEncodingGetterComponent<AsBytes>)]
 impl DefaultEncodingGetter<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
     fn default_encoding() -> &'static AnyClientEncoding {
         &AnyClientEncoding

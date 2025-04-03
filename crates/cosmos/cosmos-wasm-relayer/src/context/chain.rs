@@ -1,8 +1,6 @@
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
-use cgp::core::field::WithField;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
@@ -20,7 +18,6 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::{
 };
 use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
 use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
-use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
@@ -32,7 +29,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
     HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
@@ -82,9 +79,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAckCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
-use hermes_relayer_components::chain::traits::types::chain_id::{
-    ChainIdGetter, ChainIdGetterComponent,
-};
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetterComponent;
 use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
@@ -98,9 +93,7 @@ use hermes_relayer_components::chain::traits::types::update_client::HasUpdateCli
 use hermes_relayer_components::error::traits::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::global_nonce_mutex::GetGlobalNonceMutex;
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
-use hermes_relayer_components::transaction::traits::default_signer::{
-    DefaultSignerGetter, DefaultSignerGetterComponent,
-};
+use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetterComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::NonceAllocationMutexGetterComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
@@ -120,14 +113,13 @@ use hermes_wasm_test_components::traits::chain::upload_client_code::{
     CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
-use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;
 use tendermint_rpc::{HttpClient, Url};
 
 use crate::components::chain::CosmosChainWasmPreset;
 use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
-use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
+use crate::context::encoding::{UseWasmCosmosEncoding, WasmCosmosEncoding};
 use crate::types::client_state::WasmTendermintClientState;
 
 #[cgp_context(WasmCosmosChainComponents: CosmosChainWasmPreset)]
@@ -153,8 +145,10 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        RuntimeTypeProviderComponent:
+            UseType<HermesRuntime>,
+        RuntimeGetterComponent:
+            UseField<symbol!("runtime")>,
         [
             LoggerTypeProviderComponent,
             LoggerGetterComponent,
@@ -162,11 +156,11 @@ delegate_components! {
         ]:
             UseHermesLogger,
         [
-            EncodingTypeComponent,
-            EncodingGetterComponent,
-            DefaultEncodingGetterComponent,
+            EncodingTypeProviderComponent<AsBytes>,
+            EncodingGetterComponent<AsBytes>,
+            DefaultEncodingGetterComponent<AsBytes>,
         ]:
-            ProvideWasmCosmosEncoding,
+            UseWasmCosmosEncoding,
         [
             StoreCodeMessageBuilderComponent,
             WasmClientCodeUploaderComponent,
@@ -174,6 +168,10 @@ delegate_components! {
             WasmChainComponents,
         NonceAllocationMutexGetterComponent:
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
+        DefaultSignerGetterComponent:
+            UseField<symbol!("key_entry")>,
+        ChainIdGetterComponent:
+            UseField<symbol!("chain_id")>,
     }
 }
 
@@ -194,13 +192,6 @@ impl TxExtensionOptionsGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 impl GasConfigGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn gas_config(chain: &WasmCosmosChain) -> &GasConfig {
         &chain.chain_config.gas_config
-    }
-}
-
-#[cgp_provider(DefaultSignerGetterComponent)]
-impl DefaultSignerGetter<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn get_default_signer(chain: &WasmCosmosChain) -> &Secp256k1KeyPair {
-        &chain.key_entry
     }
 }
 
@@ -241,13 +232,6 @@ impl HasTelemetry for WasmCosmosChain {
 
     fn telemetry(&self) -> &CosmosTelemetry {
         &self.telemetry
-    }
-}
-
-#[cgp_provider(ChainIdGetterComponent)]
-impl ChainIdGetter<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn chain_id(chain: &WasmCosmosChain) -> &ChainId {
-        &chain.chain_id
     }
 }
 

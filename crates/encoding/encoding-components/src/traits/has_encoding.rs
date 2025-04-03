@@ -1,22 +1,23 @@
 use cgp::prelude::*;
 
-#[cgp_component {
-  name: EncodingTypeComponent,
-  provider: ProvideEncodingType,
+#[cgp_type {
+    name: EncodingTypeProviderComponent<Kind>
 }]
 pub trait HasEncodingType<Kind>: Async {
     type Encoding: Async;
 }
 
 #[cgp_component {
-  provider: EncodingGetter,
+    name: EncodingGetterComponent<Kind>,
+    provider: EncodingGetter,
 }]
 pub trait HasEncoding<Kind>: HasEncodingType<Kind> {
     fn encoding(&self) -> &Self::Encoding;
 }
 
 #[cgp_component {
-  provider: DefaultEncodingGetter,
+    name: DefaultEncodingGetterComponent<Kind>,
+    provider: DefaultEncodingGetter,
 }]
 pub trait HasDefaultEncoding<Kind>: HasEncodingType<Kind, Encoding: 'static> {
     fn default_encoding() -> &'static Self::Encoding;

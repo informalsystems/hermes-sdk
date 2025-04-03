@@ -30,7 +30,7 @@ use hermes_relayer_components::transaction::impls::poll_tx_response::{
 };
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
-use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
+use hermes_relayer_components::transaction::traits::types::tx_hash::HasTxHashType;
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
@@ -58,9 +58,9 @@ delegate_components! {
                 LogPerformRetry<'a, Context>,
             <'a, Chain: HasSignerType + HasNonceType + HasMessageType,>
                 LogSendMessagesWithSignerAndNonce<'a, Chain>,
-            <'a, Chain: HasTransactionHashType>
+            <'a, Chain: HasTxHashType>
                 TxNoResponseError<'a, Chain>,
-            <'a, Chain: HasTransactionHashType + HasAsyncErrorType>
+            <'a, Chain: HasTxHashType + HasAsyncErrorType>
                 LogRetryQueryTxResponse<'a, Chain>,
             <'a, Relay: HasRelayChains>
                 LogSkipRelayLockedPacket<'a, Relay>,

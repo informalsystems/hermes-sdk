@@ -1,7 +1,7 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::amount::HasAmountType;
 
 use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::denom::HasDenomType;
 
 #[cgp_component {

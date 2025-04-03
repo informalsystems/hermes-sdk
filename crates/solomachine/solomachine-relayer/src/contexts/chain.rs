@@ -5,8 +5,6 @@ use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::WithField;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use eyre::eyre;
 use hermes_cosmos_chain_components::types::tendermint::{
@@ -16,7 +14,7 @@ use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
     HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
@@ -47,9 +45,7 @@ use hermes_relayer_components::chain::traits::queries::connection_end::{
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusStateWithProofs, ConsensusStateQuerier, ConsensusStateQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::{
-    ChainIdGetter, ChainIdGetterComponent,
-};
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetterComponent;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -100,14 +96,18 @@ delegate_components! {
             UseHermesError,
         ErrorRaiserComponent:
             DebugError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        RuntimeTypeProviderComponent:
+            UseType<HermesRuntime>,
+        RuntimeGetterComponent:
+            UseField<symbol!("runtime")>,
         [
-            EncodingTypeComponent,
-            EncodingGetterComponent,
-            DefaultEncodingGetterComponent,
+            EncodingTypeProviderComponent<AsBytes>,
+            EncodingGetterComponent<AsBytes>,
+            DefaultEncodingGetterComponent<AsBytes>,
         ]:
             ProvideSolomachineEncoding,
+        ChainIdGetterComponent:
+            UseField<symbol!("chain_id")>,
     }
 }
 
@@ -132,13 +132,6 @@ impl MockSolomachine {
             telemetry,
             connections: Arc::new(Mutex::new(HashMap::new())),
         }
-    }
-}
-
-#[cgp_provider(ChainIdGetterComponent)]
-impl ChainIdGetter<MockSolomachine> for SolomachineChainContextComponents {
-    fn chain_id(chain: &MockSolomachine) -> &ChainId {
-        &chain.chain_id
     }
 }
 
