@@ -55,7 +55,6 @@ mod preset {
     use hermes_cosmos_test_components::chain::impls::proposal::query_status::QueryProposalStatusWithGrpc;
     use hermes_cosmos_test_components::chain::impls::queries::balance::QueryCosmosBalance;
     use hermes_cosmos_test_components::chain::impls::transfer::timeout::IbcTransferTimeoutAfterSeconds;
-    use hermes_cosmos_test_components::chain::impls::types::address::ProvideStringAddress;
     use hermes_cosmos_test_components::chain::impls::types::amount::UseCosmosAmount;
     use hermes_cosmos_test_components::chain::impls::types::denom::ProvideIbcDenom;
     use hermes_cosmos_test_components::chain::impls::types::proposal::ProvideCosmosProposalTypes;
@@ -246,13 +245,12 @@ mod preset {
     use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
     use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
     use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
-    use hermes_test_components::chain::traits::transfer::string_memo::ProvideStringMemoType;
     use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
-    use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
+    use hermes_test_components::chain::traits::types::address::AddressTypeProviderComponent;
     use hermes_test_components::chain::traits::types::amount::AmountMethodsComponent;
     use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
     use hermes_test_components::chain::traits::types::memo::{
-        DefaultMemoGetterComponent, MemoTypeComponent,
+        DefaultMemoGetterComponent, MemoTypeProviderComponent,
     };
     use hermes_test_components::chain::traits::types::wallet::{
         WalletSignerComponent, WalletTypeComponent,
@@ -482,10 +480,10 @@ mod preset {
                 ProvideCosmosProposalTypes,
             DenomTypeComponent:
                 ProvideIbcDenom,
-            AddressTypeComponent:
-                ProvideStringAddress,
-            MemoTypeComponent:
-                ProvideStringMemoType,
+            AddressTypeProviderComponent:
+                UseType<String>,
+            MemoTypeProviderComponent:
+                UseType<Option<String>>,
             DefaultMemoGetterComponent:
                 ProvideDefaultMemo,
             TokenIbcTransferrerComponent:
