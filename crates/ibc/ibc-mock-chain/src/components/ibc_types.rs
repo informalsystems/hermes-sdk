@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
+use hermes_chain_type_components::traits::types::address::AddressTypeProviderComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
@@ -21,7 +21,7 @@ delegate_components! {
     MockIbcChainTypes {
         TimeTypeComponent: MockHeight,
         HeightTypeProviderComponent: MockHeight,
-        AddressTypeComponent: MockAddress,
+        AddressTypeProviderComponent: MockAddress,
         AppIdTypeComponent: MockAppId,
         ClientIdTypeComponent: MockClientId,
         ChannelIdTypeComponent: MockChannelId,
