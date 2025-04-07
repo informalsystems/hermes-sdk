@@ -21,7 +21,7 @@ Given an abstract type `X`:
 
 ## Macro Use
 
-- In new code, we use `#[cgp_type]` instead of `#[cgp_component]`, to generate type-related CGP constructs for us.
+- In new code, we use `#[cgp_type]` instead of `#[cgp_component]`, to define type components with generated type-related CGP constructs for us.
     - Whenever possible, we should migrate legacy type traits to use `#[cgp_type]`.
 - The `#[cgp_type]` macro is an extension of the `#[cgp_component]` macro.
 - `#[cgp_type]` can only be used if the trait contains exactly one associated type.
@@ -34,7 +34,7 @@ Given an abstract type `X`:
 - The new preferred way to wire concrete types is to use `UseType`.
     - In legacy wiring, `WithType` is used.
     - The type `WithType<X>` is simply an alias to `WithProvider<UseType<X>>`.
-    - The use of `WithType` require more advanced understanding of CGP, while the auto derivation of `UseType` can be understood more easily by anyone.
+    - The use of `WithType` is functionally the same as `UseType`, but is more general and requires more advanced understanding of CGP, while the auto derivation of `UseType` can be understood more easily by anyone.
     - Since `#[cgp_type]` auto derives `UseType` for us, we can use `UseType` whenever possible to make the code simpler to understand.
 
 ## Example
