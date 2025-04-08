@@ -86,93 +86,17 @@ We can convert the struct into `Cons<String, Cons<u8, Cons<String, Nil>>>`, and 
 
 It is worth noting that we could technically also use the native Rust tuples to represent the generic fields, such as `(String, (u8, (String, ())))`, or just `(String, u8, String)`. However, we choose to not use the convention, as it can be confusing for readers to distinguish whether a use of tuple is meant to be an ordinary Rust type, or a CGP product type.
 
-Product types can be useful in implementing generic providers, such as for encoding and decoding. At a high level, the algorithm for such providers would be to first perform some operation
-Ideally, these types should use at most one character for```rust
-pub struct Person {
-    pub name: String,
-    pub age: u8,
-    pub address: String,
-}
-```
-
-We choose the Greek character `ι` (Iota) to replace `Char`, as it has the least visual cluttering as compared to other characters. We also re-export `ι` as `Char`, so that we can still use the ASCII representation when writing code.
-
-Similarly, the `Nil` type is now renamed to ε:
-
-```rust
-pub struct ε;
-
-pub use ε as Nil;
-```
-
-With the Greek alphabets, the error messages for type-level string will show `"abc"` as `ι<'a', ι<'b', ι<'c'>, ε>>`. Although it is still not as compact as the literal `"abc"`, it is at least shorter than the original type `Char<'a', Char<'b', Char<'c'>, Nil>>`. This would become more apparent for longer strings that contain more characters.
-
-## `HasField` Trait
-
-## Product Types
-
-When writing code that access all fields in a struct, we typically would require access to the concrete struct so that we can walk through every field by their names. But when we do not have access to the concrete struct, we need to first turn it into a generic collection of values.
-
-With CGP, we use the `Cons` and the `Nil` type to construct _type-level lists_, so that we can store arbitrary number of values from a struct into nested tuples. The `Cons` type is defined as follows:
-
-```rust
-pub struct π<Head, Tail>(pub Head, pub Tail);
-
-pub use π as Cons;
-```
-
-Similar to `Char`, the `Cons` type contains a `Tail` that represent the rest of the list. But compared to `Char`, `Cons` allows types other than on the head, and then recursively perform the same operation for every remaining element in the tail. The main difference is that we are operating on a _heterogeneous_ list with each of the element having different type.
+Product types can be useful in implementing generic providers, such as for encoding and decoding. At a high level, the algorithm for such providers would be to first perform some operation on the head, and then recursively perform the same operation for every remaining element in the tail. The main difference is that we are operating on a _heterogeneous_ list with each of the element having different type.
 
 ## Field Types
 
-When converting the `Person` struct to a product ty
-Ideally, these types should use at most one character for maximal space saving. But avoid clashing with other one-character identifiers, we opt to use _greek alphabets_ to represent the field types. So maximal space saving. But avoid clashing with other one-character identifiers, we opt to use _greek alphabets_ to represent the field types. So we can now redefine the `Char` type as follows:
-
-```rust
-pub struct ι<const CHAR: char, Tail>(pub PhantomData<Tail>);
-
-pub use ι as Char;
-```
-
-We choose the Greek character `ι` (Iota) to replace `Char`, as it has the least visual cluttering as compared to other characters. We also re-export `ι` as `Char`, so that we can still use the ASCII representation when writing code.
-
-Similarly, the `Nil` type is now renamed to ε:
-
-```rust
-pub struct ε;
-
-pub use ε as Nil;
-```
-
-With the Greek alphabets, the error messages for type-level string will show `"abc"` as `ι<'a', ι<'b', ι<'c'>, ε>>`. Although it is still not as compact as the literal `"abc"`, it is at least shorter than the original type `Char<'a', Char<'b', Char<'c'>, Nil>>`. This would become more apparent for longer strings that contain more characters.
-
-## `HasField` Trait
-
-## Product Types
-
-When writing code that access all fields in a struct, we typically would require access to the concrete struct so that we can walk through every field by their names. But when we do not have access to the concrete struct, we need to first turn it into a generic collection of values.
-
-With CGP, we use the `Cons` and the `Nil` type to construct _type-level lists_, so that we can store arbitrary number of values from a struct into nested tuples. The `Cons` type is defined as follows:
-
-```rust
-pub struct π<Head, Tail>(pub Head, pub Tail);
-
-pub use π as Cons;
-```
-
-Similar to `Char`, the `Cons` type contains a `Tail` that represent the rest of the list. But compared to `Char`, `Cons` allows types other than pe earlier, we do lose some information about the _name_ of the original fields. For instance, given that both the `name` and `address` fields have the type `String`, it is not clear whether the first `String` element in the product type refers to the `name` field or the `address` field.
+When converting the `Person` struct to a product type earlier, we do lose some information about the _name_ of the original fields. For instance, given that both the `name` and `address` fields have the type `String`, it is not clear whether the first `String` element in the product type refers to the `name` field or the `address` field.
 
 To help disambiguate the fields, we also introduce a `Field` type that carries the field names in addition to the field values.
 
 ```rust
 pub struct ω<Tag, Value> {
-    pub value: Value, we can now redefine the `Char` type as follows:
-
-```rust
-pub struct ι<const CHAR: char, Tail>(pub PhantomData<Tail>);
-
-pub use ι as Char;
-```
+    pub value: Value,
     pub phantom: PhantomData<Tag>,
 }
 
@@ -189,46 +113,12 @@ It is worth noting that the `Field` type is not strictly necessary for most of t
 
 Aside from struct with named fields, Rust also supports structs with position-based fields, such as:
 
-Ideally, these types should use at most one character for maximal space saving. But avoid clashing with other one-character identifiers, we opt to use _greek alphabets_ to represent the field types. So we can now redefine the `Char` type as follows:
-
 ```rust
-pub struct ι<const CHAR: char, Tail>(pub PhantomData<Tail>);
-
-pub use ι as Char;
+pub struct Person(String, u8);
 ```
 
-We choose the Greek character `ι` (Iota) to replace `Char`, as it has the least visual cluttering as compared to other characters. We also re-export `ι` as `Char`, so that we can still use the ASCII representation when writing code.
+When representing the struct as generic fields, we would use the `Index` type to identify the field tag also by _position_ instead of by name:
 
-Similarly, the `Nil` type is now renamed to ε:
-
-```rust
-pub struct ε;
-
-pub use ε as Nil;
-```
-
-With the Greek alphabets, the error messages for type-level string will show `"abc"` as `ι<'a', ι<'b', ι<'c'>, ε>>`. Although it is still not as compact as the literal `"abc"`, it is at least shorter than the original type `Char<'a', Char<'b', Char<'c'>, Nil>>`. This would become more apparent for longer strings that contain more characters.
-
-## `HasField` Trait
-
-## Product Types
-
-When writing code that access all fields in a struct, we typically would require access to the concrete struct so that we can walk through every field by their names. But when we do not have access to the concrete struct, we need to first turn it into a generic collection of values.
-
-With CGP, we use the `Cons` and the `Nil` type to construct _type-level lists_, so that we can store arbitrary number of values from a struct into nested tuples. The `Cons` type is defined as follows:
-
-```rust
-pub struct π<Head, Tail>(pub Head, pub Tail); we can now redefine the `Char` type as follows:
-
-```rust
-pub struct ι<const CHAR: char, Tail>(pub PhantomData<Tail>);
-
-pub use ι as Char;
-```
-```
-
-Similar to `Char`, the `Cons` type contains a `Tail` that represent the rest of the list. But compared to `Char`, `Cons` allows types other than
-```π<ω<symbol!("name"), String>, π<ω<symbol!("age"), u8>, π<ω<symbol!("address"), String>, ε>>>
 ```rust
 pub struct δ<const I: usize>;
 
