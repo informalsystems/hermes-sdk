@@ -22,6 +22,14 @@ use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink
 use crate::relay::traits::target::{DestinationTarget, HasDestinationTargetChainTypes};
 use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
 
+pub struct MissingChannelTryEventError<'a, Relay>
+where
+    Relay: HasRelayChains,
+{
+    pub relay: &'a Relay,
+    pub src_channel_id: &'a ChannelIdOf<Relay::SrcChain, Relay::DstChain>,
+}
+
 /**
    A base implementation of [`ChannelOpenTryRelayer`] that relays a new channel
    at the source chain that is in `OPEN_INIT` state, and submits it as a
@@ -34,15 +42,6 @@ use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPor
    source chain is really in the `OPEN_INIT` state. This will be implemented as
    a separate wrapper component. (TODO)
 */
-
-pub struct MissingChannelTryEventError<'a, Relay>
-where
-    Relay: HasRelayChains,
-{
-    pub relay: &'a Relay,
-    pub src_channel_id: &'a ChannelIdOf<Relay::SrcChain, Relay::DstChain>,
-}
-
 #[cgp_new_provider(ChannelOpenTryRelayerComponent)]
 impl<Relay, SrcChain, DstChain> ChannelOpenTryRelayer<Relay> for RelayChannelOpenTry
 where
