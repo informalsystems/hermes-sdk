@@ -6,3 +6,4 @@
 - [Getter Traits](./getter-traits.md)
 - [Blanket Traits](./blanket-traits.md)
 - [Check Components](./check-components.md)
+- [Field Types](./field-types.md)
