@@ -3,7 +3,6 @@ use core::time::Duration;
 
 use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
@@ -13,11 +12,10 @@ use crate::error::traits::{AsyncCont, HasRetryableError, RetryPerformer, RetryPe
 impl<Context> RetryPerformer<Context> for PerformRetryWithRetryableError
 where
     Context: HasRuntime
-        + HasLogger
         + HasRetryableError
+        + for<'a> CanLog<LogPerformRetry<'a, Context>>
         + for<'a> CanWrapAsyncError<ErrMaxRetryExceeded<'a, Context>>,
     Context::Runtime: CanSleep,
-    Context::Logger: for<'a> CanLog<LogPerformRetry<'a, Context>>,
 {
     async fn perform_with_retry<T: Send + Sync>(
         context: &Context,
@@ -26,7 +24,6 @@ where
         cont: impl AsyncCont<Result<T, Context::Error>>,
     ) -> Result<T, Context::Error> {
         let runtime = context.runtime();
-        let logger = context.logger();
 
         let mut attempts: usize = 0;
         let mut retry_interval = Duration::from_millis(500);
@@ -51,7 +48,7 @@ where
                             },
                         ));
                     } else {
-                        logger
+                        context
                             .log(
                                 "sleeping and retrying operation after encountering error",
                                 &LogPerformRetry {

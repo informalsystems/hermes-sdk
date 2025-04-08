@@ -10,7 +10,6 @@ use cgp::prelude::*;
 use hermes_chain_components::traits::queries::block_time::CanQueryBlockTime;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::types::height::{CanAdjustHeight, HasHeightType, HeightOf};
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
@@ -38,9 +37,9 @@ where
 impl<BiRelay> AutoBiRelayer<BiRelay> for PerformAutoBiRelay
 where
     BiRelay: HasRuntime
-        + HasLogger
         + HasTwoWayRelay
         + HasBiRelayTypes
+        + for<'a> CanLog<LogAutoBiRelay<'a, BiRelay>>
         + CanRaiseAsyncError<TryFromIntError>
         + CanRaiseAsyncError<ErrorOf<BiRelay::ChainA>>
         + CanRaiseAsyncError<ErrorOf<BiRelay::ChainB>>,
@@ -58,7 +57,6 @@ where
     BiRelay::ChainA: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight,
     BiRelay::ChainB: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight,
     BiRelay::Runtime: CanRunConcurrentTasks,
-    BiRelay::Logger: for<'a> CanLog<LogAutoBiRelay<'a, BiRelay>>,
 {
     async fn auto_bi_relay(
         bi_relay: &BiRelay,
@@ -138,7 +136,6 @@ where
         };
 
         bi_relay
-            .logger()
             .log(
                 "starting auto bi-relaying",
                 &LogAutoBiRelay {

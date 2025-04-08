@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
@@ -63,7 +62,7 @@ impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
 where
     App: HasOutputType + HasAsyncErrorType,
     App: CanLoadBuilder<Builder = Builder>
-        + HasLogger
+        + CanLog<LevelInfo>
         + CanProduceOutput<&'static str>
         + CanRaiseAsyncError<Builder::Error>
         + CanRaiseAsyncError<Relay::Error>
@@ -71,7 +70,6 @@ where
         + CanParseArg<Args, symbol!("counterparty_chain_id"), Parsed = Counterparty::ChainId>
         + CanParseArg<Args, symbol!("target_client_id"), Parsed = Chain::ClientId>
         + CanParseArg<Args, symbol!("counterparty_client_id"), Parsed = Counterparty::ClientId>,
-    App::Logger: CanLog<LevelInfo>,
     Builder: HasChainTypeAt<Index<0>, Chain = Chain>
         + HasChainTypeAt<Index<1>, Chain = Counterparty>
         + CanBuildRelay<Index<0>, Index<1>, Relay = Relay>
@@ -90,7 +88,6 @@ where
     Args: Async,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
-        let logger = app.logger();
         let builder = app.load_builder().await?;
 
         let target_chain_id = app.parse_arg(args, PhantomData::<symbol!("target_chain_id")>)?;
@@ -100,18 +97,14 @@ where
         let counterparty_client_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_client_id")>)?;
 
-        logger
-            .log(
-                &format!(
-                    "Creating connection between {}:{} and {}:{}...",
-                    target_chain_id,
-                    target_client_id,
-                    counterparty_chain_id,
-                    counterparty_client_id
-                ),
-                &LevelInfo,
-            )
-            .await;
+        app.log(
+            &format!(
+                "Creating connection between {}:{} and {}:{}...",
+                target_chain_id, target_client_id, counterparty_chain_id, counterparty_client_id
+            ),
+            &LevelInfo,
+        )
+        .await;
 
         let relay = builder
             .build_relay(
@@ -129,20 +122,19 @@ where
             .await
             .map_err(App::raise_error)?;
 
-        logger
-            .log(
-                &format!(
-                    "Connection {}:{} successfully created between {}:{} and {}:{}",
-                    target_connection_id,
-                    counterparty_connection_id,
-                    target_chain_id,
-                    target_client_id,
-                    counterparty_chain_id,
-                    counterparty_client_id,
-                ),
-                &LevelInfo,
-            )
-            .await;
+        app.log(
+            &format!(
+                "Connection {}:{} successfully created between {}:{} and {}:{}",
+                target_connection_id,
+                counterparty_connection_id,
+                target_chain_id,
+                target_client_id,
+                counterparty_chain_id,
+                counterparty_client_id,
+            ),
+            &LevelInfo,
+        )
+        .await;
 
         Ok(app.produce_output("Done"))
     }

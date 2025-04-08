@@ -4,7 +4,6 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::poll_interval::HasPollInterval;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
@@ -74,12 +73,11 @@ where
         + HasPollTimeout
         + HasPollInterval
         + HasRuntime
-        + HasLogger
         + HasRetryableError
+        + for<'a> CanLog<TxNoResponseError<'a, Chain>>
+        + for<'a> CanLog<LogRetryQueryTxResponse<'a, Chain>>
         + for<'a> CanRaiseAsyncError<TxNoResponseError<'a, Chain>>,
     Chain::Runtime: HasTime + CanSleep,
-    Chain::Logger: for<'a> CanLog<TxNoResponseError<'a, Chain>>
-        + for<'a> CanLog<LogRetryQueryTxResponse<'a, Chain>>,
 {
     async fn poll_tx_response(
         chain: &Chain,
@@ -90,8 +88,6 @@ where
         let wait_backoff = chain.poll_interval();
 
         let start_time = runtime.now();
-
-        let logger = chain.logger();
 
         loop {
             let response = chain.query_tx_response(tx_hash).await;
@@ -110,7 +106,7 @@ where
                             wait_timeout: &wait_timeout,
                         };
 
-                        logger.log("no tx response received, and poll timeout has reached. returning error", &e).await;
+                        chain.log("no tx response received, and poll timeout has reached. returning error", &e).await;
 
                         return Err(Chain::raise_error(e));
                     } else {
@@ -136,7 +132,7 @@ where
                     if elapsed > wait_timeout {
                         return Err(e);
                     } else {
-                        logger
+                        chain
                             .log(
                                 "retry polling with query_tx_response returning retryable error",
                                 &LogRetryQueryTxResponse {

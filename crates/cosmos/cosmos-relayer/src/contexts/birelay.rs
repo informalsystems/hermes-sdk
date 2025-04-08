@@ -1,12 +1,9 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::{Index, WithField};
+use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::extra::run::RunnerComponent;
 use cgp::prelude::*;
-use hermes_logger::UseHermesLogger;
-use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
-};
+use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::birelay::traits::AutoBiRelayerComponent;
 use hermes_relayer_components::components::default::birelay::DefaultBiRelayComponents;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
@@ -17,6 +14,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
@@ -37,14 +35,9 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        [
-            LoggerTypeProviderComponent,
-            LoggerGetterComponent,
-            GlobalLoggerGetterComponent,
-        ]:
-            UseHermesLogger,
+        RuntimeTypeProviderComponent: UseType<HermesRuntime>,
+        RuntimeGetterComponent: UseField<symbol!("runtime")>,
+        LoggerComponent: TracingLogger,
         ChainTypeProviderAtComponent<Index<0>>: WithType<CosmosChain>,
         ChainTypeProviderAtComponent<Index<1>>: WithType<CosmosChain>,
         [

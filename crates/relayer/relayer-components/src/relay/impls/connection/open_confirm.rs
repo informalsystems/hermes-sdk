@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::chain_id::HasChainId;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 
@@ -40,14 +39,13 @@ where
         + HasDestinationTargetChainTypes
         + CanBuildTargetUpdateClientMessage<DestinationTarget>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
-        + HasLogger
+        + CanLog<LevelInfo>
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildConnectionOpenConfirmPayload<DstChain>,
     DstChain: CanBuildConnectionOpenConfirmMessage<SrcChain>
         + CanQueryClientStateWithLatestHeight<SrcChain>
         + HasChainId,
     DstChain::ConnectionId: Clone,
-    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_connection_open_confirm(
         relay: &Relay,
@@ -61,7 +59,6 @@ where
         let dst_client_id = relay.dst_client_id();
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Starting ICS03 ConnectionOpenConfirm on chain `{}` for clients `{src_client_id}` and `{dst_client_id}`",
@@ -101,7 +98,6 @@ where
             .await?;
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Successfully completed ICS03 ConnectionOpenConfirm on chain {} with ConnectionId `{src_connection_id}` for clients `{src_client_id}` and `{dst_client_id}`",

@@ -2,7 +2,6 @@ use core::fmt::{Debug, Display};
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
@@ -65,7 +64,7 @@ impl<App, Args, Builder, Chain, Counterparty, Relay, TargetTag, CounterpartyTag>
 where
     App: CanLoadBuilder<Builder = Builder>
         + CanProduceOutput<Chain::ClientId>
-        + HasLogger
+        + CanLog<LevelInfo>
         + CanParseCreateClientOptions<Args, TargetTag, CounterpartyTag>
         + CanParseArg<Args, symbol!("target_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("counterparty_chain_id"), Parsed = Counterparty::ChainId>
@@ -88,7 +87,6 @@ where
     CounterpartyTag: Async,
     Chain::CreateClientMessageOptions: Debug,
     Counterparty::CreateClientPayloadOptions: Debug,
-    App::Logger: CanLog<LevelInfo>,
     Chain::ClientId: Display,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
@@ -96,7 +94,6 @@ where
         let counterparty_chain_id =
             app.parse_arg(args, PhantomData::<symbol!("counterparty_chain_id")>)?;
 
-        let logger = app.logger();
         let builder = app.load_builder().await?;
 
         let target_chain = builder
@@ -113,7 +110,7 @@ where
             .parse_create_client_options(args, &target_chain, &counterparty_chain)
             .await?;
 
-        logger.log(
+        app.log(
             &format!(
                 "Creating client on target chain `{}` with counterparty chain `{}`. Create options: {:?}, {:?}",
                 target_chain_id,
@@ -141,15 +138,14 @@ where
             )
         })?;
 
-        logger
-            .log(
-                &format!(
-                    "Successfully created client {} on target chain `{}`",
-                    client_id, target_chain_id
-                ),
-                &LevelInfo,
-            )
-            .await;
+        app.log(
+            &format!(
+                "Successfully created client {} on target chain `{}`",
+                client_id, target_chain_id
+            ),
+            &LevelInfo,
+        )
+        .await;
 
         Ok(app.produce_output(client_id))
     }

@@ -3,8 +3,6 @@ use core::ops::Deref;
 use core::time::Duration;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
-use cgp::core::field::WithField;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
@@ -48,10 +46,6 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
 };
 use hermes_encoding_components::types::AsBytes;
-use hermes_logger::{HermesLogger, UseHermesLogger};
-use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
-};
 use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     HasCommitmentPrefixType, IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
@@ -121,6 +115,7 @@ use hermes_test_components::chain::traits::messages::ibc_transfer::{
 use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerierComponent;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
 use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
 use hermes_wasm_test_components::traits::chain::upload_client_code::WasmClientCodeUploaderComponent;
@@ -174,14 +169,9 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        [
-            LoggerTypeProviderComponent,
-            LoggerGetterComponent,
-            GlobalLoggerGetterComponent,
-        ]:
-            UseHermesLogger,
+        RuntimeTypeProviderComponent: UseType<HermesRuntime>,
+        RuntimeGetterComponent: UseField<symbol!("runtime")>,
+        LoggerComponent: TracingLogger,
         [
             EncodingTypeProviderComponent<AsBytes>,
             EncodingGetterComponent<AsBytes>,
@@ -402,7 +392,7 @@ check_components! {
 
 check_components! {
     <'a>
-    CanLogWithCosmosChain for HermesLogger
+    CanLogWithCosmosChain for CosmosChain
     {
         LoggerComponent: [
             LogSendMessagesWithSignerAndNonce<'a, CosmosChain>,

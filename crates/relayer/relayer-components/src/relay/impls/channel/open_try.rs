@@ -5,7 +5,6 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 use hermes_chain_components::traits::types::chain_id::HasChainId;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 
@@ -35,7 +34,6 @@ use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPor
    source chain is really in the `OPEN_INIT` state. This will be implemented as
    a separate wrapper component. (TODO)
 */
-pub struct RelayChannelOpenTry;
 
 pub struct MissingChannelTryEventError<'a, Relay>
 where
@@ -45,15 +43,15 @@ where
     pub src_channel_id: &'a ChannelIdOf<Relay::SrcChain, Relay::DstChain>,
 }
 
-#[cgp_provider(ChannelOpenTryRelayerComponent)]
+#[cgp_new_provider(ChannelOpenTryRelayerComponent)]
 impl<Relay, SrcChain, DstChain> ChannelOpenTryRelayer<Relay> for RelayChannelOpenTry
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasDestinationTargetChainTypes
         + HasRelayClientIds
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
+        + CanLog<LevelInfo>
         + for<'a> CanRaiseAsyncError<MissingChannelTryEventError<'a, Relay>>
-        + HasLogger
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildChannelOpenTryPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
@@ -62,7 +60,6 @@ where
         + CanExtractFromMessageResponse<DstChain::ChannelOpenTryEvent>
         + HasChainId,
     DstChain::ChannelId: Clone,
-    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_channel_open_try(
         relay: &Relay,
@@ -74,7 +71,6 @@ where
         let dst_chain = relay.dst_chain();
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Starting ICS04 ChannelOpenTry on chain `{}`",
@@ -125,7 +121,6 @@ where
         let dst_channel_id = DstChain::channel_open_try_event_channel_id(&open_try_event);
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Successfully completed ICS04 ChannelOpenTry on chain {} with ChannelId `{dst_channel_id}` and PortId `{dst_port}`",

@@ -1,10 +1,8 @@
 use alloc::vec::Vec;
-use core::marker::PhantomData;
 
 use cgp::prelude::{CanRaiseAsyncError, *};
 use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_chain_components::traits::types::message::HasMessageType;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
@@ -15,12 +13,6 @@ use crate::relay::traits::target::{
 use crate::relay::traits::update_client_message_builder::{
     TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
 };
-
-/**
-   Wait for the chain to reach a height that is greater than or equal the required height,
-   so that the update client proof can be built.
-*/
-pub struct WaitUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
 
 pub enum LogWaitUpdateClientHeightStatus<'a, Relay, Target>
 where
@@ -38,18 +30,21 @@ where
     },
 }
 
-#[cgp_provider(TargetUpdateClientMessageBuilderComponent)]
+/**
+   Wait for the chain to reach a height that is greater than or equal the required height,
+   so that the update client proof can be built.
+*/
+#[cgp_new_provider(TargetUpdateClientMessageBuilderComponent)]
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
     TargetUpdateClientMessageBuilder<Relay, Target> for WaitUpdateClient<InUpdateClient>
 where
     Target: RelayTarget,
-    Relay: HasLogger
-        + HasTargetChains<Target, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>
+    Relay: HasTargetChains<Target, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>
+        + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>
         + CanRaiseAsyncError<CounterpartyChain::Error>,
     InUpdateClient: TargetUpdateClientMessageBuilder<Relay, Target>,
     TargetChain: HasMessageType,
     CounterpartyChain: CanWaitChainReachHeight + HasHeightType,
-    Relay::Logger: for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>,
 {
     async fn build_target_update_client_messages(
         relay: &Relay,
@@ -57,9 +52,8 @@ where
         target_height: &CounterpartyChain::Height,
     ) -> Result<Vec<TargetChain::Message>, Relay::Error> {
         let counterparty_chain = relay.counterparty_chain();
-        let logger = relay.logger();
 
-        logger
+        relay
             .log(
                 "waiting for counterparty chain to reach height",
                 &LogWaitUpdateClientHeightStatus::Waiting {
@@ -78,7 +72,7 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        logger
+        relay
             .log(
                 "counterparty chain's height is now greater than or equal to target height",
                 &LogWaitUpdateClientHeightStatus::HeightReached {

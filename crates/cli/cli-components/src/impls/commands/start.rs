@@ -2,7 +2,6 @@ use std::marker::PhantomData;
 
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
@@ -73,7 +72,7 @@ impl<App, Args, Build, BiRelay, ChainA, ChainB, TagA, TagB> CommandRunner<App, A
     for RunStartRelayerCommand<TagA, TagB>
 where
     App: CanLoadBuilder<Builder = Build>
-        + HasLogger
+        + CanLog<LevelInfo>
         + CanProduceOutput<&'static str>
         + CanParseArg<Args, symbol!("chain_id_a"), Parsed = ChainA::ChainId>
         + CanParseArg<Args, symbol!("client_id_a"), Parsed = ChainA::ClientId>
@@ -83,7 +82,6 @@ where
         + CanRaiseAsyncError<BiRelay::Error>
         + CanWrapError<&'static str>,
     Args: Async + HasClearPacketFields,
-    App::Logger: CanLog<LevelInfo>,
     Build: CanBuildBiRelay<TagA, TagB, BiRelay = BiRelay>
         + HasChainTypeAt<TagA, Chain = ChainA>
         + HasChainTypeAt<TagB, Chain = ChainB>,
@@ -92,7 +90,6 @@ where
     ChainB: HasChainIdType + HasClientIdType<ChainA>,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
-        let logger = app.logger();
         let builder = app.load_builder().await?;
 
         let chain_id_a = app.parse_arg(args, PhantomData::<symbol!("chain_id_a")>)?;
@@ -109,12 +106,11 @@ where
             .await
             .map_err(App::raise_error)?;
 
-        logger
-            .log(
-                &format!("Relaying between {} and {}...", chain_id_a, chain_id_b,),
-                &LevelInfo,
-            )
-            .await;
+        app.log(
+            &format!("Relaying between {} and {}...", chain_id_a, chain_id_b,),
+            &LevelInfo,
+        )
+        .await;
 
         birelay
             .auto_bi_relay(

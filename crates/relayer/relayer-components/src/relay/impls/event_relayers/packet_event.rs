@@ -4,7 +4,6 @@ use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
 use hermes_chain_components::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
@@ -86,14 +85,13 @@ where
         + CanRelayAckPacket
         + CanFilterRelayPackets
         + HasPacketLock
-        + HasLogger
+        + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
+        + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + CanRaiseRelayChainErrors,
     DstChain: CanQueryChainHeight
         + CanBuildPacketFromWriteAck<Relay::SrcChain>
         + CanExtractFromEvent<DstChain::WriteAckEvent>,
     MatchPacketSourceChain: RelayPacketFilter<Relay>,
-    Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
-        + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
     async fn relay_chain_event(
         relay: &Relay,
@@ -149,7 +147,6 @@ where
                             .map_err(Relay::raise_error)?;
 
                         relay
-                            .logger()
                             .log(
                                 "relaying ack packet extracted from ack event",
                                 &LogRelayPacketAction {
@@ -163,7 +160,6 @@ where
                         relay.relay_ack_packet(&height, &packet, &ack).await?;
 
                         relay
-                            .logger()
                             .log(
                                 "successfully relayed ack packet extracted from ack event",
                                 &LogRelayPacketAction {
@@ -175,7 +171,7 @@ where
                             .await;
                     }
                     None => {
-                        relay.logger().log(
+                        relay.log(
                             "skip relaying ack packet, as another packet relayer has acquired the packet lock",
                             &LogSkipRelayLockedPacket {
                                 relay,

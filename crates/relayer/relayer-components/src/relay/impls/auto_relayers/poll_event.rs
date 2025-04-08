@@ -8,7 +8,6 @@ use hermes_chain_components::traits::queries::block_events::CanQueryBlockEvents;
 use hermes_chain_components::traits::types::event::HasEventType;
 use hermes_chain_components::traits::types::height::{CanIncrementHeight, HasHeightType};
 use hermes_chain_components::types::aliases::{EventOf, HeightOf};
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::{LevelInfo, LevelTrace};
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -24,15 +23,14 @@ where
     Relay: Clone
         + HasRuntime
         + HasTargetChains<Target>
-        + HasLogger
         + CanRelayEvent<Target>
+        + CanLog<LevelInfo>
+        + CanLog<LevelTrace>
+        + for<'a> CanLog<LogAutoRelayWithHeights<'a, Relay, Target>>
         + CanRaiseAsyncError<ErrorOf<Relay::TargetChain>>,
     Target: RelayTarget,
     Relay::TargetChain: CanIncrementHeight + CanQueryBlockEvents,
     Relay::Runtime: CanRunConcurrentTasks,
-    Relay::Logger: CanLog<LevelInfo>
-        + CanLog<LevelTrace>
-        + for<'a> CanLog<LogAutoRelayWithHeights<'a, Relay, Target>>,
 {
     async fn auto_relay_with_heights(
         relay: &Relay,
@@ -46,7 +44,6 @@ where
         let mut height = start_height.clone();
 
         relay
-            .logger()
             .log(
                 "starting auto relay with heights",
                 &LogAutoRelayWithHeights {
@@ -65,7 +62,6 @@ where
                 .map_err(Relay::raise_error)?;
 
             relay
-                .logger()
                 .log(
                     &format!("Queried {} events at height `{height}`", events.len()),
                     &LevelTrace,
@@ -90,7 +86,6 @@ where
             if let Some(end_height) = end_height {
                 if &height > end_height {
                     relay
-                        .logger()
                         .log(
                             &format!("Done clearing packets at height `{height}`"),
                             &LevelInfo,

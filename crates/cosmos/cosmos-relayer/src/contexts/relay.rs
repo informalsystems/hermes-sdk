@@ -3,14 +3,11 @@ use alloc::sync::Arc;
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
-use cgp::core::field::{Index, UseField, WithField};
+use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_logger::UseHermesLogger;
-use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
-};
+use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::error::traits::{CanPerformRetry, RetryableErrorComponent};
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainAt, ChainGetterAtComponent, ChainTypeProviderAtComponent,
@@ -37,6 +34,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,
 };
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::chain::CosmosChain;
@@ -114,19 +112,14 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        RuntimeTypeProviderComponent: UseType<HermesRuntime>,
+        RuntimeGetterComponent: UseField<symbol!("runtime")>,
+        LoggerComponent: TracingLogger,
         [
             ChainTypeProviderAtComponent<Index<0>>,
             ChainTypeProviderAtComponent<Index<1>>,
         ]:
             WithType<CosmosChain>,
-        [
-            LoggerTypeProviderComponent,
-            LoggerGetterComponent,
-            GlobalLoggerGetterComponent,
-        ]:
-            UseHermesLogger,
         ChainGetterAtComponent<Index<0>>:
             UseField<symbol!("chain_a")>,
         ChainGetterAtComponent<Index<1>>:

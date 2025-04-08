@@ -5,7 +5,6 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::H
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_error::types::HermesError;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::{LevelDebug, LevelTrace, LevelWarn};
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -38,7 +37,9 @@ where
         + CanQueryGrpcServiceStatus
         + HasPollInterval
         + HasChainId
-        + HasLogger<Logger: CanLog<LevelWarn> + CanLog<LevelDebug> + CanLog<LevelTrace>>,
+        + CanLog<LevelWarn>
+        + CanLog<LevelDebug>
+        + CanLog<LevelTrace>,
 {
     async fn build_chain_with_node_config(
         bootstrap: &Bootstrap,
@@ -57,7 +58,6 @@ where
             .map_err(Bootstrap::raise_error)?;
 
         chain
-            .logger()
             .log(
                 &format!(
                     "waiting for chain `{}` RPC and GRPC services to become ready`",
@@ -78,7 +78,6 @@ where
 
             if rpc_server_is_ready && grpc_server_is_ready {
                 chain
-                    .logger()
                     .log(
                         &format!(
                             "RPC and GRPC services of chain `{}`  are now ready",
@@ -91,7 +90,6 @@ where
                 break;
             } else if i + 1 == RETRY_COUNT {
                 chain
-                    .logger()
                     .log(
                         &format!(
                             "RPC and GRPC services of chain `{}`  are still not ready after {} tries. Will continue with possible failure",

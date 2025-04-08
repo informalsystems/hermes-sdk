@@ -5,7 +5,6 @@ use cgp::prelude::*;
 use hermes_chain_components::traits::types::height::HasHeightType;
 use hermes_chain_components::traits::types::ibc::HasClientIdType;
 use hermes_chain_components::types::aliases::ClientIdOf;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
@@ -22,8 +21,6 @@ use crate::relay::traits::update_client_message_builder::{
     TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
 };
 
-pub struct BuildUpdateClientMessages;
-
 pub struct LogClientUpdateMessage<'a, Relay, Target>
 where
     Target: RelayTarget,
@@ -35,7 +32,7 @@ where
     pub target_height: &'a HeightOf<CounterpartyChainOf<Relay, Target>>,
 }
 
-#[cgp_provider(TargetUpdateClientMessageBuilderComponent)]
+#[cgp_new_provider(TargetUpdateClientMessageBuilderComponent)]
 impl<Relay, Target, TargetChain, CounterpartyChain> TargetUpdateClientMessageBuilder<Relay, Target>
     for BuildUpdateClientMessages
 where
@@ -46,7 +43,7 @@ where
             CounterpartyChain = CounterpartyChain,
         > + HasTargetChains<Target>
         + HasTargetClientIds<Target>
-        + HasLogger
+        + for<'a> CanLog<LogClientUpdateMessage<'a, Relay, Target>>
         + CanRaiseAsyncError<TargetChain::Error>
         + CanRaiseAsyncError<CounterpartyChain::Error>,
     TargetChain: CanQueryClientStateWithLatestHeight<CounterpartyChain>
@@ -54,7 +51,6 @@ where
         + CanQueryConsensusStateHeight<CounterpartyChain>,
     CounterpartyChain: CanBuildUpdateClientPayload<TargetChain> + HasClientStateFields<TargetChain>,
     CounterpartyChain::Height: Clone,
-    Relay::Logger: for<'a> CanLog<LogClientUpdateMessage<'a, Relay, Target>>,
 {
     async fn build_target_update_client_messages(
         relay: &Relay,
@@ -111,7 +107,6 @@ where
             .map_err(Relay::raise_error)?;
 
         relay
-            .logger()
             .log(
                 "successfully built UpdateClient messages",
                 &LogClientUpdateMessage {

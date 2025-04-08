@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::chain_id::HasChainId;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 
@@ -40,13 +39,12 @@ where
         + HasSourceTargetChainTypes
         + HasRelayClientIds
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
-        + HasLogger
+        + CanLog<LevelInfo>
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryClientStateWithLatestHeight<DstChain>
         + CanBuildChannelOpenAckMessage<DstChain>
         + HasChainId,
     DstChain: CanQueryChainHeight + CanBuildChannelOpenAckPayload<SrcChain>,
-    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_channel_open_ack(
         relay: &Relay,
@@ -59,7 +57,6 @@ where
         let dst_chain = relay.dst_chain();
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Starting ICS04 ChannelOpenAck on chain `{}`",
@@ -102,7 +99,6 @@ where
         relay.send_message(SourceTarget, open_ack_message).await?;
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Successfully completed ICS04 ChannelOpenAck on chain {} with ChannelId `{src_channel_id}` and PortId `{src_port_id}`",
