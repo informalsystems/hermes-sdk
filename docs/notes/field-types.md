@@ -58,6 +58,55 @@ With the Greek alphabets, the error messages for type-level string will show `"a
 
 ## `HasField` Trait
 
+The `HasField` trait allows the access of individual fields inside a struct:
+
+```rust
+pub trait HasField<Tag> {
+    type Value;
+
+    fn get_field(&self, _tag: PhantomData<Tag>) -> &Self::Value;
+}
+```
+
+For example, given the following struct:
+
+```rust
+#[derive(HasField)]
+pub struct Person {
+    pub name: String,
+    pub age: u8,
+}
+```
+
+```rust
+impl HasField<symbol!("name")> for Person {
+    type Value = String;
+
+    fn get_field(&self, _tag: PhantomData<symbol("name")>) -> &String {
+        &self.name
+    }
+}
+
+impl HasField<symbol!("age")> for Person {
+    type Value = u8;
+
+    fn get_field(&self, _tag: PhantomData<symbol("age")>) -> &u8 {
+        &self.age
+    }
+}
+```
+
+With the introduction of `#[cgp_auto_getter]`, there are less need for us to directly interact with the `HasField` trait. For example, instead of requiring a context to implement `HasField<symbol("name"), Value = String>`, we can instead define an auto getter trait such as:
+
+```rust
+#[cgp_auto_getter]
+pub trait HasName {
+    fn name(&self) -> &str;
+}
+```
+
+Although the use of `#[cgp_auto_getter]` can be slightly more verbose, it is significantly more easily understandable than a constraint like `HasField<symbol("name"), Value = String>`. Hence, we encourage the use of `#[cgp_auto_getter]` over the direct use o `HasField` in Hermes SDK code base.
+
 ## Product Types
 
 When writing code that access all fields in a struct, we typically would require access to the concrete struct so that we can walk through every field by their names. But when we do not have access to the concrete struct, we need to first turn it into a generic collection of values.
@@ -88,6 +137,14 @@ It is worth noting that we could technically also use the native Rust tuples to 
 
 Product types can be useful in implementing generic providers, such as for encoding and decoding. At a high level, the algorithm for such providers would be to first perform some operation on the head, and then recursively perform the same operation for every remaining element in the tail. The main difference is that we are operating on a _heterogeneous_ list with each of the element having different type.
 
+## `Product!` Macro
+
+CGP provides the `Product!` macro to simplify the expression of product types in source code. For example, the product type we used earlier, `Cons<String, Cons<u8, Cons<String, Nil>>>`, can be simplified into:
+
+```rust
+Product![ String, u8, String ]
+```
+
 ## Field Types
 
 When converting the `Person` struct to a product type earlier, we do lose some information about the _name_ of the original fields. For instance, given that both the `name` and `address` fields have the type `String`, it is not clear whether the first `String` element in the product type refers to the `name` field or the `address` field.
@@ -105,7 +162,22 @@ pub use ω as Field;
 
 The `Field` type is parameterized by a `Tag` and a `Value`, but the `Tag` is phantom and it technically just wraps around `Value`. Before Hermes SDK, we also call this type `Tagged`, as it is tagging a `Value` with a `Tag`. To shorten its representation, we also use the Greek symbol ω to represent `Field`.
 
-Using `Field`, we can now more concisely represent the generic field type for `Person` as `Cons<Field<symbol!("name"), String>, Cons<Field<symbol!("age"), u8>, Cons<Field<symbol!("address"), String>, Nil>>>`. As we can see, the type representation becomes quite more cluttered once we include the field tags. We can slightly shorten the type with the Greek alphabets into `π<ω<symbol!("name"), String>, π<ω<symbol!("age"), u8>, π<ω<symbol!("address"), String>, ε>>>`.
+Using `Field`, we can now more concisely represent the generic field type for `Person` as:
+
+```rust
+Product! [
+    Field<symbol!("name"), String>,
+    Field<symbol!("age"), u8>,
+    Field<symbol!("address"), String>,
+]
+```
+
+
+As we can see, the type representation becomes quite more cluttered once we include the field tags. When displayed, the type would be shown with Greek symbols as:
+
+```rust
+π<ω<symbol!("name"), String>, π<ω<symbol!("age"), u8>, π<ω<symbol!("address"), String>, ε>>>
+```
 
 It is worth noting that the `Field` type is not strictly necessary for most of the generic implementation. However, CGP macros such as `HasFields` would wrap values around `Field`, so that it is easier to recover the original data structure.
 
@@ -127,7 +199,20 @@ pub use δ as Index;
 
 Similar to `Char`, the `Index` type makes use of const generics to lift a `usize` value as type. With that, a type like `Index<0>` is different from the type `Index<1>`. To shorten its representation, we use the Greek alphabet δ to represent `Index`.
 
-With the `Index` type, we can now have a generic field representation of `Person` as `Cons<Field<Index<0>, String>, Cons<Field<Index<1>, u8>, Nil>>`, or `π<ω<δ<0>, String>, π<ω<δ<1>, u8>, ε>>` in the shortened representation.
+With the `Index` type, we can now have a generic field representation of `Person` as:
+
+```rust
+Product! [
+    Field<Index<0>, String>,
+    Field<Index<1>, u8>,
+]
+```
+
+or in the raw form as:
+
+```rust
+π<ω<δ<0>, String>, π<ω<δ<1>, u8>, ε>>
+```
 
 ## `HasFields` Trait
 
@@ -154,7 +239,11 @@ which would generate the following implementation:
 
 ```rust
 impl HasFields for Person {
-    type Fields = π<ω<symbol!("name"), String>, π<ω<symbol!("age"), u8>, π<ω<symbol!("address"), String>, ε>>>;
+    type Fields = Product! [
+        Field<symbol!("name"), &'a String>,
+        Field<symbol!("age"), &'a u8>,
+        Field<symbol!("address"), &'a String>,
+    ];
 }
 ```
 
@@ -165,11 +254,7 @@ CGP also provides `FromFields` and `ToFields` traits that allows for conversion 
 ```rust
 pub trait FromFields: HasFields {
     fn from_fields(fields: Self::Fields) -> Self;
-}```rust
-impl HasFields for Person {
-    type Fields = π<ω<symbol!("name"), String>, π<ω<symbol!("age"), u8>, π<ω<symbol!("address"), String>, ε>>>;
 }
-```
 
 pub trait ToFields: HasFields {
     fn to_fields(self) -> Self::Fields;
@@ -196,8 +281,106 @@ The `HasFieldsRef` trait is also automatically derived by `#[derive(HasFields)]`
 
 ```rust
 impl HasFieldsRef for Person {
-    type Fields<'a> = π<ω<symbol!("name"), &'a String>, π<ω<symbol!("age"), &'a u8>, π<ω<symbol!("address"), &'a String>, ε>>>;
+    type Fields<'a> = Product! [
+        Field<symbol!("name"), &'a String>,
+        Field<symbol!("age"), &'a u8>,
+        Field<symbol!("address"), &'a String>,
+    ];
 }
 ```
 
 As we can see, each of the borrowed field in `HasFieldsRef` contain a `&'a` reference to the original field values.
+
+## `ToFieldsRef` Trait
+
+With `HasFieldsRef`, CGP also provides `ToFieldsRef` to allows one to borrow the field values from a data type, and get its field representations.
+
+```rust
+pub trait ToFieldsRef: HasFieldsRef {
+    fn to_fields_ref<'a>(&'a self) -> Self::FieldsRef<'a>
+    where
+        Self: 'a;
+}
+```
+
+The `ToFieldsRef` trait is used in Hermes SDK implementations such as encoding, to extract field values and perform the encoding operation.
+
+## Sum Types
+
+Similar to product types, CGP provides sum types to be used for accessing fields in an enum. The sum type is consist of the `Either` type and the `Void` type:
+
+```rust
+#[derive(Eq, PartialEq, Debug, Clone)]
+pub enum σ<Head, Tail> {
+    Left(Head),
+    Right(Tail),
+}
+
+#[derive(Eq, PartialEq, Debug, Clone)]
+pub enum θ {}
+
+pub use {θ as Void, σ as Either};
+```
+
+The `Either` type (with Greek symbol σ) is a binary enum with either left or right. The `Void` (θ) type is an empty enum that cannot be constructed. Note that `Void` is representationally the same as the `Infallible` type or the _never_ type (`!`) in Rust. We just define `Void` separately here to make it clear of its usage in a sum type.
+
+## `Sum!` Macro
+
+Similar to `Product!`, CGP provides the `Sum!` macro, that can be used to simplify the expression of nested sum types. For example, given the following:
+
+```rust
+Sum![ String, u64, bool ]
+```
+
+would be expanded into:
+
+```rust
+Either<String, Either<u64, Either<bool, Void>>>
+```
+
+which in Greek symbols would be shown as:
+
+```rust
+σ<String, σ<u64, σ<bool, θ>>>
+```
+
+## `#[derive(HasFields)]` for Enums
+
+Using `Either` and `Void`, we can use `#[derive(HasFields)]` on an enum such as follows:
+
+```rust
+#[derive(HasFields)]
+pub enum Denom {
+    Native(String),
+    Remote {
+        channel_id: String,
+        value: String,
+    },
+}
+```
+
+The `#[derive(HasFields)]` macro would generate a `HasFields` implementation such as follows:
+
+```rust
+impl HasFields for Denom {
+    type Fields =
+        Sum![
+            Field<
+                symbol!("Native"),
+                Product![
+                    Field<Index<0>, String>,
+                ],
+            >,
+            Field<
+                symbol!("Remote"),
+                Product![
+                    Field<symbol!("channel_id"), String>,
+                    Field<symbol!("value"), String>,
+                ]
+            >
+        ]
+    ;
+}
+```
+
+Notice that with each enum field, there is a separate `Product!` type that would store the fields in a variant as a product. This is because enum is technically an _algebraic data type_ that is made of _sums of product types_. As a result, we need the inner product type to map multiple field values in a variant, such as the case for `Denom::Remote`.
