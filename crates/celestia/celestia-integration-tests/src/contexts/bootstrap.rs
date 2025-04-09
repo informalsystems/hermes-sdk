@@ -3,8 +3,6 @@ use std::path::PathBuf;
 use std::sync::OnceLock;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::WithField;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_celestia_test_components::bootstrap::components::CelestiaBootstrapComponents as BaseCelestiaBootstrapComponents;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::BridgeBootstrapperComponent;
@@ -63,6 +61,7 @@ use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::HermesError;
+use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
@@ -70,6 +69,7 @@ use hermes_runtime_components::traits::runtime::{
 use hermes_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeProviderComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
@@ -99,8 +99,12 @@ delegate_components! {
             BaseCelestiaBootstrapComponents::Provider,
         ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        RuntimeTypeProviderComponent:
+            UseType<HermesRuntime>,
+        RuntimeGetterComponent:
+            UseField<symbol!("runtime")>,
+        LoggerComponent:
+            TracingLogger,
         ChainTypeProviderComponent:
             UseType<CosmosChain>,
         ChainDriverTypeProviderComponent:

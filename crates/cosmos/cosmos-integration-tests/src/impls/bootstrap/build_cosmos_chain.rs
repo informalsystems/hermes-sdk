@@ -31,15 +31,13 @@ where
         + HasCosmosBuilder
         + HasRuntime
         + HasDynamicGas
-        + CanRaiseAsyncError<HermesError>,
-    Bootstrap::Runtime: CanSleep,
-    Bootstrap::Chain: CanQueryChainStatus
-        + CanQueryGrpcServiceStatus
-        + HasPollInterval
-        + HasChainId
         + CanLog<LevelWarn>
         + CanLog<LevelDebug>
-        + CanLog<LevelTrace>,
+        + CanLog<LevelTrace>
+        + CanRaiseAsyncError<HermesError>,
+    Bootstrap::Runtime: CanSleep,
+    Bootstrap::Chain:
+        CanQueryChainStatus + CanQueryGrpcServiceStatus + HasPollInterval + HasChainId,
 {
     async fn build_chain_with_node_config(
         bootstrap: &Bootstrap,

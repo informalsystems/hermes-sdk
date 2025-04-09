@@ -22,6 +22,8 @@ hermes-cosmos-relayer               = { workspace = true }
 hermes-test-components              = { workspace = true }
 hermes-ibc-test-suite               = { workspace = true }
 hermes-async-runtime-components     = { workspace = true }
+hermes-logging-components           = { workspace = true }
+hermes-tracing-logging-components   = { workspace = true }
 hermes-cosmos-chain-components      = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
 hermes-cosmos-integration-tests     = { workspace = true }

@@ -27,12 +27,14 @@ use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
+use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeProviderComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use tendermint_rpc::client::CompatMode;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
@@ -90,6 +92,8 @@ delegate_components! {
             UseType<HermesRuntime>,
         RuntimeGetterComponent:
             UseField<symbol!("runtime")>,
+        LoggerComponent:
+            TracingLogger,
         WalletConfigGeneratorComponent:
             GenerateStandardWalletConfig,
         ChainTypeProviderComponent:
