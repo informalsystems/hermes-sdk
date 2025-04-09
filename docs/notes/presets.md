@@ -61,8 +61,6 @@ delegate_components! {
 }
 ```
 
-We
-
 With the naive approach above, we copy-pasted the foo and bar entries as defined in `MappingA`, and repeat them in `MappingB`. But because we have made copies, the entries can become out of sync if `MappingA` is updated. What if a different `FooValue2` is assigned to `FooKey` later on? What if a new `QuuxKey` entry is added to `MappingA`?
 
 One minor tweak that we can improve is to delegate the value mapping back to `MappingA` itself, such as follows:
@@ -244,3 +242,162 @@ where
 ```
 
 With this, we are able to separate a collection of providers into presets, and then "inherit" from them when we define the concrete contexts.
+
+## Multiple Inheritance
+
+The use of `IsPreset` for single inheritance only works if we inherit a final provider with a preset. However, it is not possible to define one preset that "inherits" from another preset, or combine the use of multiple `IsPreset` traits.
+
+Similarly, we cannot use the `IsPreset` trait to perform inheritance over multiple presets. This is because we can only have one blanket implementation of `DelegateComponent` with generic key. So even the use of `IsPreset` cannot help us workaround here, even if Rust can statically determine that there will be no overlap.
+
+However, having some kind of multiple inheritance would still be useful for CGP, since CGP presets are similar collection of mixins that can be mixed and matched. The way we solve this currently is by using macros to syntactically "copy" over the list of keys to be expanded at the target site.
+
+## `Preset::with_components!` Macro
+
+When using `cgp_preset!`, it also generates a `with_components!` macro that would capture all the keys in a mapping, and then expand it at the call site. We can for example use it to extend the mapping for the earlier `MappingB` as follows:
+
+```rust
+MappingA::with_components! {
+    | Keys | {
+        delegate_components! {
+            MappingB {
+                Keys: MappingA::Provider,
+                BazKey: BazValue,
+            }
+        }
+    }
+}
+```
+
+The macro works in a continuation-passing-style with a closure-like syntax. It will replace the identifier `Keys` in the macro argument, with all the keys defined in `MappingA`, i.e. `[FooKey, BarKey]`. So after the macro expansion, the code becomes the same as before:
+
+```rust
+delegate_components! {
+    MappingB {
+        [
+            FooKey,
+            BarKey,
+        ]: MappingA::Provider,
+        BazKey: BazValue,
+    }
+}
+```
+
+## `#[re_export_imports]` Macro
+
+The use of `with_components!` macro is a hackish way of getting multiple inheritance work. However, a key issue is that the macro can only capture and expand syntax _tokens_, but not the actual types or where they were imported from. This can be a problem, because we would then have to manually import `FooKey` and `BarKey` when defining `MappingB` for the macro to work. This would not only be tedious, but also poorly integrated with IDEs like Rust Analyzer, which cannot easily provide auto fix on errors that arise from macro expansions.
+
+What we need is to come up with yet another hack, so that when defining the `MappingA` preset, we also re-export _everything_ that we have imported over there. As a result, we also need to create a dummy module and use `#[cgp::re_export_imports]` to capture and re-export all the imports within that module.
+
+A full definition of `MappingA` with re-exports would be something like follows:
+
+```rust
+// Inside a file like presets/mapping-a.rs
+
+#[cgp::re_export_import]
+mod preset {
+    use cgp::prelude::*;
+
+    use crate::foo::{FooKey, FooValue};
+    use crate::bar::{BarKey, BarValue};
+
+    cgp_preset! {
+        MappingA {
+            FooKey: FooValue,
+            BarKey: BarValue,
+        }
+    }
+}
+```
+
+The outer `#[cgp::re_export_imports]` macro would then expand the module into something like:
+
+```rust
+mod preset {
+    use cgp::prelude::*;
+
+    use crate::foo::{FooKey, FooValue};
+    use crate::bar::{BarKey, BarValue};
+
+    cgp_preset! {
+        MappingA {
+            FooKey: FooValue,
+            BarKey: BarValue,
+        }
+    }
+
+    mod re_exports {
+        pub use cgp::prelude::*;
+        pub use crate::foo::{FooKey, FooValue};
+        pub use crate::bar::{BarKey, BarValue};
+    }
+}
+
+pub use preset::*;
+```
+
+Essentially, `#[cgp::re_export_imports]` creates an inner `re_exports` module, and repeat all the import statements of the parent module with an additional `pub` keyword to make them re-exports. It is also worth noticing that the macro generates a `pub use preset::*;` at the end, so we can import and use the module content as if the inner module don't exist.
+
+Within the `cgp_preset!` macro, it also requires a `re_exports` module to be present at the same scope, so that it can re-export them again inside `Preset::re_exports`.
+
+With this additional logistics in place, we just need to add one more line to automatically import all re-exports from `MappingA` inside `MappingB`:
+
+
+```rust
+use MappingA::re_exports::*;
+
+MappingA::with_components! {
+    | Keys | {
+        delegate_components! {
+            MappingB {
+                Keys: MappingA::Provider,
+                BazKey: BazValue,
+            }
+        }
+    }
+}
+```
+
+## Filtering Keys
+
+When inheriting from presets, we sometimes want to filter out some of the keys, so that we can override them with some other values. This may also be useful in solving the "diamond inheritance" problem, which would just result in errors on overlapping instances in Rust.
+
+The `Preset::with_compoennts!` macro accepts an optional list of key filters to exclude the keys from the macro expansion. For example, we can write:
+
+```rust
+MappingA::with_components! {
+    [
+        BarKey,
+    ],
+    | Keys | {
+        delegate_components! {
+            MappingB {
+                Keys: MappingA::Provider,
+                BarKey: NewBarValue,
+                BazKey: BazValue,
+            }
+        }
+    }
+}
+```
+
+In this case, the key `BarKey` will be filtered out, and the `Keys` "variable" would be expanded into just `[FooKey]`. With that, we can for example replace the entry with a new value such as `NewBarValue`. The end result expansion becomes:
+
+```rust
+delegate_components! {
+    MappingB {
+        [
+            FooKey,
+        ]: MappingA::Provider,
+        BarKey: NewBarValue,
+        BazKey: BazValue,
+    }
+}
+```
+
+It is worth noting that the filtering works only on the _syntactic identifier_ of the original map. So if `MappingA` was doing some import renaming on the keys, it may not get recognized when the original key name is given in the filter list.
+
+## Future Improvements
+
+The current iteration of the preset macros are better than before, but is still not very elegant. It is possible that in future versions of CGP, we will improve the usability with new macros and syntaxes.
+
+At the time of writing, this feature is highly unstable and may be subject to breaking changes. Until then, I hope that this document will help make navigating the presets and inheritance a little easier.
