@@ -3,7 +3,6 @@ use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -18,7 +17,6 @@ pub struct LogRelayPacketAction<'a, Relay>
 where
     Relay: HasRelayChains,
 {
-    pub relay: &'a Relay,
     pub packet: &'a PacketOf<Relay>,
     pub relay_progress: RelayPacketProgress,
 }
@@ -38,8 +36,8 @@ where
         + CanRelayReceivePacket
         + CanRelayTimeoutUnorderedPacket
         + HasRelayPacketType
-        + HasLogger
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>,
     SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
@@ -48,12 +46,10 @@ where
         + HasWriteAckEvent<SrcChain>
         + CanBuildPacketFromWriteAck<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>,
-    Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
-        let logger = relay.logger();
 
         let is_packet_received = dst_chain
             .query_packet_is_received(
@@ -89,11 +85,10 @@ where
         };
 
         if !is_packet_received && has_packet_timed_out {
-            logger
+            relay
                 .log(
                     "relaying timeout unordered packet",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayTimeoutUnorderedPacket,
                     },
@@ -104,11 +99,10 @@ where
                 .relay_timeout_unordered_packet(destination_height, packet)
                 .await?;
 
-            logger
+            relay
                 .log(
                     "successfully relayed timeout unordered packet",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayTimeoutUnorderedPacket,
                     },
@@ -120,11 +114,10 @@ where
                 .await
                 .map_err(Relay::raise_error)?;
 
-            logger
+            relay
                 .log(
                     "relaying receive packet",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayRecvPacket,
                     },
@@ -138,11 +131,10 @@ where
                 )
                 .await?;
 
-            logger
+            relay
                 .log(
                     "successfully relayed receive packet",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayRecvPacket,
                     },
@@ -150,11 +142,10 @@ where
                 .await;
 
             if let Some(ack) = m_ack {
-                logger
+                relay
                     .log(
                         "relaying ack packet using ack event returned from recv-packet event",
                         &LogRelayPacketAction {
-                            relay,
                             packet,
                             relay_progress: RelayPacketProgress::RelayAckPacket,
                         },
@@ -172,11 +163,10 @@ where
                     )
                     .await?;
 
-                logger
+                relay
                     .log(
                         "successfully relayed ack packet",
                         &LogRelayPacketAction {
-                            relay,
                             packet,
                             relay_progress: RelayPacketProgress::RelayAckPacket,
                         },
@@ -184,11 +174,10 @@ where
                     .await;
             }
         } else {
-            logger
+            relay
                 .log(
                     "skip relaying receive packet as it has already been received",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::SkipRelayAckPacket,
                     },

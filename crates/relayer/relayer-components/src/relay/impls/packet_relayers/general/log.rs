@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::relay::traits::chains::{HasRelayChains, PacketOf};
@@ -13,7 +12,6 @@ pub struct LogRelayPacketStatus<'a, Relay>
 where
     Relay: HasRelayChains,
 {
-    pub relay: &'a Relay,
     pub packet: &'a PacketOf<Relay>,
     pub relay_status: RelayPacketStatus<'a, Relay>,
 }
@@ -30,18 +28,14 @@ where
 #[cgp_provider(PacketRelayerComponent)]
 impl<Relay, InRelayer> PacketRelayer<Relay> for LoggerRelayer<InRelayer>
 where
-    Relay: HasRelayChains + HasLogger,
+    Relay: HasRelayChains + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>,
     InRelayer: PacketRelayer<Relay>,
-    Relay::Logger: for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &PacketOf<Relay>) -> Result<(), Relay::Error> {
-        let logger = relay.logger();
-
-        logger
+        relay
             .log(
                 "starting to relay packet",
                 &LogRelayPacketStatus {
-                    relay,
                     packet,
                     relay_status: RelayPacketStatus::Start,
                 },
@@ -51,22 +45,20 @@ where
         let res = InRelayer::relay_packet(relay, packet).await;
 
         if let Err(error) = &res {
-            logger
+            relay
                 .log(
                     "failed to relay packet",
                     &LogRelayPacketStatus {
-                        relay,
                         packet,
                         relay_status: RelayPacketStatus::Error { error },
                     },
                 )
                 .await;
         } else {
-            logger
+            relay
                 .log(
                     "successfully relayed packet",
                     &LogRelayPacketStatus {
-                        relay,
                         packet,
                         relay_status: RelayPacketStatus::Successful,
                     },

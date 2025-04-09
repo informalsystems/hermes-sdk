@@ -15,7 +15,6 @@ description  = """
 cgp                                 = { workspace = true }
 hermes-error                        = { workspace = true }
 hermes-runtime                      = { workspace = true }
-hermes-logger                       = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-relayer-components-extra     = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
@@ -27,6 +26,7 @@ hermes-cosmos-test-components       = { workspace = true }
 hermes-wasm-test-components         = { workspace = true }
 hermes-runtime-components           = { workspace = true }
 hermes-logging-components           = { workspace = true }
+hermes-tracing-logging-components   = { workspace = true }
 
 ibc                                 = { workspace = true }
 ibc-proto                           = { workspace = true }

@@ -4,7 +4,6 @@ use core::marker::PhantomData;
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::chain::traits::packet::fields::HasPacketSequence;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
@@ -41,8 +40,6 @@ where
     B: Async,
 {
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
-        let logger = driver.logger();
-
         let chain_driver_a = driver.chain_driver_a();
 
         let chain_driver_b = driver.chain_driver_b();
@@ -65,7 +62,7 @@ where
 
         let port_id_b = driver.port_id_b();
 
-        logger
+        driver
             .log_message(&format!(
                 "Test clearing pending recv from chain `{chain_id_a}` to chain `{chain_id_b}` and pending ack from `{chain_id_b}` to `{chain_id_a}`"
             ))
@@ -275,7 +272,7 @@ where
             assert!(is_cleared);
         }
 
-        logger
+        driver
             .log_message(&format!(
                 "successfully performed packet clearing between chain `{chain_id_a}` and chain `{chain_id_b}`"
             ))

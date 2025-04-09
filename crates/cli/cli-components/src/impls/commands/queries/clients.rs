@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
@@ -17,8 +16,6 @@ use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::{CanProduceOutput, HasOutputType};
 use crate::traits::parse::CanParseArg;
-
-pub struct RunQueryClientsCommand;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct QueryClientsArgs {
@@ -39,11 +36,11 @@ pub struct QueryClientsArgs {
     reference_chain_id: Option<String>,
 }
 
-#[cgp_provider(CommandRunnerComponent)]
+#[cgp_new_provider(CommandRunnerComponent)]
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientsCommand
 where
     App: CanLoadBuilder<Builder = Build>
-        + HasLogger
+        + CanLog<LevelInfo>
         + HasOutputType
         + CanProduceOutput<Vec<(Chain::ClientId, Counterparty::ClientState)>>
         + CanParseArg<Args, symbol!("host_chain_id"), Parsed = Chain::ChainId>
@@ -57,12 +54,10 @@ where
     Counterparty: HasClientIdType<Counterparty> + HasClientStateFields<Chain>,
     Args: Async,
     Chain::ClientId: Display,
-    App::Logger: CanLog<LevelInfo>,
     Counterparty::ChainId: Eq,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
         let builder = app.load_builder().await?;
-        let logger = app.logger();
 
         let host_chain_id = app.parse_arg(args, PhantomData::<symbol!("host_chain_id")>)?;
         let reference_chain_id =
@@ -91,12 +86,11 @@ where
                 }
             }
 
-            logger
-                .log(
-                    &format!("- {}: {} -> {}", client_id, &host_chain_id, chain_id,),
-                    &LevelInfo,
-                )
-                .await;
+            app.log(
+                &format!("- {}: {} -> {}", client_id, &host_chain_id, chain_id,),
+                &LevelInfo,
+            )
+            .await;
 
             result_client_states.push((client_id, client_state));
         }

@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
@@ -65,7 +64,7 @@ impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQuer
 where
     App: CanLoadBuilder<Builder = Build>
         + CanProduceOutput<ClientStatus>
-        + HasLogger
+        + CanLog<LevelInfo>
         // TODO: use AnyCounterparty
         // + HasAnyCounterparty<AnyCounterparty = Counterparty>
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
@@ -79,7 +78,6 @@ where
         + HasClientStateFields<Chain>
         + HasConsensusStateType<Chain>
         + HasConsensusStateFields<Chain>,
-    App::Logger: CanLog<LevelInfo>,
     Args: Async,
     Chain::ClientId: Display,
 {
@@ -87,7 +85,6 @@ where
         let chain_id = app.parse_arg(args, PhantomData::<symbol!("chain_id")>)?;
         let client_id = app.parse_arg(args, PhantomData::<symbol!("client_id")>)?;
 
-        let logger = app.logger();
         let builder = app.load_builder().await?;
 
         let chain = builder
@@ -102,18 +99,15 @@ where
 
         match client_status {
             ClientStatus::Frozen => {
-                logger
-                    .log(&format!("Client `{}` is frozen", client_id), &LevelInfo)
+                app.log(&format!("Client `{}` is frozen", client_id), &LevelInfo)
                     .await;
             }
             ClientStatus::Expired => {
-                logger
-                    .log(&format!("Client `{}` has expired", client_id), &LevelInfo)
+                app.log(&format!("Client `{}` has expired", client_id), &LevelInfo)
                     .await;
             }
             ClientStatus::Active => {
-                logger
-                    .log(&format!("Client `{}` is active", client_id), &LevelInfo)
+                app.log(&format!("Client `{}` is active", client_id), &LevelInfo)
                     .await;
             }
         }

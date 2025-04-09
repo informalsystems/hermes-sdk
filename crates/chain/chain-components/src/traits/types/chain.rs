@@ -15,17 +15,17 @@ use crate::traits::types::timestamp::{HasTimeType, HasTimeoutType};
 
    A chain context have the following abstract types:
 
-   -   [`Height`](HasHeightType::Height) - the height of a chain, which should
-        behave like natural numbers.
+   -    [`Height`](HasHeightType::Height) - the height of a chain, which should
+        like natural numbers.
 
-   -   [`Timestamp`](HasTimestampType::Timestamp) - the timestamp of a chain, which should
-       increment monotonically.
+   -    [`Timestamp`](HasTimestampType::Timestamp) - the timestamp of a chain, which should
+        increment monotonically.
 
-   -   [`Message`](HasMessageType::Message) - the messages being submitted
-       to a chain.
+   -    [`Message`](HasMessageType::Message) - the messages being submitted
+        to a chain.
 
-   -   [`Event`](HasEventType::Event) - the events that are emitted after
-       a transaction is committed to a chain.
+   -    [`Event`](HasEventType::Event) - the events that are emitted after
+        a transaction is committed to a chain.
 
     This trait only covers chain types that involve a single chain. For IBC
     chain types that involve _two_ chains, the abstract types are defined

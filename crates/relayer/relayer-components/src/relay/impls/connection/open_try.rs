@@ -5,7 +5,6 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 use hermes_chain_components::traits::types::chain_id::HasChainId;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 
@@ -56,7 +55,7 @@ where
         + CanSendTargetUpdateClientMessage<SourceTarget>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
         + for<'a> CanRaiseAsyncError<MissingConnectionTryEventError<'a, Relay>>
-        + HasLogger
+        + CanLog<LevelInfo>
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildConnectionOpenTryPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
@@ -65,7 +64,6 @@ where
         + CanExtractFromMessageResponse<DstChain::ConnectionOpenTryEvent>
         + HasChainId,
     DstChain::ConnectionId: Clone,
-    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn relay_connection_open_try(
         relay: &Relay,
@@ -78,7 +76,6 @@ where
         let dst_client_id = relay.dst_client_id();
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Starting ICS03 ConnectionOpenTry on chain `{}` for clients `{src_client_id}` and `{dst_client_id}`",
@@ -134,7 +131,6 @@ where
         let dst_connection_id = DstChain::connection_open_try_event_connection_id(&open_try_event);
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Successfully completed ICS03 ConnectionOpenTry on chain {} with ConnectionId `{dst_connection_id}` for clients `{src_client_id}` and `{dst_client_id}`",

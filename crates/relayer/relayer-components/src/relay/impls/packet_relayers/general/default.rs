@@ -3,7 +3,6 @@ use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
 use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use hermes_chain_components::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
 use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -34,10 +33,12 @@ where
         + CanRelayReceivePacket
         + CanRelayTimeoutUnorderedPacket
         + HasRelayPacketType
-        + HasLogger
         + HasPacketLock
         + CanFilterRelayPackets
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
+        + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>
+        + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>,
     SrcChain:
@@ -46,9 +47,6 @@ where
         + HasWriteAckEvent<SrcChain>
         + CanBuildPacketFromWriteAck<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>,
-    Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
-        + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>
-        + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
         <LockPacketRelayer<LoggerRelayer<FilterRelayer<SkipClearedPacket<PerformFullRelay>>>>>::relay_packet(

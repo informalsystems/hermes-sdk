@@ -1,8 +1,6 @@
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::WithField;
-use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -38,12 +36,14 @@ use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_s
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
+use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeProviderComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
 use hermes_wasm_test_components::impls::bootstrap::genesis_config::ModifyWasmGenesisConfig;
 use hermes_wasm_test_components::impls::bootstrap::node_config::ModifyWasmNodeConfig;
@@ -74,8 +74,12 @@ delegate_components! {
     CosmosWithWasmClientBootstrapComponents {
         ErrorTypeProviderComponent: UseHermesError,
         ErrorRaiserComponent: DebugError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
+        RuntimeTypeProviderComponent:
+            UseType<HermesRuntime>,
+        RuntimeGetterComponent:
+            UseField<symbol!("runtime")>,
+        LoggerComponent:
+            TracingLogger,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
         ChainTypeProviderComponent:
             UseType<CosmosChain>,

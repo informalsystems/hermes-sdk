@@ -16,22 +16,22 @@ name = "hermes"
 path = "bin/hermes.rs"
 
 [dependencies]
-cgp                             = { workspace = true }
-hermes-any-counterparty         = { workspace = true }
-hermes-cli-components           = { workspace = true }
-hermes-cli-framework            = { workspace = true }
-hermes-error                    = { workspace = true }
-hermes-runtime                  = { workspace = true }
-hermes-runtime-components       = { workspace = true }
-hermes-logging-components       = { workspace = true }
-hermes-logger                   = { workspace = true }
-hermes-relayer-components       = { workspace = true }
-hermes-chain-components         = { workspace = true }
-hermes-cosmos-relayer           = { workspace = true }
-hermes-cosmos-integration-tests = { workspace = true }
-hermes-cosmos-chain-components  = { workspace = true }
-hermes-cosmos-test-components   = { workspace = true }
-hermes-encoding-components      = { workspace = true }
+cgp                                 = { workspace = true }
+hermes-any-counterparty             = { workspace = true }
+hermes-cli-components               = { workspace = true }
+hermes-cli-framework                = { workspace = true }
+hermes-error                        = { workspace = true }
+hermes-runtime                      = { workspace = true }
+hermes-runtime-components           = { workspace = true }
+hermes-logging-components           = { workspace = true }
+hermes-tracing-logging-components   = { workspace = true }
+hermes-relayer-components           = { workspace = true }
+hermes-chain-components             = { workspace = true }
+hermes-cosmos-relayer               = { workspace = true }
+hermes-cosmos-integration-tests     = { workspace = true }
+hermes-cosmos-chain-components      = { workspace = true }
+hermes-cosmos-test-components       = { workspace = true }
+hermes-encoding-components          = { workspace = true }
 hermes-protobuf-encoding-components = { workspace = true }
 
 ibc                             = { workspace = true }

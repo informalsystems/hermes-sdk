@@ -1,5 +1,4 @@
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::types::message::HasMessageType;
@@ -20,7 +19,6 @@ pub struct LogSendMessagesWithSignerAndNonce<'a, Chain>
 where
     Chain: HasSignerType + HasNonceType + HasMessageType,
 {
-    pub chain: &'a Chain,
     pub signer: &'a Chain::Signer,
     pub nonce: &'a Chain::Nonce,
     pub messages: &'a [Chain::Message],
@@ -34,8 +32,7 @@ where
         + CanEstimateTxFee
         + CanSubmitTx
         + CanPollTxResponse
-        + HasLogger,
-    Chain::Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>,
+        + for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>,
 {
     async fn send_messages_with_signer_and_nonce(
         chain: &Chain,
@@ -43,16 +40,13 @@ where
         nonce: &Chain::Nonce,
         messages: &[Chain::Message],
     ) -> Result<Chain::TxResponse, Chain::Error> {
-        let logger = chain.logger();
-
         let details = LogSendMessagesWithSignerAndNonce {
-            chain,
             signer,
             nonce,
             messages,
         };
 
-        logger.log("encoding tx for simulation", &details).await;
+        chain.log("encoding tx for simulation", &details).await;
 
         let fee_for_simulation = chain.fee_for_simulation();
 
@@ -60,25 +54,25 @@ where
             .encode_tx(signer, nonce, fee_for_simulation, messages)
             .await?;
 
-        logger
+        chain
             .log("estimating fee with tx for simulation", &details)
             .await;
 
         let tx_fee = chain.estimate_tx_fee(&simulate_tx).await?;
 
-        logger.log("encoding tx for submission", &details).await;
+        chain.log("encoding tx for submission", &details).await;
 
         let tx = chain.encode_tx(signer, nonce, &tx_fee, messages).await?;
 
-        logger.log("submitting tx to chain", &details).await;
+        chain.log("submitting tx to chain", &details).await;
 
         let tx_hash = chain.submit_tx(&tx).await?;
 
-        logger.log("waiting for tx hash response", &details).await;
+        chain.log("waiting for tx hash response", &details).await;
 
         let response = chain.poll_tx_response(&tx_hash).await?;
 
-        logger.log("received tx hash response", &details).await;
+        chain.log("received tx hash response", &details).await;
 
         Ok(response)
     }
