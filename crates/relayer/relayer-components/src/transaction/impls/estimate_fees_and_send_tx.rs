@@ -19,7 +19,6 @@ pub struct LogSendMessagesWithSignerAndNonce<'a, Chain>
 where
     Chain: HasSignerType + HasNonceType + HasMessageType,
 {
-    pub chain: &'a Chain,
     pub signer: &'a Chain::Signer,
     pub nonce: &'a Chain::Nonce,
     pub messages: &'a [Chain::Message],
@@ -42,7 +41,6 @@ where
         messages: &[Chain::Message],
     ) -> Result<Chain::TxResponse, Chain::Error> {
         let details = LogSendMessagesWithSignerAndNonce {
-            chain,
             signer,
             nonce,
             messages,

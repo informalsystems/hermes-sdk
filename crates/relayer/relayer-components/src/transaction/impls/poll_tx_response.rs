@@ -20,7 +20,6 @@ pub struct TxNoResponseError<'a, Chain>
 where
     Chain: HasTxHashType,
 {
-    pub chain: &'a Chain,
     pub tx_hash: &'a Chain::TxHash,
     pub wait_timeout: &'a Duration,
     pub elapsed: &'a Duration,
@@ -30,7 +29,6 @@ pub struct LogRetryQueryTxResponse<'a, Chain>
 where
     Chain: HasTxHashType + HasAsyncErrorType,
 {
-    pub chain: &'a Chain,
     pub tx_hash: &'a Chain::TxHash,
     pub elapsed: &'a Duration,
     pub error: &'a Chain::Error,
@@ -100,7 +98,6 @@ where
                     let elapsed = Chain::Runtime::duration_since(&start_time, &runtime.now());
                     if elapsed > wait_timeout {
                         let e = TxNoResponseError {
-                            chain,
                             tx_hash,
                             elapsed: &elapsed,
                             wait_timeout: &wait_timeout,
@@ -136,7 +133,6 @@ where
                             .log(
                                 "retry polling with query_tx_response returning retryable error",
                                 &LogRetryQueryTxResponse {
-                                    chain,
                                     tx_hash,
                                     elapsed: &elapsed,
                                     error: &e,

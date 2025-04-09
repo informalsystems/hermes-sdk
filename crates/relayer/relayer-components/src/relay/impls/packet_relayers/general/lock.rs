@@ -20,7 +20,6 @@ pub struct LogSkipRelayLockedPacket<'a, Relay>
 where
     Relay: HasRelayChains,
 {
-    pub relay: &'a Relay,
     pub packet: &'a PacketOf<Relay>,
 }
 
@@ -39,7 +38,6 @@ where
                 relay.log(
                     "skip relaying packet, as another packet relayer has acquired the packet lock",
                     &LogSkipRelayLockedPacket {
-                        relay,
                         packet,
                     }).await;
 

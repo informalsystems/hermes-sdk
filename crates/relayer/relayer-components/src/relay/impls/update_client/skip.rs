@@ -21,7 +21,6 @@ where
     Target: RelayTarget,
     Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>,
 {
-    pub relay: &'a Relay,
     pub target_height: &'a HeightOf<CounterpartyChainOf<Relay, Target>>,
 }
 
@@ -55,7 +54,6 @@ where
                 relay.log(
                     "skip building update client message, as the target chain already has one at given height",
                     &LogSkipBuildUpdateClientMessage {
-                        relay,
                         target_height,
                     }
                 ).await;

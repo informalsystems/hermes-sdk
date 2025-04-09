@@ -150,7 +150,6 @@ where
                             .log(
                                 "relaying ack packet extracted from ack event",
                                 &LogRelayPacketAction {
-                                    relay,
                                     packet: &packet,
                                     relay_progress: RelayPacketProgress::RelayAckPacket,
                                 },
@@ -163,7 +162,6 @@ where
                             .log(
                                 "successfully relayed ack packet extracted from ack event",
                                 &LogRelayPacketAction {
-                                    relay,
                                     packet: &packet,
                                     relay_progress: RelayPacketProgress::RelayAckPacket,
                                 },
@@ -174,7 +172,6 @@ where
                         relay.log(
                             "skip relaying ack packet, as another packet relayer has acquired the packet lock",
                             &LogSkipRelayLockedPacket {
-                                relay,
                                 packet: &packet,
                             }).await;
                     }

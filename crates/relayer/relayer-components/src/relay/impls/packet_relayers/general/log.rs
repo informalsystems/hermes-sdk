@@ -12,7 +12,6 @@ pub struct LogRelayPacketStatus<'a, Relay>
 where
     Relay: HasRelayChains,
 {
-    pub relay: &'a Relay,
     pub packet: &'a PacketOf<Relay>,
     pub relay_status: RelayPacketStatus<'a, Relay>,
 }
@@ -37,7 +36,6 @@ where
             .log(
                 "starting to relay packet",
                 &LogRelayPacketStatus {
-                    relay,
                     packet,
                     relay_status: RelayPacketStatus::Start,
                 },
@@ -51,7 +49,6 @@ where
                 .log(
                     "failed to relay packet",
                     &LogRelayPacketStatus {
-                        relay,
                         packet,
                         relay_status: RelayPacketStatus::Error { error },
                     },
@@ -62,7 +59,6 @@ where
                 .log(
                     "successfully relayed packet",
                     &LogRelayPacketStatus {
-                        relay,
                         packet,
                         relay_status: RelayPacketStatus::Successful,
                     },

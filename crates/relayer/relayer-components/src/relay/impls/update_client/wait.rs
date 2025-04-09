@@ -20,11 +20,9 @@ where
     Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>,
 {
     Waiting {
-        relay: &'a Relay,
         target_height: &'a HeightOf<CounterpartyChainOf<Relay, Target>>,
     },
     HeightReached {
-        relay: &'a Relay,
         current_height: &'a HeightOf<CounterpartyChainOf<Relay, Target>>,
         target_height: &'a HeightOf<CounterpartyChainOf<Relay, Target>>,
     },
@@ -56,10 +54,7 @@ where
         relay
             .log(
                 "waiting for counterparty chain to reach height",
-                &LogWaitUpdateClientHeightStatus::Waiting {
-                    relay,
-                    target_height,
-                },
+                &LogWaitUpdateClientHeightStatus::Waiting { target_height },
             )
             .await;
 
@@ -76,7 +71,6 @@ where
             .log(
                 "counterparty chain's height is now greater than or equal to target height",
                 &LogWaitUpdateClientHeightStatus::HeightReached {
-                    relay,
                     target_height,
                     current_height: &current_height,
                 },

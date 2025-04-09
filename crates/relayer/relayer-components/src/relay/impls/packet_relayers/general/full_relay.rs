@@ -17,7 +17,6 @@ pub struct LogRelayPacketAction<'a, Relay>
 where
     Relay: HasRelayChains,
 {
-    pub relay: &'a Relay,
     pub packet: &'a PacketOf<Relay>,
     pub relay_progress: RelayPacketProgress,
 }
@@ -90,7 +89,6 @@ where
                 .log(
                     "relaying timeout unordered packet",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayTimeoutUnorderedPacket,
                     },
@@ -105,7 +103,6 @@ where
                 .log(
                     "successfully relayed timeout unordered packet",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayTimeoutUnorderedPacket,
                     },
@@ -121,7 +118,6 @@ where
                 .log(
                     "relaying receive packet",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayRecvPacket,
                     },
@@ -139,7 +135,6 @@ where
                 .log(
                     "successfully relayed receive packet",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayRecvPacket,
                     },
@@ -151,7 +146,6 @@ where
                     .log(
                         "relaying ack packet using ack event returned from recv-packet event",
                         &LogRelayPacketAction {
-                            relay,
                             packet,
                             relay_progress: RelayPacketProgress::RelayAckPacket,
                         },
@@ -173,7 +167,6 @@ where
                     .log(
                         "successfully relayed ack packet",
                         &LogRelayPacketAction {
-                            relay,
                             packet,
                             relay_progress: RelayPacketProgress::RelayAckPacket,
                         },
@@ -185,7 +178,6 @@ where
                 .log(
                     "skip relaying receive packet as it has already been received",
                     &LogRelayPacketAction {
-                        relay,
                         packet,
                         relay_progress: RelayPacketProgress::SkipRelayAckPacket,
                     },

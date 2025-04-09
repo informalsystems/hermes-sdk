@@ -26,11 +26,10 @@ use crate::batch::traits::types::{CanUseMessageBatchChannel, HasMessageBatchChan
 use crate::batch::types::config::BatchConfig;
 use crate::batch::types::sink::BatchWorkerSink;
 
-pub struct LogBatchWorker<'a, Relay, Tag> {
-    pub relay: &'a Relay,
+pub struct LogBatchWorker<'a, Target> {
     pub details: &'a str,
     pub log_level: LogLevel,
-    pub phantom: PhantomData<Tag>,
+    pub phantom: PhantomData<Target>,
 }
 
 #[async_trait]
@@ -100,7 +99,7 @@ where
     Relay: HasChainAt<Target::Chain>
         + CanUseMessageBatchChannel<Target::Chain>
         + CanProcessMessageBatches<Target>
-        + for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
+        + for<'a> CanLog<LogBatchWorker<'a, Target>>,
     Relay::Runtime: HasTime + HasMutex + CanSleep + CanUseChannels + HasChannelOnceTypes,
 {
     async fn run_loop(&self, config: &BatchConfig, mut receiver: Relay::MessageBatchReceiver) {
@@ -121,7 +120,6 @@ where
                         self.log(
                             "received message batch",
                             &LogBatchWorker {
-                                relay: self,
                                 details: &format!("batch_size = {batch_size}"),
                                 log_level: LogLevel::Trace,
                                 phantom: PhantomData,
@@ -151,7 +149,6 @@ where
                     self.log(
                         "error in try_receive, terminating worker",
                         &LogBatchWorker {
-                            relay: self,
                             details: &format!("error = {:?}", e),
                             log_level: LogLevel::Error,
                             phantom: PhantomData,
@@ -186,7 +183,7 @@ where
         + HasRuntime
         + CanUseMessageBatchChannel<Target::Chain>
         + CanPartitionMessageBatches<Target>
-        + for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
+        + for<'a> CanLog<LogBatchWorker<'a, Target>>,
     Relay::Runtime:
         HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes + HasAsyncErrorType,
     SendReadyBatchTask<Relay, Target>: Task,
@@ -214,7 +211,6 @@ where
             self.log(
                 "sending ready batches",
                 &LogBatchWorker {
-                    relay: self,
                     details: &format!("batch_size = {batch_size}"),
                     log_level: LogLevel::Trace,
                     phantom: PhantomData,
@@ -328,7 +324,7 @@ where
     Target: RelayTarget,
     Relay: CanUseMessageBatchChannel<Target::Chain>
         + CanSendIbcMessages<BatchWorkerSink, Target>
-        + for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
+        + for<'a> CanLog<LogBatchWorker<'a, Target>>,
     Relay::Runtime: CanUseChannelsOnce + CanUseChannels,
     Relay::Error: Clone,
 {
@@ -348,7 +344,6 @@ where
         self.log(
             "sending batched messages to inner sender",
             &LogBatchWorker {
-                relay: self,
                 details: &format!("message_count = {message_count}"),
                 log_level: LogLevel::Trace,
                 phantom: PhantomData,
@@ -363,7 +358,6 @@ where
                 self.log(
                     "inner sender returned error result, sending error back to caller",
                     &LogBatchWorker {
-                        relay: self,
                         details: &format!("error = {:?}", e),
                         log_level: LogLevel::Trace,
                         phantom: PhantomData,
@@ -382,7 +376,6 @@ where
                 self.log(
                     "inner sender returned result events, sending events back to caller",
                     &LogBatchWorker {
-                        relay: self,
                         details: &format!("events_count = {events_count}"),
                         log_level: LogLevel::Trace,
                         phantom: PhantomData,
