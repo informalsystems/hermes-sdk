@@ -7,3 +7,4 @@
 - [Blanket Traits](./blanket-traits.md)
 - [Check Components](./check-components.md)
 - [Field Types](./field-types.md)
+- [Presets](./presets.md)
