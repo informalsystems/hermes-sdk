@@ -1497,7 +1497,6 @@ dependencies = [
  "hermes-cosmos-test-components",
  "hermes-encoding-components",
  "hermes-error",
- "hermes-logger",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1543,7 +1542,6 @@ dependencies = [
  "eyre",
  "hermes-cosmos-relayer",
  "hermes-error",
- "hermes-logger",
  "hermes-runtime",
  "serde",
  "serde_json",
@@ -1668,7 +1666,6 @@ dependencies = [
  "hermes-cosmos-test-components",
  "hermes-error",
  "hermes-ibc-test-suite",
- "hermes-logger",
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -1705,7 +1702,6 @@ dependencies = [
  "hermes-cosmos-test-components",
  "hermes-encoding-components",
  "hermes-error",
- "hermes-logger",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1781,7 +1777,6 @@ dependencies = [
  "hermes-cosmos-test-components",
  "hermes-encoding-components",
  "hermes-error",
- "hermes-logger",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1871,19 +1866,6 @@ dependencies = [
  "hermes-chain-type-components",
  "hermes-encoding-components",
  "hermes-ibc-components",
-]
-
-[[package]]
-name = "hermes-logger"
-version = "0.1.0"
-dependencies = [
- "cgp",
- "hermes-logging-components",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "hermes-tracing-logging-components",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -2010,7 +1992,6 @@ dependencies = [
  "hermes-cosmos-relayer",
  "hermes-encoding-components",
  "hermes-error",
- "hermes-logger",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -2066,6 +2047,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

@@ -7,9 +7,9 @@ use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::Dyna
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
-use hermes_logger::subscriber::init_tracing_subscriber;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::setup::traits::driver::CanBuildTestDriver;
+use hermes_tracing_logging_components::subscriber::init_tracing_subscriber;
 use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;
