@@ -28,6 +28,6 @@ pub trait CanBuildChainDriver:
         genesis_config: Self::ChainGenesisConfig,
         chain_node_config: Self::ChainNodeConfig,
         wallets: BTreeMap<String, Wallet<Self::Chain>>,
-        chain_process: ChildProcessOf<Self::Runtime>,
+        chain_processes: Vec<ChildProcessOf<Self::Runtime>>,
     ) -> Result<Self::ChainDriver, Self::Error>;
 }
