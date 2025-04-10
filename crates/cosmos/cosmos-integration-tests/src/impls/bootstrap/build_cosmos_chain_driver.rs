@@ -25,9 +25,7 @@ use tokio::process::Child;
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::traits::bootstrap::build_chain::CanBuildChainWithNodeConfig;
 
-pub struct BuildCosmosChainDriver;
-
-#[cgp_provider(ChainDriverBuilderComponent)]
+#[cgp_new_provider(ChainDriverBuilderComponent)]
 impl<Bootstrap, Runtime> ChainDriverBuilder<Bootstrap> for BuildCosmosChainDriver
 where
     Bootstrap: HasChainDriverType<ChainDriver = CosmosChainDriver>
@@ -47,7 +45,7 @@ where
         genesis_config: CosmosGenesisConfig,
         chain_node_config: CosmosChainNodeConfig,
         wallets: BTreeMap<String, CosmosTestWallet>,
-        chain_process: Child,
+        chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Bootstrap::Error> {
         let validator_wallet = wallets
             .get("validator")
@@ -96,7 +94,7 @@ where
             chain_command_path,
             chain_node_config,
             genesis_config,
-            chain_process: Some(chain_process),
+            chain_processes,
             validator_wallet,
             relayer_wallet,
             user_wallet_a,

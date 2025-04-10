@@ -80,18 +80,27 @@ where
         )
         .await;
 
-        let m_chain_process = chain_driver.take_chain_process();
+        let chain_processes = chain_driver.take_chain_process();
 
-        if let Some(chain_process) = m_chain_process {
-            app.log(&format!("running chain {} running in the background. Press Ctrl+C to stop then chain...", chain_driver.chain().chain_id()), &LevelInfo).await;
+        if !chain_processes.is_empty() {
+            app.log(
+                &format!(
+                    "running chain {} in the background. Press Ctrl+C to stop then chain...",
+                    chain_driver.chain().chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
 
-            Runtime::wait_child_process(chain_process)
-                .await
-                .map_err(|e| {
-                    App::wrap_error(App::raise_error(e), "chain process exited with error")
-                })?;
+            for chain_process in chain_processes {
+                Runtime::wait_child_process(chain_process)
+                    .await
+                    .map_err(|e| {
+                        App::wrap_error(App::raise_error(e), "chain process exited with error")
+                    })?;
+            }
 
-            app.log("chain process exited with no error", &LevelInfo)
+            app.log("chain processes exited with no error", &LevelInfo)
                 .await;
         }
 

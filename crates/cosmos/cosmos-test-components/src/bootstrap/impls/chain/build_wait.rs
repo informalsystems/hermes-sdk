@@ -35,7 +35,7 @@ where
         genesis_config: Bootstrap::ChainGenesisConfig,
         chain_node_config: Bootstrap::ChainNodeConfig,
         wallets: BTreeMap<String, Wallet<Bootstrap::Chain>>,
-        chain_process: ChildProcessOf<Bootstrap::Runtime>,
+        chain_process: Vec<ChildProcessOf<Bootstrap::Runtime>>,
     ) -> Result<ChainDriver, Bootstrap::Error> {
         let chain_driver = InBuilder::build_chain_driver(
             bootstrap,

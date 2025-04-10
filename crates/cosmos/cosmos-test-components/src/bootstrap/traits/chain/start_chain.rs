@@ -11,16 +11,16 @@ use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
   context: Bootstrap,
 }]
 #[async_trait]
-pub trait CanStartChainFullNode:
+pub trait CanStartChainFullNodes:
     HasChainNodeConfigType
     + HasChainGenesisConfigType
     + HasRuntime<Runtime: HasChildProcessType + HasFilePathType>
     + HasAsyncErrorType
 {
-    async fn start_chain_full_node(
+    async fn start_chain_full_nodes(
         &self,
         chain_home_dir: &FilePathOf<Self::Runtime>,
         chain_node_config: &Self::ChainNodeConfig,
         chain_genesis_config: &Self::ChainGenesisConfig,
-    ) -> Result<ChildProcessOf<Self::Runtime>, Self::Error>;
+    ) -> Result<Vec<ChildProcessOf<Self::Runtime>>, Self::Error>;
 }
