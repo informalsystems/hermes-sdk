@@ -4,7 +4,7 @@ use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::{UseDelegatedType, WithType};
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
+use hermes_chain_type_components::traits::types::address::AddressTypeProviderComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
@@ -59,7 +59,7 @@ delegate_components! {
         [
             HeightTypeProviderComponent,
             TimeTypeComponent,
-            AddressTypeComponent,
+            AddressTypeProviderComponent,
             AppIdTypeComponent,
             ClientIdTypeComponent,
             ChannelIdTypeComponent,
