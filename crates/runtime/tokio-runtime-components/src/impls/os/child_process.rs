@@ -5,6 +5,8 @@ use std::process::{ExitStatus, Stdio};
 
 use cgp::prelude::*;
 use hermes_async_runtime_components::task::types::future_task::FutureTask;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::types::level::LevelDebug;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::os::child_process::{
@@ -13,6 +15,7 @@ use hermes_runtime_components::traits::os::child_process::{
 };
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
+use itertools::Itertools;
 use tokio::fs::OpenOptions;
 use tokio::io::{copy, AsyncRead};
 use tokio::process::{Child, Command};
@@ -42,6 +45,7 @@ where
         + CanSleep
         + CanPipeReaderToFile
         + CanReadFileAsString
+        + CanLog<LevelDebug>
         + CanRaiseAsyncError<IoError>
         + CanRaiseAsyncError<PrematureChildProcessExitError>,
     Runtime::FilePath: AsRef<Path>,
@@ -53,7 +57,21 @@ where
         envs: &[(&str, &str)],
         stdout_path: Option<&Runtime::FilePath>,
         stderr_path: Option<&Runtime::FilePath>,
-    ) -> Result<Runtime::ChildProcess, Runtime::Error> {
+    ) -> Result<Child, Runtime::Error> {
+        runtime
+            .log(
+                &format!(
+                    "starting child process with the command: {} {}",
+                    command_path.as_ref().display(),
+                    command_args
+                        .iter()
+                        .map(|arg| format!("\"{arg}\""))
+                        .join(" "),
+                ),
+                &LevelDebug,
+            )
+            .await;
+
         let mut child_process = Command::new(command_path.as_ref())
             .args(command_args)
             .envs(Vec::from(envs))
