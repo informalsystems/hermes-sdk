@@ -4,10 +4,7 @@ use cgp::prelude::*;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_ibc_test_suite::traits::CanUseBinaryTestDriverMethods;
-use hermes_logger::UseHermesLogger;
-use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
-};
+use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
@@ -19,6 +16,7 @@ use hermes_test_components::driver::traits::types::relay_driver_at::{
     RelayDriverGetterAtComponent, RelayDriverTypeProviderAtComponent,
 };
 use hermes_test_components::setup::traits::port_id_at::PortIdGetterAtComponent;
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::chain_driver::CosmosChainDriver;
@@ -54,12 +52,7 @@ delegate_components! {
             RelayDriverTypeProviderAtComponent<Index<0>, Index<1>>,
         ]:
             UseCosmosTestTypes,
-        [
-            LoggerTypeProviderComponent,
-            LoggerGetterComponent,
-            GlobalLoggerGetterComponent,
-        ]:
-            UseHermesLogger,
+        LoggerComponent: TracingLogger,
         ChainDriverGetterAtComponent<Index<0>>:
             UseField<symbol!("chain_driver_a")>,
         ChainDriverGetterAtComponent<Index<1>>:

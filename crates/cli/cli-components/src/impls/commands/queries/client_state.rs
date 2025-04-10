@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
@@ -17,8 +16,6 @@ use crate::traits::build::{CanLoadBuilder, HasBuilderType};
 use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
-
-pub struct RunQueryClientStateCommand;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct QueryClientStateArgs {
@@ -48,12 +45,12 @@ pub struct QueryClientStateArgs {
     height: Option<String>,
 }
 
-#[cgp_provider(CommandRunnerComponent)]
+#[cgp_new_provider(CommandRunnerComponent)]
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientStateCommand
 where
     App: HasBuilderType<Builder = Build>
         + CanLoadBuilder
-        + HasLogger
+        + CanLog<LevelInfo>
         + HasAnyCounterpartyType<AnyCounterparty = Counterparty>
         + CanProduceOutput<Counterparty::ClientState>
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
@@ -65,7 +62,6 @@ where
     Build: CanBuildChain<Index<0>, Chain = Chain>,
     Chain: HasChainIdType + CanQueryChainHeight + CanQueryClientState<Counterparty>,
     Counterparty: HasClientStateType<Chain>,
-    App::Logger: CanLog<LevelInfo>,
     Chain::ClientId: Display,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
@@ -73,7 +69,6 @@ where
         let client_id = app.parse_arg(args, PhantomData::<symbol!("client_id")>)?;
         let m_height = app.parse_arg(args, PhantomData::<symbol!("height")>)?;
 
-        let logger = app.logger();
         let builder = app.load_builder().await?;
 
         let chain = builder
@@ -91,12 +86,11 @@ where
             .await
             .map_err(App::raise_error)?;
 
-        logger
-            .log(
-                &format!("Found client state for client `{client_id}` on chain `{chain_id}`!"),
-                &LevelInfo,
-            )
-            .await;
+        app.log(
+            &format!("Found client state for client `{client_id}` on chain `{chain_id}`!"),
+            &LevelInfo,
+        )
+        .await;
 
         Ok(app.produce_output(client_state))
     }

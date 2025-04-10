@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::types::message::HasMessageType;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
@@ -17,30 +16,26 @@ use crate::relay::traits::update_client_message_builder::{
     TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
 };
 
-pub struct SkipUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
-
 pub struct LogSkipBuildUpdateClientMessage<'a, Relay, Target>
 where
     Target: RelayTarget,
     Relay: HasTargetChainTypes<Target, CounterpartyChain: HasHeightType>,
 {
-    pub relay: &'a Relay,
     pub target_height: &'a HeightOf<CounterpartyChainOf<Relay, Target>>,
 }
 
-#[cgp_provider(TargetUpdateClientMessageBuilderComponent)]
+#[cgp_new_provider(TargetUpdateClientMessageBuilderComponent)]
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
     TargetUpdateClientMessageBuilder<Relay, Target> for SkipUpdateClient<InUpdateClient>
 where
     Target: RelayTarget,
-    Relay: HasLogger
-        + HasTargetChains<Target, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>
+    Relay: HasTargetChains<Target, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>
         + HasTargetClientIds<Target>
+        + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>
         + HasAsyncErrorType,
     InUpdateClient: TargetUpdateClientMessageBuilder<Relay, Target>,
     CounterpartyChain: HasConsensusStateType<TargetChain> + HasHeightType,
     TargetChain: CanQueryConsensusStateWithLatestHeight<CounterpartyChain> + HasMessageType,
-    Relay::Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>,
 {
     async fn build_target_update_client_messages(
         relay: &Relay,
@@ -56,10 +51,9 @@ where
 
         match consensus_state {
             Ok(_) => {
-                relay.logger().log(
+                relay.log(
                     "skip building update client message, as the target chain already has one at given height",
                     &LogSkipBuildUpdateClientMessage {
-                        relay,
                         target_height,
                     }
                 ).await;

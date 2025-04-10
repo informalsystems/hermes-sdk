@@ -18,3 +18,4 @@ hermes-relayer-components-extra     = { workspace = true }
 hermes-logging-components           = { workspace = true }
 
 tracing                             = { workspace = true }
+tracing-subscriber                  = { workspace = true }

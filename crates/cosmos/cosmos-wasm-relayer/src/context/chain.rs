@@ -33,10 +33,7 @@ use hermes_encoding_components::traits::has_encoding::{
     HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
-use hermes_logger::UseHermesLogger;
-use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeProviderComponent,
-};
+use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
@@ -107,6 +104,7 @@ use hermes_runtime_components::traits::runtime::{
     HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
 use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
 use hermes_wasm_test_components::traits::chain::upload_client_code::{
@@ -149,12 +147,7 @@ delegate_components! {
             UseType<HermesRuntime>,
         RuntimeGetterComponent:
             UseField<symbol!("runtime")>,
-        [
-            LoggerTypeProviderComponent,
-            LoggerGetterComponent,
-            GlobalLoggerGetterComponent,
-        ]:
-            UseHermesLogger,
+        LoggerComponent: TracingLogger,
         [
             EncodingTypeProviderComponent<AsBytes>,
             EncodingGetterComponent<AsBytes>,
@@ -267,7 +260,6 @@ pub trait CanUseWasmCosmosChain:
     + HasPollTimeout
     + CanQueryTxResponse
     + HasRetryableError
-    + HasLogger
     + HasRuntime
     // + CanAssertEventualAmount
     + CanQueryAbci

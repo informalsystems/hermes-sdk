@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
@@ -27,7 +26,7 @@ where
     App: CanLoadBuilder<Builder = Builder>
         + HasOutputType
         + HasErrorType
-        + HasLogger
+        + CanLog<LevelInfo>
         + CanProduceOutput<&'static str>
         + CanRaiseError<Builder::Error>
         + CanRaiseError<Relay::Error>
@@ -38,7 +37,6 @@ where
         + CanParseArg<Args, symbol!("counterparty_client_id"), Parsed = Counterparty::ClientId>
         + CanParseArg<Args, symbol!("counterparty_port_id"), Parsed = Counterparty::PortId>
         + CanParseArg<Args, symbol!("init_channel_options"), Parsed = Chain::InitChannelOptions>,
-    App::Logger: CanLog<LevelInfo>,
     Args: Async,
     Builder: CanBuildRelay<Index<0>, Index<1>, Relay = Relay>
         + HasChainTypeAt<Index<0>, Chain = Chain>
@@ -60,7 +58,6 @@ where
     Relay: CanBootstrapChannel + HasRelayChains<SrcChain = Chain, DstChain = Counterparty>,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
-        let logger = app.logger();
         let builder = app.load_builder().await?;
 
         let target_chain_id = app.parse_arg(args, PhantomData::<symbol!("target_chain_id")>)?;
@@ -90,18 +87,14 @@ where
             .await
             .map_err(App::raise_error)?;
 
-        logger
-            .log(
-                &format!(
-                    "Creating channel between {}:{} and {}:{} ...",
-                    target_chain_id,
-                    target_client_id,
-                    counterparty_chain_id,
-                    counterparty_client_id,
-                ),
-                &LevelInfo,
-            )
-            .await;
+        app.log(
+            &format!(
+                "Creating channel between {}:{} and {}:{} ...",
+                target_chain_id, target_client_id, counterparty_chain_id, counterparty_client_id,
+            ),
+            &LevelInfo,
+        )
+        .await;
 
         let (target_channel_id, counterparty_channel_id) = relay
             .bootstrap_channel(
@@ -112,18 +105,14 @@ where
             .await
             .map_err(App::raise_error)?;
 
-        logger
-            .log(
-                &format!(
-                    "Channel {}:{} successfully created between {} and {}",
-                    target_channel_id,
-                    counterparty_channel_id,
-                    target_chain_id,
-                    counterparty_chain_id,
-                ),
-                &LevelInfo,
-            )
-            .await;
+        app.log(
+            &format!(
+                "Channel {}:{} successfully created between {} and {}",
+                target_channel_id, counterparty_channel_id, target_chain_id, counterparty_chain_id,
+            ),
+            &LevelInfo,
+        )
+        .await;
 
         Ok(app.produce_output("Done"))
     }

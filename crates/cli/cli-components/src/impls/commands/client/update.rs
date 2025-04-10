@@ -2,7 +2,6 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
@@ -62,15 +61,14 @@ pub struct UpdateClientArgs {
     )]
     counterparty_client_id: String,
 }
-pub struct RunUpdateClientCommand;
 
-#[cgp_provider(CommandRunnerComponent)]
+#[cgp_new_provider(CommandRunnerComponent)]
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>
     for RunUpdateClientCommand
 where
     App: CanLoadBuilder<Builder = Builder>
         + CanProduceOutput<&'static str>
-        + HasLogger
+        + CanLog<LevelInfo>
         + CanParseArg<Args, symbol!("host_chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
         + CanParseArg<Args, symbol!("counterparty_client_id"), Parsed = Counterparty::ClientId>
@@ -95,10 +93,8 @@ where
         + HasRelayClientIds
         + CanSendTargetUpdateClientMessage<SourceTarget>,
     Args: Async,
-    App::Logger: CanLog<LevelInfo>,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
-        let logger = app.logger();
         let host_chain_id = app.parse_arg(args, PhantomData::<symbol!("host_chain_id")>)?;
         let client_id = app.parse_arg(args, PhantomData::<symbol!("client_id")>)?;
         let counterparty_client_id =
@@ -135,12 +131,11 @@ where
 
         let target_height = match target_height {
             Some(height) => {
-                logger
-                    .log(
-                        &format!("Updating client using specified target height: {height}"),
-                        &LevelInfo,
-                    )
-                    .await;
+                app.log(
+                    &format!("Updating client using specified target height: {height}"),
+                    &LevelInfo,
+                )
+                .await;
                 height
             }
             None => {
@@ -149,12 +144,11 @@ where
                     .await
                     .map_err(App::raise_error)?;
 
-                logger
-                    .log(
-                        &format!("Updating client using specified target height: {height}"),
-                        &LevelInfo,
-                    )
-                    .await;
+                app.log(
+                    &format!("Updating client using specified target height: {height}"),
+                    &LevelInfo,
+                )
+                .await;
                 height
             }
         };

@@ -5,7 +5,6 @@ use core::marker::PhantomData;
 use core::mem;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LogLevel;
 use hermes_relayer_components::chain::traits::types::message::{
@@ -27,11 +26,10 @@ use crate::batch::traits::types::{CanUseMessageBatchChannel, HasMessageBatchChan
 use crate::batch::types::config::BatchConfig;
 use crate::batch::types::sink::BatchWorkerSink;
 
-pub struct LogBatchWorker<'a, Relay, Tag> {
-    pub relay: &'a Relay,
+pub struct LogBatchWorker<'a, Target> {
     pub details: &'a str,
     pub log_level: LogLevel,
-    pub phantom: PhantomData<Tag>,
+    pub phantom: PhantomData<Target>,
 }
 
 #[async_trait]
@@ -101,13 +99,11 @@ where
     Relay: HasChainAt<Target::Chain>
         + CanUseMessageBatchChannel<Target::Chain>
         + CanProcessMessageBatches<Target>
-        + HasLogger,
+        + for<'a> CanLog<LogBatchWorker<'a, Target>>,
     Relay::Runtime: HasTime + HasMutex + CanSleep + CanUseChannels + HasChannelOnceTypes,
-    Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
 {
     async fn run_loop(&self, config: &BatchConfig, mut receiver: Relay::MessageBatchReceiver) {
         let runtime = self.runtime();
-        let logger = self.logger();
 
         let mut pending_batches: VecDeque<Relay::BatchSubmission> = VecDeque::new();
 
@@ -121,17 +117,15 @@ where
                     if let Some(batch) = m_batch {
                         let batch_size = batch.0.len();
 
-                        logger
-                            .log(
-                                "received message batch",
-                                &LogBatchWorker {
-                                    relay: self,
-                                    details: &format!("batch_size = {batch_size}"),
-                                    log_level: LogLevel::Trace,
-                                    phantom: PhantomData,
-                                },
-                            )
-                            .await;
+                        self.log(
+                            "received message batch",
+                            &LogBatchWorker {
+                                details: &format!("batch_size = {batch_size}"),
+                                log_level: LogLevel::Trace,
+                                phantom: PhantomData,
+                            },
+                        )
+                        .await;
 
                         pending_batches.push_back(batch);
                     }
@@ -152,17 +146,15 @@ where
                     }
                 }
                 Err(e) => {
-                    logger
-                        .log(
-                            "error in try_receive, terminating worker",
-                            &LogBatchWorker {
-                                relay: self,
-                                details: &format!("error = {:?}", e),
-                                log_level: LogLevel::Error,
-                                phantom: PhantomData,
-                            },
-                        )
-                        .await;
+                    self.log(
+                        "error in try_receive, terminating worker",
+                        &LogBatchWorker {
+                            details: &format!("error = {:?}", e),
+                            log_level: LogLevel::Error,
+                            phantom: PhantomData,
+                        },
+                    )
+                    .await;
 
                     return;
                 }
@@ -191,10 +183,9 @@ where
         + HasRuntime
         + CanUseMessageBatchChannel<Target::Chain>
         + CanPartitionMessageBatches<Target>
-        + HasLogger,
+        + for<'a> CanLog<LogBatchWorker<'a, Target>>,
     Relay::Runtime:
         HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes + HasAsyncErrorType,
-    Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
     SendReadyBatchTask<Relay, Target>: Task,
 {
     async fn process_message_batches(
@@ -217,17 +208,15 @@ where
         } else {
             let batch_size = ready_batches.len();
 
-            self.logger()
-                .log(
-                    "sending ready batches",
-                    &LogBatchWorker {
-                        relay: self,
-                        details: &format!("batch_size = {batch_size}"),
-                        log_level: LogLevel::Trace,
-                        phantom: PhantomData,
-                    },
-                )
-                .await;
+            self.log(
+                "sending ready batches",
+                &LogBatchWorker {
+                    details: &format!("batch_size = {batch_size}"),
+                    log_level: LogLevel::Trace,
+                    phantom: PhantomData,
+                },
+            )
+            .await;
 
             let task = SendReadyBatchTask {
                 relay: self.clone(),
@@ -335,14 +324,11 @@ where
     Target: RelayTarget,
     Relay: CanUseMessageBatchChannel<Target::Chain>
         + CanSendIbcMessages<BatchWorkerSink, Target>
-        + HasLogger,
+        + for<'a> CanLog<LogBatchWorker<'a, Target>>,
     Relay::Runtime: CanUseChannelsOnce + CanUseChannels,
     Relay::Error: Clone,
-    Relay::Logger: for<'a> CanLog<LogBatchWorker<'a, Relay, Target>>,
 {
     async fn send_ready_batches(&self, ready_batches: VecDeque<Relay::BatchSubmission>) {
-        let logger = self.logger();
-
         let (messages, senders): (Vec<_>, Vec<_>) = ready_batches
             .into_iter()
             .map(|(messages, result_sender)| {
@@ -355,33 +341,29 @@ where
 
         let message_count = in_messages.len();
 
-        logger
-            .log(
-                "sending batched messages to inner sender",
-                &LogBatchWorker {
-                    relay: self,
-                    details: &format!("message_count = {message_count}"),
-                    log_level: LogLevel::Trace,
-                    phantom: PhantomData,
-                },
-            )
-            .await;
+        self.log(
+            "sending batched messages to inner sender",
+            &LogBatchWorker {
+                details: &format!("message_count = {message_count}"),
+                log_level: LogLevel::Trace,
+                phantom: PhantomData,
+            },
+        )
+        .await;
 
         let send_result = self.send_messages(Target::default(), in_messages).await;
 
         match send_result {
             Err(e) => {
-                logger
-                    .log(
-                        "inner sender returned error result, sending error back to caller",
-                        &LogBatchWorker {
-                            relay: self,
-                            details: &format!("error = {:?}", e),
-                            log_level: LogLevel::Trace,
-                            phantom: PhantomData,
-                        },
-                    )
-                    .await;
+                self.log(
+                    "inner sender returned error result, sending error back to caller",
+                    &LogBatchWorker {
+                        details: &format!("error = {:?}", e),
+                        log_level: LogLevel::Trace,
+                        phantom: PhantomData,
+                    },
+                )
+                .await;
 
                 for (_, sender) in senders.into_iter() {
                     let _ = Relay::Runtime::send_once(sender, Err(e.clone()));
@@ -391,17 +373,15 @@ where
                 let events_count = all_events.len();
                 let mut all_events = all_events.into_iter();
 
-                logger
-                    .log(
-                        "inner sender returned result events, sending events back to caller",
-                        &LogBatchWorker {
-                            relay: self,
-                            details: &format!("events_count = {events_count}"),
-                            log_level: LogLevel::Trace,
-                            phantom: PhantomData,
-                        },
-                    )
-                    .await;
+                self.log(
+                    "inner sender returned result events, sending events back to caller",
+                    &LogBatchWorker {
+                        details: &format!("events_count = {events_count}"),
+                        log_level: LogLevel::Trace,
+                        phantom: PhantomData,
+                    },
+                )
+                .await;
 
                 for (message_count, sender) in senders.into_iter() {
                     let events = take(&mut all_events, message_count);

@@ -4,7 +4,6 @@ use core::marker::PhantomData;
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
-use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
@@ -36,8 +35,6 @@ where
     B: Async,
 {
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
-        let logger = driver.logger();
-
         let chain_driver_a = driver.chain_driver_a();
 
         let chain_driver_b = driver.chain_driver_b();
@@ -82,7 +79,7 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
-        logger
+        driver
             .log_message(&format!(
                 "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
                 chain_id_a, chain_id_b, a_to_b_amount, denom_a
@@ -121,7 +118,7 @@ where
 
         assert_eq!(balance_a2, balance_a3);
 
-        logger
+        driver
             .log_message(&format!(
                 "Waiting for user on chain B to receive IBC transferred amount of {}",
                 balance_b1
@@ -139,7 +136,7 @@ where
 
         let b_to_a_amount = chain_driver_b.random_amount(500, &balance_b1).await;
 
-        logger
+        driver
             .log_message(&format!(
                 "Sending IBC transfer from chain {} to chain {} with amount of {}",
                 chain_id_b, chain_id_a, b_to_a_amount,
@@ -194,7 +191,7 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
-        logger
+        driver
             .log_message(&format!(
                 "successfully performed reverse IBC transfer from chain {} back to chain {}",
                 chain_id_b, chain_id_a,

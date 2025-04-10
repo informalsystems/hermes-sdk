@@ -2,7 +2,6 @@ use core::marker::PhantomData;
 use std::path::PathBuf;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
@@ -27,12 +26,12 @@ pub struct RunBootstrapChainCommand<Tag, UpdateConfig>(pub PhantomData<(Tag, Upd
 impl<App, Tag, Args, Bootstrap, ChainDriver, Chain, Runtime, UpdateConfig> CommandRunner<App, Args>
     for RunBootstrapChainCommand<Tag, UpdateConfig>
 where
-    App: HasLogger
-        + CanProduceOutput<()>
+    App: CanProduceOutput<()>
         + CanLoadBootstrap<Tag, Args, Bootstrap = Bootstrap>
         + HasConfigPath
         + CanLoadConfig
         + CanWriteConfig
+        + CanLog<LevelInfo>
         + CanRaiseAsyncError<Bootstrap::Error>
         + CanRaiseAsyncError<Runtime::Error>
         + CanRaiseAsyncError<ChainDriver::Error>
@@ -46,10 +45,8 @@ where
     Chain: HasChainId,
     Runtime: CanWaitChildProcess + HasFilePathType<FilePath = PathBuf>,
     Args: Async + HasField<symbol!("chain_id"), Value = String>,
-    App::Logger: CanLog<LevelInfo>,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
-        let logger = app.logger();
         let chain_id = args.get_field(PhantomData);
 
         let mut config = app.load_config().await?;
@@ -60,35 +57,33 @@ where
             .await
             .map_err(App::raise_error)?;
 
-        logger
-            .log(
-                &format!(
-                    "Bootstrapped a new chain with chain ID: {}",
-                    chain_driver.chain().chain_id()
-                ),
-                &LevelInfo,
-            )
-            .await;
+        app.log(
+            &format!(
+                "Bootstrapped a new chain with chain ID: {}",
+                chain_driver.chain().chain_id()
+            ),
+            &LevelInfo,
+        )
+        .await;
 
         let chain_config =
             UpdateConfig::update_config(&chain_driver, &mut config).map_err(App::raise_error)?;
 
         app.write_config(&config).await?;
 
-        logger
-            .log(
-                &format!(
-                    "Added the following chain config to the main config file:\n{}",
-                    chain_config
-                ),
-                &LevelInfo,
-            )
-            .await;
+        app.log(
+            &format!(
+                "Added the following chain config to the main config file:\n{}",
+                chain_config
+            ),
+            &LevelInfo,
+        )
+        .await;
 
         let m_chain_process = chain_driver.take_chain_process();
 
         if let Some(chain_process) = m_chain_process {
-            logger.log(&format!("running chain {} running in the background. Press Ctrl+C to stop then chain...", chain_driver.chain().chain_id()), &LevelInfo).await;
+            app.log(&format!("running chain {} running in the background. Press Ctrl+C to stop then chain...", chain_driver.chain().chain_id()), &LevelInfo).await;
 
             Runtime::wait_child_process(chain_process)
                 .await
@@ -96,8 +91,7 @@ where
                     App::wrap_error(App::raise_error(e), "chain process exited with error")
                 })?;
 
-            logger
-                .log("chain process exited with no error", &LevelInfo)
+            app.log("chain process exited with no error", &LevelInfo)
                 .await;
         }
 

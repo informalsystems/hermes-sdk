@@ -5,7 +5,6 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
 use hermes_chain_components::traits::types::chain_id::HasChainId;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 
@@ -38,7 +37,7 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasRelayClientIds
         + for<'a> CanRaiseAsyncError<MissingConnectionInitEventError<'a, Relay>>
-        + HasLogger
+        + CanLog<LevelInfo>
         + CanRaiseRelayChainErrors,
     SrcChain: CanSendSingleMessage
         + HasInitConnectionOptionsType<DstChain>
@@ -49,7 +48,6 @@ where
         + HasChainId,
     DstChain: CanBuildConnectionOpenInitPayload<SrcChain>,
     SrcChain::ConnectionId: Clone,
-    Relay::Logger: CanLog<LevelInfo>,
 {
     async fn init_connection(
         relay: &Relay,
@@ -62,7 +60,6 @@ where
         let dst_client_id = relay.dst_client_id();
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Starting ICS03 ConnectionOpenInit on chain `{}` for clients `{src_client_id}` and `{dst_client_id}`",
@@ -105,7 +102,6 @@ where
             SrcChain::connection_open_init_event_connection_id(&open_init_event);
 
         relay
-            .logger()
             .log(
                 &format!(
                     "Successfully completed ICS03 ConnectionOpenInit on chain {} with ConnectionId `{src_connection_id}` for client `{src_client_id}` and `{dst_client_id}`",

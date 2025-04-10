@@ -3,7 +3,6 @@ use alloc::vec::Vec;
 use cgp::prelude::*;
 use hermes_chain_components::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use hermes_chain_components::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
@@ -30,13 +29,15 @@ impl<Relay, Target, TargetChain, CounterpartyChain> TargetUpdateClientMessageBui
     for DefaultTargetUpdateClientMessageBuilder
 where
     Target: RelayTarget,
-    Relay: HasLogger
-        + HasTargetChainTypes<
+    Relay: HasTargetChainTypes<
             Target,
             TargetChain = TargetChain,
             CounterpartyChain = CounterpartyChain,
         > + HasTargetChains<Target>
         + HasTargetClientIds<Target>
+        + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>
+        + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>
+        + for<'a> CanLog<LogClientUpdateMessage<'a, Relay, Target>>
         + CanRaiseAsyncError<TargetChain::Error>
         + CanRaiseAsyncError<CounterpartyChain::Error>,
     TargetChain: CanQueryClientStateWithLatestHeight<CounterpartyChain>
@@ -47,9 +48,6 @@ where
         + CanBuildUpdateClientPayload<TargetChain>
         + HasClientStateFields<TargetChain>,
     CounterpartyChain::Height: Clone,
-    Relay::Logger: for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>
-        + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>
-        + for<'a> CanLog<LogClientUpdateMessage<'a, Relay, Target>>,
 {
     async fn build_target_update_client_messages(
         relay: &Relay,

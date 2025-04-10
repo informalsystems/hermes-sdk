@@ -16,22 +16,20 @@ use tracing::{debug, error, trace};
 use crate::contexts::logger::TracingLogger;
 
 #[cgp_provider(LoggerComponent)]
-impl<'a, Logging, Chain> Logger<Logging, LogSendMessagesWithSignerAndNonce<'a, Chain>>
-    for TracingLogger
+impl<'a, Chain> Logger<Chain, LogSendMessagesWithSignerAndNonce<'a, Chain>> for TracingLogger
 where
-    Logging: Async,
     Chain: HasSignerType + HasNonceType + HasMessageType + HasChainId,
     Chain::Signer: Debug,
     Chain::Nonce: Debug,
 {
     async fn log(
-        _logging: &Logging,
+        chain: &Chain,
         message: &str,
         details: &LogSendMessagesWithSignerAndNonce<'a, Chain>,
     ) {
         trace!(
             target: "hermes::tx",
-            chain_id = %details.chain.chain_id(),
+            chain_id = %chain.chain_id(),
             nonce = ?details.nonce,
             signer = ?details.signer,
             "{message}",
@@ -40,16 +38,15 @@ where
 }
 
 #[cgp_provider(LoggerComponent)]
-impl<'a, Logging, Chain> Logger<Logging, TxNoResponseError<'a, Chain>> for TracingLogger
+impl<'a, Chain> Logger<Chain, TxNoResponseError<'a, Chain>> for TracingLogger
 where
-    Logging: Async,
     Chain: HasTxHashType + HasChainId,
     Chain::TxHash: Display,
 {
-    async fn log(_logging: &Logging, message: &str, details: &TxNoResponseError<'a, Chain>) {
+    async fn log(chain: &Chain, message: &str, details: &TxNoResponseError<'a, Chain>) {
         error!(
             target: "hermes::tx",
-            chain_id = %details.chain.chain_id(),
+            chain_id = %chain.chain_id(),
             tx_hash = %details.tx_hash,
             wait_timeout = ?details.wait_timeout,
             elapsed = ?details.elapsed,
@@ -59,17 +56,16 @@ where
 }
 
 #[cgp_provider(LoggerComponent)]
-impl<'a, Logging, Chain> Logger<Logging, LogRetryQueryTxResponse<'a, Chain>> for TracingLogger
+impl<'a, Chain> Logger<Chain, LogRetryQueryTxResponse<'a, Chain>> for TracingLogger
 where
-    Logging: Async,
     Chain: HasTxHashType + HasChainId + HasAsyncErrorType,
     Chain::TxHash: Display,
     Chain::Error: Debug,
 {
-    async fn log(_logging: &Logging, message: &str, details: &LogRetryQueryTxResponse<'a, Chain>) {
+    async fn log(chain: &Chain, message: &str, details: &LogRetryQueryTxResponse<'a, Chain>) {
         debug!(
             target: "hermes::tx",
-            chain_id = %details.chain.chain_id(),
+            chain_id = %chain.chain_id(),
             tx_hash = %details.tx_hash,
             elapsed = ?details.elapsed,
             error = ?details.error,

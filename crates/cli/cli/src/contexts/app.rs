@@ -4,7 +4,7 @@ use std::path::PathBuf;
 
 use cgp::core::component::{UseContext, UseDelegate};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
-use cgp::core::field::{Index, WithField};
+use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
@@ -87,15 +87,13 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_error::types::{Error, HermesError};
-use hermes_logger::UseHermesLogger;
-use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
-};
+use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use ibc::clients::tendermint::types::TrustThreshold;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
@@ -129,14 +127,9 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             ProvideCliError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        [
-            LoggerTypeProviderComponent,
-            LoggerGetterComponent,
-            GlobalLoggerGetterComponent,
-        ]:
-            UseHermesLogger,
+        RuntimeTypeProviderComponent: UseType<HermesRuntime>,
+        RuntimeGetterComponent: UseField<symbol!("runtime")>,
+        LoggerComponent: TracingLogger,
         AnyCounterpartyTypeProviderComponent:
             UseType<AnyCounterparty>,
         ConfigTypeComponent:

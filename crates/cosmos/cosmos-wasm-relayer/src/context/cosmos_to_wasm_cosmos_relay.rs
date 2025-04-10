@@ -2,19 +2,14 @@ use std::collections::BTreeSet;
 use std::sync::Arc;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::core::field::{UseField, WithField};
-use cgp::core::types::WithType;
+use cgp::core::field::UseField;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
-use hermes_logger::{HermesLogger, UseHermesLogger};
-use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeProviderComponent,
-};
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::logger::{CanLog, LoggerComponent};
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::relay::*;
@@ -33,6 +28,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
 
 use crate::context::chain::WasmCosmosChain;
@@ -78,14 +74,9 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeProviderComponent: WithType<HermesRuntime>,
-        RuntimeGetterComponent: WithField<symbol!("runtime")>,
-        [
-            LoggerTypeProviderComponent,
-            LoggerGetterComponent,
-            GlobalLoggerGetterComponent,
-        ]:
-            UseHermesLogger,
+        RuntimeTypeProviderComponent: UseType<HermesRuntime>,
+        RuntimeGetterComponent: UseField<symbol!("runtime")>,
+        LoggerComponent: TracingLogger,
         [
             ChainTypeProviderAtComponent<Src>,
             ChainGetterAtComponent<Src>,
@@ -106,7 +97,11 @@ delegate_components! {
 }
 
 pub trait CanUseCosmosToWasmCosmosRelay:
-    CanRelayPacket + CanBootstrapConnection + CanBootstrapChannel + CanRun
+    CanRelayPacket
+    + CanBootstrapConnection
+    + CanBootstrapChannel
+    + CanRun
+    + for<'a> CanLog<LogSkipRelayLockedPacket<'a, CosmosToWasmCosmosRelay>>
 where
     Self::SrcChain:
         HasInitConnectionOptionsType<Self::DstChain> + HasInitChannelOptionsType<Self::DstChain>,
@@ -114,10 +109,3 @@ where
 }
 
 impl CanUseCosmosToWasmCosmosRelay for CosmosToWasmCosmosRelay {}
-
-pub trait CanUseLogger:
-    for<'a> CanLog<LogSkipRelayLockedPacket<'a, CosmosToWasmCosmosRelay>>
-{
-}
-
-impl CanUseLogger for HermesLogger {}

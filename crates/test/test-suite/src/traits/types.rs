@@ -5,7 +5,6 @@ use cgp::core::field::Index;
 use cgp::core::macros::blanket_trait;
 use cgp::prelude::{CanRaiseError, HasAsyncErrorType, HasErrorType};
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
 use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
@@ -53,7 +52,7 @@ pub trait HasBinaryTestDriverFields<A, B>:
         A,
         B,
         RelayDriver: HasErrorType + HasBiRelayAt<Index<0>, Index<1>, BiRelay = Self::BiRelay>,
-    > + HasLogger<Logger: CanLogMessage>
+    > + CanLogMessage
     + CanRaiseError<ErrorOf<Self::ChainA>>
     + CanRaiseError<ErrorOf<Self::ChainB>>
     + CanRaiseError<ErrorOf<Self::RelayAToB>>

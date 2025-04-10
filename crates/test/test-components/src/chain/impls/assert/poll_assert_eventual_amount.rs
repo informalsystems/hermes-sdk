@@ -5,7 +5,6 @@ use core::time::Duration;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -18,19 +17,16 @@ use crate::chain::traits::assert::poll_assert::HasPollAssertDuration;
 use crate::chain::traits::queries::balance::CanQueryBalance;
 use crate::chain::traits::types::address::HasAddressType;
 
-pub struct PollAssertEventualAmount;
-
-#[cgp_provider(EventualAmountAsserterComponent)]
+#[cgp_new_provider(EventualAmountAsserterComponent)]
 impl<Chain> EventualAmountAsserter<Chain> for PollAssertEventualAmount
 where
     Chain: HasRuntime
         + HasPollAssertDuration
         + CanQueryBalance
         + HasAmountDenom
-        + HasLogger
+        + CanLog<LevelError>
         + for<'a> CanRaiseAsyncError<EventualAmountTimeoutError<'a, Chain>>,
     Chain::Runtime: CanSleep,
-    Chain::Logger: CanLog<LevelError>,
 {
     async fn assert_eventual_amount(
         chain: &Chain,
@@ -60,7 +56,6 @@ where
         let final_balance = balance_result?;
 
         chain
-            .logger()
             .log(
                 &format!("Expected balance `{amount}`, found `{final_balance}`"),
                 &LevelError,
