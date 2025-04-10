@@ -372,7 +372,7 @@ check_components! {
         ]: [
             CosmosChain,
             AnyCounterparty,
-        ]
+        ],
     }
 }
 
