@@ -22,7 +22,6 @@ use hermes_runtime_components::traits::channel::{
     CanCloneSender, CanCreateChannels, HasChannelTypes,
 };
 use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
-use hermes_runtime_components::traits::mutex::HasMutex;
 use hermes_runtime_components::traits::runtime::{HasRuntimeType, RuntimeOf};
 
 use crate::batch::traits::config::HasBatchConfig;
@@ -199,9 +198,7 @@ where
         ),
         Build::Error,
     > {
-        let mutex = self.batch_sender_cache(index);
-
-        let mut sender_cache = Build::Runtime::acquire_mutex(mutex).await;
+        let mut sender_cache = self.batch_sender_cache(index).lock().await;
 
         let cache_key = (
             chain_id.clone(),

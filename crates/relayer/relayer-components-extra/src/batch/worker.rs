@@ -15,7 +15,6 @@ use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMess
 use hermes_relayer_components::relay::traits::target::RelayTarget;
 use hermes_runtime_components::traits::channel::{CanUseChannels, HasChannelTypes};
 use hermes_runtime_components::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
-use hermes_runtime_components::traits::mutex::HasMutex;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
@@ -100,7 +99,7 @@ where
         + CanUseMessageBatchChannel<Target::Chain>
         + CanProcessMessageBatches<Target>
         + for<'a> CanLog<LogBatchWorker<'a, Target>>,
-    Relay::Runtime: HasTime + HasMutex + CanSleep + CanUseChannels + HasChannelOnceTypes,
+    Relay::Runtime: HasTime + CanSleep + CanUseChannels + HasChannelOnceTypes,
 {
     async fn run_loop(&self, config: &BatchConfig, mut receiver: Relay::MessageBatchReceiver) {
         let runtime = self.runtime();

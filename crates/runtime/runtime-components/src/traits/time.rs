@@ -3,9 +3,9 @@ use core::time::Duration;
 use cgp::prelude::*;
 
 #[cgp_component {
-  name: TimeComponent,
-  provider: ProvideTime,
-  context: Runtime,
+    name: TimeComponent,
+    provider: ProvideTime,
+    context: Runtime,
 }]
 pub trait HasTime: Async {
     type Time: Async;

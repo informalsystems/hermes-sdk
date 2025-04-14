@@ -3,7 +3,9 @@ use alloc::sync::Arc;
 use core::marker::PhantomData;
 
 use cgp::core::field::UseField;
+use cgp::core::macros::blanket_trait;
 use cgp::prelude::*;
+use futures::lock::Mutex;
 use hermes_chain_components::traits::packet::fields::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence, HasPacketSrcChannelId,
     HasPacketSrcPortId,
@@ -14,7 +16,6 @@ use hermes_chain_components::traits::types::ibc::{
 use hermes_runtime_components::traits::channel_once::{
     CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes, ReceiverOnce, SenderOnceOf,
 };
-use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
 use hermes_runtime_components::traits::runtime::{HasRuntime, HasRuntimeType};
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
@@ -51,7 +52,6 @@ where
     DstChain: HasChannelIdType<SrcChain, ChannelId: Ord + Clone>
         + HasPortIdType<SrcChain, PortId: Ord + Clone>
         + HasAsyncErrorType,
-    Runtime: HasMutex,
 {
     type PacketKey = (
         SrcChain::ChannelId,
@@ -61,12 +61,12 @@ where
         SrcChain::Sequence,
     );
 
-    type PacketMutex = Arc<MutexOf<Relay::Runtime, BTreeSet<Self::PacketKey>>>;
+    type PacketMutex = Arc<Mutex<BTreeSet<Self::PacketKey>>>;
 }
 
+#[blanket_trait]
 pub trait CanUsePacketMutex:
-    HasRuntimeType<Runtime: HasMutex>
-    + HasRelayChainTypes<
+    HasRelayChainTypes<
         SrcChain: HasChannelIdType<Self::DstChain, ChannelId: Ord + Clone>
                       + HasPortIdType<Self::DstChain, PortId: Ord + Clone>
                       + HasSequenceType<Self::DstChain, Sequence: Ord + Clone>,
@@ -81,8 +81,7 @@ pub trait CanUsePacketMutex:
             SequenceOf<Self::SrcChain, Self::DstChain>,
         ),
         PacketMutex = Arc<
-            MutexOf<
-                Self::Runtime,
+            Mutex<
                 BTreeSet<(
                     ChannelIdOf<Self::SrcChain, Self::DstChain>,
                     PortIdOf<Self::SrcChain, Self::DstChain>,
@@ -93,21 +92,6 @@ pub trait CanUsePacketMutex:
             >,
         >,
     >
-{
-}
-
-impl<Relay, Runtime, SrcChain, DstChain> CanUsePacketMutex for Relay
-where
-    Relay: HasRuntimeType<Runtime = Runtime>
-        + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>,
-    SrcChain: HasChannelIdType<DstChain, ChannelId: Ord + Clone>
-        + HasPortIdType<DstChain, PortId: Ord + Clone>
-        + HasSequenceType<DstChain, Sequence: Ord + Clone>
-        + HasAsyncErrorType,
-    DstChain: HasChannelIdType<SrcChain, ChannelId: Ord + Clone>
-        + HasPortIdType<SrcChain, PortId: Ord + Clone>
-        + HasAsyncErrorType,
-    Runtime: HasMutex,
 {
 }
 
@@ -130,12 +114,12 @@ where
 
 impl<Relay> Task for ReleasePacketLockTask<Relay>
 where
-    Relay: CanUsePacketMutex,
+    Relay: CanUsePacketMutex + HasRuntime,
     Relay::Runtime: CanUseChannelsOnce,
 {
     async fn run(self) {
         let _ = Relay::Runtime::receive_once(self.release_receiver).await;
-        let mut lock_table = Relay::Runtime::acquire_mutex(&self.packet_mutex).await;
+        let mut lock_table = self.packet_mutex.lock().await;
         lock_table.remove(&self.packet_key);
     }
 }
@@ -167,7 +151,7 @@ where
 
         let packet_mutex = relay.packet_mutex();
 
-        let mut lock_table = Relay::Runtime::acquire_mutex(packet_mutex).await;
+        let mut lock_table = packet_mutex.lock().await;
 
         if lock_table.contains(&packet_key) {
             None

@@ -1,16 +1,13 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::build::traits::builders::relay_builder::{RelayBuilder, RelayBuilderComponent};
 use crate::build::traits::cache::HasRelayCache;
 use crate::multi::traits::chain_at::ChainIdAt;
 use crate::multi::traits::relay_at::ClientIdAt;
 
-pub struct BuildRelayWithCache<InBuilder>(pub PhantomData<InBuilder>);
-
-#[cgp_provider(RelayBuilderComponent)]
+#[cgp_new_provider(RelayBuilderComponent)]
 impl<InBuilder, Build, Src: Async, Dst: Async> RelayBuilder<Build, Src, Dst>
     for BuildRelayWithCache<InBuilder>
 where
@@ -37,7 +34,7 @@ where
             dst_client_id.clone(),
         );
 
-        let mut cache = Build::Runtime::acquire_mutex(build.relay_cache()).await;
+        let mut cache = build.relay_cache().lock().await;
 
         if let Some(relay) = cache.get(&relay_id) {
             Ok(relay.clone())

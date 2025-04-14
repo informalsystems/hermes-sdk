@@ -14,7 +14,6 @@ mod preset {
     pub use hermes_runtime_components::traits::fs::file_path::FilePathTypeComponent;
     pub use hermes_runtime_components::traits::fs::read_file::FileAsStringReaderComponent;
     pub use hermes_runtime_components::traits::fs::write_file::StringToFileWriterComponent;
-    pub use hermes_runtime_components::traits::mutex::MutexComponent;
     pub use hermes_runtime_components::traits::os::child_process::{
         ChildProcessStarterComponent, ChildProcessTypeComponent, ChildProcessWaiterComponent,
     };
@@ -39,7 +38,6 @@ mod preset {
             [
                 SleeperComponent,
                 TimeComponent,
-                MutexComponent,
                 StreamTypeComponent,
                 StreamMapperComponent,
                 TaskSpawnerComponent,

@@ -3,7 +3,6 @@ mod preset {
     use cgp::prelude::*;
     use hermes_async_runtime_components::channel::impls::ProvideUnboundedChannelType;
     use hermes_async_runtime_components::channel_once::impls::ProvideOneShotChannelType;
-    use hermes_async_runtime_components::mutex::impls::mutex::ProvideFuturesMutex;
     use hermes_async_runtime_components::stream::impls::boxed::ProvideBoxedStreamType;
     use hermes_async_runtime_components::stream::impls::map::BoxedStreamMapper;
     use hermes_runtime_components::impls::os::exec_command::ExecCommandWithNoEnv;
@@ -19,7 +18,6 @@ mod preset {
     use hermes_runtime_components::traits::fs::file_path::FilePathTypeComponent;
     use hermes_runtime_components::traits::fs::read_file::FileAsStringReaderComponent;
     use hermes_runtime_components::traits::fs::write_file::StringToFileWriterComponent;
-    use hermes_runtime_components::traits::mutex::MutexComponent;
     use hermes_runtime_components::traits::os::child_process::{
         ChildProcessStarterComponent, ChildProcessTypeComponent, ChildProcessWaiterComponent,
     };
@@ -54,7 +52,6 @@ mod preset {
         TokioParallelRuntimeComponents {
             SleeperComponent: TokioSleep,
             TimeComponent: ProvideStdTime,
-            MutexComponent: ProvideFuturesMutex,
             StreamTypeComponent: ProvideBoxedStreamType,
             StreamMapperComponent: BoxedStreamMapper,
             ConcurrentTaskRunnerComponent: TokioRunParallelTasks,
