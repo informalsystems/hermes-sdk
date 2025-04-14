@@ -15,8 +15,10 @@ description  = """
 cgp                                 = { workspace = true }
 hermes-runtime-components           = { workspace = true }
 hermes-async-runtime-components     = { workspace = true }
+hermes-logging-components           = { workspace = true }
 
-tokio           = { workspace = true, features = ["full"] }
 futures         = { workspace = true }
+itertools       = { workspace = true }
 rand            = { workspace = true }
+tokio           = { workspace = true, features = ["full"] }
 tokio-stream    = { version = "0.1" }

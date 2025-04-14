@@ -59,7 +59,7 @@ use toml::to_string_pretty;
 pub struct CosmosChainDriver {
     pub chain: CosmosChain,
     pub chain_command_path: PathBuf,
-    pub chain_process: Option<Child>,
+    pub chain_processes: Vec<Child>,
     pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
     pub validator_wallet: CosmosTestWallet,
@@ -158,8 +158,8 @@ impl ChainCommandPathGetter<CosmosChainDriver> for CosmosChainDriverComponents {
 
 #[cgp_provider(ChainProcessTakerComponent)]
 impl ChainProcessTaker<CosmosChainDriver> for CosmosChainDriverComponents {
-    fn take_chain_process(chain_driver: &mut CosmosChainDriver) -> Option<Child> {
-        chain_driver.chain_process.take()
+    fn take_chain_process(chain_driver: &mut CosmosChainDriver) -> Vec<Child> {
+        core::mem::take(&mut chain_driver.chain_processes)
     }
 }
 

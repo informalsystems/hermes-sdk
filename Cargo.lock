@@ -1913,8 +1913,10 @@ version = "0.1.0"
 dependencies = [
  "cgp",
  "hermes-async-runtime-components",
+ "hermes-logging-components",
  "hermes-runtime-components",
  "hermes-tokio-runtime-components",
+ "hermes-tracing-logging-components",
  "tokio",
 ]
 
@@ -2013,7 +2015,9 @@ dependencies = [
  "cgp",
  "futures",
  "hermes-async-runtime-components",
+ "hermes-logging-components",
  "hermes-runtime-components",
+ "itertools",
  "rand",
  "tokio",
  "tokio-stream",
