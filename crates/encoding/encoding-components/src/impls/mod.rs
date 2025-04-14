@@ -3,5 +3,7 @@ pub mod default_encoding;
 pub mod delegate;
 pub mod encode;
 pub mod encode_mut;
+pub mod fields;
+pub mod tagged;
 pub mod types;
 pub mod with_context;
