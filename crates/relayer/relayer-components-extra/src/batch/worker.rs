@@ -107,54 +107,56 @@ where
         let mut last_sent_time = runtime.now();
 
         loop {
+            // Poll and see if there is additional payload from the receiver.
+            // We do not block and wait for the next payload, as it may only arrive much later on.
+            // If there is no payload, we will still need to continue and process any pending messages
+            // that we have previously received.
             let payload = receiver.try_next();
 
-            match payload {
-                Ok(m_batch) => {
-                    if let Some(batch) = m_batch {
-                        let batch_size = batch.0.len();
+            // futures::UnboundedReceiver uses `Ok(None)` to indicate that the channel has closed.
+            // We ignore errors as it indicates the sender was not ready, which will be retried later on.
+            //
+            // https://docs.rs/futures/latest/futures/channel/mpsc/struct.UnboundedReceiver.html#method.try_next
+            let channel_closed = matches!(payload, Ok(None));
 
-                        self.log(
-                            "received message batch",
-                            &LogBatchWorker {
-                                details: &format!("batch_size = {batch_size}"),
-                                log_level: LogLevel::Trace,
-                                phantom: PhantomData,
-                            },
-                        )
-                        .await;
+            if let Ok(Some(batch)) = payload {
+                let batch_size = batch.0.len();
 
-                        pending_batches.push_back(batch);
-                    }
+                self.log(
+                    "received message batch",
+                    &LogBatchWorker {
+                        details: &format!("batch_size = {batch_size}"),
+                        log_level: LogLevel::Trace,
+                        phantom: PhantomData,
+                    },
+                )
+                .await;
 
-                    let current_batch_size = pending_batches.len();
-                    let now = runtime.now();
+                pending_batches.push_back(batch);
+            }
 
-                    self.process_message_batches(
-                        config,
-                        &mut pending_batches,
-                        now,
-                        &mut last_sent_time,
-                    )
-                    .await;
+            let current_batch_size = pending_batches.len();
+            let now = runtime.now();
 
-                    if pending_batches.len() == current_batch_size {
-                        runtime.sleep(config.sleep_time).await;
-                    }
-                }
-                Err(e) => {
-                    self.log(
-                        "error in try_receive, terminating worker",
-                        &LogBatchWorker {
-                            details: &format!("error = {:?}", e),
-                            log_level: LogLevel::Error,
-                            phantom: PhantomData,
-                        },
-                    )
-                    .await;
+            self.process_message_batches(config, &mut pending_batches, now, &mut last_sent_time)
+                .await;
 
-                    return;
-                }
+            if pending_batches.len() == current_batch_size {
+                runtime.sleep(config.sleep_time).await;
+            }
+
+            if channel_closed {
+                self.log(
+                    "batch channel has closed, terminating worker",
+                    &LogBatchWorker {
+                        details: "",
+                        log_level: LogLevel::Info,
+                        phantom: PhantomData,
+                    },
+                )
+                .await;
+
+                return;
             }
         }
     }
