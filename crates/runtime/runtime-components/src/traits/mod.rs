@@ -4,6 +4,5 @@ pub mod random;
 pub mod runtime;
 pub mod sleep;
 pub mod spawn;
-pub mod stream;
 pub mod task;
 pub mod time;

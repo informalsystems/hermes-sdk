@@ -1,8 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_async_runtime_components::stream::impls::boxed::ProvideBoxedStreamType;
-    use hermes_async_runtime_components::stream::impls::map::BoxedStreamMapper;
     use hermes_runtime_components::impls::os::exec_command::ExecCommandWithNoEnv;
     use hermes_runtime_components::traits::fs::copy_file::FileCopierComponent;
     use hermes_runtime_components::traits::fs::create_dir::DirCreatorComponent;
@@ -19,7 +17,6 @@ mod preset {
     use hermes_runtime_components::traits::random::RandomGeneratorComponent;
     use hermes_runtime_components::traits::sleep::SleeperComponent;
     use hermes_runtime_components::traits::spawn::TaskSpawnerComponent;
-    use hermes_runtime_components::traits::stream::{StreamMapperComponent, StreamTypeComponent};
     use hermes_runtime_components::traits::task::ConcurrentTaskRunnerComponent;
     use hermes_runtime_components::traits::time::TimeComponent;
 
@@ -43,8 +40,6 @@ mod preset {
         TokioParallelRuntimeComponents {
             SleeperComponent: TokioSleep,
             TimeComponent: ProvideStdTime,
-            StreamTypeComponent: ProvideBoxedStreamType,
-            StreamMapperComponent: BoxedStreamMapper,
             ConcurrentTaskRunnerComponent: RunParallelTasksWithTokio,
             TaskSpawnerComponent: TokioSpawnTask,
             FilePathTypeComponent: ProvideStdPathType,
