@@ -1,12 +1,11 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::client_state::{
+use hermes_chain_type_components::traits::HasChainIdType;
+use hermes_relayer_components::chain::traits::{
     ClientStateFieldsComponent, ClientStateFieldsGetter, ClientStateTypeComponent,
-    HasClientStateType, ProvideClientStateType,
+    HasClientStateType, HasHeightType, ProvideClientStateType,
 };
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc::core::client::types::Height;
 
 use crate::types::client_state::SolomachineClientState;

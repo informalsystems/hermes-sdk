@@ -1,16 +1,14 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
+use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
+use hermes_relayer_components::chain::traits::{
+    HasChannelIdType, HasHeightFields, HasMessageType, HasPortIdType, HasTimeoutType,
+};
 use hermes_test_components::chain::traits::messages::ibc_transfer::{
     IbcTokenTransferMessageBuilder, IbcTokenTransferMessageBuilderComponent,
 };
-use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::memo::HasMemoType;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;

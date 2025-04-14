@@ -1,10 +1,8 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::transaction::traits::estimate_tx_fee::{
-    TxFeeEstimator, TxFeeEstimatorComponent,
+use hermes_relayer_components::chain::traits::HasChainId;
+use hermes_relayer_components::transaction::traits::{
+    HasFeeType, HasTransactionType, TxFeeEstimator, TxFeeEstimatorComponent,
 };
-use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
-use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use http::uri::InvalidUri;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::service_client::ServiceClient;

@@ -5,16 +5,14 @@ use cgp::prelude::*;
 
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;
 use crate::build::traits::builders::birelay_builder::CanBuildBiRelay;
-use crate::chain::traits::types::chain_id::HasChainIdType;
-use crate::chain::traits::types::create_client::{
-    CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,
-    HasCreateClientPayloadOptionsType,
+use crate::chain::traits::{
+    CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasChainIdType,
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType, HasIbcChainTypes,
 };
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::HasBoundedRelayTypeAt;
-use crate::relay::traits::chains::{HasDstClientId, HasRelayClientIds, HasSrcClientId};
+use crate::relay::traits::{HasDstClientId, HasRelayClientIds, HasSrcClientId};
 
 #[async_trait]
 pub trait CanBootstrapBiRelay<A, B>:

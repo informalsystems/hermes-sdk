@@ -1,33 +1,21 @@
 use cgp::prelude::*;
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
-use hermes_relayer_components::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
-use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
-use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::chain::traits::{
+    CanBuildPacketFromWriteAck, CanQueryChainStatus, CanQueryPacketIsCleared,
+    CanQueryPacketIsReceived, CanReadPacketFields, HasWriteAckEvent,
+};
 use hermes_relayer_components::error::traits::{
     CanPerformRetry, HasMaxErrorRetry, HasRetryableError,
 };
-use hermes_relayer_components::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
-use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::{
-    LogRelayPacketAction, PerformFullRelay,
+use hermes_relayer_components::relay::impls::{
+    FilterRelayer, LockPacketRelayer, LogRelayPacketAction, LogRelayPacketStatus,
+    LogSkipRelayLockedPacket, LoggerRelayer, PerformFullRelay,
 };
-use hermes_relayer_components::relay::impls::packet_relayers::general::lock::{
-    LockPacketRelayer, LogSkipRelayLockedPacket,
-};
-use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
-    LogRelayPacketStatus, LoggerRelayer,
-};
-use hermes_relayer_components::relay::traits::chains::{HasRelayChains, HasRelayPacketType};
-use hermes_relayer_components::relay::traits::packet_filter::CanFilterRelayPackets;
-use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
-use hermes_relayer_components::relay::traits::packet_relayer::{
+use hermes_relayer_components::relay::traits::{
+    CanFilterRelayPackets, CanRelayAckPacket, CanRelayReceivePacket,
+    CanRelayTimeoutUnorderedPacket, HasPacketLock, HasRelayChains, HasRelayPacketType,
     PacketRelayer, PacketRelayerComponent,
 };
-use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
-use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
-use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;
 
 use crate::relay::impls::packet_relayers::retry::RelayPacketWithRetry;
 

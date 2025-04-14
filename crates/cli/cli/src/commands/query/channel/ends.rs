@@ -2,8 +2,7 @@ use std::str::FromStr;
 
 use cgp::prelude::*;
 use eyre::eyre;
-use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_chain_components::traits::queries::connection_end::CanQueryConnectionEnd;
+use hermes_chain_components::traits::{CanQueryChainHeight, CanQueryConnectionEnd};
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;

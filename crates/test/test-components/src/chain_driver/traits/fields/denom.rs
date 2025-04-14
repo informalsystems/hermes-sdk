@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::{DenomOf, HasDenomType};
 
-use crate::chain::traits::types::denom::{DenomOf, HasDenomType};
 use crate::chain_driver::traits::types::chain::HasChainType;
 
 #[derive(Clone, Copy, Default)]

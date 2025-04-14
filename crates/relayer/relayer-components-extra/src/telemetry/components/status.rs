@@ -1,6 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::chain_status::*;
-use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
+use hermes_relayer_components::chain::traits::{HasChainStatusType, *};
 
 use crate::telemetry::traits::metrics::{HasMetric, TelemetryCounter};
 use crate::telemetry::traits::telemetry::HasTelemetry;

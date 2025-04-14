@@ -1,16 +1,11 @@
 use cgp::prelude::*;
 
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::packets::ack::{
+use crate::traits::{
     AckPacketPayloadTypeProvider, AckPacketPayloadTypeProviderComponent, HasAcknowledgementType,
+    HasCommitmentProofType, HasHeightType, ProvideReceivePacketPayloadType,
+    ProvideTimeoutUnorderedPacketPayloadType, ReceivePacketPayloadTypeComponent,
+    TimeoutUnorderedPacketPayloadTypeComponent,
 };
-use crate::traits::types::packets::receive::{
-    ProvideReceivePacketPayloadType, ReceivePacketPayloadTypeComponent,
-};
-use crate::traits::types::packets::timeout::{
-    ProvideTimeoutUnorderedPacketPayloadType, TimeoutUnorderedPacketPayloadTypeComponent,
-};
-use crate::traits::types::proof::HasCommitmentProofType;
 use crate::types::payloads::packet::{
     AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
 };

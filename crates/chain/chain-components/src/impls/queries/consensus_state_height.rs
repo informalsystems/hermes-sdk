@@ -1,13 +1,12 @@
 use core::fmt::Debug;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::HasClientIdType;
 
-use crate::traits::queries::consensus_state_height::{
+use crate::traits::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerier,
-    ConsensusStateHeightQuerierComponent,
+    ConsensusStateHeightQuerierComponent, HasHeightType,
 };
-use crate::traits::types::height::HasHeightType;
 
 pub struct QueryConsensusStateHeightsAndFindHeightBefore;
 

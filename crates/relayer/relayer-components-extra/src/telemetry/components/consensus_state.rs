@@ -1,12 +1,10 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    ConsensusStateQuerier, ConsensusStateQuerierComponent,
+use hermes_relayer_components::chain::traits::{
+    ConsensusStateQuerier, ConsensusStateQuerierComponent, HasConsensusStateType, HasHeightType,
+    HasIbcChainTypes,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use crate::telemetry::traits::metrics::{HasMetric, TelemetryCounter};
 use crate::telemetry::traits::telemetry::HasTelemetry;

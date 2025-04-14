@@ -5,13 +5,11 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::types::AsBytes;
 
-use crate::traits::queries::consensus_state::{
+use crate::traits::{
     CanQueryRawConsensusState, CanQueryRawConsensusStateWithProofs, ConsensusStateQuerier,
     ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerier,
-    ConsensusStateWithProofsQuerierComponent,
+    ConsensusStateWithProofsQuerierComponent, HasConsensusStateType, HasHeightType,
 };
-use crate::traits::types::consensus_state::HasConsensusStateType;
-use crate::traits::types::height::HasHeightType;
 
 pub struct QueryAndConvertRawConsensusState;
 

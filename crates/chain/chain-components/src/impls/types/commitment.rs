@@ -2,9 +2,7 @@ use alloc::vec::Vec;
 
 use cgp::prelude::*;
 
-use crate::traits::types::packets::receive::{
-    PacketCommitmentTypeComponent, ProvidePacketCommitmentType,
-};
+use crate::traits::{PacketCommitmentTypeComponent, ProvidePacketCommitmentType};
 
 pub struct ProvideBytesPacketCommitment;
 

@@ -2,9 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::transaction::traits::estimate_tx_fee::{TxFeeEstimator, TxFeeEstimatorComponent};
-use crate::transaction::traits::types::fee::HasFeeType;
-use crate::transaction::traits::types::transaction::HasTransactionType;
+use crate::transaction::traits::{
+    HasFeeType, HasTransactionType, TxFeeEstimator, TxFeeEstimatorComponent,
+};
 
 pub trait CanRecoverEstimateError: HasFeeType + HasAsyncErrorType {
     fn try_recover_estimate_error(&self, e: Self::Error) -> Result<Self::Fee, Self::Error>;

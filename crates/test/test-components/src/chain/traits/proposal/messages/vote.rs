@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::chain::traits::HasMessageType;
 
 use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use crate::chain::traits::proposal::types::vote::HasProposalVoteType;

@@ -5,7 +5,7 @@ use cgp::extra::run::RunnerComponent;
 use cgp::prelude::*;
 use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::birelay::traits::AutoBiRelayerComponent;
-use hermes_relayer_components::components::default::birelay::DefaultBiRelayComponents;
+use hermes_relayer_components::components::default::DefaultBiRelayComponents;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::{
     RelayGetterAtComponent, RelayTypeProviderAtComponent,

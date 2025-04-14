@@ -1,24 +1,20 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-use hermes_chain_components::impls::wait_chain_reach_height::CanWaitChainReachHeight;
-use hermes_chain_components::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
+use hermes_chain_components::impls::CanWaitChainReachHeight;
+use hermes_chain_components::traits::CanQueryConsensusStateWithLatestHeight;
 use hermes_logging_components::traits::logger::CanLog;
 
-use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
-use crate::chain::traits::types::client_state::HasClientStateFields;
-use crate::relay::impls::update_client::build::{
-    BuildUpdateClientMessages, LogClientUpdateMessage,
+use crate::chain::traits::{
+    CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, CanQueryClientStateWithLatestHeight,
+    CanQueryConsensusStateHeight, HasClientStateFields,
 };
-use crate::relay::impls::update_client::skip::{LogSkipBuildUpdateClientMessage, SkipUpdateClient};
-use crate::relay::impls::update_client::wait::{LogWaitUpdateClientHeightStatus, WaitUpdateClient};
-use crate::relay::traits::target::{
+use crate::relay::impls::{
+    BuildUpdateClientMessages, LogClientUpdateMessage, LogSkipBuildUpdateClientMessage,
+    LogWaitUpdateClientHeightStatus, SkipUpdateClient, WaitUpdateClient,
+};
+use crate::relay::traits::{
     HasTargetChainTypes, HasTargetChains, HasTargetClientIds, RelayTarget,
-};
-use crate::relay::traits::update_client_message_builder::{
     TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
 };
 

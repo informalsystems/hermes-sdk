@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::HasChainIdType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommandWithEnvs;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;

@@ -1,10 +1,8 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::packets::ack::{
-    AcknowledgementOf, HasAcknowledgementType,
-};
+use hermes_chain_components::traits::{AcknowledgementOf, HasAcknowledgementType};
 
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::{HasRelayChains, PacketOf};
+use crate::relay::traits::{HasRelayChains, PacketOf};
 
 #[cgp_component {
   provider: ReceivePacketRelayer,

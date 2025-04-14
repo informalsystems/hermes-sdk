@@ -3,18 +3,15 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
-use hermes_chain_components::traits::types::chain_id::HasChainId;
+use hermes_chain_components::traits::{CanExtractFromMessageResponse, HasChainId};
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 
-use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
-use crate::chain::traits::send_message::CanSendSingleMessage;
-use crate::chain::traits::types::channel::HasInitChannelOptionsType;
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::channel::open_init::{ChannelInitializer, ChannelInitializerComponent};
+use crate::chain::traits::{
+    CanBuildChannelOpenInitMessage, CanSendSingleMessage, HasChannelOpenInitEvent,
+    HasIbcChainTypes, HasInitChannelOptionsType,
+};
+use crate::relay::traits::{ChannelInitializer, ChannelInitializerComponent, HasRelayChains};
 
 /**
    A base implementation for [`ChannelInitializer`] which submits a

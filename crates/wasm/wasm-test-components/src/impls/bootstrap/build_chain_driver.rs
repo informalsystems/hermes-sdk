@@ -3,8 +3,7 @@ use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::denom::HasDenomType;
+use hermes_chain_type_components::traits::{HasAmountType, HasDenomType};
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::{
     ChainDriverBuilder, ChainDriverBuilderComponent,
 };
@@ -14,7 +13,7 @@ use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus;
 use hermes_cosmos_test_components::chain::types::proposal_vote::ProposalVote;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
+use hermes_relayer_components::transaction::traits::CanSendMessagesWithSigner;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntime;

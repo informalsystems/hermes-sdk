@@ -1,8 +1,7 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::chain_status::{
-    ChainStatusQuerier, ChainStatusQuerierComponent,
+use hermes_relayer_components::chain::traits::{
+    ChainStatusQuerier, ChainStatusQuerierComponent, HasChainStatusType,
 };
-use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::error::IdentifierError;

@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::timestamp::HasTimeType;
+use crate::traits::{HasHeightType, HasTimeType};
 
 /**
    A chain context that offers a `ChainStatus` type to

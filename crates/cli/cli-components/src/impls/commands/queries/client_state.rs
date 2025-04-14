@@ -6,10 +6,9 @@ use cgp::prelude::*;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::{
+    CanQueryChainHeight, CanQueryClientState, HasChainIdType, HasClientStateType,
+};
 
 use crate::traits::any_counterparty::HasAnyCounterpartyType;
 use crate::traits::build::{CanLoadBuilder, HasBuilderType};

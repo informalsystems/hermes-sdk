@@ -18,49 +18,29 @@ mod preset {
     };
     use hermes_cosmos_chain_components::impls::types::payload::ProvideCosmosPayloadTypes;
     use hermes_cosmos_test_components::chain::impls::transfer::amount::ConvertCosmosIbcAmount;
-    use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
-    use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
-    use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
-    use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+    use hermes_relayer_components::chain::impls::{
+        QueryAndConvertRawClientState, QueryAndConvertRawConsensusState,
+    };
+    use hermes_relayer_components::chain::traits::{
+        AckPacketMessageBuilderComponent, AllClientStatesQuerierComponent,
         ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
         ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
-    };
-    use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
-        ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
-        ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
-    };
-    use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
-    use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
-    use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
-    use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-    use hermes_relayer_components::chain::traits::packet::fields::{
+        ClientStateFieldsComponent, ClientStateQuerierComponent, ClientStateTypeComponent,
+        ClientStateWithProofsQuerierComponent, ConnectionOpenAckMessageBuilderComponent,
+        ConnectionOpenConfirmMessageBuilderComponent, ConnectionOpenInitMessageBuilderComponent,
+        ConnectionOpenTryMessageBuilderComponent, ConsensusStateFieldComponent,
+        ConsensusStateHeightsQuerierComponent, ConsensusStateQuerierComponent,
+        ConsensusStateTypeComponent, ConsensusStateWithProofsQuerierComponent,
+        CounterpartyMessageHeightGetterComponent, CreateClientMessageBuilderComponent,
+        CreateClientMessageOptionsTypeComponent, CreateClientPayloadBuilderComponent,
+        CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
         PacketDstChannelIdGetterComponent, PacketDstPortIdGetterComponent,
         PacketSequenceGetterComponent, PacketSrcChannelIdGetterComponent,
         PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetterComponent,
-        PacketTimeoutTimestampGetterComponent,
+        PacketTimeoutTimestampGetterComponent, ReceivePacketMessageBuilderComponent,
+        TimeoutUnorderedPacketMessageBuilderComponent, UpdateClientMessageBuilderComponent,
+        UpdateClientPayloadBuilderComponent, UpdateClientPayloadTypeComponent,
     };
-    use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
-    use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
-    use hermes_relayer_components::chain::traits::queries::client_state::{
-        AllClientStatesQuerierComponent, ClientStateQuerierComponent,
-        ClientStateWithProofsQuerierComponent,
-    };
-    use hermes_relayer_components::chain::traits::queries::consensus_state::{
-        ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
-    };
-    use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
-    use hermes_relayer_components::chain::traits::types::client_state::{
-        ClientStateFieldsComponent, ClientStateTypeComponent,
-    };
-    use hermes_relayer_components::chain::traits::types::consensus_state::{
-        ConsensusStateFieldComponent, ConsensusStateTypeComponent,
-    };
-    use hermes_relayer_components::chain::traits::types::create_client::{
-        CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
-        CreateClientPayloadTypeComponent,
-    };
-    use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
-    use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
     use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
 
     cgp_preset! {

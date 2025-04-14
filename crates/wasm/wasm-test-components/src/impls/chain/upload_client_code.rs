@@ -2,9 +2,9 @@ use core::str::{from_utf8, FromStr, Utf8Error};
 use std::num::ParseIntError;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
+use hermes_chain_type_components::traits::HasMessageResponseEvents;
 use hermes_cosmos_chain_components::types::event::AbciEvent;
-use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
+use hermes_relayer_components::chain::traits::CanSendSingleMessage;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 
 use crate::traits::chain::messages::store_code::CanBuildStoreCodeMessage;

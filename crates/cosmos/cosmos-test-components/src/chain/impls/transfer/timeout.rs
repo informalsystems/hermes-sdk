@@ -2,8 +2,7 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::status::Time;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::timestamp::{HasTimeType, HasTimeoutType};
+use hermes_relayer_components::chain::traits::{HasHeightType, HasTimeType, HasTimeoutType};
 use hermes_test_components::chain::traits::transfer::timeout::{
     IbcTransferTimeoutCalculator, IbcTransferTimeoutCalculatorComponent,
 };

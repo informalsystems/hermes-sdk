@@ -1,8 +1,8 @@
 use cgp::prelude::*;
 
-use crate::chain::traits::types::packets::ack::{AcknowledgementOf, HasAcknowledgementType};
+use crate::chain::traits::{AcknowledgementOf, HasAcknowledgementType};
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::{HasRelayChains, PacketOf};
+use crate::relay::traits::{HasRelayChains, PacketOf};
 
 #[cgp_component {
   provider: AckPacketRelayer,

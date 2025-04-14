@@ -2,6 +2,7 @@ use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::HasDenomType;
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
 };
@@ -13,7 +14,6 @@ use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::HasW
 use hermes_cosmos_test_components::bootstrap::types::wallet_config::CosmosWalletConfig;
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
-use hermes_test_components::chain::traits::types::denom::HasDenomType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 pub struct GenerateCelestiaWalletConfig;

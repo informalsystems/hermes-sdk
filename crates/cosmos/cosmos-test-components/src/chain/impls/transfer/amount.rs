@@ -2,9 +2,8 @@ use core::marker::PhantomData;
 use std::string::FromUtf8Error;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::denom::HasDenomType;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
+use hermes_chain_type_components::traits::{HasAmountType, HasDenomType};
+use hermes_relayer_components::chain::traits::{HasChannelIdType, HasPortIdType};
 use hermes_test_components::chain::traits::transfer::amount::{
     IbcTransferredAmountConverter, IbcTransferredAmountConverterComponent,
 };

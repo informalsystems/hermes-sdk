@@ -1,16 +1,13 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::{CanRaiseAsyncError, *};
-use hermes_chain_components::traits::types::height::HasHeightType;
-use hermes_chain_components::traits::types::message::HasMessageType;
+use hermes_chain_components::traits::{HasHeightType, HasMessageType};
 use hermes_logging_components::traits::logger::CanLog;
 
-use crate::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
+use crate::chain::impls::CanWaitChainReachHeight;
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::target::{
+use crate::relay::traits::{
     CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, RelayTarget,
-};
-use crate::relay::traits::update_client_message_builder::{
     TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
 };
 

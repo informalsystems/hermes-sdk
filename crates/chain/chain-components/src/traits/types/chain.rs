@@ -2,13 +2,11 @@
    Trait definition for [`HasChainTypes`].
 */
 
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_chain_type_components::traits::HasMessageResponseType;
 
-use crate::traits::types::chain_id::HasChainIdType;
-use crate::traits::types::event::HasEventType;
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::message::HasMessageType;
-use crate::traits::types::timestamp::{HasTimeType, HasTimeoutType};
+use crate::traits::{
+    HasChainIdType, HasEventType, HasHeightType, HasMessageType, HasTimeType, HasTimeoutType,
+};
 
 /**
    This covers the minimal abstract types that are used inside a chain context.

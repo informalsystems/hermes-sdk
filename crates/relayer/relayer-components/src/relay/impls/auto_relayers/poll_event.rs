@@ -4,18 +4,19 @@ use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
-use hermes_chain_components::traits::queries::block_events::CanQueryBlockEvents;
-use hermes_chain_components::traits::types::event::HasEventType;
-use hermes_chain_components::traits::types::height::{CanIncrementHeight, HasHeightType};
+use hermes_chain_components::traits::{
+    CanIncrementHeight, CanQueryBlockEvents, HasEventType, HasHeightType,
+};
 use hermes_chain_components::types::aliases::{EventOf, HeightOf};
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::{LevelInfo, LevelTrace};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
-use crate::relay::traits::auto_relayer::{AutoRelayerWithHeights, AutoRelayerWithHeightsComponent};
-use crate::relay::traits::event_relayer::CanRelayEvent;
-use crate::relay::traits::target::{HasTargetChainTypes, HasTargetChains, RelayTarget};
+use crate::relay::traits::{
+    AutoRelayerWithHeights, AutoRelayerWithHeightsComponent, CanRelayEvent, HasTargetChainTypes,
+    HasTargetChains, RelayTarget,
+};
 
 #[cgp_new_provider(AutoRelayerWithHeightsComponent)]
 impl<Relay, Target> AutoRelayerWithHeights<Relay, Target> for RelayWithPolledEvents

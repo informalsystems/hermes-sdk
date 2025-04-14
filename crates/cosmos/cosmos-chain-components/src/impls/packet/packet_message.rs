@@ -1,22 +1,11 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
-    AckPacketMessageBuilder, AckPacketMessageBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::message_builders::receive_packet::{
+use hermes_relayer_components::chain::traits::{
+    AckPacketMessageBuilder, AckPacketMessageBuilderComponent, HasAckPacketPayloadType,
+    HasAcknowledgementType, HasCommitmentProofBytes, HasHeightFields, HasMessageType,
+    HasOutgoingPacketType, HasReceivePacketPayloadType, HasTimeoutUnorderedPacketPayloadType,
     ReceivePacketMessageBuilder, ReceivePacketMessageBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketMessageBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-use hermes_relayer_components::chain::traits::types::packets::ack::{
-    HasAckPacketPayloadType, HasAcknowledgementType,
-};
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::packet::{
     AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
 };

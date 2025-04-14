@@ -5,15 +5,14 @@ use cgp::core::field::Index;
 use cgp::core::Async;
 use cgp::prelude::*;
 use hermes_relayer_components::birelay::traits::HasTwoWayRelay;
-use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::{HasIbcChainTypes, HasInitChannelOptionsType};
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::{
     HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
 };
-use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
+use hermes_relayer_components::relay::impls::CanBootstrapChannel;
 
 use crate::setup::traits::channel::{ChannelSetup, ChannelSetupComponent};
 use crate::setup::traits::init_channel_options_at::HasInitChannelOptionsAt;

@@ -1,23 +1,15 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::impls::types::payloads::channel::ProvideChannelPayloadTypes;
-use hermes_relayer_components::chain::impls::types::payloads::connection::ProvideConnectionPayloadTypes;
-use hermes_relayer_components::chain::impls::types::payloads::packet::ProvidePacketPayloadTypes;
-use hermes_relayer_components::chain::traits::types::channel::{
-    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
-    ChannelOpenTryPayloadTypeComponent,
+use hermes_relayer_components::chain::impls::{
+    ProvideChannelPayloadTypes, ProvideConnectionPayloadTypes, ProvidePacketPayloadTypes,
 };
-use hermes_relayer_components::chain::traits::types::connection::{
+use hermes_relayer_components::chain::traits::{
+    AckPacketPayloadTypeProviderComponent, ChannelOpenAckPayloadTypeComponent,
+    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
     ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
     ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
-};
-use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientPayloadTypeComponent, ProvideCreateClientPayloadType,
-};
-use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::update_client::{
-    ProvideUpdateClientPayloadType, UpdateClientPayloadTypeComponent,
+    ProvideUpdateClientPayloadType, ReceivePacketPayloadTypeComponent,
+    TimeoutUnorderedPacketPayloadTypeComponent, UpdateClientPayloadTypeComponent,
 };
 
 use crate::types::payloads::client::{CosmosCreateClientPayload, CosmosUpdateClientPayload};

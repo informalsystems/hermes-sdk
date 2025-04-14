@@ -2,7 +2,7 @@ use core::convert::Infallible;
 
 use cgp::prelude::*;
 use eyre::Report;
-use hermes_chain_components::traits::types::height::HasHeightType;
+use hermes_chain_components::traits::HasHeightType;
 use hermes_comet_light_client_components::impls::verify_target_height::verify_forward::TargetLowerThanTrustedHeight;
 use hermes_comet_light_client_components::traits::verify_target_height::NoInitialTrustedState;
 use hermes_error::handlers::debug::DebugError;

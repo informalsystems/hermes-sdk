@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::channel::{
+use hermes_relayer_components::chain::traits::{
     InitChannelOptionsTypeComponent, ProvideInitChannelOptionsType,
 };
 

@@ -2,7 +2,7 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 
-use crate::traits::types::poll_interval::{PollIntervalGetter, PollIntervalGetterComponent};
+use crate::traits::{PollIntervalGetter, PollIntervalGetterComponent};
 
 pub struct FixedPollIntervalMillis<const MILLIS: u64>;
 

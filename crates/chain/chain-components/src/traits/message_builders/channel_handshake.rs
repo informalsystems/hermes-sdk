@@ -1,11 +1,10 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
-use hermes_chain_type_components::traits::types::message::HasMessageType;
+use hermes_chain_type_components::traits::{
+    CanUseCounterparty, HasChannelIdType, HasMessageType, HasPortIdType,
+};
 
-use crate::traits::types::channel::{
+use crate::traits::{
     ChannelOpenAckPayloadOf, ChannelOpenConfirmPayloadOf, ChannelOpenTryPayloadOf,
     HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
     HasInitChannelOptionsType,

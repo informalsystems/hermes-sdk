@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::amount::HasAmountType;
-use crate::traits::types::denom::HasDenomType;
+use crate::traits::{HasAmountType, HasDenomType};
 
 #[cgp_component {
   provider: AmountDenomGetter,

@@ -1,14 +1,11 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::amount::denom::{
-    AmountDenomGetter, AmountDenomGetterComponent,
-};
-use hermes_chain_type_components::traits::types::amount::{
-    AmountTypeProviderComponent, HasAmountType,
+use hermes_chain_type_components::traits::{
+    AmountDenomGetter, AmountDenomGetterComponent, AmountTypeProviderComponent, HasAmountType,
+    HasDenomType,
 };
 use hermes_test_components::chain::traits::types::amount::{
     AmountMethodsComponent, ProvideAmountMethods,
 };
-use hermes_test_components::chain::traits::types::denom::HasDenomType;
 
 use crate::chain::types::amount::Amount;
 use crate::chain::types::denom::Denom;

@@ -3,7 +3,7 @@ use cgp::core::error::{
 };
 use cgp::prelude::*;
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::send_message::EmptyMessageResponse;
+use hermes_relayer_components::chain::traits::EmptyMessageResponse;
 use hermes_runtime::types::error::TokioRuntimeError;
 
 use crate::relayer_mock::base::error::{BaseError, Error};

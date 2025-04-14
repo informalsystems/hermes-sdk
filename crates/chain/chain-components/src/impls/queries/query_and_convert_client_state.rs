@@ -6,13 +6,12 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::types::AsBytes;
 
-use crate::traits::queries::client_state::{
+use crate::traits::{
     AllClientStatesQuerier, AllClientStatesQuerierComponent, CanQueryAllRawClientStates,
     CanQueryRawClientState, CanQueryRawClientStateWithProofs, ClientStateQuerier,
     ClientStateQuerierComponent, ClientStateWithProofsQuerier,
-    ClientStateWithProofsQuerierComponent,
+    ClientStateWithProofsQuerierComponent, HasClientStateType,
 };
-use crate::traits::types::client_state::HasClientStateType;
 
 pub struct QueryAndConvertRawClientState;
 

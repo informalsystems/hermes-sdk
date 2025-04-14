@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::core::field::UseField;
 use cgp::prelude::*;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::impls::selector::SelectRelayChains;
+use hermes_relayer_components::relay::impls::SelectRelayChains;
 
 use crate::batch::traits::types::HasMessageBatchChannelTypes;
 

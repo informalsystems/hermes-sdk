@@ -10,20 +10,21 @@ use hermes_cosmos_chain_components::types::messages::packet::packet_filter::Pack
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_logging_components::traits::logger::{CanLog, LoggerComponent};
-use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
-use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
-use hermes_relayer_components::components::default::relay::*;
+use hermes_relayer_components::chain::traits::{
+    HasInitChannelOptionsType, HasInitConnectionOptionsType,
+};
+use hermes_relayer_components::components::default::*;
 use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
-use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_components::relay::impls::packet_lock::PacketMutexGetterComponent;
-use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
+use hermes_relayer_components::relay::impls::{
+    CanBootstrapChannel, CanBootstrapConnection, LogSkipRelayLockedPacket,
+    PacketMutexGetterComponent,
+};
+use hermes_relayer_components::relay::traits::CanRelayPacket;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,

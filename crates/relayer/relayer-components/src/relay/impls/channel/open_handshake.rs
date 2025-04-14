@@ -1,13 +1,10 @@
 use cgp::prelude::*;
 
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::channel::open_ack::CanRelayChannelOpenAck;
-use crate::relay::traits::channel::open_confirm::CanRelayChannelOpenConfirm;
-use crate::relay::traits::channel::open_handshake::{
-    ChannelOpenHandshakeRelayer, ChannelOpenHandshakeRelayerComponent,
+use crate::chain::traits::HasIbcChainTypes;
+use crate::relay::traits::{
+    CanRelayChannelOpenAck, CanRelayChannelOpenConfirm, CanRelayChannelOpenTry,
+    ChannelOpenHandshakeRelayer, ChannelOpenHandshakeRelayerComponent, HasRelayChains,
 };
-use crate::relay::traits::channel::open_try::CanRelayChannelOpenTry;
 
 /**
    Relays a channel open handshake using a channel ID that has been

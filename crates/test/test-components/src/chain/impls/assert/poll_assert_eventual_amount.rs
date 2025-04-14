@@ -3,8 +3,7 @@ use core::fmt::Debug;
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
+use hermes_chain_type_components::traits::{HasAddressType, HasAmountDenom, HasAmountType};
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -15,7 +14,6 @@ use crate::chain::traits::assert::eventual_amount::{
 };
 use crate::chain::traits::assert::poll_assert::HasPollAssertDuration;
 use crate::chain::traits::queries::balance::CanQueryBalance;
-use crate::chain::traits::types::address::HasAddressType;
 
 #[cgp_new_provider(EventualAmountAsserterComponent)]
 impl<Chain> EventualAmountAsserter<Chain> for PollAssertEventualAmount

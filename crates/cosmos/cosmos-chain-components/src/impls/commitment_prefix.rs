@@ -2,7 +2,7 @@ use alloc::vec::Vec;
 use std::sync::OnceLock;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::commitment_prefix::{
+use hermes_relayer_components::chain::traits::{
     HasCommitmentPrefixType, IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
 

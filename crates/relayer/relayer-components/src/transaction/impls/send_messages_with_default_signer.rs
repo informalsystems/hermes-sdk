@@ -1,11 +1,10 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::send_message::MessageSenderComponent;
+use hermes_chain_components::traits::MessageSenderComponent;
 
-use crate::chain::traits::send_message::MessageSender;
-use crate::transaction::traits::default_signer::HasDefaultSigner;
-use crate::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
+use crate::chain::traits::MessageSender;
+use crate::transaction::traits::{CanSendMessagesWithSigner, HasDefaultSigner};
 
 pub struct SendMessagesWithDefaultSigner;
 

@@ -5,15 +5,9 @@
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-pub use hermes_chain_type_components::traits::types::ibc::channel_id::*;
-pub use hermes_chain_type_components::traits::types::ibc::client_id::*;
-pub use hermes_chain_type_components::traits::types::ibc::connection_id::*;
-pub use hermes_chain_type_components::traits::types::ibc::port_id::*;
-pub use hermes_chain_type_components::traits::types::ibc::sequence::*;
+pub use hermes_chain_type_components::traits::*;
 
-use crate::traits::types::chain::HasChainTypes;
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::message::HasMessageType;
+use crate::traits::{HasChainTypes, HasHeightType, HasMessageType};
 
 /**
    The abstract types for a chain context when it is used for IBC
@@ -94,7 +88,7 @@ where
        messages targetting this self chain. So any IBC message that the self
        chain received would correspond to events happening on the `Counterparty`
        chain. With this method, we are thus getting the
-       [`Counterparty::Height`](crate::traits::types::height::HasHeightType::Height)
+       [`Counterparty::Height`](crate::traits::HasHeightType::Height)
        and _not_ `Self::Height`.
 
        Note that the message height for UpdateClient is usually an increment

@@ -1,58 +1,34 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
-use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
-use hermes_chain_type_components::traits::types::event::{
-    EventTypeProviderComponent, HasEventType,
+use hermes_chain_type_components::impls::UseEventsMessageResponse;
+use hermes_chain_type_components::traits::{
+    EventTypeProviderComponent, HasEventType, HasMessageResponseType,
+    MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
+    MessageTypeProviderComponent,
 };
-use hermes_chain_type_components::traits::types::message::MessageTypeProviderComponent;
-use hermes_chain_type_components::traits::types::message_response::{
-    HasMessageResponseType, MessageResponseTypeComponent,
-};
-use hermes_relayer_components::chain::traits::commitment_prefix::{
-    CommitmentPrefixTypeComponent, ProvideCommitmentPrefixType,
-};
-use hermes_relayer_components::chain::traits::extract_data::{
-    EventExtractor, EventExtractorComponent,
-};
-use hermes_relayer_components::chain::traits::types::channel::{
-    ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
-    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
-    InitChannelOptionsTypeComponent, ProvideChannelEndType, ProvideChannelOpenAckPayloadType,
-    ProvideChannelOpenConfirmPayloadType, ProvideChannelOpenTryPayloadType,
-    ProvideInitChannelOptionsType,
-};
-use hermes_relayer_components::chain::traits::types::connection::{
+use hermes_relayer_components::chain::traits::{
+    AckPacketPayloadTypeProvider, AckPacketPayloadTypeProviderComponent, ChannelEndTypeComponent,
+    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
+    ChannelOpenTryPayloadTypeComponent, CommitmentPrefixTypeComponent,
     ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
-    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
-    InitConnectionOptionsTypeComponent, ProvideConnectionOpenAckPayloadType,
-    ProvideConnectionOpenConfirmPayloadType, ProvideConnectionOpenInitPayloadType,
-    ProvideConnectionOpenTryPayloadType, ProvideInitConnectionOptionsType,
-};
-use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
-    CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
-    ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
-    ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
-};
-use hermes_relayer_components::chain::traits::types::event::EventTypeProvider;
-use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasConnectionIdType};
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
-    ConnectionOpenInitEventComponent, ProvideConnectionOpenInitEvent,
-};
-use hermes_relayer_components::chain::traits::types::message::MessageTypeProvider;
-use hermes_relayer_components::chain::traits::types::packets::ack::{
-    AckPacketPayloadTypeProvider, AckPacketPayloadTypeProviderComponent,
-};
-use hermes_relayer_components::chain::traits::types::packets::receive::{
-    ProvideReceivePacketPayloadType, ReceivePacketPayloadTypeComponent,
-};
-use hermes_relayer_components::chain::traits::types::packets::timeout::{
-    ProvideTimeoutUnorderedPacketPayloadType, TimeoutUnorderedPacketPayloadTypeComponent,
-};
-use hermes_relayer_components::chain::traits::types::update_client::{
-    ProvideUpdateClientPayloadType, UpdateClientPayloadTypeComponent,
+    ConnectionOpenInitEventComponent, ConnectionOpenInitPayloadTypeComponent,
+    ConnectionOpenTryPayloadTypeComponent, CreateClientEventComponent,
+    CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
+    CreateClientPayloadTypeComponent, EventExtractor, EventExtractorComponent, EventTypeProvider,
+    HasClientIdType, HasConnectionIdType, InitChannelOptionsTypeComponent,
+    InitConnectionOptionsTypeComponent, MessageTypeProvider, ProvideChannelEndType,
+    ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
+    ProvideChannelOpenTryPayloadType, ProvideCommitmentPrefixType,
+    ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
+    ProvideConnectionOpenInitEvent, ProvideConnectionOpenInitPayloadType,
+    ProvideConnectionOpenTryPayloadType, ProvideCreateClientEvent,
+    ProvideCreateClientMessageOptionsType, ProvideCreateClientPayloadOptionsType,
+    ProvideCreateClientPayloadType, ProvideInitChannelOptionsType,
+    ProvideInitConnectionOptionsType, ProvideReceivePacketPayloadType,
+    ProvideTimeoutUnorderedPacketPayloadType, ProvideUpdateClientPayloadType,
+    ReceivePacketPayloadTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+    UpdateClientPayloadTypeComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::host::types::identifiers::{ClientId, ConnectionId};

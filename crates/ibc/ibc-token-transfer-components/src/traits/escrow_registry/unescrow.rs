@@ -1,6 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::{HasAmountType, HasChannelIdType};
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 
 /**

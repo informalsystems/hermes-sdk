@@ -2,7 +2,7 @@ use core::time::Duration;
 use std::path::PathBuf;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;

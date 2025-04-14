@@ -3,7 +3,7 @@ use alloc::string::String;
 use alloc::sync::Arc;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::consensus_state::{
+use hermes_chain_type_components::traits::{
     ConsensusStateTypeComponent, ProvideConsensusStateType,
 };
 use hermes_ibc_components::traits::queries::consensus_state::{

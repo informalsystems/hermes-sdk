@@ -7,18 +7,19 @@ use core::time::Duration;
 use cgp::core::error::ErrorOf;
 use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
-use hermes_chain_components::traits::queries::block_time::CanQueryBlockTime;
-use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_chain_components::traits::types::height::{CanAdjustHeight, HasHeightType, HeightOf};
+use hermes_chain_components::traits::{
+    CanAdjustHeight, CanQueryBlockTime, CanQueryChainHeight, HasHeightType, HeightOf,
+};
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 use crate::birelay::traits::{
     AutoBiRelayer, AutoBiRelayerComponent, HasBiRelayTypes, HasTwoWayRelay,
 };
-use crate::relay::traits::auto_relayer::CanAutoRelayWithHeights;
-use crate::relay::traits::chains::{HasDstChain, HasRelayChains, HasSrcChain};
-use crate::relay::traits::target::{DestinationTarget, HasChainTargets, SourceTarget};
+use crate::relay::traits::{
+    CanAutoRelayWithHeights, DestinationTarget, HasChainTargets, HasDstChain, HasRelayChains,
+    HasSrcChain, SourceTarget,
+};
 
 pub struct LogAutoBiRelay<'a, BiRelay>
 where

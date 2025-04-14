@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::connection::{
+use hermes_relayer_components::chain::traits::{
     InitConnectionOptionsTypeComponent, ProvideInitConnectionOptionsType,
 };
 

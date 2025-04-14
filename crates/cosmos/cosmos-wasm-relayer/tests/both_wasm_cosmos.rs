@@ -11,8 +11,7 @@ use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientB
 use hermes_cosmos_wasm_relayer::context::wasm_cosmos_relay::WasmCosmosRelay;
 use hermes_cosmos_wasm_relayer::types::create_client::CreateWasmTendermintMessageOptions;
 use hermes_error::types::Error;
-use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::relay::traits::{CanCreateClient, DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use sha2::{Digest, Sha256};

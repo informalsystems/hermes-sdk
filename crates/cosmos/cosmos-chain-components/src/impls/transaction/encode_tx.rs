@@ -1,13 +1,10 @@
 #![allow(clippy::ptr_arg)]
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::transaction::traits::encode_tx::{TxEncoder, TxEncoderComponent};
-use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
-use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
-use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
-use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
+use hermes_relayer_components::chain::traits::{HasChainId, HasMessageType};
+use hermes_relayer_components::transaction::traits::{
+    HasFeeType, HasNonceType, HasSignerType, HasTransactionType, TxEncoder, TxEncoderComponent,
+};
 use ibc::core::host::types::identifiers::ChainId;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::tx::v1beta1::mode_info::{Single, Sum};

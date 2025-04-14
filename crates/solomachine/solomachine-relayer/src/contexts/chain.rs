@@ -21,35 +21,17 @@ use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::Error;
-use hermes_relayer_components::chain::traits::commitment_prefix::{
-    IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
+use hermes_relayer_components::chain::traits::{
+    CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenAckPayload,
+    CanBuildConnectionOpenConfirmMessage, CanBuildConnectionOpenConfirmPayload,
+    CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenInitPayload,
+    CanBuildConnectionOpenTryMessage, CanBuildConnectionOpenTryPayload, CanQueryClientState,
+    CanQueryClientStateWithProofs, CanQueryConsensusStateWithProofs, ChainIdGetterComponent,
+    ChannelEndQuerier, ChannelEndQuerierComponent, ClientStateQuerier, ClientStateQuerierComponent,
+    ConnectionEndQuerier, ConnectionEndQuerierComponent, ConsensusStateQuerier,
+    ConsensusStateQuerierComponent, HasClientStateType, HasConsensusStateType, HasHeightType,
+    HasInitConnectionOptionsType, IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
-    CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
-    CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
-};
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
-    CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
-    CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
-};
-use hermes_relayer_components::chain::traits::queries::channel_end::{
-    ChannelEndQuerier, ChannelEndQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerier,
-    ClientStateQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::connection_end::{
-    ConnectionEndQuerier, ConnectionEndQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    CanQueryConsensusStateWithProofs, ConsensusStateQuerier, ConsensusStateQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetterComponent;
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,

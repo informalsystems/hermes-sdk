@@ -2,13 +2,11 @@ use core::iter::Iterator;
 use core::str::FromStr;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllRawClientStatesQuerier, AllRawClientStatesQuerierComponent, RawClientStateQuerier,
-    RawClientStateQuerierComponent, RawClientStateWithProofsQuerier,
-    RawClientStateWithProofsQuerierComponent,
+use hermes_relayer_components::chain::traits::{
+    AllRawClientStatesQuerier, AllRawClientStatesQuerierComponent, HasIbcChainTypes,
+    HasRawClientStateType, RawClientStateQuerier, RawClientStateQuerierComponent,
+    RawClientStateWithProofsQuerier, RawClientStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::client_state::HasRawClientStateType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::ClientId;

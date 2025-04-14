@@ -15,15 +15,12 @@ use hermes_relayer_components::multi::traits::chain_at::{
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::impls::packet_lock::{
-    PacketMutexGetterComponent, PacketMutexOf,
+use hermes_relayer_components::relay::impls::{
+    PacketMutexGetterComponent, PacketMutexOf, SelectRelayAToB,
 };
-use hermes_relayer_components::relay::impls::selector::SelectRelayAToB;
-use hermes_relayer_components::relay::traits::auto_relayer::TargetAutoRelayerComponent;
-use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
-use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::{
-    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+use hermes_relayer_components::relay::traits::{
+    CanCreateClient, DestinationTarget, HasDestinationTargetChainTypes, HasRelayClientIds,
+    HasSourceTargetChainTypes, SourceTarget, TargetAutoRelayerComponent,
 };
 use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetterComponent;
 use hermes_relayer_components_extra::batch::traits::types::{

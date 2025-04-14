@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 use futures::lock::Mutex;
 
-use crate::transaction::traits::types::signer::HasSignerType;
+use crate::transaction::traits::HasSignerType;
 
 /**
    A naive nonce allocator that simply query the current nonce from the context

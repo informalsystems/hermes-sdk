@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::field::UseField;
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::ibc::HasClientIdType;
+use hermes_chain_components::traits::HasClientIdType;
 
 use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::ClientIdAt;

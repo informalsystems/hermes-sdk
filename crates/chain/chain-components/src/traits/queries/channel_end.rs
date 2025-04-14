@@ -1,12 +1,9 @@
 use core::fmt::Debug;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+use hermes_chain_type_components::traits::{HasChannelIdType, HasHeightType, HasPortIdType};
 
-use crate::traits::types::channel::HasChannelEndType;
-use crate::traits::types::proof::HasCommitmentProofType;
+use crate::traits::{HasChannelEndType, HasCommitmentProofType};
 
 #[cgp_component {
   provider: ChannelEndQuerier,

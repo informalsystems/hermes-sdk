@@ -2,23 +2,18 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::height::HasHeightType;
-use hermes_chain_components::traits::types::ibc::HasClientIdType;
+use hermes_chain_components::traits::{HasClientIdType, HasHeightType};
 use hermes_chain_components::types::aliases::ClientIdOf;
 use hermes_logging_components::traits::logger::CanLog;
 
-use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
-use crate::chain::traits::types::client_state::HasClientStateFields;
-use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::target::{
-    CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, HasTargetClientIds, RelayTarget,
-    TargetChainOf,
+use crate::chain::traits::{
+    CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, CanQueryClientStateWithLatestHeight,
+    CanQueryConsensusStateHeight, HasClientStateFields,
 };
-use crate::relay::traits::update_client_message_builder::{
-    TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
+use crate::chain::types::aliases::HeightOf;
+use crate::relay::traits::{
+    CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, HasTargetClientIds, RelayTarget,
+    TargetChainOf, TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
 };
 
 pub struct LogClientUpdateMessage<'a, Relay, Target>

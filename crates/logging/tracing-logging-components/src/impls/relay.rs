@@ -3,25 +3,17 @@ use core::fmt::{Debug, Display};
 use cgp::prelude::*;
 use hermes_logging_components::traits::logger::{Logger, LoggerComponent};
 use hermes_logging_components::types::level::LogLevel;
-use hermes_relayer_components::birelay::impls::auto_birelay::LogAutoBiRelay;
+use hermes_relayer_components::birelay::impls::LogAutoBiRelay;
 use hermes_relayer_components::birelay::traits::{HasBiRelayTypes, HasTwoWayRelay};
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
-use hermes_relayer_components::relay::impls::auto_relayers::poll_event::LogAutoRelayWithHeights;
-use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
-use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
-    LogRelayPacketStatus, RelayPacketStatus,
+use hermes_relayer_components::chain::traits::{HasChainId, HasClientIdType, HasHeightType};
+use hermes_relayer_components::relay::impls::{
+    LogAutoRelayWithHeights, LogClientUpdateMessage, LogRelayPacketAction, LogRelayPacketStatus,
+    LogSkipBuildUpdateClientMessage, LogSkipRelayLockedPacket, LogWaitUpdateClientHeightStatus,
+    RelayPacketStatus,
 };
-use hermes_relayer_components::relay::impls::update_client::build::LogClientUpdateMessage;
-use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
-use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use hermes_relayer_components::relay::traits::chains::{
-    HasDstChain, HasRelayChains, HasSrcChain, PacketOf,
-};
-use hermes_relayer_components::relay::traits::target::{
-    HasTargetChains, HasTargetClientIds, RelayTarget,
+use hermes_relayer_components::relay::traits::{
+    HasDstChain, HasRelayChains, HasSrcChain, HasTargetChains, HasTargetClientIds, PacketOf,
+    RelayTarget,
 };
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use tracing::{debug, error, info, trace};

@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_chain_type_components::traits::HasAmountType;
+use hermes_relayer_components::chain::traits::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;

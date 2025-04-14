@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
 use crate::chain_driver::traits::types::chain::HasChain;

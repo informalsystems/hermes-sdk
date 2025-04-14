@@ -9,8 +9,7 @@ use hermes_cosmos_integration_tests::init::{init_preset_bootstraps, init_test_ru
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_error::types::Error;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
+use hermes_relayer_components::chain::traits::{CanQueryChainStatus, CanQueryPacketIsReceived};
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;

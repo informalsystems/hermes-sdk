@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-pub use hermes_chain_type_components::traits::types::commitment_prefix::*;
+pub use hermes_chain_type_components::traits::*;
 
 #[cgp_component {
   provider: IbcCommitmentPrefixGetter,

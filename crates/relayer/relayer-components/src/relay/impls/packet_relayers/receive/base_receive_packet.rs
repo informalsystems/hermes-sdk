@@ -1,24 +1,21 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
-use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
-use hermes_chain_components::traits::types::packets::ack::HasAcknowledgementType;
-use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
-
-use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
-use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::{
-    CanRaiseRelayChainErrors, HasDstClientId, HasRelayChains, PacketOf,
+use hermes_chain_components::traits::{
+    CanBuildPacketFromWriteAck, CanExtractFromEvent, HasAcknowledgementType,
 };
-use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::packet_relayers::receive_packet::{
+use hermes_chain_type_components::traits::HasMessageResponseEvents;
+
+use crate::chain::traits::{
+    CanBuildReceivePacketMessage, CanBuildReceivePacketPayload,
+    CanQueryClientStateWithLatestHeight, HasWriteAckEvent,
+};
+use crate::chain::types::aliases::HeightOf;
+use crate::relay::traits::{
+    CanRaiseRelayChainErrors, CanSendSingleIbcMessage, DestinationTarget,
+    HasDestinationTargetChainTypes, HasDstClientId, HasRelayChains, MainSink, PacketOf,
     ReceivePacketRelayer, ReceivePacketRelayerComponent,
 };
-use crate::relay::traits::target::{DestinationTarget, HasDestinationTargetChainTypes};
 
 pub struct BaseReceivePacketRelayer;
 

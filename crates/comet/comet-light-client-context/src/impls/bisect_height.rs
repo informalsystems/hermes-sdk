@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::HasHeightType;
 use hermes_comet_light_client_components::traits::compute_verification_height::{
     NextVerificationHeightComputer, NextVerificationHeightComputerComponent,
 };

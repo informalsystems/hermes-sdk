@@ -6,10 +6,9 @@ use cgp::prelude::*;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
-use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
+use hermes_relayer_components::chain::traits::{
+    CanQueryAllClientStatesWithLatestHeight, HasChainIdType, HasClientIdType, HasClientStateFields,
+};
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
 use crate::traits::build::CanLoadBuilder;

@@ -6,14 +6,11 @@ use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::any::Any;
-use hermes_relayer_components::chain::traits::message_builders::create_client::{
+use hermes_relayer_components::chain::traits::{
     CreateClientMessageBuilder, CreateClientMessageBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientMessageOptionsTypeComponent, HasCreateClientMessageOptionsType,
-    HasCreateClientPayloadType, ProvideCreateClientMessageOptionsType,
+    HasCreateClientPayloadType, HasMessageType, ProvideCreateClientMessageOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 
 use crate::types::client_state::SolomachineClientState;
 use crate::types::consensus_state::SolomachineConsensusState;

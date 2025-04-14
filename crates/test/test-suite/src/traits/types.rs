@@ -4,31 +4,26 @@ use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::core::macros::blanket_trait;
 use cgp::prelude::{CanRaiseError, HasAsyncErrorType, HasErrorType};
-use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
+use hermes_chain_type_components::traits::{DenomOf, HasAmountDenom};
 use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
-use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
-use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::{
+    CanQueryChainStatus, CanQueryPacketIsCleared, CanQueryPacketIsReceived, CanReadPacketFields,
+    HasChainId, HasIbcChainTypes,
+};
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayAt;
-use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelayWithHeights;
-use hermes_relayer_components::relay::traits::chains::{HasDstChain, HasSrcChain};
-use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
-use hermes_relayer_components::relay::traits::target::{
-    DestinationTarget, HasChainTargets, SourceTarget,
+use hermes_relayer_components::relay::traits::{
+    CanAutoRelayWithHeights, CanRelayReceivePacket, DestinationTarget, HasChainTargets,
+    HasDstChain, HasSrcChain, SourceTarget,
 };
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
-use hermes_test_components::chain::traits::types::denom::DenomOf;
 use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;

@@ -10,13 +10,9 @@ use hermes_relayer_components::multi::traits::chain_at::{
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::traits::chains::{HasDstClientId, HasSrcClientId};
-use hermes_relayer_components::relay::traits::packet_lock::{
-    PacketLockComponent, ProvidePacketLock,
-};
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components::relay::traits::update_client_message_builder::{
-    TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
+use hermes_relayer_components::relay::traits::{
+    DestinationTarget, HasDstClientId, HasSrcClientId, PacketLockComponent, ProvidePacketLock,
+    SourceTarget, TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
 };
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,

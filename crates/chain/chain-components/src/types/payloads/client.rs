@@ -1,5 +1,4 @@
-use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::consensus_state::HasConsensusStateType;
+use crate::traits::{HasClientStateType, HasConsensusStateType};
 
 pub struct CreateClientPayload<Chain, Counterparty>
 where

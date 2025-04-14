@@ -6,13 +6,13 @@ use cgp::prelude::*;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
-use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
+use hermes_relayer_components::chain::traits::{
+    HasChainIdType, HasClientIdType, HasInitConnectionOptionsType,
+};
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
-use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::impls::CanBootstrapConnection;
+use hermes_relayer_components::relay::traits::HasRelayChains;
 
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::{CommandRunner, CommandRunnerComponent};

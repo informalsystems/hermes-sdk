@@ -1,9 +1,8 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
+use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;

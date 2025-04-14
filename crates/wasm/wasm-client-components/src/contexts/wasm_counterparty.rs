@@ -14,18 +14,13 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
-use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::ibc::{
-    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
-    SequenceTypeComponent,
+use hermes_relayer_components::chain::impls::QueryAndConvertRawClientState;
+use hermes_relayer_components::chain::traits::{
+    ChainIdTypeProviderComponent, ChainStatusTypeComponent, ChannelIdTypeComponent,
+    ClientIdTypeComponent, ClientStateQuerierComponent, ClientStateTypeComponent,
+    ConnectionIdTypeComponent, HeightTypeProviderComponent, OutgoingPacketTypeComponent,
+    PortIdTypeComponent, SequenceTypeComponent, TimeoutTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
-use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 use hermes_wasm_encoding_components::components::*;
 use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 

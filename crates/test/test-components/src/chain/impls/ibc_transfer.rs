@@ -1,23 +1,20 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
-use hermes_relayer_components::chain::traits::extract_data::CanExtractFromEvent;
-use hermes_relayer_components::chain::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
-use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
+use hermes_chain_type_components::traits::{
+    HasAddressType, HasAmountType, HasHeightType, HasMessageResponseEvents, HasTimeoutType,
+};
+use hermes_relayer_components::chain::traits::{
+    CanBuildPacketFromSendPacket, CanExtractFromEvent, HasChainStatusType, HasChannelIdType,
+    HasPortIdType, HasSendPacketEvent,
+};
+use hermes_relayer_components::transaction::traits::CanSendMessagesWithSigner;
 
 use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessages;
 use crate::chain::traits::transfer::ibc_transfer::{
     TokenIbcTransferrer, TokenIbcTransferrerComponent,
 };
 use crate::chain::traits::transfer::timeout::CanCalculateIbcTransferTimeout;
-use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::memo::HasMemoType;
 use crate::chain::traits::types::wallet::{HasWalletSigner, HasWalletType};
 

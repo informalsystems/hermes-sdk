@@ -2,14 +2,14 @@ use std::marker::PhantomData;
 use std::str::FromStr;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::queries::client_state::CanQueryClientState;
+use hermes_chain_components::traits::CanQueryClientState;
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use hermes_relayer_components::chain::traits::CanQueryChainHeight;
 use http::Uri;
 use ibc::core::channel::types::channel::{IdentifiedChannelEnd, State};
 use ibc::core::channel::types::proto::v1::query_client::QueryClient;
@@ -103,7 +103,7 @@ impl CommandRunner<HermesApp> for QueryChannels {
 
             let counterparty = if show_counterparty || dst_chain_id.is_some() {
                 let connection_id = connection_id.clone();
-                let connection_end = <hermes_cosmos_relayer::contexts::chain::CosmosChain as hermes_chain_components::traits::queries::connection_end::CanQueryConnectionEnd<Counterparty>>::query_connection_end(&chain, &connection_id, &chain_height)
+                let connection_end = <hermes_cosmos_relayer::contexts::chain::CosmosChain as hermes_chain_components::traits::CanQueryConnectionEnd<Counterparty>>::query_connection_end(&chain, &connection_id, &chain_height)
                     .await;
 
                 let Ok(connection_end) = connection_end else {

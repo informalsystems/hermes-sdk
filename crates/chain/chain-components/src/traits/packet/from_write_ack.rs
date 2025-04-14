@@ -1,8 +1,7 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
+use hermes_chain_type_components::traits::HasOutgoingPacketType;
 
-use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::traits::types::packets::ack::HasAcknowledgementType;
+use crate::traits::{HasAcknowledgementType, HasWriteAckEvent};
 
 #[cgp_component {
   provider: PacketFromWriteAckEventBuilder,

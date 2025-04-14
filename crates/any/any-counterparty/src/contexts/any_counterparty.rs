@@ -26,31 +26,17 @@ use hermes_error::impls::UseHermesError;
 use hermes_protobuf_encoding_components::traits::length::EncodedLengthGetterComponent;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
-use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
-use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesQuerierComponent, ClientStateQuerierComponent,
+use hermes_relayer_components::chain::impls::{
+    QueryAndConvertRawClientState, QueryAndConvertRawConsensusState,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
+use hermes_relayer_components::chain::traits::{
+    AllClientStatesQuerierComponent, ChainIdTypeProviderComponent, ChainStatusTypeComponent,
+    ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsComponent,
+    ClientStateQuerierComponent, ClientStateTypeComponent, ConnectionIdTypeComponent,
+    ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
+    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent, HeightTypeProviderComponent,
+    OutgoingPacketTypeComponent, PortIdTypeComponent, SequenceTypeComponent, TimeoutTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsComponent, ClientStateTypeComponent,
-};
-use hermes_relayer_components::chain::traits::types::consensus_state::{
-    ConsensusStateFieldComponent, ConsensusStateTypeComponent,
-};
-use hermes_relayer_components::chain::traits::types::height::{
-    HeightFieldComponent, HeightTypeProviderComponent,
-};
-use hermes_relayer_components::chain::traits::types::ibc::{
-    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
-    SequenceTypeComponent,
-};
-use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
-use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 
 use crate::impls::encoding::convert::AnyClientConverterComponents;
 use crate::impls::encoding::encode::AnyClientEncoderComponents;

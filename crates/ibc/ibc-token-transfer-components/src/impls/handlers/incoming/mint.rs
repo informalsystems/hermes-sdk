@@ -1,7 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
-use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
-use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
+use hermes_chain_type_components::traits::{CanBuildAmount, HasAmountDenom, HasAmountQuantity};
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
 use hermes_ibc_components::traits::handlers::incoming::payload::{

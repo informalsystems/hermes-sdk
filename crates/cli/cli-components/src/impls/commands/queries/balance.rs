@@ -4,7 +4,7 @@ use core::marker::PhantomData;
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::HasChainIdType;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 
 use crate::traits::build::CanLoadBuilder;

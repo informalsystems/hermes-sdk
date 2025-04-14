@@ -1,7 +1,8 @@
 use cgp::prelude::*;
 
-use crate::relay::traits::chains::{HasRelayChains, PacketOf};
-use crate::relay::traits::packet_filter::{RelayPacketFilter, RelayPacketFilterComponent};
+use crate::relay::traits::{
+    HasRelayChains, PacketOf, RelayPacketFilter, RelayPacketFilterComponent,
+};
 
 pub struct AllowAll;
 

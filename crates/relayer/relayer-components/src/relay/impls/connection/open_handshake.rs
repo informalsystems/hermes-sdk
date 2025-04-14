@@ -1,13 +1,10 @@
 use cgp::prelude::*;
 
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::connection::open_ack::CanRelayConnectionOpenAck;
-use crate::relay::traits::connection::open_confirm::CanRelayConnectionOpenConfirm;
-use crate::relay::traits::connection::open_handshake::{
-    ConnectionOpenHandshakeRelayer, ConnectionOpenHandshakeRelayerComponent,
+use crate::chain::traits::HasIbcChainTypes;
+use crate::relay::traits::{
+    CanRelayConnectionOpenAck, CanRelayConnectionOpenConfirm, CanRelayConnectionOpenTry,
+    ConnectionOpenHandshakeRelayer, ConnectionOpenHandshakeRelayerComponent, HasRelayChains,
 };
-use crate::relay::traits::connection::open_try::CanRelayConnectionOpenTry;
 
 /**
    Relays a connection open handshake using a connection ID that has been

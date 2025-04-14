@@ -1,9 +1,8 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
-    ConsensusStateHeightsQuerier, ConsensusStateHeightsQuerierComponent,
+use hermes_relayer_components::chain::traits::{
+    ConsensusStateHeightsQuerier, ConsensusStateHeightsQuerierComponent, HasHeightType,
+    HasIbcChainTypes,
 };
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc::core::client::types::Height;

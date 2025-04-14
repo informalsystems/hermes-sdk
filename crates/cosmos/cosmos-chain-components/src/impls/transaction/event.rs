@@ -1,11 +1,10 @@
 use alloc::sync::Arc;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_relayer_components::transaction::traits::parse_events::{
-    TxMessageResponseParser, TxMessageResponseParserComponent,
+use hermes_chain_type_components::traits::HasMessageResponseType;
+use hermes_relayer_components::transaction::traits::{
+    HasTxResponseType, TxMessageResponseParser, TxMessageResponseParserComponent,
 };
-use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 

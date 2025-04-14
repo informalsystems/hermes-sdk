@@ -1,10 +1,9 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::consensus_state::{
+use hermes_relayer_components::chain::traits::{
     ConsensusStateFieldComponent, ConsensusStateFieldGetter, ConsensusStateTypeComponent,
-    HasConsensusStateType, ProvideConsensusStateType, ProvideRawConsensusStateType,
+    HasConsensusStateType, HasTimeType, ProvideConsensusStateType, ProvideRawConsensusStateType,
     RawConsensusStateTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::timestamp::HasTimeType;
 use prost_types::Any;
 use tendermint::Time;
 

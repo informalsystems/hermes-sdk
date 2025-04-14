@@ -1,11 +1,8 @@
 use std::sync::Arc;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::event::HasEventType;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::queries::block_events::{
-    BlockEventsQuerier, BlockEventsQuerierComponent,
-};
+use hermes_chain_type_components::traits::{HasEventType, HasHeightType};
+use hermes_relayer_components::chain::traits::{BlockEventsQuerier, BlockEventsQuerierComponent};
 use ibc::core::client::types::Height;
 use tendermint::abci::Code;
 use tendermint::block::Height as TmHeight;

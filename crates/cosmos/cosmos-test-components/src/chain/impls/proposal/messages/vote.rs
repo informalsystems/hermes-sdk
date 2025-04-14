@@ -2,7 +2,7 @@ use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{
     CosmosMessage, DynCosmosMessage, ToCosmosMessage,
 };
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::chain::traits::HasMessageType;
 use hermes_test_components::chain::traits::proposal::messages::vote::{
     VoteProposalMessageBuilder, VoteProposalMessageBuilderComponent,
 };

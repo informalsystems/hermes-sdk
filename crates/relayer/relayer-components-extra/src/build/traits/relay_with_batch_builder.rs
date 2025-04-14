@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
+use hermes_relayer_components::chain::traits::HasClientIdType;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 use hermes_relayer_components::multi::types::tags::{Dst, Src};

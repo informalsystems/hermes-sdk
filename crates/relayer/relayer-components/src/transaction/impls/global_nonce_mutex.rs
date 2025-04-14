@@ -4,10 +4,9 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 
-use crate::transaction::traits::nonce::nonce_mutex::{
-    NonceAllocationMutexGetter, NonceAllocationMutexGetterComponent,
+use crate::transaction::traits::{
+    HasSignerType, NonceAllocationMutexGetter, NonceAllocationMutexGetterComponent,
 };
-use crate::transaction::traits::types::signer::HasSignerType;
 
 /**
    A provider that returns the same global mutex from a chain regardless of the signer.

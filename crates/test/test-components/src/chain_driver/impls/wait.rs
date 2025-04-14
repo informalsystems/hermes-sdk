@@ -1,8 +1,7 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
+use hermes_relayer_components::chain::traits::{CanQueryChainHeight, HasHeightFields};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 

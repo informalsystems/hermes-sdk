@@ -4,15 +4,11 @@ use cgp::prelude::*;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::types::AsBytes;
-use hermes_relayer_components::chain::traits::message_builders::create_client::{
-    CreateClientMessageBuilder, CreateClientMessageBuilderComponent,
+use hermes_relayer_components::chain::traits::{
+    CreateClientMessageBuilder, CreateClientMessageBuilderComponent, HasClientStateType,
+    HasConsensusStateType, HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+    HasMessageType,
 };
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
-};
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use prost_types::Any;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};

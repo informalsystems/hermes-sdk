@@ -3,9 +3,8 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_chain_type_components::traits::HasAmountDenom;
+use hermes_relayer_components::chain::traits::{CanQueryChainStatus, HasChainId};
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;

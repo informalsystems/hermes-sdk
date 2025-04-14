@@ -33,7 +33,7 @@ use hermes_relayer_components::multi::traits::relay_at::{
     HasRelayTypeAt, RelayTypeProviderAtComponent,
 };
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::traits::target::SourceTarget;
+use hermes_relayer_components::relay::traits::SourceTarget;
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_relayer_components_extra::batch::traits::types::MessageBatchSenderOf;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;

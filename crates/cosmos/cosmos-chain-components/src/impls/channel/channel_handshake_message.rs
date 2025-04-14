@@ -1,22 +1,16 @@
 use core::fmt::Display;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+use hermes_chain_type_components::traits::HasMessageType;
+use hermes_relayer_components::chain::traits::{
     ChannelOpenAckMessageBuilder, ChannelOpenAckMessageBuilderComponent,
     ChannelOpenConfirmMessageBuilder, ChannelOpenConfirmMessageBuilderComponent,
     ChannelOpenInitMessageBuilder, ChannelOpenInitMessageBuilderComponent,
-    ChannelOpenTryMessageBuilder, ChannelOpenTryMessageBuilderComponent,
+    ChannelOpenTryMessageBuilder, ChannelOpenTryMessageBuilderComponent, HasChannelEndType,
+    HasChannelIdType, HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType,
+    HasChannelOpenTryPayloadType, HasCommitmentProofBytes, HasConnectionIdType, HasHeightFields,
+    HasInitChannelOptionsType, HasPortIdType,
 };
-use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelEndType, HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType,
-    HasChannelOpenTryPayloadType, HasInitChannelOptionsType,
-};
-use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::{
-    HasChannelIdType, HasConnectionIdType, HasPortIdType,
-};
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };

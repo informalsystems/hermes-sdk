@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::transaction::traits::types::nonce::HasNonceType;
-use crate::transaction::traits::types::signer::HasSignerType;
+use crate::transaction::traits::{HasNonceType, HasSignerType};
 
 #[cgp_component {
   provider: NonceQuerier,

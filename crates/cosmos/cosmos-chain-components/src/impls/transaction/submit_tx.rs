@@ -1,11 +1,9 @@
 use core::fmt::Debug;
 
 use cgp::prelude::*;
-use hermes_relayer_components::transaction::traits::submit_tx::{
-    TxSubmitter, TxSubmitterComponent,
+use hermes_relayer_components::transaction::traits::{
+    HasTransactionType, HasTxHashType, TxSubmitter, TxSubmitterComponent,
 };
-use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
-use hermes_relayer_components::transaction::traits::types::tx_hash::HasTxHashType;
 use ibc_proto::cosmos::tx::v1beta1::TxRaw;
 use prost::Message;
 use tendermint::Hash as TxHash;

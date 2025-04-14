@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::HasChainIdType;
 use hermes_runtime_components::traits::random::CanGenerateRandom;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::chain_id::CanBuildChainIdFromString;

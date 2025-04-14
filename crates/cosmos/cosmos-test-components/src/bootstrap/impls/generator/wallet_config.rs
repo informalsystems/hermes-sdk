@@ -2,7 +2,7 @@ use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_test_components::chain::traits::types::denom::HasDenomType;
+use hermes_chain_type_components::traits::HasDenomType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 use crate::bootstrap::traits::fields::denom::{DenomForStaking, DenomForTransfer, HasGenesisDenom};

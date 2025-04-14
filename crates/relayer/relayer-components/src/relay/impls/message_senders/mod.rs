@@ -1,2 +1,5 @@
-pub mod chain_sender;
-pub mod update_client;
+mod chain_sender;
+pub use chain_sender::*;
+
+mod update_client;
+pub use update_client::*;

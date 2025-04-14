@@ -3,8 +3,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_logging_components::traits::logger::CanLog;
 
-use crate::relay::traits::chains::{HasRelayChains, PacketOf};
-use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent};
+use crate::relay::traits::{HasRelayChains, PacketOf, PacketRelayer, PacketRelayerComponent};
 
 pub struct LoggerRelayer<InRelayer>(pub PhantomData<InRelayer>);
 

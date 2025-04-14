@@ -2,9 +2,10 @@ use alloc::vec::Vec;
 
 use cgp::prelude::*;
 
-use crate::chain::traits::send_message::CanSendMessages;
-use crate::relay::traits::ibc_message_sender::{IbcMessageSender, IbcMessageSenderComponent};
-use crate::relay::traits::target::{HasTargetChains, RelayTarget};
+use crate::chain::traits::CanSendMessages;
+use crate::relay::traits::{
+    HasTargetChains, IbcMessageSender, IbcMessageSenderComponent, RelayTarget,
+};
 
 pub struct SendIbcMessagesToChain;
 

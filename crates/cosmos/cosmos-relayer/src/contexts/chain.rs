@@ -6,10 +6,10 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWr
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
-use hermes_chain_type_components::traits::fields::chain_id::ChainIdGetterComponent;
-use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
-use hermes_chain_type_components::traits::types::event::HasEventType;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_chain_type_components::traits::{
+    ChainIdGetterComponent, HasEventType, HasMessageResponseType,
+    MessageResponseEventsGetterComponent,
+};
 use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
 use hermes_cosmos_chain_components::traits::eip::eip_query::EipQuerierComponent;
 use hermes_cosmos_chain_components::traits::gas_config::{
@@ -47,62 +47,33 @@ use hermes_encoding_components::traits::has_encoding::{
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_logging_components::traits::logger::LoggerComponent;
-use hermes_relayer_components::chain::traits::commitment_prefix::{
-    HasCommitmentPrefixType, IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
-};
-use hermes_relayer_components::chain::traits::extract_data::{
-    CanExtractFromMessageResponse, EventExtractorComponent, MessageResponseExtractorComponent,
-};
-use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::packet::filter::{
-    IncomingPacketFilterComponent, OutgoingPacketFilterComponent,
-};
-use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::queries::block_events::BlockEventsQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::block_time::BlockTimeQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::channel_end::{
-    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesQuerierComponent, ClientStateQuerierComponent,
-    ClientStateWithProofsQuerierComponent, RawClientStateQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::connection_end::{
-    ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAckCommitmentQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::packet_is_cleared::PacketIsClearedQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
-use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
-use hermes_relayer_components::chain::traits::types::client_state::{
-    HasClientStateType, HasRawClientStateType,
-};
-use hermes_relayer_components::chain::traits::types::create_client::{
+use hermes_relayer_components::chain::traits::{
+    AllClientStatesQuerierComponent, BlockEventsQuerierComponent, BlockTimeQuerierComponent,
+    CanExtractFromMessageResponse, ChainStatusQuerierComponent, ChannelEndQuerierComponent,
+    ChannelEndWithProofsQuerierComponent, ClientStateQuerierComponent,
+    ClientStateWithProofsQuerierComponent, ConnectionEndQuerierComponent,
+    ConnectionEndWithProofsQuerierComponent, ConsensusStateQuerierComponent,
+    ConsensusStateWithProofsQuerierComponent, CreateClientMessageBuilderComponent,
+    CreateClientPayloadBuilderComponent, EventExtractorComponent, HasChannelEndType,
+    HasClientStateType, HasCommitmentPrefixType, HasCommitmentProofType,
     HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
-    HasCreateClientPayloadType,
+    HasCreateClientPayloadType, HasRawClientStateType, HasUpdateClientPayloadType,
+    IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent, IncomingPacketFilterComponent,
+    MessageResponseExtractorComponent, OutgoingPacketFilterComponent,
+    PacketAckCommitmentQuerierComponent, PacketCommitmentQuerierComponent,
+    PacketIsClearedQuerierComponent, PacketReceiptQuerierComponent, RawClientStateQuerierComponent,
+    SendPacketEventComponent, UpdateClientMessageBuilderComponent,
+    UpdateClientPayloadBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::SendPacketEventComponent;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::error::traits::RetryableErrorComponent;
-use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
-use hermes_relayer_components::transaction::impls::global_nonce_mutex::GetGlobalNonceMutex;
-use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
-use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetterComponent;
-use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::NonceAllocationMutexGetterComponent;
-use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
-use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
-use hermes_relayer_components::transaction::traits::simulation_fee::{
-    FeeForSimulationGetter, FeeForSimulationGetterComponent,
+use hermes_relayer_components::transaction::impls::{
+    GetGlobalNonceMutex, LogSendMessagesWithSignerAndNonce, TxNoResponseError,
 };
-use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
+use hermes_relayer_components::transaction::traits::{
+    DefaultSignerGetterComponent, FeeForSimulationGetter, FeeForSimulationGetterComponent,
+    NonceAllocationMutexGetterComponent, TxResponsePollerComponent, TxResponseQuerierComponent,
+    TxSubmitterComponent,
+};
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{

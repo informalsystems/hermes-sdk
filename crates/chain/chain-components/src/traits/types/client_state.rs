@@ -2,10 +2,10 @@ use core::time::Duration;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
-pub use hermes_chain_type_components::traits::types::ibc::client_state::*;
+use hermes_chain_type_components::traits::HasChainIdType;
+pub use hermes_chain_type_components::traits::*;
 
-use crate::traits::types::height::HasHeightType;
+use crate::traits::HasHeightType;
 
 #[cgp_component {
   name: RawClientStateTypeComponent,

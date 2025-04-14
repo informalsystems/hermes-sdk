@@ -1,7 +1,7 @@
 use core::cmp::min;
 
 use cgp::prelude::*;
-use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
+use hermes_relayer_components::transaction::traits::HasFeeType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use num_bigint::BigInt;

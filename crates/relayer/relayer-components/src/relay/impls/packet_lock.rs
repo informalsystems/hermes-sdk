@@ -7,20 +7,18 @@ use cgp::core::macros::blanket_trait;
 use cgp::prelude::*;
 use futures::channel::oneshot::{channel, Receiver, Sender};
 use futures::lock::Mutex;
-use hermes_chain_components::traits::packet::fields::{
-    HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence, HasPacketSrcChannelId,
-    HasPacketSrcPortId,
-};
-use hermes_chain_components::traits::types::ibc::{
-    HasChannelIdType, HasPortIdType, HasSequenceType,
+use hermes_chain_components::traits::{
+    HasChannelIdType, HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence,
+    HasPacketSrcChannelId, HasPacketSrcPortId, HasPortIdType, HasSequenceType,
 };
 use hermes_runtime_components::traits::runtime::{HasRuntime, HasRuntimeType};
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
 
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf, SequenceOf};
-use crate::relay::traits::chains::{HasRelayChainTypes, HasRelayChains, PacketOf};
-use crate::relay::traits::packet_lock::{PacketLockComponent, ProvidePacketLock};
+use crate::relay::traits::{
+    HasRelayChainTypes, HasRelayChains, PacketLockComponent, PacketOf, ProvidePacketLock,
+};
 
 pub struct ProvidePacketLockWithMutex;
 

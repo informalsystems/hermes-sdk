@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::create_client::{
+use hermes_relayer_components::chain::traits::{
     CreateClientMessageOptionsTypeComponent, ProvideCreateClientMessageOptionsType,
 };
 

@@ -1432,6 +1432,7 @@ name = "hermes-celestia-test-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-chain-type-components",
  "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-runtime-components",

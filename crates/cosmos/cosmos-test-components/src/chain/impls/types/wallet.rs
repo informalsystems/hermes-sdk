@@ -1,7 +1,7 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::HasAddressType;
 use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
-use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
-use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_relayer_components::transaction::traits::HasSignerType;
 use hermes_test_components::chain::traits::types::wallet::{
     HasWalletType, ProvideWalletType, WalletSignerComponent, WalletSignerProvider,
     WalletTypeComponent,

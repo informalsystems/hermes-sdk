@@ -2,23 +2,20 @@ use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::chain_id::HasChainId;
+use hermes_chain_components::traits::HasChainId;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 
-use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenAckMessage;
-use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenAckPayload;
-use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::connection::open_ack::{
-    ConnectionOpenAckRelayer, ConnectionOpenAckRelayerComponent,
+use crate::chain::traits::{
+    CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenAckPayload, CanQueryChainHeight,
+    CanQueryClientStateWithLatestHeight,
 };
-use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::target::{
-    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+use crate::relay::traits::{
+    CanRaiseRelayChainErrors, CanSendSingleIbcMessage, CanSendTargetUpdateClientMessage,
+    ConnectionOpenAckRelayer, ConnectionOpenAckRelayerComponent, DestinationTarget,
+    HasDestinationTargetChainTypes, HasRelayChains, HasRelayClientIds, HasSourceTargetChainTypes,
+    MainSink, SourceTarget,
 };
-use crate::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 
 /**
    A base implementation of [`ConnectionOpenAckRelayer`] that relays a new connection

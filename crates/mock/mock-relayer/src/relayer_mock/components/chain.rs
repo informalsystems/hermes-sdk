@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 use hermes_logging_components::impls::ignore::IgnoreLog;
 use hermes_logging_components::traits::logger::LoggerComponent;
-use hermes_relayer_components::chain::traits::types::packets::ack::{
+use hermes_relayer_components::chain::traits::{
     AckCommitmentHashTypeProviderComponent, AcknowledgementTypeProviderComponent,
 };
 

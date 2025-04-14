@@ -1,8 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::address::HasAddressType;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
+use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
 use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
