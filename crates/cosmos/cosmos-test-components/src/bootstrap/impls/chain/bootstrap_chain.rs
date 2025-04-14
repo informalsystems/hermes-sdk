@@ -13,7 +13,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::bootstrap::traits::chain::build_chain_driver::CanBuildChainDriver;
-use crate::bootstrap::traits::chain::start_chain::CanStartChainFullNode;
+use crate::bootstrap::traits::chain::start_chain::CanStartChainFullNodes;
 use crate::bootstrap::traits::generator::generate_chain_id::CanGenerateChainId;
 use crate::bootstrap::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
 use crate::bootstrap::traits::genesis::add_genesis_wallet::CanAddWalletToGenesis;
@@ -40,7 +40,7 @@ where
         + CanAddWalletToGenesis
         + CanCollectGenesisTransactions
         + CanInitChainNodeConfig
-        + CanStartChainFullNode
+        + CanStartChainFullNodes
         + CanBuildChainDriver,
     Runtime: HasFilePathType + HasChildProcessType + HasAsyncErrorType,
     Chain: HasChainIdType + HasWalletType,
@@ -92,7 +92,7 @@ where
 
         // Start the chain full node in the background, and return the child process handle
         let chain_process = bootstrap
-            .start_chain_full_node(&chain_home_dir, &chain_config, &genesis_config)
+            .start_chain_full_nodes(&chain_home_dir, &chain_config, &genesis_config)
             .await?;
 
         // Build the chain context from the bootstrap parameters

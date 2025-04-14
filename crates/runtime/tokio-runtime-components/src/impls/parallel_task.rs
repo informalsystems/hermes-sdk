@@ -3,31 +3,21 @@ use core::task::{Context, Poll};
 use cgp::prelude::*;
 use futures::stream::{Stream, StreamExt};
 use futures::task::noop_waker;
-use hermes_async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use hermes_runtime_components::traits::task::{
     ConcurrentTaskRunner, ConcurrentTaskRunnerComponent, Task,
 };
 use tokio::task::JoinSet;
 
-pub struct TokioRunParallelTasks;
-
-#[cgp_provider(ConcurrentTaskRunnerComponent)]
-impl<Runtime> ConcurrentTaskRunner<Runtime> for TokioRunParallelTasks
+#[cgp_new_provider(ConcurrentTaskRunnerComponent)]
+impl<Runtime> ConcurrentTaskRunner<Runtime> for RunParallelTasksWithTokio
 where
-    Runtime: HasBoxedStreamType,
+    Runtime: Async,
 {
     async fn run_concurrent_tasks<T>(_runtime: &Runtime, tasks: Vec<Box<T>>)
     where
         T: Task,
     {
         run_parallel_tasks(tasks).await
-    }
-
-    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Runtime::Stream<Box<T>>)
-    where
-        T: Task,
-    {
-        run_parallel_task_stream(Runtime::to_boxed_stream(tasks)).await
     }
 }
 

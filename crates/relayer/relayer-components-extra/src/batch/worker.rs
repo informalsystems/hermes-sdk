@@ -13,9 +13,6 @@ use hermes_relayer_components::chain::traits::types::message::{
 use hermes_relayer_components::multi::traits::chain_at::HasChainAt;
 use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
 use hermes_relayer_components::relay::traits::target::RelayTarget;
-use hermes_runtime_components::traits::channel::{CanUseChannels, HasChannelTypes};
-use hermes_runtime_components::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
-use hermes_runtime_components::traits::mutex::HasMutex;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
@@ -100,7 +97,7 @@ where
         + CanUseMessageBatchChannel<Target::Chain>
         + CanProcessMessageBatches<Target>
         + for<'a> CanLog<LogBatchWorker<'a, Target>>,
-    Relay::Runtime: HasTime + HasMutex + CanSleep + CanUseChannels + HasChannelOnceTypes,
+    Relay::Runtime: HasTime + CanSleep,
 {
     async fn run_loop(&self, config: &BatchConfig, mut receiver: Relay::MessageBatchReceiver) {
         let runtime = self.runtime();
@@ -110,54 +107,56 @@ where
         let mut last_sent_time = runtime.now();
 
         loop {
-            let payload = Relay::Runtime::try_receive(&mut receiver);
+            // Poll and see if there is additional payload from the receiver.
+            // We do not block and wait for the next payload, as it may only arrive much later on.
+            // If there is no payload, we will still need to continue and process any pending messages
+            // that we have previously received.
+            let payload = receiver.try_next();
 
-            match payload {
-                Ok(m_batch) => {
-                    if let Some(batch) = m_batch {
-                        let batch_size = batch.0.len();
+            // futures::UnboundedReceiver uses `Ok(None)` to indicate that the channel has closed.
+            // We ignore errors as it indicates the sender was not ready, which will be retried later on.
+            //
+            // https://docs.rs/futures/latest/futures/channel/mpsc/struct.UnboundedReceiver.html#method.try_next
+            let channel_closed = matches!(payload, Ok(None));
 
-                        self.log(
-                            "received message batch",
-                            &LogBatchWorker {
-                                details: &format!("batch_size = {batch_size}"),
-                                log_level: LogLevel::Trace,
-                                phantom: PhantomData,
-                            },
-                        )
-                        .await;
+            if let Ok(Some(batch)) = payload {
+                let batch_size = batch.0.len();
 
-                        pending_batches.push_back(batch);
-                    }
+                self.log(
+                    "received message batch",
+                    &LogBatchWorker {
+                        details: &format!("batch_size = {batch_size}"),
+                        log_level: LogLevel::Trace,
+                        phantom: PhantomData,
+                    },
+                )
+                .await;
 
-                    let current_batch_size = pending_batches.len();
-                    let now = runtime.now();
+                pending_batches.push_back(batch);
+            }
 
-                    self.process_message_batches(
-                        config,
-                        &mut pending_batches,
-                        now,
-                        &mut last_sent_time,
-                    )
-                    .await;
+            let current_batch_size = pending_batches.len();
+            let now = runtime.now();
 
-                    if pending_batches.len() == current_batch_size {
-                        runtime.sleep(config.sleep_time).await;
-                    }
-                }
-                Err(e) => {
-                    self.log(
-                        "error in try_receive, terminating worker",
-                        &LogBatchWorker {
-                            details: &format!("error = {:?}", e),
-                            log_level: LogLevel::Error,
-                            phantom: PhantomData,
-                        },
-                    )
-                    .await;
+            self.process_message_batches(config, &mut pending_batches, now, &mut last_sent_time)
+                .await;
 
-                    return;
-                }
+            if pending_batches.len() == current_batch_size {
+                runtime.sleep(config.sleep_time).await;
+            }
+
+            if channel_closed {
+                self.log(
+                    "batch channel has closed, terminating worker",
+                    &LogBatchWorker {
+                        details: "",
+                        log_level: LogLevel::Info,
+                        phantom: PhantomData,
+                    },
+                )
+                .await;
+
+                return;
             }
         }
     }
@@ -184,8 +183,7 @@ where
         + CanUseMessageBatchChannel<Target::Chain>
         + CanPartitionMessageBatches<Target>
         + for<'a> CanLog<LogBatchWorker<'a, Target>>,
-    Relay::Runtime:
-        HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes + HasAsyncErrorType,
+    Relay::Runtime: HasTime + CanSpawnTask + HasAsyncErrorType,
     SendReadyBatchTask<Relay, Target>: Task,
 {
     async fn process_message_batches(
@@ -325,7 +323,6 @@ where
     Relay: CanUseMessageBatchChannel<Target::Chain>
         + CanSendIbcMessages<BatchWorkerSink, Target>
         + for<'a> CanLog<LogBatchWorker<'a, Target>>,
-    Relay::Runtime: CanUseChannelsOnce + CanUseChannels,
     Relay::Error: Clone,
 {
     async fn send_ready_batches(&self, ready_batches: VecDeque<Relay::BatchSubmission>) {
@@ -366,7 +363,7 @@ where
                 .await;
 
                 for (_, sender) in senders.into_iter() {
-                    let _ = Relay::Runtime::send_once(sender, Err(e.clone()));
+                    let _ = sender.send(Err(e.clone()));
                 }
             }
             Ok(all_events) => {
@@ -385,7 +382,7 @@ where
 
                 for (message_count, sender) in senders.into_iter() {
                     let events = take(&mut all_events, message_count);
-                    let _ = Relay::Runtime::send_once(sender, Ok(events));
+                    let _ = sender.send(Ok(events));
                 }
             }
         }

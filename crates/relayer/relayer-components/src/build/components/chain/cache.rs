@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::build::traits::builders::chain_builder::{ChainBuilder, ChainBuilderComponent};
 use crate::build::traits::cache::HasChainCache;
@@ -22,7 +21,7 @@ where
         index: PhantomData<I>,
         chain_id: &Chain::ChainId,
     ) -> Result<Chain, Build::Error> {
-        let mut cache = Build::Runtime::acquire_mutex(build.chain_cache()).await;
+        let mut cache = build.chain_cache().lock().await;
 
         if let Some(chain) = cache.get(chain_id) {
             Ok(chain.clone())

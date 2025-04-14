@@ -1,7 +1,10 @@
+use alloc::sync::Arc;
 use core::marker::PhantomData;
 
 use cgp::core::Async;
 use cgp::prelude::*;
+use futures::channel::mpsc::unbounded;
+use futures::lock::Mutex;
 use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
@@ -18,12 +21,6 @@ use hermes_relayer_components::relay::traits::target::{
     CounterpartyChainOf, DestinationTarget, HasDestinationTargetChainTypes,
     HasSourceTargetChainTypes, HasTargetChainTypes, RelayTarget, SourceTarget, TargetChainOf,
 };
-use hermes_runtime_components::traits::channel::{
-    CanCloneSender, CanCreateChannels, HasChannelTypes,
-};
-use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
-use hermes_runtime_components::traits::mutex::HasMutex;
-use hermes_runtime_components::traits::runtime::{HasRuntimeType, RuntimeOf};
 
 use crate::batch::traits::config::HasBatchConfig;
 use crate::batch::traits::types::{
@@ -49,7 +46,6 @@ where
         + CanBuildBatchChannel<SrcTag, DstTag, SourceTarget>
         + CanBuildBatchChannel<SrcTag, DstTag, DestinationTarget>,
     Relay: Clone
-        + HasRuntimeType
         + HasRelayChainTypes<SrcChain = SrcChain, DstChain = DstChain>
         + HasSourceTargetChainTypes
         + HasDestinationTargetChainTypes
@@ -66,7 +62,6 @@ where
         + HasMessageType
         + HasMessageResponseType
         + HasAsyncErrorType,
-    Relay::Runtime: HasChannelTypes + HasChannelOnceTypes,
 {
     async fn build_relay_from_chains(
         build: &Build,
@@ -183,7 +178,6 @@ where
         + HasMessageResponseType,
     CounterpartyChain:
         HasChainIdType<ChainId: Ord + Clone> + HasClientIdType<TargetChain, ClientId: Ord + Clone>,
-    Relay::Runtime: CanCloneSender + CanCreateChannels,
 {
     async fn build_batch_channel(
         &self,
@@ -199,9 +193,7 @@ where
         ),
         Build::Error,
     > {
-        let mutex = self.batch_sender_cache(index);
-
-        let mut sender_cache = Build::Runtime::acquire_mutex(mutex).await;
+        let mut sender_cache = self.batch_sender_cache(index).lock().await;
 
         let cache_key = (
             chain_id.clone(),
@@ -211,10 +203,12 @@ where
         );
 
         if let Some(sender) = sender_cache.get(&cache_key) {
-            Ok((<RuntimeOf<Build::Relay>>::clone_sender(sender), None))
+            Ok((sender.clone(), None))
         } else {
-            let (sender, receiver) = <RuntimeOf<Build::Relay>>::new_channel();
-            sender_cache.insert(cache_key, <RuntimeOf<Build::Relay>>::clone_sender(&sender));
+            let (sender, receiver) = unbounded();
+            let sender = Arc::new(Mutex::new(sender));
+
+            sender_cache.insert(cache_key, sender.clone());
             Ok((sender, Some(receiver)))
         }
     }

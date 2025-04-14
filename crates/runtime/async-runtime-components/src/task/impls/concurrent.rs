@@ -7,14 +7,10 @@ use hermes_runtime_components::traits::task::{
     ConcurrentTaskRunner, ConcurrentTaskRunnerComponent, Task,
 };
 
-use crate::stream::traits::boxed::HasBoxedStreamType;
-
-pub struct RunConcurrentTasks;
-
-#[cgp_provider(ConcurrentTaskRunnerComponent)]
+#[cgp_new_provider(ConcurrentTaskRunnerComponent)]
 impl<Runtime> ConcurrentTaskRunner<Runtime> for RunConcurrentTasks
 where
-    Runtime: HasBoxedStreamType,
+    Runtime: Async,
 {
     async fn run_concurrent_tasks<T>(_runtime: &Runtime, tasks: Vec<Box<T>>)
     where
@@ -22,14 +18,8 @@ where
     {
         run_concurrent_tasks(stream::iter(tasks)).await
     }
-
-    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Runtime::Stream<Box<T>>)
-    where
-        T: Task,
-    {
-        run_concurrent_tasks(Runtime::to_boxed_stream(tasks)).await
-    }
 }
+
 pub async fn run_concurrent_tasks<T>(tasks: impl Stream<Item = Box<T>>)
 where
     T: Task,

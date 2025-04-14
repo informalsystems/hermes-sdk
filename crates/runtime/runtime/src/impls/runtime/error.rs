@@ -7,7 +7,6 @@ use cgp::core::error::{
     ErrorRaiser, ErrorRaiserComponent, ErrorTypeProvider, ErrorTypeProviderComponent,
 };
 use cgp::prelude::{cgp_provider, *};
-use hermes_async_runtime_components::channel::types::ErrChannelClosed;
 use hermes_tokio_runtime_components::impls::os::child_process::PrematureChildProcessExitError;
 use hermes_tokio_runtime_components::impls::os::exec_command::{
     CommandNotFound, ExecCommandFailure,
@@ -50,13 +49,6 @@ impl ErrorRaiser<HermesRuntime, IoError> for HermesRuntimeComponents {
 impl ErrorRaiser<HermesRuntime, Utf8Error> for HermesRuntimeComponents {
     fn raise_error(e: Utf8Error) -> TokioRuntimeError {
         TokioRuntimeError::Utf8(e)
-    }
-}
-
-#[cgp_provider(ErrorRaiserComponent)]
-impl ErrorRaiser<HermesRuntime, ErrChannelClosed> for HermesRuntimeComponents {
-    fn raise_error(_e: ErrChannelClosed) -> TokioRuntimeError {
-        TokioRuntimeError::ChannelClosed
     }
 }
 
