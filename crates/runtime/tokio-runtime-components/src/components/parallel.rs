@@ -33,7 +33,7 @@ mod preset {
     };
     use crate::impls::os::exec_command::TokioExecCommand;
     use crate::impls::os::reserve_port::TokioReserveTcpPort;
-    use crate::impls::parallel_task::TokioRunParallelTasks;
+    use crate::impls::parallel_task::RunParallelTasksWithTokio;
     use crate::impls::random::ThreadRandomGenerator;
     use crate::impls::sleep::TokioSleep;
     use crate::impls::spawn::TokioSpawnTask;
@@ -45,7 +45,7 @@ mod preset {
             TimeComponent: ProvideStdTime,
             StreamTypeComponent: ProvideBoxedStreamType,
             StreamMapperComponent: BoxedStreamMapper,
-            ConcurrentTaskRunnerComponent: TokioRunParallelTasks,
+            ConcurrentTaskRunnerComponent: RunParallelTasksWithTokio,
             TaskSpawnerComponent: TokioSpawnTask,
             FilePathTypeComponent: ProvideStdPathType,
             ChildProcessTypeComponent: ProvideTokioChildProcessType,
