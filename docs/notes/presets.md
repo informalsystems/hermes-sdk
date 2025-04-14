@@ -361,7 +361,7 @@ MappingA::with_components! {
 
 When inheriting from presets, we sometimes want to filter out some of the keys, so that we can override them with some other values. This may also be useful in solving the "diamond inheritance" problem, which would just result in errors on overlapping instances in Rust.
 
-The `Preset::with_compoennts!` macro accepts an optional list of key filters to exclude the keys from the macro expansion. For example, we can write:
+The `Preset::with_components!` macro accepts an optional list of key filters to exclude the keys from the macro expansion. For example, we can write:
 
 ```rust
 MappingA::with_components! {
