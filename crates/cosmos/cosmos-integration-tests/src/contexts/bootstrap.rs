@@ -4,7 +4,7 @@ use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_chain_components::types::DynamicGasConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;

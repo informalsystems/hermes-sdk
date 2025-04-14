@@ -7,8 +7,8 @@ use ibc_proto::ibc::core::connection::v1::{
     Counterparty, MsgConnectionOpenInit as ProtoMsgConnectionOpenInit, Version,
 };
 
-use crate::methods::encode::encode_to_any;
-use crate::traits::message::DynCosmosMessage;
+use crate::methods::encode_to_any;
+use crate::traits::DynCosmosMessage;
 
 const TYPE_URL: &str = "/ibc.core.connection.v1.MsgConnectionOpenInit";
 

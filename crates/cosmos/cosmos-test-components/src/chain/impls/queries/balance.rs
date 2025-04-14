@@ -2,7 +2,7 @@ use core::num::ParseIntError;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountType, HasDenomType};
-use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
+use hermes_cosmos_chain_components::traits::HasGrpcAddress;
 use hermes_test_components::chain::traits::{BalanceQuerier, BalanceQuerierComponent};
 use http::uri::InvalidUri;
 use http::Uri;

@@ -10,7 +10,7 @@ use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
 use prost_types::Any;
 
-use crate::types::tendermint::TendermintClientState;
+use crate::types::TendermintClientState;
 
 pub struct ProvideTendermintClientState;
 

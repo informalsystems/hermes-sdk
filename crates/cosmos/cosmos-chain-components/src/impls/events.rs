@@ -19,18 +19,13 @@ use ibc::core::client::types::events::CLIENT_ID_ATTRIBUTE_KEY;
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, ConnectionId};
 use tendermint::abci::Event as AbciEvent;
 
-use crate::types::events::channel::{
+use crate::types::{
     try_chan_open_init_from_abci_event, try_chan_open_try_from_abci_event,
-    try_send_packet_from_abci_event, try_write_acknowledgment_from_abci_event,
-    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
-};
-use crate::types::events::client::CosmosCreateClientEvent;
-use crate::types::events::connection::{
     try_conn_open_init_from_abci_event, try_conn_open_try_from_abci_event,
-    CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
+    try_send_packet_from_abci_event, try_write_acknowledgment_from_abci_event,
+    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent, CosmosConnectionOpenInitEvent,
+    CosmosConnectionOpenTryEvent, CosmosCreateClientEvent, SendPacketEvent, WriteAckEvent,
 };
-use crate::types::events::send_packet::SendPacketEvent;
-use crate::types::events::write_acknowledgment::WriteAckEvent;
 
 pub struct ProvideCosmosEvents;
 

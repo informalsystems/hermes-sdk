@@ -19,12 +19,11 @@ use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc_proto::ibc::core::channel::v1::{Channel, Counterparty as ChannelCounterparty};
 
-use crate::traits::message::{CosmosMessage, ToCosmosMessage};
-use crate::types::channel::CosmosInitChannelOptions;
-use crate::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
-use crate::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
-use crate::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
-use crate::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
+use crate::traits::{CosmosMessage, ToCosmosMessage};
+use crate::types::{
+    CosmosChannelOpenAckMessage, CosmosChannelOpenConfirmMessage, CosmosChannelOpenInitMessage,
+    CosmosChannelOpenTryMessage, CosmosInitChannelOptions,
+};
 
 pub struct BuildCosmosChannelHandshakeMessage;
 

@@ -12,7 +12,7 @@ use ibc_proto::ibc::core::client::v1::QueryConsensusStateHeightsRequest;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::traits::grpc_address::HasGrpcAddress;
+use crate::traits::HasGrpcAddress;
 
 pub struct QueryConsensusStateHeightsFromGrpc;
 

@@ -4,7 +4,7 @@ use std::ops::Deref;
 use std::path::Path;
 
 use hermes_cli_framework::config::Config;
-use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
+use hermes_cosmos_chain_components::impls::RelayerConfig;
 
 pub struct HermesConfig {
     pub config: RelayerConfig,

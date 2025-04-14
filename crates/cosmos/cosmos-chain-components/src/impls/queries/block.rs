@@ -7,7 +7,7 @@ use tendermint::block::{Block, Height as BlockHeight, Id as BlockId};
 use tendermint::Error as TendermintError;
 use tendermint_rpc::{Client, Error as RpcError};
 
-use crate::traits::rpc_client::HasRpcClient;
+use crate::traits::HasRpcClient;
 
 pub struct QueryCometBlock;
 

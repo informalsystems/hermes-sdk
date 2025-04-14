@@ -12,11 +12,8 @@ use tonic::codegen::http::Uri;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::traits::convert_gas_to_fee::CanConvertGasToFee;
-use crate::traits::gas_config::HasGasConfig;
-use crate::traits::grpc_address::HasGrpcAddress;
-use crate::traits::rpc_client::HasRpcClient;
-use crate::types::transaction::signed_tx::SignedTx;
+use crate::traits::{CanConvertGasToFee, HasGasConfig, HasGrpcAddress, HasRpcClient};
+use crate::types::SignedTx;
 
 pub struct EstimateCosmosTxFee;
 

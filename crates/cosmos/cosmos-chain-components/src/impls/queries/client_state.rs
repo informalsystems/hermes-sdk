@@ -19,7 +19,7 @@ use ibc_proto::ibc::core::client::v1::{
 use prost::{DecodeError, Message};
 use prost_types::Any;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryCosmosClientStateFromAbci;
 

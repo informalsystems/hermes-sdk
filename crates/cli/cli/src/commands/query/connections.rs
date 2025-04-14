@@ -5,7 +5,7 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
+use hermes_cosmos_chain_components::traits::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::CanQueryClientStateWithLatestHeight;
 use http::Uri;

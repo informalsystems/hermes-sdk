@@ -3,7 +3,7 @@ use std::num::ParseIntError;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasMessageResponseEvents;
-use hermes_cosmos_chain_components::types::event::AbciEvent;
+use hermes_cosmos_chain_components::types::AbciEvent;
 use hermes_relayer_components::chain::traits::CanSendSingleMessage;
 use hermes_test_components::chain::traits::HasProposalIdType;
 

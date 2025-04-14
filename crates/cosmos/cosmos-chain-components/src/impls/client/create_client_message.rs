@@ -10,8 +10,8 @@ use hermes_relayer_components::chain::traits::{
 };
 use prost_types::Any;
 
-use crate::traits::message::{CosmosMessage, ToCosmosMessage};
-use crate::types::messages::client::create::CosmosCreateClientMessage;
+use crate::traits::{CosmosMessage, ToCosmosMessage};
+use crate::types::CosmosCreateClientMessage;
 
 pub struct BuildAnyCreateClientMessage;
 

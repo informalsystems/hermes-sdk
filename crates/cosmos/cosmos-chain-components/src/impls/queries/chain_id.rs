@@ -14,7 +14,7 @@ use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc_proto::Protobuf;
 use tendermint_proto::Error as TendermintProtoError;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryChainIdFromAbci;
 

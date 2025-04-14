@@ -44,9 +44,8 @@ use tendermint::block::{Block, Id as BlockId};
 use tendermint::{Hash, Time};
 use time::OffsetDateTime;
 
-use crate::traits::message::CosmosMessage;
-use crate::types::commitment_proof::UseCosmosCommitmentProof;
-use crate::types::status::ChainStatus;
+use crate::traits::CosmosMessage;
+use crate::types::{ChainStatus, UseCosmosCommitmentProof};
 
 pub struct ProvideCosmosChainTypes;
 

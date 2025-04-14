@@ -12,16 +12,10 @@ use ibc_proto::cosmos::tx::v1beta1::{AuthInfo, Fee, ModeInfo, SignDoc, SignerInf
 use ibc_proto::google::protobuf::Any;
 use prost::{EncodeError, Message};
 
-use crate::traits::message::CosmosMessage;
-use crate::traits::tx_extension_options::HasTxExtensionOptions;
-use crate::types::key_types::secp256k1::Secp256k1KeyPair;
-use crate::types::transaction::account::Account;
-use crate::types::transaction::memo::Memo;
-use crate::types::transaction::signed_tx::SignedTx;
+use crate::traits::{CosmosMessage, HasTxExtensionOptions};
+use crate::types::{Account, Memo, Secp256k1KeyPair, SignedTx};
 
-pub struct EncodeCosmosTx;
-
-#[cgp_provider(TxEncoderComponent)]
+#[cgp_new_provider(TxEncoderComponent)]
 impl<Chain> TxEncoder<Chain> for EncodeCosmosTx
 where
     Chain: HasSignerType<Signer = Secp256k1KeyPair>

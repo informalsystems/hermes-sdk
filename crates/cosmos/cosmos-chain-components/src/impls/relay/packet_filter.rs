@@ -8,7 +8,7 @@ use hermes_relayer_components::chain::traits::{
 };
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 
-use crate::types::messages::packet::packet_filter::PacketFilterConfig;
+use crate::types::PacketFilterConfig;
 
 pub struct FilterPacketWithConfig<Tag>(pub PhantomData<Tag>);
 

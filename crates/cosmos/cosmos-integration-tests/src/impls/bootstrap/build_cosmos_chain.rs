@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::traits::grpc_address::CanQueryGrpcServiceStatus;
+use hermes_cosmos_chain_components::traits::CanQueryGrpcServiceStatus;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;

@@ -18,11 +18,10 @@ use tendermint::block::Height as TendermintHeight;
 use tendermint::error::Error as TendermintError;
 use tendermint_rpc::{Client, Error as TendermintRpcError};
 
-use crate::traits::rpc_client::HasRpcClient;
-use crate::traits::unbonding_period::CanQueryUnbondingPeriod;
-use crate::types::payloads::client::{CosmosCreateClientOptions, CosmosCreateClientPayload};
-use crate::types::status::ChainStatus;
-use crate::types::tendermint::TendermintClientState;
+use crate::traits::{CanQueryUnbondingPeriod, HasRpcClient};
+use crate::types::{
+    ChainStatus, CosmosCreateClientOptions, CosmosCreateClientPayload, TendermintClientState,
+};
 
 pub struct BuildCosmosCreateClientPayload;
 

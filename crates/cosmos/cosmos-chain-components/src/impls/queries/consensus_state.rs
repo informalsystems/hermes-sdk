@@ -10,7 +10,7 @@ use ibc::cosmos_host::IBC_QUERY_PATH;
 use prost::{DecodeError, Message};
 use prost_types::Any;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryCosmosConsensusStateFromAbci;
 

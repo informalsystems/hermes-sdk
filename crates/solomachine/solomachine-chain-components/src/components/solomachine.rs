@@ -4,9 +4,9 @@ mod preset {
     use hermes_chain_type_components::traits::{
         MessageResponseEventsGetterComponent, MessageResponseTypeComponent, TimeTypeComponent,
     };
-    use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
-    use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
-    use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
+    use hermes_cosmos_chain_components::impls::{
+        BuildCosmosUpdateClientMessage, CosmosPacketFieldReader, ProvideCosmosChainTypes,
+    };
     use hermes_relayer_components::chain::traits::{
         AckPacketPayloadTypeProviderComponent, ChainIdTypeProviderComponent,
         ChainStatusQuerierComponent, ChainStatusTypeComponent, ChannelEndTypeComponent,

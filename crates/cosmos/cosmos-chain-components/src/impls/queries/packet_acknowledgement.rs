@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::{
 };
 use ibc::cosmos_host::IBC_QUERY_PATH;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryPacketAcknowledgementFromAbci;
 

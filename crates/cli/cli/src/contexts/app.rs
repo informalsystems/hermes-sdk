@@ -80,8 +80,8 @@ use hermes_cli_components::traits::output::{
 use hermes_cli_components::traits::parse::ArgParserComponent;
 use hermes_cli_components::traits::types::config::ConfigTypeComponent;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
-use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
+use hermes_cosmos_chain_components::impls::RelayerConfig;
+use hermes_cosmos_chain_components::types::CosmosCreateClientOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;

@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
+use hermes_cosmos_chain_components::traits::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::types::CosmosCreateClientMessage;
 use hermes_encoding_components::traits::{CanConvert, HasDefaultEncoding, HasEncodedType};
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::any::Any;

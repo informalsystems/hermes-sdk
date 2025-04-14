@@ -9,9 +9,7 @@ use prost::Message as _;
 use tendermint::hash::Hash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
-use crate::types::key_types::secp256k1::Secp256k1KeyPair;
-use crate::types::transaction::account::Account;
-use crate::types::transaction::signed_tx::SignedTx;
+use crate::types::{Account, Secp256k1KeyPair, SignedTx};
 
 pub struct UseCosmosTransactionTypes;
 

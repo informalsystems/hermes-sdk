@@ -1,9 +1,9 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField, WithField};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
-use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
-use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
+use hermes_cosmos_chain_components::types::{
+    CosmosCreateClientOptions, CosmosInitChannelOptions, CosmosInitConnectionOptions,
+};
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;

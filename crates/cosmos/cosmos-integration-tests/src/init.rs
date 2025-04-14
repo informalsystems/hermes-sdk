@@ -3,8 +3,7 @@ use std::env;
 use std::str::FromStr;
 
 use eyre::Report;
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
+use hermes_cosmos_chain_components::types::{DynamicGasConfig, PacketFilterConfig};
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_runtime::types::runtime::HermesRuntime;

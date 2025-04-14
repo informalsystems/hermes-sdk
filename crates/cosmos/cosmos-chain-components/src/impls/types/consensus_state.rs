@@ -7,7 +7,7 @@ use hermes_relayer_components::chain::traits::{
 use prost_types::Any;
 use tendermint::Time;
 
-use crate::types::tendermint::TendermintConsensusState;
+use crate::types::TendermintConsensusState;
 
 pub struct ProvideTendermintConsensusState;
 

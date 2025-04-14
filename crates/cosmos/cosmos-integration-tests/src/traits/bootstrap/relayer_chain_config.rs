@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
+use hermes_cosmos_chain_components::impls::CosmosChainConfig;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_test_components::chain::traits::{HasWalletType, WalletOf};

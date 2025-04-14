@@ -10,8 +10,8 @@ use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::broadcast::tx_sync::Response;
 use tendermint_rpc::{Client, Error as RpcError};
 
-use crate::traits::rpc_client::HasRpcClient;
-use crate::types::transaction::signed_tx::SignedTx;
+use crate::traits::HasRpcClient;
+use crate::types::SignedTx;
 
 pub struct BroadcastCosmosTx;
 

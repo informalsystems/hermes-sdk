@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
-use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::traits::{CosmosMessage, ToCosmosMessage};
 use hermes_relayer_components::chain::traits::{
     HasChannelIdType, HasHeightFields, HasMessageType, HasPortIdType, HasTimeoutType,
 };

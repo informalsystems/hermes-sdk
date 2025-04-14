@@ -3,26 +3,14 @@ use core::ops::Deref;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
-use hermes_cosmos_chain_components::traits::abci_query::CanQueryAbci;
-use hermes_cosmos_chain_components::traits::gas_config::{
-    GasConfigGetter, GasConfigGetterComponent,
-};
-use hermes_cosmos_chain_components::traits::grpc_address::{
-    GrpcAddressGetter, GrpcAddressGetterComponent,
-};
-use hermes_cosmos_chain_components::traits::rpc_client::{
-    RpcClientGetter, RpcClientGetterComponent,
-};
-use hermes_cosmos_chain_components::traits::tx_extension_options::{
+use hermes_cosmos_chain_components::traits::{
+    CanQueryAbci, CanQueryUnbondingPeriod, GasConfigGetter, GasConfigGetterComponent,
+    GrpcAddressGetter, GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
     TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent,
 };
-use hermes_cosmos_chain_components::traits::unbonding_period::CanQueryUnbondingPeriod;
-use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
-use hermes_cosmos_chain_components::types::payloads::client::{
-    CosmosCreateClientPayload, CosmosUpdateClientPayload,
-};
-use hermes_cosmos_chain_components::types::tendermint::{
-    TendermintClientState, TendermintConsensusState,
+use hermes_cosmos_chain_components::types::{
+    CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig, TendermintClientState,
+    TendermintConsensusState,
 };
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;

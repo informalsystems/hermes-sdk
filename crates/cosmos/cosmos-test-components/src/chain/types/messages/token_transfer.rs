@@ -1,5 +1,5 @@
-use hermes_cosmos_chain_components::methods::encode::encode_to_any;
-use hermes_cosmos_chain_components::traits::message::DynCosmosMessage;
+use hermes_cosmos_chain_components::methods::encode_to_any;
+use hermes_cosmos_chain_components::traits::DynCosmosMessage;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use ibc::primitives::{Signer, Timestamp};

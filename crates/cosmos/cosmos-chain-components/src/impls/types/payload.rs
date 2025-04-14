@@ -12,7 +12,7 @@ use hermes_relayer_components::chain::traits::{
     TimeoutUnorderedPacketPayloadTypeComponent, UpdateClientPayloadTypeComponent,
 };
 
-use crate::types::payloads::client::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
+use crate::types::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
 
 pub struct ProvideCosmosPayloadTypes;
 

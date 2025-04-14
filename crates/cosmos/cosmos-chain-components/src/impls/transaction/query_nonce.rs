@@ -7,9 +7,8 @@ use prost::DecodeError;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::traits::grpc_address::HasGrpcAddress;
-use crate::types::key_types::secp256k1::Secp256k1KeyPair;
-use crate::types::transaction::account::{query_account, Account};
+use crate::traits::HasGrpcAddress;
+use crate::types::{query_account, Account, Secp256k1KeyPair};
 
 pub struct QueryCosmosAccount;
 

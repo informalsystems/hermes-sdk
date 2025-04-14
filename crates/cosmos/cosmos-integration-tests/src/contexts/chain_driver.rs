@@ -4,7 +4,7 @@ use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
+use hermes_cosmos_chain_components::impls::RelayerConfig;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::{
     ChainCommandPathGetter, ChainCommandPathGetterComponent,

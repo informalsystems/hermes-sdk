@@ -1,9 +1,7 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::encoding::components::CosmosClientEncodingComponents;
-use hermes_cosmos_chain_components::types::tendermint::{
-    TendermintClientState, TendermintConsensusState,
-};
+use hermes_cosmos_chain_components::encoding::CosmosClientEncodingComponents;
+use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
 use hermes_encoding_components::impls::GetDefaultEncoding;
 use hermes_encoding_components::traits::{
     CanConvertBothWays, CanEncodeAndDecode, CanEncodeAndDecodeMut, DefaultEncodingGetter,

@@ -9,8 +9,8 @@ use tendermint::block::Height as TmHeight;
 use tendermint::Error as TmError;
 use tendermint_rpc::{Client, Error as RpcError};
 
-use crate::traits::rpc_client::HasRpcClient;
-use crate::types::event::CosmosEvent;
+use crate::traits::HasRpcClient;
+use crate::types::CosmosEvent;
 
 pub struct QueryCosmosBlockEvents;
 

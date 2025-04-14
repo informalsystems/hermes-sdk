@@ -4,7 +4,7 @@ use cgp::prelude::*;
 use hermes_cli_components::traits::bootstrap::{
     BootstrapLoader, BootstrapLoaderComponent, HasBootstrapType,
 };
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_chain_components::types::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::bootstrap::{
     CosmosBootstrap, CosmosBootstrapFields,
 };

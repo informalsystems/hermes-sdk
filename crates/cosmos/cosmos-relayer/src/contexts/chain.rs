@@ -10,36 +10,18 @@ use hermes_chain_type_components::traits::{
     ChainIdGetterComponent, HasEventType, HasMessageResponseType,
     MessageResponseEventsGetterComponent,
 };
-use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
-use hermes_cosmos_chain_components::traits::eip::eip_query::EipQuerierComponent;
-use hermes_cosmos_chain_components::traits::gas_config::{
-    GasConfigGetter, GasConfigGetterComponent,
+use hermes_cosmos_chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_chain_components::traits::{
+    EipQuerierComponent, GasConfigGetter, GasConfigGetterComponent, GrpcAddressGetter,
+    GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
+    TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent, UnbondingPeriodQuerierComponent,
 };
-use hermes_cosmos_chain_components::traits::grpc_address::{
-    GrpcAddressGetter, GrpcAddressGetterComponent,
+use hermes_cosmos_chain_components::types::{
+    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent, CosmosCommitmentProof,
+    CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent, CosmosCreateClientEvent,
+    CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig,
+    PacketFilterConfig, Secp256k1KeyPair, TendermintClientState,
 };
-use hermes_cosmos_chain_components::traits::rpc_client::{
-    RpcClientGetter, RpcClientGetterComponent,
-};
-use hermes_cosmos_chain_components::traits::tx_extension_options::{
-    TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent,
-};
-use hermes_cosmos_chain_components::traits::unbonding_period::UnbondingPeriodQuerierComponent;
-use hermes_cosmos_chain_components::types::commitment_proof::CosmosCommitmentProof;
-use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
-use hermes_cosmos_chain_components::types::events::channel::{
-    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
-};
-use hermes_cosmos_chain_components::types::events::client::CosmosCreateClientEvent;
-use hermes_cosmos_chain_components::types::events::connection::{
-    CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
-};
-use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
-use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
-use hermes_cosmos_chain_components::types::payloads::client::{
-    CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload,
-};
-use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
 use hermes_encoding_components::traits::{

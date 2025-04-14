@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::{
 };
 use ibc::core::client::types::Height;
 
-use crate::traits::message::CosmosMessage;
+use crate::traits::CosmosMessage;
 
 pub struct GetCosmosCounterpartyMessageHeight;
 

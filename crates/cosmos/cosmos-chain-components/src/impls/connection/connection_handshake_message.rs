@@ -24,12 +24,11 @@ use ibc::core::connection::types::ConnectionEnd;
 use ibc_proto::ibc::core::connection::v1::Version;
 use prost_types::Any;
 
-use crate::traits::message::{CosmosMessage, ToCosmosMessage};
-use crate::types::connection::CosmosInitConnectionOptions;
-use crate::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage;
-use crate::types::messages::connection::open_confirm::CosmosConnectionOpenConfirmMessage;
-use crate::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
-use crate::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
+use crate::traits::{CosmosMessage, ToCosmosMessage};
+use crate::types::{
+    CosmosConnectionOpenAckMessage, CosmosConnectionOpenConfirmMessage,
+    CosmosConnectionOpenInitMessage, CosmosConnectionOpenTryMessage, CosmosInitConnectionOptions,
+};
 
 pub struct BuildCosmosConnectionHandshakeMessage;
 

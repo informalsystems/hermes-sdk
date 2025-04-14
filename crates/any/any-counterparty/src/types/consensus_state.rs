@@ -1,4 +1,4 @@
-use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
+use hermes_cosmos_chain_components::types::TendermintConsensusState;
 use serde::Serialize;
 
 #[derive(Clone, Debug, Serialize)]

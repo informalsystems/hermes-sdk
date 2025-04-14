@@ -7,7 +7,7 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_chain_components::types::key_types::keyring::KeyRing;
+use hermes_cosmos_chain_components::types::KeyRing;
 use ibc::core::host::types::identifiers::ChainId;
 
 use crate::contexts::app::HermesApp;

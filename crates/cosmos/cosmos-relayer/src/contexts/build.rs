@@ -12,11 +12,10 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use eyre::{eyre, Report};
 use futures::lock::Mutex;
-use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
-use hermes_cosmos_chain_components::types::key_types::secp256k1::{
-    Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
+use hermes_cosmos_chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_chain_components::types::{
+    PacketFilterConfig, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
 };
-use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
 use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::{
     BiRelayFromRelayBuilder, BiRelayFromRelayBuilderComponent,

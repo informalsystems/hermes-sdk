@@ -8,8 +8,8 @@ use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::ChainId;
 use tendermint_rpc::{Client, Error as TendermintRpcError};
 
-use crate::traits::rpc_client::HasRpcClient;
-use crate::types::status::ChainStatus;
+use crate::traits::HasRpcClient;
+use crate::types::ChainStatus;
 
 pub struct QueryCosmosChainStatus;
 

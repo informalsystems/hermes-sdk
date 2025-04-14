@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
+use hermes_cosmos_chain_components::traits::HasGrpcAddress;
 use hermes_test_components::chain::traits::{
     HasProposalIdType, HasProposalStatusType, ProposalStatusQuerier, ProposalStatusQuerierComponent,
 };

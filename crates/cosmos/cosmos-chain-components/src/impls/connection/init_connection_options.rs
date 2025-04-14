@@ -3,7 +3,7 @@ use hermes_relayer_components::chain::traits::{
     InitConnectionOptionsTypeComponent, ProvideInitConnectionOptionsType,
 };
 
-use crate::types::connection::CosmosInitConnectionOptions;
+use crate::types::CosmosInitConnectionOptions;
 
 pub struct ProvideCosmosInitConnectionOptionsType;
 

@@ -7,9 +7,8 @@ use ibc::core::host::types::identifiers::ClientId;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use prost_types::Any;
 
-use crate::traits::message::{CosmosMessage, ToCosmosMessage};
-use crate::types::messages::client::update::CosmosUpdateClientMessage;
-use crate::types::payloads::client::CosmosUpdateClientPayload;
+use crate::traits::{CosmosMessage, ToCosmosMessage};
+use crate::types::{CosmosUpdateClientMessage, CosmosUpdateClientPayload};
 
 pub struct BuildCosmosUpdateClientMessage;
 

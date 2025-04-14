@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
+use hermes_cosmos_chain_components::types::TendermintConsensusState;
 use hermes_encoding_components::traits::{
     CanDecode, Converter, ConverterComponent, Decoder, DecoderComponent, HasEncodedType, HasSchema,
 };

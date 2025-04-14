@@ -2,7 +2,7 @@ use cgp::prelude::*;
 use hermes_cli_components::traits::build::{BuilderLoader, BuilderLoaderComponent, HasBuilderType};
 use hermes_cli_components::traits::config::load_config::CanLoadConfig;
 use hermes_cli_components::traits::types::config::HasConfigType;
-use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
+use hermes_cosmos_chain_components::impls::RelayerConfig;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::HasRuntime;

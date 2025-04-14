@@ -7,9 +7,9 @@ use ibc_proto::cosmos::tx::v1beta1::Fee;
 use num_bigint::BigInt;
 use num_rational::BigRational;
 
-use crate::traits::convert_gas_to_fee::{GasToFeeConverter, GasToFeeConverterComponent};
-use crate::traits::eip::eip_query::CanQueryEipBaseFee;
-use crate::traits::gas_config::HasGasConfig;
+use crate::traits::{
+    CanQueryEipBaseFee, GasToFeeConverter, GasToFeeConverterComponent, HasGasConfig,
+};
 
 pub struct StaticConvertCosmosGasToFee;
 

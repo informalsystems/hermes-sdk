@@ -3,7 +3,7 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
+use hermes_cosmos_chain_components::traits::HasGrpcAddress;
 use http::Uri;
 use ibc::core::channel::types::proto::v1::query_client::QueryClient;
 use ibc::core::channel::types::proto::v1::QueryChannelClientStateRequest;

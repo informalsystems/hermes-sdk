@@ -1,8 +1,6 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAmountType;
-use hermes_cosmos_chain_components::traits::message::{
-    CosmosMessage, DynCosmosMessage, ToCosmosMessage,
-};
+use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
 use hermes_relayer_components::chain::traits::HasMessageType;
 use hermes_test_components::chain::traits::{
     DepositProposalMessageBuilder, DepositProposalMessageBuilderComponent, HasProposalIdType,

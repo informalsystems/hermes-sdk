@@ -7,9 +7,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use eyre::eyre;
-use hermes_cosmos_chain_components::types::tendermint::{
-    TendermintClientState, TendermintConsensusState,
-};
+use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;

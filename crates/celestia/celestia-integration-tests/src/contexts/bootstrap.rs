@@ -22,7 +22,7 @@ use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::{
     BridgeDriverTypeComponent, ProvideBridgeDriverType,
 };
 use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_chain_components::types::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;

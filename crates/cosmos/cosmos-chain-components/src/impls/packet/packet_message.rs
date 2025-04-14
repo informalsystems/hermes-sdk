@@ -13,10 +13,10 @@ use ibc::core::channel::types::packet::Packet;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 
-use crate::traits::message::{CosmosMessage, ToCosmosMessage};
-use crate::types::messages::packet::ack::CosmosAckPacketMessage;
-use crate::types::messages::packet::receive::CosmosReceivePacketMessage;
-use crate::types::messages::packet::timeout::CosmosTimeoutPacketMessage;
+use crate::traits::{CosmosMessage, ToCosmosMessage};
+use crate::types::{
+    CosmosAckPacketMessage, CosmosReceivePacketMessage, CosmosTimeoutPacketMessage,
+};
 
 pub struct BuildCosmosPacketMessages;
 

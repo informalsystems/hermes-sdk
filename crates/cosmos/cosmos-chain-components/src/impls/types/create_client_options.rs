@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::{
     ProvideCreateClientMessageOptionsType, ProvideCreateClientPayloadOptionsType,
 };
 
-use crate::types::payloads::client::CosmosCreateClientOptions;
+use crate::types::CosmosCreateClientOptions;
 
 pub struct ProvideCosmosCreateClientSettings;
 

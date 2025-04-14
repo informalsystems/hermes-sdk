@@ -6,7 +6,7 @@ use cgp::core::field::UseField;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
+use hermes_cosmos_chain_components::types::PacketFilterConfig;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_logging_components::traits::logger::{CanLog, LoggerComponent};

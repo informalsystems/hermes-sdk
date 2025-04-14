@@ -1,6 +1,6 @@
 use cgp::core::Async;
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::status::Time;
+use hermes_cosmos_chain_components::types::Time;
 use hermes_relayer_components::chain::traits::{
     ConsensusStateFieldComponent, ConsensusStateFieldGetter, ConsensusStateTypeComponent,
     HasConsensusStateType, HasTimeType, ProvideConsensusStateType,

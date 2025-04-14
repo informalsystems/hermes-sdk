@@ -12,7 +12,7 @@ use tendermint_rpc::endpoint::tx::Response as TxResponse;
 use tendermint_rpc::query::Query;
 use tendermint_rpc::{Client, Error as TendermintRpcError, Order};
 
-use crate::traits::rpc_client::HasRpcClient;
+use crate::traits::HasRpcClient;
 
 #[cgp_new_provider(TxResponseQuerierComponent)]
 impl<Chain> TxResponseQuerier<Chain> for QueryCosmosTxResponse

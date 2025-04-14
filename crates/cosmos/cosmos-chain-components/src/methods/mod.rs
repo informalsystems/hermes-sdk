@@ -1,1 +1,2 @@
-pub mod encode;
+mod encode;
+pub use encode::*;

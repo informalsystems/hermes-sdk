@@ -9,9 +9,8 @@ use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_components::traits::command::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
-use hermes_cosmos_chain_components::types::key_types::keyring::KeyRing;
-use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
+use hermes_cosmos_chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_chain_components::types::{KeyRing, Secp256k1KeyPair};
 use ibc::core::host::types::identifiers::ChainId;
 use tracing::warn;
 

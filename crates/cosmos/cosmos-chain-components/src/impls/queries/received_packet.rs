@@ -10,7 +10,7 @@ use ibc_proto::ibc::core::channel::v1::QueryUnreceivedPacketsRequest;
 use tonic::transport::Error as TransportError;
 use tonic::{Request, Status};
 
-use crate::traits::grpc_address::HasGrpcAddress;
+use crate::traits::HasGrpcAddress;
 
 pub struct QueryCosmosPacketIsReceived;
 

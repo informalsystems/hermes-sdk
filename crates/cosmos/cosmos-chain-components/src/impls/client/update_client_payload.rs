@@ -14,9 +14,8 @@ use ibc::core::client::types::Height;
 use tendermint::block::Height as TmHeight;
 use tendermint_rpc::Client;
 
-use crate::traits::rpc_client::HasRpcClient;
-use crate::types::payloads::client::CosmosUpdateClientPayload;
-use crate::types::tendermint::TendermintClientState;
+use crate::traits::HasRpcClient;
+use crate::types::{CosmosUpdateClientPayload, TendermintClientState};
 
 pub struct BuildTendermintUpdateClientPayload;
 

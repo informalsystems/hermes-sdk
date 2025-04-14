@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
+use hermes_cosmos_chain_components::types::Secp256k1KeyPair;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::exec_command::{CanExecCommand, ExecOutput};
