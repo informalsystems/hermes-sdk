@@ -1,4 +1,3 @@
-pub mod channel;
 pub mod fs;
 pub mod os;
 pub mod parallel_task;
