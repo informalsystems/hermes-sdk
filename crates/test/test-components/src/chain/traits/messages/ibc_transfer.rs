@@ -7,7 +7,7 @@ use hermes_relayer_components::chain::traits::{
     HasChannelIdType, HasHeightType, HasMessageType, HasPortIdType, HasTimeoutType,
 };
 
-use crate::chain::traits::types::memo::HasMemoType;
+use crate::chain::traits::HasMemoType;
 
 #[cgp_component {
   provider: IbcTokenTransferMessageBuilder,

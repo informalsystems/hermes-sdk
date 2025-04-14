@@ -5,8 +5,7 @@ use hermes_relayer_components::chain::traits::{CanQueryChainHeight, HasHeightFie
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
-use crate::chain_driver::traits::types::chain::HasChain;
-use crate::chain_driver::traits::wait::{ChainStartupWaiter, ChainStartupWaiterComponent};
+use crate::chain_driver::traits::{ChainStartupWaiter, ChainStartupWaiterComponent, HasChain};
 
 pub struct WaitChainReachHeight<const H: u64>;
 

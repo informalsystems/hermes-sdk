@@ -1,1 +1,2 @@
-pub mod binary_channel;
+mod binary_channel;
+pub use binary_channel::*;

@@ -2,10 +2,9 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAmountType;
 use hermes_runtime_components::traits::random::CanGenerateRandom;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain_driver::traits::fields::amount::{
-    RandomAmountGenerator, RandomAmountGeneratorComponent,
+use hermes_test_components::chain_driver::traits::{
+    HasChainType, RandomAmountGenerator, RandomAmountGeneratorComponent,
 };
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 use crate::chain::types::amount::Amount;
 

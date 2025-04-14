@@ -10,7 +10,7 @@ use hermes_logging_components::types::level::{LevelDebug, LevelTrace, LevelWarn}
 use hermes_relayer_components::chain::traits::{CanQueryChainStatus, HasChainId, HasPollInterval};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain_driver::traits::HasChainType;
 
 use crate::traits::bootstrap::build_chain::{
     ChainBuilderWithNodeConfig, ChainBuilderWithNodeConfigComponent,

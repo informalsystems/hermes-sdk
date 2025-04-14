@@ -9,7 +9,7 @@ use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::Dyna
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::HermesError;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use hermes_test_components::bootstrap::traits::CanBootstrapChain;
 use tokio::runtime::Builder;
 
 #[test]

@@ -2,11 +2,9 @@ use core::fmt::Debug;
 
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
-use hermes_test_components::chain::traits::proposal::query_status::{
-    ProposalStatusQuerier, ProposalStatusQuerierComponent,
+use hermes_test_components::chain::traits::{
+    HasProposalIdType, HasProposalStatusType, ProposalStatusQuerier, ProposalStatusQuerierComponent,
 };
-use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
-use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc_proto::cosmos::gov::v1::query_client::QueryClient;

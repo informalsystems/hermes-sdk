@@ -3,11 +3,10 @@ use hermes_cosmos_chain_components::traits::message::{
     CosmosMessage, DynCosmosMessage, ToCosmosMessage,
 };
 use hermes_relayer_components::chain::traits::HasMessageType;
-use hermes_test_components::chain::traits::proposal::messages::vote::{
-    VoteProposalMessageBuilder, VoteProposalMessageBuilderComponent,
+use hermes_test_components::chain::traits::{
+    HasProposalIdType, HasProposalVoteType, VoteProposalMessageBuilder,
+    VoteProposalMessageBuilderComponent,
 };
-use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
-use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::gov::v1::MsgVote;
 use ibc_proto::google::protobuf::Any;

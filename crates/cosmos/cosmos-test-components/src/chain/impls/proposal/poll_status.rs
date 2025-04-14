@@ -5,10 +5,9 @@ use cgp::prelude::*;
 use hermes_relayer_components::error::traits::HasRetryableError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_test_components::chain::traits::proposal::poll_status::{
-    ProposalStatusPoller, ProposalStatusPollerComponent,
+use hermes_test_components::chain::traits::{
+    CanQueryProposalStatus, ProposalStatusPoller, ProposalStatusPollerComponent,
 };
-use hermes_test_components::chain::traits::proposal::query_status::CanQueryProposalStatus;
 
 pub struct PollProposalStatus;
 

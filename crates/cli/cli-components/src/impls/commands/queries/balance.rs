@@ -5,14 +5,12 @@ use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
 use hermes_relayer_components::chain::traits::HasChainIdType;
-use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
+use hermes_test_components::chain::traits::CanQueryBalance;
 
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::{CommandRunner, CommandRunnerComponent};
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
-
-pub struct RunQueryBalanceCommand;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct QueryBalanceArgs {
@@ -44,7 +42,7 @@ pub struct QueryBalanceArgs {
     denom: String,
 }
 
-#[cgp_provider(CommandRunnerComponent)]
+#[cgp_new_provider(CommandRunnerComponent)]
 impl<App, Args, Build, Chain> CommandRunner<App, Args> for RunQueryBalanceCommand
 where
     App: CanLoadBuilder<Builder = Build>

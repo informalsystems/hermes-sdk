@@ -18,8 +18,8 @@ use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntimeType;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_test_components::chain_driver::traits::HasChainType;
+use hermes_test_components::driver::traits::HasChainDriverType;
 use tokio::process::Child;
 
 use crate::contexts::chain_driver::CosmosChainDriver;

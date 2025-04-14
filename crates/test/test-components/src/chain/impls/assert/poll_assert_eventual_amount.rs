@@ -9,11 +9,9 @@ use hermes_logging_components::types::level::LevelError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
-use crate::chain::traits::assert::eventual_amount::{
-    EventualAmountAsserter, EventualAmountAsserterComponent,
+use crate::chain::traits::{
+    CanQueryBalance, EventualAmountAsserter, EventualAmountAsserterComponent, HasPollAssertDuration,
 };
-use crate::chain::traits::assert::poll_assert::HasPollAssertDuration;
-use crate::chain::traits::queries::balance::CanQueryBalance;
 
 #[cgp_new_provider(EventualAmountAsserterComponent)]
 impl<Chain> EventualAmountAsserter<Chain> for PollAssertEventualAmount

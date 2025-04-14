@@ -65,7 +65,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
+use hermes_test_components::chain::traits::CanQueryBalance;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
 use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;

@@ -12,9 +12,7 @@ use hermes_relayer_components::multi::traits::relay_at::{
     HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
 };
 
-use crate::setup::traits::birelay::{BiRelaySetup, BiRelaySetupComponent};
-use crate::setup::traits::builder_at::HasBuilderAt;
-use crate::setup::traits::relay::CanSetupRelays;
+use crate::setup::traits::{BiRelaySetup, BiRelaySetupComponent, CanSetupRelays, HasBuilderAt};
 
 #[cgp_new_provider(BiRelaySetupComponent)]
 impl<Setup, A: Async, B: Async> BiRelaySetup<Setup, A, B> for SetupBiRelayWithBuilder

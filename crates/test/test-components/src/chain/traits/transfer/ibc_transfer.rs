@@ -6,8 +6,7 @@ use hermes_relayer_components::chain::traits::{
     HasChainStatusType, HasChannelIdType, HasOutgoingPacketType, HasPortIdType,
 };
 
-use crate::chain::traits::types::memo::HasMemoType;
-use crate::chain::traits::types::wallet::HasWalletType;
+use crate::chain::traits::{HasMemoType, HasWalletType};
 
 #[cgp_component {
     provider: TokenIbcTransferrer,

@@ -19,22 +19,16 @@ use hermes_relayer_components::relay::traits::{
     CanAutoRelayWithHeights, CanRelayReceivePacket, DestinationTarget, HasChainTargets,
     HasDstChain, HasSrcChain, SourceTarget,
 };
-use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
-use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
-use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
-use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
-use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
-use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
-use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
-use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
-use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, TransferDenom};
-use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, UserWallet};
-use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use hermes_test_components::driver::traits::channel_at::HasChannelIdAt;
-use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
-use hermes_test_components::driver::traits::types::relay_driver_at::HasRelayDriverAt;
+use hermes_test_components::chain::traits::{
+    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
+    HasAmountMethods, HasDefaultMemo, HasWalletType, WalletOf,
+};
+use hermes_test_components::chain_driver::traits::{
+    CanGenerateRandomAmount, HasChain, HasDenom, HasWallet, TransferDenom, UserWallet,
+};
+use hermes_test_components::driver::traits::{HasChainDriverAt, HasChannelIdAt, HasRelayDriverAt};
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
-use hermes_test_components::setup::traits::port_id_at::HasPortIdAt;
+use hermes_test_components::setup::traits::HasPortIdAt;
 
 #[blanket_trait]
 pub trait HasBinaryTestDriverFields<A, B>:

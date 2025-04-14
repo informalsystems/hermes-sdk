@@ -3,9 +3,7 @@ use hermes_chain_type_components::traits::{
     AmountDenomGetter, AmountDenomGetterComponent, AmountTypeProviderComponent, HasAmountType,
     HasDenomType,
 };
-use hermes_test_components::chain::traits::types::amount::{
-    AmountMethodsComponent, ProvideAmountMethods,
-};
+use hermes_test_components::chain::traits::{AmountMethodsComponent, ProvideAmountMethods};
 
 use crate::chain::types::amount::Amount;
 use crate::chain::types::denom::Denom;

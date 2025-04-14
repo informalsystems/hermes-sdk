@@ -4,7 +4,7 @@ use std::string::FromUtf8Error;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAmountType, HasDenomType};
 use hermes_relayer_components::chain::traits::{HasChannelIdType, HasPortIdType};
-use hermes_test_components::chain::traits::transfer::amount::{
+use hermes_test_components::chain::traits::{
     IbcTransferredAmountConverter, IbcTransferredAmountConverterComponent,
 };
 use ibc::core::host::types::identifiers::{ChannelId, PortId};

@@ -6,10 +6,9 @@ use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMes
 use hermes_relayer_components::chain::traits::{
     HasChannelIdType, HasHeightFields, HasMessageType, HasPortIdType, HasTimeoutType,
 };
-use hermes_test_components::chain::traits::messages::ibc_transfer::{
-    IbcTokenTransferMessageBuilder, IbcTokenTransferMessageBuilderComponent,
+use hermes_test_components::chain::traits::{
+    HasMemoType, IbcTokenTransferMessageBuilder, IbcTokenTransferMessageBuilderComponent,
 };
-use hermes_test_components::chain::traits::types::memo::HasMemoType;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};

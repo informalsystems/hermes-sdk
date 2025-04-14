@@ -2,9 +2,7 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 
-use crate::chain::traits::assert::poll_assert::{
-    PollAssertDurationGetter, PollAssertDurationGetterComponent,
-};
+use crate::chain::traits::{PollAssertDurationGetter, PollAssertDurationGetterComponent};
 
 pub struct ProvidePollAssertDuration<const INTERVAL: u64, const ATTEMPTS: u32>;
 

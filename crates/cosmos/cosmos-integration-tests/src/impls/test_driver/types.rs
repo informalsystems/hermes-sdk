@@ -5,8 +5,9 @@ use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
-use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeProviderAtComponent;
-use hermes_test_components::driver::traits::types::relay_driver_at::RelayDriverTypeProviderAtComponent;
+use hermes_test_components::driver::traits::{
+    ChainDriverTypeProviderAtComponent, RelayDriverTypeProviderAtComponent,
+};
 
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;

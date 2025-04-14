@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::setup::traits::driver::CanBuildTestDriver;
-use crate::setup::traits::run_test::{TestRunner, TestRunnerComponent};
+use crate::setup::traits::{CanBuildTestDriver, TestRunner, TestRunnerComponent};
 use crate::test_case::traits::test_case::TestCase;
 
 /**

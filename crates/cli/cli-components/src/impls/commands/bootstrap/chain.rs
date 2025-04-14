@@ -8,10 +8,8 @@ use hermes_relayer_components::chain::traits::HasChainId;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::CanWaitChildProcess;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use hermes_test_components::chain_driver::traits::chain_process::CanTakeChainProcess;
-use hermes_test_components::chain_driver::traits::config::ConfigUpdater;
-use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use hermes_test_components::bootstrap::traits::CanBootstrapChain;
+use hermes_test_components::chain_driver::traits::{CanTakeChainProcess, ConfigUpdater, HasChain};
 
 use crate::traits::bootstrap::CanLoadBootstrap;
 use crate::traits::command::{CommandRunner, CommandRunnerComponent};

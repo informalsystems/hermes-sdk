@@ -14,9 +14,9 @@ use hermes_relayer_components::multi::traits::relay_at::{
 };
 use hermes_relayer_components::relay::impls::CanBootstrapChannel;
 
-use crate::setup::traits::channel::{ChannelSetup, ChannelSetupComponent};
-use crate::setup::traits::init_channel_options_at::HasInitChannelOptionsAt;
-use crate::setup::traits::port_id_at::HasPortIdAt;
+use crate::setup::traits::{
+    ChannelSetup, ChannelSetupComponent, HasInitChannelOptionsAt, HasPortIdAt,
+};
 
 pub struct SetupChannelHandshake;
 

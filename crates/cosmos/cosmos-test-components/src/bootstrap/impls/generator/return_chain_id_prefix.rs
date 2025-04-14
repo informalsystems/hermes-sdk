@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::HasChainIdType;
-use hermes_test_components::chain::traits::chain_id::CanBuildChainIdFromString;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::CanBuildChainIdFromString;
+use hermes_test_components::chain_driver::traits::HasChainType;
 
 use crate::bootstrap::traits::generator::generate_chain_id::{
     ChainIdGenerator, ChainIdGeneratorComponent,

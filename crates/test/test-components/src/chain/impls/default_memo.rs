@@ -1,8 +1,6 @@
 use cgp::prelude::*;
 
-use crate::chain::traits::types::memo::{
-    DefaultMemoGetter, DefaultMemoGetterComponent, HasMemoType,
-};
+use crate::chain::traits::{DefaultMemoGetter, DefaultMemoGetterComponent, HasMemoType};
 
 pub struct ProvideDefaultMemo;
 

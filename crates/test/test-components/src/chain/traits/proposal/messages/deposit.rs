@@ -2,7 +2,7 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAmountType;
 use hermes_relayer_components::chain::traits::HasMessageType;
 
-use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
+use crate::chain::traits::HasProposalIdType;
 
 #[cgp_component {
   provider: DepositProposalMessageBuilder,

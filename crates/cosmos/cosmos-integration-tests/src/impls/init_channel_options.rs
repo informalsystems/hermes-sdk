@@ -4,7 +4,7 @@ use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_relayer_components::chain::traits::{HasConnectionIdType, HasInitChannelOptionsType};
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_test_components::setup::traits::init_channel_options_at::{
+use hermes_test_components::setup::traits::{
     InitChannelOptionsGetterAt, InitChannelOptionsGetterAtComponent,
 };
 use ibc::core::host::types::identifiers::ConnectionId;

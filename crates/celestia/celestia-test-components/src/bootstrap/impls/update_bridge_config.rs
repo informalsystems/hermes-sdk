@@ -8,8 +8,8 @@ use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_test_components::chain_driver::traits::{HasChain, HasChainType};
+use hermes_test_components::driver::traits::HasChainDriverType;
 use toml::Value;
 
 use crate::bootstrap::traits::init_bridge_config::{

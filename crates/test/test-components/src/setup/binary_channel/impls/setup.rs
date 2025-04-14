@@ -5,15 +5,12 @@ use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
-use crate::chain_driver::traits::types::chain::HasChain;
-use crate::driver::traits::types::chain_driver_at::ChainDriverAt;
-use crate::setup::traits::birelay::CanSetupBiRelay;
-use crate::setup::traits::chain::CanSetupChain;
-use crate::setup::traits::channel::CanSetupChannel;
-use crate::setup::traits::clients::CanSetupClients;
-use crate::setup::traits::connection::CanSetupConnection;
-use crate::setup::traits::driver::{DriverBuilder, DriverBuilderComponent, HasTestDriverType};
-use crate::setup::traits::drivers::binary_channel::CanBuildTestDriverWithBinaryChannel;
+use crate::chain_driver::traits::HasChain;
+use crate::driver::traits::ChainDriverAt;
+use crate::setup::traits::{
+    CanBuildTestDriverWithBinaryChannel, CanSetupBiRelay, CanSetupChain, CanSetupChannel,
+    CanSetupClients, CanSetupConnection, DriverBuilder, DriverBuilderComponent, HasTestDriverType,
+};
 
 #[cgp_new_provider(DriverBuilderComponent)]
 impl<Setup, ChainA, ChainB> DriverBuilder<Setup> for SetupBinaryChannelDriver

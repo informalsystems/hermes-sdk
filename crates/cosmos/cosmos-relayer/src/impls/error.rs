@@ -48,8 +48,9 @@ use hermes_relayer_components::relay::traits::HasRelayChains;
 use hermes_relayer_components::transaction::impls::TxNoResponseError;
 use hermes_relayer_components::transaction::traits::HasTxHashType;
 use hermes_runtime::types::error::TokioRuntimeError;
-use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
-use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
+use hermes_test_components::chain::impls::{
+    EventualAmountTimeoutError, MissingSendPacketEventError,
+};
 use hermes_wasm_test_components::impls::chain::upload_client_code::ProposalIdNotFound;
 use http::uri::InvalidUri;
 use ibc::clients::tendermint::types::error::TendermintClientError;

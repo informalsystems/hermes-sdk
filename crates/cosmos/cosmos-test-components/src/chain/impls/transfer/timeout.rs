@@ -3,7 +3,7 @@ use core::time::Duration;
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::status::Time;
 use hermes_relayer_components::chain::traits::{HasHeightType, HasTimeType, HasTimeoutType};
-use hermes_test_components::chain::traits::transfer::timeout::{
+use hermes_test_components::chain::traits::{
     IbcTransferTimeoutCalculator, IbcTransferTimeoutCalculatorComponent,
 };
 use ibc::primitives::Timestamp;

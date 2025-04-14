@@ -10,13 +10,10 @@ use hermes_relayer_components::chain::traits::{
 };
 use hermes_relayer_components::transaction::traits::CanSendMessagesWithSigner;
 
-use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessages;
-use crate::chain::traits::transfer::ibc_transfer::{
-    TokenIbcTransferrer, TokenIbcTransferrerComponent,
+use crate::chain::traits::{
+    CanBuildIbcTokenTransferMessages, CanCalculateIbcTransferTimeout, HasMemoType, HasWalletSigner,
+    HasWalletType, TokenIbcTransferrer, TokenIbcTransferrerComponent,
 };
-use crate::chain::traits::transfer::timeout::CanCalculateIbcTransferTimeout;
-use crate::chain::traits::types::memo::HasMemoType;
-use crate::chain::traits::types::wallet::{HasWalletSigner, HasWalletType};
 
 #[derive(Debug)]
 pub struct MissingSendPacketEventError;

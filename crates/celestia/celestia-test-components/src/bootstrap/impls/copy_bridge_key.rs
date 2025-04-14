@@ -6,9 +6,8 @@ use hermes_relayer_components::chain::traits::HasChainId;
 use hermes_runtime_components::traits::fs::copy_file::CanCopyFile;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
-use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_test_components::chain_driver::traits::{HasChain, HasChainHomeDir};
+use hermes_test_components::driver::traits::HasChainDriverType;
 use tokio::fs;
 
 use crate::bootstrap::traits::import_bridge_key::{BridgeKeyImporter, BridgeKeyImporterComponent};

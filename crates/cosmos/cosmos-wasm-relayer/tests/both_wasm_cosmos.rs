@@ -13,7 +13,7 @@ use hermes_cosmos_wasm_relayer::types::create_client::CreateWasmTendermintMessag
 use hermes_error::types::Error;
 use hermes_relayer_components::relay::traits::{CanCreateClient, DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use hermes_test_components::bootstrap::traits::CanBootstrapChain;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 

@@ -79,13 +79,11 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
-use hermes_test_components::chain::traits::messages::ibc_transfer::{
-    CanBuildIbcTokenTransferMessages, IbcTokenTransferMessageBuilderComponent,
+use hermes_test_components::chain::traits::{
+    BalanceQuerierComponent, CanBuildIbcTokenTransferMessages, EventualAmountAsserterComponent,
+    IbcTokenTransferMessageBuilderComponent, ProposalStatusQuerierComponent,
+    TokenIbcTransferrerComponent,
 };
-use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerierComponent;
-use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
-use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
 use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;

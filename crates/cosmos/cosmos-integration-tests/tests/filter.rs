@@ -10,12 +10,11 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::{CanQueryChainStatus, CanQueryPacketIsReceived};
-use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
-use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
-use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
-use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
-use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
-use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
+use hermes_test_components::chain::traits::{
+    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
+    HasDefaultMemo,
+};
+use hermes_test_components::chain_driver::traits::CanGenerateRandomAmount;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 

@@ -4,7 +4,7 @@ use hermes_cosmos_integration_tests::init::{
     build_gaia_bootstrap, build_osmosis_bootstrap, init_test_runtime,
 };
 use hermes_error::types::Error;
-use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use hermes_test_components::bootstrap::traits::CanBootstrapChain;
 
 #[test]
 fn test_cosmos_bootstrap() -> Result<(), Error> {

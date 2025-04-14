@@ -6,10 +6,9 @@ use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
-use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverTypeAt;
-use hermes_test_components::setup::traits::driver::HasTestDriverType;
-use hermes_test_components::setup::traits::drivers::binary_channel::{
-    BinaryChannelDriverBuilder, BinaryChannelDriverBuilderComponent,
+use hermes_test_components::driver::traits::HasChainDriverTypeAt;
+use hermes_test_components::setup::traits::{
+    BinaryChannelDriverBuilder, BinaryChannelDriverBuilderComponent, HasTestDriverType,
 };
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 

@@ -41,8 +41,8 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_test_components::chain_driver::traits::types::chain::ChainTypeProviderComponent;
-use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
+use hermes_test_components::chain_driver::traits::ChainTypeProviderComponent;
+use hermes_test_components::driver::traits::ChainDriverTypeProviderComponent;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
 use hermes_wasm_test_components::impls::bootstrap::genesis_config::ModifyWasmGenesisConfig;

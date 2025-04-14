@@ -13,21 +13,17 @@ use hermes_error::impls::UseHermesError;
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
-use hermes_test_components::driver::traits::types::builder_at::BuilderAtTypeProviderComponent;
-use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeProviderAtComponent;
-use hermes_test_components::setup::binary_channel::components::*;
-use hermes_test_components::setup::traits::bootstrap_at::{
-    BootstrapGetterAtComponent, BootstrapTypeProviderAtComponent,
+use hermes_test_components::driver::traits::{
+    BuilderAtTypeProviderComponent, ChainDriverTypeProviderAtComponent,
 };
-use hermes_test_components::setup::traits::builder_at::BuilderAtGetterComponent;
-use hermes_test_components::setup::traits::create_client_options_at::{
+use hermes_test_components::setup::binary_channel::*;
+use hermes_test_components::setup::traits::{
+    BinaryChannelDriverBuilderComponent, BootstrapGetterAtComponent,
+    BootstrapTypeProviderAtComponent, BuilderAtGetterComponent,
     CreateClientMessageOptionsGetterAtComponent, CreateClientPayloadOptionsGetterAtComponent,
+    InitChannelOptionsGetterAtComponent, InitConnectionOptionsGetterAtComponent,
+    PortIdGetterAtComponent, TestDriverTypeProviderComponent,
 };
-use hermes_test_components::setup::traits::driver::TestDriverTypeProviderComponent;
-use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilderComponent;
-use hermes_test_components::setup::traits::init_channel_options_at::InitChannelOptionsGetterAtComponent;
-use hermes_test_components::setup::traits::init_connection_options_at::InitConnectionOptionsGetterAtComponent;
-use hermes_test_components::setup::traits::port_id_at::PortIdGetterAtComponent;
 use ibc::core::host::types::identifiers::PortId;
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;

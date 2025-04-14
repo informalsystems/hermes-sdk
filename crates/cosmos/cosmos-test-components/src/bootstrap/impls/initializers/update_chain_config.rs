@@ -8,7 +8,7 @@ use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain_driver::traits::HasChainType;
 use ibc::core::host::types::identifiers::ChainId;
 use toml::Value;
 

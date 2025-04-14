@@ -8,14 +8,11 @@ use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
-use hermes_test_components::driver::traits::channel_at::ChannelIdGetterAtComponent;
-use hermes_test_components::driver::traits::types::chain_driver_at::{
-    ChainDriverGetterAtComponent, ChainDriverTypeProviderAtComponent,
-};
-use hermes_test_components::driver::traits::types::relay_driver_at::{
+use hermes_test_components::driver::traits::{
+    ChainDriverGetterAtComponent, ChainDriverTypeProviderAtComponent, ChannelIdGetterAtComponent,
     RelayDriverGetterAtComponent, RelayDriverTypeProviderAtComponent,
 };
-use hermes_test_components::setup::traits::port_id_at::PortIdGetterAtComponent;
+use hermes_test_components::setup::traits::PortIdGetterAtComponent;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 

@@ -28,26 +28,14 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     RuntimeGetter, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
-use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
-use hermes_test_components::chain_driver::traits::chain_process::{
-    ChainProcessTaker, ChainProcessTakerComponent,
+use hermes_test_components::chain::traits::{ProposalIdTypeComponent, ProposalStatusTypeComponent};
+use hermes_test_components::chain_driver::traits::{
+    ChainGetter, ChainGetterComponent, ChainHomeDirGetter, ChainHomeDirGetterComponent,
+    ChainProcessTaker, ChainProcessTakerComponent, ChainStartupWaiterComponent, ChainTypeProvider,
+    ChainTypeProviderComponent, ConfigUpdater, ConfigUpdaterComponent, DenomGetter,
+    DenomGetterComponent, RandomAmountGeneratorComponent, RelayerWallet, StakingDenom,
+    TransferDenom, UserWallet, ValidatorWallet, WalletGetterComponent, WalletsGetterComponent,
 };
-use hermes_test_components::chain_driver::traits::config::{ConfigUpdater, ConfigUpdaterComponent};
-use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
-use hermes_test_components::chain_driver::traits::fields::chain_home_dir::{
-    ChainHomeDirGetter, ChainHomeDirGetterComponent,
-};
-use hermes_test_components::chain_driver::traits::fields::denom::{
-    DenomGetter, DenomGetterComponent, StakingDenom, TransferDenom,
-};
-use hermes_test_components::chain_driver::traits::fields::wallet::{
-    RelayerWallet, UserWallet, ValidatorWallet, WalletGetterComponent, WalletsGetterComponent,
-};
-use hermes_test_components::chain_driver::traits::types::chain::{
-    ChainGetter, ChainGetterComponent, ChainTypeProvider, ChainTypeProviderComponent,
-};
-use hermes_test_components::chain_driver::traits::wait::ChainStartupWaiterComponent;
 use tokio::process::Child;
 use toml::to_string_pretty;
 

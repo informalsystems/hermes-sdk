@@ -18,17 +18,14 @@ use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_test_components::chain::traits::proposal::messages::deposit::CanBuildDepositProposalMessage;
-use hermes_test_components::chain::traits::proposal::messages::vote::CanBuildVoteProposalMessage;
-use hermes_test_components::chain::traits::proposal::poll_status::CanPollProposalStatus;
-use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
-use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
-use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
-use hermes_test_components::chain::traits::types::wallet::HasWalletSigner;
-use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, StakingDenom};
-use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, ValidatorWallet};
-use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_test_components::chain::traits::{
+    CanBuildDepositProposalMessage, CanBuildVoteProposalMessage, CanPollProposalStatus,
+    HasProposalIdType, HasProposalStatusType, HasProposalVoteType, HasWalletSigner,
+};
+use hermes_test_components::chain_driver::traits::{
+    HasChain, HasChainType, HasDenom, HasWallet, StakingDenom, ValidatorWallet,
+};
+use hermes_test_components::driver::traits::HasChainDriverType;
 
 use crate::traits::bootstrap::client_byte_code::HasWasmClientByteCode;
 use crate::traits::bootstrap::gov_authority::HasGovernanceProposalAuthority;

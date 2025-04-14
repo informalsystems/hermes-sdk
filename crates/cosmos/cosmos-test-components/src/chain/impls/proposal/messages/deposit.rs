@@ -4,10 +4,9 @@ use hermes_cosmos_chain_components::traits::message::{
     CosmosMessage, DynCosmosMessage, ToCosmosMessage,
 };
 use hermes_relayer_components::chain::traits::HasMessageType;
-use hermes_test_components::chain::traits::proposal::messages::deposit::{
-    DepositProposalMessageBuilder, DepositProposalMessageBuilderComponent,
+use hermes_test_components::chain::traits::{
+    DepositProposalMessageBuilder, DepositProposalMessageBuilderComponent, HasProposalIdType,
 };
-use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::gov::v1::MsgDeposit;

@@ -1,8 +1,8 @@
 use cgp::prelude::*;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::{HasWalletType, WalletOf};
+use hermes_test_components::chain_driver::traits::HasChainType;
 
 #[cgp_component {
   provider: ChainBuilderWithNodeConfig,

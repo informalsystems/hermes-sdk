@@ -12,9 +12,9 @@ use hermes_relayer_components::relay::traits::{
     HasRelayClientIds, HasSourceTargetChainTypes, SourceTarget,
 };
 
-use crate::setup::traits::clients::{ClientSetup, ClientSetupComponent};
-use crate::setup::traits::create_client_options_at::{
-    HasCreateClientMessageOptionsAt, HasCreateClientPayloadOptionsAt,
+use crate::setup::traits::{
+    ClientSetup, ClientSetupComponent, HasCreateClientMessageOptionsAt,
+    HasCreateClientPayloadOptionsAt,
 };
 
 pub struct SetupClientsWithRelay;

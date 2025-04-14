@@ -138,31 +138,19 @@ mod preset {
         TxMessageResponseParserComponent, TxResponsePollerComponent, TxResponseQuerierComponent,
         TxResponseTypeProviderComponent, TxSubmitterComponent,
     };
-    use hermes_test_components::chain::impls::assert::assert_duration::ProvidePollAssertDuration;
-    use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::PollAssertEventualAmount;
-    use hermes_test_components::chain::impls::default_memo::ProvideDefaultMemo;
-    use hermes_test_components::chain::impls::ibc_transfer::SendIbcTransferMessage;
-    use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
-    use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
-    use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
-    use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
-    use hermes_test_components::chain::traits::proposal::messages::deposit::DepositProposalMessageBuilderComponent;
-    use hermes_test_components::chain::traits::proposal::messages::vote::VoteProposalMessageBuilderComponent;
-    use hermes_test_components::chain::traits::proposal::poll_status::ProposalStatusPollerComponent;
-    use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerierComponent;
-    use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
-    use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
-    use hermes_test_components::chain::traits::proposal::types::vote::ProposalVoteTypeComponent;
-    use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
-    use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
-    use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
-    use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
-    use hermes_test_components::chain::traits::types::amount::AmountMethodsComponent;
-    use hermes_test_components::chain::traits::types::memo::{
-        DefaultMemoGetterComponent, MemoTypeProviderComponent,
+    use hermes_test_components::chain::impls::{
+        PollAssertEventualAmount, ProvideDefaultMemo, ProvidePollAssertDuration,
+        SendIbcTransferMessage,
     };
-    use hermes_test_components::chain::traits::types::wallet::{
-        WalletSignerComponent, WalletTypeComponent,
+    use hermes_test_components::chain::traits::{
+        AmountMethodsComponent, BalanceQuerierComponent, ChainIdFromStringBuilderComponent,
+        DefaultMemoGetterComponent, DepositProposalMessageBuilderComponent,
+        EventualAmountAsserterComponent, IbcTokenTransferMessageBuilderComponent,
+        IbcTransferTimeoutCalculatorComponent, IbcTransferredAmountConverterComponent,
+        MemoTypeProviderComponent, PollAssertDurationGetterComponent, ProposalIdTypeComponent,
+        ProposalStatusPollerComponent, ProposalStatusQuerierComponent, ProposalStatusTypeComponent,
+        ProposalVoteTypeComponent, TokenIbcTransferrerComponent,
+        VoteProposalMessageBuilderComponent, WalletSignerComponent, WalletTypeComponent,
     };
 
     use crate::delegate::DelegateCosmosChainComponents;

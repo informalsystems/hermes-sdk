@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::{AddressOf, HasAddressType};
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain_driver::traits::HasChainType;
 
 #[cgp_getter {
     provider: GovernanceProposalAuthorityGetter,

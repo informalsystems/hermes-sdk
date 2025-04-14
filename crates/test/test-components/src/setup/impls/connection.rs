@@ -11,8 +11,7 @@ use hermes_relayer_components::multi::traits::relay_at::{
 };
 use hermes_relayer_components::relay::impls::CanBootstrapConnection;
 
-use crate::setup::traits::connection::{ConnectionSetup, ConnectionSetupComponent};
-use crate::setup::traits::init_connection_options_at::HasInitConnectionOptionsAt;
+use crate::setup::traits::{ConnectionSetup, ConnectionSetupComponent, HasInitConnectionOptionsAt};
 
 pub struct SetupConnectionHandshake;
 

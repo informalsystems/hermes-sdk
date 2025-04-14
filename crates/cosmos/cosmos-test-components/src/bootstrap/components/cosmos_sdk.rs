@@ -1,7 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
+    use hermes_test_components::bootstrap::traits::ChainBootstrapperComponent;
 
     use crate::bootstrap::impls::chain::bootstrap_chain::BootstrapCosmosChain;
     use crate::bootstrap::impls::chain::start_chain::StartCosmosChain;

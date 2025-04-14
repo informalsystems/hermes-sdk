@@ -10,8 +10,7 @@ use hermes_relayer_components::multi::traits::relay_at::{
     HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
 };
 
-use crate::setup::traits::builder_at::HasBuilderAt;
-use crate::setup::traits::relay::{RelaySetup, RelaySetupComponent};
+use crate::setup::traits::{HasBuilderAt, RelaySetup, RelaySetupComponent};
 
 #[cgp_new_provider(RelaySetupComponent)]
 impl<Setup, A: Async, B: Async> RelaySetup<Setup, A, B> for SetupRelayWithBuilder

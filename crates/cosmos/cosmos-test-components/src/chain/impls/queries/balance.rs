@@ -3,9 +3,7 @@ use core::num::ParseIntError;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountType, HasDenomType};
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
-use hermes_test_components::chain::traits::queries::balance::{
-    BalanceQuerier, BalanceQuerierComponent,
-};
+use hermes_test_components::chain::traits::{BalanceQuerier, BalanceQuerierComponent};
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc_proto::cosmos::bank::v1beta1::query_client::QueryClient;

@@ -8,8 +8,8 @@ use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelay
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
 
-use crate::driver::traits::types::chain_driver_at::{ChainDriverAt, HasChainDriverTypeAt};
-use crate::setup::traits::driver::HasTestDriverType;
+use crate::driver::traits::{ChainDriverAt, HasChainDriverTypeAt};
+use crate::setup::traits::HasTestDriverType;
 
 #[cgp_component {
     provider: BinaryChannelDriverBuilder,

@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
 
-use crate::chain::traits::types::wallet::HasWalletType;
+use crate::chain::traits::HasWalletType;
 
 #[cgp_component {
   provider: TokenLocalTransferrer,

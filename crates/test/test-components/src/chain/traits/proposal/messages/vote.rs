@@ -1,8 +1,7 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::HasMessageType;
 
-use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
-use crate::chain::traits::proposal::types::vote::HasProposalVoteType;
+use crate::chain::traits::{HasProposalIdType, HasProposalVoteType};
 
 #[cgp_component {
   provider: VoteProposalMessageBuilder,

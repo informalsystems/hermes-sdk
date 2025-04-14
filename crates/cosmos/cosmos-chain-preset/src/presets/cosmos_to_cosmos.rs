@@ -41,7 +41,7 @@ mod preset {
         TimeoutUnorderedPacketMessageBuilderComponent, UpdateClientMessageBuilderComponent,
         UpdateClientPayloadBuilderComponent, UpdateClientPayloadTypeComponent,
     };
-    use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
+    use hermes_test_components::chain::traits::IbcTransferredAmountConverterComponent;
 
     cgp_preset! {
         CosmosToCosmosComponents {
