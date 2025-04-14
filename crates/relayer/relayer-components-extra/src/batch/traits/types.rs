@@ -1,16 +1,17 @@
+use alloc::sync::Arc;
 use alloc::vec::Vec;
 
 use cgp::core::Async;
 use cgp::prelude::HasAsyncErrorType;
+use futures::channel::mpsc::{UnboundedReceiver, UnboundedSender};
+use futures::channel::oneshot;
+use futures::lock::Mutex;
 use hermes_chain_type_components::traits::types::message::HasMessageType;
 use hermes_chain_type_components::traits::types::message_response::{
     HasMessageResponseType, MessageResponseOf,
 };
 use hermes_relayer_components::chain::types::aliases::MessageOf;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_runtime_components::traits::channel::{HasChannelTypes, ReceiverOf, SenderOf};
-use hermes_runtime_components::traits::channel_once::{HasChannelOnceTypes, SenderOnceOf};
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
 
 pub trait HasMessageBatchChannelTypes<Tag>: Async {
     type BatchSubmission: Async;
@@ -26,62 +27,49 @@ pub type MessageBatchSenderOf<Context, Tag> =
 pub type MessageBatchReceiverOf<Context, Tag> =
     <Context as HasMessageBatchChannelTypes<Tag>>::MessageBatchReceiver;
 
-impl<Context, Tag, Chain, Runtime> HasMessageBatchChannelTypes<Tag> for Context
+impl<Context, Tag, Chain> HasMessageBatchChannelTypes<Tag> for Context
 where
-    Context:
-        HasChainTypeAt<Tag, Chain = Chain> + HasRuntimeType<Runtime = Runtime> + HasAsyncErrorType,
+    Context: HasChainTypeAt<Tag, Chain = Chain> + HasAsyncErrorType,
     Chain: HasMessageType + HasMessageResponseType,
-    Runtime: HasChannelTypes + HasChannelOnceTypes,
 {
     type BatchSubmission = (
         Vec<Chain::Message>,
-        SenderOnceOf<Runtime, Result<Vec<Chain::MessageResponse>, Context::Error>>,
+        oneshot::Sender<Result<Vec<Chain::MessageResponse>, Context::Error>>,
     );
 
-    type MessageBatchSender = SenderOf<Runtime, Self::BatchSubmission>;
+    type MessageBatchSender = Arc<Mutex<UnboundedSender<Self::BatchSubmission>>>;
 
-    type MessageBatchReceiver = ReceiverOf<Runtime, Self::BatchSubmission>;
+    type MessageBatchReceiver = UnboundedReceiver<Self::BatchSubmission>;
 }
 
 pub trait CanUseMessageBatchChannel<Tag>:
     HasChainTypeAt<Tag, Chain: HasMessageType + HasMessageResponseType>
-    + HasRuntimeType<Runtime: HasChannelTypes + HasChannelOnceTypes>
     + HasAsyncErrorType
     + HasMessageBatchChannelTypes<
         Tag,
         BatchSubmission = (
             Vec<MessageOf<Self::Chain>>,
-            SenderOnceOf<Self::Runtime, Result<Vec<MessageResponseOf<Self::Chain>>, Self::Error>>,
+            oneshot::Sender<Result<Vec<MessageResponseOf<Self::Chain>>, Self::Error>>,
         ),
-        MessageBatchSender = SenderOf<
-            Self::Runtime,
-            (
-                Vec<MessageOf<Self::Chain>>,
-                SenderOnceOf<
-                    Self::Runtime,
-                    Result<Vec<MessageResponseOf<Self::Chain>>, Self::Error>,
-                >,
-            ),
+        MessageBatchSender = Arc<
+            Mutex<
+                UnboundedSender<(
+                    Vec<MessageOf<Self::Chain>>,
+                    oneshot::Sender<Result<Vec<MessageResponseOf<Self::Chain>>, Self::Error>>,
+                )>,
+            >,
         >,
-        MessageBatchReceiver = ReceiverOf<
-            Self::Runtime,
-            (
-                Vec<MessageOf<Self::Chain>>,
-                SenderOnceOf<
-                    Self::Runtime,
-                    Result<Vec<MessageResponseOf<Self::Chain>>, Self::Error>,
-                >,
-            ),
-        >,
+        MessageBatchReceiver = UnboundedReceiver<(
+            Vec<MessageOf<Self::Chain>>,
+            oneshot::Sender<Result<Vec<MessageResponseOf<Self::Chain>>, Self::Error>>,
+        )>,
     >
 {
 }
 
-impl<Context, Tag, Chain, Runtime> CanUseMessageBatchChannel<Tag> for Context
+impl<Context, Tag, Chain> CanUseMessageBatchChannel<Tag> for Context
 where
-    Context:
-        HasChainTypeAt<Tag, Chain = Chain> + HasRuntimeType<Runtime = Runtime> + HasAsyncErrorType,
+    Context: HasChainTypeAt<Tag, Chain = Chain> + HasAsyncErrorType,
     Chain: HasMessageType + HasMessageResponseType,
-    Runtime: HasChannelTypes + HasChannelOnceTypes,
 {
 }

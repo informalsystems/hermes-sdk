@@ -2,13 +2,6 @@
 mod preset {
     use cgp::prelude::*;
     use hermes_async_runtime_components::task::impls::concurrent::RunConcurrentTasks;
-    pub use hermes_runtime_components::traits::channel::{
-        ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent,
-        ReceiverStreamerComponent, SenderClonerComponent,
-    };
-    pub use hermes_runtime_components::traits::channel_once::{
-        ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
-    };
     pub use hermes_runtime_components::traits::fs::copy_file::FileCopierComponent;
     pub use hermes_runtime_components::traits::fs::create_dir::DirCreatorComponent;
     pub use hermes_runtime_components::traits::fs::file_path::FilePathTypeComponent;
@@ -41,14 +34,6 @@ mod preset {
                 StreamTypeComponent,
                 StreamMapperComponent,
                 TaskSpawnerComponent,
-                ChannelTypeComponent,
-                ChannelCreatorComponent,
-                ChannelUserComponent,
-                ChannelOnceTypeComponent,
-                ChannelOnceCreatorComponent,
-                ChannelOnceUserComponent,
-                ReceiverStreamerComponent,
-                SenderClonerComponent,
                 FilePathTypeComponent,
                 ChildProcessTypeComponent,
                 ChildProcessStarterComponent,

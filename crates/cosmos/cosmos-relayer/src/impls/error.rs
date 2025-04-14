@@ -10,6 +10,8 @@ use cgp::core::error::{
 };
 use cgp::prelude::*;
 use eyre::Report;
+use futures::channel::mpsc::SendError;
+use futures::channel::oneshot::Canceled;
 use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateType;
 use hermes_any_counterparty::impls::encoding::consensus_state::UnknownConsensusStateType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
@@ -132,6 +134,8 @@ delegate_components! {
             subtle_encoding::Error,
             reqwest::Error,
             InvalidUri,
+            SendError,
+            Canceled,
 
             // TODO: make it retryable?
             TransportError,

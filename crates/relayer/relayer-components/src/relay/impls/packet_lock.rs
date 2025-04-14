@@ -5,6 +5,7 @@ use core::marker::PhantomData;
 use cgp::core::field::UseField;
 use cgp::core::macros::blanket_trait;
 use cgp::prelude::*;
+use futures::channel::oneshot::{channel, Receiver, Sender};
 use futures::lock::Mutex;
 use hermes_chain_components::traits::packet::fields::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence, HasPacketSrcChannelId,
@@ -12,9 +13,6 @@ use hermes_chain_components::traits::packet::fields::{
 };
 use hermes_chain_components::traits::types::ibc::{
     HasChannelIdType, HasPortIdType, HasSequenceType,
-};
-use hermes_runtime_components::traits::channel_once::{
-    CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes, ReceiverOnce, SenderOnceOf,
 };
 use hermes_runtime_components::traits::runtime::{HasRuntime, HasRuntimeType};
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
@@ -26,11 +24,8 @@ use crate::relay::traits::packet_lock::{PacketLockComponent, ProvidePacketLock};
 
 pub struct ProvidePacketLockWithMutex;
 
-pub struct PacketLock<Relay>
-where
-    Relay: HasRuntimeType<Runtime: CanUseChannelsOnce>,
-{
-    pub release_sender: Option<SenderOnceOf<Relay::Runtime, ()>>,
+pub struct PacketLock {
+    pub release_sender: Option<Sender<()>>,
 }
 
 pub trait HasPacketMutexType: Async {
@@ -105,20 +100,19 @@ pub trait HasPacketMutex: HasPacketMutexType {
 
 pub struct ReleasePacketLockTask<Relay>
 where
-    Relay: HasPacketMutexType + HasRuntimeType<Runtime: HasChannelOnceTypes>,
+    Relay: HasPacketMutexType,
 {
-    pub release_receiver: ReceiverOnce<Relay::Runtime, ()>,
+    pub release_receiver: Receiver<()>,
     pub packet_mutex: Relay::PacketMutex,
     pub packet_key: Relay::PacketKey,
 }
 
 impl<Relay> Task for ReleasePacketLockTask<Relay>
 where
-    Relay: CanUsePacketMutex + HasRuntime,
-    Relay::Runtime: CanUseChannelsOnce,
+    Relay: CanUsePacketMutex,
 {
     async fn run(self) {
-        let _ = Relay::Runtime::receive_once(self.release_receiver).await;
+        let _ = self.release_receiver.await;
         let mut lock_table = self.packet_mutex.lock().await;
         lock_table.remove(&self.packet_key);
     }
@@ -128,19 +122,19 @@ where
 impl<Relay> ProvidePacketLock<Relay> for ProvidePacketLockWithMutex
 where
     Relay: HasRuntime + CanUsePacketMutex + HasPacketMutex + HasRelayChains,
-    Relay::Runtime: CanUseChannelsOnce + CanCreateChannelsOnce + CanSpawnTask,
+    Relay::Runtime: CanSpawnTask,
     Relay::SrcChain: HasPacketSrcChannelId<Relay::DstChain>
         + HasPacketSrcPortId<Relay::DstChain>
         + HasPacketDstChannelId<Relay::DstChain>
         + HasPacketDstPortId<Relay::DstChain>
         + HasPacketSequence<Relay::DstChain>,
 {
-    type PacketLock<'a> = PacketLock<Relay>;
+    type PacketLock<'a> = PacketLock;
 
     async fn try_acquire_packet_lock<'a>(
         relay: &'a Relay,
         packet: &'a PacketOf<Relay>,
-    ) -> Option<PacketLock<Relay>> {
+    ) -> Option<PacketLock> {
         let packet_key = (
             Relay::SrcChain::packet_src_channel_id(packet),
             Relay::SrcChain::packet_src_port_id(packet),
@@ -158,7 +152,7 @@ where
         } else {
             lock_table.insert(packet_key.clone());
 
-            let (sender, receiver) = Relay::Runtime::new_channel_once();
+            let (sender, receiver) = channel();
 
             let release_task: ReleasePacketLockTask<Relay> = ReleasePacketLockTask {
                 release_receiver: receiver,
@@ -185,13 +179,10 @@ where
     }
 }
 
-impl<Relay> Drop for PacketLock<Relay>
-where
-    Relay: HasRuntimeType<Runtime: CanUseChannelsOnce>,
-{
+impl Drop for PacketLock {
     fn drop(&mut self) {
         if let Some(sender) = self.release_sender.take() {
-            let _ = Relay::Runtime::send_once(sender, ());
+            let _ = sender.send(());
         }
     }
 }

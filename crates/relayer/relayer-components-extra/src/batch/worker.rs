@@ -13,8 +13,6 @@ use hermes_relayer_components::chain::traits::types::message::{
 use hermes_relayer_components::multi::traits::chain_at::HasChainAt;
 use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
 use hermes_relayer_components::relay::traits::target::RelayTarget;
-use hermes_runtime_components::traits::channel::{CanUseChannels, HasChannelTypes};
-use hermes_runtime_components::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
@@ -99,7 +97,7 @@ where
         + CanUseMessageBatchChannel<Target::Chain>
         + CanProcessMessageBatches<Target>
         + for<'a> CanLog<LogBatchWorker<'a, Target>>,
-    Relay::Runtime: HasTime + CanSleep + CanUseChannels + HasChannelOnceTypes,
+    Relay::Runtime: HasTime + CanSleep,
 {
     async fn run_loop(&self, config: &BatchConfig, mut receiver: Relay::MessageBatchReceiver) {
         let runtime = self.runtime();
@@ -109,7 +107,7 @@ where
         let mut last_sent_time = runtime.now();
 
         loop {
-            let payload = Relay::Runtime::try_receive(&mut receiver);
+            let payload = receiver.try_next();
 
             match payload {
                 Ok(m_batch) => {
@@ -183,8 +181,7 @@ where
         + CanUseMessageBatchChannel<Target::Chain>
         + CanPartitionMessageBatches<Target>
         + for<'a> CanLog<LogBatchWorker<'a, Target>>,
-    Relay::Runtime:
-        HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes + HasAsyncErrorType,
+    Relay::Runtime: HasTime + CanSpawnTask + HasAsyncErrorType,
     SendReadyBatchTask<Relay, Target>: Task,
 {
     async fn process_message_batches(
@@ -324,7 +321,6 @@ where
     Relay: CanUseMessageBatchChannel<Target::Chain>
         + CanSendIbcMessages<BatchWorkerSink, Target>
         + for<'a> CanLog<LogBatchWorker<'a, Target>>,
-    Relay::Runtime: CanUseChannelsOnce + CanUseChannels,
     Relay::Error: Clone,
 {
     async fn send_ready_batches(&self, ready_batches: VecDeque<Relay::BatchSubmission>) {
@@ -365,7 +361,7 @@ where
                 .await;
 
                 for (_, sender) in senders.into_iter() {
-                    let _ = Relay::Runtime::send_once(sender, Err(e.clone()));
+                    let _ = sender.send(Err(e.clone()));
                 }
             }
             Ok(all_events) => {
@@ -384,7 +380,7 @@ where
 
                 for (message_count, sender) in senders.into_iter() {
                     let events = take(&mut all_events, message_count);
-                    let _ = Relay::Runtime::send_once(sender, Ok(events));
+                    let _ = sender.send(Ok(events));
                 }
             }
         }

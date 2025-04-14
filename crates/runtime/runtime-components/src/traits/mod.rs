@@ -1,5 +1,3 @@
-pub mod channel;
-pub mod channel_once;
 pub mod fs;
 pub mod os;
 pub mod random;
