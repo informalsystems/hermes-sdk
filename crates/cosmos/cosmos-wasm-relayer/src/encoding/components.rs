@@ -7,7 +7,7 @@ mod preset {
         EncodedTypeComponent, EncoderComponent, MutDecoderComponent, MutEncoderComponent,
         SchemaGetterComponent, SchemaTypeComponent,
     };
-    use hermes_protobuf_encoding_components::traits::length::EncodedLengthGetterComponent;
+    use hermes_protobuf_encoding_components::traits::EncodedLengthGetterComponent;
     use hermes_wasm_encoding_components::components::WasmEncodingComponents;
 
     use crate::encoding::convert::WasmCosmosConverterComponents;

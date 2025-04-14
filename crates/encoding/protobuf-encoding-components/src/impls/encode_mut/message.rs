@@ -9,11 +9,9 @@ use prost::{DecodeError, Message};
 use crate::impls::encode_mut::chunk::{
     CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, ProtoChunk, ProtoChunks,
 };
-use crate::traits::length::{EncodedLengthGetter, EncodedLengthGetterComponent};
+use crate::traits::{EncodedLengthGetter, EncodedLengthGetterComponent};
 
-pub struct EncodeProstMessage;
-
-#[cgp_provider(MutEncoderComponent)]
+#[cgp_new_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Value> for EncodeProstMessage
 where
     Value: Message,

@@ -8,7 +8,7 @@ mod preset {
         SchemaTypeComponent,
     };
     use hermes_protobuf_encoding_components::components::ProtobufEncodingComponents;
-    use hermes_protobuf_encoding_components::traits::length::EncodedLengthGetterComponent;
+    use hermes_protobuf_encoding_components::traits::EncodedLengthGetterComponent;
     use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
     use ibc::core::client::types::Height;
     use ibc::core::commitment_types::commitment::CommitmentRoot;

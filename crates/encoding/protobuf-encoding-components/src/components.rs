@@ -14,7 +14,7 @@ mod preset {
     use crate::impls::encode_mut::any::EncodeAny;
     use crate::impls::types::decode_buffer::ProvideProtoChunksDecodeBuffer;
     use crate::impls::types::encode_buffer::ProvideBytesEncodeBuffer;
-    use crate::traits::length::EncodedLengthGetterComponent;
+    use crate::traits::EncodedLengthGetterComponent;
     use crate::types::strategy::ViaProtobuf;
 
     cgp_preset! {

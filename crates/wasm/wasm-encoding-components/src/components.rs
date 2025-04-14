@@ -14,7 +14,7 @@ mod preset {
     };
     use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
     use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
-    use hermes_protobuf_encoding_components::traits::length::EncodedLengthGetterComponent;
+    use hermes_protobuf_encoding_components::traits::EncodedLengthGetterComponent;
     use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
     use ibc::clients::wasm_types::client_message::WASM_CLIENT_MESSAGE_TYPE_URL;
     use ibc::core::client::types::Height;
