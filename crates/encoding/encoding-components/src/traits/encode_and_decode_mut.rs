@@ -1,9 +1,8 @@
 use cgp::core::error::HasAsyncErrorType;
 
-use crate::traits::decode_mut::{CanDecodeMut, MutDecoder};
-use crate::traits::encode_mut::{CanEncodeMut, MutEncoder};
-use crate::traits::types::decode_buffer::HasDecodeBufferType;
-use crate::traits::types::encode_buffer::HasEncodeBufferType;
+use crate::traits::{
+    CanDecodeMut, CanEncodeMut, HasDecodeBufferType, HasEncodeBufferType, MutDecoder, MutEncoder,
+};
 
 pub trait CanEncodeAndDecodeMut<Strategy, Value>:
     CanEncodeMut<Strategy, Value> + CanDecodeMut<Strategy, Value>

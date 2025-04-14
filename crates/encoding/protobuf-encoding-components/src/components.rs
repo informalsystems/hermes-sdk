@@ -2,16 +2,12 @@
 mod preset {
     use cgp::core::component::UseDelegate;
     use cgp::prelude::*;
-    use hermes_encoding_components::impls::types::encoded::ProvideEncodedBytes;
-    use hermes_encoding_components::impls::types::schema::ProvideStringSchema;
-    use hermes_encoding_components::traits::decode::DecoderComponent;
-    use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
-    use hermes_encoding_components::traits::encode::EncoderComponent;
-    use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
-    use hermes_encoding_components::traits::types::decode_buffer::DecodeBufferTypeComponent;
-    use hermes_encoding_components::traits::types::encode_buffer::EncodeBufferTypeComponent;
-    use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
-    use hermes_encoding_components::traits::types::schema::SchemaTypeComponent;
+    use hermes_encoding_components::impls::{ProvideEncodedBytes, ProvideStringSchema};
+    use hermes_encoding_components::traits::{
+        DecodeBufferTypeComponent, DecoderComponent, EncodeBufferTypeComponent,
+        EncodedTypeComponent, EncoderComponent, MutDecoderComponent, MutEncoderComponent,
+        SchemaTypeComponent,
+    };
     use prost_types::Any;
 
     use crate::impls::encode::buffer::EncodeProtoWithMutBuffer;

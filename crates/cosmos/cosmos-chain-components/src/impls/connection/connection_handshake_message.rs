@@ -2,8 +2,7 @@ use core::fmt::Display;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasMessageType;
-use hermes_encoding_components::traits::convert::CanConvert;
-use hermes_encoding_components::traits::has_encoding::HasEncoding;
+use hermes_encoding_components::traits::{CanConvert, HasEncoding};
 use hermes_encoding_components::types::AsBytes;
 use hermes_relayer_components::chain::traits::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenAckMessageBuilderComponent,

@@ -5,10 +5,9 @@ use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientP
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
-use hermes_encoding_components::traits::convert::CanConvert;
-use hermes_encoding_components::traits::encode::CanEncode;
-use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
-use hermes_encoding_components::traits::types::encoded::HasEncodedType;
+use hermes_encoding_components::traits::{
+    CanConvert, CanEncode, HasDefaultEncoding, HasEncodedType,
+};
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 use hermes_relayer_components::chain::traits::{

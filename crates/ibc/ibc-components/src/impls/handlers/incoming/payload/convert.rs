@@ -2,8 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
-use hermes_encoding_components::traits::convert::CanConvert;
-use hermes_encoding_components::traits::has_encoding::{HasDefaultEncoding, HasEncoding};
+use hermes_encoding_components::traits::{CanConvert, HasDefaultEncoding, HasEncoding};
 
 use crate::traits::handlers::incoming::payload::{
     IncomingPayloadHandler, IncomingPayloadHandlerComponent,

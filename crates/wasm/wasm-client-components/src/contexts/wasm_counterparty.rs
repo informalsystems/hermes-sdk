@@ -2,12 +2,10 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
-use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
-use hermes_encoding_components::traits::convert::CanConvert;
-use hermes_encoding_components::traits::decode::CanDecode;
-use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeProviderComponent,
+use hermes_encoding_components::impls::GetDefaultEncoding;
+use hermes_encoding_components::traits::{
+    CanConvert, CanDecode, DefaultEncodingGetter, DefaultEncodingGetterComponent,
+    EncodingGetterComponent, EncodingTypeProviderComponent,
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;

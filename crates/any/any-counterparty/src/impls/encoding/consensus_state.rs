@@ -2,10 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
-use hermes_encoding_components::traits::convert::{Converter, ConverterComponent};
-use hermes_encoding_components::traits::decode::{CanDecode, Decoder, DecoderComponent};
-use hermes_encoding_components::traits::schema::HasSchema;
-use hermes_encoding_components::traits::types::encoded::HasEncodedType;
+use hermes_encoding_components::traits::{
+    CanDecode, Converter, ConverterComponent, Decoder, DecoderComponent, HasEncodedType, HasSchema,
+};
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;

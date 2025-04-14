@@ -42,7 +42,7 @@ use hermes_cosmos_chain_components::types::payloads::client::{
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
-use hermes_encoding_components::traits::has_encoding::{
+use hermes_encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
 };
 use hermes_encoding_components::types::AsBytes;

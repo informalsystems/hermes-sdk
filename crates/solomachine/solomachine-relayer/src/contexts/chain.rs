@@ -13,7 +13,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
-use hermes_encoding_components::traits::has_encoding::{
+use hermes_encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
     HasDefaultEncoding,
 };

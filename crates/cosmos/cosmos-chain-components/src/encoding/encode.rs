@@ -1,7 +1,5 @@
 use cgp::prelude::*;
-use hermes_encoding_components::impls::encode::convert_and_encode::ConvertAndEncode;
-use hermes_encoding_components::impls::encode::return_encoded::ReturnEncoded;
-use hermes_encoding_components::impls::encode::use_strategy::EncodeUsingStrategy;
+use hermes_encoding_components::impls::{ConvertAndEncode, EncodeUsingStrategy, ReturnEncoded};
 use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
 use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;

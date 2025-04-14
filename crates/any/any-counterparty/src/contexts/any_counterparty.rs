@@ -5,21 +5,14 @@ use hermes_cosmos_chain_components::encoding::components::CosmosClientEncodingCo
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
-use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
-use hermes_encoding_components::traits::convert::{CanConvert, ConverterComponent};
-use hermes_encoding_components::traits::decode::{CanDecode, DecoderComponent};
-use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
-use hermes_encoding_components::traits::encode::EncoderComponent;
-use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
-use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeProviderComponent,
+use hermes_encoding_components::impls::GetDefaultEncoding;
+use hermes_encoding_components::traits::{
+    CanConvert, CanDecode, ConverterComponent, DecodeBufferTypeComponent, DecoderComponent,
+    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodeBufferTypeComponent,
+    EncodedTypeComponent, EncoderComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
+    MutDecoderComponent, MutEncoderComponent,
 };
-pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
-use hermes_encoding_components::traits::types::decode_buffer::DecodeBufferTypeComponent;
-use hermes_encoding_components::traits::types::encode_buffer::EncodeBufferTypeComponent;
-use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
-pub use hermes_encoding_components::traits::types::schema::SchemaTypeComponent;
+pub use hermes_encoding_components::traits::{SchemaGetterComponent, SchemaTypeComponent};
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;

@@ -1,9 +1,8 @@
 use cgp::prelude::*;
-use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
-use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
-use hermes_encoding_components::traits::encode_mut::{MutEncoder, MutEncoderComponent};
-use hermes_encoding_components::traits::transform::Transformer;
-use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
+use hermes_encoding_components::impls::DecodeFrom;
+use hermes_encoding_components::traits::{
+    HasEncodeBufferType, MutDecoderComponent, MutEncoder, MutEncoderComponent, Transformer,
+};
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
 use ibc::core::commitment_types::commitment::CommitmentRoot;
 
