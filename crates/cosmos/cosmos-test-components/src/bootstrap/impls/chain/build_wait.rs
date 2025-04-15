@@ -8,11 +8,10 @@ use hermes_test_components::chain::traits::{HasWalletType, Wallet};
 use hermes_test_components::chain_driver::traits::{CanWaitChainStartup, HasChainType};
 use hermes_test_components::driver::traits::HasChainDriverType;
 
-use crate::bootstrap::traits::chain::build_chain_driver::{
-    ChainDriverBuilder, ChainDriverBuilderComponent,
+use crate::bootstrap::traits::{
+    ChainDriverBuilder, ChainDriverBuilderComponent, HasChainGenesisConfigType,
+    HasChainNodeConfigType,
 };
-use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 
 pub struct BuildAndWaitChainDriver<InBuilder>(pub PhantomData<InBuilder>);
 

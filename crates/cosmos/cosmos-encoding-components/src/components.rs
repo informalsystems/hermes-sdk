@@ -15,9 +15,7 @@ mod preset {
     use ibc::primitives::Timestamp;
     use prost_types::Any;
 
-    use crate::impls::commitment_root::EncodeCommitmentRoot;
-    use crate::impls::height::EncodeHeight;
-    use crate::impls::timestamp::EncodeTimestamp;
+    use crate::impls::{EncodeCommitmentRoot, EncodeHeight, EncodeTimestamp};
 
     cgp_preset! {
         CosmosEncodingComponents {

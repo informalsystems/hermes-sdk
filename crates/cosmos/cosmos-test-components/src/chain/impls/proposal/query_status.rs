@@ -12,7 +12,7 @@ use ibc_proto::cosmos::gov::v1::{Proposal, QueryProposalRequest};
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::chain::types::proposal_status::ProposalStatus;
+use crate::chain::types::ProposalStatus;
 
 pub struct QueryProposalStatusWithGrpc;
 

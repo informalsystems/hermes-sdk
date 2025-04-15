@@ -3,7 +3,7 @@ use core::str::FromStr;
 use cgp::prelude::*;
 use hdpath::StandardHDPath;
 
-use crate::bootstrap::traits::fields::hd_path::{WalletHdPathComponent, WalletHdPathGetter};
+use crate::bootstrap::traits::{WalletHdPathComponent, WalletHdPathGetter};
 
 pub struct ProvideCosmosHdPath;
 

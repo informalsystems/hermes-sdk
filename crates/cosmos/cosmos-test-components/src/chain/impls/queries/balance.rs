@@ -11,8 +11,7 @@ use ibc_proto::cosmos::bank::v1beta1::QueryBalanceRequest;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::chain::types::amount::Amount;
-use crate::chain::types::denom::Denom;
+use crate::chain::types::{Amount, Denom};
 
 pub struct QueryCosmosBalance;
 

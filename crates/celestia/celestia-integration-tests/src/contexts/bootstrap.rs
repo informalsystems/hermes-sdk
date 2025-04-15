@@ -35,29 +35,18 @@ use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBu
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::{
-    AccountPrefixGetter, AccountPrefixGetterComponent,
+use hermes_cosmos_test_components::bootstrap::components::LegacyCosmosSdkBootstrapComponents;
+use hermes_cosmos_test_components::bootstrap::impls::{
+    NoModifyCometConfig, NoModifyCosmosSdkConfig, NoModifyGenesisConfig,
 };
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::{
-    ChainCommandPathGetter, ChainCommandPathGetterComponent,
+use hermes_cosmos_test_components::bootstrap::traits::{
+    AccountPrefixGetter, AccountPrefixGetterComponent, ChainCommandPathGetter,
+    ChainCommandPathGetterComponent, ChainDriverBuilderComponent, ChainStoreDirGetterComponent,
+    CometConfigModifierComponent, CosmosGenesisConfigModifierComponent,
+    CosmosSdkConfigModifierComponent, DenomForStaking, DenomForTransfer, DenomPrefixGetter,
+    DenomPrefixGetterComponent, DynamicGasGetterComponent, RandomIdFlagGetterComponent,
+    UseRandomIdFlag, WalletConfigGeneratorComponent,
 };
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetterComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
-    DenomForStaking, DenomForTransfer, DenomPrefixGetter, DenomPrefixGetterComponent,
-};
-use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::{
-    RandomIdFlagGetterComponent, UseRandomIdFlag,
-};
-use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::HermesError;

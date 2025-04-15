@@ -5,15 +5,12 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasDenomType;
 use hermes_test_components::chain_driver::traits::HasChainType;
 
-use crate::bootstrap::traits::fields::denom::{DenomForStaking, DenomForTransfer, HasGenesisDenom};
-use crate::bootstrap::traits::generator::generate_wallet_config::{
-    WalletConfigGenerator, WalletConfigGeneratorComponent,
+use crate::bootstrap::traits::{
+    DenomForStaking, DenomForTransfer, HasChainGenesisConfigType, HasGenesisDenom,
+    HasWalletConfigType, WalletConfigGenerator, WalletConfigGeneratorComponent,
 };
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
-use crate::bootstrap::types::wallet_config::CosmosWalletConfig;
-use crate::chain::types::amount::Amount;
-use crate::chain::types::denom::Denom;
+use crate::bootstrap::types::CosmosWalletConfig;
+use crate::chain::types::{Amount, Denom};
 
 /**
    Generator for standard sets of wallets for testing. Consists of one validator wallet,

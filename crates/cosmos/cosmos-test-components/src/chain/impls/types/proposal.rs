@@ -4,8 +4,7 @@ use hermes_test_components::chain::traits::{
     ProvideProposalIdType, ProvideProposalStatusType, ProvideProposalVoteType,
 };
 
-use crate::chain::types::proposal_status::ProposalStatus;
-use crate::chain::types::proposal_vote::ProposalVote;
+use crate::chain::types::{ProposalStatus, ProposalVote};
 
 pub struct ProvideCosmosProposalTypes;
 

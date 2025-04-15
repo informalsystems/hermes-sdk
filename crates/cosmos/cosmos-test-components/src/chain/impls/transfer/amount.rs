@@ -11,8 +11,7 @@ use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use sha2::{Digest, Sha256};
 use subtle_encoding::hex;
 
-use crate::chain::types::amount::Amount;
-use crate::chain::types::denom::Denom;
+use crate::chain::types::{Amount, Denom};
 
 #[cgp_new_provider(IbcTransferredAmountConverterComponent)]
 impl<Chain, Counterparty> IbcTransferredAmountConverter<Chain, Counterparty>

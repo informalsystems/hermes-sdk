@@ -7,8 +7,7 @@ use hermes_test_components::chain::traits::{HasWalletType, Wallet};
 use hermes_test_components::chain_driver::traits::HasChainType;
 use hermes_test_components::driver::traits::HasChainDriverType;
 
-use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
+use crate::bootstrap::traits::{HasChainGenesisConfigType, HasChainNodeConfigType};
 
 #[cgp_component {
   provider: ChainDriverBuilder,

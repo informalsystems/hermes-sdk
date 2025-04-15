@@ -5,10 +5,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::CanBuildChainIdFromString;
 use hermes_test_components::chain_driver::traits::HasChainType;
 
-use crate::bootstrap::traits::fields::random_id::HasRandomIdFlag;
-use crate::bootstrap::traits::generator::generate_chain_id::{
-    ChainIdGenerator, ChainIdGeneratorComponent,
-};
+use crate::bootstrap::traits::{ChainIdGenerator, ChainIdGeneratorComponent, HasRandomIdFlag};
 
 pub struct GenerateRandomChainId;
 

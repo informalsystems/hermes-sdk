@@ -12,15 +12,11 @@ use hermes_test_components::chain_driver::traits::HasChainType;
 use ibc::core::host::types::identifiers::ChainId;
 use toml::Value;
 
-use crate::bootstrap::traits::initializers::init_chain_config::{
-    ChainNodeConfigInitializer, ChainNodeConfigInitializerComponent,
+use crate::bootstrap::traits::{
+    CanModifyCometConfig, CanModifyCosmosSdkConfig, ChainNodeConfigInitializer,
+    ChainNodeConfigInitializerComponent, HasChainGenesisConfigType, HasChainNodeConfigType,
 };
-use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
-use crate::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CanModifyCosmosSdkConfig;
-use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
-use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
+use crate::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
 
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
 pub struct UpdateCosmosChainNodeConfig;

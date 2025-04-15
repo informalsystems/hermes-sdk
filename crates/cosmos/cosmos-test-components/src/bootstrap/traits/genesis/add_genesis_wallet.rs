@@ -6,7 +6,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::{HasWalletType, Wallet};
 use hermes_test_components::chain_driver::traits::HasChainType;
 
-use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
+use crate::bootstrap::traits::HasWalletConfigType;
 
 #[cgp_component {
   provider: GenesisWalletAdder,

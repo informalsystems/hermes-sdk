@@ -1,9 +1,7 @@
 use cgp::prelude::*;
 use toml::Value;
 
-use crate::bootstrap::traits::modifiers::modify_cosmos_sdk_config::{
-    CosmosSdkConfigModifier, CosmosSdkConfigModifierComponent,
-};
+use crate::bootstrap::traits::{CosmosSdkConfigModifier, CosmosSdkConfigModifierComponent};
 
 pub struct NoModifyCosmosSdkConfig;
 

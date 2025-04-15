@@ -1,9 +1,8 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::CanQueryGrpcServiceStatus;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
-use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_cosmos_test_components::bootstrap::traits::{HasChainNodeConfigType, HasDynamicGas};
+use hermes_cosmos_test_components::chain::types::CosmosTestWallet;
 use hermes_error::types::HermesError;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::{LevelDebug, LevelTrace, LevelWarn};

@@ -1,3 +1,8 @@
-pub mod bootstrap_chain;
-pub mod build_wait;
-pub mod start_chain;
+mod bootstrap_chain;
+pub use bootstrap_chain::*;
+
+mod build_wait;
+pub use build_wait::*;
+
+mod start_chain;
+pub use start_chain::*;

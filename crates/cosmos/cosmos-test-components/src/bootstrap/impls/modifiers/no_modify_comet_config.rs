@@ -1,9 +1,7 @@
 use cgp::prelude::*;
 use toml::Value;
 
-use crate::bootstrap::traits::modifiers::modify_comet_config::{
-    CometConfigModifier, CometConfigModifierComponent,
-};
+use crate::bootstrap::traits::{CometConfigModifier, CometConfigModifierComponent};
 
 pub struct NoModifyCometConfig;
 

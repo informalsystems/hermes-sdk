@@ -10,16 +10,11 @@ use hermes_test_components::chain::traits::HasWalletType;
 use hermes_test_components::chain_driver::traits::HasChainType;
 use hermes_test_components::driver::traits::HasChainDriverType;
 
-use crate::bootstrap::traits::chain::build_chain_driver::CanBuildChainDriver;
-use crate::bootstrap::traits::chain::start_chain::CanStartChainFullNodes;
-use crate::bootstrap::traits::generator::generate_chain_id::CanGenerateChainId;
-use crate::bootstrap::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
-use crate::bootstrap::traits::genesis::add_genesis_wallet::CanAddWalletToGenesis;
-use crate::bootstrap::traits::genesis::collect_gentxs::CanCollectGenesisTransactions;
-use crate::bootstrap::traits::initializers::init_chain_config::CanInitChainNodeConfig;
-use crate::bootstrap::traits::initializers::init_chain_data::CanInitChainData;
-use crate::bootstrap::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
-use crate::bootstrap::traits::initializers::init_genesis_config::CanInitChainGenesisConfig;
+use crate::bootstrap::traits::{
+    CanAddWalletToGenesis, CanBuildChainDriver, CanCollectGenesisTransactions, CanGenerateChainId,
+    CanGenerateWalletConfigs, CanInitChainData, CanInitChainGenesisConfig, CanInitChainHomeDir,
+    CanInitChainNodeConfig, CanStartChainFullNodes,
+};
 
 pub struct BootstrapCosmosChain;
 

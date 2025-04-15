@@ -6,19 +6,14 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::impls::RelayerConfig;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::{
+use hermes_cosmos_test_components::bootstrap::traits::{
     ChainCommandPathGetter, ChainCommandPathGetterComponent,
 };
-use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
-use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain::types::denom::Denom;
-use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_cosmos_test_components::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
+use hermes_cosmos_test_components::chain::types::{CosmosTestWallet, Denom};
 use hermes_cosmos_test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
-use hermes_cosmos_test_components::chain_driver::traits::grpc_port::{
-    GrpcPortGetter, GrpcPortGetterComponent,
-};
-use hermes_cosmos_test_components::chain_driver::traits::rpc_port::{
-    RpcPortGetter, RpcPortGetterComponent,
+use hermes_cosmos_test_components::chain_driver::traits::{
+    GrpcPortGetter, GrpcPortGetterComponent, RpcPortGetter, RpcPortGetterComponent,
 };
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::UseHermesError;

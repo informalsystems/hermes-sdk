@@ -2,12 +2,12 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAmountType;
 use hermes_test_components::chain_driver::traits::HasChainType;
 
-use crate::bootstrap::traits::types::wallet_config::{
+use crate::bootstrap::traits::{
     HasWalletConfigType, ProvideWalletConfigType, WalletConfigFieldsComponent,
     WalletConfigFieldsGetter, WalletConfigTypeComponent,
 };
-use crate::bootstrap::types::wallet_config::CosmosWalletConfig;
-use crate::chain::types::amount::Amount;
+use crate::bootstrap::types::CosmosWalletConfig;
+use crate::chain::types::Amount;
 
 pub struct ProvideCosmosWalletConfigType;
 

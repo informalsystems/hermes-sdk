@@ -16,7 +16,7 @@ use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateTy
 use hermes_any_counterparty::impls::encoding::consensus_state::UnknownConsensusStateType;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
 use hermes_cosmos_chain_components::impls::{AbciQueryError, BroadcastTxError, EipQueryError};
-use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
+use hermes_cosmos_test_components::chain::impls::ProposalFailed;
 use hermes_error::handlers::debug::{DebugError, DebugRetryableError};
 use hermes_error::handlers::display::DisplayError;
 use hermes_error::handlers::identity::ReturnError;

@@ -4,7 +4,7 @@ use hermes_test_components::chain_driver::traits::{
     ChainStartupWaiterComponent, RandomAmountGeneratorComponent,
 };
 
-use crate::chain_driver::impls::amount::GenerateRandomAmount;
+use crate::chain_driver::impls::GenerateRandomAmount;
 
 pub struct CosmosChainDriverComponents;
 

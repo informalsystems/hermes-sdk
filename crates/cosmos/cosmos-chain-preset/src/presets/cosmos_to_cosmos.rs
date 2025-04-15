@@ -11,7 +11,7 @@ mod preset {
         ProvideTendermintClientState, ProvideTendermintConsensusState,
         QueryConsensusStateHeightsFromGrpc,
     };
-    use hermes_cosmos_test_components::chain::impls::transfer::amount::ConvertCosmosIbcAmount;
+    use hermes_cosmos_test_components::chain::impls::ConvertCosmosIbcAmount;
     use hermes_relayer_components::chain::impls::{
         QueryAndConvertRawClientState, QueryAndConvertRawConsensusState,
     };

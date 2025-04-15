@@ -85,7 +85,7 @@ use hermes_cosmos_chain_components::types::CosmosCreateClientOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::chain::types::denom::Denom;
+use hermes_cosmos_test_components::chain::types::Denom;
 use hermes_error::types::{Error, HermesError};
 use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::error::traits::RetryableErrorComponent;

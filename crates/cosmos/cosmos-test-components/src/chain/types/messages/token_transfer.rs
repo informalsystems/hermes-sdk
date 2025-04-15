@@ -7,7 +7,7 @@ use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::apps::transfer::v1::MsgTransfer;
 
-use crate::chain::types::amount::Amount;
+use crate::chain::types::Amount;
 
 #[derive(Debug)]
 pub struct TokenTransferMessage {

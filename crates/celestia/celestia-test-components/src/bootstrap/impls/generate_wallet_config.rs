@@ -3,22 +3,15 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasDenomType;
-use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
-    DenomForStaking, DenomForTransfer, HasGenesisDenom,
+use hermes_cosmos_test_components::bootstrap::traits::{
+    DenomForStaking, DenomForTransfer, HasChainGenesisConfigType, HasGenesisDenom,
+    HasWalletConfigType, WalletConfigGenerator, WalletConfigGeneratorComponent,
 };
-use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::{
-    WalletConfigGenerator, WalletConfigGeneratorComponent,
-};
-use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::HasWalletConfigType;
-use hermes_cosmos_test_components::bootstrap::types::wallet_config::CosmosWalletConfig;
-use hermes_cosmos_test_components::chain::types::amount::Amount;
-use hermes_cosmos_test_components::chain::types::denom::Denom;
+use hermes_cosmos_test_components::bootstrap::types::CosmosWalletConfig;
+use hermes_cosmos_test_components::chain::types::{Amount, Denom};
 use hermes_test_components::chain_driver::traits::HasChainType;
 
-pub struct GenerateCelestiaWalletConfig;
-
-#[cgp_provider(WalletConfigGeneratorComponent)]
+#[cgp_new_provider(WalletConfigGeneratorComponent)]
 impl<Bootstrap, Chain> WalletConfigGenerator<Bootstrap> for GenerateCelestiaWalletConfig
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>

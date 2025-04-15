@@ -2,7 +2,7 @@ use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
+use crate::bootstrap::traits::HasChainGenesisConfigType;
 
 #[cgp_component {
   provider: ChainGenesisConfigInitializer,

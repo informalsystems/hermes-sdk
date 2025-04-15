@@ -7,15 +7,13 @@ use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use serde_json::{Error as JsonError, Value};
 
-use crate::bootstrap::traits::fields::denom::{DenomForStaking, DenomForTransfer, HasDenomPrefix};
-use crate::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
-use crate::bootstrap::traits::initializers::init_genesis_config::{
-    ChainGenesisConfigInitializer, ChainGenesisConfigInitializerComponent,
+use crate::bootstrap::traits::{
+    CanModifyCosmosGenesisConfig, ChainGenesisConfigInitializer,
+    ChainGenesisConfigInitializerComponent, DenomForStaking, DenomForTransfer,
+    HasChainGenesisConfigType, HasDenomPrefix, HasDynamicGas,
 };
-use crate::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use crate::chain::types::denom::Denom;
+use crate::bootstrap::types::CosmosGenesisConfig;
+use crate::chain::types::Denom;
 
 /// Parse the generated genesis JSON file, and allow the bootstrap context to modify the genesis config
 pub struct UpdateCosmosGenesisConfig;

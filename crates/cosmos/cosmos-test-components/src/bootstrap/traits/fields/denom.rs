@@ -4,7 +4,7 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::{DenomOf, HasDenomType};
 use hermes_test_components::chain_driver::traits::HasChainType;
 
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
+use crate::bootstrap::traits::HasChainGenesisConfigType;
 
 pub struct DenomForStaking;
 

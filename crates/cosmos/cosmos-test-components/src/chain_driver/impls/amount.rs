@@ -6,7 +6,7 @@ use hermes_test_components::chain_driver::traits::{
     HasChainType, RandomAmountGenerator, RandomAmountGeneratorComponent,
 };
 
-use crate::chain::types::amount::Amount;
+use crate::chain::types::Amount;
 
 pub struct GenerateRandomAmount;
 

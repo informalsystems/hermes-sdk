@@ -7,7 +7,7 @@ use hermes_test_components::chain::traits::{
     WalletTypeComponent,
 };
 
-use crate::chain::types::wallet::CosmosTestWallet;
+use crate::chain::types::CosmosTestWallet;
 
 pub struct ProvideCosmosTestWallet;
 

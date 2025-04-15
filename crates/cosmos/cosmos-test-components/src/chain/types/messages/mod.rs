@@ -1,1 +1,2 @@
-pub mod token_transfer;
+mod token_transfer;
+pub use token_transfer::*;

@@ -5,9 +5,8 @@ use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::HasChainType;
 
-use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::bootstrap::traits::initializers::init_chain_data::{
-    ChainDataInitializer, ChainDataInitializerComponent,
+use crate::bootstrap::traits::{
+    ChainDataInitializer, ChainDataInitializerComponent, HasChainCommandPath,
 };
 
 pub struct InitCosmosChainData;

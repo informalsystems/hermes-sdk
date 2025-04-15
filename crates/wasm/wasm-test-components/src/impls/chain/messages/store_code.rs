@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
 use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
-use hermes_cosmos_test_components::chain::types::amount::Amount;
+use hermes_cosmos_test_components::chain::types::Amount;
 use hermes_relayer_components::chain::traits::HasMessageType;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::base::v1beta1::Coin;

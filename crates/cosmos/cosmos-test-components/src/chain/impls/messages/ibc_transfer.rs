@@ -14,8 +14,7 @@ use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use ibc::primitives::Timestamp;
 
-use crate::chain::types::amount::Amount;
-use crate::chain::types::messages::token_transfer::TokenTransferMessage;
+use crate::chain::types::{Amount, TokenTransferMessage};
 
 #[cgp_new_provider(IbcTokenTransferMessageBuilderComponent)]
 impl<Chain, Counterparty> IbcTokenTransferMessageBuilder<Chain, Counterparty>

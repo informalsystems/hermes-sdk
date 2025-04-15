@@ -4,12 +4,12 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasDenomType;
 use hermes_test_components::chain_driver::traits::HasChainType;
 
-use crate::bootstrap::traits::fields::denom::{
+use crate::bootstrap::traits::{
     DenomForStaking, DenomForTransfer, GenesisDenomGetter, GenesisDenomGetterComponent,
+    HasChainGenesisConfigType,
 };
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use crate::chain::types::denom::Denom;
+use crate::bootstrap::types::CosmosGenesisConfig;
+use crate::chain::types::Denom;
 
 pub struct GetCosmosGenesisDenoms;
 

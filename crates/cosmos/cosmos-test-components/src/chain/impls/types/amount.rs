@@ -5,8 +5,7 @@ use hermes_chain_type_components::traits::{
 };
 use hermes_test_components::chain::traits::{AmountMethodsComponent, ProvideAmountMethods};
 
-use crate::chain::types::amount::Amount;
-use crate::chain::types::denom::Denom;
+use crate::chain::types::{Amount, Denom};
 
 pub struct UseCosmosAmount;
 

@@ -6,6 +6,11 @@
    genesis subcommands are grouped under a `genesis` subcommand.
 */
 
-pub mod add_genesis_account;
-pub mod add_genesis_validator;
-pub mod collect_gentxs;
+mod add_genesis_account;
+pub use add_genesis_account::*;
+
+mod add_genesis_validator;
+pub use add_genesis_validator::*;
+
+mod collect_gentxs;
+pub use collect_gentxs::*;

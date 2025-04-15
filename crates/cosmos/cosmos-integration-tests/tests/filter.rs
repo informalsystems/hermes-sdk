@@ -7,7 +7,7 @@ use hermes_cosmos_chain_components::types::PacketFilterConfig;
 use hermes_cosmos_integration_tests::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
 use hermes_cosmos_integration_tests::init::{init_preset_bootstraps, init_test_runtime};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::chain::types::amount::Amount;
+use hermes_cosmos_test_components::chain::types::Amount;
 use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::{CanQueryChainStatus, CanQueryPacketIsReceived};
 use hermes_test_components::chain::traits::{

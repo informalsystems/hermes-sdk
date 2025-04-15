@@ -25,18 +25,12 @@ mod preset {
         AbciQuerierComponent, EipQuerierComponent, GasToFeeConverterComponent,
         UnbondingPeriodQuerierComponent,
     };
-    use hermes_cosmos_test_components::chain::impls::chain_id::BuildCosmosChainIdFromString;
-    use hermes_cosmos_test_components::chain::impls::messages::ibc_transfer::BuildCosmosIbcTransferMessage;
-    use hermes_cosmos_test_components::chain::impls::proposal::messages::deposit::BuildDepositProposalMessage;
-    use hermes_cosmos_test_components::chain::impls::proposal::messages::vote::BuildVoteProposalMessage;
-    use hermes_cosmos_test_components::chain::impls::proposal::poll_status::PollProposalStatus;
-    use hermes_cosmos_test_components::chain::impls::proposal::query_status::QueryProposalStatusWithGrpc;
-    use hermes_cosmos_test_components::chain::impls::queries::balance::QueryCosmosBalance;
-    use hermes_cosmos_test_components::chain::impls::transfer::timeout::IbcTransferTimeoutAfterSeconds;
-    use hermes_cosmos_test_components::chain::impls::types::amount::UseCosmosAmount;
-    use hermes_cosmos_test_components::chain::impls::types::denom::ProvideIbcDenom;
-    use hermes_cosmos_test_components::chain::impls::types::proposal::ProvideCosmosProposalTypes;
-    use hermes_cosmos_test_components::chain::impls::types::wallet::ProvideCosmosTestWallet;
+    use hermes_cosmos_test_components::chain::impls::{
+        BuildCosmosChainIdFromString, BuildCosmosIbcTransferMessage, BuildDepositProposalMessage,
+        BuildVoteProposalMessage, IbcTransferTimeoutAfterSeconds, PollProposalStatus,
+        ProvideCosmosProposalTypes, ProvideCosmosTestWallet, ProvideIbcDenom, QueryCosmosBalance,
+        QueryProposalStatusWithGrpc, UseCosmosAmount,
+    };
     use hermes_relayer_components::chain::impls::{
         BuildChannelHandshakePayload, BuildConnectionHandshakePayload, BuildPacketPayloads,
         FixedPollIntervalMillis, QueryClearedPacketWithEmptyCommitment,

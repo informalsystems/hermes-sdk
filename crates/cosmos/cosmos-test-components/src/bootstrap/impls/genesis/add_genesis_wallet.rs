@@ -7,13 +7,10 @@ use hermes_test_components::chain::traits::HasWalletType;
 use hermes_test_components::chain_driver::traits::HasChainType;
 use hermes_test_components::driver::traits::HasChainDriverType;
 
-use crate::bootstrap::traits::genesis::add_genesis_account::CanAddGenesisAccount;
-use crate::bootstrap::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
-use crate::bootstrap::traits::genesis::add_genesis_wallet::{
-    GenesisWalletAdder, GenesisWalletAdderComponent,
+use crate::bootstrap::traits::{
+    CanAddGenesisAccount, CanAddGenesisValidator, CanInitWallet, GenesisWalletAdder,
+    GenesisWalletAdderComponent, HasWalletConfigFields,
 };
-use crate::bootstrap::traits::initializers::init_wallet::CanInitWallet;
-use crate::bootstrap::traits::types::wallet_config::HasWalletConfigFields;
 
 pub struct AddCosmosWalletToGenesis;
 

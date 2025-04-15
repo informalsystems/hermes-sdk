@@ -11,7 +11,7 @@ use ibc_proto::cosmos::gov::v1::MsgDeposit;
 use ibc_proto::google::protobuf::Any;
 use prost::{Message, Name};
 
-use crate::chain::types::amount::Amount;
+use crate::chain::types::Amount;
 
 pub struct BuildDepositProposalMessage;
 
