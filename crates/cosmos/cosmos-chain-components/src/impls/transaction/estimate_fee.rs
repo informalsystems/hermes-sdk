@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::HasChainId;
-use hermes_relayer_components::transaction::traits::{
+use hermes_core::relayer_components::chain::traits::HasChainId;
+use hermes_core::relayer_components::transaction::traits::{
     HasFeeType, HasTransactionType, TxFeeEstimator, TxFeeEstimatorComponent,
 };
 use http::uri::InvalidUri;

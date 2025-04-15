@@ -1,8 +1,8 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::TendermintClientState;
-use hermes_encoding_components::traits::{
+use hermes_core::encoding_components::traits::{
     CanConvert, CanDecode, CanEncode, Converter, ConverterComponent, HasEncodedType,
 };
+use hermes_cosmos_chain_components::types::TendermintClientState;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 use hermes_wasm_encoding_components::types::WasmClientState;
 use ibc::core::client::types::Height;

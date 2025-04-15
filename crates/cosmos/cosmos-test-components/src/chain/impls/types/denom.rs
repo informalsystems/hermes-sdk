@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::{DenomTypeComponent, ProvideDenomType};
+use hermes_core::chain_type_components::traits::{DenomTypeComponent, ProvideDenomType};
 
 use crate::chain::types::Denom;
 

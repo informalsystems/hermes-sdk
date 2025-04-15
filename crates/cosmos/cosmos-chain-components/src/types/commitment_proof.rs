@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::CommitmentProofTypeProviderComponent;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::chain_type_components::traits::CommitmentProofTypeProviderComponent;
+use hermes_core::relayer_components::chain::traits::{
     CommitmentProofBytesGetter, CommitmentProofBytesGetterComponent, CommitmentProofHeightGetter,
     CommitmentProofHeightGetterComponent, HasCommitmentProofType, HasHeightType,
 };

@@ -1,10 +1,10 @@
 use core::fmt::Display;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::HasMessageType;
-use hermes_encoding_components::traits::{CanConvert, HasEncoding};
-use hermes_encoding_components::types::AsBytes;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::chain_type_components::traits::HasMessageType;
+use hermes_core::encoding_components::traits::{CanConvert, HasEncoding};
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_core::relayer_components::chain::traits::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenAckMessageBuilderComponent,
     ConnectionOpenConfirmMessageBuilder, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilder, ConnectionOpenInitMessageBuilderComponent,
@@ -14,7 +14,7 @@ use hermes_relayer_components::chain::traits::{
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType, HasHeightFields,
     HasInitConnectionOptionsType,
 };
-use hermes_relayer_components::chain::types::payloads::connection::{
+use hermes_core::relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };

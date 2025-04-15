@@ -1,7 +1,7 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::HasChainIdType;
-use hermes_relayer_components::chain::types::aliases::ChainIdOf;
-use hermes_test_components::chain_driver::traits::HasChainType;
+use hermes_core::relayer_components::chain::traits::HasChainIdType;
+use hermes_core::relayer_components::chain::types::aliases::ChainIdOf;
+use hermes_core::test_components::chain_driver::traits::HasChainType;
 
 #[cgp_component {
   provider: ChainIdGenerator,

@@ -1,10 +1,10 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::HasAmountType;
-use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
-use hermes_relayer_components::chain::traits::HasMessageType;
-use hermes_test_components::chain::traits::{
+use hermes_core::chain_type_components::traits::HasAmountType;
+use hermes_core::relayer_components::chain::traits::HasMessageType;
+use hermes_core::test_components::chain::traits::{
     DepositProposalMessageBuilder, DepositProposalMessageBuilderComponent, HasProposalIdType,
 };
+use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::gov::v1::MsgDeposit;

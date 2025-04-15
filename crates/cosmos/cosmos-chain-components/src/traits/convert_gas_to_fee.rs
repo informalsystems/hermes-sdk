@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::transaction::traits::HasFeeType;
+use hermes_core::relayer_components::transaction::traits::HasFeeType;
 
 #[cgp_component {
   provider: GasToFeeConverter,

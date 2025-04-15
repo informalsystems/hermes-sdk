@@ -1,7 +1,7 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::relayer_components::chain::traits::{
     ClientStateFieldsComponent, ClientStateFieldsGetter, ClientStateTypeComponent, HasChainIdType,
     HasClientStateType, HasHeightType, ProvideClientStateType, ProvideRawClientStateType,
     RawClientStateTypeComponent,

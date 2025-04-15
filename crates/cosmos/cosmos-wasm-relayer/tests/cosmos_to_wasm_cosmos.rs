@@ -5,6 +5,10 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use hermes_core::relayer_components::relay::traits::{
+    CanCreateClient, DestinationTarget, SourceTarget,
+};
+use hermes_core::test_components::bootstrap::traits::CanBootstrapChain;
 use hermes_cosmos_integration_tests::contexts::{CosmosBootstrap, CosmosBootstrapFields};
 use hermes_cosmos_relayer::contexts::CosmosBuilder;
 use hermes_cosmos_wasm_relayer::context::{
@@ -12,9 +16,7 @@ use hermes_cosmos_wasm_relayer::context::{
 };
 use hermes_cosmos_wasm_relayer::types::CreateWasmTendermintMessageOptions;
 use hermes_error::types::Error;
-use hermes_relayer_components::relay::traits::{CanCreateClient, DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::bootstrap::traits::CanBootstrapChain;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 

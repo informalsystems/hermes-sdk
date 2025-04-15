@@ -5,6 +5,11 @@ use std::path::PathBuf;
 use cgp::core::error::ErrorOf;
 use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
+use hermes_core::runtime_components::traits::{
+    CanCreateDir, CanWriteStringToFile, HasFilePathType,
+};
+use hermes_core::test_components::chain::traits::HasWalletType;
+use hermes_core::test_components::chain_driver::traits::HasChainType;
 use hermes_cosmos_chain_components::impls::CosmosChainConfig;
 use hermes_cosmos_chain_components::types::{GasConfig, GasPrice, KEYSTORE_FILE_EXTENSION};
 use hermes_cosmos_test_components::bootstrap::traits::{
@@ -12,9 +17,6 @@ use hermes_cosmos_test_components::bootstrap::traits::{
 };
 use hermes_cosmos_test_components::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
 use hermes_cosmos_test_components::chain::types::CosmosTestWallet;
-use hermes_runtime_components::traits::{CanCreateDir, CanWriteStringToFile, HasFilePathType};
-use hermes_test_components::chain::traits::HasWalletType;
-use hermes_test_components::chain_driver::traits::HasChainType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use tendermint_rpc::{Error as TendermintRpcError, Url};

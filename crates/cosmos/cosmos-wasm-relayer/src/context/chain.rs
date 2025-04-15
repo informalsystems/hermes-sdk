@@ -3,26 +3,13 @@ use core::ops::Deref;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::AnyCounterparty;
-use hermes_cosmos_chain_components::traits::{
-    CanQueryAbci, CanQueryUnbondingPeriod, GasConfigGetter, GasConfigGetterComponent,
-    GrpcAddressGetter, GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
-    TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent,
-};
-use hermes_cosmos_chain_components::types::{
-    CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig, TendermintClientState,
-    TendermintConsensusState,
-};
-use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_relayer::contexts::CosmosChain;
-use hermes_cosmos_relayer::impls::HandleCosmosError;
-use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
-use hermes_encoding_components::traits::{
+use hermes_core::encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
     HasDefaultEncoding,
 };
-use hermes_encoding_components::types::AsBytes;
-use hermes_logging_components::traits::LoggerComponent;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::relayer_components::chain::traits::{
     CanBuildAckPacketMessage, CanBuildAckPacketPayload, CanBuildChannelOpenAckMessage,
     CanBuildChannelOpenAckPayload, CanBuildChannelOpenConfirmMessage,
     CanBuildChannelOpenConfirmPayload, CanBuildChannelOpenInitMessage,
@@ -42,18 +29,31 @@ use hermes_relayer_components::chain::traits::{
     HasInitConnectionOptionsType, HasRawClientStateType, HasUpdateClientPayloadType,
     IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
-use hermes_relayer_components::error::traits::{HasRetryableError, RetryableErrorComponent};
-use hermes_relayer_components::transaction::impls::{GetGlobalNonceMutex, HasPollTimeout};
-use hermes_relayer_components::transaction::traits::{
+use hermes_core::relayer_components::error::traits::{HasRetryableError, RetryableErrorComponent};
+use hermes_core::relayer_components::transaction::impls::{GetGlobalNonceMutex, HasPollTimeout};
+use hermes_core::relayer_components::transaction::traits::{
     CanPollTxResponse, CanQueryTxResponse, CanSubmitTx, DefaultSignerGetterComponent,
     FeeForSimulationGetter, FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent,
 };
-use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::{
+use hermes_core::relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
+use hermes_core::runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_test_components::chain::traits::CanQueryBalance;
+use hermes_core::test_components::chain::traits::CanQueryBalance;
+use hermes_cosmos_chain_components::traits::{
+    CanQueryAbci, CanQueryUnbondingPeriod, GasConfigGetter, GasConfigGetterComponent,
+    GrpcAddressGetter, GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
+    TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent,
+};
+use hermes_cosmos_chain_components::types::{
+    CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig, TendermintClientState,
+    TendermintConsensusState,
+};
+use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
+use hermes_cosmos_relayer::contexts::CosmosChain;
+use hermes_cosmos_relayer::impls::HandleCosmosError;
+use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
 use hermes_wasm_test_components::traits::chain::{

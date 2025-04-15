@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::{
+use hermes_core::runtime_components::traits::{
     CanReadFileAsString, CanWriteStringToFile, HasFilePathType, HasRuntime,
 };
 use serde_json::{Error as JsonError, Value};

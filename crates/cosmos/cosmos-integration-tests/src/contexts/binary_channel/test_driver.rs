@@ -1,18 +1,18 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_error::handlers::DebugError;
-use hermes_error::impls::UseHermesError;
-use hermes_ibc_test_suite::traits::CanUseBinaryTestDriverMethods;
-use hermes_logging_components::traits::LoggerComponent;
-use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
-use hermes_test_components::driver::traits::{
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
+use hermes_core::test_components::driver::traits::{
     ChainDriverGetterAtComponent, ChainDriverTypeProviderAtComponent, ChannelIdGetterAtComponent,
     RelayDriverGetterAtComponent, RelayDriverTypeProviderAtComponent,
 };
-use hermes_test_components::setup::traits::PortIdGetterAtComponent;
+use hermes_core::test_components::setup::traits::PortIdGetterAtComponent;
+use hermes_error::handlers::DebugError;
+use hermes_error::impls::UseHermesError;
+use hermes_ibc_test_suite::traits::CanUseBinaryTestDriverMethods;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 

@@ -7,30 +7,30 @@ use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_logging_components::traits::LoggerComponent;
-use hermes_relayer_components::error::traits::{CanPerformRetry, RetryableErrorComponent};
-use hermes_relayer_components::multi::traits::chain_at::{
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::relayer_components::error::traits::{CanPerformRetry, RetryableErrorComponent};
+use hermes_core::relayer_components::multi::traits::chain_at::{
     ChainAt, ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };
-use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
-use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;
-use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::impls::{
+use hermes_core::relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
+use hermes_core::relayer_components::multi::traits::relay_at::ClientIdAt;
+use hermes_core::relayer_components::multi::types::tags::{Dst, Src};
+use hermes_core::relayer_components::relay::impls::{
     PacketMutexGetterComponent, PacketMutexOf, SelectRelayAToB,
 };
-use hermes_relayer_components::relay::traits::{
+use hermes_core::relayer_components::relay::traits::{
     CanCreateClient, DestinationTarget, HasDestinationTargetChainTypes, HasRelayClientIds,
     HasSourceTargetChainTypes, SourceTarget, TargetAutoRelayerComponent,
 };
-use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetterComponent;
-use hermes_relayer_components_extra::batch::traits::types::{
+use hermes_core::relayer_components_extra::batch::traits::channel::MessageBatchSenderGetterComponent;
+use hermes_core::relayer_components_extra::batch::traits::types::{
     CanUseMessageBatchChannel, MessageBatchSenderOf,
 };
-use hermes_relayer_components_extra::components::extra::relay::ExtraRelayPreset;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::{
+use hermes_core::relayer_components_extra::components::extra::relay::ExtraRelayPreset;
+use hermes_core::runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,
 };
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;
 

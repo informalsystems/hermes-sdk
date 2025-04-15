@@ -13,10 +13,6 @@ description  = """
 
 [dependencies]
 cgp                                 = { workspace = true }
-hermes-runtime                      = { workspace = true }
-hermes-relayer-components           = { workspace = true }
-hermes-test-components              = { workspace = true }
-hermes-runtime-components           = { workspace = true }
-hermes-chain-type-components        = { workspace = true }
+hermes-core                         = { workspace = true }
 hermes-cosmos-chain-components      = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }

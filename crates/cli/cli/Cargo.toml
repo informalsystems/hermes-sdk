@@ -26,6 +26,7 @@ hermes-runtime-components           = { workspace = true }
 hermes-logging-components           = { workspace = true }
 hermes-tracing-logging-components   = { workspace = true }
 hermes-relayer-components           = { workspace = true }
+hermes-core                         = { workspace = true }
 hermes-chain-components             = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
 hermes-cosmos-integration-tests     = { workspace = true }

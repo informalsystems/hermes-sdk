@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::transaction::traits::{
+use hermes_core::relayer_components::transaction::traits::{
     FeeTypeProviderComponent, NonceTypeProviderComponent, ProvideTransactionType,
     SignerTypeProviderComponent, TransactionTypeComponent, TxHashTypeProviderComponent,
     TxResponseTypeProviderComponent,

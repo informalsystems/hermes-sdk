@@ -1,11 +1,11 @@
 use cgp::prelude::*;
-use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
-use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
-use hermes_test_components::driver::traits::{
+use hermes_core::relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
+use hermes_core::test_components::driver::traits::{
     ChainDriverTypeProviderAtComponent, RelayDriverTypeProviderAtComponent,
 };
+use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
 
 use crate::contexts::{CosmosChainDriver, CosmosRelayDriver};
 

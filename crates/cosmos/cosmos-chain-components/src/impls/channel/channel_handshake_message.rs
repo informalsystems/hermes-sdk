@@ -1,8 +1,8 @@
 use core::fmt::Display;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::HasMessageType;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::chain_type_components::traits::HasMessageType;
+use hermes_core::relayer_components::chain::traits::{
     ChannelOpenAckMessageBuilder, ChannelOpenAckMessageBuilderComponent,
     ChannelOpenConfirmMessageBuilder, ChannelOpenConfirmMessageBuilderComponent,
     ChannelOpenInitMessageBuilder, ChannelOpenInitMessageBuilderComponent,
@@ -11,7 +11,7 @@ use hermes_relayer_components::chain::traits::{
     HasChannelOpenTryPayloadType, HasCommitmentProofBytes, HasConnectionIdType, HasHeightFields,
     HasInitChannelOptionsType, HasPortIdType,
 };
-use hermes_relayer_components::chain::types::payloads::channel::{
+use hermes_core::relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
 use ibc::core::channel::types::channel::{ChannelEnd, State};

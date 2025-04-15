@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::{
+use hermes_core::runtime_components::traits::{
     ChildProcessOf, FilePathOf, HasChildProcessType, HasFilePathType, HasRuntime,
 };
 

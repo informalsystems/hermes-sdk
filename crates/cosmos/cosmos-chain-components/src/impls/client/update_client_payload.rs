@@ -1,12 +1,12 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::HasHeightType;
 use hermes_comet_light_client_components::traits::CanBuildLightBlocksForUpdateClient;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
-use hermes_error::types::HermesError;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::chain_type_components::traits::HasHeightType;
+use hermes_core::relayer_components::chain::traits::{
     CanQueryChainStatus, HasClientStateType, HasUpdateClientPayloadType,
     UpdateClientPayloadBuilder, UpdateClientPayloadBuilderComponent,
 };
+use hermes_error::types::HermesError;
 use ibc::clients::tendermint::types::error::TendermintClientError;
 use ibc::clients::tendermint::types::Header;
 use ibc::core::client::types::error::ClientError;

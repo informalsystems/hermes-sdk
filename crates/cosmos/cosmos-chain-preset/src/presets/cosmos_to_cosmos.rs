@@ -1,21 +1,10 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_cosmos_chain_components::impls::{
-        BuildAnyCreateClientMessage, BuildCosmosChannelHandshakeMessage,
-        BuildCosmosConnectionHandshakeMessage, BuildCosmosCreateClientPayload,
-        BuildCosmosPacketMessages, BuildCosmosUpdateClientMessage,
-        BuildTendermintUpdateClientPayload, CosmosPacketFieldReader,
-        GetCosmosCounterpartyMessageHeight, ProvideCosmosCreateClientSettings,
-        ProvideCosmosPayloadTypes, ProvideNoCreateClientMessageOptionsType,
-        ProvideTendermintClientState, ProvideTendermintConsensusState,
-        QueryConsensusStateHeightsFromGrpc,
-    };
-    use hermes_cosmos_test_components::chain::impls::ConvertCosmosIbcAmount;
-    use hermes_relayer_components::chain::impls::{
+    use hermes_core::relayer_components::chain::impls::{
         QueryAndConvertRawClientState, QueryAndConvertRawConsensusState,
     };
-    use hermes_relayer_components::chain::traits::{
+    use hermes_core::relayer_components::chain::traits::{
         AckPacketMessageBuilderComponent, AllClientStatesQuerierComponent,
         ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
         ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
@@ -35,7 +24,18 @@ mod preset {
         TimeoutUnorderedPacketMessageBuilderComponent, UpdateClientMessageBuilderComponent,
         UpdateClientPayloadBuilderComponent, UpdateClientPayloadTypeComponent,
     };
-    use hermes_test_components::chain::traits::IbcTransferredAmountConverterComponent;
+    use hermes_core::test_components::chain::traits::IbcTransferredAmountConverterComponent;
+    use hermes_cosmos_chain_components::impls::{
+        BuildAnyCreateClientMessage, BuildCosmosChannelHandshakeMessage,
+        BuildCosmosConnectionHandshakeMessage, BuildCosmosCreateClientPayload,
+        BuildCosmosPacketMessages, BuildCosmosUpdateClientMessage,
+        BuildTendermintUpdateClientPayload, CosmosPacketFieldReader,
+        GetCosmosCounterpartyMessageHeight, ProvideCosmosCreateClientSettings,
+        ProvideCosmosPayloadTypes, ProvideNoCreateClientMessageOptionsType,
+        ProvideTendermintClientState, ProvideTendermintConsensusState,
+        QueryConsensusStateHeightsFromGrpc,
+    };
+    use hermes_cosmos_test_components::chain::impls::ConvertCosmosIbcAmount;
 
     cgp_preset! {
         CosmosToCosmosComponents {

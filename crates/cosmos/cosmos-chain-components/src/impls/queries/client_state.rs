@@ -2,7 +2,7 @@ use core::iter::Iterator;
 use core::str::FromStr;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::relayer_components::chain::traits::{
     AllRawClientStatesQuerier, AllRawClientStatesQuerierComponent, HasIbcChainTypes,
     HasRawClientStateType, RawClientStateQuerier, RawClientStateQuerierComponent,
     RawClientStateWithProofsQuerier, RawClientStateWithProofsQuerierComponent,

@@ -1,14 +1,14 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::encoding::CosmosClientEncodingComponents;
-use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
-use hermes_encoding_components::impls::GetDefaultEncoding;
-use hermes_encoding_components::traits::{
+use hermes_core::encoding_components::impls::GetDefaultEncoding;
+use hermes_core::encoding_components::traits::{
     CanConvertBothWays, CanEncodeAndDecode, CanEncodeAndDecodeMut, DefaultEncodingGetter,
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
     HasDecodeBufferType, HasEncodeBufferType, HasEncodedType, HasEncodingType,
 };
-use hermes_encoding_components::types::AsBytes;
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_cosmos_chain_components::encoding::CosmosClientEncodingComponents;
+use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
 use hermes_protobuf_encoding_components::impls::encode_mut::chunk::ProtoChunks;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use ibc::core::client::types::Height;
@@ -77,7 +77,7 @@ impl CheckCosmosEncoding for CosmosEncoding {}
 
 #[cfg(test)]
 mod test {
-    use hermes_encoding_components::traits::{CanDecode, CanEncode};
+    use hermes_core::encoding_components::traits::{CanDecode, CanEncode};
     use hermes_error::types::HermesError;
     use ibc::core::client::types::Height;
     use ibc_proto::Protobuf;

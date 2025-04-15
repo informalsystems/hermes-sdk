@@ -1,12 +1,12 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::Secp256k1KeyPair;
-use hermes_runtime_components::traits::{
+use hermes_core::runtime_components::traits::{
     CanExecCommand, CanWriteStringToFile, ExecOutput, HasFilePathType, HasRuntime,
 };
-use hermes_test_components::chain::traits::HasWalletType;
-use hermes_test_components::chain_driver::traits::HasChainType;
+use hermes_core::test_components::chain::traits::HasWalletType;
+use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_cosmos_chain_components::types::Secp256k1KeyPair;
 use serde_json as json;
 
 use crate::bootstrap::traits::{

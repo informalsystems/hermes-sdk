@@ -2,6 +2,12 @@ use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::runtime_components::traits::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
+use hermes_core::test_components::chain_driver::traits::ChainTypeProviderComponent;
+use hermes_core::test_components::driver::traits::ChainDriverTypeProviderComponent;
 use hermes_cosmos_chain_components::types::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::CosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::{
@@ -26,11 +32,7 @@ use hermes_cosmos_test_components::bootstrap::traits::{
 };
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
-use hermes_logging_components::traits::LoggerComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
-use hermes_test_components::chain_driver::traits::ChainTypeProviderComponent;
-use hermes_test_components::driver::traits::ChainDriverTypeProviderComponent;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use hermes_wasm_test_components::impls::bootstrap::{
     BuildChainDriverAndInitWasmClient, ModifyWasmGenesisConfig, ModifyWasmNodeConfig,

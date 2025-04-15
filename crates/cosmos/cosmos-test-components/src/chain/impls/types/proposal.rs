@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_test_components::chain::traits::{
+use hermes_core::test_components::chain::traits::{
     ProposalIdTypeComponent, ProposalStatusTypeComponent, ProposalVoteTypeComponent,
     ProvideProposalIdType, ProvideProposalStatusType, ProvideProposalVoteType,
 };

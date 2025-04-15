@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::relayer_components::chain::traits::{
     CanQueryChainHeight, CanQueryClientState, CounterpartyChainIdQuerier,
     CounterpartyChainIdQuerierComponent, HasChainIdType, HasClientStateFields, HasIbcChainTypes,
 };

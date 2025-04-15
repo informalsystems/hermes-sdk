@@ -6,30 +6,16 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWr
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::AnyCounterparty;
-use hermes_chain_type_components::traits::{
+use hermes_core::chain_type_components::traits::{
     ChainIdGetterComponent, HasEventType, HasMessageResponseType,
     MessageResponseEventsGetterComponent,
 };
-use hermes_cosmos_chain_components::impls::CosmosChainConfig;
-use hermes_cosmos_chain_components::traits::{
-    EipQuerierComponent, GasConfigGetter, GasConfigGetterComponent, GrpcAddressGetter,
-    GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
-    TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent, UnbondingPeriodQuerierComponent,
-};
-use hermes_cosmos_chain_components::types::{
-    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent, CosmosCommitmentProof,
-    CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent, CosmosCreateClientEvent,
-    CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig,
-    PacketFilterConfig, Secp256k1KeyPair, TendermintClientState,
-};
-use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
-use hermes_encoding_components::traits::{
+use hermes_core::encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
 };
-use hermes_encoding_components::types::AsBytes;
-use hermes_logging_components::traits::LoggerComponent;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::relayer_components::chain::traits::{
     AllClientStatesQuerierComponent, BlockEventsQuerierComponent, BlockTimeQuerierComponent,
     CanExtractFromMessageResponse, ChainStatusQuerierComponent, ChannelEndQuerierComponent,
     ChannelEndWithProofsQuerierComponent, ClientStateQuerierComponent,
@@ -47,23 +33,39 @@ use hermes_relayer_components::chain::traits::{
     SendPacketEventComponent, UpdateClientMessageBuilderComponent,
     UpdateClientPayloadBuilderComponent,
 };
-use hermes_relayer_components::error::traits::RetryableErrorComponent;
-use hermes_relayer_components::transaction::impls::{
+use hermes_core::relayer_components::error::traits::RetryableErrorComponent;
+use hermes_core::relayer_components::transaction::impls::{
     GetGlobalNonceMutex, LogSendMessagesWithSignerAndNonce, TxNoResponseError,
 };
-use hermes_relayer_components::transaction::traits::{
+use hermes_core::relayer_components::transaction::traits::{
     DefaultSignerGetterComponent, FeeForSimulationGetter, FeeForSimulationGetterComponent,
     NonceAllocationMutexGetterComponent, TxResponsePollerComponent, TxResponseQuerierComponent,
     TxSubmitterComponent,
 };
-use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
-use hermes_test_components::chain::traits::{
+use hermes_core::relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
+use hermes_core::runtime_components::traits::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
+use hermes_core::test_components::chain::traits::{
     BalanceQuerierComponent, CanBuildIbcTokenTransferMessages, EventualAmountAsserterComponent,
     IbcTokenTransferMessageBuilderComponent, ProposalStatusQuerierComponent,
     TokenIbcTransferrerComponent,
 };
+use hermes_cosmos_chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_chain_components::traits::{
+    EipQuerierComponent, GasConfigGetter, GasConfigGetterComponent, GrpcAddressGetter,
+    GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
+    TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent, UnbondingPeriodQuerierComponent,
+};
+use hermes_cosmos_chain_components::types::{
+    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent, CosmosCommitmentProof,
+    CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent, CosmosCreateClientEvent,
+    CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig,
+    PacketFilterConfig, Secp256k1KeyPair, TendermintClientState,
+};
+use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
+use hermes_cosmos_chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
 use hermes_wasm_test_components::traits::chain::{

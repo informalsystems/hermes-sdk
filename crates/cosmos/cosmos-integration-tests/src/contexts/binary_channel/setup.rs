@@ -1,26 +1,26 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField, WithField};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::{
-    CosmosCreateClientOptions, CosmosInitChannelOptions, CosmosInitConnectionOptions,
-};
-use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosBuilder, CosmosChain, CosmosRelay};
-use hermes_error::handlers::DebugError;
-use hermes_error::impls::UseHermesError;
-use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
-use hermes_test_components::driver::traits::{
+use hermes_core::relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
+use hermes_core::test_components::driver::traits::{
     BuilderAtTypeProviderComponent, ChainDriverTypeProviderAtComponent,
 };
-use hermes_test_components::setup::binary_channel::*;
-use hermes_test_components::setup::traits::{
+use hermes_core::test_components::setup::binary_channel::*;
+use hermes_core::test_components::setup::traits::{
     BinaryChannelDriverBuilderComponent, BootstrapGetterAtComponent,
     BootstrapTypeProviderAtComponent, BuilderAtGetterComponent,
     CreateClientMessageOptionsGetterAtComponent, CreateClientPayloadOptionsGetterAtComponent,
     InitChannelOptionsGetterAtComponent, InitConnectionOptionsGetterAtComponent,
     PortIdGetterAtComponent, TestDriverTypeProviderComponent,
 };
+use hermes_cosmos_chain_components::types::{
+    CosmosCreateClientOptions, CosmosInitChannelOptions, CosmosInitConnectionOptions,
+};
+use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosBuilder, CosmosChain, CosmosRelay};
+use hermes_error::handlers::DebugError;
+use hermes_error::impls::UseHermesError;
 use ibc::core::host::types::identifiers::PortId;
 
 use crate::contexts::{CosmosBinaryChannelTestDriver, CosmosChainDriver};

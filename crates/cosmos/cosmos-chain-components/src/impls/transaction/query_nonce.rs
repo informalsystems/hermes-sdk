@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::transaction::traits::{
+use hermes_core::relayer_components::transaction::traits::{
     HasNonceType, HasSignerType, NonceQuerier, NonceQuerierComponent,
 };
 use http::uri::InvalidUri;

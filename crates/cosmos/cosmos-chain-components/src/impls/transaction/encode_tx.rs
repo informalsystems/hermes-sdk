@@ -1,8 +1,8 @@
 #![allow(clippy::ptr_arg)]
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::{HasChainId, HasMessageType};
-use hermes_relayer_components::transaction::traits::{
+use hermes_core::relayer_components::chain::traits::{HasChainId, HasMessageType};
+use hermes_core::relayer_components::transaction::traits::{
     HasFeeType, HasNonceType, HasSignerType, HasTransactionType, TxEncoder, TxEncoderComponent,
 };
 use ibc::core::host::types::identifiers::ChainId;

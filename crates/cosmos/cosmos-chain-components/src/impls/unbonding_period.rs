@@ -1,7 +1,7 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::{CanQueryChainHeight, HasHeightType};
+use hermes_core::relayer_components::chain::traits::{CanQueryChainHeight, HasHeightType};
 use ibc::core::client::types::Height;
 use ibc_proto::cosmos::staking::v1beta1::QueryParamsResponse;
 use prost::{DecodeError, Message};

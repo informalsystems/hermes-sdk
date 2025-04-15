@@ -13,7 +13,25 @@ use eyre::Report;
 use futures::channel::mpsc::SendError;
 use futures::channel::oneshot::Canceled;
 use hermes_any_counterparty::impls::{UnknownClientStateType, UnknownConsensusStateType};
-use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
+use hermes_core::chain_type_components::traits::{HasAddressType, HasAmountType};
+use hermes_core::relayer_components::chain::impls::{
+    InvalidTimeoutReceipt, NoConsensusStateAtLessThanHeight,
+};
+use hermes_core::relayer_components::chain::traits::{
+    ConnectionNotFoundError, EmptyMessageResponse, HasChainIdType, HasHeightType, HasIbcChainTypes,
+    HasOutgoingPacketType,
+};
+use hermes_core::relayer_components::error::traits::RetryableErrorComponent;
+use hermes_core::relayer_components::relay::impls::{
+    MissingChannelInitEventError, MissingChannelTryEventError, MissingConnectionInitEventError,
+    MissingConnectionTryEventError, MissingCreateClientEventError,
+};
+use hermes_core::relayer_components::relay::traits::HasRelayChains;
+use hermes_core::relayer_components::transaction::impls::TxNoResponseError;
+use hermes_core::relayer_components::transaction::traits::HasTxHashType;
+use hermes_core::test_components::chain::impls::{
+    EventualAmountTimeoutError, MissingSendPacketEventError,
+};
 use hermes_cosmos_chain_components::impls::{AbciQueryError, BroadcastTxError, EipQueryError};
 use hermes_cosmos_test_components::chain::impls::ProposalFailed;
 use hermes_error::handlers::{
@@ -27,25 +45,7 @@ use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
     InvalidWireType, UnsupportedWireType,
 };
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
-use hermes_relayer_components::chain::impls::{
-    InvalidTimeoutReceipt, NoConsensusStateAtLessThanHeight,
-};
-use hermes_relayer_components::chain::traits::{
-    ConnectionNotFoundError, EmptyMessageResponse, HasChainIdType, HasHeightType, HasIbcChainTypes,
-    HasOutgoingPacketType,
-};
-use hermes_relayer_components::error::traits::RetryableErrorComponent;
-use hermes_relayer_components::relay::impls::{
-    MissingChannelInitEventError, MissingChannelTryEventError, MissingConnectionInitEventError,
-    MissingConnectionTryEventError, MissingCreateClientEventError,
-};
-use hermes_relayer_components::relay::traits::HasRelayChains;
-use hermes_relayer_components::transaction::impls::TxNoResponseError;
-use hermes_relayer_components::transaction::traits::HasTxHashType;
 use hermes_runtime::types::error::TokioRuntimeError;
-use hermes_test_components::chain::impls::{
-    EventualAmountTimeoutError, MissingSendPacketEventError,
-};
 use hermes_wasm_test_components::impls::chain::ProposalIdNotFound;
 use http::uri::InvalidUri;
 use ibc::clients::tendermint::types::error::TendermintClientError;

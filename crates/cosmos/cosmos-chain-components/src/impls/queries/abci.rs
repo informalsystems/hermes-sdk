@@ -1,9 +1,9 @@
 use cgp::prelude::*;
-use hermes_encoding_components::traits::{CanEncode, HasEncodedType, HasEncoding};
-use hermes_encoding_components::types::AsBytes;
+use hermes_core::encoding_components::traits::{CanEncode, HasEncodedType, HasEncoding};
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_core::relayer_components::chain::traits::{HasCommitmentProofType, HasHeightType};
+use hermes_core::relayer_components::error::traits::{CanPerformRetry, HasMaxErrorRetry};
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
-use hermes_relayer_components::chain::traits::{HasCommitmentProofType, HasHeightType};
-use hermes_relayer_components::error::traits::{CanPerformRetry, HasMaxErrorRetry};
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ics23::CommitmentProof;

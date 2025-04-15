@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::{HasHeightType, HasTimeoutType};
-use hermes_relayer_components::chain::traits::{
+use hermes_core::chain_type_components::traits::{HasHeightType, HasTimeoutType};
+use hermes_core::relayer_components::chain::traits::{
     HasChannelIdType, HasOutgoingPacketType, HasPortIdType, HasSequenceType,
     PacketDstChannelIdGetter, PacketDstChannelIdGetterComponent, PacketDstPortIdGetter,
     PacketDstPortIdGetterComponent, PacketSequenceGetter, PacketSequenceGetterComponent,

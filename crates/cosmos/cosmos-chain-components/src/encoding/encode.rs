@@ -1,10 +1,12 @@
 use cgp::prelude::*;
-use hermes_encoding_components::impls::{ConvertAndEncode, EncodeUsingStrategy, ReturnEncoded};
+use hermes_core::encoding_components::impls::{
+    ConvertAndEncode, EncodeUsingStrategy, ReturnEncoded,
+};
+use hermes_core::relayer_components::chain::traits::ViaCommitmentProof;
 use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
 use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
-use hermes_relayer_components::chain::traits::ViaCommitmentProof;
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_proto::ibc::core::commitment::v1::MerkleProof as ProtoMerkleProof;

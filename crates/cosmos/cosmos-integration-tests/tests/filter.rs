@@ -3,19 +3,21 @@
 use core::marker::PhantomData;
 use std::collections::HashMap;
 
+use hermes_core::relayer_components::chain::traits::{
+    CanQueryChainStatus, CanQueryPacketIsReceived,
+};
+use hermes_core::test_components::chain::traits::{
+    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
+    HasDefaultMemo,
+};
+use hermes_core::test_components::chain_driver::traits::CanGenerateRandomAmount;
+use hermes_core::test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_cosmos_chain_components::types::PacketFilterConfig;
 use hermes_cosmos_integration_tests::contexts::CosmosBinaryChannelTestDriver;
 use hermes_cosmos_integration_tests::init::{init_preset_bootstraps, init_test_runtime};
 use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_cosmos_test_components::chain::types::Amount;
 use hermes_error::types::Error;
-use hermes_relayer_components::chain::traits::{CanQueryChainStatus, CanQueryPacketIsReceived};
-use hermes_test_components::chain::traits::{
-    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
-    HasDefaultMemo,
-};
-use hermes_test_components::chain_driver::traits::CanGenerateRandomAmount;
-use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 
 #[test]

@@ -1,7 +1,7 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
-use hermes_runtime_components::traits::{CanExecCommand, HasFilePathType, HasRuntime};
-use hermes_test_components::chain_driver::traits::HasChainType;
+use hermes_core::chain_type_components::traits::{HasAddressType, HasAmountType};
+use hermes_core::runtime_components::traits::{CanExecCommand, HasFilePathType, HasRuntime};
+use hermes_core::test_components::chain_driver::traits::HasChainType;
 
 use crate::bootstrap::traits::{
     GenesisAccountAdder, GenesisAccountAdderComponent, HasChainCommandPath,

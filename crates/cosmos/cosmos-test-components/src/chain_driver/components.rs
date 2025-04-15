@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_test_components::chain_driver::impls::WaitChainReachHeight;
-use hermes_test_components::chain_driver::traits::{
+use hermes_core::test_components::chain_driver::impls::WaitChainReachHeight;
+use hermes_core::test_components::chain_driver::traits::{
     ChainStartupWaiterComponent, RandomAmountGeneratorComponent,
 };
 

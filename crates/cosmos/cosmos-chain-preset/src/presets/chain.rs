@@ -2,42 +2,18 @@
 mod preset {
     use cgp::core::component::UseDelegate;
     use cgp::prelude::*;
-    use hermes_chain_type_components::traits::{
+    use hermes_core::chain_type_components::traits::{
         AddressTypeProviderComponent, AmountDenomGetterComponent, AmountTypeProviderComponent,
         DenomTypeComponent, HeightAdjusterComponent, HeightIncrementerComponent,
         MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
     };
-    use hermes_cosmos_chain_components::impls::{
-        BroadcastCosmosTx, BuildCosmosPacketMessages, DispatchQueryEip,
-        DynamicConvertCosmosGasToFee, EncodeCosmosTx, EstimateCosmosTxFee, FilterPacketWithConfig,
-        FixedPollTimeoutSecs, ParseCosmosTxResponseAsEvents, ProvideAnyRawClientState,
-        ProvideAnyRawConsensusState, ProvideCosmosChainTypes, ProvideCosmosEvents,
-        ProvideCosmosInitChannelOptionsType, ProvideCosmosInitConnectionOptionsType,
-        ProvideCosmosPayloadTypes, QueryAbci, QueryAbciWithRetry, QueryChainIdFromAbci,
-        QueryCometBlock, QueryCosmosAccount, QueryCosmosBlockEvents, QueryCosmosChainStatus,
-        QueryCosmosChannelEndFromAbci, QueryCosmosClientStateFromAbci,
-        QueryCosmosConnectionEndFromAbci, QueryCosmosConsensusStateFromAbci,
-        QueryCosmosPacketIsReceived, QueryCosmosTxResponse, QueryCounterpartyConnectionId,
-        QueryPacketAcknowledgementFromAbci, QueryPacketCommitmentFromAbci,
-        QueryPacketReceiptFromAbci, StakingParamsUnbondingPeriod, UseCosmosTransactionTypes,
-    };
-    use hermes_cosmos_chain_components::traits::{
-        AbciQuerierComponent, EipQuerierComponent, GasToFeeConverterComponent,
-        UnbondingPeriodQuerierComponent,
-    };
-    use hermes_cosmos_test_components::chain::impls::{
-        BuildCosmosChainIdFromString, BuildCosmosIbcTransferMessage, BuildDepositProposalMessage,
-        BuildVoteProposalMessage, IbcTransferTimeoutAfterSeconds, PollProposalStatus,
-        ProvideCosmosProposalTypes, ProvideCosmosTestWallet, ProvideIbcDenom, QueryCosmosBalance,
-        QueryProposalStatusWithGrpc, UseCosmosAmount,
-    };
-    use hermes_relayer_components::chain::impls::{
+    use hermes_core::relayer_components::chain::impls::{
         BuildChannelHandshakePayload, BuildConnectionHandshakePayload, BuildPacketPayloads,
         FixedPollIntervalMillis, QueryClearedPacketWithEmptyCommitment,
         QueryConsensusStateHeightsAndFindHeightBefore, RetryQueryBlockEvents,
         WaitBlockHeightAndQueryEvents,
     };
-    use hermes_relayer_components::chain::traits::{
+    use hermes_core::relayer_components::chain::traits::{
         AckCommitmentHashTypeProviderComponent, AckPacketMessageBuilderComponent,
         AckPacketPayloadBuilderComponent, AckPacketPayloadTypeProviderComponent,
         AcknowledgementTypeProviderComponent, AllClientStatesQuerierComponent,
@@ -96,15 +72,15 @@ mod preset {
         UpdateClientMessageBuilderComponent, UpdateClientPayloadBuilderComponent,
         UpdateClientPayloadTypeComponent, WriteAckEventComponent,
     };
-    use hermes_relayer_components::components::default::DefaultTxComponents;
-    use hermes_relayer_components::error::impls::retry::{
+    use hermes_core::relayer_components::components::default::DefaultTxComponents;
+    use hermes_core::relayer_components::error::impls::retry::{
         PerformRetryWithRetryableError, ReturnMaxRetry,
     };
-    use hermes_relayer_components::error::traits::{
+    use hermes_core::relayer_components::error::traits::{
         MaxErrorRetryGetterComponent, RetryPerformerComponent,
     };
-    use hermes_relayer_components::transaction::impls::PollTimeoutGetterComponent;
-    use hermes_relayer_components::transaction::traits::{
+    use hermes_core::relayer_components::transaction::impls::PollTimeoutGetterComponent;
+    use hermes_core::relayer_components::transaction::traits::{
         FeeTypeProviderComponent, MessagesWithSignerAndNonceSenderComponent,
         MessagesWithSignerSenderComponent, NonceAllocatorComponent, NonceQuerierComponent,
         NonceTypeProviderComponent, SignerTypeProviderComponent, TransactionTypeComponent,
@@ -112,11 +88,11 @@ mod preset {
         TxMessageResponseParserComponent, TxResponsePollerComponent, TxResponseQuerierComponent,
         TxResponseTypeProviderComponent, TxSubmitterComponent,
     };
-    use hermes_test_components::chain::impls::{
+    use hermes_core::test_components::chain::impls::{
         PollAssertEventualAmount, ProvideDefaultMemo, ProvidePollAssertDuration,
         SendIbcTransferMessage,
     };
-    use hermes_test_components::chain::traits::{
+    use hermes_core::test_components::chain::traits::{
         AmountMethodsComponent, BalanceQuerierComponent, ChainIdFromStringBuilderComponent,
         DefaultMemoGetterComponent, DepositProposalMessageBuilderComponent,
         EventualAmountAsserterComponent, IbcTokenTransferMessageBuilderComponent,
@@ -125,6 +101,30 @@ mod preset {
         ProposalStatusPollerComponent, ProposalStatusQuerierComponent, ProposalStatusTypeComponent,
         ProposalVoteTypeComponent, TokenIbcTransferrerComponent,
         VoteProposalMessageBuilderComponent, WalletSignerComponent, WalletTypeComponent,
+    };
+    use hermes_cosmos_chain_components::impls::{
+        BroadcastCosmosTx, BuildCosmosPacketMessages, DispatchQueryEip,
+        DynamicConvertCosmosGasToFee, EncodeCosmosTx, EstimateCosmosTxFee, FilterPacketWithConfig,
+        FixedPollTimeoutSecs, ParseCosmosTxResponseAsEvents, ProvideAnyRawClientState,
+        ProvideAnyRawConsensusState, ProvideCosmosChainTypes, ProvideCosmosEvents,
+        ProvideCosmosInitChannelOptionsType, ProvideCosmosInitConnectionOptionsType,
+        ProvideCosmosPayloadTypes, QueryAbci, QueryAbciWithRetry, QueryChainIdFromAbci,
+        QueryCometBlock, QueryCosmosAccount, QueryCosmosBlockEvents, QueryCosmosChainStatus,
+        QueryCosmosChannelEndFromAbci, QueryCosmosClientStateFromAbci,
+        QueryCosmosConnectionEndFromAbci, QueryCosmosConsensusStateFromAbci,
+        QueryCosmosPacketIsReceived, QueryCosmosTxResponse, QueryCounterpartyConnectionId,
+        QueryPacketAcknowledgementFromAbci, QueryPacketCommitmentFromAbci,
+        QueryPacketReceiptFromAbci, StakingParamsUnbondingPeriod, UseCosmosTransactionTypes,
+    };
+    use hermes_cosmos_chain_components::traits::{
+        AbciQuerierComponent, EipQuerierComponent, GasToFeeConverterComponent,
+        UnbondingPeriodQuerierComponent,
+    };
+    use hermes_cosmos_test_components::chain::impls::{
+        BuildCosmosChainIdFromString, BuildCosmosIbcTransferMessage, BuildDepositProposalMessage,
+        BuildVoteProposalMessage, IbcTransferTimeoutAfterSeconds, PollProposalStatus,
+        ProvideCosmosProposalTypes, ProvideCosmosTestWallet, ProvideIbcDenom, QueryCosmosBalance,
+        QueryProposalStatusWithGrpc, UseCosmosAmount,
     };
 
     use crate::delegate::DelegateCosmosChainComponents;

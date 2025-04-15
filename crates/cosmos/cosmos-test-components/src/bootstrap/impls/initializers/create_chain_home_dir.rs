@@ -1,9 +1,9 @@
 use core::fmt::Display;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::HasChainIdType;
-use hermes_runtime_components::traits::{CanCreateDir, HasRuntime};
-use hermes_test_components::chain_driver::traits::HasChainType;
+use hermes_core::relayer_components::chain::traits::HasChainIdType;
+use hermes_core::runtime_components::traits::{CanCreateDir, HasRuntime};
+use hermes_core::test_components::chain_driver::traits::HasChainType;
 
 use crate::bootstrap::traits::{
     ChainHomeDirInitializer, ChainHomeDirInitializerComponent, HasChainStoreDir,

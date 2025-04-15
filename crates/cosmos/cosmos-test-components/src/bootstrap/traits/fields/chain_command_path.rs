@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::{FilePathOf, HasFilePathType, HasRuntime};
+use hermes_core::runtime_components::traits::{FilePathOf, HasFilePathType, HasRuntime};
 
 #[cgp_getter {
     provider: ChainCommandPathGetter,

@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::{
+use hermes_core::relayer_components::chain::traits::{
     CanQueryChainHeight, CanQueryConnectionEnd, CounterpartyConnectionIdQuerier,
     CounterpartyConnectionIdQuerierComponent, HasChannelEndType, HasConnectionIdType,
 };

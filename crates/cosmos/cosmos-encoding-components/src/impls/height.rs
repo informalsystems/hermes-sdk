@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_encoding_components::impls::EncoderPair;
-use hermes_encoding_components::traits::{
+use hermes_core::encoding_components::impls::EncoderPair;
+use hermes_core::encoding_components::traits::{
     HasDecodeBufferType, HasEncodeBufferType, MutDecoder, MutDecoderComponent, MutEncoder,
     MutEncoderComponent,
 };

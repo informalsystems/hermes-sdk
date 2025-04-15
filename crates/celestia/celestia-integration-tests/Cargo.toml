@@ -17,6 +17,7 @@ hermes-runtime-components           = { workspace = true }
 hermes-error                        = { workspace = true }
 hermes-runtime                      = { workspace = true }
 hermes-relayer-components           = { workspace = true }
+hermes-core                         = { workspace = true }
 hermes-relayer-components-extra     = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
 hermes-test-components              = { workspace = true }

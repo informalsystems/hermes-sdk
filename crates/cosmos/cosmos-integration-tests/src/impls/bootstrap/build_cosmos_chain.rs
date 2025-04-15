@@ -1,14 +1,16 @@
 use cgp::prelude::*;
+use hermes_core::logging_components::traits::CanLog;
+use hermes_core::logging_components::types::{LevelDebug, LevelTrace, LevelWarn};
+use hermes_core::relayer_components::chain::traits::{
+    CanQueryChainStatus, HasChainId, HasPollInterval,
+};
+use hermes_core::runtime_components::traits::{CanSleep, HasRuntime};
+use hermes_core::test_components::chain_driver::traits::HasChainType;
 use hermes_cosmos_chain_components::traits::CanQueryGrpcServiceStatus;
 use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::{HasChainNodeConfigType, HasDynamicGas};
 use hermes_cosmos_test_components::chain::types::CosmosTestWallet;
 use hermes_error::types::HermesError;
-use hermes_logging_components::traits::CanLog;
-use hermes_logging_components::types::{LevelDebug, LevelTrace, LevelWarn};
-use hermes_relayer_components::chain::traits::{CanQueryChainStatus, HasChainId, HasPollInterval};
-use hermes_runtime_components::traits::{CanSleep, HasRuntime};
-use hermes_test_components::chain_driver::traits::HasChainType;
 
 use crate::traits::{
     CanBuildRelayerChainConfig, ChainBuilderWithNodeConfig, ChainBuilderWithNodeConfigComponent,
