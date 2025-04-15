@@ -3,9 +3,9 @@ use hermes_cli_components::traits::{
     BuilderLoader, BuilderLoaderComponent, CanLoadConfig, HasBuilderType, HasConfigType,
 };
 use hermes_core::runtime_components::traits::HasRuntime;
-use hermes_cosmos_chain_components::impls::RelayerConfig;
-use hermes_cosmos_relayer::contexts::CosmosBuilder;
-use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_cosmos_core::chain_components::impls::RelayerConfig;
+use hermes_cosmos_core::relayer::contexts::CosmosBuilder;
+use hermes_cosmos_core::runtime::types::runtime::HermesRuntime;
 
 pub struct LoadCosmosBuilder;
 

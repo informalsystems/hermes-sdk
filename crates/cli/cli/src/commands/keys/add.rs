@@ -8,9 +8,9 @@ use hdpath::StandardHDPath;
 use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::impls::CosmosChainConfig;
-use hermes_cosmos_chain_components::types::{KeyRing, Secp256k1KeyPair};
-use ibc::core::host::types::identifiers::ChainId;
+use hermes_cosmos_core::chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_core::chain_components::types::{KeyRing, Secp256k1KeyPair};
+use hermes_cosmos_core::ibc::core::host::types::identifiers::ChainId;
 use tracing::warn;
 
 use crate::contexts::HermesApp;

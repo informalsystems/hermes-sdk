@@ -7,13 +7,15 @@ use cgp::core::error::{
 use cgp::prelude::*;
 use eyre::Report;
 use hermes_core::relayer_components::error::traits::RetryableErrorComponent;
-use hermes_error::handlers::{DisplayError, HandleInfallible, ReportError, ReturnError};
-use hermes_error::impls::UseHermesError;
-use hermes_error::types::Error;
-use hermes_runtime::types::error::TokioRuntimeError;
-use ibc::clients::tendermint::types::error::TendermintClientError;
-use ibc::core::channel::types::error::ChannelError;
-use ibc::core::host::types::error::{DecodingError, IdentifierError};
+use hermes_cosmos_core::error::handlers::{
+    DisplayError, HandleInfallible, ReportError, ReturnError,
+};
+use hermes_cosmos_core::error::impls::UseHermesError;
+use hermes_cosmos_core::error::types::Error;
+use hermes_cosmos_core::ibc::clients::tendermint::types::error::TendermintClientError;
+use hermes_cosmos_core::ibc::core::channel::types::error::ChannelError;
+use hermes_cosmos_core::ibc::core::host::types::error::{DecodingError, IdentifierError};
+use hermes_cosmos_core::runtime::types::error::TokioRuntimeError;
 use tonic::transport::Error as TransportError;
 
 pub struct ProvideCliError;

@@ -2,11 +2,11 @@ use cgp::prelude::*;
 use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::traits::HasGrpcAddress;
+use hermes_cosmos_core::chain_components::traits::HasGrpcAddress;
+use hermes_cosmos_core::ibc::core::channel::types::proto::v1::query_client::QueryClient;
+use hermes_cosmos_core::ibc::core::channel::types::proto::v1::QueryChannelClientStateRequest;
+use hermes_cosmos_core::ibc::core::host::types::identifiers::{ChainId, ChannelId, PortId};
 use http::Uri;
-use ibc::core::channel::types::proto::v1::query_client::QueryClient;
-use ibc::core::channel::types::proto::v1::QueryChannelClientStateRequest;
-use ibc::core::host::types::identifiers::{ChainId, ChannelId, PortId};
 
 use crate::contexts::HermesApp;
 use crate::Result;

@@ -36,17 +36,19 @@ use hermes_core::relayer_components::error::traits::RetryableErrorComponent;
 use hermes_core::runtime_components::traits::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_cosmos_chain_components::impls::RelayerConfig;
-use hermes_cosmos_chain_components::types::CosmosCreateClientOptions;
-use hermes_cosmos_integration_tests::contexts::CosmosBootstrap;
-use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
-use hermes_cosmos_test_components::chain::types::Denom;
-use hermes_error::types::{Error, HermesError};
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_tracing_logging_components::contexts::TracingLogger;
-use ibc::clients::tendermint::types::TrustThreshold;
-use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
+use hermes_cosmos_core::chain_components::impls::RelayerConfig;
+use hermes_cosmos_core::chain_components::types::CosmosCreateClientOptions;
+use hermes_cosmos_core::error::types::{Error, HermesError};
+use hermes_cosmos_core::ibc::clients::tendermint::types::TrustThreshold;
+use hermes_cosmos_core::ibc::core::client::types::Height;
+use hermes_cosmos_core::ibc::core::host::types::identifiers::{
+    ChainId, ChannelId, ClientId, ConnectionId, PortId,
+};
+use hermes_cosmos_core::integration_tests::contexts::CosmosBootstrap;
+use hermes_cosmos_core::relayer::contexts::{CosmosBuilder, CosmosChain};
+use hermes_cosmos_core::runtime::types::runtime::HermesRuntime;
+use hermes_cosmos_core::test_components::chain::types::Denom;
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
 use serde::Serialize;
 
 use crate::commands::{

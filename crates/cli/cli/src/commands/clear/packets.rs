@@ -6,7 +6,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_core::relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_core::relayer_components::relay::traits::CanClearPackets;
-use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, PortId};
+use hermes_cosmos_core::ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, PortId};
 
 use crate::contexts::HermesApp;
 use crate::Result;

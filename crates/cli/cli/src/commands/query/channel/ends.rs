@@ -7,16 +7,18 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_core::chain_components::traits::{CanQueryChainHeight, CanQueryConnectionEnd};
 use hermes_core::encoding_components::traits::{CanConvert, HasDefaultEncoding};
-use hermes_cosmos_chain_components::traits::CanQueryAbci;
-use hermes_cosmos_chain_components::types::TendermintClientState;
-use hermes_cosmos_relayer::contexts::CosmosChain;
-use hermes_protobuf_encoding_components::types::any::Any;
-use ibc::clients::tendermint::types::TENDERMINT_CLIENT_STATE_TYPE_URL;
-use ibc::core::channel::types::channel::{ChannelEnd, State};
-use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
-use ibc::cosmos_host::IBC_QUERY_PATH;
-use ibc::primitives::proto::Protobuf;
+use hermes_cosmos_core::chain_components::traits::CanQueryAbci;
+use hermes_cosmos_core::chain_components::types::TendermintClientState;
+use hermes_cosmos_core::ibc::clients::tendermint::types::TENDERMINT_CLIENT_STATE_TYPE_URL;
+use hermes_cosmos_core::ibc::core::channel::types::channel::{ChannelEnd, State};
+use hermes_cosmos_core::ibc::core::client::types::Height;
+use hermes_cosmos_core::ibc::core::host::types::identifiers::{
+    ChainId, ChannelId, ClientId, ConnectionId, PortId,
+};
+use hermes_cosmos_core::ibc::cosmos_host::IBC_QUERY_PATH;
+use hermes_cosmos_core::ibc::primitives::proto::Protobuf;
+use hermes_cosmos_core::protobuf_encoding_components::types::any::Any;
+use hermes_cosmos_core::relayer::contexts::CosmosChain;
 use serde::{Deserialize, Serialize};
 
 use crate::contexts::HermesApp;
