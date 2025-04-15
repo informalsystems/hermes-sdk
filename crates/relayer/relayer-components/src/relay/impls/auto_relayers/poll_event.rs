@@ -10,8 +10,7 @@ use hermes_chain_components::traits::{
 use hermes_chain_components::types::aliases::{EventOf, HeightOf};
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::{LevelInfo, LevelTrace};
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
+use hermes_runtime_components::traits::{CanRunConcurrentTasks, HasRuntime, Task};
 
 use crate::relay::traits::{
     AutoRelayerWithHeights, AutoRelayerWithHeightsComponent, CanRelayEvent, HasTargetChainTypes,

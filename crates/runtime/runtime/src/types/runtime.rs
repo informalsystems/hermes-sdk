@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 
 use cgp::prelude::*;
 use hermes_logging_components::traits::logger::LoggerComponent;
-use hermes_tokio_runtime_components::components::parallel::*;
+use hermes_tokio_runtime_components::components::TokioParallelRuntimeComponents;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use tokio::runtime::Runtime;
 

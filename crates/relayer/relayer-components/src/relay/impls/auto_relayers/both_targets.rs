@@ -3,8 +3,7 @@ use alloc::vec;
 
 use cgp::extra::run::{Runner, RunnerComponent};
 use cgp::prelude::*;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
+use hermes_runtime_components::traits::{CanRunConcurrentTasks, HasRuntime, Task};
 
 use crate::relay::traits::{
     CanAutoRelayTarget, CanRaiseRelayChainErrors, DestinationTarget, HasRelayClientIds,

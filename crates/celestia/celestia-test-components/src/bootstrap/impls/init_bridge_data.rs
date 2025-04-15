@@ -1,9 +1,8 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::HasChainIdType;
-use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::exec_command::CanExecCommandWithEnvs;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::{
+    CanCreateDir, CanExecCommandWithEnvs, HasFilePathType, HasRuntime,
+};
 use hermes_test_components::chain_driver::traits::HasChainType;
 
 use crate::bootstrap::traits::init_bridge_data::{

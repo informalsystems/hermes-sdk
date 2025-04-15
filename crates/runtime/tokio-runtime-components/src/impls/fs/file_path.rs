@@ -1,9 +1,7 @@
 use std::path::PathBuf;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::file_path::{
-    FilePathTypeComponent, ProvideFilePathType,
-};
+use hermes_runtime_components::traits::{FilePathTypeComponent, ProvideFilePathType};
 
 pub struct ProvideStdPathType;
 

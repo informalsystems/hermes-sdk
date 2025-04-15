@@ -5,9 +5,7 @@ use cgp::prelude::*;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::chain::traits::HasChainId;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::child_process::CanWaitChildProcess;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::{CanWaitChildProcess, HasFilePathType, HasRuntime};
 use hermes_test_components::bootstrap::traits::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::{CanTakeChainProcess, ConfigUpdater, HasChain};
 

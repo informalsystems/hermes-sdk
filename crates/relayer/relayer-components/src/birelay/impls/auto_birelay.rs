@@ -11,7 +11,7 @@ use hermes_chain_components::traits::{
     CanAdjustHeight, CanQueryBlockTime, CanQueryChainHeight, HasHeightType, HeightOf,
 };
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
+use hermes_runtime_components::traits::{CanRunConcurrentTasks, Task};
 
 use crate::birelay::traits::{
     AutoBiRelayer, AutoBiRelayerComponent, HasBiRelayTypes, HasTwoWayRelay,

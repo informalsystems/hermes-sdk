@@ -1,8 +1,7 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::HasChainIdType;
 use hermes_relayer_components::chain::types::aliases::ChainIdOf;
-use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
+use hermes_runtime_components::traits::{FilePathOf, HasFilePathType, HasRuntimeType};
 use hermes_test_components::chain_driver::traits::HasChainType;
 
 use crate::bootstrap::traits::{HasChainGenesisConfigType, HasChainNodeConfigType};

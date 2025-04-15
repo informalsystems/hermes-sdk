@@ -6,7 +6,7 @@ use hermes_relayer_components::chain::traits::{
 use hermes_relayer_components::transaction::traits::{
     HasTxHashType, HasTxResponseType, TxResponseQuerier, TxResponseQuerierComponent,
 };
-use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::CanSleep;
 use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 use tendermint_rpc::query::Query;

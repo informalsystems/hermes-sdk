@@ -7,9 +7,8 @@ use cgp::core::error::{
     ErrorRaiser, ErrorRaiserComponent, ErrorTypeProvider, ErrorTypeProviderComponent,
 };
 use cgp::prelude::{cgp_provider, *};
-use hermes_tokio_runtime_components::impls::os::child_process::PrematureChildProcessExitError;
-use hermes_tokio_runtime_components::impls::os::exec_command::{
-    CommandNotFound, ExecCommandFailure,
+use hermes_tokio_runtime_components::impls::{
+    CommandNotFound, ExecCommandFailure, PrematureChildProcessExitError,
 };
 
 use crate::types::error::TokioRuntimeError;

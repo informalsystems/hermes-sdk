@@ -13,9 +13,7 @@ use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComp
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::traits::{CanInitConnection, HasRelayClientIds};
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;
 

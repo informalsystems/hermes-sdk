@@ -26,9 +26,7 @@ use hermes_relayer_components::relay::impls::{
 };
 use hermes_relayer_components::relay::traits::CanRelayPacket;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
 

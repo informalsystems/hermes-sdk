@@ -10,11 +10,9 @@ use hermes_logging_components::types::level::LogLevel;
 use hermes_relayer_components::chain::traits::{CanEstimateMessageSize, HasMessageType};
 use hermes_relayer_components::multi::traits::chain_at::HasChainAt;
 use hermes_relayer_components::relay::traits::{CanSendIbcMessages, RelayTarget};
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_runtime_components::traits::spawn::CanSpawnTask;
-use hermes_runtime_components::traits::task::Task;
-use hermes_runtime_components::traits::time::{HasTime, TimeOf};
+use hermes_runtime_components::traits::{
+    CanSleep, CanSpawnTask, HasRuntime, HasTime, Task, TimeOf,
+};
 
 use crate::batch::traits::types::{CanUseMessageBatchChannel, HasMessageBatchChannelTypes};
 use crate::batch::types::config::BatchConfig;

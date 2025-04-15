@@ -28,7 +28,7 @@ use hermes_relayer_components_extra::batch::traits::types::{
 };
 use hermes_relayer_components_extra::components::extra::relay::ExtraRelayPreset;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
+use hermes_runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,
 };
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;

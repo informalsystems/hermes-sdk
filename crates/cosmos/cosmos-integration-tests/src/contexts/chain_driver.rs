@@ -20,7 +20,7 @@ use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
+use hermes_runtime_components::traits::{
     RuntimeGetter, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain::traits::{ProposalIdTypeComponent, ProposalStatusTypeComponent};

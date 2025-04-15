@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::HasChainIdType;
-use hermes_runtime_components::traits::os::exec_command::CanExecCommandWithEnvs;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::{CanExecCommandWithEnvs, HasRuntime};
 use hermes_test_components::chain_driver::traits::HasChainType;
 
 use crate::bootstrap::traits::bridge_auth_token::{

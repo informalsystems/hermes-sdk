@@ -11,9 +11,7 @@ use hermes_relayer_components::multi::traits::relay_at::{
     RelayGetterAtComponent, RelayTypeProviderAtComponent,
 };
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
 use crate::contexts::{CosmosChain, CosmosRelay};

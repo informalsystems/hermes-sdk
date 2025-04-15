@@ -5,7 +5,7 @@ use hermes_cli_components::traits::types::config::HasConfigType;
 use hermes_cosmos_chain_components::impls::RelayerConfig;
 use hermes_cosmos_relayer::contexts::CosmosBuilder;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::HasRuntime;
 
 pub struct LoadCosmosBuilder;
 

@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::task::Task;
+use crate::traits::Task;
 
 #[cgp_component {
   provider: TaskSpawner,

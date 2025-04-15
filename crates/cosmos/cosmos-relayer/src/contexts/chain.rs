@@ -58,9 +58,7 @@ use hermes_relayer_components::transaction::traits::{
 };
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use hermes_test_components::chain::traits::{
     BalanceQuerierComponent, CanBuildIbcTokenTransferMessages, EventualAmountAsserterComponent,
     IbcTokenTransferMessageBuilderComponent, ProposalStatusQuerierComponent,

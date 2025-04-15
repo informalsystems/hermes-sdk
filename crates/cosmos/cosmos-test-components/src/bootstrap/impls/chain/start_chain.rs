@@ -1,7 +1,5 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::{CanStartChildProcess, HasFilePathType, HasRuntime};
 
 use crate::bootstrap::traits::{
     ChainFullNodeStarter, ChainFullNodeStarterComponent, HasChainCommandPath,

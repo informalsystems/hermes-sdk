@@ -31,9 +31,7 @@ use hermes_relayer_components::chain::traits::{
     HasInitConnectionOptionsType, IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use hermes_solomachine_chain_components::components::cosmos::SolomachineCosmosComponents;
 use hermes_solomachine_chain_components::components::solomachine::*;
 use hermes_solomachine_chain_components::methods::encode::public_key::PublicKey;

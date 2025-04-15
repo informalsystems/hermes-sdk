@@ -4,8 +4,7 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasEventType, HasHeightType};
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::{CanSleep, HasRuntime};
 
 use crate::traits::{
     BlockEventsQuerier, BlockEventsQuerierComponent, CanQueryChainHeight, HasPollInterval,

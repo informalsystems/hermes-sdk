@@ -44,9 +44,7 @@ use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::{
 };
 use hermes_relayer_components_extra::components::extra::build::ExtraBuildComponents;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};

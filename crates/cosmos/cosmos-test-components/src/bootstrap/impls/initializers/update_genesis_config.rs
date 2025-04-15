@@ -1,10 +1,9 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
-use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::{
+    CanReadFileAsString, CanWriteStringToFile, HasFilePathType, HasRuntime,
+};
 use serde_json::{Error as JsonError, Value};
 
 use crate::bootstrap::traits::{

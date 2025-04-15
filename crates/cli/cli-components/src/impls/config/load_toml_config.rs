@@ -1,6 +1,5 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::{CanReadFileAsString, HasRuntime};
 use serde::de::DeserializeOwned;
 
 use crate::traits::config::config_path::HasConfigPath;

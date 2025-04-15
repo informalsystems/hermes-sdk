@@ -1,1 +1,2 @@
-pub mod os;
+mod os;
+pub use os::*;

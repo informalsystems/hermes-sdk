@@ -3,9 +3,7 @@ use std::path::PathBuf;
 
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::HasChainId;
-use hermes_runtime_components::traits::fs::copy_file::CanCopyFile;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::{CanCopyFile, HasFilePathType, HasRuntime};
 use hermes_test_components::chain_driver::traits::{HasChain, HasChainHomeDir};
 use hermes_test_components::driver::traits::HasChainDriverType;
 use tokio::fs;

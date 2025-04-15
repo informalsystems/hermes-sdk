@@ -2,7 +2,7 @@ use alloc::string::String;
 
 use cgp::prelude::*;
 
-use crate::traits::fs::file_path::HasFilePathType;
+use crate::traits::HasFilePathType;
 
 #[derive(Debug)]
 pub struct ExecOutput {

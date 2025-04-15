@@ -9,7 +9,7 @@ use hermes_cosmos_integration_tests::contexts::{CosmosBootstrap, CosmosBootstrap
 use hermes_cosmos_relayer::contexts::CosmosBuilder;
 use hermes_error::types::HermesError;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::HasRuntime;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct BootstrapCosmosChainArgs {

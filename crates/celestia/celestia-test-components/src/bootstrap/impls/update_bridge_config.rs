@@ -3,10 +3,9 @@ use hermes_cosmos_test_components::chain_driver::traits::{HasGrpcPort, HasRpcPor
 use hermes_relayer_components::chain::traits::{
     CanQueryBlock, HasBlockHash, HasChainId, HasGenesisHeight,
 };
-use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
-use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
-use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::{
+    CanReadFileAsString, CanReserveTcpPort, CanWriteStringToFile, HasRuntime,
+};
 use hermes_test_components::chain_driver::traits::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::HasChainDriverType;
 use toml::Value;

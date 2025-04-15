@@ -14,9 +14,7 @@ use hermes_relayer_components::relay::traits::{
     DestinationTarget, HasDstClientId, HasSrcClientId, PacketLockComponent, ProvidePacketLock,
     SourceTarget, TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
 };
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 
 use crate::relayer_mock::base::error::Error;
 use crate::relayer_mock::base::impls::error::HandleMockError;

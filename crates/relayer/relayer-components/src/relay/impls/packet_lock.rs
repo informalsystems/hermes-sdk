@@ -11,9 +11,7 @@ use hermes_chain_components::traits::{
     HasChannelIdType, HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence,
     HasPacketSrcChannelId, HasPacketSrcPortId, HasPortIdType, HasSequenceType,
 };
-use hermes_runtime_components::traits::runtime::{HasRuntime, HasRuntimeType};
-use hermes_runtime_components::traits::spawn::CanSpawnTask;
-use hermes_runtime_components::traits::task::Task;
+use hermes_runtime_components::traits::{CanSpawnTask, HasRuntime, HasRuntimeType, Task};
 
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf, SequenceOf};
 use crate::relay::traits::{

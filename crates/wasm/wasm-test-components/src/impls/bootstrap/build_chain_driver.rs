@@ -10,10 +10,9 @@ use hermes_cosmos_test_components::bootstrap::traits::{
 };
 use hermes_cosmos_test_components::chain::types::{Amount, Denom, ProposalStatus, ProposalVote};
 use hermes_relayer_components::transaction::traits::CanSendMessagesWithSigner;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::{
+    CanSleep, HasChildProcessType, HasFilePathType, HasRuntime,
+};
 use hermes_test_components::chain::traits::{
     CanBuildDepositProposalMessage, CanBuildVoteProposalMessage, CanPollProposalStatus,
     HasProposalIdType, HasProposalStatusType, HasProposalVoteType, HasWalletSigner,

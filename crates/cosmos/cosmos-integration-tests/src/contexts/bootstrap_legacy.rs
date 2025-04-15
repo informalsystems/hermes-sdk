@@ -22,9 +22,7 @@ use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use hermes_test_components::chain_driver::traits::ChainTypeProviderComponent;
 use hermes_test_components::driver::traits::ChainDriverTypeProviderComponent;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;

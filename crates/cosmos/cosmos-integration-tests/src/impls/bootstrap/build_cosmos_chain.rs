@@ -7,8 +7,7 @@ use hermes_error::types::HermesError;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::{LevelDebug, LevelTrace, LevelWarn};
 use hermes_relayer_components::chain::traits::{CanQueryChainStatus, HasChainId, HasPollInterval};
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::{CanSleep, HasRuntime};
 use hermes_test_components::chain_driver::traits::HasChainType;
 
 use crate::traits::{

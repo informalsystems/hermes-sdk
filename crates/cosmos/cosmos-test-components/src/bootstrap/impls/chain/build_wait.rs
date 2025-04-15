@@ -2,8 +2,7 @@ use core::marker::PhantomData;
 use std::collections::BTreeMap;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasChildProcessType};
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
+use hermes_runtime_components::traits::{ChildProcessOf, HasChildProcessType, HasRuntimeType};
 use hermes_test_components::chain::traits::{HasWalletType, Wallet};
 use hermes_test_components::chain_driver::traits::{CanWaitChainStartup, HasChainType};
 use hermes_test_components::driver::traits::HasChainDriverType;
