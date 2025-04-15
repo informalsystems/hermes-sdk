@@ -16,8 +16,8 @@ use hermes_wasm_encoding_components::types::consensus_state::WasmConsensusState;
 use ibc::core::client::types::Height;
 use prost_types::Any;
 
-use crate::encoding::components::*;
-use crate::types::client_state::WasmTendermintClientState;
+use crate::encoding::WasmCosmosEncodingComponents;
+use crate::types::WasmTendermintClientState;
 
 #[cgp_context(WasmCosmosEncodingContextComponents: WasmCosmosEncodingComponents)]
 pub struct WasmCosmosEncoding;

@@ -15,7 +15,7 @@ use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_proto::ibc::core::commitment::v1::MerkleProof as ProtoMerkleProof;
 use prost_types::Any;
 
-use crate::types::client_state::{EncodeWasmTendermintClientState, WasmTendermintClientState};
+use crate::types::{EncodeWasmTendermintClientState, WasmTendermintClientState};
 
 pub struct WasmCosmosConverterComponents;
 

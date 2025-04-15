@@ -15,9 +15,10 @@ mod preset {
     };
     use CosmosToCosmosComponents::re_exports::*;
 
-    use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
-    use crate::impls::update_client_message::BuildUpdateWasmTendermintClientMessage;
-    use crate::types::create_client::ProvidCreateWasmTendermintMessageOptionsType;
+    use crate::impls::{
+        BuildCreateWasmTendermintClientMessage, BuildUpdateWasmTendermintClientMessage,
+    };
+    use crate::types::ProvidCreateWasmTendermintMessageOptionsType;
 
     CosmosToCosmosComponents::with_components! {
         [

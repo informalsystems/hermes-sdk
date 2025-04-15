@@ -18,7 +18,7 @@ use hermes_wasm_encoding_components::types::consensus_state::WasmConsensusState;
 use ibc::core::client::types::Height;
 use prost_types::Any;
 
-use crate::types::create_client::CreateWasmTendermintMessageOptions;
+use crate::types::CreateWasmTendermintMessageOptions;
 
 pub struct BuildCreateWasmTendermintClientMessage;
 

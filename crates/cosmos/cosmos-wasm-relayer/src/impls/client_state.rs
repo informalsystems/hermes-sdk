@@ -8,7 +8,7 @@ use hermes_relayer_components::chain::traits::{
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
 
-use crate::types::client_state::WasmTendermintClientState;
+use crate::types::WasmTendermintClientState;
 
 pub struct ProvideWrappedTendermintClientState;
 

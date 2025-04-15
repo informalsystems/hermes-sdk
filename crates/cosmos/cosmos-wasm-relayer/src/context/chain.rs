@@ -65,10 +65,9 @@ use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;
 use tendermint_rpc::{HttpClient, Url};
 
-use crate::components::chain::CosmosChainWasmPreset;
-use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
+use crate::components::{CosmosChainWasmPreset, CosmosToWasmCosmosComponents};
 use crate::context::encoding::{UseWasmCosmosEncoding, WasmCosmosEncoding};
-use crate::types::client_state::WasmTendermintClientState;
+use crate::types::WasmTendermintClientState;
 
 #[cgp_context(WasmCosmosChainComponents: CosmosChainWasmPreset)]
 #[derive(Clone)]

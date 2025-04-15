@@ -6,10 +6,10 @@ use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use hermes_cosmos_relayer::contexts::CosmosBuilder;
-use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
-use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
-use hermes_cosmos_wasm_relayer::context::wasm_cosmos_relay::WasmCosmosRelay;
-use hermes_cosmos_wasm_relayer::types::create_client::CreateWasmTendermintMessageOptions;
+use hermes_cosmos_wasm_relayer::context::{
+    CosmosWithWasmClientBootstrap, WasmCosmosChain, WasmCosmosRelay,
+};
+use hermes_cosmos_wasm_relayer::types::CreateWasmTendermintMessageOptions;
 use hermes_error::types::Error;
 use hermes_relayer_components::relay::traits::{CanCreateClient, DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
