@@ -28,12 +28,12 @@ When we implement context-generic providers, we may not care about the generic p
 
 ```rust
 #[cgp_new_provider(ChainTypeProviderAtComponent)]
-impl<Chain, I> ChainTypeProviderAt<Chain, I> for UseFooChain {
+impl<Context, I> ChainTypeProviderAt<Context, I> for UseFooChain {
     type Chain = FooChain;
 }
 
 #[cgp_new_provider(ChainTypeProviderAtComponent)]
-impl<Chain, I> ChainTypeProviderAt<Chain, I> for UseBarChain {
+impl<Context, I> ChainTypeProviderAt<Context, I> for UseBarChain {
     type Chain = BarChain;
 }
 ```
@@ -47,16 +47,16 @@ pub struct UseDelegate<Components>(pub PhantomData<Components>);
 
 
 #[cgp_provider(ChainTypeProviderAtComponent)]
-impl<Chain, I, Delegate> ChainTypeProvider<Chain, I> for UseDelegate<Components>
+impl<Context, I, Delegate> ChainTypeProvider<Context, I> for UseDelegate<Components>
 where
     Components: DelegateComponent<I, Delegate = Delegate>,
-    Delegate: ChainTypeProvider<Chain, I>,
+    Delegate: ChainTypeProvider<Context, I>,
 {
-    type Chain = Delegate::Chain;
+    type Context = Delegate::Chain;
 }
 ```
 
-We can understand the `UseDelegate` implementation above as a form of "table lookup" using the `Components` type. That is, `UseDelegate<Components>` implements `ChainTypeProvider<Chain, I>`, if `Components` "contains" an entry for `I`, and that entry _also_ implements `ChainTypeProvider<I>`.
+We can understand the `UseDelegate` implementation above as a form of "table lookup" using the `Components` type. That is, `UseDelegate<Components>` implements `ChainTypeProvider<Context, I>`, if `Components` "contains" an entry for `I`, and that entry _also_ implements `ChainTypeProvider<Context, I>`.
 
 Using `UseDelegate`, we can for example define custom mappings for our context like:
 
@@ -93,7 +93,8 @@ An alternative approach to using `UseDelegate` is that we can include the generi
 
 ```rust
 #[cgp_type {
-    provider: ChainTypeProviderAt<I>,
+    provider: ChainTypeProviderAtComponent<I>,
+    provider: ChainTypeProviderAt,
 }]
 pub trait HasChainTypeAt<I> {
     type Chain;
@@ -113,7 +114,7 @@ delegate_components! {
 }
 ```
 
-Now instead of delegating based on `I`, we delegate based on `ChainTypeProviderAt<Index<0>>` inside of `MyChainMapping`. With this, `MyChainMapping` itself also implements `ChainTypeProviderAt<Index<0>>` and `ChainTypeProviderAt<Index<1>>`.
+Now instead of delegating based on `I`, we delegate based on `ChainTypeProviderAt<Context, Index<0>>` inside of `MyChainMapping`. With this, `MyChainMapping` itself also implements `ChainTypeProviderAt<Context, Index<0>>` and `ChainTypeProviderAt<Context, Index<1>>`.
 
 We can then still bulk delegate _all_ wirings of `ChainTypeProviderAtComponent<I>` inside `MyAppComponents` as follows:
 
@@ -152,7 +153,7 @@ Which approach is used depends whether we want to reuse the same mappings for mu
 
 In Hermes SDK, we use both patterns to dispatch the providers based on generic parameters. Usually, when the number of parameter instances are small, then we dispatch straight on the component name type. But when there are many possible parameter instances used, we dispatch through `UseDelegate`.
 
-From a usability stand point, `UseDelegate` tends to lead to cleaner mapping, as we don't need to repeat the same component name for every mapping. However, since `UseDelegate` requires defining separate mapping structs, it may become tedious if we only want to dispatch 2 or 3 parameter instances.
+From a usability stand point, `UseDelegate` tends to lead to cleaner mapping, as we don't need to repeat the same component name for every mapping. However, since `UseDelegate` requires defining separate mapping structs, it may become tedious if we want to dispatch only 2 or 3 parameter instances.
 
 Practically, there is also an important advantage of using `UseDelegate`, which is that it has looser ownership restriction and thus allows for more extensible mapping to be provided. Recall that `UseDelegate` uses `DelegateComponent` to look up which provider to dispatch to. Usually, `DelegateComponent` can only be implemented when the mapping struct is owned by the crate. But we can also implement `DelegateComponent<Components>` on a _foreign_ mapping struct, if we own the `Components` type in the generic parameter.
 
