@@ -47,13 +47,13 @@ use hermes_cosmos_test_components::bootstrap::traits::{
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::HermesError;
-use hermes_logging_components::traits::logger::LoggerComponent;
+use hermes_logging_components::traits::LoggerComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use hermes_test_components::bootstrap::traits::ChainBootstrapperComponent;
 use hermes_test_components::chain_driver::traits::ChainTypeProviderComponent;
 use hermes_test_components::driver::traits::ChainDriverTypeProviderComponent;
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;

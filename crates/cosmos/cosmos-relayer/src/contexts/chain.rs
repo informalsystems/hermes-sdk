@@ -28,7 +28,7 @@ use hermes_encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
 };
 use hermes_encoding_components::types::AsBytes;
-use hermes_logging_components::traits::logger::LoggerComponent;
+use hermes_logging_components::traits::LoggerComponent;
 use hermes_relayer_components::chain::traits::{
     AllClientStatesQuerierComponent, BlockEventsQuerierComponent, BlockTimeQuerierComponent,
     CanExtractFromMessageResponse, ChainStatusQuerierComponent, ChannelEndQuerierComponent,
@@ -64,7 +64,7 @@ use hermes_test_components::chain::traits::{
     IbcTokenTransferMessageBuilderComponent, ProposalStatusQuerierComponent,
     TokenIbcTransferrerComponent,
 };
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
 use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
 use hermes_wasm_test_components::traits::chain::upload_client_code::WasmClientCodeUploaderComponent;

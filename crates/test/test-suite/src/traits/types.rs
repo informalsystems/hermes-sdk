@@ -5,7 +5,7 @@ use cgp::core::field::Index;
 use cgp::core::macros::blanket_trait;
 use cgp::prelude::{CanRaiseError, HasAsyncErrorType, HasErrorType};
 use hermes_chain_type_components::traits::{DenomOf, HasAmountDenom};
-use hermes_logging_components::traits::logger::CanLogMessage;
+use hermes_logging_components::traits::CanLogMessage;
 use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
 use hermes_relayer_components::chain::traits::{
     CanQueryChainStatus, CanQueryPacketIsCleared, CanQueryPacketIsReceived, CanReadPacketFields,

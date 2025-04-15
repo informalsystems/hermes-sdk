@@ -1,8 +1,8 @@
 use core::fmt::{Debug, Display};
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::{Logger, LoggerComponent};
-use hermes_logging_components::types::level::LogLevel;
+use hermes_logging_components::traits::{Logger, LoggerComponent};
+use hermes_logging_components::types::LogLevel;
 use hermes_relayer_components::birelay::impls::LogAutoBiRelay;
 use hermes_relayer_components::birelay::traits::{HasBiRelayTypes, HasTwoWayRelay};
 use hermes_relayer_components::chain::traits::{HasChainId, HasClientIdType, HasHeightType};
@@ -18,7 +18,7 @@ use hermes_relayer_components::relay::traits::{
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use tracing::{debug, error, info, trace};
 
-use crate::contexts::logger::TracingLogger;
+use crate::contexts::TracingLogger;
 
 #[cgp_provider(LoggerComponent)]
 impl<'a, Relay> Logger<Relay, LogSkipRelayLockedPacket<'a, Relay>> for TracingLogger

@@ -1,3 +1,4 @@
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 #[cgp_component {
@@ -23,5 +24,18 @@ where
 {
     async fn log_message(&self, message: &str) {
         self.log(message, &()).await
+    }
+}
+
+#[cgp_provider(LoggerComponent)]
+impl<Logging, Components, Delegate, Details> Logger<Logging, Details> for UseDelegate<Components>
+where
+    Logging: Async,
+    Details: Send + Sync,
+    Components: DelegateComponent<Details, Delegate = Delegate>,
+    Delegate: Logger<Logging, Details>,
+{
+    async fn log(logging: &Logging, message: &str, details: &Details) {
+        Delegate::log(logging, message, details).await
     }
 }

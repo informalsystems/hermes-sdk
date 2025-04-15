@@ -1,1 +1,2 @@
-pub mod logger;
+mod logger;
+pub use logger::*;

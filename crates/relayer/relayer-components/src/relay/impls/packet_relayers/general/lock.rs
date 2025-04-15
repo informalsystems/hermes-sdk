@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
 use crate::relay::traits::{
     HasPacketLock, HasRelayChains, PacketOf, PacketRelayer, PacketRelayerComponent,

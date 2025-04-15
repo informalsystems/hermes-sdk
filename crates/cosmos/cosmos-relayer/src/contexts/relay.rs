@@ -7,7 +7,7 @@ use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_logging_components::traits::logger::LoggerComponent;
+use hermes_logging_components::traits::LoggerComponent;
 use hermes_relayer_components::error::traits::{CanPerformRetry, RetryableErrorComponent};
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainAt, ChainGetterAtComponent, ChainTypeProviderAtComponent,
@@ -31,7 +31,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,
 };
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::CosmosChain;

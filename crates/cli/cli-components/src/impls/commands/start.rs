@@ -2,8 +2,8 @@ use std::marker::PhantomData;
 
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
+use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelInfo;
 use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::chain::traits::{HasChainIdType, HasClientIdType};

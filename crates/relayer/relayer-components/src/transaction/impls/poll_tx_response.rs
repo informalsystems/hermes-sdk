@@ -4,7 +4,7 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::HasPollInterval;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 use hermes_runtime_components::traits::{CanSleep, HasRuntime, HasTime};
 
 use crate::error::traits::HasRetryableError;

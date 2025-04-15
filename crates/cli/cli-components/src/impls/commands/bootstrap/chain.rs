@@ -2,8 +2,8 @@ use core::marker::PhantomData;
 use std::path::PathBuf;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
+use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelInfo;
 use hermes_relayer_components::chain::traits::HasChainId;
 use hermes_runtime_components::traits::{CanWaitChildProcess, HasFilePathType, HasRuntime};
 use hermes_test_components::bootstrap::traits::CanBootstrapChain;

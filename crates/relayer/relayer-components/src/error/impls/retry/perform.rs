@@ -3,7 +3,7 @@ use core::time::Duration;
 
 use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 use hermes_runtime_components::traits::CanSleep;
 
 use crate::error::traits::{AsyncCont, HasRetryableError, RetryPerformer, RetryPerformerComponent};

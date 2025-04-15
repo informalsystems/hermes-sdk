@@ -3,7 +3,7 @@ use alloc::vec::Vec;
 use cgp::prelude::*;
 use hermes_chain_components::impls::CanWaitChainReachHeight;
 use hermes_chain_components::traits::CanQueryConsensusStateWithLatestHeight;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
 use crate::chain::traits::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, CanQueryClientStateWithLatestHeight,

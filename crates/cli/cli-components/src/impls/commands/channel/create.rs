@@ -3,8 +3,8 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
+use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelInfo;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
 use hermes_relayer_components::chain::traits::{
     HasChainIdType, HasClientIdType, HasIbcChainTypes, HasInitChannelOptionsType,

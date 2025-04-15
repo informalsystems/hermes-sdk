@@ -4,7 +4,7 @@ use cgp::prelude::*;
 use hermes_chain_components::traits::{
     CanBuildPacketFromSendPacket, CanExtractFromEvent, CanQueryChainHeight,
 };
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
 use crate::chain::traits::{CanBuildPacketFromWriteAck, HasSendPacketEvent};
 use crate::chain::types::aliases::EventOf;

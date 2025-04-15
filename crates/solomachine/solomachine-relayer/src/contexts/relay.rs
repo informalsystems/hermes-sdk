@@ -3,7 +3,7 @@ use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
-use hermes_logging_components::traits::logger::LoggerComponent;
+use hermes_logging_components::traits::LoggerComponent;
 use hermes_relayer_components::chain::traits::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::*;
 use hermes_relayer_components::multi::traits::chain_at::{
@@ -14,7 +14,7 @@ use hermes_relayer_components::multi::types::tags::{Dst, Src};
 use hermes_relayer_components::relay::traits::{CanInitConnection, HasRelayClientIds};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::chain::MockSolomachine;

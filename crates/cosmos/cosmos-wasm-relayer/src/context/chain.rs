@@ -21,7 +21,7 @@ use hermes_encoding_components::traits::{
     HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
-use hermes_logging_components::traits::logger::LoggerComponent;
+use hermes_logging_components::traits::LoggerComponent;
 use hermes_relayer_components::chain::traits::{
     CanBuildAckPacketMessage, CanBuildAckPacketPayload, CanBuildChannelOpenAckMessage,
     CanBuildChannelOpenAckPayload, CanBuildChannelOpenConfirmMessage,
@@ -54,7 +54,7 @@ use hermes_runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_test_components::chain::traits::CanQueryBalance;
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
 use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
 use hermes_wasm_test_components::traits::chain::upload_client_code::{

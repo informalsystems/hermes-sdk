@@ -1,9 +1,9 @@
 use alloc::sync::Arc;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::LoggerComponent;
+use hermes_logging_components::traits::LoggerComponent;
 use hermes_tokio_runtime_components::components::TokioParallelRuntimeComponents;
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use tokio::runtime::Runtime;
 
 #[cgp_context(HermesRuntimeComponents: TokioParallelRuntimeComponents)]

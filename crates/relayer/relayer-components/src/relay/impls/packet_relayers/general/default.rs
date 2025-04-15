@@ -3,7 +3,7 @@ use hermes_chain_components::traits::{
     CanBuildPacketFromWriteAck, CanQueryPacketIsCleared, CanQueryPacketIsReceived,
     CanReadPacketFields,
 };
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
 use crate::chain::traits::{CanQueryChainStatus, HasWriteAckEvent};
 use crate::relay::impls::{

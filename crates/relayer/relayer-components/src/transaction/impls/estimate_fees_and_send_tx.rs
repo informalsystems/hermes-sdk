@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
 use crate::chain::traits::HasMessageType;
 use crate::transaction::traits::{

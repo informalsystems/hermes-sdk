@@ -2,7 +2,7 @@ use alloc::vec::Vec;
 
 use cgp::prelude::{CanRaiseAsyncError, *};
 use hermes_chain_components::traits::{HasHeightType, HasMessageType};
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
 use crate::chain::impls::CanWaitChainReachHeight;
 use crate::chain::types::aliases::HeightOf;

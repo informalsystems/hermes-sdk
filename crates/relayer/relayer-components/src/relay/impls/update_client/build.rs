@@ -4,7 +4,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_components::traits::{HasClientIdType, HasHeightType};
 use hermes_chain_components::types::aliases::ClientIdOf;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
 use crate::chain::traits::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, CanQueryClientStateWithLatestHeight,

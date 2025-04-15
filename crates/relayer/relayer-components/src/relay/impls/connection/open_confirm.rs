@@ -3,8 +3,8 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::HasChainId;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
+use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelInfo;
 
 use crate::chain::traits::{
     CanBuildConnectionOpenConfirmMessage, CanBuildConnectionOpenConfirmPayload,

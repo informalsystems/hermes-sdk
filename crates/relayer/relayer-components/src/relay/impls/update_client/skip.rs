@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::HasMessageType;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
 use crate::chain::traits::{
     CanQueryConsensusStateWithLatestHeight, HasConsensusStateType, HasHeightType,
