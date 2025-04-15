@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasHeightType;
-use hermes_comet_light_client_components::traits::update_client::CanBuildLightBlocksForUpdateClient;
+use hermes_comet_light_client_components::traits::CanBuildLightBlocksForUpdateClient;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use hermes_error::types::HermesError;
 use hermes_relayer_components::chain::traits::{

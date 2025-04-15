@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasHeightType;
 
-use crate::traits::types::light_block::HasLightBlockType;
+use crate::traits::HasLightBlockType;
 
 #[cgp_component {
   provider: LightBlockQuerier,

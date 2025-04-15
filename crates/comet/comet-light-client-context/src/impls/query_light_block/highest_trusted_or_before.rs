@@ -1,10 +1,10 @@
 use cgp::prelude::*;
 use hermes_chain_components::traits::HasHeightType;
-use hermes_comet_light_client_components::traits::query_light_block::{
-    GetHighestTrustedOrVerifiedBefore, LightBlockQuerier, LightBlockQuerierComponent,
+use hermes_comet_light_client_components::traits::{
+    GetHighestTrustedOrVerifiedBefore, HasLightBlockType, LightBlockQuerier,
+    LightBlockQuerierComponent,
 };
-use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
-use hermes_comet_light_client_components::types::status::VerificationStatus;
+use hermes_comet_light_client_components::types::VerificationStatus;
 use tendermint::block::Height;
 use tendermint_light_client_verifier::types::LightBlock;
 

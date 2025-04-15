@@ -1,17 +1,11 @@
 use cgp::prelude::*;
 use hermes_chain_components::traits::HasHeightType;
-use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
-use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
-use hermes_comet_light_client_components::traits::update_client::{
-    LightBlocksForUpdateClientBuilder, LightBlocksForUpdateClientBuilderComponent,
+use hermes_comet_light_client_components::traits::{
+    CanFetchLightBlock, CanUpdateVerificationStatus, CanVerifyTargetHeight, HasLightBlockType,
+    LightBlocksForUpdateClientBuilder, LightBlocksForUpdateClientBuilderComponent, TrustedStatus,
+    VerifyForward,
 };
-use hermes_comet_light_client_components::traits::update_verification_status::{
-    CanUpdateVerificationStatus, TrustedStatus,
-};
-use hermes_comet_light_client_components::traits::verify_target_height::{
-    CanVerifyTargetHeight, VerifyForward,
-};
-use hermes_comet_light_client_components::types::status::VerificationStatus;
+use hermes_comet_light_client_components::types::VerificationStatus;
 use tendermint::block::Height;
 use tendermint_light_client_verifier::types::LightBlock;
 

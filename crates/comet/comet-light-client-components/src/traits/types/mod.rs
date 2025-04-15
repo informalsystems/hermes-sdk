@@ -1,3 +1,8 @@
-pub mod light_block;
-pub mod status;
-pub mod verdict;
+mod light_block;
+pub use light_block::*;
+
+mod status;
+pub use status::*;
+
+mod verdict;
+pub use verdict::*;

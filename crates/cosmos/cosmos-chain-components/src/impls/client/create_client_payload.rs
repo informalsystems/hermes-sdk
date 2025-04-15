@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasChainId;
-use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
+use hermes_comet_light_client_components::traits::CanFetchLightBlock;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use hermes_error::types::HermesError;
 use hermes_relayer_components::chain::traits::{

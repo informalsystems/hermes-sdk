@@ -3,21 +3,14 @@ use core::fmt::Debug;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasHeightType;
 
-use crate::traits::compute_verification_height::CanComputeNextVerificationHeight;
-use crate::traits::fetch_light_block::CanFetchLightBlockWithStatus;
-use crate::traits::light_block::height::HasLightBlockHeight;
-use crate::traits::query_light_block::{CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore};
-use crate::traits::trace_verification_height::CanTraceVerificationHeight;
-use crate::traits::types::status::HasVerificationStatusType;
-use crate::traits::types::verdict::HasVerdictType;
-use crate::traits::update_verification_status::{CanUpdateVerificationStatus, VerifiedStatus};
-use crate::traits::validate_light_block::{CanValidateLightBlock, IsWithinTrustingPeriod};
-use crate::traits::verify_target_height::{
-    NoInitialTrustedState, TargetHeightVerifier, TargetHeightVerifierComponent,
+use crate::traits::{
+    CanComputeNextVerificationHeight, CanFetchLightBlockWithStatus, CanQueryLightBlock,
+    CanTraceVerificationHeight, CanUpdateVerificationStatus, CanValidateLightBlock,
+    CanVerifyUpdateHeader, GetHighestTrustedOrVerifiedBefore, HasLightBlockHeight, HasVerdictType,
+    HasVerificationStatusType, IsWithinTrustingPeriod, NoInitialTrustedState, TargetHeightVerifier,
+    TargetHeightVerifierComponent, VerifiedStatus,
 };
-use crate::traits::verify_update_header::CanVerifyUpdateHeader;
-use crate::types::status::VerificationStatus;
-use crate::types::verdict::Verdict;
+use crate::types::{Verdict, VerificationStatus};
 
 pub struct DoVerifyForward;
 

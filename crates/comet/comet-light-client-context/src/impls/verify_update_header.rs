@@ -1,10 +1,8 @@
 use cgp::prelude::*;
-use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
-use hermes_comet_light_client_components::traits::types::verdict::HasVerdictType;
-use hermes_comet_light_client_components::traits::verify_update_header::{
-    UpdateHeaderVerifier, UpdateHeaderVerifierComponent,
+use hermes_comet_light_client_components::traits::{
+    HasLightBlockType, HasVerdictType, UpdateHeaderVerifier, UpdateHeaderVerifierComponent,
 };
-use hermes_comet_light_client_components::types::verdict::Verdict;
+use hermes_comet_light_client_components::types::Verdict;
 use tendermint_light_client_verifier::errors::VerificationErrorDetail;
 use tendermint_light_client_verifier::types::LightBlock;
 use tendermint_light_client_verifier::{Verdict as TendermintVerdict, Verifier};
