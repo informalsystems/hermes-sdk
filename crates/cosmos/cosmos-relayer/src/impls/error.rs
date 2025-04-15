@@ -65,7 +65,7 @@ use tonic::metadata::errors::InvalidMetadataValue;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::contexts::chain::CosmosChain;
+use crate::contexts::CosmosChain;
 
 pub struct HandleCosmosError;
 

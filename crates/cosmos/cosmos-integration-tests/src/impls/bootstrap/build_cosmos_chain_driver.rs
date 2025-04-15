@@ -2,7 +2,7 @@ use alloc::collections::BTreeMap;
 use std::path::PathBuf;
 
 use cgp::prelude::*;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::{
     ChainDriverBuilder, ChainDriverBuilderComponent, DenomForStaking, DenomForTransfer,
     HasChainCommandPath, HasChainGenesisConfigType, HasChainNodeConfigType, HasGenesisDenom,

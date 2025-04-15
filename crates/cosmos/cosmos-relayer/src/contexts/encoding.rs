@@ -18,7 +18,7 @@ use ibc::primitives::Timestamp;
 use prost::bytes::BufMut;
 use prost_types::Any;
 
-use crate::impls::error::HandleCosmosError;
+use crate::impls::HandleCosmosError;
 
 #[cgp_context(CosmosEncodingContextComponents: CosmosClientEncodingComponents)]
 pub struct CosmosEncoding;
@@ -82,7 +82,7 @@ mod test {
     use ibc::core::client::types::Height;
     use ibc_proto::Protobuf;
 
-    use crate::contexts::encoding::CosmosEncoding;
+    use crate::contexts::CosmosEncoding;
 
     #[test]
     fn test_height_encoding() -> Result<(), HermesError> {

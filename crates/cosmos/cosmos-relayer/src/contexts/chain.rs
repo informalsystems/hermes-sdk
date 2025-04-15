@@ -78,8 +78,8 @@ use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{HttpClient, Url};
 
-use crate::contexts::encoding::UseCosmosEncoding;
-use crate::impls::error::HandleCosmosError;
+use crate::contexts::UseCosmosEncoding;
+use crate::impls::HandleCosmosError;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[cgp_context(CosmosChainContextComponents: CosmosChainPreset)]

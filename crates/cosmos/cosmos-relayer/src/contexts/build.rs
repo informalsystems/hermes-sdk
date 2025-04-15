@@ -51,10 +51,8 @@ use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
 
-use crate::contexts::birelay::CosmosBiRelay;
-use crate::contexts::chain::CosmosChain;
-use crate::contexts::relay::CosmosRelay;
-use crate::impls::error::HandleCosmosError;
+use crate::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
+use crate::impls::HandleCosmosError;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[cgp_context(

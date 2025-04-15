@@ -34,8 +34,8 @@ use hermes_runtime_components::traits::runtime::{
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;
 
-use crate::contexts::chain::CosmosChain;
-use crate::impls::error::HandleCosmosError;
+use crate::contexts::CosmosChain;
+use crate::impls::HandleCosmosError;
 
 #[cgp_context(CosmosRelayComponents: ExtraRelayPreset)]
 #[derive(Clone)]

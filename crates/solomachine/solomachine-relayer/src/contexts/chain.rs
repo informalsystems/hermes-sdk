@@ -9,7 +9,7 @@ use cgp::prelude::*;
 use eyre::eyre;
 use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,

@@ -7,7 +7,7 @@ use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_cosmos_chain_components::types::PacketFilterConfig;
-use hermes_cosmos_relayer::impls::error::HandleCosmosError;
+use hermes_cosmos_relayer::impls::HandleCosmosError;
 use hermes_logging_components::traits::logger::{CanLog, LoggerComponent};
 use hermes_relayer_components::chain::traits::{
     HasInitChannelOptionsType, HasInitConnectionOptionsType,

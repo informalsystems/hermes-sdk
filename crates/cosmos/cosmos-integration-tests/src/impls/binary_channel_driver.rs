@@ -1,8 +1,6 @@
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
+use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;

@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::CanQueryGrpcServiceStatus;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::{HasChainNodeConfigType, HasDynamicGas};
 use hermes_cosmos_test_components::chain::types::CosmosTestWallet;
 use hermes_error::types::HermesError;

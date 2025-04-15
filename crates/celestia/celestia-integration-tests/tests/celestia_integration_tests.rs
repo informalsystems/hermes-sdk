@@ -8,7 +8,7 @@ use hermes_cosmos_integration_tests::contexts::bootstrap::{
     CosmosBootstrap, CosmosBootstrapFields,
 };
 use hermes_cosmos_integration_tests::init::init_test_runtime;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_test_components::setup::traits::CanRunTest;

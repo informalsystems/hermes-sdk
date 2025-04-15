@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use eyre::Report;
 use hermes_cosmos_chain_components::types::{DynamicGasConfig, PacketFilterConfig};
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::setup::traits::CanBuildTestDriver;

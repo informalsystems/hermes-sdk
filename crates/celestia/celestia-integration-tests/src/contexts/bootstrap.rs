@@ -33,8 +33,7 @@ use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
 };
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
 use hermes_cosmos_test_components::bootstrap::components::LegacyCosmosSdkBootstrapComponents;
 use hermes_cosmos_test_components::bootstrap::impls::{
     NoModifyCometConfig, NoModifyCosmosSdkConfig, NoModifyGenesisConfig,
