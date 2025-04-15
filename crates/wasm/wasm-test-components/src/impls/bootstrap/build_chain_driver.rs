@@ -3,24 +3,24 @@ use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::{HasAmountType, HasDenomType};
+use hermes_core::chain_type_components::traits::{HasAmountType, HasDenomType};
+use hermes_core::relayer_components::transaction::traits::CanSendMessagesWithSigner;
+use hermes_core::runtime_components::traits::{
+    CanSleep, HasChildProcessType, HasFilePathType, HasRuntime,
+};
+use hermes_core::test_components::chain::traits::{
+    CanBuildDepositProposalMessage, CanBuildVoteProposalMessage, CanPollProposalStatus,
+    HasProposalIdType, HasProposalStatusType, HasProposalVoteType, HasWalletSigner,
+};
+use hermes_core::test_components::chain_driver::traits::{
+    HasChain, HasChainType, HasDenom, HasWallet, StakingDenom, ValidatorWallet,
+};
+use hermes_core::test_components::driver::traits::HasChainDriverType;
 use hermes_cosmos_test_components::bootstrap::traits::{
     ChainDriverBuilder, ChainDriverBuilderComponent, HasChainGenesisConfigType,
     HasChainNodeConfigType,
 };
 use hermes_cosmos_test_components::chain::types::{Amount, Denom, ProposalStatus, ProposalVote};
-use hermes_relayer_components::transaction::traits::CanSendMessagesWithSigner;
-use hermes_runtime_components::traits::{
-    CanSleep, HasChildProcessType, HasFilePathType, HasRuntime,
-};
-use hermes_test_components::chain::traits::{
-    CanBuildDepositProposalMessage, CanBuildVoteProposalMessage, CanPollProposalStatus,
-    HasProposalIdType, HasProposalStatusType, HasProposalVoteType, HasWalletSigner,
-};
-use hermes_test_components::chain_driver::traits::{
-    HasChain, HasChainType, HasDenom, HasWallet, StakingDenom, ValidatorWallet,
-};
-use hermes_test_components::driver::traits::HasChainDriverType;
 
 use crate::traits::bootstrap::{HasGovernanceProposalAuthority, HasWasmClientByteCode};
 use crate::traits::chain::CanUploadWasmClientCode;

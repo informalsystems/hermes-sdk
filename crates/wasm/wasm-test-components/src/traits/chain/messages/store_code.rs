@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
-use hermes_relayer_components::chain::traits::HasMessageType;
+use hermes_core::chain_type_components::traits::{HasAddressType, HasAmountType};
+use hermes_core::relayer_components::chain::traits::HasMessageType;
 
 #[cgp_component {
   provider: StoreCodeMessageBuilder,

@@ -13,7 +13,7 @@ description  = """
 
 [dependencies]
 cgp                                     = { workspace = true }
-hermes-encoding-components              = { workspace = true }
+hermes-core                             = { workspace = true }
 hermes-protobuf-encoding-components     = { workspace = true }
 hermes-cosmos-encoding-components       = { workspace = true }
 

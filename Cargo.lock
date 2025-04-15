@@ -2046,10 +2046,8 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-chain-preset",
  "hermes-cosmos-encoding-components",
- "hermes-encoding-components",
  "hermes-error",
  "hermes-protobuf-encoding-components",
- "hermes-relayer-components",
  "hermes-wasm-encoding-components",
  "ibc",
  "ibc-proto",
@@ -2062,8 +2060,8 @@ name = "hermes-wasm-encoding-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-core",
  "hermes-cosmos-encoding-components",
- "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "ibc",
  "prost",
@@ -2075,13 +2073,9 @@ name = "hermes-wasm-test-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
- "hermes-chain-type-components",
  "hermes-core",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
- "hermes-relayer-components",
- "hermes-runtime-components",
- "hermes-test-components",
  "ibc",
  "ibc-proto",
  "prost",

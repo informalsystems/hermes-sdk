@@ -16,9 +16,7 @@ cgp                                     = { workspace = true }
 hermes-error                            = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
 hermes-cosmos-chain-preset              = { workspace = true }
-hermes-relayer-components               = { workspace = true }
 hermes-core                             = { workspace = true }
-hermes-encoding-components              = { workspace = true }
 hermes-protobuf-encoding-components     = { workspace = true }
 hermes-cosmos-encoding-components       = { workspace = true }
 hermes-wasm-encoding-components         = { workspace = true }
