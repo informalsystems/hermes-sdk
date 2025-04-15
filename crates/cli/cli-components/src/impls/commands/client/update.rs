@@ -15,10 +15,9 @@ use hermes_relayer_components::relay::traits::{
     SourceTarget,
 };
 
-use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::CanProduceOutput;
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+};
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct UpdateClientArgs {

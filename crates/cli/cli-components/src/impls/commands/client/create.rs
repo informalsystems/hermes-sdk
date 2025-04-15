@@ -15,10 +15,10 @@ use hermes_relayer_components::relay::traits::{
     CanCreateClient, HasRelayChains, HasRelayClientIds, HasSourceTargetChainTypes, SourceTarget,
 };
 
-use crate::traits::build::{BuilderOf, CanLoadBuilder, HasBuilderType};
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::CanProduceOutput;
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    BuilderOf, CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner,
+    CommandRunnerComponent, HasBuilderType,
+};
 
 #[cgp_component {
   provider: CreateClientOptionsParser,

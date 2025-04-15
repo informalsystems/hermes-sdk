@@ -1,9 +1,7 @@
 use alloc::sync::Arc;
 
 use cgp::prelude::*;
-use hermes_cli_components::traits::bootstrap::{
-    BootstrapLoader, BootstrapLoaderComponent, HasBootstrapType,
-};
+use hermes_cli_components::traits::{BootstrapLoader, BootstrapLoaderComponent, HasBootstrapType};
 use hermes_cosmos_chain_components::types::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::{CosmosBootstrap, CosmosBootstrapFields};
 use hermes_cosmos_relayer::contexts::CosmosBuilder;

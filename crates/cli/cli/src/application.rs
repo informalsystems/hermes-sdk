@@ -7,7 +7,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 
 use crate::commands::HermesCommand;
 use crate::config::HermesConfig;
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
 #[derive(clap::Parser)]

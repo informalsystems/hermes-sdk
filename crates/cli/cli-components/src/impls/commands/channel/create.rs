@@ -14,10 +14,10 @@ use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
 use hermes_relayer_components::relay::impls::CanBootstrapChannel;
 use hermes_relayer_components::relay::traits::HasRelayChains;
 
-use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::{CanProduceOutput, HasOutputType};
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+    HasOutputType,
+};
 
 #[cgp_new_provider(CommandRunnerComponent)]
 impl<App, Args, Builder, Chain, Counterparty, Relay> CommandRunner<App, Args>

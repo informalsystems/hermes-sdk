@@ -9,10 +9,9 @@ use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuil
 use hermes_relayer_components::chain::traits::{HasChainIdType, HasClientIdType};
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
-use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::CanProduceOutput;
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+};
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct StartRelayerArgs {

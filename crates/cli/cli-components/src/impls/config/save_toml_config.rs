@@ -2,9 +2,7 @@ use cgp::prelude::*;
 use hermes_runtime_components::traits::{CanWriteStringToFile, HasRuntime};
 use serde::Serialize;
 
-use crate::traits::config::config_path::HasConfigPath;
-use crate::traits::config::write_config::{ConfigWriter, ConfigWriterComponent};
-use crate::traits::types::config::HasConfigType;
+use crate::traits::{ConfigWriter, ConfigWriterComponent, HasConfigPath, HasConfigType};
 
 pub struct WriteTomlConfig;
 

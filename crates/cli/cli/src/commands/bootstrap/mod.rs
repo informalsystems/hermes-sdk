@@ -1,2 +1,5 @@
-pub mod chain;
-pub mod subcommand;
+mod chain;
+pub use chain::*;
+
+mod subcommand;
+pub use subcommand::*;

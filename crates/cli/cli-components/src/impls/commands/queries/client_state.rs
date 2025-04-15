@@ -10,11 +10,10 @@ use hermes_relayer_components::chain::traits::{
     CanQueryChainHeight, CanQueryClientState, HasChainIdType, HasClientStateType,
 };
 
-use crate::traits::any_counterparty::HasAnyCounterpartyType;
-use crate::traits::build::{CanLoadBuilder, HasBuilderType};
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::CanProduceOutput;
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+    HasAnyCounterpartyType, HasBuilderType,
+};
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct QueryClientStateArgs {

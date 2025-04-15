@@ -8,10 +8,10 @@ use hermes_relayer_components::chain::traits::{
 };
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
-use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::{CanProduceOutput, HasOutputType};
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+    HasOutputType,
+};
 
 pub struct RunQueryConnectionEndCommand;
 

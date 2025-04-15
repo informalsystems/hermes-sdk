@@ -3,8 +3,7 @@ use std::str::FromStr;
 
 use cgp::prelude::*;
 use hermes_chain_components::traits::CanQueryClientState;
-use hermes_cli_components::traits::build::CanLoadBuilder;
-use hermes_cli_components::traits::command::CommandRunnerComponent;
+use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::HasGrpcAddress;
@@ -17,8 +16,8 @@ use ibc::core::channel::types::proto::v1::QueryChannelsRequest;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, PortId};
 use tracing::{info, warn};
 
-use crate::contexts::app::HermesApp;
-use crate::impls::error_wrapper::ErrorWrapper;
+use crate::contexts::HermesApp;
+use crate::impls::ErrorWrapper;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]

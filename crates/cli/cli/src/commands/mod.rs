@@ -1,19 +1,29 @@
 use cgp::prelude::*;
-use hermes_cli_components::impls::commands::start::StartRelayerArgs;
-use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
+use hermes_cli_components::impls::StartRelayerArgs;
+use hermes_cli_components::traits::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
-pub mod bootstrap;
-pub mod channel;
-pub mod client;
-pub mod connection;
-pub mod query;
+mod bootstrap;
+pub use bootstrap::*;
 
-pub mod keys;
+mod channel;
+pub use channel::*;
+
+mod client;
+pub use client::*;
+
+mod connection;
+pub use connection::*;
+
+mod query;
+pub use query::*;
+
+mod keys;
+pub use keys::*;
 
 #[derive(Debug, clap::Parser)]
 pub enum HermesCommand {
@@ -41,7 +51,7 @@ pub enum HermesCommand {
     Keys(keys::KeysCmd),
 
     #[clap(subcommand)]
-    Bootstrap(bootstrap::subcommand::BootstrapSubCommand),
+    Bootstrap(BootstrapSubCommand),
 }
 
 #[cgp_provider(CommandRunnerComponent)]

@@ -1,7 +1,7 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
-use crate::traits::output::HasOutputType;
+use crate::traits::HasOutputType;
 
 #[cgp_component {
     provider: CommandRunner,

@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cli_components::traits::parse::{ArgParser, ArgParserComponent};
+use hermes_cli_components::traits::{ArgParser, ArgParserComponent};
 use hermes_cosmos_chain_components::types::CosmosInitChannelOptions;
 use ibc::core::channel::types::channel::Order;
 use ibc::core::channel::types::error::ChannelError;

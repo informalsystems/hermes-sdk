@@ -1,9 +1,7 @@
 use cgp::prelude::*;
-use hermes_cli_components::traits::command::{
-    CanRunCommand, CommandRunner, CommandRunnerComponent,
-};
+use hermes_cli_components::traits::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
-use crate::commands::bootstrap::chain::BootstrapCosmosChainArgs;
+use crate::commands::BootstrapCosmosChainArgs;
 
 #[derive(Debug, clap::Subcommand)]
 pub enum BootstrapSubCommand {

@@ -3,7 +3,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 pub use packets::PacketsClear;
 
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Subcommand)]

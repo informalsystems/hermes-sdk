@@ -1,14 +1,14 @@
 use cgp::prelude::*;
-use hermes_cli_components::impls::commands::client::update::UpdateClientArgs;
-use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
+use hermes_cli_components::impls::UpdateClientArgs;
+use hermes_cli_components::traits::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
-use crate::commands::client::create::CreateCosmosClientArgs;
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
-pub mod create;
+mod create;
+pub use create::*;
 
 #[derive(Debug, clap::Subcommand)]
 pub enum ClientCommands {

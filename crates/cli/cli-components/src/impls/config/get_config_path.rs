@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_runtime_components::traits::{HasFilePathType, HasRuntime};
 
-use crate::traits::config::config_path::{ConfigPathGetter, ConfigPathGetterComponent};
+use crate::traits::{ConfigPathGetter, ConfigPathGetterComponent};
 
 pub struct GetConfigField<Key>(pub PhantomData<Key>);
 

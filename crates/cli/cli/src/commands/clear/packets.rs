@@ -1,14 +1,14 @@
 use cgp::prelude::*;
 use futures::stream::{self, StreamExt};
-use hermes_cli_components::traits::build::CanLoadBuilder;
-use hermes_cli_components::traits::command::CommandRunnerComponent;
+use hermes_cli_components::traits::CanLoadBuilder;
+use hermes_cli_components::traits::CommandRunnerComponent;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::relay::traits::CanClearPackets;
 use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, PortId};
 
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]

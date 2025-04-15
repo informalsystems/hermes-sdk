@@ -10,10 +10,9 @@ use hermes_relayer_components::chain::traits::{
 };
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
-use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::CanProduceOutput;
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+};
 
 pub struct RunQueryConsensusStateCommand;
 

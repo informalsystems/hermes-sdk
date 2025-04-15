@@ -9,12 +9,10 @@ use hermes_runtime_components::traits::{CanWaitChildProcess, HasFilePathType, Ha
 use hermes_test_components::bootstrap::traits::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::{CanTakeChainProcess, ConfigUpdater, HasChain};
 
-use crate::traits::bootstrap::CanLoadBootstrap;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::config::config_path::HasConfigPath;
-use crate::traits::config::load_config::CanLoadConfig;
-use crate::traits::config::write_config::CanWriteConfig;
-use crate::traits::output::CanProduceOutput;
+use crate::traits::{
+    CanLoadBootstrap, CanLoadConfig, CanProduceOutput, CanWriteConfig, CommandRunner,
+    CommandRunnerComponent, HasConfigPath,
+};
 
 pub struct RunBootstrapChainCommand<Tag, UpdateConfig>(pub PhantomData<(Tag, UpdateConfig)>);
 

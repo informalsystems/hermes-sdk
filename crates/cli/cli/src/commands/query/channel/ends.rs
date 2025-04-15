@@ -3,8 +3,7 @@ use std::str::FromStr;
 use cgp::prelude::*;
 use eyre::eyre;
 use hermes_chain_components::traits::{CanQueryChainHeight, CanQueryConnectionEnd};
-use hermes_cli_components::traits::build::CanLoadBuilder;
-use hermes_cli_components::traits::command::CommandRunnerComponent;
+use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::traits::CanQueryAbci;
@@ -20,7 +19,7 @@ use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc::primitives::proto::Protobuf;
 use serde::{Deserialize, Serialize};
 
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
