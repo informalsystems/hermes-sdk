@@ -23,10 +23,8 @@ use hermes_test_components::setup::traits::{
 };
 use ibc::core::host::types::identifiers::PortId;
 
-use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::impls::binary_channel_driver::BuildCosmosBinaryChannelDriver;
-use crate::impls::init_channel_options::UseCosmosInitChannelOptions;
+use crate::contexts::{CosmosBinaryChannelTestDriver, CosmosChainDriver};
+use crate::impls::{BuildCosmosBinaryChannelDriver, UseCosmosInitChannelOptions};
 
 /**
    A setup context for setting up a binary channel test driver,

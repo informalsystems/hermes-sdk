@@ -82,7 +82,7 @@ use hermes_cli_components::traits::types::config::ConfigTypeComponent;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::impls::RelayerConfig;
 use hermes_cosmos_chain_components::types::CosmosCreateClientOptions;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
 use hermes_cosmos_test_components::chain::types::Denom;
 use hermes_error::types::{Error, HermesError};

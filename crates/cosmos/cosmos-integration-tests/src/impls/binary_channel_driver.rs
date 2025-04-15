@@ -10,9 +10,7 @@ use hermes_test_components::setup::traits::{
 };
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
-use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::contexts::relay_driver::CosmosRelayDriver;
+use crate::contexts::{CosmosBinaryChannelTestDriver, CosmosChainDriver, CosmosRelayDriver};
 
 #[cgp_new_provider(BinaryChannelDriverBuilderComponent)]
 impl<Setup> BinaryChannelDriverBuilder<Setup> for BuildCosmosBinaryChannelDriver

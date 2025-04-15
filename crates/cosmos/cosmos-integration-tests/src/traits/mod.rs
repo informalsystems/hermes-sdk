@@ -1,1 +1,2 @@
-pub mod bootstrap;
+mod bootstrap;
+pub use bootstrap::*;

@@ -5,9 +5,7 @@ use hermes_cli_components::traits::bootstrap::{
     BootstrapLoader, BootstrapLoaderComponent, HasBootstrapType,
 };
 use hermes_cosmos_chain_components::types::DynamicGasConfig;
-use hermes_cosmos_integration_tests::contexts::bootstrap::{
-    CosmosBootstrap, CosmosBootstrapFields,
-};
+use hermes_cosmos_integration_tests::contexts::{CosmosBootstrap, CosmosBootstrapFields};
 use hermes_cosmos_relayer::contexts::CosmosBuilder;
 use hermes_error::types::HermesError;
 use hermes_runtime::types::runtime::HermesRuntime;

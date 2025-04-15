@@ -5,9 +5,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_cosmos_integration_tests::contexts::bootstrap::{
-    CosmosBootstrap, CosmosBootstrapFields,
-};
+use hermes_cosmos_integration_tests::contexts::{CosmosBootstrap, CosmosBootstrapFields};
 use hermes_cosmos_relayer::contexts::CosmosBuilder;
 use hermes_cosmos_wasm_relayer::context::{
     CosmosToWasmCosmosRelay, CosmosWithWasmClientBootstrap, WasmCosmosChain,

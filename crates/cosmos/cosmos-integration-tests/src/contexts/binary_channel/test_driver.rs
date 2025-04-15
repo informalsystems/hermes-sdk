@@ -16,9 +16,8 @@ use hermes_test_components::setup::traits::PortIdGetterAtComponent;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
-use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::contexts::relay_driver::CosmosRelayDriver;
-use crate::impls::test_driver::types::UseCosmosTestTypes;
+use crate::contexts::{CosmosChainDriver, CosmosRelayDriver};
+use crate::impls::UseCosmosTestTypes;
 
 #[cgp_context(CosmosBinaryChannelTestDriverComponents)]
 #[derive(HasField)]

@@ -14,10 +14,10 @@ use tokio::runtime::Builder;
 use toml::Value as TomlValue;
 use tracing::info;
 
-use crate::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use crate::contexts::bootstrap::{CosmosBootstrap, CosmosBootstrapFields};
-use crate::contexts::bootstrap_legacy::{LegacyCosmosBootstrap, LegacyCosmosBootstrapFields};
+use crate::contexts::{
+    CosmosBinaryChannelSetup, CosmosBinaryChannelTestDriver, CosmosBootstrap,
+    CosmosBootstrapFields, LegacyCosmosBootstrap, LegacyCosmosBootstrapFields,
+};
 
 pub enum TestPreset {
     GaiaToGaia,

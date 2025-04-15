@@ -7,8 +7,7 @@ use hermes_test_components::driver::traits::{
     ChainDriverTypeProviderAtComponent, RelayDriverTypeProviderAtComponent,
 };
 
-use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::contexts::relay_driver::CosmosRelayDriver;
+use crate::contexts::{CosmosChainDriver, CosmosRelayDriver};
 
 pub struct UseCosmosTestTypes;
 

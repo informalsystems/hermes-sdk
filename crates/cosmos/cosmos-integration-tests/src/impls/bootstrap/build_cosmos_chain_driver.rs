@@ -16,8 +16,8 @@ use hermes_test_components::chain_driver::traits::HasChainType;
 use hermes_test_components::driver::traits::HasChainDriverType;
 use tokio::process::Child;
 
-use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::traits::bootstrap::build_chain::CanBuildChainWithNodeConfig;
+use crate::contexts::CosmosChainDriver;
+use crate::traits::CanBuildChainWithNodeConfig;
 
 #[cgp_new_provider(ChainDriverBuilderComponent)]
 impl<Bootstrap, Runtime> ChainDriverBuilder<Bootstrap> for BuildCosmosChainDriver

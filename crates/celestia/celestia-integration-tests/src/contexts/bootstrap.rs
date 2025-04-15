@@ -23,16 +23,14 @@ use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::{
 };
 use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
 use hermes_cosmos_chain_components::types::DynamicGasConfig;
-use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
-use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
-use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
-use hermes_cosmos_integration_tests::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
-use hermes_cosmos_integration_tests::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
-use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
-    CompatModeGetterComponent, UseCompatMode34,
+use hermes_cosmos_integration_tests::contexts::CosmosChainDriver;
+use hermes_cosmos_integration_tests::impls::{
+    BuildCosmosChainDriver, BuildCosmosChainWithNodeConfig, BuildRelayerChainConfig,
 };
-use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
-use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
+use hermes_cosmos_integration_tests::traits::{
+    ChainBuilderWithNodeConfigComponent, CompatModeGetterComponent, CosmosBuilderGetterComponent,
+    RelayerChainConfigBuilderComponent, UseCompatMode34,
+};
 use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
 use hermes_cosmos_test_components::bootstrap::components::LegacyCosmosSdkBootstrapComponents;
 use hermes_cosmos_test_components::bootstrap::impls::{

@@ -30,14 +30,14 @@ use hermes_test_components::driver::traits::ChainDriverTypeProviderComponent;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 use tendermint_rpc::client::CompatMode;
 
-use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
-use crate::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
-use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
-use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
-use crate::traits::bootstrap::compat_mode::CompatModeGetterComponent;
-use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
-use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
+use crate::contexts::CosmosChainDriver;
+use crate::impls::{
+    BuildCosmosChainDriver, BuildCosmosChainWithNodeConfig, BuildRelayerChainConfig,
+};
+use crate::traits::{
+    ChainBuilderWithNodeConfigComponent, CompatModeGetterComponent, CosmosBuilderGetterComponent,
+    RelayerChainConfigBuilderComponent,
+};
 
 /**
    A bootstrap context for bootstrapping a new Cosmos chain, and builds

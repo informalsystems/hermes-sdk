@@ -21,10 +21,7 @@ use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use tendermint_rpc::{Error as TendermintRpcError, Url};
 
-use crate::traits::bootstrap::compat_mode::HasCompatMode;
-use crate::traits::bootstrap::relayer_chain_config::{
-    RelayerChainConfigBuilder, RelayerChainConfigBuilderComponent,
-};
+use crate::traits::{HasCompatMode, RelayerChainConfigBuilder, RelayerChainConfigBuilderComponent};
 
 pub struct BuildRelayerChainConfig;
 

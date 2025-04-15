@@ -11,11 +11,10 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::HasChainType;
 
-use crate::traits::bootstrap::build_chain::{
-    ChainBuilderWithNodeConfig, ChainBuilderWithNodeConfigComponent,
+use crate::traits::{
+    CanBuildRelayerChainConfig, ChainBuilderWithNodeConfig, ChainBuilderWithNodeConfigComponent,
+    HasCosmosBuilder,
 };
-use crate::traits::bootstrap::cosmos_builder::HasCosmosBuilder;
-use crate::traits::bootstrap::relayer_chain_config::CanBuildRelayerChainConfig;
 
 const RETRY_COUNT: u64 = 100;
 

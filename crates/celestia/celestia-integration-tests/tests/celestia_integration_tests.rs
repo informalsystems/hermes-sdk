@@ -3,9 +3,8 @@
 use std::sync::Arc;
 
 use hermes_cosmos_chain_components::types::DynamicGasConfig;
-use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use hermes_cosmos_integration_tests::contexts::bootstrap::{
-    CosmosBootstrap, CosmosBootstrapFields,
+use hermes_cosmos_integration_tests::contexts::{
+    CosmosBinaryChannelSetup, CosmosBootstrap, CosmosBootstrapFields,
 };
 use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::CosmosBuilder;
