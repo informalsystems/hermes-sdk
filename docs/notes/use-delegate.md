@@ -24,12 +24,7 @@ pub trait HasChainAt<I>: HasChainTypeAt<I> {
 
 With the generic parameters, this means that a trait like `HasChainTypeAt<I>` may have _different_ `Chain` associated type based on the generic parameter `I`. Similarly, the trait `HasChainAt` may have different `chain` accessor method based on the generic parameter `I`. Note that in general, the method can not just be a getter, but also general methods such as for querying.
 
-When we implement context-generic provide#[cgp_type {
-    provider: ChainTypeProviderAt,
-}]
-pub trait HasChainTypeAt<I> {
-    type Chain;
-}rs, we may not care about the generic parameter `I`, and provide it for _any_ `I` parameter that the context chooses. For example:
+When we implement context-generic providers, we may not care about the generic parameter `I`, and provide it for _any_ `I` parameter that the context chooses. For example:
 
 ```rust
 #[cgp_new_provider(ChainTypeProviderAtComponent)]
@@ -53,12 +48,9 @@ pub struct UseDelegate<Components>(pub PhantomData<Components>);
 
 #[cgp_provider(ChainTypeProviderAtComponent)]
 impl<Chain, I, Delegate> ChainTypeProvider<Chain, I> for UseDelegate<Components>
-where#[cgp_type {
-    provider: ChainTypeProviderAt,
-}]
-pub trait HasChainTypeAt<I> {
-    type Chain;
-}
+where
+    Components: DelegateComponent<I, Delegate = Delegate>,
+    Delegate: ChainTypeProvider<Chain, I>,
 {
     type Chain = Delegate::Chain;
 }
@@ -91,7 +83,7 @@ delegate_components! {
 
 In the above example, we created a new "table" called `MyChainMapping`, which maps the type parameter `I` to a specific provider. So when `Index<0>` is used, we want to use `FooChain` as the `Chain` type, and when `Index<1>` is used, we want to use `BarChain` as the chain type.
 
-Now even though `MyChainMapping` contains the mapping of `I`, it does _not_ implement `ChainTypeProviderAt`. After all, the blanket implementation of `ChainType_key_ProviderAt` is not implemented for any type that implement `DelegateComponent` that contains arbitrary mappings. However, by wrapping the mapping to become `UseDelegate<MyChainMapping>`, the composite type now implements `ChainTypeProviderAt`, since we have such a blanket implementation for `UseDelegate`.
+Now even though `MyChainMapping` contains the mapping of `I`, it does _not_ implement `ChainTypeProviderAt`. After all, the blanket implementation of `ChainTypeProviderAt` is not implemented for any type that implement `DelegateComponent` that contains arbitrary mappings. However, by wrapping the mapping to become `UseDelegate<MyChainMapping>`, the composite type now implements `ChainTypeProviderAt`, since we have such a blanket implementation for `UseDelegate`.
 
 With the given mapping, we can now verify that the context `MyApp` implements `HasChainTypeAt<Index<0>, Chain = FooChain>`, and `HasChainTypeAt<Index<1>, Chain = BarChain>`.
 
