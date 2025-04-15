@@ -1,23 +1,23 @@
 [package]
-name         = "hermes-cosmos-encoding-components"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+name = "hermes-cosmos-encoding-components"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Implementation of an IBC Relayer in Rust, as a library
 """
 
 [dependencies]
-cgp                                     = { workspace = true }
-hermes-core                             = { workspace = true }
-hermes-protobuf-encoding-components     = { workspace = true }
+cgp                                 = { workspace = true }
+hermes-core                         = { workspace = true }
+hermes-protobuf-encoding-components = { workspace = true }
 
-ibc                                     = { workspace = true }
-ibc-proto                               = { workspace = true }
+ibc       = { workspace = true }
+ibc-proto = { workspace = true }
 
-prost           = { workspace = true }
-prost-types     = { workspace = true }
+prost       = { workspace = true }
+prost-types = { workspace = true }

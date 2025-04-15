@@ -1,38 +1,38 @@
 [package]
-name         = "hermes-cosmos-integration-tests"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+name = "hermes-cosmos-integration-tests"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Implementation of an IBC Relayer in Rust, as a library
 """
 
 [dependencies]
-cgp                                 = { workspace = true }
-hermes-error                        = { workspace = true }
-hermes-runtime                      = { workspace = true }
-hermes-core                         = { workspace = true }
-hermes-cosmos-relayer               = { workspace = true }
-hermes-ibc-test-suite               = { workspace = true }
-hermes-async-runtime-components     = { workspace = true }
-hermes-cosmos-chain-components      = { workspace = true }
-hermes-cosmos-test-components       = { workspace = true }
-hermes-wasm-test-components         = { workspace = true }
-hermes-tracing-logging-components   = { workspace = true }
+cgp                               = { workspace = true }
+hermes-error                      = { workspace = true }
+hermes-runtime                    = { workspace = true }
+hermes-core                       = { workspace = true }
+hermes-cosmos-relayer             = { workspace = true }
+hermes-ibc-test-suite             = { workspace = true }
+hermes-async-runtime-components   = { workspace = true }
+hermes-cosmos-chain-components    = { workspace = true }
+hermes-cosmos-test-components     = { workspace = true }
+hermes-wasm-test-components       = { workspace = true }
+hermes-tracing-logging-components = { workspace = true }
 
-ibc                                 = { workspace = true }
-ibc-proto                           = { workspace = true }
-tendermint-rpc                      = { workspace = true }
+ibc            = { workspace = true }
+ibc-proto      = { workspace = true }
+tendermint-rpc = { workspace = true }
 
-eyre                = { workspace = true }
-tokio               = { workspace = true }
-toml                = { workspace = true }
-serde_json          = { workspace = true }
-prost               = { workspace = true }
-stable-eyre         = { workspace = true }
-tracing             = { workspace = true }
-tracing-subscriber  = { workspace = true, features = ["env-filter"] }
+eyre               = { workspace = true }
+tokio              = { workspace = true }
+toml               = { workspace = true }
+serde_json         = { workspace = true }
+prost              = { workspace = true }
+stable-eyre        = { workspace = true }
+tracing            = { workspace = true }
+tracing-subscriber = { workspace = true, features = [ "env-filter" ] }

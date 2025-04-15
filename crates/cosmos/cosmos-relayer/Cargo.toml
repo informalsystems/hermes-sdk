@@ -1,13 +1,13 @@
 [package]
-name         = "hermes-cosmos-relayer"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+name = "hermes-cosmos-relayer"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Implementation of an IBC Relayer in Rust, as a library
 """
 
@@ -15,25 +15,28 @@ description  = """
 all-features = true
 
 [dependencies]
-cgp                                     = { workspace = true }
-hermes-tracing-logging-components       = { workspace = true }
-hermes-protobuf-encoding-components     = { workspace = true }
-hermes-runtime                          = { workspace = true }
-hermes-error                            = { workspace = true }
-hermes-core                             = { workspace = true }
-hermes-async-runtime-components         = { workspace = true }
-hermes-cosmos-chain-components          = { workspace = true }
-hermes-cosmos-test-components           = { workspace = true }
-hermes-cosmos-chain-preset              = { workspace = true }
-hermes-any-counterparty                 = { workspace = true }
-hermes-wasm-client-components           = { workspace = true }
-hermes-wasm-test-components             = { workspace = true }
+cgp                                 = { workspace = true }
+hermes-tracing-logging-components   = { workspace = true }
+hermes-protobuf-encoding-components = { workspace = true }
+hermes-runtime                      = { workspace = true }
+hermes-error                        = { workspace = true }
+hermes-core                         = { workspace = true }
+hermes-async-runtime-components     = { workspace = true }
+hermes-cosmos-chain-components      = { workspace = true }
+hermes-cosmos-test-components       = { workspace = true }
+hermes-cosmos-chain-preset          = { workspace = true }
+hermes-any-counterparty             = { workspace = true }
+hermes-wasm-client-components       = { workspace = true }
+hermes-wasm-test-components         = { workspace = true }
 
-ibc                                     = { workspace = true }
-ibc-proto                               = { workspace = true }
-tendermint                              = { workspace = true, features = ["secp256k1"] }
-tendermint-proto                        = { workspace = true }
-tendermint-rpc                          = { workspace = true, features = ["http-client", "websocket-client"] }
+ibc = { workspace = true }
+ibc-proto = { workspace = true }
+tendermint = { workspace = true, features = [ "secp256k1" ] }
+tendermint-proto = { workspace = true }
+tendermint-rpc = { workspace = true, features = [
+  "http-client",
+  "websocket-client",
+] }
 
 dirs-next       = { workspace = true }
 eyre            = { workspace = true }
@@ -42,7 +45,7 @@ prost-types     = { workspace = true }
 reqwest         = { workspace = true }
 tracing         = { workspace = true }
 tokio           = { workspace = true }
-tonic           = { workspace = true, features = ["tls", "tls-roots"] }
+tonic           = { workspace = true, features = [ "tls", "tls-roots" ] }
 serde           = { workspace = true }
 serde_derive    = { workspace = true }
 serde_json      = { workspace = true }
@@ -52,5 +55,5 @@ futures         = { workspace = true }
 http            = { workspace = true }
 secp256k1       = { workspace = true }
 
-opentelemetry   = { version = "0.17.0", features = ["metrics"] }
-moka            = { version = "0.12", features = ["future"] }
+opentelemetry = { version = "0.17.0", features = [ "metrics" ] }
+moka          = { version = "0.12", features = [ "future" ] }

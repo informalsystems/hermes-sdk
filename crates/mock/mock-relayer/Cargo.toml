@@ -1,29 +1,29 @@
 [package]
 name = "hermes-mock-relayer"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     TBD
 """
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-hermes-runtime-components           = { workspace = true }
-hermes-logging-components           = { workspace = true }
-hermes-relayer-components           = { workspace = true }
-hermes-core                         = { workspace = true }
-hermes-runtime                      = { workspace = true }
-hermes-cosmos-chain-components      = { workspace = true }
-hermes-chain-type-components      = { workspace = true }
+hermes-runtime-components      = { workspace = true }
+hermes-logging-components      = { workspace = true }
+hermes-relayer-components      = { workspace = true }
+hermes-core                    = { workspace = true }
+hermes-runtime                 = { workspace = true }
+hermes-cosmos-chain-components = { workspace = true }
+hermes-chain-type-components   = { workspace = true }
 
-eyre          = { workspace = true }
-flex-error    = { workspace = true }
-cgp           = { workspace = true }
-tokio         = { workspace = true, features = ["full"] }
-tracing       = { workspace = true }
+eyre       = { workspace = true }
+flex-error = { workspace = true }
+cgp        = { workspace = true }
+tokio      = { workspace = true, features = [ "full" ] }
+tracing    = { workspace = true }

@@ -1,24 +1,24 @@
 [package]
 name = "hermes-wasm-test-components"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Context-generic client components for communicating with a 08-wasm client enabled node
 """
 
 [dependencies]
-cgp                                     = { workspace = true }
-ibc                                     = { workspace = true }
-hermes-cosmos-chain-components          = { workspace = true }
-hermes-cosmos-test-components           = { workspace = true }
-hermes-core                             = { workspace = true }
+cgp                            = { workspace = true }
+ibc                            = { workspace = true }
+hermes-cosmos-chain-components = { workspace = true }
+hermes-cosmos-test-components  = { workspace = true }
+hermes-core                    = { workspace = true }
 
-prost                                   = { workspace = true }
-toml                                    = { workspace = true }
-serde_json                              = { workspace = true }
-ibc-proto                               = { workspace = true }
+prost      = { workspace = true }
+toml       = { workspace = true }
+serde_json = { workspace = true }
+ibc-proto  = { workspace = true }

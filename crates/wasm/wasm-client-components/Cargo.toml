@@ -1,28 +1,28 @@
 [package]
 name = "hermes-wasm-client-components"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Context-generic client components for communicating with a 08-wasm client enabled node
 """
 
 [dependencies]
-cgp                                     = { workspace = true }
-hermes-error                            = { workspace = true }
-hermes-cosmos-chain-components          = { workspace = true }
-hermes-cosmos-chain-preset              = { workspace = true }
-hermes-core                             = { workspace = true }
-hermes-protobuf-encoding-components     = { workspace = true }
-hermes-cosmos-encoding-components       = { workspace = true }
-hermes-wasm-encoding-components         = { workspace = true }
+cgp                                 = { workspace = true }
+hermes-error                        = { workspace = true }
+hermes-cosmos-chain-components      = { workspace = true }
+hermes-cosmos-chain-preset          = { workspace = true }
+hermes-core                         = { workspace = true }
+hermes-protobuf-encoding-components = { workspace = true }
+hermes-cosmos-encoding-components   = { workspace = true }
+hermes-wasm-encoding-components     = { workspace = true }
 
-tendermint-proto                        = { workspace = true }
-ibc-proto                               = { workspace = true }
-ibc                                     = { workspace = true, features = ["borsh","schema","serde"] }
+tendermint-proto = { workspace = true }
+ibc-proto        = { workspace = true }
+ibc              = { workspace = true, features = [ "borsh", "schema", "serde" ] }
 
-prost                                   = { workspace = true }
+prost = { workspace = true }
