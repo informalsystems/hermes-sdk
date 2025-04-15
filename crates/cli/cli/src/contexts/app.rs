@@ -31,16 +31,18 @@ use hermes_cli_components::traits::{
     HasOutputType, OutputProducer, OutputProducerComponent, OutputTypeComponent,
 };
 use hermes_cli_framework::output::Output;
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::relayer_components::error::traits::RetryableErrorComponent;
+use hermes_core::runtime_components::traits::{
+    RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
 use hermes_cosmos_chain_components::impls::RelayerConfig;
 use hermes_cosmos_chain_components::types::CosmosCreateClientOptions;
 use hermes_cosmos_integration_tests::contexts::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
 use hermes_cosmos_test_components::chain::types::Denom;
 use hermes_error::types::{Error, HermesError};
-use hermes_logging_components::traits::LoggerComponent;
-use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::clients::tendermint::types::TrustThreshold;
 use ibc::core::client::types::Height;

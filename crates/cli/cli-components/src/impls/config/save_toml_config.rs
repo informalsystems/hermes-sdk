@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::{CanWriteStringToFile, HasRuntime};
+use hermes_core::runtime_components::traits::{CanWriteStringToFile, HasRuntime};
 use serde::Serialize;
 
 use crate::traits::{ConfigWriter, ConfigWriterComponent, HasConfigPath, HasConfigType};

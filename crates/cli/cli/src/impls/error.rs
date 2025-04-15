@@ -6,10 +6,10 @@ use cgp::core::error::{
 };
 use cgp::prelude::*;
 use eyre::Report;
+use hermes_core::relayer_components::error::traits::RetryableErrorComponent;
 use hermes_error::handlers::{DisplayError, HandleInfallible, ReportError, ReturnError};
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
-use hermes_relayer_components::error::traits::RetryableErrorComponent;
 use hermes_runtime::types::error::TokioRuntimeError;
 use ibc::clients::tendermint::types::error::TendermintClientError;
 use ibc::core::channel::types::error::ChannelError;

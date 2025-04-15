@@ -2,12 +2,12 @@ use std::marker::PhantomData;
 
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
-use hermes_logging_components::traits::CanLog;
-use hermes_logging_components::types::LevelInfo;
-use hermes_relayer_components::birelay::traits::CanAutoBiRelay;
-use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
-use hermes_relayer_components::chain::traits::{HasChainIdType, HasClientIdType};
-use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_core::logging_components::traits::CanLog;
+use hermes_core::logging_components::types::LevelInfo;
+use hermes_core::relayer_components::birelay::traits::CanAutoBiRelay;
+use hermes_core::relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
+use hermes_core::relayer_components::chain::traits::{HasChainIdType, HasClientIdType};
+use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
 use crate::traits::{
     CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
