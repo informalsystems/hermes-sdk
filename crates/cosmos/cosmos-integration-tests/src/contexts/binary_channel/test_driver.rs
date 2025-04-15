@@ -1,7 +1,7 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_ibc_test_suite::traits::CanUseBinaryTestDriverMethods;
 use hermes_logging_components::traits::logger::LoggerComponent;

@@ -14,7 +14,7 @@ use hermes_encoding_components::traits::{
 };
 pub use hermes_encoding_components::traits::{SchemaGetterComponent, SchemaTypeComponent};
 use hermes_encoding_components::types::AsBytes;
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_protobuf_encoding_components::traits::EncodedLengthGetterComponent;
 use hermes_protobuf_encoding_components::types::any::Any;

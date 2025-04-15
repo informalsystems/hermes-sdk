@@ -6,10 +6,7 @@ use cgp::core::error::{
 };
 use cgp::prelude::*;
 use eyre::Report;
-use hermes_error::handlers::display::DisplayError;
-use hermes_error::handlers::identity::ReturnError;
-use hermes_error::handlers::infallible::HandleInfallible;
-use hermes_error::handlers::report::ReportError;
+use hermes_error::handlers::{DisplayError, HandleInfallible, ReportError, ReturnError};
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_relayer_components::error::traits::RetryableErrorComponent;

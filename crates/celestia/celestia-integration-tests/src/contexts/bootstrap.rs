@@ -44,7 +44,7 @@ use hermes_cosmos_test_components::bootstrap::traits::{
     DenomPrefixGetterComponent, DynamicGasGetterComponent, RandomIdFlagGetterComponent,
     UseRandomIdFlag, WalletConfigGeneratorComponent,
 };
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::HermesError;
 use hermes_logging_components::traits::logger::LoggerComponent;

@@ -16,7 +16,7 @@ use hermes_encoding_components::traits::{
     HasDefaultEncoding,
 };
 use hermes_encoding_components::types::AsBytes;
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::Error;
 use hermes_relayer_components::chain::traits::{

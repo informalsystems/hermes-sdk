@@ -4,7 +4,7 @@ use cgp::core::types::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_relayer_components::multi::traits::birelay_at::{

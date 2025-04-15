@@ -15,7 +15,7 @@ use hermes_cosmos_test_components::chain_driver::components::CosmosChainDriverCo
 use hermes_cosmos_test_components::chain_driver::traits::{
     GrpcPortGetter, GrpcPortGetterComponent, RpcPortGetter, RpcPortGetterComponent,
 };
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;

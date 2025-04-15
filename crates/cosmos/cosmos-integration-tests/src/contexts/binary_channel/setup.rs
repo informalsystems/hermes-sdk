@@ -5,7 +5,7 @@ use hermes_cosmos_chain_components::types::{
     CosmosCreateClientOptions, CosmosInitChannelOptions, CosmosInitConnectionOptions,
 };
 use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosBuilder, CosmosChain, CosmosRelay};
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
