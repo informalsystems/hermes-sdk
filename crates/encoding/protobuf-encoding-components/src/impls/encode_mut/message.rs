@@ -1,7 +1,7 @@
 use cgp::prelude::*;
-use hermes_encoding_components::traits::decode_mut::{MutDecoder, MutDecoderComponent};
-use hermes_encoding_components::traits::encode_mut::{MutEncoder, MutEncoderComponent};
-use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
+use hermes_encoding_components::traits::{
+    HasEncodeBufferType, MutDecoder, MutDecoderComponent, MutEncoder, MutEncoderComponent,
+};
 use prost::bytes::BufMut;
 use prost::encoding::{encode_varint, WireType};
 use prost::{DecodeError, Message};
@@ -9,11 +9,9 @@ use prost::{DecodeError, Message};
 use crate::impls::encode_mut::chunk::{
     CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, ProtoChunk, ProtoChunks,
 };
-use crate::traits::length::{EncodedLengthGetter, EncodedLengthGetterComponent};
+use crate::traits::{EncodedLengthGetter, EncodedLengthGetterComponent};
 
-pub struct EncodeProstMessage;
-
-#[cgp_provider(MutEncoderComponent)]
+#[cgp_new_provider(MutEncoderComponent)]
 impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Value> for EncodeProstMessage
 where
     Value: Message,

@@ -4,7 +4,14 @@
    [`HasWriteAckEvent`](write_ack::HasWriteAckEvent).
 */
 
-pub mod channel;
-pub mod connection;
-pub mod send_packet;
-pub mod write_ack;
+mod channel;
+pub use channel::*;
+
+mod connection;
+pub use connection::*;
+
+mod send_packet;
+pub use send_packet::*;
+
+mod write_ack;
+pub use write_ack::*;

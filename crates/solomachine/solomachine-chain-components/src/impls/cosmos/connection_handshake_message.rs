@@ -1,19 +1,16 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_cosmos_chain_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
+use hermes_cosmos_chain_components::traits::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::types::CosmosConnectionOpenTryMessage;
 use hermes_protobuf_encoding_components::types::any::Any;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+use hermes_relayer_components::chain::traits::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenAckMessageBuilderComponent,
     ConnectionOpenConfirmMessageBuilder, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilder, ConnectionOpenInitMessageBuilderComponent,
     ConnectionOpenTryMessageBuilder, ConnectionOpenTryMessageBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
-    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
+    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType, HasIbcChainTypes,
     HasInitConnectionOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 

@@ -2,13 +2,11 @@ use core::iter::Iterator;
 use core::str::FromStr;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllRawClientStatesQuerier, AllRawClientStatesQuerierComponent, RawClientStateQuerier,
-    RawClientStateQuerierComponent, RawClientStateWithProofsQuerier,
-    RawClientStateWithProofsQuerierComponent,
+use hermes_core::relayer_components::chain::traits::{
+    AllRawClientStatesQuerier, AllRawClientStatesQuerierComponent, HasIbcChainTypes,
+    HasRawClientStateType, RawClientStateQuerier, RawClientStateQuerierComponent,
+    RawClientStateWithProofsQuerier, RawClientStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::client_state::HasRawClientStateType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::ClientId;
@@ -21,7 +19,7 @@ use ibc_proto::ibc::core::client::v1::{
 use prost::{DecodeError, Message};
 use prost_types::Any;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryCosmosClientStateFromAbci;
 

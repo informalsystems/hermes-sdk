@@ -2,23 +2,19 @@ use core::marker::PhantomData;
 use std::path::PathBuf;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::child_process::CanWaitChildProcess;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use hermes_test_components::chain_driver::traits::chain_process::CanTakeChainProcess;
-use hermes_test_components::chain_driver::traits::config::ConfigUpdater;
-use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use hermes_core::logging_components::traits::CanLog;
+use hermes_core::logging_components::types::LevelInfo;
+use hermes_core::relayer_components::chain::traits::HasChainId;
+use hermes_core::runtime_components::traits::{CanWaitChildProcess, HasFilePathType, HasRuntime};
+use hermes_core::test_components::bootstrap::traits::CanBootstrapChain;
+use hermes_core::test_components::chain_driver::traits::{
+    CanTakeChainProcess, ConfigUpdater, HasChain,
+};
 
-use crate::traits::bootstrap::CanLoadBootstrap;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::config::config_path::HasConfigPath;
-use crate::traits::config::load_config::CanLoadConfig;
-use crate::traits::config::write_config::CanWriteConfig;
-use crate::traits::output::CanProduceOutput;
+use crate::traits::{
+    CanLoadBootstrap, CanLoadConfig, CanProduceOutput, CanWriteConfig, CommandRunner,
+    CommandRunnerComponent, HasConfigPath,
+};
 
 pub struct RunBootstrapChainCommand<Tag, UpdateConfig>(pub PhantomData<(Tag, UpdateConfig)>);
 

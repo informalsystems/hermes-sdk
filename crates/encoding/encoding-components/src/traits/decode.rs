@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::encoded::HasEncodedType;
+use crate::traits::HasEncodedType;
 
 #[cgp_component {
   provider: Decoder,

@@ -1,8 +1,8 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-pub use hermes_chain_type_components::traits::types::ibc::consensus_state::*;
+pub use hermes_chain_type_components::traits::*;
 
-use crate::traits::types::timestamp::HasTimeType;
+use crate::traits::HasTimeType;
 
 #[cgp_component {
   name: RawConsensusStateTypeComponent,

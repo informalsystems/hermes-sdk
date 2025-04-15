@@ -5,21 +5,20 @@ use cgp::core::Async;
 use cgp::prelude::*;
 use futures::channel::mpsc::unbounded;
 use futures::lock::Mutex;
-use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
-use hermes_chain_type_components::traits::types::message::HasMessageType;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_chain_type_components::traits::{
+    HasChainIdType, HasMessageResponseType, HasMessageType,
+};
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::{
     RelayFromChainsBuilder, RelayFromChainsBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
+use hermes_relayer_components::chain::traits::{HasChainId, HasClientIdType};
 use hermes_relayer_components::chain::types::aliases::{ChainIdOf, ClientIdOf};
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
-use hermes_relayer_components::relay::traits::chains::{HasRelayChainTypes, HasRelayClientIds};
-use hermes_relayer_components::relay::traits::target::{
-    CounterpartyChainOf, DestinationTarget, HasDestinationTargetChainTypes,
-    HasSourceTargetChainTypes, HasTargetChainTypes, RelayTarget, SourceTarget, TargetChainOf,
+use hermes_relayer_components::relay::traits::{
+    CounterpartyChainOf, DestinationTarget, HasDestinationTargetChainTypes, HasRelayChainTypes,
+    HasRelayClientIds, HasSourceTargetChainTypes, HasTargetChainTypes, RelayTarget, SourceTarget,
+    TargetChainOf,
 };
 
 use crate::batch::traits::config::HasBatchConfig;

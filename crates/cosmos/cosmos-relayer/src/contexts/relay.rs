@@ -7,38 +7,35 @@ use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_logging_components::traits::logger::LoggerComponent;
-use hermes_relayer_components::error::traits::{CanPerformRetry, RetryableErrorComponent};
-use hermes_relayer_components::multi::traits::chain_at::{
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::relayer_components::error::traits::{CanPerformRetry, RetryableErrorComponent};
+use hermes_core::relayer_components::multi::traits::chain_at::{
     ChainAt, ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };
-use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
-use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;
-use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::impls::packet_lock::{
-    PacketMutexGetterComponent, PacketMutexOf,
+use hermes_core::relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
+use hermes_core::relayer_components::multi::traits::relay_at::ClientIdAt;
+use hermes_core::relayer_components::multi::types::tags::{Dst, Src};
+use hermes_core::relayer_components::relay::impls::{
+    PacketMutexGetterComponent, PacketMutexOf, SelectRelayAToB,
 };
-use hermes_relayer_components::relay::impls::selector::SelectRelayAToB;
-use hermes_relayer_components::relay::traits::auto_relayer::TargetAutoRelayerComponent;
-use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
-use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::{
-    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+use hermes_core::relayer_components::relay::traits::{
+    CanCreateClient, DestinationTarget, HasDestinationTargetChainTypes, HasRelayClientIds,
+    HasSourceTargetChainTypes, SourceTarget, TargetAutoRelayerComponent,
 };
-use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetterComponent;
-use hermes_relayer_components_extra::batch::traits::types::{
+use hermes_core::relayer_components_extra::batch::traits::channel::MessageBatchSenderGetterComponent;
+use hermes_core::relayer_components_extra::batch::traits::types::{
     CanUseMessageBatchChannel, MessageBatchSenderOf,
 };
-use hermes_relayer_components_extra::components::extra::relay::ExtraRelayPreset;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
+use hermes_core::relayer_components_extra::components::extra::relay::ExtraRelayPreset;
+use hermes_core::runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,
 };
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;
 
-use crate::contexts::chain::CosmosChain;
-use crate::impls::error::HandleCosmosError;
+use crate::contexts::CosmosChain;
+use crate::impls::HandleCosmosError;
 
 #[cgp_context(CosmosRelayComponents: ExtraRelayPreset)]
 #[derive(Clone)]

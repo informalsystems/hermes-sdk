@@ -2,28 +2,22 @@ use alloc::collections::BTreeMap;
 use std::path::PathBuf;
 
 use cgp::prelude::*;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::{
-    ChainDriverBuilder, ChainDriverBuilderComponent,
+use hermes_core::runtime_components::traits::{
+    HasChildProcessType, HasFilePathType, HasRuntimeType,
 };
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
-    DenomForStaking, DenomForTransfer, HasGenesisDenom,
+use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_core::test_components::driver::traits::HasChainDriverType;
+use hermes_cosmos_relayer::contexts::CosmosChain;
+use hermes_cosmos_test_components::bootstrap::traits::{
+    ChainDriverBuilder, ChainDriverBuilderComponent, DenomForStaking, DenomForTransfer,
+    HasChainCommandPath, HasChainGenesisConfigType, HasChainNodeConfigType, HasGenesisDenom,
 };
-use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
-use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_cosmos_test_components::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
+use hermes_cosmos_test_components::chain::types::CosmosTestWallet;
 use tokio::process::Child;
 
-use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::traits::bootstrap::build_chain::CanBuildChainWithNodeConfig;
+use crate::contexts::CosmosChainDriver;
+use crate::traits::CanBuildChainWithNodeConfig;
 
 #[cgp_new_provider(ChainDriverBuilderComponent)]
 impl<Bootstrap, Runtime> ChainDriverBuilder<Bootstrap> for BuildCosmosChainDriver

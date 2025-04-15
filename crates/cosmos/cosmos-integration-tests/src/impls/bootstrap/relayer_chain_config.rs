@@ -5,29 +5,23 @@ use std::path::PathBuf;
 use cgp::core::error::ErrorOf;
 use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
-use hermes_cosmos_chain_components::types::config::gas::gas_config::{GasConfig, GasPrice};
-use hermes_cosmos_chain_components::types::key_types::secp256k1::KEYSTORE_FILE_EXTENSION;
-use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
-use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
-use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
-use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
-use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_core::runtime_components::traits::{
+    CanCreateDir, CanWriteStringToFile, HasFilePathType,
+};
+use hermes_core::test_components::chain::traits::HasWalletType;
+use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_cosmos_chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_chain_components::types::{GasConfig, GasPrice, KEYSTORE_FILE_EXTENSION};
+use hermes_cosmos_test_components::bootstrap::traits::{
+    HasAccountPrefix, HasChainGenesisConfigType, HasChainNodeConfigType, HasDynamicGas,
+};
+use hermes_cosmos_test_components::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
+use hermes_cosmos_test_components::chain::types::CosmosTestWallet;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use tendermint_rpc::{Error as TendermintRpcError, Url};
 
-use crate::traits::bootstrap::compat_mode::HasCompatMode;
-use crate::traits::bootstrap::relayer_chain_config::{
-    RelayerChainConfigBuilder, RelayerChainConfigBuilderComponent,
-};
+use crate::traits::{HasCompatMode, RelayerChainConfigBuilder, RelayerChainConfigBuilderComponent};
 
 pub struct BuildRelayerChainConfig;
 

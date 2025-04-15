@@ -1,7 +1,7 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_relayer_components::transaction::impls::poll_tx_response::{
+use hermes_core::relayer_components::transaction::impls::{
     PollTimeoutGetter, PollTimeoutGetterComponent,
 };
 

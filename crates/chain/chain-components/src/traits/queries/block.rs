@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::block::HasBlockType;
-use crate::traits::types::height::HasHeightType;
+use crate::traits::{HasBlockType, HasHeightType};
 
 #[cgp_component {
   provider: BlockQuerier,

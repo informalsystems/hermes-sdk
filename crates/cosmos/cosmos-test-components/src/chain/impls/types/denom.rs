@@ -1,7 +1,7 @@
 use cgp::prelude::*;
-use hermes_test_components::chain::traits::types::denom::{DenomTypeComponent, ProvideDenomType};
+use hermes_core::chain_type_components::traits::{DenomTypeComponent, ProvideDenomType};
 
-use crate::chain::types::denom::Denom;
+use crate::chain::types::Denom;
 
 pub struct ProvideIbcDenom;
 

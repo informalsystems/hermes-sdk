@@ -1,11 +1,10 @@
 use core::marker::PhantomData;
 
-use hermes_chain_components::traits::types::ibc::HasClientIdType;
+use hermes_chain_components::traits::HasClientIdType;
 use hermes_chain_components::types::aliases::ClientIdOf;
 
 use crate::multi::traits::client_id_at::HasClientIdAt;
-use crate::relay::traits::target::chain_types::HasTargetChainTypes;
-use crate::relay::traits::target::relay_target::RelayTarget;
+use crate::relay::traits::{HasTargetChainTypes, RelayTarget};
 
 pub trait HasTargetClientIds<Target: RelayTarget>:
     HasTargetChainTypes<

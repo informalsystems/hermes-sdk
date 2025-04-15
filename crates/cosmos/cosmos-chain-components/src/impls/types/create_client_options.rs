@@ -1,10 +1,10 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::create_client::{
+use hermes_core::relayer_components::chain::traits::{
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     ProvideCreateClientMessageOptionsType, ProvideCreateClientPayloadOptionsType,
 };
 
-use crate::types::payloads::client::CosmosCreateClientOptions;
+use crate::types::CosmosCreateClientOptions;
 
 pub struct ProvideCosmosCreateClientSettings;
 

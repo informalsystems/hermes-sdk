@@ -1,2 +1,2 @@
-pub mod delegate;
-pub mod ignore;
+mod ignore;
+pub use ignore::*;

@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 
-use crate::impls::commands::queries::connection_end::QueryConnectionEndArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
+use crate::impls::QueryConnectionEndArgs;
+use crate::traits::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryConnectionSubCommand;
 

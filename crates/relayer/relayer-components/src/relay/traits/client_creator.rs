@@ -1,12 +1,12 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::ibc::HasClientIdType;
+use hermes_chain_components::traits::HasClientIdType;
 
-use crate::chain::traits::types::create_client::{
+use crate::chain::traits::{
     CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,
     HasCreateClientPayloadOptionsType,
 };
 use crate::chain::types::aliases::ClientIdOf;
-use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
+use crate::relay::traits::{HasTargetChainTypes, RelayTarget};
 
 #[cgp_component {
   provider: ClientCreator,

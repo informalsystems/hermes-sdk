@@ -1,9 +1,7 @@
 use cgp::prelude::*;
 
-use crate::chain::traits::types::message::HasMessageType;
-use crate::transaction::traits::types::nonce::HasNonceType;
-use crate::transaction::traits::types::signer::HasSignerType;
-use crate::transaction::traits::types::tx_response::HasTxResponseType;
+use crate::chain::traits::HasMessageType;
+use crate::transaction::traits::{HasNonceType, HasSignerType, HasTxResponseType};
 
 #[cgp_component {
   provider: MessagesWithSignerAndNonceSender,

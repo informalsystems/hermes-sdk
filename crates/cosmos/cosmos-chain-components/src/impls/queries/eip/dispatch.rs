@@ -1,10 +1,8 @@
 use cgp::prelude::*;
 
-use crate::impls::queries::eip::feemarket::QueryEipFromFeeMarket;
-use crate::impls::queries::eip::osmosis::OsmosisQueryEip;
-use crate::traits::eip::eip_query::{EipQuerier, EipQuerierComponent};
-use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use crate::types::config::gas::eip_type::EipQueryType;
+use crate::impls::{OsmosisQueryEip, QueryEipFromFeeMarket};
+use crate::traits::{EipQuerier, EipQuerierComponent};
+use crate::types::{DynamicGasConfig, EipQueryType};
 
 pub struct DispatchQueryEip;
 

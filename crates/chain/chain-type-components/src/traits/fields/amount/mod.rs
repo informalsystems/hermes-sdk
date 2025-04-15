@@ -1,2 +1,5 @@
-pub mod denom;
-pub mod quantity;
+mod denom;
+pub use denom::*;
+
+mod quantity;
+pub use quantity::*;

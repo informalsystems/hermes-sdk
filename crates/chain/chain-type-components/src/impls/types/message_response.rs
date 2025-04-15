@@ -2,12 +2,9 @@ use alloc::vec::Vec;
 
 use cgp::prelude::*;
 
-use crate::traits::fields::message_response_events::{
-    MessageResponseEventsGetter, MessageResponseEventsGetterComponent,
-};
-use crate::traits::types::event::HasEventType;
-use crate::traits::types::message_response::{
-    HasMessageResponseType, MessageResponseTypeComponent, ProvideMessageResponseType,
+use crate::traits::{
+    HasEventType, HasMessageResponseType, MessageResponseEventsGetter,
+    MessageResponseEventsGetterComponent, MessageResponseTypeComponent, ProvideMessageResponseType,
 };
 
 pub struct UseEventsMessageResponse;

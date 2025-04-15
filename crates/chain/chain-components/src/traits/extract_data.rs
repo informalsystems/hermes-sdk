@@ -2,9 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
-use hermes_chain_type_components::traits::types::event::HasEventType;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_chain_type_components::traits::{
+    HasEventType, HasMessageResponseEvents, HasMessageResponseType,
+};
 
 #[cgp_component {
     provider: MessageResponseExtractor,

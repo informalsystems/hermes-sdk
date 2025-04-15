@@ -6,9 +6,8 @@ use cgp::prelude::HasAsyncErrorType;
 use futures::channel::mpsc::{UnboundedReceiver, UnboundedSender};
 use futures::channel::oneshot;
 use futures::lock::Mutex;
-use hermes_chain_type_components::traits::types::message::HasMessageType;
-use hermes_chain_type_components::traits::types::message_response::{
-    HasMessageResponseType, MessageResponseOf,
+use hermes_chain_type_components::traits::{
+    HasMessageResponseType, HasMessageType, MessageResponseOf,
 };
 use hermes_relayer_components::chain::types::aliases::MessageOf;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;

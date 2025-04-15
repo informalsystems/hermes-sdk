@@ -1,2 +1,4 @@
-pub mod error;
-pub mod telemetry;
+mod error;
+pub use error::*;
+
+mod telemetry;

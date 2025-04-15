@@ -1,20 +1,18 @@
 use cgp::extra::runtime::HasRuntime;
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::poll_interval::HasPollInterval;
-use hermes_relayer_components::transaction::traits::query_tx_response::{
-    TxResponseQuerier, TxResponseQuerierComponent,
+use hermes_core::relayer_components::chain::traits::{
+    CanQueryChainHeight, HasHeightFields, HasPollInterval,
 };
-use hermes_relayer_components::transaction::traits::types::tx_hash::HasTxHashType;
-use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
-use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_core::relayer_components::transaction::traits::{
+    HasTxHashType, HasTxResponseType, TxResponseQuerier, TxResponseQuerierComponent,
+};
+use hermes_core::runtime_components::traits::CanSleep;
 use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 use tendermint_rpc::query::Query;
 use tendermint_rpc::{Client, Error as TendermintRpcError, Order};
 
-use crate::traits::rpc_client::HasRpcClient;
+use crate::traits::HasRpcClient;
 
 #[cgp_new_provider(TxResponseQuerierComponent)]
 impl<Chain> TxResponseQuerier<Chain> for QueryCosmosTxResponse

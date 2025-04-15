@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::time::HasTimeType;
+use crate::traits::HasTimeType;
 
 #[cgp_component {
   name: TimeoutTypeComponent,

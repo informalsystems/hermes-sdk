@@ -1,1 +1,2 @@
-pub mod concurrent;
+mod concurrent;
+pub use concurrent::*;

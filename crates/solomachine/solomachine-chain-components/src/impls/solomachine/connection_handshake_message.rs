@@ -1,19 +1,14 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+use hermes_relayer_components::chain::traits::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenAckMessageBuilderComponent,
     ConnectionOpenConfirmMessageBuilder, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilder, ConnectionOpenInitMessageBuilderComponent,
-    ConnectionOpenTryMessageBuilder, ConnectionOpenTryMessageBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionEndType, HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
-    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
+    ConnectionOpenTryMessageBuilder, ConnectionOpenTryMessageBuilderComponent, HasClientStateType,
+    HasCommitmentPrefixType, HasCommitmentProofType, HasConnectionEndType,
+    HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType, HasIbcChainTypes,
     HasInitConnectionOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,

@@ -1,11 +1,11 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
+use hermes_chain_type_components::traits::CanUseCounterparty;
 
-use crate::traits::types::create_client::{
+use crate::traits::{
     CreateClientPayloadOf, HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+    HasMessageType,
 };
-use crate::traits::types::message::HasMessageType;
 
 #[cgp_component {
   provider: CreateClientMessageBuilder,

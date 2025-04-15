@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::traits::convert::{Converter, ConverterComponent};
+use crate::traits::{Converter, ConverterComponent};
 
 pub struct TryConvertFrom;
 

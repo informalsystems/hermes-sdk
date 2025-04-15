@@ -1,5 +1,4 @@
-use crate::traits::decode::CanDecode;
-use crate::traits::encode::CanEncode;
+use crate::traits::{CanDecode, CanEncode};
 
 pub trait CanEncodeAndDecode<Strategy, Value>:
     CanEncode<Strategy, Value> + CanDecode<Strategy, Value>

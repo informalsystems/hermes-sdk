@@ -1,27 +1,19 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
-use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
+use hermes_chain_type_components::traits::{HasClientIdType, HasConnectionIdType, HasHeightType};
 
-use crate::traits::commitment_prefix::HasIbcCommitmentPrefix;
-use crate::traits::payload_builders::connection_handshake::{
-    ConnectionOpenAckPayloadBuilder, ConnectionOpenAckPayloadBuilderComponent,
-    ConnectionOpenConfirmPayloadBuilder, ConnectionOpenConfirmPayloadBuilderComponent,
-    ConnectionOpenInitPayloadBuilder, ConnectionOpenInitPayloadBuilderComponent,
-    ConnectionOpenTryPayloadBuilder, ConnectionOpenTryPayloadBuilderComponent,
+use crate::traits::{
+    CanQueryClientStateWithProofs, CanQueryConnectionEndWithProofs,
+    CanQueryConsensusStateWithProofs, ConnectionOpenAckPayloadBuilder,
+    ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilder,
+    ConnectionOpenConfirmPayloadBuilderComponent, ConnectionOpenInitPayloadBuilder,
+    ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenTryPayloadBuilder,
+    ConnectionOpenTryPayloadBuilderComponent, HasClientStateFields, HasClientStateType,
+    HasCommitmentProofHeight, HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType, HasConsensusStateType,
+    HasIbcCommitmentPrefix,
 };
-use crate::traits::queries::client_state::CanQueryClientStateWithProofs;
-use crate::traits::queries::connection_end::CanQueryConnectionEndWithProofs;
-use crate::traits::queries::consensus_state::CanQueryConsensusStateWithProofs;
-use crate::traits::types::client_state::{HasClientStateFields, HasClientStateType};
-use crate::traits::types::connection::{
-    HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
-    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
-};
-use crate::traits::types::consensus_state::HasConsensusStateType;
-use crate::traits::types::proof::HasCommitmentProofHeight;
 use crate::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,

@@ -1,4 +1,4 @@
-use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
+use hermes_cosmos_chain_components::methods::encode_protobuf;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::host::types::identifiers::ChannelId;
 use ibc_proto::ibc::core::channel::v1::Channel as ProtoChannelEnd;

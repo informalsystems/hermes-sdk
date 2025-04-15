@@ -1,8 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-
-use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::denom::HasDenomType;
+use hermes_chain_type_components::traits::{HasAddressType, HasAmountType, HasDenomType};
 
 #[cgp_component {
   provider: BalanceQuerier,

@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::height::HasHeightType;
+use crate::traits::HasHeightType;
 
 #[cgp_component {
     provider: HeightIncrementer,

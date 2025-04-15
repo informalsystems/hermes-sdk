@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::commitment_proof::CommitmentProofTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeProvider;
+use hermes_core::chain_type_components::traits::CommitmentProofTypeProviderComponent;
+use hermes_core::relayer_components::chain::traits::CommitmentProofTypeProvider;
 use ibc::core::commitment_types::merkle::MerkleProof;
 
 pub struct ProvideMerkleProofType;

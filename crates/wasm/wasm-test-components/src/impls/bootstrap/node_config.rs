@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::{
+use hermes_cosmos_test_components::bootstrap::traits::{
     CometConfigModifier, CometConfigModifierComponent,
 };
 use toml::Value;

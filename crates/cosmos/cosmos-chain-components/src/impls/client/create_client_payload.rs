@@ -1,17 +1,13 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
-use hermes_comet_light_client_components::traits::fetch_light_block::CanFetchLightBlock;
+use hermes_comet_light_client_components::traits::CanFetchLightBlock;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
+use hermes_core::chain_type_components::traits::HasChainId;
+use hermes_core::relayer_components::chain::traits::{
+    CanQueryChainHeight, CanQueryChainStatus, CreateClientPayloadBuilder,
+    CreateClientPayloadBuilderComponent, HasCreateClientPayloadOptionsType,
+    HasCreateClientPayloadType,
+};
 use hermes_error::types::HermesError;
-use hermes_relayer_components::chain::traits::payload_builders::create_client::{
-    CreateClientPayloadBuilder, CreateClientPayloadBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainHeight, CanQueryChainStatus,
-};
-use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
-};
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::commitment::CommitmentRoot;
 use ibc::core::commitment_types::specs::ProofSpecs;
@@ -22,11 +18,10 @@ use tendermint::block::Height as TendermintHeight;
 use tendermint::error::Error as TendermintError;
 use tendermint_rpc::{Client, Error as TendermintRpcError};
 
-use crate::traits::rpc_client::HasRpcClient;
-use crate::traits::unbonding_period::CanQueryUnbondingPeriod;
-use crate::types::payloads::client::{CosmosCreateClientOptions, CosmosCreateClientPayload};
-use crate::types::status::ChainStatus;
-use crate::types::tendermint::TendermintClientState;
+use crate::traits::{CanQueryUnbondingPeriod, HasRpcClient};
+use crate::types::{
+    ChainStatus, CosmosCreateClientOptions, CosmosCreateClientPayload, TendermintClientState,
+};
 
 pub struct BuildCosmosCreateClientPayload;
 

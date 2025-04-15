@@ -12,50 +12,47 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use eyre::{eyre, Report};
 use futures::lock::Mutex;
-use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
-use hermes_cosmos_chain_components::types::key_types::secp256k1::{
-    Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
-};
-use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
-use hermes_error::types::Error;
-use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::{
+use hermes_core::relayer_components::build::traits::builders::birelay_from_relay_builder::{
     BiRelayFromRelayBuilder, BiRelayFromRelayBuilderComponent,
 };
-use hermes_relayer_components::build::traits::builders::chain_builder::{
+use hermes_core::relayer_components::build::traits::builders::chain_builder::{
     ChainBuilder, ChainBuilderComponent,
 };
-use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
-use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::{
+use hermes_core::relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
+use hermes_core::relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::chain_at::{
     ChainTypeProviderAtComponent, HasChainTypeAt,
 };
-use hermes_relayer_components::multi::traits::relay_at::{
+use hermes_core::relayer_components::multi::traits::relay_at::{
     HasRelayTypeAt, RelayTypeProviderAtComponent,
 };
-use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::traits::target::SourceTarget;
-use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
-use hermes_relayer_components_extra::batch::traits::types::MessageBatchSenderOf;
-use hermes_relayer_components_extra::batch::types::config::BatchConfig;
-use hermes_relayer_components_extra::build::traits::cache::{
+use hermes_core::relayer_components::multi::types::tags::{Dst, Src};
+use hermes_core::relayer_components::relay::traits::SourceTarget;
+use hermes_core::relayer_components_extra::batch::traits::config::HasBatchConfig;
+use hermes_core::relayer_components_extra::batch::traits::types::MessageBatchSenderOf;
+use hermes_core::relayer_components_extra::batch::types::config::BatchConfig;
+use hermes_core::relayer_components_extra::build::traits::cache::{
     BatchSenderCacheAt, BatchSenderCacheGetterComponent,
 };
-use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::{
+use hermes_core::relayer_components_extra::build::traits::relay_with_batch_builder::{
     RelayWithBatchBuilder, RelayWithBatchBuilderComponent,
 };
-use hermes_relayer_components_extra::components::extra::build::ExtraBuildComponents;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
+use hermes_core::relayer_components_extra::components::extra::build::ExtraBuildComponents;
+use hermes_core::runtime_components::traits::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
+use hermes_cosmos_chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_chain_components::types::{
+    PacketFilterConfig, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
+};
+use hermes_error::types::Error;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
 
-use crate::contexts::birelay::CosmosBiRelay;
-use crate::contexts::chain::CosmosChain;
-use crate::contexts::relay::CosmosRelay;
-use crate::impls::error::HandleCosmosError;
+use crate::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
+use crate::impls::HandleCosmosError;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[cgp_context(

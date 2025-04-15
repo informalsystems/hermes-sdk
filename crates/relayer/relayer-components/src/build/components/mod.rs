@@ -1,3 +1,8 @@
-pub mod birelay;
-pub mod chain;
-pub mod relay;
+mod birelay;
+pub use birelay::*;
+
+mod chain;
+pub use chain::*;
+
+mod relay;
+pub use relay::*;

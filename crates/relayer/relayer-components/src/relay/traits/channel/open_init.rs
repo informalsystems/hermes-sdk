@@ -1,8 +1,8 @@
 use cgp::prelude::*;
 
-use crate::chain::traits::types::channel::{HasInitChannelOptionsType, InitChannelOptions};
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::types::aliases::{DstPortId, SrcChannelId, SrcPortId};
+use crate::chain::traits::{HasInitChannelOptionsType, InitChannelOptions};
+use crate::relay::traits::HasRelayChains;
+use crate::relay::types::{DstPortId, SrcChannelId, SrcPortId};
 
 #[cgp_component {
   provider: ChannelInitializer,

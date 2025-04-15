@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::driver::traits::types::chain_driver_at::{ChainDriverAt, HasChainDriverTypeAt};
+use crate::driver::traits::{ChainDriverAt, HasChainDriverTypeAt};
 
 #[cgp_component {
   provider: ChainSetup,

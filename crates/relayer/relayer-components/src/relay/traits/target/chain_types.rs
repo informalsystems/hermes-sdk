@@ -1,9 +1,7 @@
 use cgp::core::macros::blanket_trait;
 
 use crate::multi::traits::chain_at::HasChainTypeAt;
-use crate::relay::traits::chains::HasRelayChainTypes;
-use crate::relay::traits::target::relay_target::RelayTarget;
-use crate::relay::traits::target::types::{DestinationTarget, SourceTarget};
+use crate::relay::traits::{DestinationTarget, HasRelayChainTypes, RelayTarget, SourceTarget};
 
 #[blanket_trait]
 pub trait HasTargetChainTypes<Target: RelayTarget>:

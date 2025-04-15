@@ -1,20 +1,15 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_core::chain_type_components::traits::{HasAddressType, HasAmountType};
+use hermes_core::relayer_components::chain::traits::HasChainIdType;
+use hermes_core::runtime_components::traits::{HasFilePathType, HasRuntime};
+use hermes_core::test_components::chain::traits::HasWalletType;
+use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_core::test_components::driver::traits::HasChainDriverType;
 
-use crate::bootstrap::traits::genesis::add_genesis_account::CanAddGenesisAccount;
-use crate::bootstrap::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
-use crate::bootstrap::traits::genesis::add_genesis_wallet::{
-    GenesisWalletAdder, GenesisWalletAdderComponent,
+use crate::bootstrap::traits::{
+    CanAddGenesisAccount, CanAddGenesisValidator, CanInitWallet, GenesisWalletAdder,
+    GenesisWalletAdderComponent, HasWalletConfigFields,
 };
-use crate::bootstrap::traits::initializers::init_wallet::CanInitWallet;
-use crate::bootstrap::traits::types::wallet_config::HasWalletConfigFields;
 
 pub struct AddCosmosWalletToGenesis;
 

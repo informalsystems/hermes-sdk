@@ -1,21 +1,21 @@
 [package]
-name         = "hermes-async-runtime-components"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+name = "hermes-async-runtime-components"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Modular runtime components implemented using Tokio
 """
 
 [dependencies]
-hermes-runtime-components   = { workspace = true }
+hermes-runtime-components = { workspace = true }
 
-cgp                         = { workspace = true }
-futures-core                = { workspace = true }
-futures-util                = { workspace = true, features = ["io"] }
-futures-channel             = { workspace = true, features = ["std"] }
-async-trait                 = { workspace = true }
+cgp             = { workspace = true }
+futures-core    = { workspace = true }
+futures-util    = { workspace = true, features = [ "io" ] }
+futures-channel = { workspace = true, features = [ "std" ] }
+async-trait     = { workspace = true }

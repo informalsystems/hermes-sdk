@@ -1,8 +1,9 @@
 use cgp::prelude::*;
 
-use crate::traits::decode_mut::{CanDecodeMut, MutDecoder, MutDecoderComponent};
-use crate::traits::encode_mut::{CanEncodeMut, MutEncoder, MutEncoderComponent};
-use crate::traits::types::encode_buffer::HasEncodeBufferType;
+use crate::traits::{
+    CanDecodeMut, CanEncodeMut, HasEncodeBufferType, MutDecoder, MutDecoderComponent, MutEncoder,
+    MutEncoderComponent,
+};
 
 pub struct EncodeFields;
 

@@ -5,12 +5,12 @@ use cgp::prelude::*;
 use futures::channel::mpsc::{SendError, TrySendError};
 use futures::channel::oneshot;
 use futures::channel::oneshot::Canceled;
-use hermes_chain_type_components::traits::types::message_response::MessageResponseOf;
+use hermes_chain_type_components::traits::MessageResponseOf;
 use hermes_relayer_components::chain::types::aliases::MessageOf;
-use hermes_relayer_components::relay::traits::ibc_message_sender::{
-    CanSendIbcMessages, IbcMessageSender, IbcMessageSenderComponent,
+use hermes_relayer_components::relay::traits::{
+    CanSendIbcMessages, HasTargetChainTypes, IbcMessageSender, IbcMessageSenderComponent,
+    RelayTarget,
 };
-use hermes_relayer_components::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::traits::types::CanUseMessageBatchChannel;

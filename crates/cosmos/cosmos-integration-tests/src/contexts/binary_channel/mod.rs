@@ -1,2 +1,5 @@
-pub mod setup;
-pub mod test_driver;
+mod setup;
+pub use setup::*;
+
+mod test_driver;
+pub use test_driver::*;

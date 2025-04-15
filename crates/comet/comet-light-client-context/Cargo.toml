@@ -1,24 +1,24 @@
 [package]
-name         = "hermes-comet-light-client-context"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+name = "hermes-comet-light-client-context"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Implementation of an IBC Relayer in Rust, as a library
 """
 
 [dependencies]
-cgp                                     = { workspace = true }
-hermes-error                            = { workspace = true }
-hermes-chain-components                 = { workspace = true }
-hermes-chain-type-components            = { workspace = true }
-hermes-comet-light-client-components    = { workspace = true }
+cgp                                  = { workspace = true }
+hermes-error                         = { workspace = true }
+hermes-chain-components              = { workspace = true }
+hermes-chain-type-components         = { workspace = true }
+hermes-comet-light-client-components = { workspace = true }
 
-eyre                                = { workspace = true}
-tendermint                          = { workspace = true}
-tendermint-rpc                      = { workspace = true}
-tendermint-light-client-verifier    = { workspace = true}
+eyre                             = { workspace = true }
+tendermint                       = { workspace = true }
+tendermint-rpc                   = { workspace = true }
+tendermint-light-client-verifier = { workspace = true }

@@ -1,6 +1,5 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasChildProcessType};
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
+use hermes_runtime_components::traits::{ChildProcessOf, HasChildProcessType, HasRuntimeType};
 
 use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;
 use crate::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;

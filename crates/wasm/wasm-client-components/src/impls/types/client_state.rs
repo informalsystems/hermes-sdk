@@ -1,8 +1,8 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::client_state::{
+use hermes_core::relayer_components::chain::traits::{
     ClientStateTypeComponent, ProvideClientStateType,
 };
-use hermes_wasm_encoding_components::types::client_state::WasmClientState;
+use hermes_wasm_encoding_components::types::WasmClientState;
 
 pub struct ProvideWasmClientState;
 

@@ -3,13 +3,12 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::HasHeightType;
 
-use crate::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::traits::queries::consensus_state_height::{
-    ConsensusStateHeightsQuerier, ConsensusStateHeightsQuerierComponent,
+use crate::traits::{
+    CanQueryClientStateWithLatestHeight, ConsensusStateHeightsQuerier,
+    ConsensusStateHeightsQuerierComponent, HasClientStateFields,
 };
-use crate::traits::types::client_state::HasClientStateFields;
 
 /**
    This is a placeholder implementation for querying all consensus state heights,

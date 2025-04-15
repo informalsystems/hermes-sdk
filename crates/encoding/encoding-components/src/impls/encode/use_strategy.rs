@@ -2,8 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::traits::decode::{CanDecode, Decoder, DecoderComponent};
-use crate::traits::encode::{CanEncode, Encoder, EncoderComponent};
+use crate::traits::{CanDecode, CanEncode, Decoder, DecoderComponent, Encoder, EncoderComponent};
 
 pub struct EncodeUsingStrategy<Strategy>(pub PhantomData<Strategy>);
 

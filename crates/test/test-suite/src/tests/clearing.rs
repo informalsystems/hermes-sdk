@@ -3,24 +3,20 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::packet::fields::HasPacketSequence;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
-use hermes_relayer_components::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::relay::traits::auto_relayer::CanAutoRelayWithHeights;
-use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
-use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
-use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
-use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
-use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
-use hermes_test_components::chain_driver::traits::fields::denom::{HasDenom, TransferDenom};
-use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, UserWallet};
-use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use hermes_chain_components::traits::CanQueryChainHeight;
+use hermes_relayer_components::chain::traits::{
+    CanQueryChainStatus, CanQueryPacketIsCleared, CanQueryPacketIsReceived, HasChainId,
+    HasPacketSequence,
+};
+use hermes_relayer_components::relay::traits::{
+    CanAutoRelayWithHeights, CanRelayReceivePacket, DestinationTarget, SourceTarget,
+};
+use hermes_test_components::chain::traits::{
+    CanIbcTransferToken, CanQueryBalance, HasAmountMethods, HasDefaultMemo, HasWalletType,
+};
+use hermes_test_components::chain_driver::traits::{
+    CanGenerateRandomAmount, HasChain, HasDenom, HasWallet, TransferDenom, UserWallet,
+};
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
 use crate::traits::CanUseBinaryTestDriverMethods;

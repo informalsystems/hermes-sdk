@@ -1,15 +1,13 @@
 use core::fmt::Display;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::packet_commitment::{
-    PacketCommitmentQuerier, PacketCommitmentQuerierComponent,
+use hermes_core::relayer_components::chain::traits::{
+    HasCommitmentProofType, HasIbcChainTypes, HasPacketCommitmentType, PacketCommitmentQuerier,
+    PacketCommitmentQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasPacketCommitmentType;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::cosmos_host::IBC_QUERY_PATH;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryPacketCommitmentFromAbci;
 

@@ -2,9 +2,9 @@ use alloc::vec::Vec;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::HasClientIdType;
 
-use crate::traits::types::height::HasHeightType;
+use crate::traits::HasHeightType;
 
 #[cgp_component {
   provider: ConsensusStateHeightQuerier,

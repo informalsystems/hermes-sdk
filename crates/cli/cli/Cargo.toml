@@ -1,13 +1,13 @@
 [package]
 name = "hermes-cli"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Hermes: IBC Relayer in Rust
 """
 
@@ -16,36 +16,23 @@ name = "hermes"
 path = "bin/hermes.rs"
 
 [dependencies]
-cgp                                 = { workspace = true }
-hermes-any-counterparty             = { workspace = true }
-hermes-cli-components               = { workspace = true }
-hermes-cli-framework                = { workspace = true }
-hermes-error                        = { workspace = true }
-hermes-runtime                      = { workspace = true }
-hermes-runtime-components           = { workspace = true }
-hermes-logging-components           = { workspace = true }
-hermes-tracing-logging-components   = { workspace = true }
-hermes-relayer-components           = { workspace = true }
-hermes-chain-components             = { workspace = true }
-hermes-cosmos-relayer               = { workspace = true }
-hermes-cosmos-integration-tests     = { workspace = true }
-hermes-cosmos-chain-components      = { workspace = true }
-hermes-cosmos-test-components       = { workspace = true }
-hermes-encoding-components          = { workspace = true }
-hermes-protobuf-encoding-components = { workspace = true }
+cgp                     = { workspace = true }
+hermes-any-counterparty = { workspace = true }
+hermes-cli-components   = { workspace = true }
+hermes-cli-framework    = { workspace = true }
+hermes-core             = { workspace = true }
+hermes-cosmos-core      = { workspace = true }
 
-ibc                             = { workspace = true }
-
-clap                        = { workspace = true, features = ["derive"] }
-dirs-next                   = { workspace = true }
-eyre                        = { workspace = true }
-toml                        = { workspace = true }
-hdpath                      = { workspace = true }
-http                        = { workspace = true }
-humantime                   = { workspace = true }
-prost                       = { workspace = true }
-tracing                     = { workspace = true }
-tonic                       = { workspace = true }
-serde_json                  = { workspace = true }
-futures                     = { workspace = true }
-serde                       = { workspace = true, features = ["derive"] }
+clap       = { workspace = true, features = [ "derive" ] }
+dirs-next  = { workspace = true }
+eyre       = { workspace = true }
+toml       = { workspace = true }
+hdpath     = { workspace = true }
+http       = { workspace = true }
+humantime  = { workspace = true }
+prost      = { workspace = true }
+tracing    = { workspace = true }
+tonic      = { workspace = true }
+serde_json = { workspace = true }
+futures    = { workspace = true }
+serde      = { workspace = true, features = [ "derive" ] }

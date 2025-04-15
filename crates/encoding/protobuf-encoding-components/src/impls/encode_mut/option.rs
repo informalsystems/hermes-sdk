@@ -1,8 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_encoding_components::traits::encode_mut::{MutEncoder, MutEncoderComponent};
-use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
+use hermes_encoding_components::traits::{HasEncodeBufferType, MutEncoder, MutEncoderComponent};
 
 pub struct EncodeOption<InEncoder>(pub PhantomData<InEncoder>);
 

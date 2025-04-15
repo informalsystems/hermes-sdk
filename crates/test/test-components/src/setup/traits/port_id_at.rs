@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::field::UseField;
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasPortIdType;
+use hermes_relayer_components::chain::traits::HasPortIdType;
 use hermes_relayer_components::chain::types::aliases::PortIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 

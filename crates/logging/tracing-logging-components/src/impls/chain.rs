@@ -1,19 +1,15 @@
 use core::fmt::{Debug, Display};
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::{Logger, LoggerComponent};
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
-use hermes_relayer_components::transaction::impls::poll_tx_response::{
-    LogRetryQueryTxResponse, TxNoResponseError,
+use hermes_logging_components::traits::{Logger, LoggerComponent};
+use hermes_relayer_components::chain::traits::{HasChainId, HasMessageType};
+use hermes_relayer_components::transaction::impls::{
+    LogRetryQueryTxResponse, LogSendMessagesWithSignerAndNonce, TxNoResponseError,
 };
-use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
-use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
-use hermes_relayer_components::transaction::traits::types::tx_hash::HasTxHashType;
+use hermes_relayer_components::transaction::traits::{HasNonceType, HasSignerType, HasTxHashType};
 use tracing::{debug, error, trace};
 
-use crate::contexts::logger::TracingLogger;
+use crate::contexts::TracingLogger;
 
 #[cgp_provider(LoggerComponent)]
 impl<'a, Chain> Logger<Chain, LogSendMessagesWithSignerAndNonce<'a, Chain>> for TracingLogger

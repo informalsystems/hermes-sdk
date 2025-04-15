@@ -1,21 +1,17 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
-use hermes_chain_components::traits::types::packets::ack::AcknowledgementOf;
+use hermes_chain_components::traits::{AcknowledgementOf, HasOutgoingPacketType};
 use hermes_chain_components::types::aliases::HeightOf;
 
-use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
-use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::traits::types::client_state::HasClientStateType;
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayClientIds, PacketOf};
-use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::packet_relayers::ack_packet::{
-    AckPacketRelayer, AckPacketRelayerComponent,
+use crate::chain::traits::{
+    CanBuildAckPacketMessage, CanBuildAckPacketPayload, CanQueryClientStateWithLatestHeight,
+    HasClientStateType, HasWriteAckEvent,
 };
-use crate::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
+use crate::relay::traits::{
+    AckPacketRelayer, AckPacketRelayerComponent, CanRaiseRelayChainErrors, CanSendSingleIbcMessage,
+    HasRelayClientIds, HasSourceTargetChainTypes, MainSink, PacketOf, SourceTarget,
+};
 
 /// The minimal component that can send an acknowledgement packet.
 /// Ack packet relayers with more capabilities can be implemented

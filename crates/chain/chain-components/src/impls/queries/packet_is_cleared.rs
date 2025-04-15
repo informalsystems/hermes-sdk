@@ -1,9 +1,8 @@
 use cgp::prelude::*;
 
-use crate::traits::queries::chain_status::CanQueryChainHeight;
-use crate::traits::queries::packet_commitment::CanQueryPacketCommitment;
-use crate::traits::queries::packet_is_cleared::{
-    PacketIsClearedQuerier, PacketIsClearedQuerierComponent,
+use crate::traits::{
+    CanQueryChainHeight, CanQueryPacketCommitment, PacketIsClearedQuerier,
+    PacketIsClearedQuerierComponent,
 };
 
 #[cgp_new_provider(PacketIsClearedQuerierComponent)]

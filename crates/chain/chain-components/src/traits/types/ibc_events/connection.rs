@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
+use hermes_chain_type_components::traits::HasConnectionIdType;
 
 #[cgp_component {
   name: ConnectionOpenTryEventComponent,

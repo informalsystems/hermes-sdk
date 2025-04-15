@@ -1,7 +1,6 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_runtime_components::traits::{FilePathOf, HasFilePathType, HasRuntime};
+use hermes_test_components::driver::traits::HasChainDriverType;
 
 /**
    Initialize a new chain with data files stored at the given home directory

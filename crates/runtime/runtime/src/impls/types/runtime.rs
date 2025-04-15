@@ -1,7 +1,5 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeTypeProvider, RuntimeTypeProviderComponent,
-};
+use hermes_runtime_components::traits::{RuntimeTypeProvider, RuntimeTypeProviderComponent};
 
 use crate::types::runtime::HermesRuntime;
 

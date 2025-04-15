@@ -1,17 +1,13 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::timeout::HasTimeoutType;
-use hermes_relayer_components::chain::traits::packet::fields::{
+use hermes_core::chain_type_components::traits::{HasHeightType, HasTimeoutType};
+use hermes_core::relayer_components::chain::traits::{
+    HasChannelIdType, HasOutgoingPacketType, HasPortIdType, HasSequenceType,
     PacketDstChannelIdGetter, PacketDstChannelIdGetterComponent, PacketDstPortIdGetter,
     PacketDstPortIdGetterComponent, PacketSequenceGetter, PacketSequenceGetterComponent,
     PacketSrcChannelIdGetter, PacketSrcChannelIdGetterComponent, PacketSrcPortIdGetter,
     PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetter, PacketTimeoutHeightGetterComponent,
     PacketTimeoutTimestampGetter, PacketTimeoutTimestampGetterComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::{
-    HasChannelIdType, HasPortIdType, HasSequenceType,
-};
-use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::channel::types::timeout::{TimeoutHeight, TimeoutTimestamp};
 use ibc::core::client::types::Height;

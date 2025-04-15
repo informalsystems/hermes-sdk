@@ -1,31 +1,19 @@
 use core::fmt::Debug;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
+use hermes_chain_type_components::traits::{
+    CanIncrementHeight, HasHeightType, HasOutgoingPacketType,
+};
 
-use crate::traits::packet::fields::{
+use crate::traits::{
+    AckPacketPayloadBuilder, AckPacketPayloadBuilderComponent, CanQueryPacketAckCommitment,
+    CanQueryPacketCommitment, CanQueryPacketReceipt, HasAckPacketPayloadType,
+    HasAcknowledgementType, HasClientStateType, HasCommitmentProofHeight, HasCommitmentProofType,
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence, HasPacketSrcChannelId,
-    HasPacketSrcPortId,
-};
-use crate::traits::payload_builders::ack_packet::{
-    AckPacketPayloadBuilder, AckPacketPayloadBuilderComponent,
-};
-use crate::traits::payload_builders::receive_packet::{
+    HasPacketSrcPortId, HasReceivePacketPayloadType, HasTimeoutUnorderedPacketPayloadType,
     ReceivePacketPayloadBuilder, ReceivePacketPayloadBuilderComponent,
-};
-use crate::traits::payload_builders::timeout_unordered_packet::{
     TimeoutUnorderedPacketPayloadBuilder, TimeoutUnorderedPacketPayloadBuilderComponent,
 };
-use crate::traits::queries::packet_acknowledgement::CanQueryPacketAckCommitment;
-use crate::traits::queries::packet_commitment::CanQueryPacketCommitment;
-use crate::traits::queries::packet_receipt::CanQueryPacketReceipt;
-use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::packets::ack::{HasAckPacketPayloadType, HasAcknowledgementType};
-use crate::traits::types::packets::receive::HasReceivePacketPayloadType;
-use crate::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
-use crate::traits::types::proof::{HasCommitmentProofHeight, HasCommitmentProofType};
 use crate::types::payloads::packet::{
     AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
 };

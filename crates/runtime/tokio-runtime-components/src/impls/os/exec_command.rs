@@ -4,9 +4,8 @@ use std::ffi::OsStr;
 use std::io::{Error as IoError, ErrorKind};
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::exec_command::{
-    CommandWithEnvsExecutor, CommandWithEnvsExecutorComponent, ExecOutput,
+use hermes_runtime_components::traits::{
+    CommandWithEnvsExecutor, CommandWithEnvsExecutorComponent, ExecOutput, HasFilePathType,
 };
 use tokio::process::Command;
 

@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::types::config::gas::gas_config::GasConfig;
+use crate::types::GasConfig;
 
 #[cgp_component {
   provider: GasConfigGetter,

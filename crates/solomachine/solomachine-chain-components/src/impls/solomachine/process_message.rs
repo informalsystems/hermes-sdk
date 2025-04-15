@@ -2,11 +2,10 @@ use core::str::FromStr;
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_relayer_components::chain::traits::send_message::{
-    MessageSender, MessageSenderComponent,
+use hermes_chain_type_components::traits::HasMessageResponseType;
+use hermes_relayer_components::chain::traits::{
+    HasMessageType, MessageSender, MessageSenderComponent,
 };
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::{ConnectionEnd, Counterparty, State as ConnectionState};
 use ibc::core::host::types::identifiers::{ClientId, ConnectionId};

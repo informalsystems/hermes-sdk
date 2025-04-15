@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use eyre::eyre;
-use ibc::clients::tendermint::types::TrustThreshold;
+use hermes_cosmos_core::ibc::clients::tendermint::types::TrustThreshold;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct CreateCosmosClientArgs {

@@ -3,7 +3,7 @@ use cgp::core::types::WithType;
 use cgp::prelude::*;
 use hermes_relayer_components::error::traits::{ProvideRetryableError, RetryableErrorComponent};
 
-use crate::handlers::wrap::WrapErrorDetail;
+use crate::handlers::WrapErrorDetail;
 use crate::types::Error;
 
 pub struct UseHermesError;

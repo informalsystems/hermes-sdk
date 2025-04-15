@@ -1,13 +1,14 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
-use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
-use hermes_relayer_components::chain::traits::types::ibc::HasConnectionIdType;
-use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_test_components::setup::traits::init_channel_options_at::{
+use hermes_core::relayer_components::chain::traits::{
+    HasConnectionIdType, HasInitChannelOptionsType,
+};
+use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_core::test_components::setup::traits::{
     InitChannelOptionsGetterAt, InitChannelOptionsGetterAtComponent,
 };
+use hermes_cosmos_chain_components::types::CosmosInitChannelOptions;
 use ibc::core::host::types::identifiers::ConnectionId;
 
 #[cgp_new_provider(InitChannelOptionsGetterAtComponent<A, B>)]

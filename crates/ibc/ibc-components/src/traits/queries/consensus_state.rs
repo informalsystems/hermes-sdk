@@ -1,7 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
-use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
+use hermes_chain_type_components::traits::{HasClientIdType, HasConsensusStateType, HasHeightType};
 
 #[cgp_component {
   provider: ConsensusStateQuerier,

@@ -1,16 +1,12 @@
 use cgp::prelude::*;
 
-use crate::traits::commitment_prefix::HasCommitmentPrefixType;
-use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::connection::{
+use crate::traits::{
     ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
     ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
-    HasConnectionEndType, ProvideConnectionOpenAckPayloadType,
-    ProvideConnectionOpenConfirmPayloadType, ProvideConnectionOpenInitPayloadType,
-    ProvideConnectionOpenTryPayloadType,
+    HasClientStateType, HasCommitmentPrefixType, HasCommitmentProofType, HasConnectionEndType,
+    HasHeightType, ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
+    ProvideConnectionOpenInitPayloadType, ProvideConnectionOpenTryPayloadType,
 };
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::proof::HasCommitmentProofType;
 use crate::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,

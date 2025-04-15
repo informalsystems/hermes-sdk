@@ -3,20 +3,18 @@ use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::extra::run::CanRun;
 use cgp::prelude::*;
-use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
-use hermes_error::handlers::debug::DebugError;
-use hermes_error::impls::UseHermesError;
-use hermes_error::types::Error;
-use hermes_relayer_components::multi::traits::birelay_at::{
+use hermes_core::relayer_components::multi::traits::birelay_at::{
     BiRelayGetterAtComponent, BiRelayTypeProviderAtComponent,
 };
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
-use hermes_test_components::relay_driver::run::{
+use hermes_core::relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
+use hermes_core::test_components::relay_driver::run::{
     RelayerBackgroundRunner, RelayerBackgroundRunnerComponent,
 };
+use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
+use hermes_error::handlers::DebugError;
+use hermes_error::impls::UseHermesError;
+use hermes_error::types::Error;
 use tokio::task::AbortHandle;
 
 #[cgp_context(CosmosRelayDriverComponents)]

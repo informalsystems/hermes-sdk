@@ -18,8 +18,17 @@
     relay context that has the source and destination chains flipped.
 */
 
-pub mod open_ack;
-pub mod open_confirm;
-pub mod open_handshake;
-pub mod open_init;
-pub mod open_try;
+mod open_ack;
+pub use open_ack::*;
+
+mod open_confirm;
+pub use open_confirm::*;
+
+mod open_handshake;
+pub use open_handshake::*;
+
+mod open_init;
+pub use open_init::*;
+
+mod open_try;
+pub use open_try::*;

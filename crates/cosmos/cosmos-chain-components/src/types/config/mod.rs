@@ -1,1 +1,2 @@
-pub mod gas;
+mod gas;
+pub use gas::*;

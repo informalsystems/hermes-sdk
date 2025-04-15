@@ -1,13 +1,9 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::ibc::HasConnectionIdType;
+use hermes_chain_components::traits::HasConnectionIdType;
 
-use crate::chain::traits::types::connection::{
-    HasInitConnectionOptionsType, InitConnectionOptionsOf,
-};
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::connection::open_handshake::CanRelayConnectionOpenHandshake;
-use crate::relay::traits::connection::open_init::CanInitConnection;
-use crate::relay::types::aliases::{DstConnectionId, SrcConnectionId};
+use crate::chain::traits::{HasInitConnectionOptionsType, InitConnectionOptionsOf};
+use crate::relay::traits::{CanInitConnection, CanRelayConnectionOpenHandshake, HasRelayChains};
+use crate::relay::types::{DstConnectionId, SrcConnectionId};
 
 /**
    This is an autotrait implementation by the relay context to allow bootstrapping
@@ -18,7 +14,7 @@ use crate::relay::types::aliases::{DstConnectionId, SrcConnectionId};
 
    Note that this should _not_ be used when relaying connection creation that
    are initiated by external users. For that purpose, use
-   [`RelayConnectionOpenHandshake`](crate::relay::impls::connection::open_handshake::RelayConnectionOpenHandshake),
+   [`RelayConnectionOpenHandshake`](crate::relay::impls::RelayConnectionOpenHandshake),
    which would reuse the given connection ID instead of creating new ones.
 */
 #[async_trait]

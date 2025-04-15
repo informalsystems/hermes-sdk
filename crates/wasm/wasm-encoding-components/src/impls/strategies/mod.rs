@@ -1,1 +1,2 @@
-pub mod consensus_state;
+mod consensus_state;
+pub use consensus_state::*;

@@ -1,2 +1,5 @@
-pub mod encoded;
-pub mod schema;
+mod encoded;
+pub use encoded::*;
+
+mod schema;
+pub use schema::*;

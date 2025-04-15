@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use core::future::Future;
 use core::pin::Pin;
 
-use hermes_runtime_components::traits::task::Task;
+use hermes_runtime_components::traits::Task;
 
 pub struct FutureTask {
     pub future: Pin<Box<dyn Future<Output = ()> + Send + Sync + 'static>>,

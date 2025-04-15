@@ -1,11 +1,8 @@
 use cgp::prelude::*;
 
-use crate::chain::traits::types::channel::{HasInitChannelOptionsType, InitChannelOptions};
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::channel::open_handshake::CanRelayChannelOpenHandshake;
-use crate::relay::traits::channel::open_init::CanInitChannel;
-use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
+use crate::chain::traits::{HasIbcChainTypes, HasInitChannelOptionsType, InitChannelOptions};
+use crate::relay::traits::{CanInitChannel, CanRelayChannelOpenHandshake, HasRelayChains};
+use crate::relay::types::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
 
 /**
    This is an autotrait implementation by the relay context to allow bootstrapping
@@ -16,7 +13,7 @@ use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPor
 
    Note that this should _not_ be used when relaying channel creation that
    are initiated by external users. For that purpose, use
-   [`RelayChannelOpenHandshake`](crate::relay::impls::channel::open_handshake::RelayChannelOpenHandshake),
+   [`RelayChannelOpenHandshake`](crate::relay::impls::RelayChannelOpenHandshake),
    which would reuse the given channel ID instead of creating new ones.
 */
 

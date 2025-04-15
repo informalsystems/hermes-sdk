@@ -1,8 +1,7 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::packet_is_received::{
-    PacketIsReceivedQuerier, PacketIsReceivedQuerierComponent,
+use hermes_core::relayer_components::chain::traits::{
+    HasIbcChainTypes, PacketIsReceivedQuerier, PacketIsReceivedQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};
@@ -11,7 +10,7 @@ use ibc_proto::ibc::core::channel::v1::QueryUnreceivedPacketsRequest;
 use tonic::transport::Error as TransportError;
 use tonic::{Request, Status};
 
-use crate::traits::grpc_address::HasGrpcAddress;
+use crate::traits::HasGrpcAddress;
 
 pub struct QueryCosmosPacketIsReceived;
 

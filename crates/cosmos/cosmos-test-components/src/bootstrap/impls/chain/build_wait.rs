@@ -2,18 +2,17 @@ use core::marker::PhantomData;
 use std::collections::BTreeMap;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasChildProcessType};
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
-use hermes_test_components::chain::traits::types::wallet::{HasWalletType, Wallet};
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::chain_driver::traits::wait::CanWaitChainStartup;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-
-use crate::bootstrap::traits::chain::build_chain_driver::{
-    ChainDriverBuilder, ChainDriverBuilderComponent,
+use hermes_core::runtime_components::traits::{
+    ChildProcessOf, HasChildProcessType, HasRuntimeType,
 };
-use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
+use hermes_core::test_components::chain::traits::{HasWalletType, Wallet};
+use hermes_core::test_components::chain_driver::traits::{CanWaitChainStartup, HasChainType};
+use hermes_core::test_components::driver::traits::HasChainDriverType;
+
+use crate::bootstrap::traits::{
+    ChainDriverBuilder, ChainDriverBuilderComponent, HasChainGenesisConfigType,
+    HasChainNodeConfigType,
+};
 
 pub struct BuildAndWaitChainDriver<InBuilder>(pub PhantomData<InBuilder>);
 

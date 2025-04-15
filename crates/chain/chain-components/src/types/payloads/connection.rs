@@ -1,8 +1,7 @@
-use crate::traits::commitment_prefix::HasCommitmentPrefixType;
-use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::connection::HasConnectionEndType;
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::proof::HasCommitmentProofType;
+use crate::traits::{
+    HasClientStateType, HasCommitmentPrefixType, HasCommitmentProofType, HasConnectionEndType,
+    HasHeightType,
+};
 
 pub struct ConnectionOpenInitPayload<Chain>
 where

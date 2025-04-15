@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::field::UseField;
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::create_client::{
+use hermes_relayer_components::chain::traits::{
     CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,
     HasCreateClientPayloadOptionsType,
 };

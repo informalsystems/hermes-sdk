@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::HasChannelIdType;
 
 use crate::traits::types::packet::header::{PacketHeaderTypeComponent, ProvidePacketHeaderType};
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;

@@ -1,9 +1,8 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
-use hermes_comet_light_client_components::traits::validate_light_block::{
-    LightBlockValidator, LightBlockValidatorComponent,
+use hermes_comet_light_client_components::traits::{
+    HasLightBlockType, LightBlockValidator, LightBlockValidatorComponent,
 };
 use tendermint::Time;
 use tendermint_light_client_verifier::types::LightBlock;

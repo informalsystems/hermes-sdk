@@ -1,8 +1,23 @@
-pub mod fs;
-pub mod os;
-pub mod random;
-pub mod runtime;
-pub mod sleep;
-pub mod spawn;
-pub mod task;
-pub mod time;
+mod fs;
+pub use fs::*;
+
+mod os;
+pub use os::*;
+
+mod random;
+pub use random::*;
+
+mod runtime;
+pub use runtime::*;
+
+mod sleep;
+pub use sleep::*;
+
+mod spawn;
+pub use spawn::*;
+
+mod task;
+pub use task::*;
+
+mod time;
+pub use time::*;

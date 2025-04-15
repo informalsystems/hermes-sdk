@@ -4,7 +4,7 @@ use cgp::core::macros::blanket_trait;
 
 use crate::multi::traits::chain_at::HasChainAt;
 use crate::multi::types::tags::{Dst, Src};
-use crate::relay::traits::chains::types::{HasDstChainType, HasRelayChainTypes, HasSrcChainType};
+use crate::relay::traits::{HasDstChainType, HasRelayChainTypes, HasSrcChainType};
 
 #[blanket_trait]
 pub trait HasSrcChain: HasSrcChainType + HasChainAt<Src> {

@@ -1,17 +1,14 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
-use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
-use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_chain_components::traits::{
+    CanBuildPacketFromWriteAck, CanQueryChainHeight, CanQueryPacketIsReceived, CanReadPacketFields,
+};
+use hermes_logging_components::traits::CanLog;
 
-use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::relay::traits::chains::{HasRelayChains, HasRelayPacketType, PacketOf};
-use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent};
-use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
-use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
-use crate::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;
+use crate::chain::traits::{CanQueryChainStatus, HasWriteAckEvent};
+use crate::relay::traits::{
+    CanRelayAckPacket, CanRelayReceivePacket, CanRelayTimeoutUnorderedPacket, HasRelayChains,
+    HasRelayPacketType, PacketOf, PacketRelayer, PacketRelayerComponent,
+};
 
 pub struct LogRelayPacketAction<'a, Relay>
 where

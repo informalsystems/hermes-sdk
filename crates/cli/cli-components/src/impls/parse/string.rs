@@ -3,7 +3,7 @@ use core::str::FromStr;
 
 use cgp::prelude::*;
 
-use crate::traits::parse::{ArgParser, ArgParserComponent};
+use crate::traits::{ArgParser, ArgParserComponent};
 
 pub struct ParseFromString<Parsed>(pub PhantomData<Parsed>);
 

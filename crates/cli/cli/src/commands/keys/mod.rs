@@ -2,7 +2,7 @@ mod add;
 pub use add::KeysAddCmd;
 
 mod list;
-use hermes_cli_components::traits::command::CommandRunnerComponent;
+use hermes_cli_components::traits::CommandRunnerComponent;
 pub use list::KeysListCmd;
 
 mod delete;
@@ -11,7 +11,7 @@ pub use delete::KeysDeleteCmd;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
 /// `keys` subcommand

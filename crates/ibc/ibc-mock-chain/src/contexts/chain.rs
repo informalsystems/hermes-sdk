@@ -5,18 +5,11 @@ use alloc::sync::Arc;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
-use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
-use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
-use hermes_chain_type_components::traits::types::address::HasAddressType;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::denom::HasDenomType;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
-use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
-use hermes_chain_type_components::traits::types::quantity::HasQuantityType;
-use hermes_chain_type_components::traits::types::time::HasTimeType;
+use hermes_chain_type_components::traits::{
+    CanBuildAmount, HasAddressType, HasAmountDenom, HasAmountQuantity, HasAmountType,
+    HasChannelIdType, HasClientIdType, HasConsensusStateType, HasDenomType, HasHeightType,
+    HasQuantityType, HasTimeType,
+};
 use hermes_ibc_components::traits::builders::packet::CanBuildPacket;
 use hermes_ibc_components::traits::fields::commitment::proof_height::HasCommitmentProofHeight;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;

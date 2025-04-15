@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::{
+use hermes_cosmos_test_components::bootstrap::traits::{
     CosmosGenesisConfigModifier, CosmosGenesisConfigModifierComponent,
 };
 use serde_json::Value;

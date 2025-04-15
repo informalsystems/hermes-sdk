@@ -1,7 +1,7 @@
 use cgp::core::Async;
 
 use crate::multi::types::tags::{Dst, Src};
-use crate::relay::traits::target::types::{DestinationTarget, SourceTarget};
+use crate::relay::traits::{DestinationTarget, SourceTarget};
 
 pub trait RelayTarget: Async + Default + Copy + private::Sealed {
     type Chain: Async;

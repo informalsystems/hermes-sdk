@@ -1,11 +1,8 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
-use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
+use hermes_chain_type_components::traits::{HasClientIdType, HasConnectionIdType, HasHeightType};
 
-use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::connection::{
-    HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+use crate::traits::{
+    HasClientStateType, HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
 };
 

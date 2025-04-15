@@ -3,16 +3,14 @@ use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::poll_interval::HasPollInterval;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_runtime_components::traits::time::HasTime;
+use hermes_chain_components::traits::HasPollInterval;
+use hermes_logging_components::traits::CanLog;
+use hermes_runtime_components::traits::{CanSleep, HasRuntime, HasTime};
 
 use crate::error::traits::HasRetryableError;
-use crate::transaction::traits::poll_tx_response::{TxResponsePoller, TxResponsePollerComponent};
-use crate::transaction::traits::query_tx_response::CanQueryTxResponse;
-use crate::transaction::traits::types::tx_hash::HasTxHashType;
+use crate::transaction::traits::{
+    CanQueryTxResponse, HasTxHashType, TxResponsePoller, TxResponsePollerComponent,
+};
 
 pub struct PollTxResponse;
 

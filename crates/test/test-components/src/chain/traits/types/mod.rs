@@ -1,5 +1,8 @@
-pub mod amount;
-pub mod memo;
-pub mod wallet;
+mod amount;
+pub use amount::*;
 
-pub use hermes_chain_type_components::traits::types::{address, denom};
+mod memo;
+pub use memo::*;
+
+mod wallet;
+pub use wallet::*;

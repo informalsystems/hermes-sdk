@@ -3,11 +3,11 @@ use std::path::{Path, PathBuf};
 use hermes_cli_framework::application::Application;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_cosmos_core::runtime::types::runtime::HermesRuntime;
 
 use crate::commands::HermesCommand;
 use crate::config::HermesConfig;
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
 #[derive(clap::Parser)]

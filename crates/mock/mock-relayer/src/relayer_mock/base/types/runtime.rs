@@ -3,8 +3,7 @@ use core::time::Duration;
 
 use cgp::prelude::HasErrorType;
 use hermes_runtime::types::error::TokioRuntimeError;
-use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_runtime_components::traits::time::HasTime;
+use hermes_runtime_components::traits::{CanSleep, HasTime};
 
 use crate::relayer_mock::base::types::aliases::MockTimestamp;
 use crate::relayer_mock::util::clock::MockClock;

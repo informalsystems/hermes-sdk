@@ -1,9 +1,8 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::height::HasHeightType;
-use hermes_comet_light_client_components::traits::fetch_light_block::{
-    LightBlockFetcher, LightBlockFetcherComponent,
+use hermes_chain_components::traits::HasHeightType;
+use hermes_comet_light_client_components::traits::{
+    HasLightBlockType, LightBlockFetcher, LightBlockFetcherComponent,
 };
-use hermes_comet_light_client_components::traits::types::light_block::HasLightBlockType;
 use tendermint_light_client_verifier::types::{Height, LightBlock, ValidatorSet};
 use tendermint_rpc::{Client, Error as RpcError, Paging};
 

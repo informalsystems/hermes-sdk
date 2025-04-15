@@ -2,15 +2,12 @@ use alloc::vec;
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::send_message::EmptyMessageResponse;
-use hermes_chain_components::traits::types::message::HasMessageType;
-use hermes_chain_type_components::traits::types::message_response::{
-    HasMessageResponseType, MessageResponseOf,
-};
+use hermes_chain_components::traits::{EmptyMessageResponse, HasMessageType};
+use hermes_chain_type_components::traits::{HasMessageResponseType, MessageResponseOf};
 
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::chain::traits::HasIbcChainTypes;
 use crate::chain::types::aliases::MessageOf;
-use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
+use crate::relay::traits::{HasTargetChainTypes, RelayTarget};
 
 pub struct MainSink;
 

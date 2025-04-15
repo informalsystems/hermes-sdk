@@ -3,8 +3,8 @@ use ibc::primitives::Signer;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::channel::v1::{Channel, MsgChannelOpenTry as ProtoMsgChannelOpenTry};
 
-use crate::methods::encode::encode_to_any;
-use crate::traits::message::DynCosmosMessage;
+use crate::methods::encode_to_any;
+use crate::traits::DynCosmosMessage;
 
 const TYPE_URL: &str = "/ibc.core.channel.v1.MsgChannelOpenTry";
 

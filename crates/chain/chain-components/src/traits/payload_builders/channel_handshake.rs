@@ -1,12 +1,10 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+use hermes_chain_type_components::traits::{HasChannelIdType, HasHeightType, HasPortIdType};
 
-use crate::traits::types::channel::{
+use crate::traits::{
     HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
+    HasClientStateType,
 };
-use crate::traits::types::client_state::HasClientStateType;
 
 #[cgp_component {
   provider: ChannelOpenTryPayloadBuilder,

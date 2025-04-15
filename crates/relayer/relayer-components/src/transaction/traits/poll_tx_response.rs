@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::transaction::traits::types::tx_hash::HasTxHashType;
-use crate::transaction::traits::types::tx_response::HasTxResponseType;
+use crate::transaction::traits::{HasTxHashType, HasTxResponseType};
 
 #[cgp_component {
   provider: TxResponsePoller,

@@ -1,7 +1,7 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::sleep::{Sleeper, SleeperComponent};
+use hermes_runtime_components::traits::{Sleeper, SleeperComponent};
 use tokio::time::sleep;
 
 pub struct TokioSleep;

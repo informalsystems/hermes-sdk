@@ -3,20 +3,18 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
-use hermes_chain_components::traits::types::chain_id::HasChainId;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
+use hermes_chain_components::traits::{CanExtractFromMessageResponse, HasChainId};
+use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelInfo;
 
-use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
-use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenInitPayload;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::traits::send_message::CanSendSingleMessage;
-use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
-use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::connection::open_init::{
-    ConnectionInitializer, ConnectionInitializerComponent,
+use crate::chain::traits::{
+    CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenInitPayload,
+    CanQueryClientStateWithLatestHeight, CanSendSingleMessage, HasConnectionOpenInitEvent,
+    HasInitConnectionOptionsType,
+};
+use crate::relay::traits::{
+    CanRaiseRelayChainErrors, ConnectionInitializer, ConnectionInitializerComponent,
+    HasRelayChains, HasRelayClientIds,
 };
 
 /**

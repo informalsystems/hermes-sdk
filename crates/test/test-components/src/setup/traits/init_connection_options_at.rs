@@ -1,6 +1,6 @@
 use cgp::core::field::UseField;
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::connection::{
+use hermes_relayer_components::chain::traits::{
     HasInitConnectionOptionsType, InitConnectionOptionsOf,
 };
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};

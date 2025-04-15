@@ -1,24 +1,20 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
-use hermes_test_components::chain::traits::messages::ibc_transfer::{
-    IbcTokenTransferMessageBuilder, IbcTokenTransferMessageBuilderComponent,
+use hermes_core::chain_type_components::traits::{HasAddressType, HasAmountType};
+use hermes_core::relayer_components::chain::traits::{
+    HasChannelIdType, HasHeightFields, HasMessageType, HasPortIdType, HasTimeoutType,
 };
-use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::memo::HasMemoType;
+use hermes_core::test_components::chain::traits::{
+    HasMemoType, IbcTokenTransferMessageBuilder, IbcTokenTransferMessageBuilderComponent,
+};
+use hermes_cosmos_chain_components::traits::{CosmosMessage, ToCosmosMessage};
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use ibc::primitives::Timestamp;
 
-use crate::chain::types::amount::Amount;
-use crate::chain::types::messages::token_transfer::TokenTransferMessage;
+use crate::chain::types::{Amount, TokenTransferMessage};
 
 #[cgp_new_provider(IbcTokenTransferMessageBuilderComponent)]
 impl<Chain, Counterparty> IbcTokenTransferMessageBuilder<Chain, Counterparty>

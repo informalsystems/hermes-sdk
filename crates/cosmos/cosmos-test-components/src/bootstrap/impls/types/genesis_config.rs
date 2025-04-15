@@ -1,9 +1,7 @@
 use cgp::prelude::*;
 
-use crate::bootstrap::traits::types::genesis_config::{
-    ChainGenesisConfigTypeComponent, ProvideChainGenesisConfigType,
-};
-use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
+use crate::bootstrap::traits::{ChainGenesisConfigTypeComponent, ProvideChainGenesisConfigType};
+use crate::bootstrap::types::CosmosGenesisConfig;
 
 pub struct ProvideCosmosGenesisConfigType;
 

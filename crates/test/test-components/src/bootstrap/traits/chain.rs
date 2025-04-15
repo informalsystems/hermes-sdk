@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::driver::traits::types::chain_driver::HasChainDriverType;
+use crate::driver::traits::HasChainDriverType;
 
 #[cgp_component {
     provider: ChainBootstrapper,

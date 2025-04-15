@@ -1,12 +1,11 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_encoding_components::traits::encode_mut::{MutEncoder, MutEncoderComponent};
-use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
+use hermes_encoding_components::traits::{HasEncodeBufferType, MutEncoder, MutEncoderComponent};
 use prost::bytes::BufMut;
 use prost::encoding::{encode_key, encode_varint, encoded_len_varint, key_len, WireType};
 
-use crate::traits::length::{EncodedLengthGetter, EncodedLengthGetterComponent};
+use crate::traits::{EncodedLengthGetter, EncodedLengthGetterComponent};
 
 pub struct EncodeProtoFieldWithKnownLength<const TAG: u32, InEncoder>(pub PhantomData<InEncoder>);
 

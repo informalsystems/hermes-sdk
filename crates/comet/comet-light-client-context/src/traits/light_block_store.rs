@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
-use hermes_comet_light_client_components::types::status::VerificationStatus;
+use hermes_comet_light_client_components::types::VerificationStatus;
 use tendermint::block::Height;
 use tendermint_light_client_verifier::types::LightBlock;
 

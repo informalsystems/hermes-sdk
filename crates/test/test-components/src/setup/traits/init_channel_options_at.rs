@@ -1,8 +1,7 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::channel::{
-    HasInitChannelOptionsType, InitChannelOptions,
+use hermes_relayer_components::chain::traits::{
+    HasConnectionIdType, HasInitChannelOptionsType, InitChannelOptions,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasConnectionIdType;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 

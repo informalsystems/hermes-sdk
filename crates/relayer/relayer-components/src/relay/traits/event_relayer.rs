@@ -1,9 +1,9 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::height::HasHeightType;
+use hermes_chain_components::traits::HasHeightType;
 
-use crate::chain::traits::types::event::HasEventType;
+use crate::chain::traits::HasEventType;
 use crate::chain::types::aliases::EventOf;
-use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
+use crate::relay::traits::{HasTargetChainTypes, RelayTarget};
 
 /**
    An event relayer performs relay actions based on one event at a time from
@@ -11,7 +11,7 @@ use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
 
    The event relayer is a general abstraction over other relayer types that
    need to be reactive to chain events. This includes the
-   [packet relayer]( crate::relay::traits::packet_relayer::CanRelayPacket),
+   [packet relayer]( crate::relay::traits::CanRelayPacket),
    but also future relayers such as connection and channel handshake relayers.
 */
 #[cgp_component {

@@ -1,23 +1,20 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_error::handlers::debug::DebugError;
+use hermes_cosmos_relayer::contexts::CosmosChain;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
-use hermes_logging_components::traits::logger::LoggerComponent;
-use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
-use hermes_relayer_components::components::default::relay::*;
+use hermes_logging_components::traits::LoggerComponent;
+use hermes_relayer_components::chain::traits::HasInitConnectionOptionsType;
+use hermes_relayer_components::components::default::*;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };
 use hermes_relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
 use hermes_relayer_components::multi::types::tags::{Dst, Src};
-use hermes_relayer_components::relay::traits::chains::HasRelayClientIds;
-use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
+use hermes_relayer_components::relay::traits::{CanInitConnection, HasRelayClientIds};
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::chain::MockSolomachine;

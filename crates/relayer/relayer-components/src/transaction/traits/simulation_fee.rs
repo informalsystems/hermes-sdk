@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::transaction::traits::types::fee::HasFeeType;
+use crate::transaction::traits::HasFeeType;
 
 #[cgp_component {
   provider: FeeForSimulationGetter,

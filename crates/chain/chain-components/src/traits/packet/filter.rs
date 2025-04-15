@@ -1,7 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::packet::{
-    HasIncomingPacketType, HasOutgoingPacketType,
-};
+use hermes_chain_type_components::traits::{HasIncomingPacketType, HasOutgoingPacketType};
 
 #[cgp_component {
     context: Chain,

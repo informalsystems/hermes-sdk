@@ -2,25 +2,19 @@ use core::time::Duration;
 use std::path::PathBuf;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
-use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
-use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_core::relayer_components::chain::traits::HasChainIdType;
+use hermes_core::runtime_components::traits::{
+    CanReadFileAsString, CanReserveTcpPort, CanWriteStringToFile, HasFilePathType, HasRuntime,
+};
+use hermes_core::test_components::chain_driver::traits::HasChainType;
 use ibc::core::host::types::identifiers::ChainId;
 use toml::Value;
 
-use crate::bootstrap::traits::initializers::init_chain_config::{
-    ChainNodeConfigInitializer, ChainNodeConfigInitializerComponent,
+use crate::bootstrap::traits::{
+    CanModifyCometConfig, CanModifyCosmosSdkConfig, ChainNodeConfigInitializer,
+    ChainNodeConfigInitializerComponent, HasChainGenesisConfigType, HasChainNodeConfigType,
 };
-use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
-use crate::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CanModifyCosmosSdkConfig;
-use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
-use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
+use crate::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
 
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
 pub struct UpdateCosmosChainNodeConfig;

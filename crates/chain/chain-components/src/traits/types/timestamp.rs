@@ -5,8 +5,7 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-pub use hermes_chain_type_components::traits::types::time::*;
-pub use hermes_chain_type_components::traits::types::timeout::*;
+pub use hermes_chain_type_components::traits::*;
 
 #[cgp_component {
   provider: TimeMeasurer,

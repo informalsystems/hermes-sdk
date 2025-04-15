@@ -1,11 +1,9 @@
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::{CanSleep, HasRuntime};
 
-use crate::traits::queries::chain_status::CanQueryChainHeight;
-use crate::traits::types::height::HasHeightType;
+use crate::traits::{CanQueryChainHeight, HasHeightType};
 
 #[async_trait]
 pub trait CanWaitChainReachHeight: HasHeightType + HasAsyncErrorType {

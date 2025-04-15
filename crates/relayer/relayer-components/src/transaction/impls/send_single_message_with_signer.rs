@@ -1,10 +1,9 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::send_message::EmptyMessageResponse;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_chain_components::traits::EmptyMessageResponse;
+use hermes_chain_type_components::traits::HasMessageResponseType;
 
-use crate::chain::traits::types::message::HasMessageType;
-use crate::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
-use crate::transaction::traits::types::signer::HasSignerType;
+use crate::chain::traits::HasMessageType;
+use crate::transaction::traits::{CanSendMessagesWithSigner, HasSignerType};
 
 #[async_trait]
 pub trait CanSendSingleMessageWithSigner:

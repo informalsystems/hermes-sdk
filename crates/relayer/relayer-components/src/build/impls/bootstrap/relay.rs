@@ -5,20 +5,15 @@ use cgp::prelude::*;
 
 use crate::build::traits::builders::chain_builder::CanBuildChain;
 use crate::build::traits::builders::relay_builder::CanBuildRelay;
-use crate::chain::traits::types::chain_id::HasChainIdType;
-use crate::chain::traits::types::create_client::{
-    CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,
-    HasCreateClientPayloadOptionsType,
+use crate::chain::traits::{
+    CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasChainIdType,
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType, HasIbcChainTypes,
 };
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::HasRelayTypeAt;
-use crate::relay::traits::chains::{
-    CanRaiseRelayChainErrors, HasRelayChainTypes, HasRelayClientIds,
-};
-use crate::relay::traits::client_creator::CanCreateClient;
-use crate::relay::traits::target::{
-    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
+use crate::relay::traits::{
+    CanCreateClient, CanRaiseRelayChainErrors, DestinationTarget, HasDestinationTargetChainTypes,
+    HasRelayChainTypes, HasRelayClientIds, HasSourceTargetChainTypes, SourceTarget,
 };
 
 #[async_trait]

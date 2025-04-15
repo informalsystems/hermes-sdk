@@ -4,8 +4,8 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::chain::traits::types::wallet::{HasWalletType, WalletOf};
-use crate::chain_driver::traits::types::chain::HasChainType;
+use crate::chain::traits::{HasWalletType, WalletOf};
+use crate::chain_driver::traits::HasChainType;
 
 #[derive(Copy, Clone)]
 pub struct UserWallet<const I: usize = 0>;

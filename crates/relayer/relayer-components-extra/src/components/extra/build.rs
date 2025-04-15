@@ -5,7 +5,7 @@ mod preset {
     use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilderComponent;
     use hermes_relayer_components::build::traits::builders::relay_builder::RelayBuilderComponent;
     use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilderComponent;
-    use hermes_relayer_components::components::default::build::DefaultBuildComponents;
+    use hermes_relayer_components::components::default::DefaultBuildComponents;
 
     use crate::build::impls::relay::batch::BuildRelayWithBatchWorker;
 

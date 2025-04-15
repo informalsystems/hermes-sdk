@@ -5,17 +5,15 @@ use std::str::FromStr;
 use cgp::prelude::*;
 use eyre::{eyre, WrapErr};
 use hdpath::StandardHDPath;
-use hermes_cli_components::traits::build::CanLoadBuilder;
-use hermes_cli_components::traits::command::CommandRunnerComponent;
+use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::impls::types::config::CosmosChainConfig;
-use hermes_cosmos_chain_components::types::key_types::keyring::KeyRing;
-use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
-use ibc::core::host::types::identifiers::ChainId;
+use hermes_cosmos_core::chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_core::chain_components::types::{KeyRing, Secp256k1KeyPair};
+use hermes_cosmos_core::ibc::core::host::types::identifiers::ChainId;
 use tracing::warn;
 
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
 ///

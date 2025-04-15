@@ -1,7 +1,7 @@
 use cgp::prelude::*;
-pub use hermes_chain_type_components::traits::types::commitment_proof::*;
+pub use hermes_chain_type_components::traits::*;
 
-use crate::traits::types::height::HasHeightType;
+use crate::traits::HasHeightType;
 
 #[cgp_component {
   provider: CommitmentProofHeightGetter,

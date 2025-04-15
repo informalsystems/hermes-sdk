@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::consensus_state::{
+use hermes_relayer_components::chain::traits::{
     ConsensusStateTypeComponent, ProvideConsensusStateType,
 };
 

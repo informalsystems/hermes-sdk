@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::schema::{ProvideSchemaType, SchemaTypeComponent};
+use crate::traits::{ProvideSchemaType, SchemaTypeComponent};
 
 pub struct ProvideStringSchema;
 

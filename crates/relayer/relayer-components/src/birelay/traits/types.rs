@@ -3,7 +3,7 @@ use cgp::core::macros::blanket_trait;
 
 use crate::multi::traits::chain_at::HasChainTypeAt;
 use crate::multi::traits::relay_at::HasRelayTypeAt;
-use crate::relay::traits::chains::{HasDstChainType, HasSrcChainType};
+use crate::relay::traits::{HasDstChainType, HasSrcChainType};
 
 #[blanket_trait]
 pub trait HasBiRelayTypes:

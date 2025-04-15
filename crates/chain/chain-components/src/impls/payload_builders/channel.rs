@@ -1,21 +1,16 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
-use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+use hermes_chain_type_components::traits::{
+    HasChannelIdType, HasConnectionIdType, HasHeightType, HasPortIdType,
+};
 
-use crate::traits::payload_builders::channel_handshake::{
-    ChannelOpenAckPayloadBuilder, ChannelOpenAckPayloadBuilderComponent,
-    ChannelOpenConfirmPayloadBuilder, ChannelOpenConfirmPayloadBuilderComponent,
-    ChannelOpenTryPayloadBuilder, ChannelOpenTryPayloadBuilderComponent,
+use crate::traits::{
+    CanQueryChannelEndWithProofs, CanQueryCounterpartyConnectionId, ChannelOpenAckPayloadBuilder,
+    ChannelOpenAckPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilder,
+    ChannelOpenConfirmPayloadBuilderComponent, ChannelOpenTryPayloadBuilder,
+    ChannelOpenTryPayloadBuilderComponent, HasChannelOpenAckPayloadType,
+    HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType, HasClientStateType,
+    HasCommitmentProofHeight,
 };
-use crate::traits::queries::channel_end::CanQueryChannelEndWithProofs;
-use crate::traits::queries::counterparty_connection_id::CanQueryCounterpartyConnectionId;
-use crate::traits::types::channel::{
-    HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
-};
-use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::proof::HasCommitmentProofHeight;
 use crate::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };

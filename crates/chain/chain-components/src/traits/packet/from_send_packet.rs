@@ -1,7 +1,7 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
+use hermes_chain_type_components::traits::HasOutgoingPacketType;
 
-use crate::traits::types::ibc_events::send_packet::HasSendPacketEvent;
+use crate::traits::HasSendPacketEvent;
 
 #[cgp_component {
   provider: PacketFromSendPacketEventBuilder,

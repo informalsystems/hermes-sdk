@@ -1,17 +1,13 @@
 use alloc::sync::Arc;
 
 use cgp::prelude::*;
-use hermes_cli_components::traits::bootstrap::{
-    BootstrapLoader, BootstrapLoaderComponent, HasBootstrapType,
-};
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_integration_tests::contexts::bootstrap::{
-    CosmosBootstrap, CosmosBootstrapFields,
-};
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_error::types::HermesError;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_cli_components::traits::{BootstrapLoader, BootstrapLoaderComponent, HasBootstrapType};
+use hermes_core::runtime_components::traits::HasRuntime;
+use hermes_cosmos_core::chain_components::types::DynamicGasConfig;
+use hermes_cosmos_core::error::types::HermesError;
+use hermes_cosmos_core::integration_tests::contexts::{CosmosBootstrap, CosmosBootstrapFields};
+use hermes_cosmos_core::relayer::contexts::CosmosBuilder;
+use hermes_cosmos_core::runtime::types::runtime::HermesRuntime;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct BootstrapCosmosChainArgs {

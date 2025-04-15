@@ -1,16 +1,15 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::chain_status::{
-    ChainStatusQuerier, ChainStatusQuerierComponent,
+use hermes_core::relayer_components::chain::traits::{
+    ChainStatusQuerier, ChainStatusQuerierComponent, HasChainStatusType,
 };
-use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::ChainId;
 use tendermint_rpc::{Client, Error as TendermintRpcError};
 
-use crate::traits::rpc_client::HasRpcClient;
-use crate::types::status::ChainStatus;
+use crate::traits::HasRpcClient;
+use crate::types::ChainStatus;
 
 pub struct QueryCosmosChainStatus;
 

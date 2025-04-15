@@ -3,16 +3,11 @@ use core::marker::PhantomData;
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
-use crate::traits::convert::{Converter, ConverterComponent};
-use crate::traits::decode::{Decoder, DecoderComponent};
-use crate::traits::decode_mut::{MutDecoder, MutDecoderComponent};
-use crate::traits::encode::{Encoder, EncoderComponent};
-use crate::traits::encode_mut::{MutEncoder, MutEncoderComponent};
-use crate::traits::schema::{SchemaGetter, SchemaGetterComponent};
-use crate::traits::types::decode_buffer::HasDecodeBufferType;
-use crate::traits::types::encode_buffer::HasEncodeBufferType;
-use crate::traits::types::encoded::HasEncodedType;
-use crate::traits::types::schema::HasSchemaType;
+use crate::traits::{
+    Converter, ConverterComponent, Decoder, DecoderComponent, Encoder, EncoderComponent,
+    HasDecodeBufferType, HasEncodeBufferType, HasEncodedType, HasSchemaType, MutDecoder,
+    MutDecoderComponent, MutEncoder, MutEncoderComponent, SchemaGetter, SchemaGetterComponent,
+};
 
 #[cgp_provider(EncoderComponent)]
 impl<Encoding, Strategy, Value, Components, Delegate> Encoder<Encoding, Strategy, Value>

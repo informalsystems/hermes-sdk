@@ -5,24 +5,53 @@
    are defined in this module.
 */
 
-pub mod block;
-pub mod chain;
-pub mod chain_id;
-pub mod channel;
-pub mod client_state;
-pub mod connection;
-pub mod consensus_state;
-pub mod create_client;
-pub mod height;
-pub mod ibc;
-pub mod ibc_events;
-pub mod message;
-pub mod packets;
-pub mod poll_interval;
-pub mod proof;
-pub mod status;
-pub mod timestamp;
-pub mod update_client;
+mod block;
+pub use block::*;
 
-pub use hermes_chain_type_components::traits::types::event;
-pub use hermes_chain_type_components::traits::types::ibc::packet;
+mod chain;
+pub use chain::*;
+
+mod channel;
+pub use channel::*;
+
+mod client_state;
+pub use client_state::*;
+
+mod connection;
+pub use connection::*;
+
+mod consensus_state;
+pub use consensus_state::*;
+
+mod create_client;
+pub use create_client::*;
+
+mod height;
+pub use height::*;
+
+mod ibc;
+pub use ibc::*;
+
+mod ibc_events;
+pub use ibc_events::*;
+
+mod message;
+pub use message::*;
+
+mod packets;
+pub use packets::*;
+
+mod poll_interval;
+pub use poll_interval::*;
+
+mod proof;
+pub use proof::*;
+
+mod status;
+pub use status::*;
+
+mod timestamp;
+pub use timestamp::*;
+
+mod update_client;
+pub use update_client::*;

@@ -1,14 +1,10 @@
-use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
+use hermes_chain_type_components::traits::HasOutgoingPacketType;
 
-use crate::traits::types::chain_id::HasChainIdType;
-use crate::traits::types::event::HasEventType;
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::ibc::{
-    HasChannelIdType, HasClientIdType, HasConnectionIdType, HasPortIdType, HasSequenceType,
+use crate::traits::{
+    HasChainIdType, HasChannelIdType, HasClientIdType, HasConnectionIdType, HasEventType,
+    HasHeightType, HasMessageType, HasPortIdType, HasSequenceType, HasTimeoutType,
+    HasWriteAckEvent,
 };
-use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::traits::types::message::HasMessageType;
-use crate::traits::types::timestamp::HasTimeoutType;
 
 pub type OutgoingPacketOf<Chain, Counterparty> =
     <Chain as HasOutgoingPacketType<Counterparty>>::OutgoingPacket;

@@ -2,14 +2,13 @@ use core::marker::PhantomData;
 
 use cgp::core::field::FieldGetter;
 use cgp::prelude::*;
-use hermes_encoding_components::impls::encode_mut::field::EncodeFieldWithGetter;
-use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
-use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
-use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
-use hermes_encoding_components::traits::transform::Transformer;
+use hermes_core::encoding_components::impls::{DecodeFrom, EncodeFieldWithGetter};
+use hermes_core::encoding_components::traits::{
+    MutDecoderComponent, MutEncoderComponent, Transformer,
+};
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
 
-use crate::types::client_message::WasmClientMessage;
+use crate::types::WasmClientMessage;
 
 pub struct EncodeWasmClientMessage;
 

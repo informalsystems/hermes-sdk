@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::address::HasAddressType;
+use hermes_chain_type_components::traits::HasAddressType;
 
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 

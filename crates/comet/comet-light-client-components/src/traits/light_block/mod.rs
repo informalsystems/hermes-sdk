@@ -1,1 +1,2 @@
-pub mod height;
+mod height;
+pub use height::*;

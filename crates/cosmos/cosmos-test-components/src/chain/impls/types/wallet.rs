@@ -1,13 +1,13 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
-use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
-use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::wallet::{
+use hermes_core::chain_type_components::traits::HasAddressType;
+use hermes_core::relayer_components::transaction::traits::HasSignerType;
+use hermes_core::test_components::chain::traits::{
     HasWalletType, ProvideWalletType, WalletSignerComponent, WalletSignerProvider,
     WalletTypeComponent,
 };
+use hermes_cosmos_chain_components::types::Secp256k1KeyPair;
 
-use crate::chain::types::wallet::CosmosTestWallet;
+use crate::chain::types::CosmosTestWallet;
 
 pub struct ProvideCosmosTestWallet;
 

@@ -1,11 +1,11 @@
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
 
-use crate::traits::convert::{CanConvert, Converter, ConverterComponent};
-use crate::traits::decode::{CanDecode, Decoder, DecoderComponent};
-use crate::traits::decode_mut::{CanDecodeMut, MutDecoder, MutDecoderComponent};
-use crate::traits::encode::{CanEncode, Encoder, EncoderComponent};
-use crate::traits::encode_mut::{CanEncodeMut, MutEncoder, MutEncoderComponent};
+use crate::traits::{
+    CanConvert, CanDecode, CanDecodeMut, CanEncode, CanEncodeMut, Converter, ConverterComponent,
+    Decoder, DecoderComponent, Encoder, EncoderComponent, MutDecoder, MutDecoderComponent,
+    MutEncoder, MutEncoderComponent,
+};
 
 #[cgp_provider(EncoderComponent)]
 impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for UseContext

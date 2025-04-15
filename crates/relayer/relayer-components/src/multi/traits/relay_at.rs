@@ -5,11 +5,11 @@ use cgp::core::macros::blanket_trait;
 use cgp::core::types::ProvideType;
 use cgp::prelude::*;
 
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::chain::traits::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;
 use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use crate::multi::types::tags::{Dst, Src};
-use crate::relay::traits::chains::HasRelayChainTypes;
+use crate::relay::traits::HasRelayChainTypes;
 
 #[cgp_type {
     name: RelayTypeProviderAtComponent<A, B>,

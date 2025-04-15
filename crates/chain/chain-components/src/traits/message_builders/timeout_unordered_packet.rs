@@ -1,8 +1,7 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
+use hermes_chain_type_components::traits::HasOutgoingPacketType;
 
-use crate::traits::types::message::HasMessageType;
-use crate::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
+use crate::traits::{HasMessageType, HasTimeoutUnorderedPacketPayloadType};
 
 #[cgp_component {
   provider: TimeoutUnorderedPacketMessageBuilder,

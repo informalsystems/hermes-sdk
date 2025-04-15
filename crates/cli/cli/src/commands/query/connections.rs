@@ -1,21 +1,20 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cli_components::traits::build::CanLoadBuilder;
-use hermes_cli_components::traits::command::CommandRunnerComponent;
+use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use hermes_core::relayer_components::chain::traits::CanQueryClientStateWithLatestHeight;
+use hermes_cosmos_core::chain_components::traits::HasGrpcAddress;
+use hermes_cosmos_core::ibc::core::connection::types::proto::v1::query_client::QueryClient;
+use hermes_cosmos_core::ibc::core::connection::types::proto::v1::QueryConnectionsRequest;
+use hermes_cosmos_core::ibc::core::connection::types::IdentifiedConnectionEnd;
+use hermes_cosmos_core::ibc::core::host::types::identifiers::ChainId;
+use hermes_cosmos_core::relayer::contexts::CosmosChain;
 use http::Uri;
-use ibc::core::connection::types::proto::v1::query_client::QueryClient;
-use ibc::core::connection::types::proto::v1::QueryConnectionsRequest;
-use ibc::core::connection::types::IdentifiedConnectionEnd;
-use ibc::core::host::types::identifiers::ChainId;
 use tracing::{info, warn};
 
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]

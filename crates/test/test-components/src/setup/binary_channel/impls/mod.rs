@@ -1,1 +1,2 @@
-pub mod setup;
+mod setup;
+pub use setup::*;

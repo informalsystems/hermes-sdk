@@ -3,7 +3,7 @@ use core::time::Duration;
 use cgp::prelude::*;
 use ibc_client_tendermint::types::proto::v1::Fraction;
 
-use crate::types::tendermint::{TendermintClientState, TendermintConsensusState, TendermintHeader};
+use crate::types::{TendermintClientState, TendermintConsensusState, TendermintHeader};
 
 #[derive(Debug, Clone)]
 pub struct CosmosUpdateClientPayload {

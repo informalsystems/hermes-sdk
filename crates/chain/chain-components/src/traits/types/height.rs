@@ -3,8 +3,7 @@
 */
 
 use cgp::prelude::*;
-pub use hermes_chain_type_components::traits::fields::height::*;
-pub use hermes_chain_type_components::traits::types::height::*;
+pub use hermes_chain_type_components::traits::*;
 
 #[cgp_component {
   name: HeightFieldComponent,

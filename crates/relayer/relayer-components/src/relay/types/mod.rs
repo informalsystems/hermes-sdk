@@ -1,1 +1,2 @@
-pub mod aliases;
+mod aliases;
+pub use aliases::*;

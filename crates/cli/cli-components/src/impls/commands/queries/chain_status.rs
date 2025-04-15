@@ -3,14 +3,12 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_core::relayer_components::build::traits::builders::chain_builder::CanBuildChain;
+use hermes_core::relayer_components::chain::traits::{CanQueryChainStatus, HasChainIdType};
 
-use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::CanProduceOutput;
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+};
 
 pub struct RunQueryChainStatusCommand;
 

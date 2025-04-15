@@ -4,7 +4,7 @@ use cgp::prelude::*;
 
 use crate::build::traits::builders::chain_builder::{ChainBuilder, ChainBuilderComponent};
 use crate::build::traits::cache::HasChainCache;
-use crate::chain::traits::types::chain_id::HasChainIdType;
+use crate::chain::traits::HasChainIdType;
 
 pub struct BuildChainWithCache<InBuilder>(pub PhantomData<InBuilder>);
 

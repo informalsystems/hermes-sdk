@@ -3,31 +3,20 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
-use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    CanQueryClientState, CanQueryClientStateWithLatestHeight,
+use hermes_core::logging_components::traits::CanLog;
+use hermes_core::logging_components::types::LevelInfo;
+use hermes_core::relayer_components::build::traits::builders::chain_builder::CanBuildChain;
+use hermes_core::relayer_components::chain::traits::{
+    CanMeasureTime, CanQueryChainStatus, CanQueryClientState, CanQueryClientStateWithLatestHeight,
+    CanQueryConsensusState, CanQueryConsensusStateWithLatestHeight, HasClientStateFields,
+    HasClientStateType, HasConsensusStateFields, HasConsensusStateType, HasIbcChainTypes,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    CanQueryConsensusState, CanQueryConsensusStateWithLatestHeight,
-};
-use hermes_relayer_components::chain::traits::types::client_state::{
-    HasClientStateFields, HasClientStateType,
-};
-use hermes_relayer_components::chain::traits::types::consensus_state::{
-    HasConsensusStateFields, HasConsensusStateType,
-};
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::timestamp::CanMeasureTime;
-use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use serde::Serialize;
 
-use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::CanProduceOutput;
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+};
 
 pub struct RunQueryClientStatusCommand;
 

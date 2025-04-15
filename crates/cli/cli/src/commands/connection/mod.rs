@@ -1,10 +1,10 @@
 use cgp::prelude::*;
-use hermes_cli_components::impls::commands::connection::create::CreateConnectionArgs;
-use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
+use hermes_cli_components::impls::CreateConnectionArgs;
+use hermes_cli_components::traits::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
-use crate::contexts::app::HermesApp;
+use crate::contexts::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Subcommand)]

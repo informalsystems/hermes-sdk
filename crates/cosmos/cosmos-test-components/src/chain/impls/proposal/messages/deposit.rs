@@ -1,20 +1,17 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_cosmos_chain_components::traits::message::{
-    CosmosMessage, DynCosmosMessage, ToCosmosMessage,
+use hermes_core::chain_type_components::traits::HasAmountType;
+use hermes_core::relayer_components::chain::traits::HasMessageType;
+use hermes_core::test_components::chain::traits::{
+    DepositProposalMessageBuilder, DepositProposalMessageBuilderComponent, HasProposalIdType,
 };
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_test_components::chain::traits::proposal::messages::deposit::{
-    DepositProposalMessageBuilder, DepositProposalMessageBuilderComponent,
-};
-use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
+use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::gov::v1::MsgDeposit;
 use ibc_proto::google::protobuf::Any;
 use prost::{Message, Name};
 
-use crate::chain::types::amount::Amount;
+use crate::chain::types::Amount;
 
 pub struct BuildDepositProposalMessage;
 

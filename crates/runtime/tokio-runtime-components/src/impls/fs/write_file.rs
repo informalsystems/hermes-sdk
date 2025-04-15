@@ -2,9 +2,8 @@ use std::io::Error as IoError;
 use std::path::Path;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::fs::write_file::{
-    StringToFileWriter, StringToFileWriterComponent,
+use hermes_runtime_components::traits::{
+    HasFilePathType, StringToFileWriter, StringToFileWriterComponent,
 };
 use tokio::fs::write;
 

@@ -2,9 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::traits::decode_mut::{MutDecoder, MutDecoderComponent};
-use crate::traits::transform::Transformer;
-use crate::traits::types::decode_buffer::HasDecodeBufferType;
+use crate::traits::{HasDecodeBufferType, MutDecoder, MutDecoderComponent, Transformer};
 
 pub struct DecodeFrom<Transform, InDecoder>(pub PhantomData<(Transform, InDecoder)>);
 

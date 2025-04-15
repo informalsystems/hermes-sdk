@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::decode_buffer::HasDecodeBufferType;
+use crate::traits::HasDecodeBufferType;
 
 #[cgp_component {
   provider: MutDecoder,

@@ -1,2 +1,5 @@
-pub mod field;
-pub mod string;
+mod field;
+pub use field::*;
+
+mod string;
+pub use string::*;

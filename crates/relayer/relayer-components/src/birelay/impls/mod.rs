@@ -1,1 +1,2 @@
-pub mod auto_birelay;
+mod auto_birelay;
+pub use auto_birelay::*;

@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 
-use crate::impls::commands::queries::balance::QueryBalanceArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
+use crate::impls::QueryBalanceArgs;
+use crate::traits::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryWalletSubCommand;
 

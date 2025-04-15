@@ -1,8 +1,7 @@
 use cgp::prelude::*;
 use hermes_relayer_components::error::traits::{CanPerformRetry, HasMaxErrorRetry};
-use hermes_relayer_components::relay::traits::chains::{HasRelayChains, PacketOf};
-use hermes_relayer_components::relay::traits::packet_relayer::{
-    PacketRelayer, PacketRelayerComponent,
+use hermes_relayer_components::relay::traits::{
+    HasRelayChains, PacketOf, PacketRelayer, PacketRelayerComponent,
 };
 
 #[cgp_new_provider(PacketRelayerComponent)]

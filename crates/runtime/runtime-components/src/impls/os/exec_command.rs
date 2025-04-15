@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::os::exec_command::{
+use crate::traits::{
     CanExecCommandWithEnvs, CommandExecutor, CommandExecutorComponent, ExecOutput,
 };
 

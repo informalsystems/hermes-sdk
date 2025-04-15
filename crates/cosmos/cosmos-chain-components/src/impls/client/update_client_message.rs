@@ -1,16 +1,14 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::message_builders::update_client::{
-    UpdateClientMessageBuilder, UpdateClientMessageBuilderComponent,
+use hermes_core::relayer_components::chain::traits::{
+    HasIbcChainTypes, HasUpdateClientPayloadType, UpdateClientMessageBuilder,
+    UpdateClientMessageBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use prost_types::Any;
 
-use crate::traits::message::{CosmosMessage, ToCosmosMessage};
-use crate::types::messages::client::update::CosmosUpdateClientMessage;
-use crate::types::payloads::client::CosmosUpdateClientPayload;
+use crate::traits::{CosmosMessage, ToCosmosMessage};
+use crate::types::{CosmosUpdateClientMessage, CosmosUpdateClientPayload};
 
 pub struct BuildCosmosUpdateClientMessage;
 

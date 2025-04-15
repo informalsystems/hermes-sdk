@@ -2,11 +2,9 @@ use alloc::vec::Vec;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
-use hermes_chain_type_components::traits::types::message::HasMessageType;
+use hermes_chain_type_components::traits::{CanUseCounterparty, HasClientIdType, HasMessageType};
 
-use crate::traits::types::update_client::{HasUpdateClientPayloadType, UpdateClientPayloadOf};
+use crate::traits::{HasUpdateClientPayloadType, UpdateClientPayloadOf};
 
 #[cgp_component {
   provider: UpdateClientMessageBuilder,

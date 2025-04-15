@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_test_components::chain::traits::chain_id::{
+use hermes_core::relayer_components::chain::traits::HasChainIdType;
+use hermes_core::test_components::chain::traits::{
     ChainIdFromStringBuilder, ChainIdFromStringBuilderComponent,
 };
 use ibc::core::host::types::identifiers::ChainId;

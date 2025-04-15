@@ -1,11 +1,9 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::payloads::client::CosmosUpdateClientPayload;
-use hermes_relayer_components::chain::traits::message_builders::update_client::{
-    UpdateClientMessageBuilder, UpdateClientMessageBuilderComponent,
+use hermes_cosmos_chain_components::types::CosmosUpdateClientPayload;
+use hermes_relayer_components::chain::traits::{
+    HasIbcChainTypes, HasMessageType, HasUpdateClientPayloadType, UpdateClientMessageBuilder,
+    UpdateClientMessageBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc::core::host::types::identifiers::ClientId;
 
 use crate::types::message::SolomachineMessage;

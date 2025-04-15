@@ -1,4 +1,11 @@
-pub mod dispatch;
-pub mod feemarket;
-pub mod osmosis;
-pub mod types;
+mod dispatch;
+pub use dispatch::*;
+
+mod feemarket;
+pub use feemarket::*;
+
+mod osmosis;
+pub use osmosis::*;
+
+mod types;
+pub use types::*;

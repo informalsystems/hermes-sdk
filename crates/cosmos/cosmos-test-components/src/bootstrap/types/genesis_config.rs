@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-use crate::chain::types::denom::Denom;
+use crate::chain::types::Denom;
 
 #[derive(Clone)]
 pub struct CosmosGenesisConfig {

@@ -4,7 +4,7 @@ mod preset {
     use hermes_cosmos_chain_preset::presets::CosmosChainPreset;
     use CosmosChainPreset::re_exports::*;
 
-    use crate::impls::client_state::ProvideWrappedTendermintClientState;
+    use crate::impls::ProvideWrappedTendermintClientState;
 
     CosmosChainPreset::with_components! {
         [

@@ -1,1 +1,2 @@
-pub mod packet_event;
+mod packet_event;
+pub use packet_event::*;

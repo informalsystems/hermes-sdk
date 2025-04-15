@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::traits::parse::{ArgParser, ArgParserComponent};
+use crate::traits::{ArgParser, ArgParserComponent};
 
 pub struct GetField;
 

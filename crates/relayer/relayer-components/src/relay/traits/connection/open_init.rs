@@ -1,9 +1,9 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::connection::InitConnectionOptionsOf;
+use hermes_chain_components::traits::InitConnectionOptionsOf;
 
-use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::types::aliases::SrcConnectionId;
+use crate::chain::traits::HasInitConnectionOptionsType;
+use crate::relay::traits::HasRelayChains;
+use crate::relay::types::SrcConnectionId;
 
 #[cgp_component {
   provider: ConnectionInitializer,

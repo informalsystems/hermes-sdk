@@ -1,8 +1,7 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
+use hermes_chain_type_components::traits::{HasChannelIdType, HasPortIdType};
 
-use crate::traits::types::chain_id::HasChainIdType;
+use crate::traits::HasChainIdType;
 
 #[cgp_component {
   provider: CounterpartyChainIdQuerier,

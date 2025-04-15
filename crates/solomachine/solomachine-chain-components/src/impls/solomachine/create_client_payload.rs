@@ -1,8 +1,6 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::payload_builders::create_client::{
+use hermes_relayer_components::chain::traits::{
     CreateClientPayloadBuilder, CreateClientPayloadBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 

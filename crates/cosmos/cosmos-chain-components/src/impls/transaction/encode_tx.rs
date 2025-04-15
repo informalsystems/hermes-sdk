@@ -1,13 +1,10 @@
 #![allow(clippy::ptr_arg)]
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::transaction::traits::encode_tx::{TxEncoder, TxEncoderComponent};
-use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
-use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
-use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
-use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
+use hermes_core::relayer_components::chain::traits::{HasChainId, HasMessageType};
+use hermes_core::relayer_components::transaction::traits::{
+    HasFeeType, HasNonceType, HasSignerType, HasTransactionType, TxEncoder, TxEncoderComponent,
+};
 use ibc::core::host::types::identifiers::ChainId;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::tx::v1beta1::mode_info::{Single, Sum};
@@ -15,16 +12,10 @@ use ibc_proto::cosmos::tx::v1beta1::{AuthInfo, Fee, ModeInfo, SignDoc, SignerInf
 use ibc_proto::google::protobuf::Any;
 use prost::{EncodeError, Message};
 
-use crate::traits::message::CosmosMessage;
-use crate::traits::tx_extension_options::HasTxExtensionOptions;
-use crate::types::key_types::secp256k1::Secp256k1KeyPair;
-use crate::types::transaction::account::Account;
-use crate::types::transaction::memo::Memo;
-use crate::types::transaction::signed_tx::SignedTx;
+use crate::traits::{CosmosMessage, HasTxExtensionOptions};
+use crate::types::{Account, Memo, Secp256k1KeyPair, SignedTx};
 
-pub struct EncodeCosmosTx;
-
-#[cgp_provider(TxEncoderComponent)]
+#[cgp_new_provider(TxEncoderComponent)]
 impl<Chain> TxEncoder<Chain> for EncodeCosmosTx
 where
     Chain: HasSignerType<Signer = Secp256k1KeyPair>

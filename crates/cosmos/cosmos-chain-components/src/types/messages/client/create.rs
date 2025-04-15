@@ -3,10 +3,10 @@ use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use prost::Message;
 use prost_types::Any;
 
-use crate::methods::encode::encode_to_any;
-use crate::traits::message::DynCosmosMessage;
+use crate::methods::encode_to_any;
+use crate::traits::DynCosmosMessage;
 
-pub const TYPE_URL: &str = "/ibc.core.client.v1.MsgCreateClient";
+const TYPE_URL: &str = "/ibc.core.client.v1.MsgCreateClient";
 
 #[derive(Debug)]
 pub struct CosmosCreateClientMessage {

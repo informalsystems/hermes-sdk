@@ -3,61 +3,31 @@ use core::time::Duration;
 
 use cgp::core::error::CanRaiseAsyncError;
 use cgp::prelude::*;
-use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
-use hermes_chain_type_components::traits::fields::height::{
-    HeightAdjuster, HeightAdjusterComponent, HeightIncrementer, HeightIncrementerComponent,
+use hermes_core::chain_type_components::impls::UseEventsMessageResponse;
+use hermes_core::chain_type_components::traits::{
+    ChainIdTypeProviderComponent, EventTypeProviderComponent, HeightAdjuster,
+    HeightAdjusterComponent, HeightIncrementer, HeightIncrementerComponent,
+    HeightTypeProviderComponent, MessageResponseEventsGetterComponent,
+    MessageResponseTypeComponent, MessageTypeProviderComponent, TimeTypeComponent,
+    TimeoutTypeComponent,
 };
-use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
-use hermes_chain_type_components::traits::types::chain_id::ChainIdTypeProviderComponent;
-use hermes_chain_type_components::traits::types::event::EventTypeProviderComponent;
-use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
-use hermes_chain_type_components::traits::types::message::MessageTypeProviderComponent;
-use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
-use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
-use hermes_chain_type_components::traits::types::timeout::TimeoutTypeComponent;
-use hermes_relayer_components::chain::impls::types::commitment::ProvideBytesPacketCommitment;
-use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCommitmentPrefixBytes;
-use hermes_relayer_components::chain::impls::types::receipt::ProvideBytesPacketReceipt;
-use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
-use hermes_relayer_components::chain::traits::types::block::{
-    BlockHashComponent, BlockTypeComponent, HasBlockType, ProvideBlockHash, ProvideBlockType,
+use hermes_core::relayer_components::chain::impls::{
+    ProvideBytesPacketCommitment, ProvideBytesPacketReceipt, ProvideCommitmentPrefixBytes,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::channel::{
-    ChannelEndTypeComponent, ProvideChannelEndType,
-};
-use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionEndTypeComponent, ProvideConnectionEndType,
-};
-use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetter, GenesisHeightGetterComponent, HasHeightType, HeightFieldComponent,
-    HeightFieldGetter,
-};
-use hermes_relayer_components::chain::traits::types::ibc::{
-    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
-    ProvideChannelIdType, ProvideClientIdType, ProvideConnectionIdType, ProvidePortIdType,
-    ProvideSequenceType, SequenceTypeComponent,
-};
-use hermes_relayer_components::chain::traits::types::message::{
-    HasMessageType, MessageSizeEstimator, MessageSizeEstimatorComponent,
-};
-use hermes_relayer_components::chain::traits::types::packet::{
-    OutgoingPacketTypeComponent, ProvideOutgoingPacketType,
-};
-use hermes_relayer_components::chain::traits::types::packets::ack::{
+use hermes_core::relayer_components::chain::traits::{
     AckCommitmentHashTypeProviderComponent, AcknowledgementTypeProviderComponent,
-};
-use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
-use hermes_relayer_components::chain::traits::types::proof::{
+    BlockHashComponent, BlockTypeComponent, ChainStatusTypeComponent, ChannelEndTypeComponent,
+    ChannelIdTypeComponent, ClientIdTypeComponent, CommitmentPrefixTypeComponent,
     CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
-    CommitmentProofTypeProviderComponent,
-};
-use hermes_relayer_components::chain::traits::types::status::{
-    ChainStatusTypeComponent, ProvideChainStatusType,
-};
-use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimeType, ProvideTimeType, ProvideTimeoutType, TimeMeasurer, TimeMeasurerComponent,
+    CommitmentProofTypeProviderComponent, ConnectionEndTypeComponent, ConnectionIdTypeComponent,
+    GenesisHeightGetter, GenesisHeightGetterComponent, HasBlockType, HasChainId, HasHeightType,
+    HasMessageType, HasTimeType, HeightFieldComponent, HeightFieldGetter, MessageSizeEstimator,
+    MessageSizeEstimatorComponent, OutgoingPacketTypeComponent, PacketCommitmentTypeComponent,
+    PacketReceiptTypeComponent, PortIdTypeComponent, ProvideBlockHash, ProvideBlockType,
+    ProvideChainStatusType, ProvideChannelEndType, ProvideChannelIdType, ProvideClientIdType,
+    ProvideConnectionEndType, ProvideConnectionIdType, ProvideOutgoingPacketType,
+    ProvidePortIdType, ProvideSequenceType, ProvideTimeType, ProvideTimeoutType,
+    SequenceTypeComponent, TimeMeasurer, TimeMeasurerComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::channel::types::packet::Packet;
@@ -74,9 +44,8 @@ use tendermint::block::{Block, Id as BlockId};
 use tendermint::{Hash, Time};
 use time::OffsetDateTime;
 
-use crate::traits::message::CosmosMessage;
-use crate::types::commitment_proof::UseCosmosCommitmentProof;
-use crate::types::status::ChainStatus;
+use crate::traits::CosmosMessage;
+use crate::types::{ChainStatus, UseCosmosCommitmentProof};
 
 pub struct ProvideCosmosChainTypes;
 

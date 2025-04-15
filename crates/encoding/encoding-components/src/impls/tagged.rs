@@ -1,7 +1,8 @@
 use cgp::prelude::*;
 
-use crate::traits::decode_mut::{CanDecodeMut, MutDecoder, MutDecoderComponent};
-use crate::traits::encode_mut::{CanEncodeMut, MutEncoder, MutEncoderComponent};
+use crate::traits::{
+    CanDecodeMut, CanEncodeMut, MutDecoder, MutDecoderComponent, MutEncoder, MutEncoderComponent,
+};
 
 pub struct EncodeTaggedField;
 

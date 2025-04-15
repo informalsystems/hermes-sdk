@@ -3,14 +3,12 @@ use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::event::HasEventType;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_chain_type_components::traits::{HasEventType, HasHeightType};
+use hermes_runtime_components::traits::{CanSleep, HasRuntime};
 
-use crate::traits::queries::block_events::{BlockEventsQuerier, BlockEventsQuerierComponent};
-use crate::traits::queries::chain_status::CanQueryChainHeight;
-use crate::traits::types::poll_interval::HasPollInterval;
+use crate::traits::{
+    BlockEventsQuerier, BlockEventsQuerierComponent, CanQueryChainHeight, HasPollInterval,
+};
 
 pub struct WaitBlockHeightAndQueryEvents<InQuerier>(pub PhantomData<InQuerier>);
 

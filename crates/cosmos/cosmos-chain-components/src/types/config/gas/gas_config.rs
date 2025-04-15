@@ -1,7 +1,7 @@
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use serde::{Deserialize, Serialize};
 
-use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use crate::types::DynamicGasConfig;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct GasPrice {

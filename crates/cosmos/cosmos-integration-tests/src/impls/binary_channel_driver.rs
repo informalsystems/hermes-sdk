@@ -1,21 +1,16 @@
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
-use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
-use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
-use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverTypeAt;
-use hermes_test_components::setup::traits::driver::HasTestDriverType;
-use hermes_test_components::setup::traits::drivers::binary_channel::{
-    BinaryChannelDriverBuilder, BinaryChannelDriverBuilderComponent,
+use hermes_core::relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
+use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_core::relayer_components::multi::traits::relay_at::HasRelayTypeAt;
+use hermes_core::test_components::driver::traits::HasChainDriverTypeAt;
+use hermes_core::test_components::setup::traits::{
+    BinaryChannelDriverBuilder, BinaryChannelDriverBuilderComponent, HasTestDriverType,
 };
+use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
-use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::contexts::relay_driver::CosmosRelayDriver;
+use crate::contexts::{CosmosBinaryChannelTestDriver, CosmosChainDriver, CosmosRelayDriver};
 
 #[cgp_new_provider(BinaryChannelDriverBuilderComponent)]
 impl<Setup> BinaryChannelDriverBuilder<Setup> for BuildCosmosBinaryChannelDriver

@@ -1,4 +1,4 @@
-use crate::chain::types::amount::Amount;
+use crate::chain::types::Amount;
 
 pub struct CosmosWalletConfig {
     pub wallet_id: String,

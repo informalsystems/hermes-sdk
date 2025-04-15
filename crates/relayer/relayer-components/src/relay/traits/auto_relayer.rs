@@ -1,8 +1,8 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::height::HasHeightType;
+use hermes_chain_components::traits::HasHeightType;
 use hermes_chain_components::types::aliases::HeightOf;
 
-use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
+use crate::relay::traits::{HasTargetChainTypes, RelayTarget};
 
 #[cgp_component {
     name: TargetAutoRelayerComponent,

@@ -1,1 +1,2 @@
-pub mod wait;
+mod wait;
+pub use wait::*;

@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::traits::types::schema::HasSchemaType;
+use crate::traits::HasSchemaType;
 
 #[cgp_component {
   provider: SchemaGetter,

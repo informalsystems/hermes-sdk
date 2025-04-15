@@ -1,10 +1,8 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
-use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
-use hermes_chain_type_components::traits::types::message::HasMessageType;
+use hermes_chain_type_components::traits::{HasClientIdType, HasConnectionIdType, HasMessageType};
 
-use crate::traits::types::connection::{
+use crate::traits::{
     HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
     HasInitConnectionOptionsType,

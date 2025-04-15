@@ -1,2 +1,5 @@
-pub mod assert_duration;
-pub mod poll_assert_eventual_amount;
+mod assert_duration;
+pub use assert_duration::*;
+
+mod poll_assert_eventual_amount;
+pub use poll_assert_eventual_amount::*;

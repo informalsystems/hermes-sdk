@@ -1,16 +1,13 @@
 use cgp::prelude::*;
-use hermes_cosmos_test_components::chain_driver::traits::grpc_port::HasGrpcPort;
-use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;
-use hermes_relayer_components::chain::traits::queries::block::CanQueryBlock;
-use hermes_relayer_components::chain::traits::types::block::HasBlockHash;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::height::HasGenesisHeight;
-use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
-use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
-use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_cosmos_test_components::chain_driver::traits::{HasGrpcPort, HasRpcPort};
+use hermes_relayer_components::chain::traits::{
+    CanQueryBlock, HasBlockHash, HasChainId, HasGenesisHeight,
+};
+use hermes_runtime_components::traits::{
+    CanReadFileAsString, CanReserveTcpPort, CanWriteStringToFile, HasRuntime,
+};
+use hermes_test_components::chain_driver::traits::{HasChain, HasChainType};
+use hermes_test_components::driver::traits::HasChainDriverType;
 use toml::Value;
 
 use crate::bootstrap::traits::init_bridge_config::{

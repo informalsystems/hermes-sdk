@@ -1,13 +1,11 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
-    PacketAckCommitmentQuerier, PacketAckCommitmentQuerierComponent,
+use hermes_core::relayer_components::chain::traits::{
+    HasAckCommitmentHashType, HasCommitmentProofType, HasIbcChainTypes, PacketAckCommitmentQuerier,
+    PacketAckCommitmentQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckCommitmentHashType;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::cosmos_host::IBC_QUERY_PATH;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryPacketAcknowledgementFromAbci;
 

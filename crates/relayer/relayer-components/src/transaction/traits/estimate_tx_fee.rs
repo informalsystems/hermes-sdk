@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::transaction::traits::types::fee::HasFeeType;
-use crate::transaction::traits::types::transaction::HasTransactionType;
+use crate::transaction::traits::{HasFeeType, HasTransactionType};
 
 #[cgp_component {
   provider: TxFeeEstimator,

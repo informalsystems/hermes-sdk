@@ -2,7 +2,7 @@ use alloc::vec::Vec;
 
 use cgp::prelude::*;
 
-use crate::traits::types::encoded::{EncodedTypeComponent, ProvideEncodedType};
+use crate::traits::{EncodedTypeComponent, ProvideEncodedType};
 
 pub struct ProvideEncodedBytes;
 

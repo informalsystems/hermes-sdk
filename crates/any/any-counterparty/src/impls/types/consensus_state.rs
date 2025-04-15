@@ -1,13 +1,12 @@
 use cgp::core::Async;
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::status::Time;
-use hermes_relayer_components::chain::traits::types::consensus_state::{
+use hermes_cosmos_chain_components::types::Time;
+use hermes_relayer_components::chain::traits::{
     ConsensusStateFieldComponent, ConsensusStateFieldGetter, ConsensusStateTypeComponent,
-    HasConsensusStateType, ProvideConsensusStateType,
+    HasConsensusStateType, HasTimeType, ProvideConsensusStateType,
 };
-use hermes_relayer_components::chain::traits::types::timestamp::HasTimeType;
 
-use crate::types::consensus_state::AnyConsensusState;
+use crate::types::AnyConsensusState;
 
 pub struct ProvideAnyConsensusState;
 

@@ -1,8 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
+use hermes_chain_type_components::traits::{HasConsensusStateType, HasHeightType};
 
 use crate::traits::commitment::path::send_packet::CanBuildSendPacketCommitmentPath;
 use crate::traits::commitment::value::send_packet::CanBuildSendPacketCommitmentValue;

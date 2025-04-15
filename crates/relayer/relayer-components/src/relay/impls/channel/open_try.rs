@@ -3,24 +3,21 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
-use hermes_chain_components::traits::types::chain_id::HasChainId;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
+use hermes_chain_components::traits::{CanExtractFromMessageResponse, HasChainId};
+use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelInfo;
 
-use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenTryMessage;
-use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenTryPayload;
-use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::traits::types::ibc_events::channel::HasChannelOpenTryEvent;
-use crate::chain::types::aliases::ChannelIdOf;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::channel::open_try::{
-    ChannelOpenTryRelayer, ChannelOpenTryRelayerComponent,
+use crate::chain::traits::{
+    CanBuildChannelOpenTryMessage, CanBuildChannelOpenTryPayload, CanQueryChainHeight,
+    CanQueryClientStateWithLatestHeight, HasChannelOpenTryEvent,
 };
-use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::target::{DestinationTarget, HasDestinationTargetChainTypes};
-use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
+use crate::chain::types::aliases::ChannelIdOf;
+use crate::relay::traits::{
+    CanRaiseRelayChainErrors, CanSendSingleIbcMessage, ChannelOpenTryRelayer,
+    ChannelOpenTryRelayerComponent, DestinationTarget, HasDestinationTargetChainTypes,
+    HasRelayChains, HasRelayClientIds, MainSink,
+};
+use crate::relay::types::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
 
 pub struct MissingChannelTryEventError<'a, Relay>
 where

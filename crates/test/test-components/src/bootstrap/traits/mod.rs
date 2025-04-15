@@ -1,1 +1,2 @@
-pub mod chain;
+mod chain;
+pub use chain::*;

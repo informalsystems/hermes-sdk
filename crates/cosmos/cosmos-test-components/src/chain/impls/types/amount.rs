@@ -1,17 +1,11 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::amount::denom::{
-    AmountDenomGetter, AmountDenomGetterComponent,
+use hermes_core::chain_type_components::traits::{
+    AmountDenomGetter, AmountDenomGetterComponent, AmountTypeProviderComponent, HasAmountType,
+    HasDenomType,
 };
-use hermes_chain_type_components::traits::types::amount::{
-    AmountTypeProviderComponent, HasAmountType,
-};
-use hermes_test_components::chain::traits::types::amount::{
-    AmountMethodsComponent, ProvideAmountMethods,
-};
-use hermes_test_components::chain::traits::types::denom::HasDenomType;
+use hermes_core::test_components::chain::traits::{AmountMethodsComponent, ProvideAmountMethods};
 
-use crate::chain::types::amount::Amount;
-use crate::chain::types::denom::Denom;
+use crate::chain::types::{Amount, Denom};
 
 pub struct UseCosmosAmount;
 

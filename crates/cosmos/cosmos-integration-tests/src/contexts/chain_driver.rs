@@ -4,50 +4,35 @@ use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::{
+use hermes_core::runtime_components::traits::{
+    RuntimeGetter, RuntimeGetterComponent, RuntimeTypeProviderComponent,
+};
+use hermes_core::test_components::chain::traits::{
+    ProposalIdTypeComponent, ProposalStatusTypeComponent,
+};
+use hermes_core::test_components::chain_driver::traits::{
+    ChainGetter, ChainGetterComponent, ChainHomeDirGetter, ChainHomeDirGetterComponent,
+    ChainProcessTaker, ChainProcessTakerComponent, ChainStartupWaiterComponent, ChainTypeProvider,
+    ChainTypeProviderComponent, ConfigUpdater, ConfigUpdaterComponent, DenomGetter,
+    DenomGetterComponent, RandomAmountGeneratorComponent, RelayerWallet, StakingDenom,
+    TransferDenom, UserWallet, ValidatorWallet, WalletGetterComponent, WalletsGetterComponent,
+};
+use hermes_cosmos_chain_components::impls::RelayerConfig;
+use hermes_cosmos_relayer::contexts::CosmosChain;
+use hermes_cosmos_test_components::bootstrap::traits::{
     ChainCommandPathGetter, ChainCommandPathGetterComponent,
 };
-use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
-use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain::types::denom::Denom;
-use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_cosmos_test_components::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
+use hermes_cosmos_test_components::chain::types::{CosmosTestWallet, Denom};
 use hermes_cosmos_test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
-use hermes_cosmos_test_components::chain_driver::traits::grpc_port::{
-    GrpcPortGetter, GrpcPortGetterComponent,
+use hermes_cosmos_test_components::chain_driver::traits::{
+    GrpcPortGetter, GrpcPortGetterComponent, RpcPortGetter, RpcPortGetterComponent,
 };
-use hermes_cosmos_test_components::chain_driver::traits::rpc_port::{
-    RpcPortGetter, RpcPortGetterComponent,
-};
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetter, RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
-use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
-use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
-use hermes_test_components::chain_driver::traits::chain_process::{
-    ChainProcessTaker, ChainProcessTakerComponent,
-};
-use hermes_test_components::chain_driver::traits::config::{ConfigUpdater, ConfigUpdaterComponent};
-use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
-use hermes_test_components::chain_driver::traits::fields::chain_home_dir::{
-    ChainHomeDirGetter, ChainHomeDirGetterComponent,
-};
-use hermes_test_components::chain_driver::traits::fields::denom::{
-    DenomGetter, DenomGetterComponent, StakingDenom, TransferDenom,
-};
-use hermes_test_components::chain_driver::traits::fields::wallet::{
-    RelayerWallet, UserWallet, ValidatorWallet, WalletGetterComponent, WalletsGetterComponent,
-};
-use hermes_test_components::chain_driver::traits::types::chain::{
-    ChainGetter, ChainGetterComponent, ChainTypeProvider, ChainTypeProviderComponent,
-};
-use hermes_test_components::chain_driver::traits::wait::ChainStartupWaiterComponent;
 use tokio::process::Child;
 use toml::to_string_pretty;
 

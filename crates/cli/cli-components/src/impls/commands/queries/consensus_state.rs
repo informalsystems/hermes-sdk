@@ -3,19 +3,16 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_core::relayer_components::build::traits::builders::chain_builder::CanBuildChain;
+use hermes_core::relayer_components::chain::traits::{
+    CanQueryChainHeight, CanQueryConsensusState, CanQueryConsensusStateHeights, HasChainIdType,
+    HasConsensusStateType, HasHeightType,
+};
+use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
 
-use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::CanProduceOutput;
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+};
 
 pub struct RunQueryConsensusStateCommand;
 

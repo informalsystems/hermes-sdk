@@ -3,7 +3,7 @@ use core::task::{Context, Poll};
 use cgp::prelude::*;
 use futures::stream::{Stream, StreamExt};
 use futures::task::noop_waker;
-use hermes_runtime_components::traits::task::{
+use hermes_runtime_components::traits::{
     ConcurrentTaskRunner, ConcurrentTaskRunnerComponent, Task,
 };
 use tokio::task::JoinSet;

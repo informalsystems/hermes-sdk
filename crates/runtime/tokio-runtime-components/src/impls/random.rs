@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::random::{RandomGenerator, RandomGeneratorComponent};
+use hermes_runtime_components::traits::{RandomGenerator, RandomGeneratorComponent};
 use rand::distributions::uniform::SampleUniform;
 use rand::distributions::Standard;
 use rand::prelude::*;

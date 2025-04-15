@@ -1,10 +1,7 @@
 use cgp::prelude::*;
 
-use crate::chain::traits::types::message::HasMessageType;
-use crate::transaction::traits::types::fee::HasFeeType;
-use crate::transaction::traits::types::nonce::HasNonceType;
-use crate::transaction::traits::types::signer::HasSignerType;
-use crate::transaction::traits::types::transaction::HasTransactionType;
+use crate::chain::traits::HasMessageType;
+use crate::transaction::traits::{HasFeeType, HasNonceType, HasSignerType, HasTransactionType};
 
 #[cgp_component {
   provider: TxEncoder,

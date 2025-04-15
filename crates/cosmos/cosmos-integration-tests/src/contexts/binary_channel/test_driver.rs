@@ -1,27 +1,23 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_error::handlers::debug::DebugError;
-use hermes_error::impls::UseHermesError;
-use hermes_ibc_test_suite::traits::CanUseBinaryTestDriverMethods;
-use hermes_logging_components::traits::logger::LoggerComponent;
-use hermes_relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
-use hermes_test_components::driver::traits::channel_at::ChannelIdGetterAtComponent;
-use hermes_test_components::driver::traits::types::chain_driver_at::{
-    ChainDriverGetterAtComponent, ChainDriverTypeProviderAtComponent,
-};
-use hermes_test_components::driver::traits::types::relay_driver_at::{
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::relay_at::RelayTypeProviderAtComponent;
+use hermes_core::test_components::driver::traits::{
+    ChainDriverGetterAtComponent, ChainDriverTypeProviderAtComponent, ChannelIdGetterAtComponent,
     RelayDriverGetterAtComponent, RelayDriverTypeProviderAtComponent,
 };
-use hermes_test_components::setup::traits::port_id_at::PortIdGetterAtComponent;
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_core::test_components::setup::traits::PortIdGetterAtComponent;
+use hermes_error::handlers::DebugError;
+use hermes_error::impls::UseHermesError;
+use hermes_ibc_test_suite::traits::CanUseBinaryTestDriverMethods;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
-use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::contexts::relay_driver::CosmosRelayDriver;
-use crate::impls::test_driver::types::UseCosmosTestTypes;
+use crate::contexts::{CosmosChainDriver, CosmosRelayDriver};
+use crate::impls::UseCosmosTestTypes;
 
 #[cgp_context(CosmosBinaryChannelTestDriverComponents)]
 #[derive(HasField)]

@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 
-use crate::impls::commands::queries::channel_end::QueryChannelEndArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
+use crate::impls::QueryChannelEndArgs;
+use crate::traits::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryChannelSubCommand;
 

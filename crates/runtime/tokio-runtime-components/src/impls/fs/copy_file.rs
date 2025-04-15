@@ -2,8 +2,7 @@ use std::io::Error as IoError;
 use std::path::Path;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::copy_file::{FileCopier, FileCopierComponent};
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::{FileCopier, FileCopierComponent, HasFilePathType};
 use tokio::fs::copy;
 
 pub struct TokioCopyFile;

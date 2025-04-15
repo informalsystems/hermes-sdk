@@ -4,13 +4,10 @@ use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::field::FieldGetter;
 use cgp::core::macros::blanket_trait;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
-use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
-use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
-use hermes_chain_type_components::traits::types::timeout::{HasTimeoutType, TimeoutOf};
+use hermes_chain_type_components::traits::{
+    CanUseCounterparty, HasChannelIdType, HasHeightType, HasOutgoingPacketType, HasPortIdType,
+    HasSequenceType, HasTimeoutType, TimeoutOf,
+};
 
 use crate::types::aliases::{ChannelIdOf, HeightOf, PortIdOf};
 

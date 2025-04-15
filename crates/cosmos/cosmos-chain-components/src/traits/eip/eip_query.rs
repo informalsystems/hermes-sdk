@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use crate::types::DynamicGasConfig;
 
 #[cgp_component {
   provider: EipQuerier,

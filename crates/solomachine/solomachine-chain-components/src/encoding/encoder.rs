@@ -1,6 +1,6 @@
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
-use hermes_encoding_components::impls::encode::convert_and_encode::ConvertAndEncode;
+use hermes_encoding_components::impls::ConvertAndEncode;
 use hermes_protobuf_encoding_components::impls::any::EncodeAsAnyProtobuf;
 use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;

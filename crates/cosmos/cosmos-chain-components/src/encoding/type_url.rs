@@ -4,7 +4,7 @@ use ibc::clients::tendermint::types::{
     TENDERMINT_CLIENT_STATE_TYPE_URL, TENDERMINT_CONSENSUS_STATE_TYPE_URL,
 };
 
-use crate::types::tendermint::{TendermintClientState, TendermintConsensusState};
+use crate::types::{TendermintClientState, TendermintConsensusState};
 
 pub struct CosmosTypeUrlSchemas;
 

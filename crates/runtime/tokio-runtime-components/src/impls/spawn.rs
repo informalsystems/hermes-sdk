@@ -1,8 +1,7 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::spawn::{TaskSpawner, TaskSpawnerComponent};
-use hermes_runtime_components::traits::task::Task;
+use hermes_runtime_components::traits::{Task, TaskSpawner, TaskSpawnerComponent};
 
-use crate::traits::runtime::HasTokioRuntime;
+use crate::traits::HasTokioRuntime;
 
 pub struct TokioSpawnTask;
 

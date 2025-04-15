@@ -1,6 +1,6 @@
 #![allow(non_snake_case)]
 
-use hermes_cosmos_chain_components::methods::encode::{
+use hermes_cosmos_chain_components::methods::{
     encode_any_to_bytes, encode_protobuf, encode_to_any,
 };
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};

@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use ibc::core::host::types::identifiers::ChainId;
 
 use super::secp256k1::{Secp256k1KeyPair, KEYSTORE_FILE_EXTENSION};
-use crate::types::key_types::secp256k1::{KEYSTORE_DEFAULT_FOLDER, KEYSTORE_DISK_BACKEND};
+use crate::types::{KEYSTORE_DEFAULT_FOLDER, KEYSTORE_DISK_BACKEND};
 
 #[derive(Clone, Debug)]
 pub enum KeyRing {

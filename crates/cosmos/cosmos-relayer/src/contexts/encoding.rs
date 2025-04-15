@@ -1,21 +1,14 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::encoding::components::CosmosClientEncodingComponents;
-use hermes_cosmos_chain_components::types::tendermint::{
-    TendermintClientState, TendermintConsensusState,
+use hermes_core::encoding_components::impls::GetDefaultEncoding;
+use hermes_core::encoding_components::traits::{
+    CanConvertBothWays, CanEncodeAndDecode, CanEncodeAndDecodeMut, DefaultEncodingGetter,
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
+    HasDecodeBufferType, HasEncodeBufferType, HasEncodedType, HasEncodingType,
 };
-use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
-use hermes_encoding_components::traits::convert::CanConvertBothWays;
-use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
-use hermes_encoding_components::traits::encode_and_decode_mut::CanEncodeAndDecodeMut;
-use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeProviderComponent, HasEncodingType,
-};
-use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
-use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
-use hermes_encoding_components::traits::types::encoded::HasEncodedType;
-use hermes_encoding_components::types::AsBytes;
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_cosmos_chain_components::encoding::CosmosClientEncodingComponents;
+use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
 use hermes_protobuf_encoding_components::impls::encode_mut::chunk::ProtoChunks;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use ibc::core::client::types::Height;
@@ -25,7 +18,7 @@ use ibc::primitives::Timestamp;
 use prost::bytes::BufMut;
 use prost_types::Any;
 
-use crate::impls::error::HandleCosmosError;
+use crate::impls::HandleCosmosError;
 
 #[cgp_context(CosmosEncodingContextComponents: CosmosClientEncodingComponents)]
 pub struct CosmosEncoding;
@@ -84,13 +77,12 @@ impl CheckCosmosEncoding for CosmosEncoding {}
 
 #[cfg(test)]
 mod test {
-    use hermes_encoding_components::traits::decode::CanDecode;
-    use hermes_encoding_components::traits::encode::CanEncode;
+    use hermes_core::encoding_components::traits::{CanDecode, CanEncode};
     use hermes_error::types::HermesError;
     use ibc::core::client::types::Height;
     use ibc_proto::Protobuf;
 
-    use crate::contexts::encoding::CosmosEncoding;
+    use crate::contexts::CosmosEncoding;
 
     #[test]
     fn test_height_encoding() -> Result<(), HermesError> {

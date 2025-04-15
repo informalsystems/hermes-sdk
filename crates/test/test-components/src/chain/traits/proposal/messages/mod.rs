@@ -1,2 +1,5 @@
-pub mod deposit;
-pub mod vote;
+mod deposit;
+pub use deposit::*;
+
+mod vote;
+pub use vote::*;

@@ -1,9 +1,9 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::commitment_prefix::CommitmentPrefixTypeComponent;
+use hermes_chain_type_components::traits::CommitmentPrefixTypeComponent;
 
-use crate::traits::commitment_prefix::ProvideCommitmentPrefixType;
+use crate::traits::ProvideCommitmentPrefixType;
 
 pub struct ProvideCommitmentPrefixBytes;
 

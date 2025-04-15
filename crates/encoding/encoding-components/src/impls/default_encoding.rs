@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::has_encoding::{EncodingGetter, EncodingGetterComponent, HasDefaultEncoding};
+use crate::traits::{EncodingGetter, EncodingGetterComponent, HasDefaultEncoding};
 
 pub struct GetDefaultEncoding;
 

@@ -1,28 +1,20 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::packet::fields::CanReadPacketFields;
-use hermes_chain_components::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
-use hermes_chain_components::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
-use hermes_chain_components::traits::queries::packet_is_received::CanQueryPacketIsReceived;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_chain_components::traits::{
+    CanBuildPacketFromWriteAck, CanQueryPacketIsCleared, CanQueryPacketIsReceived,
+    CanReadPacketFields,
+};
+use hermes_logging_components::traits::CanLog;
 
-use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
-use crate::relay::impls::packet_relayers::general::full_relay::{
-    LogRelayPacketAction, PerformFullRelay,
+use crate::chain::traits::{CanQueryChainStatus, HasWriteAckEvent};
+use crate::relay::impls::{
+    FilterRelayer, LockPacketRelayer, LogRelayPacketAction, LogRelayPacketStatus,
+    LogSkipRelayLockedPacket, LoggerRelayer, PerformFullRelay, SkipClearedPacket,
 };
-use crate::relay::impls::packet_relayers::general::lock::{
-    LockPacketRelayer, LogSkipRelayLockedPacket,
+use crate::relay::traits::{
+    CanFilterRelayPackets, CanRelayAckPacket, CanRelayReceivePacket,
+    CanRelayTimeoutUnorderedPacket, HasPacketLock, HasRelayChains, HasRelayPacketType,
+    PacketRelayer, PacketRelayerComponent,
 };
-use crate::relay::impls::packet_relayers::general::log::{LogRelayPacketStatus, LoggerRelayer};
-use crate::relay::impls::packet_relayers::skip_cleared::SkipClearedPacket;
-use crate::relay::traits::chains::{HasRelayChains, HasRelayPacketType};
-use crate::relay::traits::packet_filter::CanFilterRelayPackets;
-use crate::relay::traits::packet_lock::HasPacketLock;
-use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent};
-use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
-use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
-use crate::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;
 
 pub struct DefaultPacketRelayer;
 

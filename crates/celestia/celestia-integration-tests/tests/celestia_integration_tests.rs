@@ -2,16 +2,15 @@
 
 use std::sync::Arc;
 
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use hermes_cosmos_integration_tests::contexts::bootstrap::{
-    CosmosBootstrap, CosmosBootstrapFields,
+use hermes_cosmos_chain_components::types::DynamicGasConfig;
+use hermes_cosmos_integration_tests::contexts::{
+    CosmosBinaryChannelSetup, CosmosBootstrap, CosmosBootstrapFields,
 };
 use hermes_cosmos_integration_tests::init::init_test_runtime;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
-use hermes_test_components::setup::traits::run_test::CanRunTest;
+use hermes_test_components::setup::traits::CanRunTest;
 
 // FIXME: Celestia currently can only be bootstrapped using CosmosBootstrap.
 // We need to refactor `CosmosBinaryChannelSetup` to make it support generic

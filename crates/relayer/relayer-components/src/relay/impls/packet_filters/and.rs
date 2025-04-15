@@ -2,8 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::relay::traits::chains::{HasRelayChains, PacketOf};
-use crate::relay::traits::packet_filter::{RelayPacketFilter, RelayPacketFilterComponent};
+use crate::relay::traits::{
+    HasRelayChains, PacketOf, RelayPacketFilter, RelayPacketFilterComponent,
+};
 
 pub struct And<FilterA, FilterB>(pub PhantomData<(FilterA, FilterB)>);
 

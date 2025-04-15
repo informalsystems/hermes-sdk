@@ -1,16 +1,15 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::packet::fields::{
-    HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence,
+use hermes_chain_components::traits::{
+    HasAcknowledgementType, HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence,
 };
-use hermes_chain_components::traits::types::packets::ack::HasAcknowledgementType;
 
-use crate::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
+use crate::chain::traits::CanQueryPacketIsReceived;
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
-use crate::relay::traits::packet_relayers::receive_packet::{
-    ReceivePacketRelayer, ReceivePacketRelayerComponent,
+use crate::relay::traits::{
+    CanRaiseRelayChainErrors, HasRelayChains, PacketOf, ReceivePacketRelayer,
+    ReceivePacketRelayerComponent,
 };
 
 pub struct SkipReceivedPacket<Relayer> {

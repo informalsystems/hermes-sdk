@@ -1,4 +1,11 @@
-pub mod channel;
-pub mod client;
-pub mod connection;
-pub mod packet;
+mod channel;
+pub use channel::*;
+
+mod client;
+pub use client::*;
+
+mod connection;
+pub use connection::*;
+
+mod packet;
+pub use packet::*;

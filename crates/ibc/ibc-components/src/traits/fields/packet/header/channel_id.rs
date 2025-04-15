@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::core::component::WithProvider;
 use cgp::core::field::FieldGetter;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::HasChannelIdType;
 
 use crate::traits::types::packet::header::HasPacketHeaderType;
 

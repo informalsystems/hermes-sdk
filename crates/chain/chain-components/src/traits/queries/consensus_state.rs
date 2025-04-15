@@ -2,14 +2,12 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
-use hermes_chain_type_components::traits::types::ibc::consensus_state::ConsensusStateOf;
+use hermes_chain_type_components::traits::{CanUseCounterparty, ConsensusStateOf, HasClientIdType};
 
 use super::chain_status::CanQueryChainStatus;
-use crate::traits::types::consensus_state::{HasConsensusStateType, HasRawConsensusStateType};
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::proof::HasCommitmentProofType;
+use crate::traits::{
+    HasCommitmentProofType, HasConsensusStateType, HasHeightType, HasRawConsensusStateType,
+};
 use crate::types::aliases::HeightOf;
 
 #[cgp_component {

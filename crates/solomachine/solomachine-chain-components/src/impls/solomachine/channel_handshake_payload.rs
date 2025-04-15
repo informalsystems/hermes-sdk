@@ -1,16 +1,11 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
-use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
-    ChannelOpenAckPayloadBuilder, ChannelOpenAckPayloadBuilderComponent,
+use hermes_relayer_components::chain::traits::{
+    CanQueryChannelEnd, ChannelOpenAckPayloadBuilder, ChannelOpenAckPayloadBuilderComponent,
     ChannelOpenConfirmPayloadBuilder, ChannelOpenConfirmPayloadBuilderComponent,
     ChannelOpenTryPayloadBuilder, ChannelOpenTryPayloadBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::queries::channel_end::CanQueryChannelEnd;
-use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
+    HasClientStateType, HasIbcChainTypes, HasIbcCommitmentPrefix,
 };
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::channel::types::channel::{ChannelEnd, State};
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};

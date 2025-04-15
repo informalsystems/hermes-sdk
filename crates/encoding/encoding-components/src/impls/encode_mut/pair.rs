@@ -3,10 +3,10 @@ use core::marker::PhantomData;
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
 
-use crate::traits::decode_mut::{MutDecoder, MutDecoderComponent};
-use crate::traits::encode_mut::{MutEncoder, MutEncoderComponent};
-use crate::traits::types::decode_buffer::HasDecodeBufferType;
-use crate::traits::types::encode_buffer::HasEncodeBufferType;
+use crate::traits::{
+    HasDecodeBufferType, HasEncodeBufferType, MutDecoder, MutDecoderComponent, MutEncoder,
+    MutEncoderComponent,
+};
 
 pub struct EncoderPair<EncoderA, EncoderB>(pub PhantomData<(EncoderA, EncoderB)>);
 

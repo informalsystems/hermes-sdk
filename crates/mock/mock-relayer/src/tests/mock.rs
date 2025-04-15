@@ -1,9 +1,8 @@
 use alloc::string::String;
 use std::time::Duration;
 
-use hermes_relayer_components::relay::traits::chains::{HasDstClientId, HasSrcClientId};
-use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
-use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_relayer_components::relay::traits::{CanRelayPacket, HasDstClientId, HasSrcClientId};
+use hermes_runtime_components::traits::CanSleep;
 use tracing::info;
 
 use crate::relayer_mock::base::error::Error;

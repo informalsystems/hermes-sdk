@@ -5,9 +5,9 @@ use alloc::vec;
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_chain_type_components::traits::HasMessageResponseType;
 
-use crate::traits::types::message::HasMessageType;
+use crate::traits::HasMessageType;
 
 /**
     This is a simplified interface offered by a chain context or a transaction
