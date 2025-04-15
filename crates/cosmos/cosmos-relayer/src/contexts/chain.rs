@@ -5,7 +5,7 @@ use core::time::Duration;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
+use hermes_any_counterparty::contexts::AnyCounterparty;
 use hermes_chain_type_components::traits::{
     ChainIdGetterComponent, HasEventType, HasMessageResponseType,
     MessageResponseEventsGetterComponent,

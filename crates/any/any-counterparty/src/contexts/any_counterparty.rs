@@ -31,12 +31,11 @@ use hermes_relayer_components::chain::traits::{
     OutgoingPacketTypeComponent, PortIdTypeComponent, SequenceTypeComponent, TimeoutTypeComponent,
 };
 
-use crate::impls::encoding::convert::AnyClientConverterComponents;
-use crate::impls::encoding::encode::AnyClientEncoderComponents;
-use crate::impls::types::client_state::ProvideAnyClientState;
-use crate::impls::types::consensus_state::ProvideAnyConsensusState;
-use crate::types::client_state::AnyClientState;
-use crate::types::consensus_state::AnyConsensusState;
+use crate::impls::{
+    AnyClientConverterComponents, AnyClientEncoderComponents, ProvideAnyClientState,
+    ProvideAnyConsensusState,
+};
+use crate::types::{AnyClientState, AnyConsensusState};
 
 #[cgp_context(AnyCounterpartyComponents)]
 pub struct AnyCounterparty;

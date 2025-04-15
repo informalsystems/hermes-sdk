@@ -9,7 +9,7 @@ use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
 
-use crate::types::client_state::AnyClientState;
+use crate::types::AnyClientState;
 
 pub struct EncodeAnyClientState;
 

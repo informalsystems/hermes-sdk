@@ -6,7 +6,7 @@ use hermes_relayer_components::chain::traits::{
     HasConsensusStateType, HasTimeType, ProvideConsensusStateType,
 };
 
-use crate::types::consensus_state::AnyConsensusState;
+use crate::types::AnyConsensusState;
 
 pub struct ProvideAnyConsensusState;
 

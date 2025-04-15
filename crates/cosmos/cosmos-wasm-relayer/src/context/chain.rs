@@ -2,7 +2,7 @@ use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::prelude::*;
-use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
+use hermes_any_counterparty::contexts::AnyCounterparty;
 use hermes_cosmos_chain_components::traits::{
     CanQueryAbci, CanQueryUnbondingPeriod, GasConfigGetter, GasConfigGetterComponent,
     GrpcAddressGetter, GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,

@@ -6,10 +6,8 @@ use hermes_cosmos_chain_components::types::{
 };
 use hermes_protobuf_encoding_components::types::any::Any;
 
-use crate::impls::encoding::client_state::EncodeAnyClientState;
-use crate::impls::encoding::consensus_state::EncodeAnyConsensusState;
-use crate::types::client_state::AnyClientState;
-use crate::types::consensus_state::AnyConsensusState;
+use crate::impls::{EncodeAnyClientState, EncodeAnyConsensusState};
+use crate::types::{AnyClientState, AnyConsensusState};
 
 pub struct AnyClientConverterComponents;
 

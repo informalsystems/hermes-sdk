@@ -7,7 +7,7 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWr
 use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
-use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
+use hermes_any_counterparty::contexts::AnyCounterparty;
 use hermes_cli_components::impls::{
     CreateClientOptionsParser, CreateClientOptionsParserComponent, CreateConnectionArgs,
     GetDefaultConfigField, LoadTomlConfig, ParseFromOptionalString, ParseFromString,

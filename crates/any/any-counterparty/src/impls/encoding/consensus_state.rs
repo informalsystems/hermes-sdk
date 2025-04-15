@@ -9,7 +9,7 @@ use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
 
-use crate::types::consensus_state::AnyConsensusState;
+use crate::types::AnyConsensusState;
 
 pub struct EncodeAnyConsensusState;
 
