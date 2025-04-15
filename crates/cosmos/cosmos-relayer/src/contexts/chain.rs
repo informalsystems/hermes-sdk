@@ -66,8 +66,9 @@ use hermes_test_components::chain::traits::{
 };
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
-use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
-use hermes_wasm_test_components::traits::chain::upload_client_code::WasmClientCodeUploaderComponent;
+use hermes_wasm_test_components::traits::chain::{
+    StoreCodeMessageBuilderComponent, WasmClientCodeUploaderComponent,
+};
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;

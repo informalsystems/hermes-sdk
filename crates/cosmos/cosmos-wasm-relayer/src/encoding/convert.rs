@@ -5,12 +5,12 @@ use hermes_cosmos_chain_components::types::{
     TendermintConsensusState,
 };
 use hermes_wasm_encoding_components::components::WasmEncodingComponents;
-use hermes_wasm_encoding_components::impls::strategies::consensus_state::{
+use hermes_wasm_encoding_components::impls::{
     DecodeViaWasmConsensusState, EncodeViaWasmConsensusState,
 };
-use hermes_wasm_encoding_components::types::client_message::WasmClientMessage;
-use hermes_wasm_encoding_components::types::client_state::WasmClientState;
-use hermes_wasm_encoding_components::types::consensus_state::WasmConsensusState;
+use hermes_wasm_encoding_components::types::{
+    WasmClientMessage, WasmClientState, WasmConsensusState,
+};
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_proto::ibc::core::commitment::v1::MerkleProof as ProtoMerkleProof;
 use prost_types::Any;

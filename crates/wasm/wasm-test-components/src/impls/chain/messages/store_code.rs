@@ -10,9 +10,7 @@ use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::lightclients::wasm::v1::MsgStoreCode;
 use prost::Message;
 
-use crate::traits::chain::messages::store_code::{
-    StoreCodeMessageBuilder, StoreCodeMessageBuilderComponent,
-};
+use crate::traits::chain::{StoreCodeMessageBuilder, StoreCodeMessageBuilderComponent};
 
 pub struct BuildStoreCodeMessage;
 

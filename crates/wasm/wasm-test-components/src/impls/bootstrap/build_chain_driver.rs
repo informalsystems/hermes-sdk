@@ -22,9 +22,8 @@ use hermes_test_components::chain_driver::traits::{
 };
 use hermes_test_components::driver::traits::HasChainDriverType;
 
-use crate::traits::bootstrap::client_byte_code::HasWasmClientByteCode;
-use crate::traits::bootstrap::gov_authority::HasGovernanceProposalAuthority;
-use crate::traits::chain::upload_client_code::CanUploadWasmClientCode;
+use crate::traits::bootstrap::{HasGovernanceProposalAuthority, HasWasmClientByteCode};
+use crate::traits::chain::CanUploadWasmClientCode;
 
 pub struct BuildChainDriverAndInitWasmClient<InBuilder>(pub PhantomData<InBuilder>);
 

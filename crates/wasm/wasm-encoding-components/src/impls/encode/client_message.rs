@@ -6,7 +6,7 @@ use hermes_encoding_components::impls::{DecodeFrom, EncodeFieldWithGetter};
 use hermes_encoding_components::traits::{MutDecoderComponent, MutEncoderComponent, Transformer};
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
 
-use crate::types::client_message::WasmClientMessage;
+use crate::types::WasmClientMessage;
 
 pub struct EncodeWasmClientMessage;
 

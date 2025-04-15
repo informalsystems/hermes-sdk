@@ -10,9 +10,9 @@ use hermes_encoding_components::traits::{
 };
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
-use hermes_wasm_encoding_components::types::client_message::WasmClientMessage;
-use hermes_wasm_encoding_components::types::client_state::WasmClientState;
-use hermes_wasm_encoding_components::types::consensus_state::WasmConsensusState;
+use hermes_wasm_encoding_components::types::{
+    WasmClientMessage, WasmClientState, WasmConsensusState,
+};
 use ibc::core::client::types::Height;
 use prost_types::Any;
 
@@ -85,7 +85,7 @@ mod test {
     use hermes_error::types::HermesError;
     use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
     use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
-    use hermes_wasm_encoding_components::types::client_state::WasmClientState;
+    use hermes_wasm_encoding_components::types::WasmClientState;
     use ibc::core::client::types::Height;
 
     use crate::context::encoding::WasmCosmosEncoding;

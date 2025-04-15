@@ -56,9 +56,8 @@ use hermes_runtime_components::traits::{
 use hermes_test_components::chain::traits::CanQueryBalance;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;
-use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
-use hermes_wasm_test_components::traits::chain::upload_client_code::{
-    CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
+use hermes_wasm_test_components::traits::chain::{
+    CanUploadWasmClientCode, StoreCodeMessageBuilderComponent, WasmClientCodeUploaderComponent,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;

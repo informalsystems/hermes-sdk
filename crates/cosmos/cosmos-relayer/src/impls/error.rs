@@ -47,7 +47,7 @@ use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_test_components::chain::impls::{
     EventualAmountTimeoutError, MissingSendPacketEventError,
 };
-use hermes_wasm_test_components::impls::chain::upload_client_code::ProposalIdNotFound;
+use hermes_wasm_test_components::impls::chain::ProposalIdNotFound;
 use http::uri::InvalidUri;
 use ibc::clients::tendermint::types::error::TendermintClientError;
 use ibc::core::channel::types::error::ChannelError;

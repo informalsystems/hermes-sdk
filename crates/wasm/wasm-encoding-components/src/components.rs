@@ -20,12 +20,8 @@ mod preset {
     use ibc::core::client::types::Height;
     use prost_types::Any;
 
-    use crate::impls::encode::client_message::EncodeWasmClientMessage;
-    use crate::impls::encode::client_state::EncodeWasmClientState;
-    use crate::impls::encode::consensus_state::EncodeWasmConsensusState;
-    use crate::types::client_message::WasmClientMessage;
-    use crate::types::client_state::WasmClientState;
-    use crate::types::consensus_state::WasmConsensusState;
+    use crate::impls::{EncodeWasmClientMessage, EncodeWasmClientState, EncodeWasmConsensusState};
+    use crate::types::{WasmClientMessage, WasmClientState, WasmConsensusState};
 
     cgp_preset! {
         WasmEncodingComponents {

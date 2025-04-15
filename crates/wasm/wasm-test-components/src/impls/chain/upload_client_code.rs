@@ -7,9 +7,8 @@ use hermes_cosmos_chain_components::types::AbciEvent;
 use hermes_relayer_components::chain::traits::CanSendSingleMessage;
 use hermes_test_components::chain::traits::HasProposalIdType;
 
-use crate::traits::chain::messages::store_code::CanBuildStoreCodeMessage;
-use crate::traits::chain::upload_client_code::{
-    WasmClientCodeUploader, WasmClientCodeUploaderComponent,
+use crate::traits::chain::{
+    CanBuildStoreCodeMessage, WasmClientCodeUploader, WasmClientCodeUploaderComponent,
 };
 
 pub struct SendStoreCodeProposalMessage;

@@ -3,7 +3,7 @@ use hermes_encoding_components::impls::{DecodeFrom, EncodeField};
 use hermes_encoding_components::traits::{MutDecoderComponent, MutEncoderComponent, Transformer};
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
 
-use crate::types::consensus_state::WasmConsensusState;
+use crate::types::WasmConsensusState;
 
 pub struct EncodeWasmConsensusState;
 

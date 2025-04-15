@@ -20,9 +20,9 @@ use hermes_relayer_components::chain::traits::{
     PortIdTypeComponent, SequenceTypeComponent, TimeoutTypeComponent,
 };
 use hermes_wasm_encoding_components::components::*;
-use hermes_wasm_encoding_components::types::client_state::WasmClientState;
+use hermes_wasm_encoding_components::types::WasmClientState;
 
-use crate::impls::types::client_state::ProvideWasmClientState;
+use crate::impls::ProvideWasmClientState;
 
 #[cgp_context(WasmCounterpartyComponents)]
 pub struct WasmCounterparty;

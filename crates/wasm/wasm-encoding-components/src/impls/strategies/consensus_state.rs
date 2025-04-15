@@ -6,7 +6,7 @@ use hermes_encoding_components::traits::{
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 
-use crate::types::consensus_state::WasmConsensusState;
+use crate::types::WasmConsensusState;
 
 pub struct EncodeViaWasmConsensusState;
 pub struct DecodeViaWasmConsensusState;

@@ -32,11 +32,12 @@ use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProvi
 use hermes_test_components::chain_driver::traits::ChainTypeProviderComponent;
 use hermes_test_components::driver::traits::ChainDriverTypeProviderComponent;
 use hermes_tracing_logging_components::contexts::TracingLogger;
-use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
-use hermes_wasm_test_components::impls::bootstrap::genesis_config::ModifyWasmGenesisConfig;
-use hermes_wasm_test_components::impls::bootstrap::node_config::ModifyWasmNodeConfig;
-use hermes_wasm_test_components::traits::bootstrap::client_byte_code::WasmClientByteCodeGetterComponent;
-use hermes_wasm_test_components::traits::bootstrap::gov_authority::GovernanceProposalAuthorityGetterComponent;
+use hermes_wasm_test_components::impls::bootstrap::{
+    BuildChainDriverAndInitWasmClient, ModifyWasmGenesisConfig, ModifyWasmNodeConfig,
+};
+use hermes_wasm_test_components::traits::bootstrap::{
+    GovernanceProposalAuthorityGetterComponent, WasmClientByteCodeGetterComponent,
+};
 
 /**
    A bootstrap context for bootstrapping a new Cosmos chain, and builds

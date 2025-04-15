@@ -7,7 +7,7 @@ use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::encode::EncodeLengthDelimitedProtoField;
 use ibc::core::client::types::Height;
 
-use crate::types::client_state::WasmClientState;
+use crate::types::WasmClientState;
 
 pub struct EncodeWasmClientState;
 
