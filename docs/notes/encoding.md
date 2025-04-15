@@ -142,3 +142,75 @@ pub trait CanDecodeMut<Strategy, Value>: HasDecodeBufferType + HasAsyncErrorType
 ```
 
 Compared to the simple versions, the `CanEncodeMut` and `CanDecodeMut` traits accept mutable `EncodeBuffer` and `DecodeBuffer` thtat can be modified during the encoding process.
+
+It is usually possible to define generic implementations of `CanEncode` and `CanDecode` that calls `CanEncodeMut` and `CanDecodeMut`, and perform conversion between the `Encoded` abstract type and the `EncodeBuffer` and `DecodeBuffer` abstract types. As a result, once we have implemented `CanEncodeMut` and `CanDecodeMut` for a given `Value`, we can usually also get the `CanEncode` and `CanDecode` implementations for free.
+
+## Encoder Composition
+
+With CGP, the encoding framework in Hermes SDK allows highly generic encoding implementations to be defined and composed easily. We will now take a look at how encoding composition is done.
+
+Typically, an encoding scheme like Protobuf would be made of manual implementation of primitive values, such as `u64` and `String`. Once the primitive encoders are implemented, we can then compose them to build higher level encoders for specific data types.
+
+For example, given the Cosmos `Height` type:
+
+```rust
+#[derive(HasField, HasFields)]
+pub struct Height {
+    pub revision_number: u64,
+    pub revision_height: u64,
+}
+```
+
+We know that the encoding of this data type is consist of encoding two separate `u64` fields. So if the encoding context implements `CanEncodeMut<Strategy, u64>`, and if we know how to combine multiple encoded fields together, then we can derive the implementation of this data type automatically.
+
+CGP provides two traits that can help us implement datatype-generic encoders. The `HasField` trait provides accessors to read the fields in a struct, while the `HasFields` trait provides conversion of data types into generic representation. For the example `Height` type, the following implementations are derived:
+
+```rust
+impl HasField<symbol!("revision_number")> for Height {
+    type Value = u64;
+}
+
+impl HasField<symbol!("revision_height")> for Height {
+    type Value = u64;
+}
+
+impl HasFields for Height {
+    type Fields = Product![
+        Field<symbol!("revision_number"), u64>,
+        Field<symbol!("revision_height"), u64>,
+    ];
+}
+```
+
+Using the derived implementations, we can now reduce the problem of encoding a specific data type into encoding general product and sum types.
+
+For simplicity, we will first look at how to encode a type like `Product![u64, u64]`. Recall that the expanded form is the type-level list `Cons<u64, Cons<u64, Nil>>`. For every step of the encoding, we want to consider the head of the list, and then the remainder.
+
+We would define a `ProductEncoder` that satisfies the following constraints:
+
+- `ProductEncoder: MutEncoder<Encoding, Strategy, Cons<u64, Cons<u64, Nil>>>`, if:
+    - `Encoding: CanEncodeMut<Strategy, u64>`
+    - `ProductEncoder: MutEncoder<Encoding, Strategy, Cons<u64, Nil>>`, if:
+        - `Encoding: CanEncodeMut<Strategy, u64>`
+        - `ProductEncoder: MutEncoder<Encoding, Strategy, Nil>`
+
+To implement such an encoder, we first implement the terminal case, when the list is just `Nil`:
+
+```rust
+impl<Encoding, Strategy> MutEncoder<Encoding, Strategy, Nil> for ProductEncoder
+```
+
+After that, we implement the recursive case for processing the head of a list:
+
+```rust
+impl<Encoding, Strategy, Value, Tail> MutEncoder<Encoding, Strategy, Cons<Value, Tail>> for ProductEncoder
+where
+    Encoding: CanEncodeMut<Strategy, Value>,
+    ProductEncoder: MutEncoder<Encoding, Strategy, Tail>,
+    ...
+```
+
+We can see that this generic implementation could be used for the list we have:
+
+- `Cons<u64, Cons<u64, Nil>>` would have `Value = u64` and `Tail = Cons<u64, Nil>`
+- `Cons<u64, Nil>` would have `Value = u64` and `Tail = Nil`
