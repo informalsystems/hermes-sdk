@@ -3,6 +3,8 @@
 resolver = "2"
 
 members = [
+    "crates/core",
+
     "crates/chain/chain-components",
     "crates/chain/chain-type-components",
 
@@ -124,6 +126,8 @@ sha2                            = { version = "0.10.8" }
 secp256k1                       = { version = "0.28.2" }
 ics23                           = { version = "0.12" }
 
+hermes-core                             = { version = "0.1.0" }
+
 hermes-runtime-components               = { version = "0.1.0" }
 hermes-async-runtime-components         = { version = "0.1.0" }
 hermes-tokio-runtime-components         = { version = "0.1.0" }
@@ -193,6 +197,8 @@ cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git
 cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
+
+hermes-core                 = { path = "./crates/core" }
 
 hermes-chain-components             = { path = "./crates/chain/chain-components" }
 hermes-chain-type-components        = { path = "./crates/chain/chain-type-components" }

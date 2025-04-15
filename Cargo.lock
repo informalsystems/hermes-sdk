@@ -1557,6 +1557,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-core"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-chain-components",
+ "hermes-chain-type-components",
+ "hermes-encoding-components",
+ "hermes-logging-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-runtime-components",
+ "hermes-test-components",
+]
+
+[[package]]
 name = "hermes-cosmos-chain-components"
 version = "0.1.0"
 dependencies = [
