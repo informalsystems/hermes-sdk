@@ -35,3 +35,47 @@ The main consideration here is that as long as there are strong boundaries betwe
 When starting new sub-projects, it is also common to crate just a single crate that contains code from all levels. This approach is also acceptable if the developer prefers, but it is encouraged to split the crates later on when the amount of code become large.
 
 The main risk of monolithic crate is that it becomes very easy to write context-specific code that is mixed within context-generic code. When that happens, it may become challenging to untangle and determine which code is reusable and which code is not. So if that happens often enough, the crate should be split to separate the code at different levels.
+
+## Crates Overview
+
+This section gives an overview of the crates currently present in Hermes SDK.
+
+### Fully Abstract Core Crates
+
+- `hermes-encoding-components` - Contains encoding-agnostic traits that can be used to implement any encoding.
+- `hermes-logging-components` - Contains abstract logging traits that can be used by any abstract code to perform logging.
+- `hermes-runtime-components` - Contains abstract async runtime traits to decouple the async code from concrete async runtimes such as Tokio.
+- `hermes-chain-type-components` - Contains abstract chain types that can be used for both on-chain and off-chain implementations.
+    - The original plan was to use this crate also for a CGP-based on-chain IBC implementation, but the plan has now been dropped.
+- `hermes-chain-components` - Contains abstract chain traits that are used mainly for off-chain implementations such as the relayer.
+    - Some type traits can and should be moved to `hermes-chain-type-components`, but they are here for legacy reasons.
+- `hermes-relayer-components` - Contains core relayer logic that can be used to build a minimal IBC relayer.
+- `hermes-relayer-components-extra` - Contains extra relayer logic that can be used to enhance relayer performance, such as batched relaying logic.
+- `hermes-test-components` - Contains abstract test traits that can be used to setup E2E integration tests.
+- `hermes-cli-components` - Contains CLI traits for building CLI applications.
+- `hermes-test-suite` - Contains abstract E2E tests that can be used to run E2E tests for any concrete relayer implementation.
+
+### Context-Generic Providers
+
+- `hermes-protobuf-encoding-components` - Contains Protobuf-specific encoding providers.
+- `hermes-tracing-logging-components` - Contains Tracing-specific logging providers, together with `Logger` implementation for `Details` types that are defined in `hermes-relayer-components`.
+- `hermes-async-runtime-components` - Contains async runtime providers that use the `futures` crate.
+- `hermes-tokio-runtime-components` - Contains Tokio-specific runtime providers.
+- `hermes-comet-light-client-components` - Contains the Comet light client providers for fetching light client blocks from the chain.
+- `hermes-cosmos-chain-components` - Contains core Cosmos client providers for implementing a Cosmos chain to support relaying.
+- `hermes-cosmos-test-components` - Contains additional Cosmos test providers for setting up a Cosmos chain for local E2E tests.
+- `hermes-cosmos-chain-preset` - Contains component presets that combines providers from `hermes-cosmos-chain-components` and `hermes-cosmos-test-components`.
+- `hermes-wasm-client-components` - Contains Wasm client providers for implementing a Cosmos chain with Wasm client support.
+- `hermes-wasm-test-components` - Contains test providers that also setup Wasm IBC clients during bootstrapping.
+- `hermes-wasm-encoding-components` - Contains encoding providers for implementing encoding for Wasm-wrapped IBC types.
+
+### Concrete Contexts
+
+- `hermes-error` - Contains the `HermesError` type, which is a lightweight wrapper around `eyre::Error` with additional retryable flag.
+- `hermes-runtime` - Contains the `HermesRuntime` type, which is a lightweight wrapper around `tokio::Runtime` that implements the CGP runtime traits.
+- `hermes-comet-light-client-context` - Contains the concrete Comet light client used for fetching and verifying light client blocks.
+- `hermes-cosmos-relayer` - Contains the concrete Cosmos chain and relayer types, with full support for Cosmos-to-Cosmos relaying.
+- `hermes-cosmos-wasm-relayer` - Contains Wasm variant of the Cosmos chain and relayer, to suport relaying between a pure Cosmos chain and a Cosmos chain that uses the Wasm Tendermint client.
+    - This is mainly used for testing the compatibility of Wasm IBC clients and the Rust implementation of Tendermint.
+- `hermes-cosmos-integration-tests` - Contains the concrete contexts for bootstrapping and testing Cosmos chains.
+- `hermes-cli` - Contains the concrete CLI application for running a Cosmos-to-Cosmos relayer from the CLI.
