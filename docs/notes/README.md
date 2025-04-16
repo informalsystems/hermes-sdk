@@ -12,4 +12,5 @@
 
 ## Relayer Architecture
 
+- [Crate Organization](./crate-organization.md)
 - [Encoding](./encoding.md)
