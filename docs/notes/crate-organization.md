@@ -30,7 +30,7 @@ The main confusion here is that the new developer sees that all the Cosmos-speci
 
 The right solution to resolve the conflict is that the new developer should add the context-specific implementation directly in the `hermes-cosmos-relayer` crate. Even though this is less than ideal, the trade off is acceptable if the main priority is in shipping code. Of course, there is a risk that eventually, a crate like `hermes-cosmos-relayer` could become so bloated with context-specific code it is preventing the same code to be reused for other use cases. But we could take action later to refactor the context-specific code to become context-generic, and move them back to `hermes-cosmos-chain-components` when that happens.
 
-The main consideration here is that as long as there are strong boundaries between different crate levels, it will be clearer on which code is context-generic and which code is context-specific, which in turns make it easier to identify and refactor code at a later time.
+The main consideration here is that as long as there are strong boundaries between different crate levels, it will be clearer which code is context-generic and which is context-specific, which in turns make it easier to identify and refactor code at a later time.
 
 When starting new sub-projects, it is also common to crate just a single crate that contains code from all levels. This approach is also acceptable if the developer prefers, but it is encouraged to split the crates later on when the amount of code become large.
 
@@ -75,7 +75,7 @@ This section gives an overview of the crates currently present in Hermes SDK.
 - `hermes-runtime` - Contains the `HermesRuntime` type, which is a lightweight wrapper around `tokio::Runtime` that implements the CGP runtime traits.
 - `hermes-comet-light-client-context` - Contains the concrete Comet light client used for fetching and verifying light client blocks.
 - `hermes-cosmos-relayer` - Contains the concrete Cosmos chain and relayer types, with full support for Cosmos-to-Cosmos relaying.
-- `hermes-cosmos-wasm-relayer` - Contains Wasm variant of the Cosmos chain and relayer, to suport relaying between a pure Cosmos chain and a Cosmos chain that uses the Wasm Tendermint client.
+- `hermes-cosmos-wasm-relayer` - Contains Wasm variant of the Cosmos chain and relayer, to support relaying between a pure Cosmos chain and a Cosmos chain that uses the Wasm Tendermint client.
     - This is mainly used for testing the compatibility of Wasm IBC clients and the Rust implementation of Tendermint.
 - `hermes-cosmos-integration-tests` - Contains the concrete contexts for bootstrapping and testing Cosmos chains.
 - `hermes-cli` - Contains the concrete CLI application for running a Cosmos-to-Cosmos relayer from the CLI.

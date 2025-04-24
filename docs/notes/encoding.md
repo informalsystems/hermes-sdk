@@ -4,11 +4,11 @@ Hermes SDK uses a CGP-based encoding framework to provide a modular and composab
 
 ## Problem Statement
 
-As a chain client, Hermes SDK needs to support encoding of data types across different encoding schemes, including Protobuf, Cairo, JSON, and Borsh. Furthermore, the encoding can sometimes come with different "flavors", such as wrapping an protobuf-encoded payload inside an `Any`, and then encoding the payload again.
+As a chain client, Hermes SDK needs to support encoding of data types across different encoding schemes, including Protobuf, Cairo, JSON, and Borsh. Furthermore, the encoding can sometimes come with different "flavors", such as wrapping a protobuf-encoded payload inside an `Any`, and then encoding the payload again.
 
 More generally, encoding schemes can sometimes interleave with each other, such as encoding a value with JSON, putting it inside a wrapper that is then encoded with Protobuf.
 
-Traditionally, different encodings tend to be implemented as separate libraries, each having their own ways of designing the APIs. This result in a lot of ad hoc code written to call each encoding library in their own convention. Furthermore, the encoding libraries tend to require additional encoding traits, such as `Serialize` or `BorshSerialize`, to be derived on a data type. This makes it challenging to define domain types that can be usable with all encodings, as the domain types would then become bloated with derivations and dependencies that may not necessary be needed by everyone.
+Traditionally, different encodings tend to be implemented as separate libraries, each having their own ways of designing the APIs. This result in a lot of ad hoc code written to call each encoding library in their own convention. Furthermore, the encoding libraries tend to require additional encoding traits, such as `Serialize` or `BorshSerialize`, to be derived on a data type. This makes it challenging to define domain types that can be usable with all encodings, as the domain types would then become bloated with derivations and dependencies that may not necessarily be needed by everyone.
 
 The CGP approach used in Hermes SDK offers a universal interface to support all encodings the same way. We will next look at how this is done.
 
@@ -16,11 +16,11 @@ The CGP approach used in Hermes SDK offers a universal interface to support all 
 
 Encodings in Hermes SDK are implemented as encoding contexts. The context makes use of CGP to wire up context-generic encoding providers, to form an encoding implementation for a specific chain.
 
-Most of the time, the decision of defining multiple encoding contexts depends on whether each context requires different wirings. Unlike general encoding libraries, an encoding context can usually encode specific data types that have been wired with it. For example, the `CosmosEncoding` context knows how to encode a `TendermintClientState` with protobuf, but it won't be able to encode an external type that have not been wired, such as `EthereumClientState`.
+Most of the time, the decision of defining multiple encoding contexts depends on whether each context requires different wirings. Unlike general encoding libraries, an encoding context can usually encode specific data types that have been wired with it. For example, the `CosmosEncoding` context knows how to encode a `TendermintClientState` with protobuf, but it won't be able to encode external types that have not been wired, such as `EthereumClientState`.
 
-As a result, if some external code need to support new types such as `EthereumClientState`, they would not able to reuse existing encoding contexts such as `CosmosEncoding`. However, we could define a new encoding context such as `CosmosEthereumEncoding`, and make it _extend_ from existing encoding [presets](./presets.md) that are shared with `CosmosEncoding`.
+As a result, if some external code needs to support new types such as `EthereumClientState`, they would not able to reuse existing encoding contexts such as `CosmosEncoding`. However, we could define a new encoding context such as `CosmosEthereumEncoding`, and make it _extend_ from existing encoding [presets](./presets.md) that are shared with `CosmosEncoding`.
 
-Usually, an encoding context can be consist of an empty struct with no field. This is because most of the encodings do not require additional metadata to perform the encoding or decoding. However, sometimes an encoding may require additional metadata, such as schema information or contract addresses, in order for the encoding to be done correctly. In these cases, the encoding context may contain additional fields that can be used by the encoding providers through dependency injection.
+Usually, an encoding context can consist of an empty struct with no field. This is because most of the encodings do not require additional metadata to perform the encoding or decoding. However, sometimes an encoding may require additional metadata, such as schema information or contract addresses, in order for the encoding to be done correctly. In these cases, the encoding context may contain additional fields that can be used by the encoding providers through dependency injection.
 
 ## `HasEncoding`
 
@@ -54,7 +54,7 @@ pub trait HasDefaultEncoding<Kind>: HasEncodingType<Kind, Encoding: 'static> {
 
 Compared to `HasEncoding`, `HasDefaultEncoding` do not require a `&self` parameter to get the encoding context. In other words, we can think of there being a "singleton" or "global" encoding context that can always be accessed anywhere.
 
-To implement `HasDefaultEncoding`, the encoding context typically needs to be an empty struct, so that it can be trivally be constructed at compile time. This also means that the encoding context cannot depend on additional values, such as contract classes.
+To implement `HasDefaultEncoding`, the encoding context typically needs to be an empty struct, so that it can be trivally constructed at compile time. This also means that the encoding context cannot depend on additional values, such as contract classes.
 
 The `HasDefaultEncoding` trait is mainly used to get the counterparty encoding context, from chain providers that only have access to the local chain context.
 
@@ -90,7 +90,7 @@ The `CanEncode` and `CanDecode` traits are the simplest encoding traits that can
 
 The traits are also parameterized by a `Strategy` tag type, which allows different versions of encoders for the same `Value` type to co-exist. The `Strategy` type only acts as a tag, and is typically named based on the encoding scheme used. For example, the `ViaProtobuf` strategy is used by convention to encode values into bytes following the Protobuf encoding format.
 
-The encoding methods on these traits are pretty straightforward. The `encode` method takes a reference to `Value`, and try to encode it into the `Encoded` form. In reverse, the `decode` method takes a reference to `Encoded`, and returns a new owned `Value` if the encoding is successful.
+The encoding methods on these traits are pretty straightforward. The `encode` method takes a reference to `Value`, and tries to encode it into the `Encoded` form. In reverse, the `decode` method takes a reference to `Encoded`, and returns a new owned `Value` if the encoding is successful.
 
 Based on the method signatures, we can see that the way the references are used means that the encoding may not always be done the most efficiently. For example, since `encode` borrows the `Value`, it may need to clone the value if it needs to make use of `From` to convert the value into some other form, before the actual encoding is done. Nevertheless, these traits serve as a good starting point for implementing naive encoders, without introducing too steep learning curves to the developers.
 
@@ -130,9 +130,9 @@ pub trait CanDecodeMut<Strategy, Value>: HasDecodeBufferType + HasAsyncErrorType
 }
 ```
 
-Compared to the simple versions, the `CanEncodeMut` and `CanDecodeMut` traits accept mutable `EncodeBuffer` and `DecodeBuffer` thtat can be modified during the encoding process.
+Compared to the simple versions, the `CanEncodeMut` and `CanDecodeMut` traits accept mutable `EncodeBuffer` and `DecodeBuffer` that can be modified during the encoding process.
 
-It is usually possible to define generic implementations of `CanEncode` and `CanDecode` that calls `CanEncodeMut` and `CanDecodeMut`, and perform conversion between the `Encoded` abstract type and the `EncodeBuffer` and `DecodeBuffer` abstract types. As a result, once we have implemented `CanEncodeMut` and `CanDecodeMut` for a given `Value`, we can usually also get the `CanEncode` and `CanDecode` implementations for free.
+It is usually possible to define generic implementations of `CanEncode` and `CanDecode` that call `CanEncodeMut` and `CanDecodeMut`, and perform conversion between the `Encoded` abstract type and the `EncodeBuffer` and `DecodeBuffer` abstract types. As a result, once we have implemented `CanEncodeMut` and `CanDecodeMut` for a given `Value`, we can usually also get the `CanEncode` and `CanDecode` implementations for free.
 
 ## Encoder Composition
 
@@ -345,10 +345,10 @@ However in practice, we find that the savings achieved by such converter encoder
 
 ## Future Improvements
 
-The encoding framework in Hermes SDK has only reached an MVP status, and it is not very well polished at the current state. Technically, the encoding problem is a more general problem than building a cross-chain relayer. We also do not much room or priority to iterate on the encoding design.
+The encoding framework in Hermes SDK has only reached an MVP status, and it is not very well polished at the current state. Technically, the encoding problem is a more general problem than building a cross-chain relayer. We also do not have much room or priority to iterate on the encoding design.
 
 On the other hand, the encoding approaches we used in Hermes SDK will likely evolve externally and become a generalized CGP library for encoding. This may happen in few months time, and we may come up with more polished design with potential breaking changes.
 
 However, given the current status of the project, the developers for Hermes SDK may not have the capacity to migrate to use this improved encoding framework. This means that whatever that is currently designed and implemented in Hermes SDK will likely stay, even when better alternatives become available.
 
-This section mainly serves as a historical note for future readers, in case you wondered why Hermes SDK is having its own encoding framework even when the new CGP encoding framework is released. If the future team is adventerous enough, I hope that this document will help the team to migrate to any new approaches that are offered by the CGP project.
+This section mainly serves as a historical note for future readers, in case you wondered why Hermes SDK is having its own encoding framework even when the new CGP encoding framework is released. If the future team is adventurous enough, I hope that this document will help the team to migrate to any new approaches that are offered by the CGP project.
