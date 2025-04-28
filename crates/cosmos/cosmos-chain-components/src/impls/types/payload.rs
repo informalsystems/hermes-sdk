@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::impls::{
     ProvideChannelPayloadTypes, ProvideConnectionPayloadTypes, ProvidePacketPayloadTypes,
 };
@@ -11,6 +10,7 @@ use hermes_core::relayer_components::chain::traits::{
     ProvideUpdateClientPayloadType, ReceivePacketPayloadTypeComponent,
     TimeoutUnorderedPacketPayloadTypeComponent, UpdateClientPayloadTypeComponent,
 };
+use hermes_prelude::*;
 
 use crate::types::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
 

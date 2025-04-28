@@ -1,9 +1,9 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_cosmos_test_components::bootstrap::traits::{
     CosmosGenesisConfigModifier, CosmosGenesisConfigModifierComponent,
 };
+use hermes_prelude::*;
 use serde_json::Value;
 
 pub struct ModifyWasmGenesisConfig<InModifier>(pub PhantomData<InModifier>);

@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hdpath::StandardHDPath;
+use hermes_prelude::*;
 
 #[cgp_component {
   name: WalletHdPathComponent,

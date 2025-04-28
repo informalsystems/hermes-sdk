@@ -4,7 +4,6 @@ use cgp::core::component::UseDelegate;
 use cgp::core::error::{
     ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent,
 };
-use cgp::prelude::*;
 use eyre::Report;
 use hermes_core::relayer_components::error::traits::RetryableErrorComponent;
 use hermes_cosmos_core::error::handlers::{
@@ -16,6 +15,7 @@ use hermes_cosmos_core::ibc::clients::tendermint::types::error::TendermintClient
 use hermes_cosmos_core::ibc::core::channel::types::error::ChannelError;
 use hermes_cosmos_core::ibc::core::host::types::error::{DecodingError, IdentifierError};
 use hermes_cosmos_core::runtime::types::error::TokioRuntimeError;
+use hermes_prelude::*;
 use tonic::transport::Error as TransportError;
 
 pub struct ProvideCliError;

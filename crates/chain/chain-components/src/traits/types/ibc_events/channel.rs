@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasChannelIdType;
+use hermes_prelude::*;
 
 #[cgp_component {
   name: ChannelOpenInitEventComponent,

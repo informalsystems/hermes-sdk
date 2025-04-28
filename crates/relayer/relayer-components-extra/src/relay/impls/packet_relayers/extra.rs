@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_logging_components::traits::CanLog;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     CanBuildPacketFromWriteAck, CanQueryChainStatus, CanQueryPacketIsCleared,
     CanQueryPacketIsReceived, CanReadPacketFields, HasWriteAckEvent,

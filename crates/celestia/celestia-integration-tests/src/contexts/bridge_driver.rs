@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_celestia_test_components::bridge_driver::traits::bridge_auth_token::{
     BridgeAuthTokenGetter, BridgeAuthTokenGetterComponent, BridgeAuthTokenTypeComponent,
     ProvideBridgeAuthTokenType,
@@ -7,6 +6,7 @@ use hermes_celestia_test_components::bridge_driver::traits::bridge_rpc_port::{
     BridgeRpcPortGetter, BridgeRpcPortGetterComponent,
 };
 use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
+use hermes_prelude::*;
 use tokio::process::Child;
 
 #[cgp_context(CelestiaBridgeDriverComponents)]

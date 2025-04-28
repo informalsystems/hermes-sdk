@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::{HasHeightType, HasTimeoutType};
 use hermes_core::relayer_components::chain::traits::{
     HasChannelIdType, HasOutgoingPacketType, HasPortIdType, HasSequenceType,
@@ -8,6 +7,7 @@ use hermes_core::relayer_components::chain::traits::{
     PacketSrcPortIdGetterComponent, PacketTimeoutHeightGetter, PacketTimeoutHeightGetterComponent,
     PacketTimeoutTimestampGetter, PacketTimeoutTimestampGetterComponent,
 };
+use hermes_prelude::*;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::channel::types::timeout::{TimeoutHeight, TimeoutTimestamp};
 use ibc::core::client::types::Height;

@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_cli_components::impls::{
     QueryChainSubCommand, QueryClientSubCommand, QueryClientsArgs, QueryConnectionSubCommand,
     QueryWalletSubCommand,
@@ -6,6 +5,7 @@ use hermes_cli_components::impls::{
 use hermes_cli_components::traits::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
+use hermes_prelude::*;
 
 mod connections;
 pub use connections::QueryConnections;

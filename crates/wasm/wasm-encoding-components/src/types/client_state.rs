@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use ibc::core::client::types::Height;
 
 #[derive(Clone, Debug, HasField, PartialEq, Eq)]

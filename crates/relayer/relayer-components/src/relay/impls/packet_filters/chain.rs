@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::{CanFilterIncomingPacket, CanFilterOutgoingPacket};
+use hermes_prelude::*;
 
 use crate::relay::traits::{
     CanRaiseRelayChainErrors, HasRelayChains, PacketOf, RelayPacketFilter,

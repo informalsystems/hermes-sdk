@@ -1,8 +1,8 @@
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use futures::lock::Mutex;
+use hermes_prelude::*;
 
 use crate::transaction::traits::{
     HasSignerType, NonceAllocationMutexGetter, NonceAllocationMutexGetterComponent,

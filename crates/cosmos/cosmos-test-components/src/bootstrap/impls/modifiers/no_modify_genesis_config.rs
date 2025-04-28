@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use serde_json::Value;
 
 use crate::bootstrap::traits::{CosmosGenesisConfigModifier, CosmosGenesisConfigModifierComponent};

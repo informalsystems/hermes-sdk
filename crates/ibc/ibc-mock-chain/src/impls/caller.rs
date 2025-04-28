@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_ibc_components::traits::fields::caller::{CallerGetter, CallerGetterComponent};
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

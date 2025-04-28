@@ -13,7 +13,6 @@ use core::marker::PhantomData;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::WithField;
 use cgp::core::types::WithType;
-use cgp::prelude::*;
 use hermes_chain_type_components::impls::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::{
     ChainIdGetterComponent, ChainIdTypeProviderComponent, CommitmentProofTypeProvider,
@@ -22,6 +21,7 @@ use hermes_chain_type_components::traits::{
     MessageResponseTypeComponent, MessageTypeProviderComponent, TimeTypeComponent,
     TimeoutTypeComponent,
 };
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     AckPacketMessageBuilder, AckPacketMessageBuilderComponent, AckPacketPayloadBuilder,
     AckPacketPayloadBuilderComponent, AckPacketPayloadTypeProvider,

@@ -1,6 +1,5 @@
 use core::fmt::Display;
 
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::HasMessageType;
 use hermes_core::relayer_components::chain::traits::{
     ChannelOpenAckMessageBuilder, ChannelOpenAckMessageBuilderComponent,
@@ -14,6 +13,7 @@ use hermes_core::relayer_components::chain::traits::{
 use hermes_core::relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
+use hermes_prelude::*;
 use ibc::core::channel::types::channel::{ChannelEnd, State};
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;

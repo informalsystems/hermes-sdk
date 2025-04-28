@@ -3,7 +3,7 @@ use alloc::vec;
 
 use cgp::core::field::Index;
 use cgp::extra::run::{CanRun, Runner, RunnerComponent};
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{CanRunConcurrentTasks, HasRuntime, Task};
 
 use crate::birelay::traits::HasTwoWayRelay;

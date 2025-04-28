@@ -1,12 +1,12 @@
 use core::marker::PhantomData;
 use std::string::FromUtf8Error;
 
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::{HasAmountType, HasDenomType};
 use hermes_core::relayer_components::chain::traits::{HasChannelIdType, HasPortIdType};
 use hermes_core::test_components::chain::traits::{
     IbcTransferredAmountConverter, IbcTransferredAmountConverterComponent,
 };
+use hermes_prelude::*;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use sha2::{Digest, Sha256};
 use subtle_encoding::hex;

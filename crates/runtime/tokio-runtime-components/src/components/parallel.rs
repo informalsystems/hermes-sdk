@@ -1,6 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
+    use hermes_prelude::*;
     use hermes_runtime_components::impls::ExecCommandWithNoEnv;
     use hermes_runtime_components::traits::{
         ChildProcessStarterComponent, ChildProcessTypeComponent, ChildProcessWaiterComponent,

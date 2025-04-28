@@ -1,10 +1,10 @@
 use alloc::vec::Vec;
 use std::sync::OnceLock;
 
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     HasCommitmentPrefixType, IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
+use hermes_prelude::*;
 
 pub struct ProvideIbcCommitmentPrefix;
 

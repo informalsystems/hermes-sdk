@@ -1,9 +1,9 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_encoding_components::traits::{CanConvert, HasDefaultEncoding};
 use hermes_encoding_components::types::AsBytes;
+use hermes_prelude::*;
 
 use crate::traits::{
     AllClientStatesQuerier, AllClientStatesQuerierComponent, CanQueryAllRawClientStates,

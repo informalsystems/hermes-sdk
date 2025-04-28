@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::HasChainIdType;
 use hermes_core::test_components::chain::traits::{
     ChainIdFromStringBuilder, ChainIdFromStringBuilderComponent,
 };
+use hermes_prelude::*;
 use ibc::core::host::types::identifiers::ChainId;
 
 pub struct BuildCosmosChainIdFromString;

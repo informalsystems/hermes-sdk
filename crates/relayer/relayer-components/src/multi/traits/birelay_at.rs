@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_type {
     name: BiRelayTypeProviderAtComponent<A, B>,

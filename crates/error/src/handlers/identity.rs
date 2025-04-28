@@ -1,5 +1,5 @@
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, HasAsyncErrorType};
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::types::Error;
 

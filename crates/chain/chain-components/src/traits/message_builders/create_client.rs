@@ -1,6 +1,6 @@
 use cgp::core::component::UseDelegate;
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::CanUseCounterparty;
+use hermes_prelude::*;
 
 use crate::traits::{
     CreateClientPayloadOf, HasCreateClientMessageOptionsType, HasCreateClientPayloadType,

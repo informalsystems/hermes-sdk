@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasMessageResponseType;
+use hermes_prelude::*;
 
 use crate::transaction::traits::HasTxResponseType;
 

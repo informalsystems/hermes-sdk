@@ -1,5 +1,5 @@
 use cgp::core::component::UseContext;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::{
     CanConvert, CanDecode, CanDecodeMut, CanEncode, CanEncodeMut, Converter, ConverterComponent,

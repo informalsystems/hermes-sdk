@@ -1,5 +1,5 @@
 use cgp::core::component::UseDelegate;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{HasHeightType, HasTimeoutType};
 
 #[cgp_component {

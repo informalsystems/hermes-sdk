@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{HasCommitmentProofType, HasHeightType};
+use hermes_prelude::*;
 
 #[cgp_component {
   provider: AbciQuerier,

@@ -1,6 +1,6 @@
 use cgp::core::component::UseDelegate;
-use cgp::prelude::*;
 pub use hermes_chain_type_components::traits::*;
+use hermes_prelude::*;
 
 use crate::traits::HasTimeType;
 

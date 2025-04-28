@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::build::traits::builders::chain_builder::{ChainBuilder, ChainBuilderComponent};
 use crate::build::traits::cache::HasChainCache;

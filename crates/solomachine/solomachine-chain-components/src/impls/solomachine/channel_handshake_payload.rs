@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     CanQueryChannelEnd, ChannelOpenAckPayloadBuilder, ChannelOpenAckPayloadBuilderComponent,
     ChannelOpenConfirmPayloadBuilder, ChannelOpenConfirmPayloadBuilderComponent,

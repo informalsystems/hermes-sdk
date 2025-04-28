@@ -1,11 +1,11 @@
 use core::str::{from_utf8, FromStr, Utf8Error};
 use std::num::ParseIntError;
 
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::HasMessageResponseEvents;
 use hermes_core::relayer_components::chain::traits::CanSendSingleMessage;
 use hermes_core::test_components::chain::traits::HasProposalIdType;
 use hermes_cosmos_chain_components::types::AbciEvent;
+use hermes_prelude::*;
 
 use crate::traits::chain::{
     CanBuildStoreCodeMessage, WasmClientCodeUploader, WasmClientCodeUploaderComponent,

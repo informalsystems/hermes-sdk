@@ -1,6 +1,6 @@
 use core::fmt::Display;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_component {
   name: BlockTypeComponent,

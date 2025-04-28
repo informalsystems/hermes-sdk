@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_core::encoding_components::traits::{CanConvert, HasDefaultEncoding};
 use hermes_core::encoding_components::types::AsBytes;
 use hermes_core::relayer_components::chain::traits::{
@@ -8,6 +7,7 @@ use hermes_core::relayer_components::chain::traits::{
     HasConsensusStateType, HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
     HasMessageType,
 };
+use hermes_prelude::*;
 use prost_types::Any;
 
 use crate::traits::{CosmosMessage, ToCosmosMessage};

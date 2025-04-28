@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
 use hermes_relayer_components::chain::traits::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;

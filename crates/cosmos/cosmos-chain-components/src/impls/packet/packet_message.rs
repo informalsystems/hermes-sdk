@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     AckPacketMessageBuilder, AckPacketMessageBuilderComponent, HasAckPacketPayloadType,
     HasAcknowledgementType, HasCommitmentProofBytes, HasHeightFields, HasMessageType,
@@ -9,6 +8,7 @@ use hermes_core::relayer_components::chain::traits::{
 use hermes_core::relayer_components::chain::types::payloads::packet::{
     AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
 };
+use hermes_prelude::*;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;

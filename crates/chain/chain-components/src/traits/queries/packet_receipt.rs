@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{
     CanUseCounterparty, HasChannelIdType, HasHeightType, HasPortIdType, HasSequenceType,
 };
+use hermes_prelude::*;
 
 use crate::traits::{HasCommitmentProofType, HasPacketReceiptType};
 use crate::types::aliases::SequenceOf;

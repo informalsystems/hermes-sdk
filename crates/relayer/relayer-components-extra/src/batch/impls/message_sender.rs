@@ -1,11 +1,11 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use futures::channel::mpsc::{SendError, TrySendError};
 use futures::channel::oneshot;
 use futures::channel::oneshot::Canceled;
 use hermes_chain_type_components::traits::MessageResponseOf;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::types::aliases::MessageOf;
 use hermes_relayer_components::relay::traits::{
     CanSendIbcMessages, HasTargetChainTypes, IbcMessageSender, IbcMessageSenderComponent,

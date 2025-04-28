@@ -1,12 +1,12 @@
 use core::cmp::Ordering;
 use core::fmt::{Debug, Display};
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{
     AmountBuilder, AmountBuilderComponent, AmountDenomGetter, AmountDenomGetterComponent,
     AmountQuantityGetter, AmountQuantityGetterComponent, AmountTypeProvider,
     AmountTypeProviderComponent,
 };
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

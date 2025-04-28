@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_core::runtime_components::traits::{CanExecCommand, HasFilePathType, HasRuntime};
+use hermes_prelude::*;
 
 use crate::bootstrap::traits::{
     GenesisTransactionsCollector, GenesisTransactionsCollectorComponent, HasChainCommandPath,

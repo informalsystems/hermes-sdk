@@ -1,5 +1,5 @@
 use cgp::core::component::{UseContext, UseDelegate};
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;

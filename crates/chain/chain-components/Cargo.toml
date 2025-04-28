@@ -12,7 +12,8 @@ description = """
 """
 
 [dependencies]
-cgp                          = { workspace = true, features = [ "full" ] }
+cgp                          = { workspace = true }
+hermes-prelude               = { workspace = true }
 hermes-runtime-components    = { workspace = true }
 hermes-encoding-components   = { workspace = true }
 hermes-chain-type-components = { workspace = true }

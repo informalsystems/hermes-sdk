@@ -1,7 +1,6 @@
 use alloc::boxed::Box;
 use alloc::string::String;
 
-use cgp::prelude::*;
 use hermes_ibc_token_transfer_components::traits::mint_registry::lookup_incoming::{
     IncomingMintedTokenQuerier, IncomingMintedTokenQuerierComponent,
 };
@@ -14,6 +13,7 @@ use hermes_ibc_token_transfer_components::traits::mint_registry::register::{
 use hermes_ibc_token_transfer_components::traits::token::create::{
     CanCreateToken, TokenCreator, TokenCreatorComponent,
 };
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

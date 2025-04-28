@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_core::test_components::chain::traits::{
     ProposalIdTypeComponent, ProposalStatusTypeComponent, ProposalVoteTypeComponent,
     ProvideProposalIdType, ProvideProposalStatusType, ProvideProposalVoteType,
 };
+use hermes_prelude::*;
 
 use crate::chain::types::{ProposalStatus, ProposalVote};
 

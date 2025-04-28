@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::types::packet_data::mint::UseIbcTransferMintPayloadData;
 use crate::types::packet_data::transfer::UseIbcTransferPayloadData;

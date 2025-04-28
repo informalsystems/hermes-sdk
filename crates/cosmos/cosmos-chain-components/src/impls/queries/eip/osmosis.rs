@@ -1,6 +1,6 @@
 use core::str::FromStr;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 use ibc_proto::cosmos::base::v1beta1::DecProto;
 use prost::DecodeError;
 use subtle_encoding::base64;

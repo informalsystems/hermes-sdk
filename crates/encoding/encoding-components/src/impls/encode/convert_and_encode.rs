@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::{
     CanConvert, CanDecode, CanEncode, Decoder, DecoderComponent, Encoder, EncoderComponent,

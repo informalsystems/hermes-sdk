@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::{EncodedTypeComponent, ProvideEncodedType};
 

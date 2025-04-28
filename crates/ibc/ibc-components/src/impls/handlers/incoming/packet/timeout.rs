@@ -1,8 +1,8 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasTimeType;
+use hermes_prelude::*;
 
 use crate::traits::fields::packet::header::timeout::HasPacketTimeout;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;

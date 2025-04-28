@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::HasHeightType;
 use hermes_comet_light_client_components::traits::{
     VerificationHeightTracer, VerificationHeightTracerComponent,
 };
+use hermes_prelude::*;
 use tendermint::block::Height;
 
 use crate::traits::verification_trace::HasVerificationTrace;

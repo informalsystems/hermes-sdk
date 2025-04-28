@@ -6,10 +6,10 @@ use hermes_cli_components::traits::CommandRunnerComponent;
 pub use list::KeysListCmd;
 
 mod delete;
-use cgp::prelude::*;
 pub use delete::KeysDeleteCmd;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
+use hermes_prelude::*;
 
 use crate::contexts::HermesApp;
 use crate::Result;

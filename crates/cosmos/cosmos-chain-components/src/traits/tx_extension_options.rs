@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use ibc_proto::google::protobuf::Any;
 
 #[cgp_component {

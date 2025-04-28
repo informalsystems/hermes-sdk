@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::error::traits::{CanPerformRetry, HasMaxErrorRetry};
 use hermes_relayer_components::relay::traits::{
     HasRelayChains, PacketOf, PacketRelayer, PacketRelayerComponent,

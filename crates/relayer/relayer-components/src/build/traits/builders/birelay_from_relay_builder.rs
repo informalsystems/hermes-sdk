@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};

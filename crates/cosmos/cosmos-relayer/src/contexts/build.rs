@@ -9,7 +9,6 @@ use std::str::FromStr;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField, WithField};
 use cgp::core::types::WithType;
-use cgp::prelude::*;
 use eyre::{eyre, Report};
 use futures::lock::Mutex;
 use hermes_core::relayer_components::build::traits::builders::birelay_from_relay_builder::{
@@ -46,6 +45,7 @@ use hermes_cosmos_chain_components::types::{
     PacketFilterConfig, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
 };
 use hermes_error::types::Error;
+use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::host::types::identifiers::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;

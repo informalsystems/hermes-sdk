@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseContext;
-use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::CosmosBuilder;
+use hermes_prelude::*;
 
 #[cgp_getter {
     provider: CosmosBuilderGetter,

@@ -2,13 +2,13 @@ use alloc::borrow::ToOwned;
 use alloc::string::String;
 use alloc::sync::Arc;
 
-use cgp::prelude::*;
 use hermes_ibc_components::traits::commitment::verify::{
     CommitmentVerifier, CommitmentVerifierComponent,
 };
 use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::tags::commitment::receive::ReceivePacket;
 use hermes_ibc_components::types::tags::commitment::send::SendPacket;
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::{MockChain, MockChainState};

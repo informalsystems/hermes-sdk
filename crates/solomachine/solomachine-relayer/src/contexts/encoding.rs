@@ -1,5 +1,4 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::prelude::*;
 use hermes_encoding_components::impls::GetDefaultEncoding;
 use hermes_encoding_components::traits::{
     CanConvertBothWays, CanEncodeAndDecode, DefaultEncodingGetter, DefaultEncodingGetterComponent,
@@ -8,6 +7,7 @@ use hermes_encoding_components::traits::{
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use hermes_solomachine_chain_components::encoding::components::*;

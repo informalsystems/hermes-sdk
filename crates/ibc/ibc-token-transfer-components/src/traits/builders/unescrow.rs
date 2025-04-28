@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAmountType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
 use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
+use hermes_prelude::*;
 
 #[cgp_component {
   provider: UnescrowPayloadBuilder,

@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::HasChainIdType;
 use hermes_relayer_components::chain::types::aliases::ChainIdOf;
 use hermes_runtime_components::traits::{FilePathOf, HasFilePathType, HasRuntimeType};

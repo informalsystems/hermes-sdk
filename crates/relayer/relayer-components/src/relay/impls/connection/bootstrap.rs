@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::HasConnectionIdType;
+use hermes_prelude::*;
 
 use crate::chain::traits::{HasInitConnectionOptionsType, InitConnectionOptionsOf};
 use crate::relay::traits::{CanInitConnection, CanRelayConnectionOpenHandshake, HasRelayChains};

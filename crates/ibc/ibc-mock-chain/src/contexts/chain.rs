@@ -4,7 +4,6 @@ use alloc::string::String;
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{
     CanBuildAmount, HasAddressType, HasAmountDenom, HasAmountQuantity, HasAmountType,
     HasChannelIdType, HasClientIdType, HasConsensusStateType, HasDenomType, HasHeightType,
@@ -70,6 +69,7 @@ use hermes_ibc_token_transfer_components::types::packet_data::unescrow::IbcTrans
 use hermes_ibc_token_transfer_components::types::tags::{
     IbcTransferApp, IbcTransferMintApp, IbcTransferUnescrowApp,
 };
+use hermes_prelude::*;
 
 use crate::types::address::MockAddress;
 use crate::types::amount::MockAmount;

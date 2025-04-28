@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     HasClientStateType, HasHeightType, HasUpdateClientPayloadType, UpdateClientPayloadBuilder,
     UpdateClientPayloadBuilderComponent,

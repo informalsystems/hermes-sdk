@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseContext;
 use cgp::core::field::FieldGetter;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::{HasEncodeBufferType, MutEncoder, MutEncoderComponent};
 

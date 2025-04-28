@@ -1,6 +1,6 @@
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::{AmountOf, HasAmountType};
 use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_prelude::*;
 
 /**
    A wallet config is a template for generating fresh wallets for a chain.

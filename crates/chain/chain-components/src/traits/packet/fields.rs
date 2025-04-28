@@ -3,11 +3,11 @@ use core::marker::PhantomData;
 use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::field::FieldGetter;
 use cgp::core::macros::blanket_trait;
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{
     CanUseCounterparty, HasChannelIdType, HasHeightType, HasOutgoingPacketType, HasPortIdType,
     HasSequenceType, HasTimeoutType, TimeoutOf,
 };
+use hermes_prelude::*;
 
 use crate::types::aliases::{ChannelIdOf, HeightOf, PortIdOf};
 

@@ -1,6 +1,6 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasChannelIdType, HasDenomType};
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
+use hermes_prelude::*;
 
 /**
    Create a new token address used for minting an IBC denom with the given channels.

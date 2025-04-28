@@ -2,7 +2,6 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::extra::run::RunnerComponent;
-use cgp::prelude::*;
 use hermes_core::logging_components::traits::LoggerComponent;
 use hermes_core::relayer_components::birelay::traits::AutoBiRelayerComponent;
 use hermes_core::relayer_components::components::default::DefaultBiRelayComponents;
@@ -13,6 +12,7 @@ use hermes_core::relayer_components::multi::traits::relay_at::{
 use hermes_core::runtime_components::traits::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
+use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 

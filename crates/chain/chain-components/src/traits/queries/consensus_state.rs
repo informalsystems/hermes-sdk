@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{CanUseCounterparty, ConsensusStateOf, HasClientIdType};
+use hermes_prelude::*;
 
 use super::chain_status::CanQueryChainStatus;
 use crate::traits::{

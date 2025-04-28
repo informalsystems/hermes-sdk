@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::core::component::WithProvider;
 use cgp::core::macros::blanket_trait;
 use cgp::core::types::ProvideType;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::chain::traits::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;

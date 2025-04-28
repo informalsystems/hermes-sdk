@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::relay::traits::HasRelayChains;
 use crate::relay::types::{DstConnectionId, SrcConnectionId};

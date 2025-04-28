@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::field::Index;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::multi::traits::chain_at::{
     ChainGetterAt, ChainGetterAtComponent, ChainTypeProviderAt, ChainTypeProviderAtComponent,

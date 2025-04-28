@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::chain::traits::HasChainIdType;
 use crate::chain::types::aliases::ChainIdOf;

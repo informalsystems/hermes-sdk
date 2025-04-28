@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     CanQueryClientState, CanQueryConnectionEnd, CanQueryConsensusState,
     ConnectionOpenAckPayloadBuilder, ConnectionOpenAckPayloadBuilderComponent,

@@ -1,7 +1,6 @@
 use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
-use cgp::prelude::*;
 use hermes_any_counterparty::contexts::AnyCounterparty;
 use hermes_core::encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
@@ -53,6 +52,7 @@ use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_cosmos_relayer::impls::HandleCosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
+use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;

@@ -1,10 +1,10 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseContext;
-use cgp::prelude::*;
 use hermes_encoding_components::traits::{
     Decoder, DecoderComponent, Encoder, EncoderComponent, HasEncodedType,
 };
+use hermes_prelude::*;
 
 use crate::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
 

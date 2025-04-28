@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::CommitmentProofTypeProviderComponent;
 use hermes_core::relayer_components::chain::traits::{
     CommitmentProofBytesGetter, CommitmentProofBytesGetterComponent, CommitmentProofHeightGetter,
     CommitmentProofHeightGetterComponent, HasCommitmentProofType, HasHeightType,
 };
+use hermes_prelude::*;
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
 

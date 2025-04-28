@@ -1,7 +1,7 @@
 use std::io::Error as IoError;
 use std::path::PathBuf;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::HasChainId;
 use hermes_runtime_components::traits::{CanCopyFile, HasFilePathType, HasRuntime};
 use hermes_test_components::chain_driver::traits::{HasChain, HasChainHomeDir};

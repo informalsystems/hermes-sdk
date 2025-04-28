@@ -1,6 +1,6 @@
 use cgp::core::error::ErrorOf;
-use cgp::prelude::*;
 use hermes_chain_components::traits::CanQueryChainHeight;
+use hermes_prelude::*;
 
 use crate::relay::traits::{
     CanAutoRelayWithHeights, HasTargetChains, RelayTarget, TargetAutoRelayer,

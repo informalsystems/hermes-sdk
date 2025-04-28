@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_core::encoding_components::impls::{DecodeFrom, EncodeField};
 use hermes_core::encoding_components::traits::{
     MutDecoderComponent, MutEncoderComponent, Transformer,
 };
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
 
 use crate::types::WasmConsensusState;

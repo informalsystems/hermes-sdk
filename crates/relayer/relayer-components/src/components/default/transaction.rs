@@ -1,6 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
+    use hermes_prelude::*;
 
     use crate::chain::traits::MessageSenderComponent;
     use crate::transaction::impls::{

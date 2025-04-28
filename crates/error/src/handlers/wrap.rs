@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 use core::fmt::Debug;
 
 use cgp::core::error::{ErrorWrapper, ErrorWrapperComponent, HasAsyncErrorType};
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::types::{Error, ErrorDetail};
 

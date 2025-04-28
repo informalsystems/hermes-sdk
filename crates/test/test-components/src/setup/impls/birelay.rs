@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
 use cgp::core::Async;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use hermes_relayer_components::chain::traits::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;

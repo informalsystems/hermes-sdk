@@ -2,7 +2,6 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, WithField};
 use cgp::core::types::WithType;
 use cgp::extra::run::CanRun;
-use cgp::prelude::*;
 use hermes_core::relayer_components::multi::traits::birelay_at::{
     BiRelayGetterAtComponent, BiRelayTypeProviderAtComponent,
 };
@@ -15,6 +14,7 @@ use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
+use hermes_prelude::*;
 use tokio::task::AbortHandle;
 
 #[cgp_context(CosmosRelayDriverComponents)]

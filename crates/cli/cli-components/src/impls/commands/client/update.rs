@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
 use cgp::core::field::Index;
-use cgp::prelude::*;
 use hermes_core::logging_components::traits::CanLog;
 use hermes_core::logging_components::types::LevelInfo;
 use hermes_core::relayer_components::build::traits::builders::chain_builder::CanBuildChain;
@@ -14,6 +13,7 @@ use hermes_core::relayer_components::relay::traits::{
     CanSendTargetUpdateClientMessage, HasRelayChains, HasRelayClientIds, HasSourceTargetChainTypes,
     SourceTarget,
 };
+use hermes_prelude::*;
 
 use crate::traits::{
     CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,

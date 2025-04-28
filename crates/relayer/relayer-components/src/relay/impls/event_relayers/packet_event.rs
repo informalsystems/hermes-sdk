@@ -1,10 +1,10 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::{
     CanBuildPacketFromSendPacket, CanExtractFromEvent, CanQueryChainHeight,
 };
 use hermes_logging_components::traits::CanLog;
+use hermes_prelude::*;
 
 use crate::chain::traits::{CanBuildPacketFromWriteAck, HasSendPacketEvent};
 use crate::chain::types::aliases::EventOf;

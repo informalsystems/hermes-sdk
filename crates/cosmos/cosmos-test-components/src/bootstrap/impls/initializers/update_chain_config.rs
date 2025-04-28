@@ -1,12 +1,12 @@
 use core::time::Duration;
 use std::path::PathBuf;
 
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::HasChainIdType;
 use hermes_core::runtime_components::traits::{
     CanReadFileAsString, CanReserveTcpPort, CanWriteStringToFile, HasFilePathType, HasRuntime,
 };
 use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_prelude::*;
 use ibc::core::host::types::identifiers::ChainId;
 use toml::Value;
 

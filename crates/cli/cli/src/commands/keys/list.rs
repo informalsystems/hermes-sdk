@@ -1,13 +1,13 @@
 use core::fmt::Write;
 use std::collections::BTreeMap;
 
-use cgp::prelude::*;
 use eyre::eyre;
 use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_core::chain_components::types::KeyRing;
 use hermes_cosmos_core::ibc::core::host::types::identifiers::ChainId;
+use hermes_prelude::*;
 
 use crate::contexts::HermesApp;
 

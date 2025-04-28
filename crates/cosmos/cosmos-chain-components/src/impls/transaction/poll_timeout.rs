@@ -1,9 +1,9 @@
 use core::time::Duration;
 
-use cgp::prelude::*;
 use hermes_core::relayer_components::transaction::impls::{
     PollTimeoutGetter, PollTimeoutGetterComponent,
 };
+use hermes_prelude::*;
 
 pub struct FixedPollTimeoutSecs<const SECS: u64>;
 

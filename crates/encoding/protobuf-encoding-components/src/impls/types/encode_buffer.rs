@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_encoding_components::traits::{
     EncodeBufferTypeComponent, HasEncodedType, ProvideEncodeBufferType,
 };
+use hermes_prelude::*;
 
 pub struct ProvideBytesEncodeBuffer;
 

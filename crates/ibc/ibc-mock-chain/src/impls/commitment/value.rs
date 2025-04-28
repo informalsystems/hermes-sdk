@@ -1,6 +1,5 @@
 use alloc::string::String;
 
-use cgp::prelude::*;
 use hermes_ibc_components::traits::commitment::value::receive_packet::{
     ReceivePacketCommitmentValueBuilder, ReceivePacketCommitmentValueBuilderComponent,
 };
@@ -8,6 +7,7 @@ use hermes_ibc_components::traits::commitment::value::send_packet::{
     SendPacketCommitmentValueBuilder, SendPacketCommitmentValueBuilderComponent,
 };
 use hermes_ibc_components::types::packet::IbcPacket;
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

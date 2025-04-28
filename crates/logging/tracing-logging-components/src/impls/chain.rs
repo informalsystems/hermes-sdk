@@ -1,7 +1,7 @@
 use core::fmt::{Debug, Display};
 
-use cgp::prelude::*;
 use hermes_logging_components::traits::{Logger, LoggerComponent};
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{HasChainId, HasMessageType};
 use hermes_relayer_components::transaction::impls::{
     LogRetryQueryTxResponse, LogSendMessagesWithSignerAndNonce, TxNoResponseError,

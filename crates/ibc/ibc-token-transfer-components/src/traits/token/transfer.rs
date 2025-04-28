@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
+use hermes_prelude::*;
 
 pub struct Mint;
 

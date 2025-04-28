@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_cosmos_chain_preset::presets::CosmosToCosmosComponents;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     ClientStateFieldsComponent, ClientStateQuerierComponent, ClientStateTypeComponent,
     ClientStateWithProofsQuerierComponent, ConnectionOpenAckMessageBuilderComponent,

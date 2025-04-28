@@ -2,7 +2,7 @@
    Trait definitions for [`HasSendPacketEvent`].
 */
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 /**
    Indicates that a chain context's

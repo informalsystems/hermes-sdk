@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasChannelIdType, HasPortIdType, HasSequenceType};
+use hermes_prelude::*;
 
 /**
    Checks if a given packet has been cleared on the source chain. Having

@@ -3,7 +3,6 @@ use core::ops::Deref;
 use core::time::Duration;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
-use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::AnyCounterparty;
 use hermes_core::chain_type_components::traits::{
@@ -65,6 +64,7 @@ use hermes_cosmos_chain_components::types::{
 };
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
+use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use hermes_wasm_test_components::components::WasmChainComponents;

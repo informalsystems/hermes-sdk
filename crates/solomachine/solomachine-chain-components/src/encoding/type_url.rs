@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::impl_type_url;
 
 use crate::types::client_state::{SolomachineClientState, SOLOMACHINE_CLIENT_STATE_TYPE_URL};

@@ -1,12 +1,12 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::impls::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::{
     EventTypeProviderComponent, HasEventType, HasMessageResponseType,
     MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
     MessageTypeProviderComponent,
 };
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     AckPacketPayloadTypeProvider, AckPacketPayloadTypeProviderComponent, ChannelEndTypeComponent,
     ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,

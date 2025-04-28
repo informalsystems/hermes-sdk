@@ -1,10 +1,10 @@
-use cgp::prelude::*;
 use hermes_ibc_components::traits::fields::commitment::proof_height::{
     CommitmentProofHeightGetter, CommitmentProofHeightGetterComponent,
 };
 use hermes_ibc_components::traits::types::commitment::proof::{
     CommitmentProofTypeComponent, ProvideCommitmentProofType,
 };
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

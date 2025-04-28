@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{
     HasChannelIdType, HasConnectionIdType, HasHeightType, HasPortIdType,
 };
+use hermes_prelude::*;
 
 use crate::traits::{
     CanQueryChannelEndWithProofs, CanQueryCounterpartyConnectionId, ChannelOpenAckPayloadBuilder,

@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::{
     HasPacketDstChannelId, HasPacketDstPortId, HasPacketSrcChannelId, HasPacketSrcPortId,
 };
+use hermes_prelude::*;
 
 use crate::chain::traits::{CanQueryCounterpartyChainId, HasChainId};
 use crate::relay::traits::{

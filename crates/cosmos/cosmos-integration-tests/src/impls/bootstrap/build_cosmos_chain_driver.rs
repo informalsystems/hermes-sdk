@@ -1,7 +1,6 @@
 use alloc::collections::BTreeMap;
 use std::path::PathBuf;
 
-use cgp::prelude::*;
 use hermes_core::runtime_components::traits::{
     HasChildProcessType, HasFilePathType, HasRuntimeType,
 };
@@ -14,6 +13,7 @@ use hermes_cosmos_test_components::bootstrap::traits::{
 };
 use hermes_cosmos_test_components::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
 use hermes_cosmos_test_components::chain::types::CosmosTestWallet;
+use hermes_prelude::*;
 use tokio::process::Child;
 
 use crate::contexts::CosmosChainDriver;

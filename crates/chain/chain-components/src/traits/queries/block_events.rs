@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasEventType, HasHeightType};
+use hermes_prelude::*;
 
 #[cgp_component {
     provider: BlockEventsQuerier,

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::payloads::HasPacketPayloads;

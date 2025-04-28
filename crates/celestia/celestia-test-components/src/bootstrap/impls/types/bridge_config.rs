@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::bootstrap::traits::types::bridge_config::{
     BridgeConfigTypeComponent, ProvideBridgeConfigType,

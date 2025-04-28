@@ -1,6 +1,6 @@
-use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::CosmosConnectionOpenTryMessage;
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_relayer_components::chain::traits::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenAckMessageBuilderComponent,

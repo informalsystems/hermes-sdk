@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::impls::chain::{BuildStoreCodeMessage, SendStoreCodeProposalMessage};
 use crate::traits::chain::{StoreCodeMessageBuilderComponent, WasmClientCodeUploaderComponent};

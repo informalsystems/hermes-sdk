@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::relay::traits::{
     CanFilterRelayPackets, PacketOf, PacketRelayer, PacketRelayerComponent,

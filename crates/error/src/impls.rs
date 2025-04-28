@@ -1,6 +1,6 @@
 use cgp::core::error::{ErrorTypeProviderComponent, ErrorWrapperComponent, HasAsyncErrorType};
 use cgp::core::types::WithType;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::error::traits::{ProvideRetryableError, RetryableErrorComponent};
 
 use crate::handlers::WrapErrorDetail;

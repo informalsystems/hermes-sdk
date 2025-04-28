@@ -1,9 +1,9 @@
 use alloc::vec;
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::{EmptyMessageResponse, HasMessageType};
 use hermes_chain_type_components::traits::{HasMessageResponseType, MessageResponseOf};
+use hermes_prelude::*;
 
 use crate::chain::traits::HasIbcChainTypes;
 use crate::chain::types::aliases::MessageOf;

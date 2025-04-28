@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 
 use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
 use cgp::core::field::Index;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::bootstrap::traits::CanBootstrapChain;
 use crate::driver::traits::{ChainDriverAt, HasChainDriverTypeAt};

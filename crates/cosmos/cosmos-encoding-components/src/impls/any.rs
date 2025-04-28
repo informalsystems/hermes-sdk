@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_core::encoding_components::traits::{Converter, ConverterComponent};
+use hermes_prelude::*;
 use ibc::primitives::proto::Any as IbcAny;
 use prost_types::Any as ProstAny;
 

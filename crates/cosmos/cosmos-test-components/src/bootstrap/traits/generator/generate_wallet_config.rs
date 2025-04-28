@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::bootstrap::traits::{HasChainGenesisConfigType, HasWalletConfigType};
 

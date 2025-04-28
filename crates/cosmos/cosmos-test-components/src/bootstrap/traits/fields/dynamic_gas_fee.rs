@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::DynamicGasConfig;
+use hermes_prelude::*;
 
 #[cgp_getter {
     provider: DynamicGasGetter,

@@ -1,6 +1,6 @@
 use alloc::string::String;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::contexts::chain::MockChainContext;

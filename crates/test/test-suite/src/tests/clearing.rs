@@ -2,8 +2,8 @@ use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::core::field::Index;
-use cgp::prelude::*;
 use hermes_chain_components::traits::CanQueryChainHeight;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     CanQueryChainStatus, CanQueryPacketIsCleared, CanQueryPacketIsReceived, HasChainId,
     HasPacketSequence,

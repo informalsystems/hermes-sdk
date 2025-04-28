@@ -4,7 +4,7 @@ use std::vec;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{UseField, WithField};
 use cgp::core::types::WithType;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };

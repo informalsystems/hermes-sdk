@@ -12,4 +12,5 @@ description = """
 """
 
 [dependencies]
-cgp = { workspace = true }
+cgp            = { workspace = true }
+hermes-prelude = { workspace = true }

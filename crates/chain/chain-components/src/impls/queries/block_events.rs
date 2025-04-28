@@ -2,8 +2,8 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 use core::time::Duration;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasEventType, HasHeightType};
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{CanSleep, HasRuntime};
 
 use crate::traits::{

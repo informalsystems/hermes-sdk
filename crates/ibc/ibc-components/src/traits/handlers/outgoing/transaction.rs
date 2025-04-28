@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::transaction::HasIbcTransactionType;

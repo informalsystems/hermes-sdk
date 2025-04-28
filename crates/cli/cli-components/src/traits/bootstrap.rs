@@ -1,6 +1,6 @@
 use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::ProvideType;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_type]
 pub trait HasBootstrapType<Tag> {

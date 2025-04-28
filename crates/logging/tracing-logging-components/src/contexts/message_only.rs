@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_logging_components::traits::{Logger, LoggerComponent};
 use hermes_logging_components::types::{LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn};
+use hermes_prelude::*;
 use tracing::{debug, error, info, trace, warn};
 
 pub struct LogMessageOnly<Level>(pub PhantomData<Level>);

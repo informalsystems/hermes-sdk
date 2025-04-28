@@ -1,9 +1,9 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::HasMessageType;
 use hermes_logging_components::traits::CanLog;
+use hermes_prelude::*;
 
 use crate::chain::traits::{
     CanQueryConsensusStateWithLatestHeight, HasConsensusStateType, HasHeightType,

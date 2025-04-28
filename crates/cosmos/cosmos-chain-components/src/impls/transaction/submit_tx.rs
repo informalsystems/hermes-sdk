@@ -1,9 +1,9 @@
 use core::fmt::Debug;
 
-use cgp::prelude::*;
 use hermes_core::relayer_components::transaction::traits::{
     HasTransactionType, HasTxHashType, TxSubmitter, TxSubmitterComponent,
 };
+use hermes_prelude::*;
 use ibc_proto::cosmos::tx::v1beta1::TxRaw;
 use prost::Message;
 use tendermint::Hash as TxHash;

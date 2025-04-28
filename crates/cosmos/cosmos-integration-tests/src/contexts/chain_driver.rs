@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::prelude::*;
 use hermes_core::runtime_components::traits::{
     RuntimeGetter, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
@@ -31,6 +30,7 @@ use hermes_cosmos_test_components::chain_driver::traits::{
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
+use hermes_prelude::*;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use tokio::process::Child;

@@ -1,6 +1,6 @@
 use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::birelay::traits::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::{HasIbcChainTypes, HasInitConnectionOptionsType};
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;

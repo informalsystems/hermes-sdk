@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasChannelIdType, HasConsensusStateType};
+use hermes_prelude::*;
 
 use crate::traits::types::commitment::path::HasCommitmentPathType;
 use crate::traits::types::commitment::proof::HasCommitmentProofType;

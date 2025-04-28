@@ -4,9 +4,9 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 use core::mem;
 
-use cgp::prelude::*;
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::LogLevel;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{CanEstimateMessageSize, HasMessageType};
 use hermes_relayer_components::multi::traits::chain_at::HasChainAt;
 use hermes_relayer_components::relay::traits::{CanSendIbcMessages, RelayTarget};

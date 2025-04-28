@@ -1,6 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
+    use hermes_prelude::*;
     use CosmosSdkBootstrapComponents::re_exports::*;
 
     use crate::bootstrap::components::CosmosSdkBootstrapComponents;

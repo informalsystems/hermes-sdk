@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[async_trait]
 pub trait TestCase<Driver>: Async

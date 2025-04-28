@@ -2,10 +2,10 @@ use core::fmt::Display;
 use core::marker::PhantomData;
 
 use cgp::core::field::Index;
-use cgp::prelude::*;
 use hermes_core::relayer_components::build::traits::builders::chain_builder::CanBuildChain;
 use hermes_core::relayer_components::chain::traits::HasChainIdType;
 use hermes_core::test_components::chain::traits::CanQueryBalance;
+use hermes_prelude::*;
 
 use crate::traits::{
     CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,

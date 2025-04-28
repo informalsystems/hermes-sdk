@@ -1,6 +1,5 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
     use hermes_core::relayer_components::chain::traits::{
         AllClientStatesQuerierComponent, ChannelOpenAckMessageBuilderComponent,
         ChannelOpenConfirmMessageBuilderComponent, ChannelOpenInitMessageBuilderComponent,
@@ -13,6 +12,7 @@ mod preset {
         CreateClientMessageOptionsTypeComponent, UpdateClientMessageBuilderComponent,
     };
     use hermes_cosmos_chain_preset::presets::CosmosToCosmosComponents;
+    use hermes_prelude::*;
     use CosmosToCosmosComponents::re_exports::*;
 
     use crate::impls::{

@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
 use hermes_ibc_components::traits::handlers::incoming::payload::{
     IncomingPayloadHandler, IncomingPayloadHandlerComponent,
@@ -8,6 +7,7 @@ use hermes_ibc_components::traits::handlers::incoming::payload::{
 use hermes_ibc_components::traits::types::packet::header::HasPacketHeaderType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
+use hermes_prelude::*;
 
 use crate::types::packet_data::mint::IbcTransferMintPayloadData;
 use crate::types::packet_data::transfer::IbcTransferPayloadData;

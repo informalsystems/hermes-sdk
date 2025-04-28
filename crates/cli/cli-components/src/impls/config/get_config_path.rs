@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_core::runtime_components::traits::{HasFilePathType, HasRuntime};
+use hermes_prelude::*;
 
 use crate::traits::{ConfigPathGetter, ConfigPathGetterComponent};
 

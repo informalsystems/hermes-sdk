@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::core::component::WithProvider;
 use cgp::core::field::UseField;
 use cgp::core::types::ProvideType;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::chain::types::aliases::ChainIdOf;
 

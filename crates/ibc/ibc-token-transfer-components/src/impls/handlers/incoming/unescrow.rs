@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAmountDenom, HasAmountQuantity};
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
@@ -6,6 +5,7 @@ use hermes_ibc_components::traits::handlers::incoming::payload::{
     IncomingPayloadHandler, IncomingPayloadHandlerComponent,
 };
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
+use hermes_prelude::*;
 
 use crate::traits::escrow_registry::unescrow::CanRegisterUnescrowToken;
 use crate::traits::fields::payload_data::receiver::HasIbcTransferReceiver;

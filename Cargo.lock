@@ -1439,6 +1439,7 @@ dependencies = [
  "cgp",
  "hermes-chain-type-components",
  "hermes-encoding-components",
+ "hermes-prelude",
  "hermes-runtime-components",
 ]
 
@@ -1447,6 +1448,7 @@ name = "hermes-chain-type-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-prelude",
 ]
 
 [[package]]
@@ -1797,6 +1799,7 @@ name = "hermes-encoding-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-prelude",
 ]
 
 [[package]]
@@ -1817,6 +1820,7 @@ dependencies = [
  "cgp",
  "hermes-chain-type-components",
  "hermes-encoding-components",
+ "hermes-prelude",
 ]
 
 [[package]]
@@ -1854,6 +1858,7 @@ dependencies = [
  "hermes-chain-type-components",
  "hermes-encoding-components",
  "hermes-ibc-components",
+ "hermes-prelude",
 ]
 
 [[package]]
@@ -1861,6 +1866,7 @@ name = "hermes-logging-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-prelude",
 ]
 
 [[package]]
@@ -1947,6 +1953,7 @@ name = "hermes-runtime-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-prelude",
 ]
 
 [[package]]

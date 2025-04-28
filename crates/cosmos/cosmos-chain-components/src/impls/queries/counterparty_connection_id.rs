@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     CanQueryChainHeight, CanQueryConnectionEnd, CounterpartyConnectionIdQuerier,
     CounterpartyConnectionIdQuerierComponent, HasChannelEndType, HasConnectionIdType,
 };
+use hermes_prelude::*;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc::core::host::types::identifiers::ConnectionId;

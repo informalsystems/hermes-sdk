@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::{DenomOf, HasDenomType};
 use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_prelude::*;
 
 use crate::bootstrap::traits::HasChainGenesisConfigType;
 

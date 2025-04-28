@@ -2,7 +2,7 @@
    Trait definition for [`HasIbcPacketTypes`].
 */
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::CanUseCounterparty;
 

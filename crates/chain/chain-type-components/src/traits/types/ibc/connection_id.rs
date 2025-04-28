@@ -2,7 +2,7 @@ use core::fmt::{Debug, Display};
 
 use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_component {
   name: ConnectionIdTypeComponent,

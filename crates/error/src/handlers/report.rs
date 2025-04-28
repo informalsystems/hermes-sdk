@@ -1,8 +1,8 @@
 use alloc::sync::Arc;
 
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, HasAsyncErrorType};
-use cgp::prelude::*;
 use eyre::Report;
+use hermes_prelude::*;
 
 use crate::types::{Error, ErrorDetail};
 

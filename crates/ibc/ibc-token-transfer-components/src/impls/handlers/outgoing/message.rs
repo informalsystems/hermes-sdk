@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{
     CanBuildAmount, HasAmountDenom, HasAmountQuantity, HasChannelIdType,
 };
@@ -9,6 +8,7 @@ use hermes_ibc_components::traits::handlers::outgoing::message::{
     IbcMessageHandler, IbcMessageHandlerComponent,
 };
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
+use hermes_prelude::*;
 
 use crate::traits::builders::mint::CanBuildMintPayload;
 use crate::traits::builders::unescrow::CanBuildUnescrowPayload;

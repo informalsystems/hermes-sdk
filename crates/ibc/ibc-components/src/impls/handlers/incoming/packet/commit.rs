@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasChannelIdType;
+use hermes_prelude::*;
 
 use crate::traits::commitment::path::receive_packet::CanBuildReceivePacketCommitmentPath;
 use crate::traits::commitment::store::CanStoreCommitment;

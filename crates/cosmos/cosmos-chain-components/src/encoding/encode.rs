@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_core::encoding_components::impls::{
     ConvertAndEncode, EncodeUsingStrategy, ReturnEncoded,
 };
 use hermes_core::relayer_components::chain::traits::ViaCommitmentProof;
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
 use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;

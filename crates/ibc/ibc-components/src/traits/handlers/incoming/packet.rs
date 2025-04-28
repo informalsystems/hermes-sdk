@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::packet::HasPacketType;

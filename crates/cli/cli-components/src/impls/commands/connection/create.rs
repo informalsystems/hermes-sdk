@@ -2,7 +2,6 @@ use core::fmt::Display;
 use core::marker::PhantomData;
 
 use cgp::core::field::Index;
-use cgp::prelude::*;
 use hermes_core::logging_components::traits::CanLog;
 use hermes_core::logging_components::types::LevelInfo;
 use hermes_core::relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
@@ -13,6 +12,7 @@ use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_core::relayer_components::multi::traits::relay_at::HasRelayTypeAt;
 use hermes_core::relayer_components::relay::impls::CanBootstrapConnection;
 use hermes_core::relayer_components::relay::traits::HasRelayChains;
+use hermes_prelude::*;
 
 use crate::traits::{
     CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,

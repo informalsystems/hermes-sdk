@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::ChainStatus;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     ChainStatusQuerier, ChainStatusQuerierComponent, HasChainStatusType,
 };

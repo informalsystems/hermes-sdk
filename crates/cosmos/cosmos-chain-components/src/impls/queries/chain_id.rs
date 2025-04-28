@@ -1,10 +1,10 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     CanQueryChainHeight, CanQueryClientState, CounterpartyChainIdQuerier,
     CounterpartyChainIdQuerierComponent, HasChainIdType, HasClientStateFields, HasIbcChainTypes,
 };
+use hermes_prelude::*;
 use ibc::core::channel::types::channel::{ChannelEnd, State};
 use ibc::core::channel::types::error::ChannelError;
 use ibc::core::connection::types::ConnectionEnd;

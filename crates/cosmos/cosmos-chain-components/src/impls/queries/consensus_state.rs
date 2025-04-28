@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     HasCommitmentProofType, HasHeightFields, HasIbcChainTypes, HasRawConsensusStateType,
     RawConsensusStateQuerier, RawConsensusStateQuerierComponent,
     RawConsensusStateWithProofsQuerier, RawConsensusStateWithProofsQuerierComponent,
 };
+use hermes_prelude::*;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc::cosmos_host::IBC_QUERY_PATH;

@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use super::chain_status::QueryChainStatusArgs;
 use crate::traits::{CanRunCommand, CommandRunner, CommandRunnerComponent};

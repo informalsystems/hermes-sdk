@@ -1,6 +1,6 @@
 use core::future::Future;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_component {
     provider: RetryPerformer,

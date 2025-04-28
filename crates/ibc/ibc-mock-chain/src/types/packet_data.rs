@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_ibc_components::traits::types::payload::data::{
     PayloadDataTypeComponent, ProvidePayloadDataType,
 };
 use hermes_ibc_token_transfer_components::types::packet_data::transfer::IbcTransferPayloadData;
+use hermes_prelude::*;
 
 use crate::contexts::chain::MockChain;
 

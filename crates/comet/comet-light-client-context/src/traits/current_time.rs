@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseContext;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use tendermint_light_client_verifier::types::Time;
 
 #[cgp_component {

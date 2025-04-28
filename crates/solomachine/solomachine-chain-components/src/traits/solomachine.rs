@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
+use hermes_prelude::*;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc::core::host::types::identifiers::{ClientId, ConnectionId};

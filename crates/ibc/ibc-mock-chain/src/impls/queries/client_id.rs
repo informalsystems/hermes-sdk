@@ -1,10 +1,10 @@
 use alloc::borrow::ToOwned;
 use alloc::string::String;
 
-use cgp::prelude::*;
 use hermes_ibc_components::traits::queries::client_id::{
     ClientIdFromChannelIdQuerier, ClientIdFromChannelIdQuerierComponent,
 };
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

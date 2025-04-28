@@ -1,7 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
     use hermes_core::test_components::bootstrap::traits::ChainBootstrapperComponent;
+    use hermes_prelude::*;
 
     use crate::bootstrap::impls::{
         AddCosmosGenesisAccount, AddCosmosGenesisValidator, AddCosmosWalletToGenesis,

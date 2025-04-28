@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use tendermint_rpc::Url;
 use tonic::client::Grpc;
 use tonic::transport::Endpoint;

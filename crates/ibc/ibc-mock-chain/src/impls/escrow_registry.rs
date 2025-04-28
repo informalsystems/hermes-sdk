@@ -1,13 +1,13 @@
 use alloc::borrow::ToOwned;
 use alloc::string::String;
 
-use cgp::prelude::*;
 use hermes_ibc_token_transfer_components::traits::escrow_registry::escrow::{
     EscrowTokenRegistrar, EscrowTokenRegistrarComponent,
 };
 use hermes_ibc_token_transfer_components::traits::escrow_registry::unescrow::{
     UnescrowTokenRegistrar, UnescrowTokenRegistrarComponent,
 };
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

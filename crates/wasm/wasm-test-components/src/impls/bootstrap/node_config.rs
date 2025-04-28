@@ -1,9 +1,9 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_cosmos_test_components::bootstrap::traits::{
     CometConfigModifier, CometConfigModifierComponent,
 };
+use hermes_prelude::*;
 use toml::Value;
 
 pub struct ModifyWasmNodeConfig<InModifier>(pub PhantomData<InModifier>);

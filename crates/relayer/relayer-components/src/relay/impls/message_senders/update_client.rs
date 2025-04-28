@@ -1,8 +1,8 @@
 use alloc::collections::BTreeSet;
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasMessageResponseType;
+use hermes_prelude::*;
 
 use crate::chain::traits::{HasCounterpartyMessageHeight, HasIbcChainTypes};
 use crate::relay::traits::{

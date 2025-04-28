@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{
     AddressTypeProviderComponent, ChannelIdTypeComponent, ClientIdTypeComponent,
     HeightTypeProviderComponent, TimeTypeComponent,
@@ -6,6 +5,7 @@ use hermes_chain_type_components::traits::{
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
 use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComponent;
+use hermes_prelude::*;
 
 use crate::types::address::MockAddress;
 use crate::types::app_id::MockAppId;

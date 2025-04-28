@@ -1,9 +1,9 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::CanExtractFromMessageResponse;
 use hermes_chain_type_components::traits::HasMessageResponseEvents;
+use hermes_prelude::*;
 
 use crate::chain::traits::{
     CanBuildCreateClientMessage, CanBuildCreateClientPayload, CanSendSingleMessage, HasChainId,

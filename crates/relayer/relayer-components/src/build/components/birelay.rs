@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::build::traits::builders::birelay_builder::{BiRelayBuilder, BiRelayBuilderComponent};
 use crate::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;

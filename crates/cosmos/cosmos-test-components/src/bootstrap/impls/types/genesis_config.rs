@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::bootstrap::traits::{ChainGenesisConfigTypeComponent, ProvideChainGenesisConfigType};
 use crate::bootstrap::types::CosmosGenesisConfig;

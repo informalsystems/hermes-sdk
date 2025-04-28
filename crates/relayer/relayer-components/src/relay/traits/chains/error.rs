@@ -1,6 +1,6 @@
 use cgp::core::error::ErrorOf;
 use cgp::core::macros::blanket_trait;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::relay::traits::HasRelayChainTypes;
 

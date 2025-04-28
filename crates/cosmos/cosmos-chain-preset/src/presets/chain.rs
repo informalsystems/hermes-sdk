@@ -1,7 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::core::component::UseDelegate;
-    use cgp::prelude::*;
     use hermes_core::chain_type_components::traits::{
         AddressTypeProviderComponent, AmountDenomGetterComponent, AmountTypeProviderComponent,
         DenomTypeComponent, HeightAdjusterComponent, HeightIncrementerComponent,
@@ -126,6 +125,7 @@ mod preset {
         ProvideCosmosProposalTypes, ProvideCosmosTestWallet, ProvideIbcDenom, QueryCosmosBalance,
         QueryProposalStatusWithGrpc, UseCosmosAmount,
     };
+    use hermes_prelude::*;
 
     use crate::delegate::DelegateCosmosChainComponents;
 

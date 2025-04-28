@@ -1,6 +1,5 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
     use hermes_core::relayer_components::chain::impls::{
         QueryAndConvertRawClientState, QueryAndConvertRawConsensusState,
     };
@@ -36,6 +35,7 @@ mod preset {
         QueryConsensusStateHeightsFromGrpc,
     };
     use hermes_cosmos_test_components::chain::impls::ConvertCosmosIbcAmount;
+    use hermes_prelude::*;
 
     cgp_preset! {
         CosmosToCosmosComponents {
