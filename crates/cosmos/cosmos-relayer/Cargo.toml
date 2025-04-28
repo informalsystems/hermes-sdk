@@ -55,5 +55,5 @@ futures         = { workspace = true }
 http            = { workspace = true }
 secp256k1       = { workspace = true }
 
-opentelemetry = { version = "0.17.0", features = [ "metrics" ] }
+opentelemetry = { version = "0.29.1", features = [ "metrics" ] }
 moka          = { version = "0.12", features = [ "future" ] }
