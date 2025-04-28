@@ -14,10 +14,11 @@ description = """
 [dependencies]
 hermes-core = { workspace = true }
 
-cgp       = { workspace = true }
-http      = { workspace = true }
-ibc       = { workspace = true }
-serde     = { workspace = true, features = [ "derive" ] }
-toml      = { workspace = true }
-humantime = { workspace = true }
-clap      = { workspace = true, features = [ "derive" ] }
+cgp            = { workspace = true }
+hermes-prelude = { workspace = true }
+http           = { workspace = true }
+ibc            = { workspace = true }
+serde          = { workspace = true, features = [ "derive" ] }
+toml           = { workspace = true }
+humantime      = { workspace = true }
+clap           = { workspace = true, features = [ "derive" ] }

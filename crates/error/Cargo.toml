@@ -14,5 +14,6 @@ description = """
 [dependencies]
 eyre                      = { workspace = true }
 cgp                       = { workspace = true }
+hermes-prelude            = { workspace = true }
 hermes-relayer-components = { workspace = true }
 hermes-core               = { workspace = true }

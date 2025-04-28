@@ -1,5 +1,5 @@
 [package]
-name = "hermes-comet-light-client-components"
+name = "hermes-prelude"
 version = { workspace = true }
 edition = { workspace = true }
 license = { workspace = true }
@@ -12,6 +12,5 @@ description = """
 """
 
 [dependencies]
-cgp                          = { workspace = true }
-hermes-prelude               = { workspace = true }
-hermes-chain-type-components = { workspace = true }
+cgp       = { workspace = true }
+cgp-async = { workspace = true }

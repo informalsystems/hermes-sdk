@@ -22,8 +22,9 @@ hermes-runtime                 = { workspace = true }
 hermes-cosmos-chain-components = { workspace = true }
 hermes-chain-type-components   = { workspace = true }
 
-eyre       = { workspace = true }
-flex-error = { workspace = true }
-cgp        = { workspace = true }
-tokio      = { workspace = true, features = [ "full" ] }
-tracing    = { workspace = true }
+eyre           = { workspace = true }
+flex-error     = { workspace = true }
+cgp            = { workspace = true }
+hermes-prelude = { workspace = true }
+tokio          = { workspace = true, features = [ "full" ] }
+tracing        = { workspace = true }

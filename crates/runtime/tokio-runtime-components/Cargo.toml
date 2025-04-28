@@ -13,6 +13,7 @@ description = """
 
 [dependencies]
 cgp                             = { workspace = true }
+hermes-prelude                  = { workspace = true }
 hermes-runtime-components       = { workspace = true }
 hermes-async-runtime-components = { workspace = true }
 hermes-logging-components       = { workspace = true }

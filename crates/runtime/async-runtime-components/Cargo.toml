@@ -15,6 +15,7 @@ description = """
 hermes-runtime-components = { workspace = true }
 
 cgp             = { workspace = true }
+hermes-prelude  = { workspace = true }
 futures-core    = { workspace = true }
 futures-util    = { workspace = true, features = [ "io" ] }
 futures-channel = { workspace = true, features = [ "std" ] }
