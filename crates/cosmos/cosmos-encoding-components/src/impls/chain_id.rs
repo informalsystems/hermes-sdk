@@ -3,7 +3,7 @@ use hermes_core::encoding_components::traits::{
     MutEncoderComponent,
 };
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::string::EncodeStringField;
+use hermes_protobuf_encoding_components::impls::EncodeStringField;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::ChainId;
 

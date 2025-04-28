@@ -83,7 +83,7 @@ impl CheckWasmCosmosEncoding for WasmCosmosEncoding {}
 mod test {
     use hermes_core::encoding_components::traits::{CanEncode, Decoder, Encoder};
     use hermes_error::types::HermesError;
-    use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
+    use hermes_protobuf_encoding_components::impls::EncodeProtoWithMutBuffer;
     use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
     use hermes_wasm_encoding_components::types::WasmClientState;
     use ibc::core::client::types::Height;

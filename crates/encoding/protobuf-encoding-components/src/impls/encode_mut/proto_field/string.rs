@@ -5,7 +5,7 @@ use hermes_encoding_components::traits::{
 };
 use hermes_prelude::*;
 
-use crate::impls::encode_mut::proto_field::bytes::EncodeByteField;
+use crate::impls::EncodeByteField;
 
 pub struct EncodeStringField<const TAG: u32>;
 

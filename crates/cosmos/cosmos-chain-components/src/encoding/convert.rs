@@ -1,7 +1,7 @@
 use cgp::core::component::UseContext;
 use hermes_core::encoding_components::impls::{ConvertFrom, TryConvertFrom};
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
+use hermes_protobuf_encoding_components::impls::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_proto::ibc::core::commitment::v1::MerkleProof as ProtoMerkleProof;

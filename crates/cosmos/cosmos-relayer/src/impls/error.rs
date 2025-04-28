@@ -40,11 +40,9 @@ use hermes_error::handlers::{
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
-use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
-    InvalidWireType, UnsupportedWireType,
+use hermes_protobuf_encoding_components::impls::{
+    InvalidWireType, RequiredFieldTagNotFound, TypeUrlMismatchError, UnsupportedWireType,
 };
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_wasm_test_components::impls::chain::ProposalIdNotFound;
 use http::uri::InvalidUri;

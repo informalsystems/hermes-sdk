@@ -1,8 +1,23 @@
-pub mod bytes;
-pub mod decode_optional;
-pub mod decode_required;
-pub mod encode;
-pub mod encode_len;
-pub mod length_delim;
-pub mod string;
-pub mod u64;
+mod bytes;
+pub use bytes::*;
+
+mod decode_optional;
+pub use decode_optional::*;
+
+mod decode_required;
+pub use decode_required::*;
+
+mod encode;
+pub use encode::*;
+
+mod encode_len;
+pub use encode_len::*;
+
+mod length_delim;
+pub use length_delim::*;
+
+mod string;
+pub use string::*;
+
+mod u64;
+pub use u64::*;

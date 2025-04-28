@@ -9,11 +9,9 @@ mod preset {
     use hermes_cosmos_encoding_components::components::CosmosEncodingComponents;
     use hermes_prelude::*;
     use hermes_protobuf_encoding_components::impl_type_url;
-    use hermes_protobuf_encoding_components::impls::any::{
-        DecodeAsAnyProtobuf, EncodeAsAnyProtobuf,
+    use hermes_protobuf_encoding_components::impls::{
+        DecodeAsAnyProtobuf, EncodeAsAnyProtobuf, EncodeProtoWithMutBuffer, EncodeViaAny,
     };
-    use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
-    use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
     use hermes_protobuf_encoding_components::traits::EncodedLengthGetterComponent;
     use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
     use ibc::clients::wasm_types::client_message::WASM_CLIENT_MESSAGE_TYPE_URL;

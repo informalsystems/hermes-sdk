@@ -9,7 +9,7 @@ use hermes_core::encoding_components::types::AsBytes;
 use hermes_cosmos_chain_components::encoding::CosmosClientEncodingComponents;
 use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::impls::encode_mut::chunk::ProtoChunks;
+use hermes_protobuf_encoding_components::impls::ProtoChunks;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::commitment::CommitmentRoot;

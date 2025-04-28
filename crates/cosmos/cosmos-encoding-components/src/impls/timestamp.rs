@@ -6,7 +6,7 @@ use hermes_core::encoding_components::traits::{
     MutEncoderComponent,
 };
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::u64::EncodeU64ProtoField;
+use hermes_protobuf_encoding_components::impls::EncodeU64ProtoField;
 use ibc::core::primitives::{Timestamp, TimestampError};
 use ibc_proto::google::protobuf::Timestamp as ProtoTimestamp;
 

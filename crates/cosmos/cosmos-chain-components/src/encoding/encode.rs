@@ -3,9 +3,9 @@ use hermes_core::encoding_components::impls::{
 };
 use hermes_core::relayer_components::chain::traits::ViaCommitmentProof;
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
-use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
-use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
+use hermes_protobuf_encoding_components::impls::{
+    EncodeAsProtobuf, EncodeProtoWithMutBuffer, EncodeViaAny,
+};
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
