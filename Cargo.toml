@@ -52,15 +52,6 @@ members = [
   "crates/wasm/wasm-client-components",
   "crates/wasm/wasm-encoding-components",
   "crates/wasm/wasm-test-components",
-
-  "crates/solomachine/solomachine-chain-components",
-  "crates/solomachine/solomachine-relayer",
-
-  "crates/mock/mock-relayer",
-
-  "crates/ibc/ibc-components",
-  "crates/ibc/ibc-token-transfer-components",
-  "crates/ibc/ibc-mock-chain",
 ]
 
 [workspace.package]
@@ -178,13 +169,6 @@ hermes-wasm-client-components   = { version = "0.1.0" }
 hermes-wasm-encoding-components = { version = "0.1.0" }
 hermes-wasm-test-components     = { version = "0.1.0" }
 
-hermes-solomachine-chain-components = { version = "0.1.0" }
-hermes-solomachine-relayer          = { version = "0.1.0" }
-
-hermes-ibc-components                = { version = "0.1.0" }
-hermes-ibc-token-transfer-components = { version = "0.1.0" }
-hermes-ibc-mock-chain                = { version = "0.1.0" }
-
 [patch.crates-io]
 cgp             = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-core        = { git = "https://github.com/contextgeneric/cgp.git" }
@@ -252,10 +236,3 @@ hermes-celestia-integration-tests = { path = "./crates/celestia/celestia-integra
 hermes-wasm-client-components   = { path = "./crates/wasm/wasm-client-components" }
 hermes-wasm-encoding-components = { path = "./crates/wasm/wasm-encoding-components" }
 hermes-wasm-test-components     = { path = "./crates/wasm/wasm-test-components" }
-
-hermes-solomachine-chain-components = { path = "./crates/solomachine/solomachine-chain-components" }
-hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine-relayer" }
-
-hermes-ibc-components                = { path = "./crates/ibc/ibc-components" }
-hermes-ibc-token-transfer-components = { path = "./crates/ibc/ibc-token-transfer-components" }
-hermes-ibc-mock-chain                = { path = "./crates/ibc/ibc-mock-chain" }
