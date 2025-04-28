@@ -1,10 +1,8 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::transaction::traits::estimate_tx_fee::{
-    TxFeeEstimator, TxFeeEstimatorComponent,
+use hermes_core::relayer_components::chain::traits::HasChainId;
+use hermes_core::relayer_components::transaction::traits::{
+    HasFeeType, HasTransactionType, TxFeeEstimator, TxFeeEstimatorComponent,
 };
-use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
-use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use http::uri::InvalidUri;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::service_client::ServiceClient;
@@ -14,11 +12,8 @@ use tonic::codegen::http::Uri;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::traits::convert_gas_to_fee::CanConvertGasToFee;
-use crate::traits::gas_config::HasGasConfig;
-use crate::traits::grpc_address::HasGrpcAddress;
-use crate::traits::rpc_client::HasRpcClient;
-use crate::types::transaction::signed_tx::SignedTx;
+use crate::traits::{CanConvertGasToFee, HasGasConfig, HasGrpcAddress, HasRpcClient};
+use crate::types::SignedTx;
 
 pub struct EstimateCosmosTxFee;
 

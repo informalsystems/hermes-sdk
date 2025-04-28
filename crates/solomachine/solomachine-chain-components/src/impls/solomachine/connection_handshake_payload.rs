@@ -1,27 +1,17 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::tendermint::{
-    TendermintClientState, TendermintConsensusState,
-};
-use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
+use hermes_relayer_components::chain::traits::{
+    CanQueryClientState, CanQueryConnectionEnd, CanQueryConsensusState,
     ConnectionOpenAckPayloadBuilder, ConnectionOpenAckPayloadBuilderComponent,
     ConnectionOpenConfirmPayloadBuilder, ConnectionOpenConfirmPayloadBuilderComponent,
     ConnectionOpenInitPayloadBuilder, ConnectionOpenInitPayloadBuilderComponent,
-    ConnectionOpenTryPayloadBuilder, ConnectionOpenTryPayloadBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
-use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::connection::{
+    ConnectionOpenTryPayloadBuilder, ConnectionOpenTryPayloadBuilderComponent, HasClientStateType,
     HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
-    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
+    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType, HasConsensusStateType,
+    HasHeightType, HasIbcChainTypes, HasIbcCommitmentPrefix,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::client::types::Height;
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};

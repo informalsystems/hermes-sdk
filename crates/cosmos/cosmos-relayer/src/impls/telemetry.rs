@@ -1,4 +1,4 @@
-use hermes_relayer_components_extra::telemetry::traits::metrics::{
+use hermes_core::relayer_components_extra::telemetry::traits::metrics::{
     HasLabel, HasMetric, TelemetryCounter, TelemetryUpDownCounter, TelemetryValueRecorder,
 };
 use opentelemetry::metrics::Unit;

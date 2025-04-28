@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use crate::chain::types::aliases::ClientIdOf;
 use crate::multi::traits::client_id_at::HasClientIdAt;
 use crate::multi::types::tags::{Dst, Src};
-use crate::relay::traits::chains::{HasRelayChainTypes, HasRelayChains};
+use crate::relay::traits::{HasRelayChainTypes, HasRelayChains};
 
 pub trait HasSrcClientId: HasRelayChainTypes {
     fn src_client_id(&self) -> &ClientIdOf<Self::SrcChain, Self::DstChain>;

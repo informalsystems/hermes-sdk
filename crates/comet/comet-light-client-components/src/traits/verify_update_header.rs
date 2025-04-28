@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::light_block::HasLightBlockType;
-use crate::traits::types::verdict::HasVerdictType;
+use crate::traits::{HasLightBlockType, HasVerdictType};
 
 #[cgp_component {
   provider: UpdateHeaderVerifier,

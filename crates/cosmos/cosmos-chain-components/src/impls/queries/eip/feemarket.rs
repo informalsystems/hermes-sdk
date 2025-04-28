@@ -4,10 +4,9 @@ use cgp::prelude::*;
 use prost::DecodeError;
 use subtle_encoding::base64;
 
-use crate::impls::queries::eip::types::{EipBaseFeeHTTPResult, EipQueryError, GasPriceResponse};
-use crate::traits::eip::eip_query::{EipQuerier, EipQuerierComponent};
-use crate::traits::rpc_client::HasRpcClient;
-use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use crate::impls::{EipBaseFeeHTTPResult, EipQueryError, GasPriceResponse};
+use crate::traits::{EipQuerier, EipQuerierComponent, HasRpcClient};
+use crate::types::DynamicGasConfig;
 
 /// Query EIP-1559 base fee using Skip's feemarket endpoint and decode it using
 /// `GasPriceResponse`

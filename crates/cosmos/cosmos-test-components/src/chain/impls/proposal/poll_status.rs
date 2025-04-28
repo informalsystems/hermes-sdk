@@ -2,13 +2,11 @@ use core::fmt::{Debug, Display};
 use core::time::Duration;
 
 use cgp::prelude::*;
-use hermes_relayer_components::error::traits::HasRetryableError;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_test_components::chain::traits::proposal::poll_status::{
-    ProposalStatusPoller, ProposalStatusPollerComponent,
+use hermes_core::relayer_components::error::traits::HasRetryableError;
+use hermes_core::runtime_components::traits::{CanSleep, HasRuntime};
+use hermes_core::test_components::chain::traits::{
+    CanQueryProposalStatus, ProposalStatusPoller, ProposalStatusPollerComponent,
 };
-use hermes_test_components::chain::traits::proposal::query_status::CanQueryProposalStatus;
 
 pub struct PollProposalStatus;
 

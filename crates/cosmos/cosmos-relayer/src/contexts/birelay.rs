@@ -3,22 +3,21 @@ use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::extra::run::RunnerComponent;
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::LoggerComponent;
-use hermes_relayer_components::birelay::traits::AutoBiRelayerComponent;
-use hermes_relayer_components::components::default::birelay::DefaultBiRelayComponents;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
-use hermes_relayer_components::multi::traits::relay_at::{
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::relayer_components::birelay::traits::AutoBiRelayerComponent;
+use hermes_core::relayer_components::components::default::DefaultBiRelayComponents;
+use hermes_core::relayer_components::multi::traits::chain_at::ChainTypeProviderAtComponent;
+use hermes_core::relayer_components::multi::traits::relay_at::{
     RelayGetterAtComponent, RelayTypeProviderAtComponent,
 };
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
+use hermes_core::runtime_components::traits::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 
-use crate::contexts::chain::CosmosChain;
-use crate::contexts::relay::CosmosRelay;
-use crate::impls::error::HandleCosmosError;
+use crate::contexts::{CosmosChain, CosmosRelay};
+use crate::impls::HandleCosmosError;
 
 #[cgp_context(CosmosBiRelayComponents: DefaultBiRelayComponents)]
 #[derive(HasField, Clone)]

@@ -1,9 +1,9 @@
 use cgp::prelude::*;
 use futures::lock::MutexGuard;
 
-use crate::transaction::traits::nonce::allocate_nonce::{NonceAllocator, NonceAllocatorComponent};
-use crate::transaction::traits::nonce::nonce_mutex::HasMutexForNonceAllocation;
-use crate::transaction::traits::nonce::query_nonce::CanQueryNonce;
+use crate::transaction::traits::{
+    CanQueryNonce, HasMutexForNonceAllocation, NonceAllocator, NonceAllocatorComponent,
+};
 
 pub struct AllocateNonceWithMutex;
 

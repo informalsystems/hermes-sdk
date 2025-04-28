@@ -22,54 +22,38 @@ use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::{
     BridgeDriverTypeComponent, ProvideBridgeDriverType,
 };
 use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
-use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
-use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
-use hermes_cosmos_integration_tests::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
-use hermes_cosmos_integration_tests::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
-use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
-    CompatModeGetterComponent, UseCompatMode34,
+use hermes_cosmos_chain_components::types::DynamicGasConfig;
+use hermes_cosmos_integration_tests::contexts::CosmosChainDriver;
+use hermes_cosmos_integration_tests::impls::{
+    BuildCosmosChainDriver, BuildCosmosChainWithNodeConfig, BuildRelayerChainConfig,
 };
-use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
-use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::{
-    AccountPrefixGetter, AccountPrefixGetterComponent,
+use hermes_cosmos_integration_tests::traits::{
+    ChainBuilderWithNodeConfigComponent, CompatModeGetterComponent, CosmosBuilderGetterComponent,
+    RelayerChainConfigBuilderComponent, UseCompatMode34,
 };
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::{
-    ChainCommandPathGetter, ChainCommandPathGetterComponent,
+use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
+use hermes_cosmos_test_components::bootstrap::components::LegacyCosmosSdkBootstrapComponents;
+use hermes_cosmos_test_components::bootstrap::impls::{
+    NoModifyCometConfig, NoModifyCosmosSdkConfig, NoModifyGenesisConfig,
 };
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetterComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
-    DenomForStaking, DenomForTransfer, DenomPrefixGetter, DenomPrefixGetterComponent,
+use hermes_cosmos_test_components::bootstrap::traits::{
+    AccountPrefixGetter, AccountPrefixGetterComponent, ChainCommandPathGetter,
+    ChainCommandPathGetterComponent, ChainDriverBuilderComponent, ChainStoreDirGetterComponent,
+    CometConfigModifierComponent, CosmosGenesisConfigModifierComponent,
+    CosmosSdkConfigModifierComponent, DenomForStaking, DenomForTransfer, DenomPrefixGetter,
+    DenomPrefixGetterComponent, DynamicGasGetterComponent, RandomIdFlagGetterComponent,
+    UseRandomIdFlag, WalletConfigGeneratorComponent,
 };
-use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::{
-    RandomIdFlagGetterComponent, UseRandomIdFlag,
-};
-use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
-use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::HermesError;
-use hermes_logging_components::traits::logger::LoggerComponent;
+use hermes_logging_components::traits::LoggerComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    RuntimeGetterComponent, RuntimeTypeProviderComponent,
-};
-use hermes_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
-use hermes_test_components::chain_driver::traits::types::chain::ChainTypeProviderComponent;
-use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeProviderComponent;
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
+use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
+use hermes_test_components::bootstrap::traits::ChainBootstrapperComponent;
+use hermes_test_components::chain_driver::traits::ChainTypeProviderComponent;
+use hermes_test_components::driver::traits::ChainDriverTypeProviderComponent;
+use hermes_tracing_logging_components::contexts::TracingLogger;
 use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;

@@ -1,8 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::decode::{Decoder, DecoderComponent};
-use crate::traits::encode::{Encoder, EncoderComponent};
-use crate::traits::types::encoded::HasEncodedType;
+use crate::traits::{Decoder, DecoderComponent, Encoder, EncoderComponent, HasEncodedType};
 
 pub struct ReturnEncoded;
 

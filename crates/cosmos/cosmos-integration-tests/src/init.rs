@@ -3,22 +3,21 @@ use std::env;
 use std::str::FromStr;
 
 use eyre::Report;
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
-use hermes_cosmos_chain_components::types::messages::packet::packet_filter::PacketFilterConfig;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_core::test_components::setup::traits::CanBuildTestDriver;
+use hermes_cosmos_chain_components::types::{DynamicGasConfig, PacketFilterConfig};
+use hermes_cosmos_relayer::contexts::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::setup::traits::driver::CanBuildTestDriver;
 use hermes_tracing_logging_components::subscriber::init_tracing_subscriber;
 use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
 use toml::Value as TomlValue;
 use tracing::info;
 
-use crate::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use crate::contexts::bootstrap::{CosmosBootstrap, CosmosBootstrapFields};
-use crate::contexts::bootstrap_legacy::{LegacyCosmosBootstrap, LegacyCosmosBootstrapFields};
+use crate::contexts::{
+    CosmosBinaryChannelSetup, CosmosBinaryChannelTestDriver, CosmosBootstrap,
+    CosmosBootstrapFields, LegacyCosmosBootstrap, LegacyCosmosBootstrapFields,
+};
 
 pub enum TestPreset {
     GaiaToGaia,

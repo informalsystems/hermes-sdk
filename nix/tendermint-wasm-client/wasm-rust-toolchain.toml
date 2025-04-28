@@ -1,6 +1,4 @@
 [toolchain]
 channel = "1.81"
 profile = "minimal"
-targets = [
-  "wasm32-unknown-unknown",
-]
+targets = ["wasm32-unknown-unknown"]

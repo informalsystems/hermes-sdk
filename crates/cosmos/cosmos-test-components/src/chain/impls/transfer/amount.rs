@@ -2,18 +2,16 @@ use core::marker::PhantomData;
 use std::string::FromUtf8Error;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::denom::HasDenomType;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
-use hermes_test_components::chain::traits::transfer::amount::{
+use hermes_core::chain_type_components::traits::{HasAmountType, HasDenomType};
+use hermes_core::relayer_components::chain::traits::{HasChannelIdType, HasPortIdType};
+use hermes_core::test_components::chain::traits::{
     IbcTransferredAmountConverter, IbcTransferredAmountConverterComponent,
 };
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 use sha2::{Digest, Sha256};
 use subtle_encoding::hex;
 
-use crate::chain::types::amount::Amount;
-use crate::chain::types::denom::Denom;
+use crate::chain::types::{Amount, Denom};
 
 #[cgp_new_provider(IbcTransferredAmountConverterComponent)]
 impl<Chain, Counterparty> IbcTransferredAmountConverter<Chain, Counterparty>

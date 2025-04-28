@@ -1,23 +1,17 @@
 use core::fmt::Display;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+use hermes_core::chain_type_components::traits::HasMessageType;
+use hermes_core::relayer_components::chain::traits::{
     ChannelOpenAckMessageBuilder, ChannelOpenAckMessageBuilderComponent,
     ChannelOpenConfirmMessageBuilder, ChannelOpenConfirmMessageBuilderComponent,
     ChannelOpenInitMessageBuilder, ChannelOpenInitMessageBuilderComponent,
-    ChannelOpenTryMessageBuilder, ChannelOpenTryMessageBuilderComponent,
+    ChannelOpenTryMessageBuilder, ChannelOpenTryMessageBuilderComponent, HasChannelEndType,
+    HasChannelIdType, HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType,
+    HasChannelOpenTryPayloadType, HasCommitmentProofBytes, HasConnectionIdType, HasHeightFields,
+    HasInitChannelOptionsType, HasPortIdType,
 };
-use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelEndType, HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType,
-    HasChannelOpenTryPayloadType, HasInitChannelOptionsType,
-};
-use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::{
-    HasChannelIdType, HasConnectionIdType, HasPortIdType,
-};
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
-use hermes_relayer_components::chain::types::payloads::channel::{
+use hermes_core::relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
 use ibc::core::channel::types::channel::{ChannelEnd, State};
@@ -25,12 +19,11 @@ use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc_proto::ibc::core::channel::v1::{Channel, Counterparty as ChannelCounterparty};
 
-use crate::traits::message::{CosmosMessage, ToCosmosMessage};
-use crate::types::channel::CosmosInitChannelOptions;
-use crate::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
-use crate::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
-use crate::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
-use crate::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
+use crate::traits::{CosmosMessage, ToCosmosMessage};
+use crate::types::{
+    CosmosChannelOpenAckMessage, CosmosChannelOpenConfirmMessage, CosmosChannelOpenInitMessage,
+    CosmosChannelOpenTryMessage, CosmosInitChannelOptions,
+};
 
 pub struct BuildCosmosChannelHandshakeMessage;
 

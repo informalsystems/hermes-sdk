@@ -7,7 +7,7 @@ use prost::{DecodeError, Message};
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::traits::grpc_address::HasGrpcAddress;
+use crate::traits::HasGrpcAddress;
 
 /// TODO: Move this to a HasAccount component
 /// and create a CanQueryAccount trait

@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
-use crate::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
+use crate::chain::traits::{HasProposalIdType, HasProposalStatusType};
 
 #[cgp_component {
   provider: ProposalStatusQuerier,

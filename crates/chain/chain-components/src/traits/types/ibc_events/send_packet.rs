@@ -6,7 +6,7 @@ use cgp::prelude::*;
 
 /**
    Indicates that a chain context's
-   [`Event`](crate::traits::types::event::HasEventType::Event)
+   [`Event`](crate::traits::HasEventType::Event)
    type contains a [`SendPacketEvent`](Self::SendPacketEvent) variant.
 */
 #[cgp_component {

@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_encoding_components::traits::decode_mut::{MutDecoder, MutDecoderComponent};
+use hermes_encoding_components::traits::{MutDecoder, MutDecoderComponent};
 
 use crate::impls::encode_mut::chunk::{
     CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunks,

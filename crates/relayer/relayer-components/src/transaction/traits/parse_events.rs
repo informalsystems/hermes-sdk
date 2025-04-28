@@ -1,9 +1,9 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_chain_type_components::traits::HasMessageResponseType;
 
-use crate::transaction::traits::types::tx_response::HasTxResponseType;
+use crate::transaction::traits::HasTxResponseType;
 
 #[cgp_component {
   provider: TxMessageResponseParser,

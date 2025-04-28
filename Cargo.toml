@@ -3,246 +3,255 @@
 resolver = "2"
 
 members = [
-    "crates/chain/chain-components",
-    "crates/chain/chain-type-components",
+  "crates/core",
 
-    "crates/relayer/relayer-components",
-    "crates/relayer/relayer-components-extra",
+  "crates/chain/chain-components",
+  "crates/chain/chain-type-components",
 
-    "crates/runtime/runtime-components",
-    "crates/runtime/async-runtime-components",
-    "crates/runtime/tokio-runtime-components",
-    "crates/runtime/runtime",
+  "crates/relayer/relayer-components",
+  "crates/relayer/relayer-components-extra",
 
-    "crates/test/test-components",
-    "crates/test/test-suite",
+  "crates/runtime/runtime-components",
+  "crates/runtime/async-runtime-components",
+  "crates/runtime/tokio-runtime-components",
+  "crates/runtime/runtime",
 
-    "crates/any/any-counterparty",
+  "crates/test/test-components",
+  "crates/test/test-suite",
 
-    "crates/cli/cli-components",
-    "crates/cli/cli-framework",
-    "crates/cli/cli",
+  "crates/any/any-counterparty",
 
-    "crates/encoding/encoding-components",
-    "crates/encoding/protobuf-encoding-components",
+  "crates/cli/cli-components",
+  "crates/cli/cli-framework",
+  "crates/cli/cli",
 
-    "crates/error",
+  "crates/encoding/encoding-components",
+  "crates/encoding/protobuf-encoding-components",
 
-    "crates/logging/logging-components",
-    "crates/logging/tracing-logging-components",
+  "crates/error",
 
-    "crates/cosmos/cosmos-chain-components",
-    "crates/cosmos/cosmos-chain-preset",
-    "crates/cosmos/cosmos-encoding-components",
-    "crates/cosmos/cosmos-test-components",
-    "crates/cosmos/cosmos-integration-tests",
-    "crates/cosmos/cosmos-relayer",
-    "crates/cosmos/cosmos-wasm-relayer",
+  "crates/logging/logging-components",
+  "crates/logging/tracing-logging-components",
 
-    "crates/comet/comet-light-client-components",
-    "crates/comet/comet-light-client-context",
+  "crates/cosmos/cosmos-core",
+  "crates/cosmos/cosmos-chain-components",
+  "crates/cosmos/cosmos-chain-preset",
+  "crates/cosmos/cosmos-encoding-components",
+  "crates/cosmos/cosmos-test-components",
+  "crates/cosmos/cosmos-integration-tests",
+  "crates/cosmos/cosmos-relayer",
+  "crates/cosmos/cosmos-wasm-relayer",
 
-    "crates/celestia/celestia-test-components",
-    "crates/celestia/celestia-integration-tests",
+  "crates/comet/comet-light-client-components",
+  "crates/comet/comet-light-client-context",
 
-    "crates/wasm/wasm-client-components",
-    "crates/wasm/wasm-encoding-components",
-    "crates/wasm/wasm-test-components",
+  "crates/celestia/celestia-test-components",
+  "crates/celestia/celestia-integration-tests",
 
-    "crates/solomachine/solomachine-chain-components",
-    "crates/solomachine/solomachine-relayer",
+  "crates/wasm/wasm-client-components",
+  "crates/wasm/wasm-encoding-components",
+  "crates/wasm/wasm-test-components",
 
-    "crates/mock/mock-relayer",
+  "crates/solomachine/solomachine-chain-components",
+  "crates/solomachine/solomachine-relayer",
 
-    "crates/ibc/ibc-components",
-    "crates/ibc/ibc-token-transfer-components",
-    "crates/ibc/ibc-mock-chain",
+  "crates/mock/mock-relayer",
+
+  "crates/ibc/ibc-components",
+  "crates/ibc/ibc-token-transfer-components",
+  "crates/ibc/ibc-mock-chain",
 ]
 
 [workspace.package]
 
-version         = "0.1.0"
-edition         = "2021"
-license         = "Apache-2.0"
-keywords        = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
-repository      = "https://github.com/informalsystems/hermes-sdk"
-authors         = ["Informal Systems <hello@informal.systems>"]
-rust-version    = "1.81"
+version      = "0.1.0"
+edition      = "2021"
+license      = "Apache-2.0"
+keywords     = [ "blockchain", "consensus", "cosmos", "ibc", "tendermint" ]
+repository   = "https://github.com/informalsystems/hermes-sdk"
+authors      = [ "Informal Systems <hello@informal.systems>" ]
+rust-version = "1.81"
 
 [profile.release]
 overflow-checks = true
 
 [workspace.dependencies]
-async-trait                     = { version = "0.1.83" }
-ibc                             = { version = "0.56.0", default-features = false }
-ibc-client-tendermint           = { version = "0.56.0", default-features = false }
-ibc-proto                       = { version = "0.51.1", default-features = false }
-tendermint                      = { version = "0.40" }
-tendermint-proto                = { version = "0.40" }
-tendermint-rpc                  = { version = "0.40" }
-tendermint-testgen              = { version = "0.40" }
+async-trait                      = { version = "0.1.83" }
+ibc                              = { version = "0.56.0", default-features = false }
+ibc-client-tendermint            = { version = "0.56.0", default-features = false }
+ibc-proto                        = { version = "0.51.1", default-features = false }
+tendermint                       = { version = "0.40" }
+tendermint-proto                 = { version = "0.40" }
+tendermint-rpc                   = { version = "0.40" }
+tendermint-testgen               = { version = "0.40" }
 tendermint-light-client-verifier = { version = "0.40" }
-tendermint-light-client         = { version = "0.40" }
-basecoin                        = { version = "0.2.0" }
-bitcoin                         = { version = "0.31.2" }
-cgp                             = { version = "0.4.0", default-features = false }
-clap                            = { version = "4.5.20" }
-dirs-next                       = { version = "2.0.0" }
-num-bigint                      = { version = "0.4" }
-num-rational                    = { version = "0.4.1" }
-prost                           = { version = "0.13.3" }
-prost-types                     = { version = "0.13.3" }
-reqwest                         = { version = "0.12.9", features = ["json"] }
-ripemd                          = { version =  "0.1.3" }
-serde                           = { version = "1.0.214" }
-serde_derive                    = { version = "1.0.104" }
-serde_json                      = { version = "1.0" }
-subtle-encoding                 = { version = "0.5.1" }
-tiny-bip39                      = { version = "1.0.0" }
-tokio                           = { version = "1.40" }
-tracing                         = { version = "0.1.40" }
-tracing-subscriber              = { version = "0.3.18" }
-time                            = { version = "0.3.36" }
-tonic                           = { version = "0.12" }
-toml                            = { version = "0.8.15" }
-digest                          = { version = "0.10.6" }
-futures                         = { version = "0.3.30", default-features = false }
-futures-core                    = { version = "0.3.30", default-features = false }
-futures-util                    = { version = "0.3.30", default-features = false }
-futures-channel                 = { version = "0.3.31", default-features = false }
-generic-array                   = { version = "0.14.7" }
-eyre                            = { version = "0.6.12" }
-stable-eyre                     = { version = "0.2.2" }
-itertools                       = { version = "0.14" }
-http                            = { version = "1.0.0" }
-humantime                       = { version = "2.1.0" }
-flex-error                      = { version = "0.4.4", default-features = false }
-hdpath                          = { version = "0.6.3" }
-rand                            = { version = "0.8.5" }
-bech32                          = { version = "0.9.1" }
-sha2                            = { version = "0.10.8" }
-secp256k1                       = { version = "0.28.2" }
-ics23                           = { version = "0.12" }
+tendermint-light-client          = { version = "0.40" }
+basecoin                         = { version = "0.2.0" }
+bitcoin                          = { version = "0.31.2" }
+cgp                              = { version = "0.4.0", default-features = false }
+clap                             = { version = "4.5.20" }
+dirs-next                        = { version = "2.0.0" }
+num-bigint                       = { version = "0.4" }
+num-rational                     = { version = "0.4.1" }
+prost                            = { version = "0.13.3" }
+prost-types                      = { version = "0.13.3" }
+reqwest                          = { version = "0.12.9", features = [ "json" ] }
+ripemd                           = { version = "0.1.3" }
+serde                            = { version = "1.0.214" }
+serde_derive                     = { version = "1.0.104" }
+serde_json                       = { version = "1.0" }
+subtle-encoding                  = { version = "0.5.1" }
+tiny-bip39                       = { version = "1.0.0" }
+tokio                            = { version = "1.40" }
+tracing                          = { version = "0.1.40" }
+tracing-subscriber               = { version = "0.3.18" }
+time                             = { version = "0.3.36" }
+tonic                            = { version = "0.12" }
+toml                             = { version = "0.8.15" }
+digest                           = { version = "0.10.6" }
+futures                          = { version = "0.3.30", default-features = false }
+futures-core                     = { version = "0.3.30", default-features = false }
+futures-util                     = { version = "0.3.30", default-features = false }
+futures-channel                  = { version = "0.3.31", default-features = false }
+generic-array                    = { version = "0.14.7" }
+eyre                             = { version = "0.6.12" }
+stable-eyre                      = { version = "0.2.2" }
+itertools                        = { version = "0.14" }
+http                             = { version = "1.0.0" }
+humantime                        = { version = "2.1.0" }
+flex-error                       = { version = "0.4.4", default-features = false }
+hdpath                           = { version = "0.6.3" }
+rand                             = { version = "0.8.5" }
+bech32                           = { version = "0.9.1" }
+sha2                             = { version = "0.10.8" }
+secp256k1                        = { version = "0.28.2" }
+ics23                            = { version = "0.12" }
 
-hermes-runtime-components               = { version = "0.1.0" }
-hermes-async-runtime-components         = { version = "0.1.0" }
-hermes-tokio-runtime-components         = { version = "0.1.0" }
-hermes-runtime                          = { version = "0.1.0" }
+hermes-core = { version = "0.1.0" }
 
-hermes-error                            = { version = "0.1.0" }
-hermes-encoding-components              = { version = "0.1.0" }
-hermes-protobuf-encoding-components     = { version = "0.1.0" }
+hermes-runtime-components       = { version = "0.1.0" }
+hermes-async-runtime-components = { version = "0.1.0" }
+hermes-tokio-runtime-components = { version = "0.1.0" }
+hermes-runtime                  = { version = "0.1.0" }
 
-hermes-logging-components               = { version = "0.1.0" }
-hermes-tracing-logging-components       = { version = "0.1.0" }
+hermes-error                        = { version = "0.1.0" }
+hermes-encoding-components          = { version = "0.1.0" }
+hermes-protobuf-encoding-components = { version = "0.1.0" }
 
-hermes-chain-components                 = { version = "0.1.0" }
-hermes-chain-type-components           = { version = "0.1.0" }
+hermes-logging-components         = { version = "0.1.0" }
+hermes-tracing-logging-components = { version = "0.1.0" }
 
-hermes-relayer-components               = { version = "0.1.0" }
-hermes-relayer-components-extra         = { version = "0.1.0" }
+hermes-chain-components      = { version = "0.1.0" }
+hermes-chain-type-components = { version = "0.1.0" }
 
-hermes-test-components                  = { version = "0.1.0" }
-hermes-ibc-test-suite                   = { version = "0.1.0" }
+hermes-relayer-components       = { version = "0.1.0" }
+hermes-relayer-components-extra = { version = "0.1.0" }
 
-hermes-any-counterparty                 = { version = "0.1.0" }
+hermes-test-components = { version = "0.1.0" }
+hermes-ibc-test-suite  = { version = "0.1.0" }
 
-hermes-cli                              = { version = "0.1.0" }
-hermes-cli-components                   = { version = "0.1.0" }
-hermes-cli-framework                    = { version = "0.1.0" }
+hermes-any-counterparty = { version = "0.1.0" }
 
-hermes-cosmos-chain-components          = { version = "0.1.0" }
-hermes-cosmos-chain-preset              = { version = "0.1.0" }
-hermes-cosmos-encoding-components       = { version = "0.1.0" }
-hermes-cosmos-relayer                   = { version = "0.1.0" }
-hermes-cosmos-wasm-relayer              = { version = "0.1.0" }
-hermes-cosmos-test-components           = { version = "0.1.0" }
-hermes-cosmos-integration-tests         = { version = "0.1.0" }
+hermes-cli            = { version = "0.1.0" }
+hermes-cli-components = { version = "0.1.0" }
+hermes-cli-framework  = { version = "0.1.0" }
 
-hermes-comet-light-client-components    = { version = "0.1.0" }
-hermes-comet-light-client-context       = { version = "0.1.0" }
+hermes-cosmos-core                = { version = "0.1.0" }
+hermes-cosmos-chain-components    = { version = "0.1.0" }
+hermes-cosmos-chain-preset        = { version = "0.1.0" }
+hermes-cosmos-encoding-components = { version = "0.1.0" }
+hermes-cosmos-relayer             = { version = "0.1.0" }
+hermes-cosmos-wasm-relayer        = { version = "0.1.0" }
+hermes-cosmos-test-components     = { version = "0.1.0" }
+hermes-cosmos-integration-tests   = { version = "0.1.0" }
 
-hermes-celestia-test-components         = { version = "0.1.0" }
-hermes-celestia-integration-tests       = { version = "0.1.0" }
+hermes-comet-light-client-components = { version = "0.1.0" }
+hermes-comet-light-client-context    = { version = "0.1.0" }
 
-hermes-wasm-client-components           = { version = "0.1.0" }
-hermes-wasm-encoding-components         = { version = "0.1.0" }
-hermes-wasm-test-components             = { version = "0.1.0" }
+hermes-celestia-test-components   = { version = "0.1.0" }
+hermes-celestia-integration-tests = { version = "0.1.0" }
 
-hermes-solomachine-chain-components     = { version = "0.1.0" }
-hermes-solomachine-relayer              = { version = "0.1.0" }
+hermes-wasm-client-components   = { version = "0.1.0" }
+hermes-wasm-encoding-components = { version = "0.1.0" }
+hermes-wasm-test-components     = { version = "0.1.0" }
 
-hermes-ibc-components                   = { version = "0.1.0" }
-hermes-ibc-token-transfer-components    = { version = "0.1.0" }
-hermes-ibc-mock-chain                   = { version = "0.1.0" }
+hermes-solomachine-chain-components = { version = "0.1.0" }
+hermes-solomachine-relayer          = { version = "0.1.0" }
+
+hermes-ibc-components                = { version = "0.1.0" }
+hermes-ibc-token-transfer-components = { version = "0.1.0" }
+hermes-ibc-mock-chain                = { version = "0.1.0" }
 
 [patch.crates-io]
-cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-macro                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp             = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-core        = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-extra       = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-async       = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-async-macro = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-component   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-macro       = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-macro-lib   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-type        = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-field       = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-error       = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-error-extra = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-run         = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-runtime     = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-sync        = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-inner       = { git = "https://github.com/contextgeneric/cgp.git" }
 
-hermes-chain-components             = { path = "./crates/chain/chain-components" }
-hermes-chain-type-components        = { path = "./crates/chain/chain-type-components" }
+hermes-core = { path = "./crates/core" }
 
-hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
-hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }
+hermes-chain-components      = { path = "./crates/chain/chain-components" }
+hermes-chain-type-components = { path = "./crates/chain/chain-type-components" }
 
-hermes-runtime-components           = { path = "./crates/runtime/runtime-components" }
-hermes-async-runtime-components     = { path = "./crates/runtime/async-runtime-components" }
-hermes-tokio-runtime-components     = { path = "./crates/runtime/tokio-runtime-components" }
-hermes-runtime                      = { path = "./crates/runtime/runtime" }
+hermes-relayer-components       = { path = "./crates/relayer/relayer-components" }
+hermes-relayer-components-extra = { path = "./crates/relayer/relayer-components-extra" }
 
-hermes-error                        = { path = "./crates/error" }
+hermes-runtime-components       = { path = "./crates/runtime/runtime-components" }
+hermes-async-runtime-components = { path = "./crates/runtime/async-runtime-components" }
+hermes-tokio-runtime-components = { path = "./crates/runtime/tokio-runtime-components" }
+hermes-runtime                  = { path = "./crates/runtime/runtime" }
+
+hermes-error = { path = "./crates/error" }
 
 hermes-encoding-components          = { path = "./crates/encoding/encoding-components" }
 hermes-protobuf-encoding-components = { path = "./crates/encoding/protobuf-encoding-components" }
 
-hermes-logging-components           = { path = "./crates/logging/logging-components" }
-hermes-tracing-logging-components   = { path = "./crates/logging/tracing-logging-components" }
+hermes-logging-components         = { path = "./crates/logging/logging-components" }
+hermes-tracing-logging-components = { path = "./crates/logging/tracing-logging-components" }
 
-hermes-test-components              = { path = "./crates/test/test-components" }
-hermes-ibc-test-suite               = { path = "./crates/test/test-suite" }
+hermes-test-components = { path = "./crates/test/test-components" }
+hermes-ibc-test-suite  = { path = "./crates/test/test-suite" }
 
-hermes-any-counterparty             = { path = "./crates/any/any-counterparty" }
+hermes-any-counterparty = { path = "./crates/any/any-counterparty" }
 
-hermes-cli                          = { path = "./crates/cli/cli" }
-hermes-cli-components               = { path = "./crates/cli/cli-components" }
-hermes-cli-framework                = { path = "./crates/cli/cli-framework" }
+hermes-cli            = { path = "./crates/cli/cli" }
+hermes-cli-components = { path = "./crates/cli/cli-components" }
+hermes-cli-framework  = { path = "./crates/cli/cli-framework" }
 
-hermes-cosmos-chain-components      = { path = "./crates/cosmos/cosmos-chain-components" }
-hermes-cosmos-chain-preset          = { path = "./crates/cosmos/cosmos-chain-preset" }
-hermes-cosmos-encoding-components   = { path = "./crates/cosmos/cosmos-encoding-components" }
-hermes-cosmos-relayer               = { path = "./crates/cosmos/cosmos-relayer" }
-hermes-cosmos-wasm-relayer          = { path = "./crates/cosmos/cosmos-wasm-relayer" }
-hermes-cosmos-test-components       = { path = "./crates/cosmos/cosmos-test-components" }
-hermes-cosmos-integration-tests     = { path = "./crates/cosmos/cosmos-integration-tests" }
+hermes-cosmos-core                = { path = "./crates/cosmos/cosmos-core" }
+hermes-cosmos-chain-components    = { path = "./crates/cosmos/cosmos-chain-components" }
+hermes-cosmos-chain-preset        = { path = "./crates/cosmos/cosmos-chain-preset" }
+hermes-cosmos-encoding-components = { path = "./crates/cosmos/cosmos-encoding-components" }
+hermes-cosmos-relayer             = { path = "./crates/cosmos/cosmos-relayer" }
+hermes-cosmos-wasm-relayer        = { path = "./crates/cosmos/cosmos-wasm-relayer" }
+hermes-cosmos-test-components     = { path = "./crates/cosmos/cosmos-test-components" }
+hermes-cosmos-integration-tests   = { path = "./crates/cosmos/cosmos-integration-tests" }
 
 hermes-comet-light-client-components = { path = "./crates/comet/comet-light-client-components" }
 hermes-comet-light-client-context    = { path = "./crates/comet/comet-light-client-context" }
 
-hermes-celestia-test-components     = { path = "./crates/celestia/celestia-test-components" }
-hermes-celestia-integration-tests   = { path = "./crates/celestia/celestia-integration-tests" }
+hermes-celestia-test-components   = { path = "./crates/celestia/celestia-test-components" }
+hermes-celestia-integration-tests = { path = "./crates/celestia/celestia-integration-tests" }
 
-hermes-wasm-client-components       = { path = "./crates/wasm/wasm-client-components" }
-hermes-wasm-encoding-components     = { path = "./crates/wasm/wasm-encoding-components" }
-hermes-wasm-test-components         = { path = "./crates/wasm/wasm-test-components" }
+hermes-wasm-client-components   = { path = "./crates/wasm/wasm-client-components" }
+hermes-wasm-encoding-components = { path = "./crates/wasm/wasm-encoding-components" }
+hermes-wasm-test-components     = { path = "./crates/wasm/wasm-test-components" }
 
 hermes-solomachine-chain-components = { path = "./crates/solomachine/solomachine-chain-components" }
 hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine-relayer" }
 
-hermes-ibc-components                   = { path = "./crates/ibc/ibc-components" }
-hermes-ibc-token-transfer-components    = { path = "./crates/ibc/ibc-token-transfer-components" }
-hermes-ibc-mock-chain                   = { path = "./crates/ibc/ibc-mock-chain" }
+hermes-ibc-components                = { path = "./crates/ibc/ibc-components" }
+hermes-ibc-token-transfer-components = { path = "./crates/ibc/ibc-token-transfer-components" }
+hermes-ibc-mock-chain                = { path = "./crates/ibc/ibc-mock-chain" }

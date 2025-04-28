@@ -1,18 +1,18 @@
 [package]
-name         = "hermes-ibc-token-transfer-components"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+name = "hermes-ibc-token-transfer-components"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Implementation of an IBC Relayer in Rust, as a library
 """
 
 [dependencies]
-cgp                             = { workspace = true, features = ["full"] }
-hermes-chain-type-components    = { workspace = true }
-hermes-encoding-components      = { workspace = true }
-hermes-ibc-components           = { workspace = true }
+cgp                          = { workspace = true, features = [ "full" ] }
+hermes-chain-type-components = { workspace = true }
+hermes-encoding-components   = { workspace = true }
+hermes-ibc-components        = { workspace = true }

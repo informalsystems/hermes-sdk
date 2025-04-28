@@ -2,17 +2,15 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::message::HasMessageType;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_chain_components::traits::HasMessageType;
+use hermes_logging_components::traits::CanLog;
 
-use crate::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
-use crate::chain::traits::types::consensus_state::HasConsensusStateType;
-use crate::chain::traits::types::height::HasHeightType;
-use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::target::{
-    CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, HasTargetClientIds, RelayTarget,
+use crate::chain::traits::{
+    CanQueryConsensusStateWithLatestHeight, HasConsensusStateType, HasHeightType,
 };
-use crate::relay::traits::update_client_message_builder::{
+use crate::chain::types::aliases::HeightOf;
+use crate::relay::traits::{
+    CounterpartyChainOf, HasTargetChainTypes, HasTargetChains, HasTargetClientIds, RelayTarget,
     TargetUpdateClientMessageBuilder, TargetUpdateClientMessageBuilderComponent,
 };
 

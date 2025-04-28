@@ -2,8 +2,7 @@ use alloc::collections::BTreeMap;
 
 use cgp::prelude::*;
 
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
+use crate::bootstrap::traits::{HasChainGenesisConfigType, HasWalletConfigType};
 
 #[cgp_component {
   provider: WalletConfigGenerator,

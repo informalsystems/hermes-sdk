@@ -3,18 +3,15 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
-use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
-use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
-use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
-use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
-use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
-use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
-use hermes_test_components::chain_driver::traits::fields::wallet::{HasWallet, UserWallet};
+use hermes_chain_type_components::traits::HasAmountDenom;
+use hermes_relayer_components::chain::traits::{CanQueryChainStatus, HasChainId};
+use hermes_test_components::chain::traits::{
+    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
+    HasAmountMethods, HasDefaultMemo, HasWalletType,
+};
+use hermes_test_components::chain_driver::traits::{
+    CanGenerateRandomAmount, HasWallet, UserWallet,
+};
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_test_components::test_case::traits::test_case::TestCase;
 

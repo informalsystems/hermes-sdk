@@ -1,8 +1,8 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
-use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasChildProcessType};
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_runtime_components::traits::{
+    ChildProcessOf, FilePathOf, HasChildProcessType, HasFilePathType, HasRuntimeType,
+};
+use hermes_test_components::driver::traits::HasChainDriverType;
 
 use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;
 

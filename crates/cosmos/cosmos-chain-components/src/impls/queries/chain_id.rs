@@ -1,14 +1,10 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
-use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::{
-    CounterpartyChainIdQuerier, CounterpartyChainIdQuerierComponent,
+use hermes_core::relayer_components::chain::traits::{
+    CanQueryChainHeight, CanQueryClientState, CounterpartyChainIdQuerier,
+    CounterpartyChainIdQuerierComponent, HasChainIdType, HasClientStateFields, HasIbcChainTypes,
 };
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::channel::types::channel::{ChannelEnd, State};
 use ibc::core::channel::types::error::ChannelError;
 use ibc::core::connection::types::ConnectionEnd;
@@ -18,7 +14,7 @@ use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc_proto::Protobuf;
 use tendermint_proto::Error as TendermintProtoError;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryChainIdFromAbci;
 

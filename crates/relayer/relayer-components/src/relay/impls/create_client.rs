@@ -2,18 +2,16 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
-use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
+use hermes_chain_components::traits::CanExtractFromMessageResponse;
+use hermes_chain_type_components::traits::HasMessageResponseEvents;
 
-use crate::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
-use crate::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
-use crate::chain::traits::send_message::CanSendSingleMessage;
-use crate::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
-use crate::chain::traits::types::create_client::{
-    HasCreateClientEvent, HasCreateClientPayloadType,
+use crate::chain::traits::{
+    CanBuildCreateClientMessage, CanBuildCreateClientPayload, CanSendSingleMessage, HasChainId,
+    HasChainIdType, HasCreateClientEvent, HasCreateClientPayloadType,
 };
-use crate::relay::traits::client_creator::{ClientCreator, ClientCreatorComponent};
-use crate::relay::traits::target::{HasTargetChainTypes, RelayTarget};
+use crate::relay::traits::{
+    ClientCreator, ClientCreatorComponent, HasTargetChainTypes, RelayTarget,
+};
 
 pub struct CreateClientWithChains;
 

@@ -1,28 +1,23 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::tendermint::{
-    TendermintClientState, TendermintConsensusState,
+use hermes_core::encoding_components::impls::GetDefaultEncoding;
+use hermes_core::encoding_components::traits::{
+    CanConvert, CanConvertBothWays, CanEncode, CanEncodeAndDecode, DefaultEncodingGetter,
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
+    HasEncodedType, HasEncodingType,
 };
-use hermes_cosmos_relayer::impls::error::HandleCosmosError;
-use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
-use hermes_encoding_components::traits::convert::{CanConvert, CanConvertBothWays};
-use hermes_encoding_components::traits::encode::CanEncode;
-use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
-use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeProviderComponent, HasEncodingType,
-};
-use hermes_encoding_components::traits::types::encoded::HasEncodedType;
-use hermes_encoding_components::types::AsBytes;
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
+use hermes_cosmos_relayer::impls::HandleCosmosError;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
-use hermes_wasm_encoding_components::types::client_message::WasmClientMessage;
-use hermes_wasm_encoding_components::types::client_state::WasmClientState;
-use hermes_wasm_encoding_components::types::consensus_state::WasmConsensusState;
+use hermes_wasm_encoding_components::types::{
+    WasmClientMessage, WasmClientState, WasmConsensusState,
+};
 use ibc::core::client::types::Height;
 use prost_types::Any;
 
-use crate::encoding::components::*;
-use crate::types::client_state::WasmTendermintClientState;
+use crate::encoding::WasmCosmosEncodingComponents;
+use crate::types::WasmTendermintClientState;
 
 #[cgp_context(WasmCosmosEncodingContextComponents: WasmCosmosEncodingComponents)]
 pub struct WasmCosmosEncoding;
@@ -86,12 +81,11 @@ impl CheckWasmCosmosEncoding for WasmCosmosEncoding {}
 
 #[cfg(test)]
 mod test {
-    use hermes_encoding_components::traits::decode::Decoder;
-    use hermes_encoding_components::traits::encode::{CanEncode, Encoder};
+    use hermes_core::encoding_components::traits::{CanEncode, Decoder, Encoder};
     use hermes_error::types::HermesError;
     use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
     use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
-    use hermes_wasm_encoding_components::types::client_state::WasmClientState;
+    use hermes_wasm_encoding_components::types::WasmClientState;
     use ibc::core::client::types::Height;
 
     use crate::context::encoding::WasmCosmosEncoding;

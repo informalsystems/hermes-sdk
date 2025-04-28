@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::chain_id::HasChainIdType;
+use crate::traits::HasChainIdType;
 
 /**
    This implements the accessor method to get a chain context's

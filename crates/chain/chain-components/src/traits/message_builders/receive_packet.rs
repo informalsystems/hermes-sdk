@@ -1,9 +1,8 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
+use hermes_chain_type_components::traits::HasOutgoingPacketType;
 
-use crate::traits::types::message::HasMessageType;
-use crate::traits::types::packets::receive::HasReceivePacketPayloadType;
+use crate::traits::{HasMessageType, HasReceivePacketPayloadType};
 
 #[cgp_component {
   provider: ReceivePacketMessageBuilder,

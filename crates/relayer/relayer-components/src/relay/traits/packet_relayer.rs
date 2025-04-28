@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::relay::traits::chains::HasRelayPacketType;
+use crate::relay::traits::HasRelayPacketType;
 
 #[cgp_component {
   provider: PacketRelayer,

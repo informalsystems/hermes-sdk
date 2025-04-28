@@ -1,8 +1,8 @@
 use cgp::prelude::*;
-use hermes_encoding_components::traits::decode_mut::{MutDecoder, MutDecoderComponent};
-use hermes_encoding_components::traits::encode_mut::{MutEncoder, MutEncoderComponent};
-use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
-use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
+use hermes_core::encoding_components::traits::{
+    HasDecodeBufferType, HasEncodeBufferType, MutDecoder, MutDecoderComponent, MutEncoder,
+    MutEncoderComponent,
+};
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::string::EncodeStringField;
 use ibc::core::host::types::error::IdentifierError;
 use ibc::core::host::types::identifiers::ChainId;

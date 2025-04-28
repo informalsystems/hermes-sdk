@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::fs::file_path::HasFilePathType;
+use crate::traits::HasFilePathType;
 
 #[cgp_component {
   name: ChildProcessTypeComponent,

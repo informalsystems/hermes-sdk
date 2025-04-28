@@ -1,4 +1,4 @@
-use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
+use hermes_cosmos_chain_components::methods::encode_protobuf;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc::core::host::types::identifiers::ConnectionId;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};

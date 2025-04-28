@@ -1,27 +1,20 @@
 use core::fmt::Display;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message::HasMessageType;
-use hermes_encoding_components::traits::convert::CanConvert;
-use hermes_encoding_components::traits::has_encoding::HasEncoding;
-use hermes_encoding_components::types::AsBytes;
-use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+use hermes_core::chain_type_components::traits::HasMessageType;
+use hermes_core::encoding_components::traits::{CanConvert, HasEncoding};
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_core::relayer_components::chain::traits::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenAckMessageBuilderComponent,
     ConnectionOpenConfirmMessageBuilder, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilder, ConnectionOpenInitMessageBuilderComponent,
-    ConnectionOpenTryMessageBuilder, ConnectionOpenTryMessageBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionEndType, HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
-    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
+    ConnectionOpenTryMessageBuilder, ConnectionOpenTryMessageBuilderComponent, HasClientIdType,
+    HasClientStateType, HasCommitmentPrefixType, HasCommitmentProofBytes, HasConnectionEndType,
+    HasConnectionIdType, HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType, HasHeightFields,
     HasInitConnectionOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasConnectionIdType};
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
-use hermes_relayer_components::chain::types::payloads::connection::{
+use hermes_core::relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };
@@ -31,12 +24,11 @@ use ibc::core::connection::types::ConnectionEnd;
 use ibc_proto::ibc::core::connection::v1::Version;
 use prost_types::Any;
 
-use crate::traits::message::{CosmosMessage, ToCosmosMessage};
-use crate::types::connection::CosmosInitConnectionOptions;
-use crate::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage;
-use crate::types::messages::connection::open_confirm::CosmosConnectionOpenConfirmMessage;
-use crate::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
-use crate::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
+use crate::traits::{CosmosMessage, ToCosmosMessage};
+use crate::types::{
+    CosmosConnectionOpenAckMessage, CosmosConnectionOpenConfirmMessage,
+    CosmosConnectionOpenInitMessage, CosmosConnectionOpenTryMessage, CosmosInitConnectionOptions,
+};
 
 pub struct BuildCosmosConnectionHandshakeMessage;
 

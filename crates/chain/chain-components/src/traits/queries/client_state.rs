@@ -3,14 +3,13 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::counterparty::CanUseCounterparty;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
-use hermes_chain_type_components::traits::types::ibc::client_state::ClientStateOf;
+use hermes_chain_type_components::traits::{
+    CanUseCounterparty, ClientStateOf, HasClientIdType, HasHeightType,
+};
 
-use crate::traits::queries::chain_status::CanQueryChainStatus;
-use crate::traits::types::client_state::{HasClientStateType, HasRawClientStateType};
-use crate::traits::types::proof::HasCommitmentProofType;
+use crate::traits::{
+    CanQueryChainStatus, HasClientStateType, HasCommitmentProofType, HasRawClientStateType,
+};
 
 #[cgp_component {
   provider: ClientStateQuerier,

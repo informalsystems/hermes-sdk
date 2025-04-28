@@ -5,19 +5,14 @@ use core::marker::PhantomData;
 use core::mem;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LogLevel;
-use hermes_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, HasMessageType,
-};
+use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LogLevel;
+use hermes_relayer_components::chain::traits::{CanEstimateMessageSize, HasMessageType};
 use hermes_relayer_components::multi::traits::chain_at::HasChainAt;
-use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
-use hermes_relayer_components::relay::traits::target::RelayTarget;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_runtime_components::traits::spawn::CanSpawnTask;
-use hermes_runtime_components::traits::task::Task;
-use hermes_runtime_components::traits::time::{HasTime, TimeOf};
+use hermes_relayer_components::relay::traits::{CanSendIbcMessages, RelayTarget};
+use hermes_runtime_components::traits::{
+    CanSleep, CanSpawnTask, HasRuntime, HasTime, Task, TimeOf,
+};
 
 use crate::batch::traits::types::{CanUseMessageBatchChannel, HasMessageBatchChannelTypes};
 use crate::batch::types::config::BatchConfig;

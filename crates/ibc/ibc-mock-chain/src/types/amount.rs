@@ -2,17 +2,10 @@ use core::cmp::Ordering;
 use core::fmt::{Debug, Display};
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::builders::amount::{
-    AmountBuilder, AmountBuilderComponent,
-};
-use hermes_chain_type_components::traits::fields::amount::denom::{
-    AmountDenomGetter, AmountDenomGetterComponent,
-};
-use hermes_chain_type_components::traits::fields::amount::quantity::{
-    AmountQuantityGetter, AmountQuantityGetterComponent,
-};
-use hermes_chain_type_components::traits::types::amount::{
-    AmountTypeProvider, AmountTypeProviderComponent,
+use hermes_chain_type_components::traits::{
+    AmountBuilder, AmountBuilderComponent, AmountDenomGetter, AmountDenomGetterComponent,
+    AmountQuantityGetter, AmountQuantityGetterComponent, AmountTypeProvider,
+    AmountTypeProviderComponent,
 };
 
 use crate::components::chain::MockChainComponents;

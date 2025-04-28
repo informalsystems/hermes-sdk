@@ -1,28 +1,22 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::extract_data::CanExtractFromEvent;
-use hermes_chain_components::traits::packet::from_send_packet::CanBuildPacketFromSendPacket;
-use hermes_chain_components::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_chain_components::traits::{
+    CanBuildPacketFromSendPacket, CanExtractFromEvent, CanQueryChainHeight,
+};
+use hermes_logging_components::traits::CanLog;
 
-use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
-use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
+use crate::chain::traits::{CanBuildPacketFromWriteAck, HasSendPacketEvent};
 use crate::chain::types::aliases::EventOf;
-use crate::relay::impls::packet_filters::target::{
-    MatchPacketDestinationChain, MatchPacketSourceChain,
+use crate::relay::impls::{
+    LogRelayPacketAction, LogSkipRelayLockedPacket, MatchPacketDestinationChain,
+    MatchPacketSourceChain, RelayPacketProgress,
 };
-use crate::relay::impls::packet_relayers::general::full_relay::{
-    LogRelayPacketAction, RelayPacketProgress,
+use crate::relay::traits::{
+    CanFilterRelayPackets, CanRaiseRelayChainErrors, CanRelayAckPacket, CanRelayPacket,
+    DestinationTarget, EventRelayer, EventRelayerComponent, HasPacketLock, HasRelayChains,
+    HasRelayClientIds, RelayPacketFilter, SourceTarget,
 };
-use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::event_relayer::{EventRelayer, EventRelayerComponent};
-use crate::relay::traits::packet_filter::{CanFilterRelayPackets, RelayPacketFilter};
-use crate::relay::traits::packet_lock::HasPacketLock;
-use crate::relay::traits::packet_relayer::CanRelayPacket;
-use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
-use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 
 /**
    A packet event relayer that performs packet relaying based on chain events

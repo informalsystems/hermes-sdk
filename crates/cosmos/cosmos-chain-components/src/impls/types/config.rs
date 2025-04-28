@@ -5,7 +5,7 @@ use ibc_proto::google::protobuf::Any;
 use serde::{Deserialize, Serialize};
 use tendermint_rpc::Url;
 
-use crate::types::config::gas::gas_config::GasConfig;
+use crate::types::GasConfig;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RelayerConfig {

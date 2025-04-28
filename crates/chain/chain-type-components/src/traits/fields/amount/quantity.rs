@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::amount::HasAmountType;
-use crate::traits::types::quantity::HasQuantityType;
+use crate::traits::{HasAmountType, HasQuantityType};
 
 #[cgp_component {
   provider: AmountQuantityGetter,

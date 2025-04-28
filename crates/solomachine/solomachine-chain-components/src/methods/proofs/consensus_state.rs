@@ -1,5 +1,5 @@
-use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
-use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
+use hermes_cosmos_chain_components::methods::encode_protobuf;
+use hermes_cosmos_chain_components::types::TendermintConsensusState;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};

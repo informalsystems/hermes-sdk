@@ -1,11 +1,8 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_core::runtime_components::traits::{CanReadFileAsString, HasRuntime};
 use serde::de::DeserializeOwned;
 
-use crate::traits::config::config_path::HasConfigPath;
-use crate::traits::config::load_config::{ConfigLoader, ConfigLoaderComponent};
-use crate::traits::types::config::HasConfigType;
+use crate::traits::{ConfigLoader, ConfigLoaderComponent, HasConfigPath, HasConfigType};
 
 pub struct LoadTomlConfig;
 

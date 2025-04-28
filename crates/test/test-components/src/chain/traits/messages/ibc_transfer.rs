@@ -2,14 +2,12 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
+use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
+use hermes_relayer_components::chain::traits::{
+    HasChannelIdType, HasHeightType, HasMessageType, HasPortIdType, HasTimeoutType,
+};
 
-use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::memo::HasMemoType;
+use crate::chain::traits::HasMemoType;
 
 #[cgp_component {
   provider: IbcTokenTransferMessageBuilder,

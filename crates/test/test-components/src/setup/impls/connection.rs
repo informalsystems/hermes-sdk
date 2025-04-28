@@ -2,18 +2,16 @@ use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::prelude::*;
 use hermes_relayer_components::birelay::traits::HasTwoWayRelay;
-use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::{HasIbcChainTypes, HasInitConnectionOptionsType};
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::{
     HasBoundedRelayTypeAt, HasRelayTypeAt, RelayAt,
 };
-use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
+use hermes_relayer_components::relay::impls::CanBootstrapConnection;
 
-use crate::setup::traits::connection::{ConnectionSetup, ConnectionSetupComponent};
-use crate::setup::traits::init_connection_options_at::HasInitConnectionOptionsAt;
+use crate::setup::traits::{ConnectionSetup, ConnectionSetupComponent, HasInitConnectionOptionsAt};
 
 pub struct SetupConnectionHandshake;
 

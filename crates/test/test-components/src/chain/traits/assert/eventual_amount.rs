@@ -1,7 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-
-use crate::chain::traits::types::address::HasAddressType;
+use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
 
 #[cgp_component {
   provider: EventualAmountAsserter,

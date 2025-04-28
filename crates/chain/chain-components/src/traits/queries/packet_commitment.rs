@@ -1,11 +1,9 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_chain_type_components::traits::types::ibc::port_id::HasPortIdType;
-use hermes_chain_type_components::traits::types::ibc::sequence::HasSequenceType;
+use hermes_chain_type_components::traits::{
+    HasChannelIdType, HasHeightType, HasPortIdType, HasSequenceType,
+};
 
-use crate::traits::types::packets::receive::HasPacketCommitmentType;
-use crate::traits::types::proof::HasCommitmentProofType;
+use crate::traits::{HasCommitmentProofType, HasPacketCommitmentType};
 
 #[cgp_component {
   provider: PacketCommitmentQuerier,

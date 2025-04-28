@@ -1,1 +1,2 @@
-pub mod amount;
+mod amount;
+pub use amount::*;

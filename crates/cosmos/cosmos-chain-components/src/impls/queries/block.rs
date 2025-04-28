@@ -1,15 +1,13 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::block::{
-    BlockQuerier, BlockQuerierComponent,
+use hermes_core::relayer_components::chain::traits::{
+    BlockQuerier, BlockQuerierComponent, HasBlockType, HasHeightType,
 };
-use hermes_relayer_components::chain::traits::types::block::HasBlockType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc::core::client::types::Height;
 use tendermint::block::{Block, Height as BlockHeight, Id as BlockId};
 use tendermint::Error as TendermintError;
 use tendermint_rpc::{Client, Error as RpcError};
 
-use crate::traits::rpc_client::HasRpcClient;
+use crate::traits::HasRpcClient;
 
 pub struct QueryCometBlock;
 

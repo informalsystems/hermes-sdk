@@ -1,11 +1,11 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
-use crate::relay::traits::chains::{HasRelayChains, PacketOf};
-use crate::relay::traits::packet_lock::HasPacketLock;
-use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent};
+use crate::relay::traits::{
+    HasPacketLock, HasRelayChains, PacketOf, PacketRelayer, PacketRelayerComponent,
+};
 
 /**
    Call the inner relayer only if the packet lock provided by [`HasPacketLock`]

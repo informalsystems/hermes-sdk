@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::light_block::HasLightBlockType;
+use crate::traits::HasLightBlockType;
 
 #[cgp_component {
   provider: VerificationStatusUpdater,

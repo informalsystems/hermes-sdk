@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::relay::traits::chains::{HasRelayChains, PacketOf};
+use crate::relay::traits::{HasRelayChains, PacketOf};
 
 /**
    Provides a packet lock mutex for packet relayers to coordinate and avoid

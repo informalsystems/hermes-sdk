@@ -3,26 +3,21 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::extract_data::CanExtractFromMessageResponse;
-use hermes_chain_components::traits::types::chain_id::HasChainId;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
+use hermes_chain_components::traits::{CanExtractFromMessageResponse, HasChainId};
+use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelInfo;
 
-use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenTryMessage;
-use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenTryPayload;
-use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenTryEvent;
+use crate::chain::traits::{
+    CanBuildConnectionOpenTryMessage, CanBuildConnectionOpenTryPayload, CanQueryChainHeight,
+    CanQueryClientStateWithLatestHeight, HasConnectionOpenTryEvent,
+};
 use crate::chain::types::aliases::ConnectionIdOf;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::connection::open_try::{
-    ConnectionOpenTryRelayer, ConnectionOpenTryRelayerComponent,
+use crate::relay::traits::{
+    CanRaiseRelayChainErrors, CanSendSingleIbcMessage, CanSendTargetUpdateClientMessage,
+    ConnectionOpenTryRelayer, ConnectionOpenTryRelayerComponent, DestinationTarget,
+    HasDestinationTargetChainTypes, HasRelayChains, HasRelayClientIds, HasSourceTargetChainTypes,
+    MainSink, SourceTarget,
 };
-use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::target::{
-    DestinationTarget, HasDestinationTargetChainTypes, HasSourceTargetChainTypes, SourceTarget,
-};
-use crate::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 
 /**
    A base implementation of [`ConnectionOpenTryRelayer`] that relays a new connection

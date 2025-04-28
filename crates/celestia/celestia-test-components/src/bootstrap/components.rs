@@ -1,7 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::prelude::*;
-    use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
+    use hermes_cosmos_test_components::bootstrap::traits::WalletConfigGeneratorComponent;
 
     use crate::bootstrap::impls::bootstrap_bridge::BootstrapCelestiaBridge;
     use crate::bootstrap::impls::bridge_auth_token::GenerateBridgeJwtToken;

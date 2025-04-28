@@ -1,19 +1,16 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::consensus_state::{
+use hermes_core::relayer_components::chain::traits::{
+    HasCommitmentProofType, HasHeightFields, HasIbcChainTypes, HasRawConsensusStateType,
     RawConsensusStateQuerier, RawConsensusStateQuerierComponent,
     RawConsensusStateWithProofsQuerier, RawConsensusStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::HasRawConsensusStateType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc::cosmos_host::IBC_QUERY_PATH;
 use prost::{DecodeError, Message};
 use prost_types::Any;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryCosmosConsensusStateFromAbci;
 

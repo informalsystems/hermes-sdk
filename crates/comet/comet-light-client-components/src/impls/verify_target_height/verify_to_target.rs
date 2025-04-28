@@ -1,13 +1,10 @@
 use cgp::prelude::*;
 
-use crate::traits::light_block::height::HasLightBlockHeight;
-use crate::traits::query_light_block::{
-    CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore, GetLowestTrustedOrVerified,
-    GetTrustedOrVerified,
-};
-use crate::traits::verify_target_height::{
-    CanVerifyTargetHeight, NoInitialTrustedState, TargetHeightVerifier,
-    TargetHeightVerifierComponent, VerifyBackward, VerifyForward, VerifyToTarget,
+use crate::traits::{
+    CanQueryLightBlock, CanVerifyTargetHeight, GetHighestTrustedOrVerifiedBefore,
+    GetLowestTrustedOrVerified, GetTrustedOrVerified, HasLightBlockHeight, NoInitialTrustedState,
+    TargetHeightVerifier, TargetHeightVerifierComponent, VerifyBackward, VerifyForward,
+    VerifyToTarget,
 };
 
 pub struct DoVerifyToTarget;

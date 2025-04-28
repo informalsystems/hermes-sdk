@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::event::HasEventType;
-use crate::traits::types::message_response::HasMessageResponseType;
+use crate::traits::{HasEventType, HasMessageResponseType};
 
 #[cgp_component {
   provider: MessageResponseEventsGetter,

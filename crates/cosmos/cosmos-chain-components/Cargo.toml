@@ -1,44 +1,41 @@
 [package]
-name         = "hermes-cosmos-chain-components"
-version      = { workspace = true }
-edition      = { workspace = true }
-license      = { workspace = true }
-keywords     = { workspace = true }
-repository   = { workspace = true }
-authors      = { workspace = true }
+name = "hermes-cosmos-chain-components"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
 rust-version = { workspace = true }
-description  = """
+description = """
     Implementation of an IBC Relayer in Rust, as a library
 """
 
 [dependencies]
-cgp                                     = { workspace = true }
-hermes-error                            = { workspace = true }
-hermes-relayer-components               = { workspace = true }
-hermes-relayer-components-extra         = { workspace = true }
-hermes-chain-type-components            = { workspace = true }
-hermes-runtime-components               = { workspace = true }
-hermes-encoding-components              = { workspace = true }
-hermes-protobuf-encoding-components     = { workspace = true }
-hermes-cosmos-encoding-components       = { workspace = true }
-hermes-comet-light-client-components    = { workspace = true }
-hermes-comet-light-client-context       = { workspace = true }
+cgp                                  = { workspace = true }
+hermes-error                         = { workspace = true }
+hermes-core                          = { workspace = true }
+hermes-protobuf-encoding-components  = { workspace = true }
+hermes-cosmos-encoding-components    = { workspace = true }
+hermes-comet-light-client-components = { workspace = true }
+hermes-comet-light-client-context    = { workspace = true }
 
-ibc                                     = { workspace = true }
-ibc-proto                               = { workspace = true, features = ["client", "transport"] }
-ibc-client-tendermint                   = { workspace = true }
-tendermint                              = { workspace = true, features = ["secp256k1"] }
-tendermint-proto                        = { workspace = true }
-tendermint-light-client                 = { workspace = true }
-tendermint-light-client-verifier        = { workspace = true }
-tendermint-rpc                          = { workspace = true, features = ["http-client", "websocket-client"] }
+ibc = { workspace = true }
+ibc-proto = { workspace = true, features = [ "client", "transport" ] }
+ibc-client-tendermint = { workspace = true }
+tendermint = { workspace = true, features = [ "secp256k1" ] }
+tendermint-proto = { workspace = true }
+tendermint-rpc = { workspace = true, features = [
+  "http-client",
+  "websocket-client",
+] }
 
 bitcoin         = { workspace = true }
 bech32          = { workspace = true }
 eyre            = { workspace = true }
 digest          = { workspace = true }
 dirs-next       = { workspace = true }
-futures         = { workspace = true, features = ["alloc"] }
+futures         = { workspace = true, features = [ "alloc" ] }
 generic-array   = { workspace = true }
 hdpath          = { workspace = true }
 http            = { workspace = true }
@@ -51,7 +48,7 @@ prost-types     = { workspace = true }
 reqwest         = { workspace = true }
 ripemd          = { workspace = true }
 sha2            = { workspace = true }
-secp256k1       = { workspace = true, features = ["serde"] }
+secp256k1       = { workspace = true, features = [ "serde" ] }
 serde           = { workspace = true }
 serde_derive    = { workspace = true }
 serde_json      = { workspace = true }
@@ -59,5 +56,5 @@ subtle-encoding = { workspace = true }
 time            = { workspace = true }
 tiny-bip39      = { workspace = true }
 tokio           = { workspace = true }
-tonic           = { workspace = true, features = ["tls", "tls-roots"] }
+tonic           = { workspace = true, features = [ "tls", "tls-roots" ] }
 tracing         = { workspace = true }

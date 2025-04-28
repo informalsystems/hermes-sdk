@@ -1,12 +1,9 @@
 use cgp::prelude::*;
-use hermes_encoding_components::traits::encode::CanEncode;
-use hermes_encoding_components::traits::has_encoding::HasEncoding;
-use hermes_encoding_components::traits::types::encoded::HasEncodedType;
-use hermes_encoding_components::types::AsBytes;
+use hermes_core::encoding_components::traits::{CanEncode, HasEncodedType, HasEncoding};
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_core::relayer_components::chain::traits::{HasCommitmentProofType, HasHeightType};
+use hermes_core::relayer_components::error::traits::{CanPerformRetry, HasMaxErrorRetry};
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
-use hermes_relayer_components::error::traits::{CanPerformRetry, HasMaxErrorRetry};
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ics23::CommitmentProof;
@@ -17,9 +14,8 @@ use tendermint::Error as TendermintError;
 use tendermint_rpc::endpoint::abci_query::AbciQuery;
 use tendermint_rpc::{Client, Error as RpcError};
 
-use crate::traits::abci_query::{AbciQuerier, AbciQuerierComponent};
-use crate::traits::rpc_client::HasRpcClient;
-use crate::types::commitment_proof::CosmosCommitmentProof;
+use crate::traits::{AbciQuerier, AbciQuerierComponent, HasRpcClient};
+use crate::types::CosmosCommitmentProof;
 
 #[derive(Debug)]
 pub struct AbciQueryError {

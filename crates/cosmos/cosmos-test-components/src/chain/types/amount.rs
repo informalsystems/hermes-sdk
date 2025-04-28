@@ -2,7 +2,7 @@ use core::fmt::{self, Display};
 
 use serde::Serialize;
 
-use crate::chain::types::denom::Denom;
+use crate::chain::types::Denom;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Serialize)]
 pub struct Amount {

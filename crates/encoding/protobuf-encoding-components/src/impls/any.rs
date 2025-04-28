@@ -2,11 +2,10 @@ use core::fmt::Display;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_encoding_components::traits::convert::{Converter, ConverterComponent};
-use hermes_encoding_components::traits::decode::{Decoder, DecoderComponent};
-use hermes_encoding_components::traits::encode::{Encoder, EncoderComponent};
-use hermes_encoding_components::traits::schema::HasSchema;
-use hermes_encoding_components::traits::types::encoded::HasEncodedType;
+use hermes_encoding_components::traits::{
+    Converter, ConverterComponent, Decoder, DecoderComponent, Encoder, EncoderComponent,
+    HasEncodedType, HasSchema,
+};
 use prost::{DecodeError, Message};
 use prost_types::Any;
 

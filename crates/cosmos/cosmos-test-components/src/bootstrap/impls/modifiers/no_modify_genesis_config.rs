@@ -1,9 +1,7 @@
 use cgp::prelude::*;
 use serde_json::Value;
 
-use crate::bootstrap::traits::modifiers::modify_genesis_config::{
-    CosmosGenesisConfigModifier, CosmosGenesisConfigModifierComponent,
-};
+use crate::bootstrap::traits::{CosmosGenesisConfigModifier, CosmosGenesisConfigModifierComponent};
 
 pub struct NoModifyGenesisConfig;
 

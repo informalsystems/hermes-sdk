@@ -2,11 +2,8 @@ use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::denom::HasDenomType;
-use hermes_relayer_components::chain::traits::types::ibc::{
-    HasChannelIdType, HasIbcChainTypes, HasPortIdType,
-};
+use hermes_chain_type_components::traits::{HasAmountType, HasDenomType};
+use hermes_relayer_components::chain::traits::{HasChannelIdType, HasIbcChainTypes, HasPortIdType};
 
 #[cgp_component {
     provider: IbcTransferredAmountConverter,

@@ -1,9 +1,7 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
-use crate::traits::types::create_client::{
-    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
-};
+use crate::traits::{HasCreateClientPayloadOptionsType, HasCreateClientPayloadType};
 
 #[cgp_component {
   provider: CreateClientPayloadBuilder,

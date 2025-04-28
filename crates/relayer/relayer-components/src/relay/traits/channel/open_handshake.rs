@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
+use crate::relay::traits::HasRelayChains;
+use crate::relay::types::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
 
 #[cgp_component {
   provider: ChannelOpenHandshakeRelayer,

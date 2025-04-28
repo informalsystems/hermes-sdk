@@ -1,21 +1,18 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::types::key_types::secp256k1::Secp256k1KeyPair;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
-use hermes_runtime_components::traits::os::exec_command::{CanExecCommand, ExecOutput};
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_core::runtime_components::traits::{
+    CanExecCommand, CanWriteStringToFile, ExecOutput, HasFilePathType, HasRuntime,
+};
+use hermes_core::test_components::chain::traits::HasWalletType;
+use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_cosmos_chain_components::types::Secp256k1KeyPair;
 use serde_json as json;
 
-use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::bootstrap::traits::fields::hd_path::HasWalletHdPath;
-use crate::bootstrap::traits::initializers::init_wallet::{
-    WalletInitializer, WalletInitializerComponent,
+use crate::bootstrap::traits::{
+    HasChainCommandPath, HasWalletHdPath, WalletInitializer, WalletInitializerComponent,
 };
-use crate::chain::types::wallet::CosmosTestWallet;
+use crate::chain::types::CosmosTestWallet;
 
 pub struct InitCosmosTestWallet<OutputGetter>(pub PhantomData<OutputGetter>);
 

@@ -1,1 +1,2 @@
-pub mod store_code;
+mod store_code;
+pub use store_code::*;

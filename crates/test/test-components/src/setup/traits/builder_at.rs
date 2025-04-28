@@ -1,7 +1,7 @@
 use cgp::core::field::UseField;
 use cgp::prelude::*;
 
-use crate::driver::traits::types::builder_at::{BuilderAt, HasBuilderTypeAt};
+use crate::driver::traits::{BuilderAt, HasBuilderTypeAt};
 
 #[cgp_getter {
     name: BuilderAtGetterComponent<A, B>,

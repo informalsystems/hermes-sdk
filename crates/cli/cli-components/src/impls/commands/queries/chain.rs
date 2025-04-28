@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 
 use super::chain_status::QueryChainStatusArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
+use crate::traits::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryChainSubCommand;
 

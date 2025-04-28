@@ -1,11 +1,9 @@
 use core::fmt::Debug;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::height::HasHeightType;
-use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
+use hermes_chain_type_components::traits::{HasConnectionIdType, HasHeightType};
 
-use crate::traits::types::connection::HasConnectionEndType;
-use crate::traits::types::proof::HasCommitmentProofType;
+use crate::traits::{HasCommitmentProofType, HasConnectionEndType};
 
 #[cgp_component {
   provider: ConnectionEndQuerier,

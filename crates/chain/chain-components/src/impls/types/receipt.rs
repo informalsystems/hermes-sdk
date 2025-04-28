@@ -2,9 +2,7 @@ use alloc::vec::Vec;
 
 use cgp::prelude::*;
 
-use crate::traits::types::packets::timeout::{
-    PacketReceiptTypeComponent, ProvidePacketReceiptType,
-};
+use crate::traits::{PacketReceiptTypeComponent, ProvidePacketReceiptType};
 
 // TODO: determine if we can use `bool` instead of `Vec<u8>` as the
 // canonical `PacketReceipt` type

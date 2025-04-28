@@ -1,23 +1,14 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::packet::fields::{
+use hermes_chain_components::traits::{
+    CanQueryPacketIsCleared, HasAcknowledgementType, HasHeightType, HasOutgoingPacketType,
     HasPacketSequence, HasPacketSrcChannelId, HasPacketSrcPortId,
 };
-use hermes_chain_components::traits::queries::packet_is_cleared::CanQueryPacketIsCleared;
-use hermes_chain_components::traits::types::height::HasHeightType;
-use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
-use hermes_chain_components::traits::types::packets::ack::HasAcknowledgementType;
 
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::packet_relayer::{PacketRelayer, PacketRelayerComponent};
-use crate::relay::traits::packet_relayers::ack_packet::{
-    AckPacketRelayer, AckPacketRelayerComponent,
-};
-use crate::relay::traits::packet_relayers::receive_packet::{
-    ReceivePacketRelayer, ReceivePacketRelayerComponent,
-};
-use crate::relay::traits::packet_relayers::timeout_unordered_packet::{
+use crate::relay::traits::{
+    AckPacketRelayer, AckPacketRelayerComponent, HasRelayChains, PacketRelayer,
+    PacketRelayerComponent, ReceivePacketRelayer, ReceivePacketRelayerComponent,
     TimeoutUnorderedPacketRelayer, TimeoutUnorderedPacketRelayerComponent,
 };
 

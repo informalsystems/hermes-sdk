@@ -1,35 +1,28 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
-use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
-use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
-use hermes_encoding_components::traits::convert::CanConvert;
-use hermes_encoding_components::traits::decode::CanDecode;
-use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, DefaultEncodingGetterComponent, EncodingGetterComponent,
-    EncodingTypeProviderComponent,
+use hermes_core::encoding_components::impls::GetDefaultEncoding;
+use hermes_core::encoding_components::traits::{
+    CanConvert, CanDecode, DefaultEncodingGetter, DefaultEncodingGetterComponent,
+    EncodingGetterComponent, EncodingTypeProviderComponent,
 };
-use hermes_encoding_components::types::AsBytes;
-use hermes_error::handlers::debug::DebugError;
+use hermes_core::encoding_components::types::AsBytes;
+use hermes_core::relayer_components::chain::impls::QueryAndConvertRawClientState;
+use hermes_core::relayer_components::chain::traits::{
+    ChainIdTypeProviderComponent, ChainStatusTypeComponent, ChannelIdTypeComponent,
+    ClientIdTypeComponent, ClientStateQuerierComponent, ClientStateTypeComponent,
+    ConnectionIdTypeComponent, HeightTypeProviderComponent, OutgoingPacketTypeComponent,
+    PortIdTypeComponent, SequenceTypeComponent, TimeoutTypeComponent,
+};
+use hermes_cosmos_chain_components::impls::ProvideCosmosChainTypes;
+use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
+use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
-use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::ibc::{
-    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent, PortIdTypeComponent,
-    SequenceTypeComponent,
-};
-use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
-use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 use hermes_wasm_encoding_components::components::*;
-use hermes_wasm_encoding_components::types::client_state::WasmClientState;
+use hermes_wasm_encoding_components::types::WasmClientState;
 
-use crate::impls::types::client_state::ProvideWasmClientState;
+use crate::impls::ProvideWasmClientState;
 
 #[cgp_context(WasmCounterpartyComponents)]
 pub struct WasmCounterparty;

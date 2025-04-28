@@ -4,8 +4,7 @@ use cgp::core::component::UseContext;
 use cgp::core::field::FieldGetter;
 use cgp::prelude::*;
 
-use crate::traits::encode_mut::{MutEncoder, MutEncoderComponent};
-use crate::traits::types::encode_buffer::HasEncodeBufferType;
+use crate::traits::{HasEncodeBufferType, MutEncoder, MutEncoderComponent};
 
 pub type EncodeField<Tag, InEncoder> = EncodeFieldWithGetter<UseContext, Tag, InEncoder>;
 

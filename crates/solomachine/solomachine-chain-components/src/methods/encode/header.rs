@@ -1,6 +1,6 @@
 #![allow(non_snake_case)]
 
-use hermes_cosmos_chain_components::methods::encode::encode_to_any;
+use hermes_cosmos_chain_components::methods::encode_to_any;
 use ibc_proto::google::protobuf::Any;
 use prost::Message;
 use secp256k1::SecretKey;

@@ -1,5 +1,14 @@
-pub mod create_chain_home_dir;
-pub mod init_chain_data;
-pub mod init_wallet;
-pub mod update_chain_config;
-pub mod update_genesis_config;
+mod create_chain_home_dir;
+pub use create_chain_home_dir::*;
+
+mod init_chain_data;
+pub use init_chain_data::*;
+
+mod init_wallet;
+pub use init_wallet::*;
+
+mod update_chain_config;
+pub use update_chain_config::*;
+
+mod update_genesis_config;
+pub use update_genesis_config::*;

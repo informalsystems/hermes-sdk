@@ -1,0 +1,37 @@
+[package]
+name = "hermes-cosmos-core"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+keywords = { workspace = true }
+repository = { workspace = true }
+authors = { workspace = true }
+rust-version = { workspace = true }
+description = """
+    Implementation of an IBC Relayer in Rust, as a library
+"""
+
+[dependencies]
+hermes-core                          = { workspace = true }
+hermes-cosmos-chain-components       = { workspace = true }
+hermes-cosmos-test-components        = { workspace = true }
+hermes-cosmos-chain-preset           = { workspace = true }
+hermes-cosmos-encoding-components    = { workspace = true }
+hermes-cosmos-integration-tests      = { workspace = true }
+hermes-cosmos-relayer                = { workspace = true }
+hermes-cosmos-wasm-relayer           = { workspace = true }
+hermes-protobuf-encoding-components  = { workspace = true }
+hermes-tracing-logging-components    = { workspace = true }
+hermes-runtime                       = { workspace = true }
+hermes-error                         = { workspace = true }
+hermes-wasm-client-components        = { workspace = true }
+hermes-wasm-encoding-components      = { workspace = true }
+hermes-wasm-test-components          = { workspace = true }
+hermes-comet-light-client-components = { workspace = true }
+hermes-comet-light-client-context    = { workspace = true }
+
+ibc              = { workspace = true }
+ibc-proto        = { workspace = true }
+tendermint       = { workspace = true }
+tendermint-proto = { workspace = true }
+tendermint-rpc   = { workspace = true }

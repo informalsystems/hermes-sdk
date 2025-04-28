@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_runtime_components::traits::HasRuntime;
+use hermes_test_components::driver::traits::HasChainDriverType;
 
 use crate::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 

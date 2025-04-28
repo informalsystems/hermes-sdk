@@ -1,7 +1,7 @@
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::ibc::HasClientIdType;
+use hermes_chain_components::traits::HasClientIdType;
 
-use crate::chain::traits::types::chain_id::HasChainIdType;
+use crate::chain::traits::HasChainIdType;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::ClientIdAt;

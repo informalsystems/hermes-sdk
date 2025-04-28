@@ -2,7 +2,7 @@ use alloc::collections::BTreeMap;
 
 use futures::lock::Mutex;
 
-use crate::chain::traits::types::chain_id::HasChainIdType;
+use crate::chain::traits::HasChainIdType;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::{ClientIdAt, HasBoundedRelayTypeAt, RelayAt};
 

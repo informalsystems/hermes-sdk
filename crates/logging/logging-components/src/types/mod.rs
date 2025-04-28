@@ -1,1 +1,2 @@
-pub mod level;
+mod level;
+pub use level::*;

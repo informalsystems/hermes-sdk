@@ -1,8 +1,6 @@
-use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
+use hermes_chain_type_components::traits::HasConnectionIdType;
 
-use crate::traits::types::channel::HasChannelEndType;
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::proof::HasCommitmentProofType;
+use crate::traits::{HasChannelEndType, HasCommitmentProofType, HasHeightType};
 
 pub struct ChannelOpenTryPayload<Chain, Counterparty>
 where

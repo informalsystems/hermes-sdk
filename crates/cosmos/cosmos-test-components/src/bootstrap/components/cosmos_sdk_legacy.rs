@@ -3,11 +3,11 @@ mod preset {
     use cgp::prelude::*;
     use CosmosSdkBootstrapComponents::re_exports::*;
 
-    use crate::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
-    use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
-    use crate::bootstrap::impls::genesis_legacy::add_genesis_validator::LegacyAddCosmosGenesisValidator;
-    use crate::bootstrap::impls::genesis_legacy::collect_gentxs::LegacyCollectCosmosGentxs;
-    use crate::bootstrap::impls::initializers::init_wallet::GetStdOutOrElseStdErr;
+    use crate::bootstrap::components::CosmosSdkBootstrapComponents;
+    use crate::bootstrap::impls::{
+        GetStdOutOrElseStdErr, LegacyAddCosmosGenesisAccount, LegacyAddCosmosGenesisValidator,
+        LegacyCollectCosmosGentxs,
+    };
 
     CosmosSdkBootstrapComponents::with_components! {
         [

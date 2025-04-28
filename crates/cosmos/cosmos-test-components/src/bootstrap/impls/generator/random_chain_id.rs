@@ -1,14 +1,10 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_runtime_components::traits::random::CanGenerateRandom;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain::traits::chain_id::CanBuildChainIdFromString;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_core::relayer_components::chain::traits::HasChainIdType;
+use hermes_core::runtime_components::traits::{CanGenerateRandom, HasRuntime};
+use hermes_core::test_components::chain::traits::CanBuildChainIdFromString;
+use hermes_core::test_components::chain_driver::traits::HasChainType;
 
-use crate::bootstrap::traits::fields::random_id::HasRandomIdFlag;
-use crate::bootstrap::traits::generator::generate_chain_id::{
-    ChainIdGenerator, ChainIdGeneratorComponent,
-};
+use crate::bootstrap::traits::{ChainIdGenerator, ChainIdGeneratorComponent, HasRandomIdFlag};
 
 pub struct GenerateRandomChainId;
 

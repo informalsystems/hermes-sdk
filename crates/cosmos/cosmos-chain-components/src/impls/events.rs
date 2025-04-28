@@ -2,56 +2,30 @@ use alloc::sync::Arc;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
-use hermes_relayer_components::chain::traits::extract_data::{
-    EventExtractor, EventExtractorComponent,
-};
-use hermes_relayer_components::chain::traits::packet::from_send_packet::{
+use hermes_core::chain_type_components::traits::HasMessageResponseType;
+use hermes_core::relayer_components::chain::traits::{
+    ChannelOpenInitEventComponent, ChannelOpenTryEventComponent, ConnectionOpenInitEventComponent,
+    ConnectionOpenTryEventComponent, CreateClientEventComponent, EventExtractor,
+    EventExtractorComponent, HasAcknowledgementType, HasChannelIdType, HasClientIdType,
+    HasConnectionIdType, HasEventType, HasOutgoingPacketType, HasSendPacketEvent, HasWriteAckEvent,
     PacketFromSendPacketEventBuilder, PacketFromSendPacketEventBuilderComponent,
-};
-use hermes_relayer_components::chain::traits::packet::from_write_ack::{
     PacketFromWriteAckEventBuilder, PacketFromWriteAckEventBuilderComponent,
+    ProvideChannelOpenInitEvent, ProvideChannelOpenTryEvent, ProvideConnectionOpenInitEvent,
+    ProvideConnectionOpenTryEvent, ProvideCreateClientEvent, ProvideSendPacketEvent,
+    ProvideWriteAckEvent, SendPacketEventComponent, WriteAckEventComponent,
 };
-use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientEventComponent, ProvideCreateClientEvent,
-};
-use hermes_relayer_components::chain::traits::types::event::HasEventType;
-use hermes_relayer_components::chain::traits::types::ibc::{
-    HasChannelIdType, HasClientIdType, HasConnectionIdType,
-};
-use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
-    ChannelOpenInitEventComponent, ChannelOpenTryEventComponent, ProvideChannelOpenInitEvent,
-    ProvideChannelOpenTryEvent,
-};
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
-    ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
-    ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
-};
-use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::{
-    HasSendPacketEvent, ProvideSendPacketEvent, SendPacketEventComponent,
-};
-use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::{
-    HasWriteAckEvent, ProvideWriteAckEvent, WriteAckEventComponent,
-};
-use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAcknowledgementType;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::client::types::events::CLIENT_ID_ATTRIBUTE_KEY;
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, ConnectionId};
 use tendermint::abci::Event as AbciEvent;
 
-use crate::types::events::channel::{
+use crate::types::{
     try_chan_open_init_from_abci_event, try_chan_open_try_from_abci_event,
-    try_send_packet_from_abci_event, try_write_acknowledgment_from_abci_event,
-    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
-};
-use crate::types::events::client::CosmosCreateClientEvent;
-use crate::types::events::connection::{
     try_conn_open_init_from_abci_event, try_conn_open_try_from_abci_event,
-    CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
+    try_send_packet_from_abci_event, try_write_acknowledgment_from_abci_event,
+    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent, CosmosConnectionOpenInitEvent,
+    CosmosConnectionOpenTryEvent, CosmosCreateClientEvent, SendPacketEvent, WriteAckEvent,
 };
-use crate::types::events::send_packet::SendPacketEvent;
-use crate::types::events::write_acknowledgment::WriteAckEvent;
 
 pub struct ProvideCosmosEvents;
 

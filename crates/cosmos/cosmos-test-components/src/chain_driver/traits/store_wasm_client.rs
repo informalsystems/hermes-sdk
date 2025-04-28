@@ -1,6 +1,6 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
+use hermes_core::runtime_components::traits::{FilePathOf, HasFilePathType};
+use hermes_core::runtime_components::traits::HasRuntimeType;
 
 #[cgp_component {
   provider: WasmClientCodeUploader,

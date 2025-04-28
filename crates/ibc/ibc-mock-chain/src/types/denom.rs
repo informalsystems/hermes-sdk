@@ -3,7 +3,7 @@ use core::cmp::Ordering;
 use core::fmt::{Debug, Display};
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::denom::{DenomTypeComponent, ProvideDenomType};
+use hermes_chain_type_components::traits::{DenomTypeComponent, ProvideDenomType};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

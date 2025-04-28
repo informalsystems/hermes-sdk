@@ -1,9 +1,7 @@
 use cgp::prelude::*;
 
-use crate::impls::commands::queries::client_state::QueryClientStateArgs;
-use crate::impls::commands::queries::client_status::QueryClientStatusArgs;
-use crate::impls::commands::queries::consensus_state::QueryConsensusStateArgs;
-use crate::traits::command::{CanRunCommand, CommandRunner, CommandRunnerComponent};
+use crate::impls::{QueryClientStateArgs, QueryClientStatusArgs, QueryConsensusStateArgs};
+use crate::traits::{CanRunCommand, CommandRunner, CommandRunnerComponent};
 
 pub struct RunQueryClientSubCommand;
 

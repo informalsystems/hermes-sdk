@@ -1,13 +1,9 @@
 use core::num::ParseIntError;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::denom::HasDenomType;
-use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
-use hermes_test_components::chain::traits::queries::balance::{
-    BalanceQuerier, BalanceQuerierComponent,
-};
-use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_core::chain_type_components::traits::{HasAddressType, HasAmountType, HasDenomType};
+use hermes_core::test_components::chain::traits::{BalanceQuerier, BalanceQuerierComponent};
+use hermes_cosmos_chain_components::traits::HasGrpcAddress;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc_proto::cosmos::bank::v1beta1::query_client::QueryClient;
@@ -15,8 +11,7 @@ use ibc_proto::cosmos::bank::v1beta1::QueryBalanceRequest;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::chain::types::amount::Amount;
-use crate::chain::types::denom::Denom;
+use crate::chain::types::{Amount, Denom};
 
 pub struct QueryCosmosBalance;
 

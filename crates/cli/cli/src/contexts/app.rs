@@ -7,105 +7,55 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWr
 use cgp::core::field::Index;
 use cgp::core::types::WithType;
 use cgp::prelude::*;
-use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
-use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainCommand;
-use hermes_cli_components::impls::commands::channel::create::RunCreateChannelCommand;
-use hermes_cli_components::impls::commands::client::create::{
-    CreateClientOptionsParser, CreateClientOptionsParserComponent, RunCreateClientCommand,
+use hermes_any_counterparty::contexts::AnyCounterparty;
+use hermes_cli_components::impls::{
+    CreateClientOptionsParser, CreateClientOptionsParserComponent, CreateConnectionArgs,
+    GetDefaultConfigField, LoadTomlConfig, ParseFromOptionalString, ParseFromString,
+    QueryBalanceArgs, QueryChainStatusArgs, QueryChainSubCommand, QueryChannelEndArgs,
+    QueryChannelSubCommand, QueryClientStateArgs, QueryClientStatusArgs, QueryClientSubCommand,
+    QueryClientsArgs, QueryConnectionEndArgs, QueryConnectionSubCommand, QueryConsensusStateArgs,
+    QueryWalletSubCommand, RunBootstrapChainCommand, RunCreateChannelCommand,
+    RunCreateClientCommand, RunCreateConnectionCommand, RunQueryBalanceCommand,
+    RunQueryChainStatusCommand, RunQueryChainSubCommand, RunQueryChannelEndCommand,
+    RunQueryChannelSubCommand, RunQueryClientStateCommand, RunQueryClientStatusCommand,
+    RunQueryClientSubCommand, RunQueryClientsCommand, RunQueryConnectionEndCommand,
+    RunQueryConnectionSubCommand, RunQueryConsensusStateCommand, RunQueryWalletSubCommand,
+    RunStartRelayerCommand, RunUpdateClientCommand, StartRelayerArgs, UpdateClientArgs,
+    WriteTomlConfig,
 };
-use hermes_cli_components::impls::commands::client::update::{
-    RunUpdateClientCommand, UpdateClientArgs,
+use hermes_cli_components::traits::{
+    AnyCounterpartyTypeProviderComponent, ArgParserComponent, BootstrapLoaderComponent,
+    BootstrapTypeProviderComponent, BuilderLoaderComponent, BuilderTypeComponent, CanLoadBuilder,
+    CanLoadConfig, CanProduceOutput, CanRunCommand, CanWriteConfig, CommandRunnerComponent,
+    ConfigLoaderComponent, ConfigPathGetterComponent, ConfigTypeComponent, ConfigWriterComponent,
+    HasOutputType, OutputProducer, OutputProducerComponent, OutputTypeComponent,
 };
-use hermes_cli_components::impls::commands::connection::create::{
-    CreateConnectionArgs, RunCreateConnectionCommand,
-};
-use hermes_cli_components::impls::commands::queries::balance::{
-    QueryBalanceArgs, RunQueryBalanceCommand,
-};
-use hermes_cli_components::impls::commands::queries::chain::{
-    QueryChainSubCommand, RunQueryChainSubCommand,
-};
-use hermes_cli_components::impls::commands::queries::chain_status::{
-    QueryChainStatusArgs, RunQueryChainStatusCommand,
-};
-use hermes_cli_components::impls::commands::queries::channel::{
-    QueryChannelSubCommand, RunQueryChannelSubCommand,
-};
-use hermes_cli_components::impls::commands::queries::channel_end::{
-    QueryChannelEndArgs, RunQueryChannelEndCommand,
-};
-use hermes_cli_components::impls::commands::queries::client::{
-    QueryClientSubCommand, RunQueryClientSubCommand,
-};
-use hermes_cli_components::impls::commands::queries::client_state::{
-    QueryClientStateArgs, RunQueryClientStateCommand,
-};
-use hermes_cli_components::impls::commands::queries::client_status::{
-    QueryClientStatusArgs, RunQueryClientStatusCommand,
-};
-use hermes_cli_components::impls::commands::queries::clients::{
-    QueryClientsArgs, RunQueryClientsCommand,
-};
-use hermes_cli_components::impls::commands::queries::connection::{
-    QueryConnectionSubCommand, RunQueryConnectionSubCommand,
-};
-use hermes_cli_components::impls::commands::queries::connection_end::{
-    QueryConnectionEndArgs, RunQueryConnectionEndCommand,
-};
-use hermes_cli_components::impls::commands::queries::consensus_state::{
-    QueryConsensusStateArgs, RunQueryConsensusStateCommand,
-};
-use hermes_cli_components::impls::commands::queries::wallet::{
-    QueryWalletSubCommand, RunQueryWalletSubCommand,
-};
-use hermes_cli_components::impls::commands::start::{RunStartRelayerCommand, StartRelayerArgs};
-use hermes_cli_components::impls::config::get_config_path::GetDefaultConfigField;
-use hermes_cli_components::impls::config::load_toml_config::LoadTomlConfig;
-use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
-use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
-use hermes_cli_components::traits::any_counterparty::AnyCounterpartyTypeProviderComponent;
-use hermes_cli_components::traits::bootstrap::{
-    BootstrapLoaderComponent, BootstrapTypeProviderComponent,
-};
-use hermes_cli_components::traits::build::{
-    BuilderLoaderComponent, BuilderTypeComponent, CanLoadBuilder,
-};
-use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
-use hermes_cli_components::traits::config::config_path::ConfigPathGetterComponent;
-use hermes_cli_components::traits::config::load_config::{CanLoadConfig, ConfigLoaderComponent};
-use hermes_cli_components::traits::config::write_config::{CanWriteConfig, ConfigWriterComponent};
-use hermes_cli_components::traits::output::{
-    CanProduceOutput, HasOutputType, OutputProducer, OutputProducerComponent, OutputTypeComponent,
-};
-use hermes_cli_components::traits::parse::ArgParserComponent;
-use hermes_cli_components::traits::types::config::ConfigTypeComponent;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_chain_components::impls::types::config::RelayerConfig;
-use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientOptions;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::chain::types::denom::Denom;
-use hermes_error::types::{Error, HermesError};
-use hermes_logging_components::traits::logger::LoggerComponent;
-use hermes_relayer_components::error::traits::RetryableErrorComponent;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{
+use hermes_core::logging_components::traits::LoggerComponent;
+use hermes_core::relayer_components::error::traits::RetryableErrorComponent;
+use hermes_core::runtime_components::traits::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_tracing_logging_components::contexts::logger::TracingLogger;
-use ibc::clients::tendermint::types::TrustThreshold;
-use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
+use hermes_cosmos_core::chain_components::impls::RelayerConfig;
+use hermes_cosmos_core::chain_components::types::CosmosCreateClientOptions;
+use hermes_cosmos_core::error::types::{Error, HermesError};
+use hermes_cosmos_core::ibc::clients::tendermint::types::TrustThreshold;
+use hermes_cosmos_core::ibc::core::client::types::Height;
+use hermes_cosmos_core::ibc::core::host::types::identifiers::{
+    ChainId, ChannelId, ClientId, ConnectionId, PortId,
+};
+use hermes_cosmos_core::integration_tests::contexts::CosmosBootstrap;
+use hermes_cosmos_core::relayer::contexts::{CosmosBuilder, CosmosChain};
+use hermes_cosmos_core::runtime::types::runtime::HermesRuntime;
+use hermes_cosmos_core::test_components::chain::types::Denom;
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
 use serde::Serialize;
 
-use crate::commands::bootstrap::chain::{BootstrapCosmosChainArgs, LoadCosmosBootstrap};
-use crate::commands::bootstrap::subcommand::{BootstrapSubCommand, RunBootstrapSubCommand};
-use crate::commands::channel::CreateChannelArgs;
-use crate::commands::client::create::CreateCosmosClientArgs;
-use crate::impls::build::LoadCosmosBuilder;
-use crate::impls::error::ProvideCliError;
-use crate::impls::parse::ParseInitCosmosChannelOptions;
+use crate::commands::{
+    BootstrapCosmosChainArgs, BootstrapSubCommand, CreateChannelArgs, CreateCosmosClientArgs,
+    LoadCosmosBootstrap, RunBootstrapSubCommand,
+};
+use crate::impls::{LoadCosmosBuilder, ParseInitCosmosChannelOptions, ProvideCliError};
 
 #[cgp_context(HermesAppComponents)]
 #[derive(HasField)]

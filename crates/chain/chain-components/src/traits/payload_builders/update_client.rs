@@ -1,9 +1,7 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
-use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::update_client::HasUpdateClientPayloadType;
+use crate::traits::{HasClientStateType, HasHeightType, HasUpdateClientPayloadType};
 
 #[cgp_component {
   provider: UpdateClientPayloadBuilder,

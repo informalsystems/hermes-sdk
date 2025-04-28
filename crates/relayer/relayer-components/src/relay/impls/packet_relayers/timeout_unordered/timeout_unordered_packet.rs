@@ -3,16 +3,15 @@ use core::marker::PhantomData;
 use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
 
-use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
-use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::{HasRelayChains, HasSrcClientId, PacketOf};
-use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::packet_relayers::timeout_unordered_packet::{
-    TimeoutUnorderedPacketRelayer, TimeoutUnorderedPacketRelayerComponent,
+use crate::chain::traits::{
+    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
+    CanQueryClientStateWithLatestHeight,
 };
-use crate::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
+use crate::chain::types::aliases::HeightOf;
+use crate::relay::traits::{
+    CanSendSingleIbcMessage, HasRelayChains, HasSourceTargetChainTypes, HasSrcClientId, MainSink,
+    PacketOf, SourceTarget, TimeoutUnorderedPacketRelayer, TimeoutUnorderedPacketRelayerComponent,
+};
 
 /// The minimal component that implements timeout packet relayer
 /// capabilities. Timeout packet relayers with more capabilities can be

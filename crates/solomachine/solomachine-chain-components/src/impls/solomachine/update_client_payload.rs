@@ -1,10 +1,8 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::payload_builders::update_client::{
-    UpdateClientPayloadBuilder, UpdateClientPayloadBuilderComponent,
+use hermes_relayer_components::chain::traits::{
+    HasClientStateType, HasHeightType, HasUpdateClientPayloadType, UpdateClientPayloadBuilder,
+    UpdateClientPayloadBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc::core::client::types::Height;
 
 use crate::methods::encode::header_data::sign_header_data;

@@ -1,11 +1,10 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
-use hermes_runtime_components::traits::random::CanGenerateRandom;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_relayer_components::chain::traits::HasChainId;
+use hermes_runtime_components::traits::{
+    CanGenerateRandom, HasChildProcessType, HasFilePathType, HasRuntime,
+};
+use hermes_test_components::chain_driver::traits::{HasChain, HasChainType};
+use hermes_test_components::driver::traits::HasChainDriverType;
 
 use crate::bootstrap::traits::bootstrap_bridge::{BridgeBootstrapper, BridgeBootstrapperComponent};
 use crate::bootstrap::traits::bridge_auth_token::CanGenerateBridgeAuthToken;

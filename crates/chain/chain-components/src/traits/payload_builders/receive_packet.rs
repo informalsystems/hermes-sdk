@@ -1,9 +1,7 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
+use hermes_chain_type_components::traits::HasOutgoingPacketType;
 
-use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::packets::receive::HasReceivePacketPayloadType;
+use crate::traits::{HasClientStateType, HasHeightType, HasReceivePacketPayloadType};
 
 #[cgp_component {
   provider: ReceivePacketPayloadBuilder,

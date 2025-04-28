@@ -1,9 +1,8 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::address::AddressTypeProviderComponent;
-use hermes_chain_type_components::traits::types::height::HeightTypeProviderComponent;
-use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
-use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
-use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
+use hermes_chain_type_components::traits::{
+    AddressTypeProviderComponent, ChannelIdTypeComponent, ClientIdTypeComponent,
+    HeightTypeProviderComponent, TimeTypeComponent,
+};
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
 use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComponent;

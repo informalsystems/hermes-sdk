@@ -1,6 +1,4 @@
-use hermes_cosmos_chain_components::types::payloads::client::{
-    CosmosCreateClientPayload, CosmosUpdateClientPayload,
-};
+use hermes_cosmos_chain_components::types::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
 
 #[derive(Debug)]
 pub enum SolomachineMessage {

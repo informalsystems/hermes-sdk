@@ -1,3 +1,8 @@
-pub mod convert;
-pub mod encode;
-pub mod strategies;
+mod convert;
+pub use convert::*;
+
+mod encode;
+pub use encode::*;
+
+mod strategies;
+pub use strategies::*;

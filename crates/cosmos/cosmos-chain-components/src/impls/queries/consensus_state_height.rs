@@ -1,9 +1,8 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
-    ConsensusStateHeightsQuerier, ConsensusStateHeightsQuerierComponent,
+use hermes_core::relayer_components::chain::traits::{
+    ConsensusStateHeightsQuerier, ConsensusStateHeightsQuerierComponent, HasHeightType,
+    HasIbcChainTypes,
 };
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc::core::client::types::Height;
@@ -13,7 +12,7 @@ use ibc_proto::ibc::core::client::v1::QueryConsensusStateHeightsRequest;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
-use crate::traits::grpc_address::HasGrpcAddress;
+use crate::traits::HasGrpcAddress;
 
 pub struct QueryConsensusStateHeightsFromGrpc;
 

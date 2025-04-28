@@ -1,16 +1,11 @@
 use cgp::prelude::*;
-use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
-use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_core::runtime_components::traits::{CanStartChildProcess, HasFilePathType, HasRuntime};
 
-use crate::bootstrap::traits::chain::start_chain::{
-    ChainFullNodeStarter, ChainFullNodeStarterComponent,
+use crate::bootstrap::traits::{
+    ChainFullNodeStarter, ChainFullNodeStarterComponent, HasChainCommandPath,
+    HasChainGenesisConfigType, HasChainNodeConfigType,
 };
-use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
-use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
-use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
+use crate::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
 
 #[cgp_new_provider(ChainFullNodeStarterComponent)]
 impl<Bootstrap, Runtime> ChainFullNodeStarter<Bootstrap> for StartCosmosChain

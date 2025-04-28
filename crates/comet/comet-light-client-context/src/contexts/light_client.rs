@@ -2,50 +2,22 @@ use cgp::core::component::{UseContext, UseDelegate};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::WithDelegatedType;
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::height::{HasHeightType, HeightTypeProviderComponent};
-use hermes_comet_light_client_components::impls::verify_target_height::verify_forward::DoVerifyForward;
-use hermes_comet_light_client_components::traits::compute_verification_height::{
-    CanComputeNextVerificationHeight, NextVerificationHeightComputerComponent,
+use hermes_chain_components::traits::{HasHeightType, HeightTypeProviderComponent};
+use hermes_comet_light_client_components::impls::DoVerifyForward;
+use hermes_comet_light_client_components::traits::{
+    CanBuildLightBlocksForUpdateClient, CanComputeNextVerificationHeight, CanFetchLightBlock,
+    CanFetchLightBlockWithStatus, CanQueryLightBlock, CanTraceVerificationHeight,
+    CanUpdateVerificationStatus, CanValidateLightBlock, CanVerifyTargetHeight,
+    CanVerifyUpdateHeader, GetHighestTrustedOrVerifiedBefore, HasLightBlockHeight,
+    HasLightBlockType, HasVerdictType, HasVerificationStatusType, IsWithinTrustingPeriod,
+    LightBlockFetcherComponent, LightBlockHeightGetterComponent, LightBlockQuerierComponent,
+    LightBlockTypeComponent, LightBlockValidatorComponent, LightBlockWithStatusFetcherComponent,
+    LightBlocksForUpdateClientBuilderComponent, NextVerificationHeightComputerComponent,
+    TargetHeightVerifierComponent, TrustedStatus, UpdateHeaderVerifierComponent,
+    VerdictTypeComponent, VerificationHeightTracerComponent, VerificationStatusTypeComponent,
+    VerificationStatusUpdaterComponent, VerifiedStatus, VerifyForward,
 };
-use hermes_comet_light_client_components::traits::fetch_light_block::{
-    CanFetchLightBlock, CanFetchLightBlockWithStatus, LightBlockFetcherComponent,
-    LightBlockWithStatusFetcherComponent,
-};
-use hermes_comet_light_client_components::traits::light_block::height::{
-    HasLightBlockHeight, LightBlockHeightGetterComponent,
-};
-use hermes_comet_light_client_components::traits::query_light_block::{
-    CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore, LightBlockQuerierComponent,
-};
-use hermes_comet_light_client_components::traits::trace_verification_height::{
-    CanTraceVerificationHeight, VerificationHeightTracerComponent,
-};
-use hermes_comet_light_client_components::traits::types::light_block::{
-    HasLightBlockType, LightBlockTypeComponent,
-};
-use hermes_comet_light_client_components::traits::types::status::{
-    HasVerificationStatusType, VerificationStatusTypeComponent,
-};
-use hermes_comet_light_client_components::traits::types::verdict::{
-    HasVerdictType, VerdictTypeComponent,
-};
-use hermes_comet_light_client_components::traits::update_client::{
-    CanBuildLightBlocksForUpdateClient, LightBlocksForUpdateClientBuilderComponent,
-};
-use hermes_comet_light_client_components::traits::update_verification_status::{
-    CanUpdateVerificationStatus, TrustedStatus, VerificationStatusUpdaterComponent, VerifiedStatus,
-};
-use hermes_comet_light_client_components::traits::validate_light_block::{
-    CanValidateLightBlock, IsWithinTrustingPeriod, LightBlockValidatorComponent,
-};
-use hermes_comet_light_client_components::traits::verify_target_height::{
-    CanVerifyTargetHeight, TargetHeightVerifierComponent, VerifyForward,
-};
-use hermes_comet_light_client_components::traits::verify_update_header::{
-    CanVerifyUpdateHeader, UpdateHeaderVerifierComponent,
-};
-use hermes_comet_light_client_components::types::status::VerificationStatus;
-use hermes_comet_light_client_components::types::verdict::Verdict;
+use hermes_comet_light_client_components::types::{Verdict, VerificationStatus};
 use hermes_error::impls::UseHermesError;
 use tendermint::block::Height;
 use tendermint::Time;

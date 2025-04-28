@@ -2,26 +2,22 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
-use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
-use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::client_state::{
-    HasClientStateFields, HasClientStateType,
+use hermes_core::logging_components::traits::CanLog;
+use hermes_core::logging_components::types::LevelInfo;
+use hermes_core::relayer_components::build::traits::builders::chain_builder::CanBuildChain;
+use hermes_core::relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
+use hermes_core::relayer_components::chain::traits::{
+    CanQueryChainHeight, CanQueryClientStateWithLatestHeight, HasChainIdType, HasClientIdType,
+    HasClientStateFields, HasClientStateType, HasHeightType,
 };
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
-use hermes_relayer_components::relay::traits::chains::{HasRelayChains, HasRelayClientIds};
-use hermes_relayer_components::relay::traits::target::{HasSourceTargetChainTypes, SourceTarget};
-use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
+use hermes_core::relayer_components::relay::traits::{
+    CanSendTargetUpdateClientMessage, HasRelayChains, HasRelayClientIds, HasSourceTargetChainTypes,
+    SourceTarget,
+};
 
-use crate::traits::build::CanLoadBuilder;
-use crate::traits::command::{CommandRunner, CommandRunnerComponent};
-use crate::traits::output::CanProduceOutput;
-use crate::traits::parse::CanParseArg;
+use crate::traits::{
+    CanLoadBuilder, CanParseArg, CanProduceOutput, CommandRunner, CommandRunnerComponent,
+};
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct UpdateClientArgs {

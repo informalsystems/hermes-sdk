@@ -1,19 +1,16 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::traits::message::{
-    CosmosMessage, DynCosmosMessage, ToCosmosMessage,
+use hermes_core::relayer_components::chain::traits::HasMessageType;
+use hermes_core::test_components::chain::traits::{
+    HasProposalIdType, HasProposalVoteType, VoteProposalMessageBuilder,
+    VoteProposalMessageBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_test_components::chain::traits::proposal::messages::vote::{
-    VoteProposalMessageBuilder, VoteProposalMessageBuilderComponent,
-};
-use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
-use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
+use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::gov::v1::MsgVote;
 use ibc_proto::google::protobuf::Any;
 use prost::{Message, Name};
 
-use crate::chain::types::proposal_vote::ProposalVote;
+use crate::chain::types::ProposalVote;
 
 pub struct BuildVoteProposalMessage;
 

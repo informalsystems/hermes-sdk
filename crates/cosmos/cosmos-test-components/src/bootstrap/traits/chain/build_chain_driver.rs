@@ -1,14 +1,14 @@
 use alloc::collections::BTreeMap;
 
 use cgp::prelude::*;
-use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasChildProcessType};
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
-use hermes_test_components::chain::traits::types::wallet::{HasWalletType, Wallet};
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_core::runtime_components::traits::{
+    ChildProcessOf, HasChildProcessType, HasRuntimeType,
+};
+use hermes_core::test_components::chain::traits::{HasWalletType, Wallet};
+use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_core::test_components::driver::traits::HasChainDriverType;
 
-use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
+use crate::bootstrap::traits::{HasChainGenesisConfigType, HasChainNodeConfigType};
 
 #[cgp_component {
   provider: ChainDriverBuilder,

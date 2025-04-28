@@ -2,21 +2,19 @@ use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::chain_id::HasChainId;
-use hermes_logging_components::traits::logger::CanLog;
-use hermes_logging_components::types::level::LevelInfo;
+use hermes_chain_components::traits::HasChainId;
+use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelInfo;
 
-use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenConfirmMessage;
-use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenConfirmPayload;
-use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
-use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, HasRelayClientIds};
-use crate::relay::traits::connection::open_confirm::{
-    ConnectionOpenConfirmRelayer, ConnectionOpenConfirmRelayerComponent,
+use crate::chain::traits::{
+    CanBuildConnectionOpenConfirmMessage, CanBuildConnectionOpenConfirmPayload,
+    CanQueryChainHeight, CanQueryClientStateWithLatestHeight,
 };
-use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::target::{DestinationTarget, HasDestinationTargetChainTypes};
-use crate::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
+use crate::relay::traits::{
+    CanBuildTargetUpdateClientMessage, CanRaiseRelayChainErrors, CanSendSingleIbcMessage,
+    ConnectionOpenConfirmRelayer, ConnectionOpenConfirmRelayerComponent, DestinationTarget,
+    HasDestinationTargetChainTypes, HasRelayChains, HasRelayClientIds, MainSink,
+};
 
 /**
    A base implementation of [`ConnectionOpenConfirmRelayer`] that relays a new connection

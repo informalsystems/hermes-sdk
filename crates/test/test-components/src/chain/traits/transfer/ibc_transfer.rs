@@ -1,14 +1,12 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_relayer_components::chain::traits::types::ibc::{HasChannelIdType, HasPortIdType};
-use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
-use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
+use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
+use hermes_relayer_components::chain::traits::{
+    HasChainStatusType, HasChannelIdType, HasOutgoingPacketType, HasPortIdType,
+};
 
-use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::memo::HasMemoType;
-use crate::chain::traits::types::wallet::HasWalletType;
+use crate::chain::traits::{HasMemoType, HasWalletType};
 
 #[cgp_component {
     provider: TokenIbcTransferrer,

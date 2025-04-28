@@ -1,17 +1,12 @@
 use cgp::prelude::*;
-use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::traits::CanLog;
 
-use crate::chain::traits::types::message::HasMessageType;
-use crate::transaction::traits::encode_tx::CanEncodeTx;
-use crate::transaction::traits::estimate_tx_fee::CanEstimateTxFee;
-use crate::transaction::traits::poll_tx_response::CanPollTxResponse;
-use crate::transaction::traits::send_messages_with_signer_and_nonce::{
-    MessagesWithSignerAndNonceSender, MessagesWithSignerAndNonceSenderComponent,
+use crate::chain::traits::HasMessageType;
+use crate::transaction::traits::{
+    CanEncodeTx, CanEstimateTxFee, CanPollTxResponse, CanSubmitTx, HasFeeForSimulation,
+    HasNonceType, HasSignerType, MessagesWithSignerAndNonceSender,
+    MessagesWithSignerAndNonceSenderComponent,
 };
-use crate::transaction::traits::simulation_fee::HasFeeForSimulation;
-use crate::transaction::traits::submit_tx::CanSubmitTx;
-use crate::transaction::traits::types::nonce::HasNonceType;
-use crate::transaction::traits::types::signer::HasSignerType;
 
 pub struct EstimateFeesAndSendTx;
 

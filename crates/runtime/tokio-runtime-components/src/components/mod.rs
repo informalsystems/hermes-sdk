@@ -1,2 +1,5 @@
-pub mod concurrent;
-pub mod parallel;
+mod concurrent;
+pub use concurrent::*;
+
+mod parallel;
+pub use parallel::*;

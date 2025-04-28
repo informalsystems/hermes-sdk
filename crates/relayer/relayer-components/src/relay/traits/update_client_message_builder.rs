@@ -2,12 +2,11 @@ use alloc::vec::Vec;
 
 use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
-use hermes_chain_components::traits::types::height::HasHeightType;
-use hermes_chain_components::traits::types::message::HasMessageType;
+use hermes_chain_components::traits::{HasHeightType, HasMessageType};
 
-use crate::chain::traits::send_message::CanSendMessages;
+use crate::chain::traits::CanSendMessages;
 use crate::chain::types::aliases::{HeightOf, MessageOf};
-use crate::relay::traits::target::{HasTargetChainTypes, HasTargetChains, RelayTarget};
+use crate::relay::traits::{HasTargetChainTypes, HasTargetChains, RelayTarget};
 
 #[cgp_component {
   provider: TargetUpdateClientMessageBuilder,

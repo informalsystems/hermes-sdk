@@ -1,7 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::status::HasChainStatusType;
+use crate::traits::{HasChainStatusType, HasHeightType};
 
 /**
    Implemented by a chain context to provide method for querying the
@@ -17,9 +16,9 @@ pub trait CanQueryChainStatus: HasChainStatusType + HasAsyncErrorType {
         Query the current status of the blockchain. The returned
         [status](HasChainStatusType::ChainStatus) is required to have the same
         or increasing
-        [height](crate::traits::types::height::HasHeightType::Height)
+        [height](crate::traits::HasHeightType::Height)
         and
-        [timestamp](crate::traits::types::timestamp::HasTimestampType::Timestamp)
+        [timestamp](crate::traits::HasTimestampType::Timestamp)
         each time the query is called.
 
         The querying of the chain status may fail due to errors such as the full

@@ -1,1 +1,2 @@
-pub mod balance;
+mod balance;
+pub use balance::*;

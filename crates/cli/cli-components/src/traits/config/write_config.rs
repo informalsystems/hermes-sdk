@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::config::HasConfigType;
+use crate::traits::HasConfigType;
 
 #[cgp_component {
   provider: ConfigWriter,

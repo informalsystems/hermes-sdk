@@ -1,16 +1,10 @@
 use cgp::prelude::*;
-use hermes_test_components::chain::traits::proposal::types::proposal_id::{
-    ProposalIdTypeComponent, ProvideProposalIdType,
-};
-use hermes_test_components::chain::traits::proposal::types::proposal_status::{
-    ProposalStatusTypeComponent, ProvideProposalStatusType,
-};
-use hermes_test_components::chain::traits::proposal::types::vote::{
-    ProposalVoteTypeComponent, ProvideProposalVoteType,
+use hermes_core::test_components::chain::traits::{
+    ProposalIdTypeComponent, ProposalStatusTypeComponent, ProposalVoteTypeComponent,
+    ProvideProposalIdType, ProvideProposalStatusType, ProvideProposalVoteType,
 };
 
-use crate::chain::types::proposal_status::ProposalStatus;
-use crate::chain::types::proposal_vote::ProposalVote;
+use crate::chain::types::{ProposalStatus, ProposalVote};
 
 pub struct ProvideCosmosProposalTypes;
 

@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::time::HasTimeType;
+use hermes_chain_type_components::traits::HasTimeType;
 
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
 

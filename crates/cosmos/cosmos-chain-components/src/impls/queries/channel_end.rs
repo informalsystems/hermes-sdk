@@ -1,11 +1,9 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::queries::channel_end::{
+use hermes_core::relayer_components::chain::traits::{
     ChannelEndQuerier, ChannelEndQuerierComponent, ChannelEndWithProofsQuerier,
-    ChannelEndWithProofsQuerierComponent,
+    ChannelEndWithProofsQuerierComponent, HasChannelEndType, HasCommitmentProofType,
+    HasIbcChainTypes,
 };
-use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
@@ -13,7 +11,7 @@ use ibc::cosmos_host::IBC_QUERY_PATH;
 use ibc_proto::Protobuf;
 use tendermint_proto::Error as TendermintProtoError;
 
-use crate::traits::abci_query::CanQueryAbci;
+use crate::traits::CanQueryAbci;
 
 pub struct QueryCosmosChannelEndFromAbci;
 

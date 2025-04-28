@@ -5,19 +5,18 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_cosmos_integration_tests::contexts::bootstrap::{
-    CosmosBootstrap, CosmosBootstrapFields,
+use hermes_core::relayer_components::relay::traits::{
+    CanCreateClient, DestinationTarget, SourceTarget,
 };
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
-use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
-use hermes_cosmos_wasm_relayer::context::cosmos_to_wasm_cosmos_relay::CosmosToWasmCosmosRelay;
-use hermes_cosmos_wasm_relayer::types::create_client::CreateWasmTendermintMessageOptions;
+use hermes_core::test_components::bootstrap::traits::CanBootstrapChain;
+use hermes_cosmos_integration_tests::contexts::{CosmosBootstrap, CosmosBootstrapFields};
+use hermes_cosmos_relayer::contexts::CosmosBuilder;
+use hermes_cosmos_wasm_relayer::context::{
+    CosmosToWasmCosmosRelay, CosmosWithWasmClientBootstrap, WasmCosmosChain,
+};
+use hermes_cosmos_wasm_relayer::types::CreateWasmTendermintMessageOptions;
 use hermes_error::types::Error;
-use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 

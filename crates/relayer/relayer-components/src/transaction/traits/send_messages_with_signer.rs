@@ -1,10 +1,10 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_chain_type_components::traits::HasMessageResponseType;
 
-use crate::chain::traits::types::message::HasMessageType;
-use crate::transaction::traits::types::signer::HasSignerType;
+use crate::chain::traits::HasMessageType;
+use crate::transaction::traits::HasSignerType;
 
 #[cgp_component {
   provider: MessagesWithSignerSender,

@@ -1,9 +1,9 @@
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::channel::{
+use hermes_core::relayer_components::chain::traits::{
     InitChannelOptionsTypeComponent, ProvideInitChannelOptionsType,
 };
 
-use crate::types::channel::CosmosInitChannelOptions;
+use crate::types::CosmosInitChannelOptions;
 
 pub struct ProvideCosmosInitChannelOptionsType;
 

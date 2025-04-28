@@ -6,11 +6,11 @@ use cgp::core::field::UseField;
 use cgp::core::Async;
 use cgp::prelude::*;
 use futures::lock::Mutex;
-use hermes_chain_type_components::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::ibc::HasClientIdType;
+use hermes_chain_type_components::traits::HasChainIdType;
+use hermes_relayer_components::chain::traits::HasClientIdType;
 use hermes_relayer_components::chain::types::aliases::{ChainIdOf, ClientIdOf};
 use hermes_relayer_components::multi::traits::relay_at::HasRelayTypeAt;
-use hermes_relayer_components::relay::traits::target::{
+use hermes_relayer_components::relay::traits::{
     CounterpartyChainOf, HasTargetChainTypes, RelayTarget, TargetChainOf,
 };
 

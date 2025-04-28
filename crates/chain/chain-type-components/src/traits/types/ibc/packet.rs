@@ -4,7 +4,7 @@
 
 use cgp::prelude::*;
 
-use crate::traits::types::counterparty::CanUseCounterparty;
+use crate::traits::CanUseCounterparty;
 
 #[cgp_component {
   name: OutgoingPacketTypeComponent,

@@ -1,4 +1,11 @@
-pub mod allow_all;
-pub mod and;
-pub mod chain;
-pub mod target;
+mod allow_all;
+pub use allow_all::*;
+
+mod and;
+pub use and::*;
+
+mod chain;
+pub use chain::*;
+
+mod target;
+pub use target::*;

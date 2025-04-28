@@ -1,7 +1,6 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
+use hermes_relayer_components::chain::traits::{HasHeightType, HasTimeoutType};
 
 #[cgp_component {
     provider: IbcTransferTimeoutCalculator,

@@ -2,9 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::traits::convert::CanConvert;
-use crate::traits::decode::{CanDecode, Decoder, DecoderComponent};
-use crate::traits::encode::{CanEncode, Encoder, EncoderComponent};
+use crate::traits::{
+    CanConvert, CanDecode, CanEncode, Decoder, DecoderComponent, Encoder, EncoderComponent,
+};
 
 pub struct ConvertAndEncode<Raw>(pub PhantomData<Raw>);
 
