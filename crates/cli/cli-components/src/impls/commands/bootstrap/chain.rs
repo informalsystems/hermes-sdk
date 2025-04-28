@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 use std::path::PathBuf;
 
-use cgp::prelude::*;
 use hermes_core::logging_components::traits::CanLog;
 use hermes_core::logging_components::types::LevelInfo;
 use hermes_core::relayer_components::chain::traits::HasChainId;
@@ -10,6 +9,7 @@ use hermes_core::test_components::bootstrap::traits::CanBootstrapChain;
 use hermes_core::test_components::chain_driver::traits::{
     CanTakeChainProcess, ConfigUpdater, HasChain,
 };
+use hermes_prelude::*;
 
 use crate::traits::{
     CanLoadBootstrap, CanLoadConfig, CanProduceOutput, CanWriteConfig, CommandRunner,

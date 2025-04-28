@@ -1,11 +1,11 @@
 use std::collections::btree_map::Entry;
 
-use cgp::prelude::*;
 use hermes_comet_light_client_components::traits::{
     HasLightBlockType, TrustedStatus, VerificationStatusUpdater,
     VerificationStatusUpdaterComponent, VerifiedStatus,
 };
 use hermes_comet_light_client_components::types::VerificationStatus;
+use hermes_prelude::*;
 use tendermint_light_client_verifier::types::LightBlock;
 
 use crate::traits::light_block_store::HasLightBlockStore;

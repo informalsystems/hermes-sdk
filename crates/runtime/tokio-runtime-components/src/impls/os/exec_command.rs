@@ -3,7 +3,7 @@ use core::str::Utf8Error;
 use std::ffi::OsStr;
 use std::io::{Error as IoError, ErrorKind};
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{
     CommandWithEnvsExecutor, CommandWithEnvsExecutorComponent, ExecOutput, HasFilePathType,
 };

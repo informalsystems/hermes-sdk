@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{CanSleep, HasRuntime};
 
 use crate::traits::{CanQueryChainHeight, HasHeightType};

@@ -2,12 +2,12 @@ use alloc::sync::Arc;
 use core::marker::PhantomData;
 
 use cgp::core::Async;
-use cgp::prelude::*;
 use futures::channel::mpsc::unbounded;
 use futures::lock::Mutex;
 use hermes_chain_type_components::traits::{
     HasChainIdType, HasMessageResponseType, HasMessageType,
 };
+use hermes_prelude::*;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::{
     RelayFromChainsBuilder, RelayFromChainsBuilderComponent,
 };

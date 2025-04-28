@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::setup::traits::{CanBuildTestDriver, TestRunner, TestRunnerComponent};
 use crate::test_case::traits::test_case::TestCase;

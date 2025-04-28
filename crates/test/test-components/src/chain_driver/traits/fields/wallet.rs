@@ -2,7 +2,7 @@ use alloc::collections::BTreeMap;
 use alloc::string::String;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::chain::traits::{HasWalletType, WalletOf};
 use crate::chain_driver::traits::HasChainType;

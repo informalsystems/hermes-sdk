@@ -1,12 +1,12 @@
 use core::fmt::{Debug, Display};
 use core::time::Duration;
 
-use cgp::prelude::*;
 use hermes_core::relayer_components::error::traits::HasRetryableError;
 use hermes_core::runtime_components::traits::{CanSleep, HasRuntime};
 use hermes_core::test_components::chain::traits::{
     CanQueryProposalStatus, ProposalStatusPoller, ProposalStatusPollerComponent,
 };
+use hermes_prelude::*;
 
 pub struct PollProposalStatus;
 

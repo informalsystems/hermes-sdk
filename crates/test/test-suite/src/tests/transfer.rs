@@ -2,8 +2,8 @@ use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::core::field::Index;
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAmountDenom;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{CanQueryChainStatus, HasChainId};
 use hermes_test_components::chain::traits::{
     CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,

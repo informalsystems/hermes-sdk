@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_cosmos_chain_components::types::CosmosUpdateClientPayload;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     HasIbcChainTypes, HasMessageType, HasUpdateClientPayloadType, UpdateClientMessageBuilder,
     UpdateClientMessageBuilderComponent,

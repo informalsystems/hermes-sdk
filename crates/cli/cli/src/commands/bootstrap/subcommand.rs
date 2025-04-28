@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_cli_components::traits::{CanRunCommand, CommandRunner, CommandRunnerComponent};
+use hermes_prelude::*;
 
 use crate::commands::BootstrapCosmosChainArgs;
 

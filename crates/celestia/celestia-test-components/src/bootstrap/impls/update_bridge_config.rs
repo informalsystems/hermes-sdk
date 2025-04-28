@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_cosmos_test_components::chain_driver::traits::{HasGrpcPort, HasRpcPort};
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     CanQueryBlock, HasBlockHash, HasChainId, HasGenesisHeight,
 };

@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_wasm_encoding_components::components::WasmEncodingComponents;
 use hermes_wasm_encoding_components::types::{

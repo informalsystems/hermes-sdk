@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAmountType;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::HasMessageType;
 
 use crate::chain::traits::HasProposalIdType;

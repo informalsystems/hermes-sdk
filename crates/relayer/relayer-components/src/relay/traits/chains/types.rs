@@ -1,6 +1,6 @@
 use cgp::core::macros::blanket_trait;
-use cgp::prelude::{HasAsyncErrorType, HasErrorType};
 use hermes_chain_components::traits::HasOutgoingPacketType;
+use hermes_prelude::{HasAsyncErrorType, HasErrorType};
 
 use crate::chain::traits::HasIbcChainTypes;
 use crate::multi::traits::chain_at::HasChainTypeAt;

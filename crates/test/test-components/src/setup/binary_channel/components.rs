@@ -1,6 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
+    use hermes_prelude::*;
 
     use crate::setup::binary_channel::SetupBinaryChannelDriver;
     use crate::setup::impls::{

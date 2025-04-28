@@ -1,7 +1,6 @@
 use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasDenomType;
 use hermes_cosmos_test_components::bootstrap::traits::{
     DenomForStaking, DenomForTransfer, HasChainGenesisConfigType, HasGenesisDenom,
@@ -9,6 +8,7 @@ use hermes_cosmos_test_components::bootstrap::traits::{
 };
 use hermes_cosmos_test_components::bootstrap::types::CosmosWalletConfig;
 use hermes_cosmos_test_components::chain::types::{Amount, Denom};
+use hermes_prelude::*;
 use hermes_test_components::chain_driver::traits::HasChainType;
 
 #[cgp_new_provider(WalletConfigGeneratorComponent)]

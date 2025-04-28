@@ -1,5 +1,4 @@
 use cgp::extra::runtime::HasRuntime;
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     CanQueryChainHeight, HasHeightFields, HasPollInterval,
 };
@@ -7,6 +6,7 @@ use hermes_core::relayer_components::transaction::traits::{
     HasTxHashType, HasTxResponseType, TxResponseQuerier, TxResponseQuerierComponent,
 };
 use hermes_core::runtime_components::traits::CanSleep;
+use hermes_prelude::*;
 use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 use tendermint_rpc::query::Query;

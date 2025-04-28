@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::types::commitment::path::HasCommitmentPathType;
 use crate::traits::types::commitment::value::HasCommitmentValueType;

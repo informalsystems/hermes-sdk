@@ -1,6 +1,6 @@
 use alloc::string::String;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::HasFilePathType;
 

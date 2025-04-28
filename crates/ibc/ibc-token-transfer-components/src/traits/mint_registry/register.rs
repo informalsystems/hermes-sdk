@@ -1,6 +1,6 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasChannelIdType, HasDenomType};
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
+use hermes_prelude::*;
 
 #[cgp_component {
   provider: MintedTokenRegistrar,

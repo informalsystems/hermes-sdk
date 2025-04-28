@@ -1,6 +1,6 @@
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::{HasAddressType, HasAmountType};
 use hermes_core::test_components::chain::traits::HasProposalIdType;
+use hermes_prelude::*;
 
 #[cgp_component {
   provider: WasmClientCodeUploader,

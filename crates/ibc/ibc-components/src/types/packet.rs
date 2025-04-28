@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::builders::packet::{PacketBuilder, PacketBuilderComponent};
 use crate::traits::types::packet::header::HasPacketHeaderType;

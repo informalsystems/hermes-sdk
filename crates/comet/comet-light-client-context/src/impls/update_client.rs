@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::HasHeightType;
 use hermes_comet_light_client_components::traits::{
     CanFetchLightBlock, CanUpdateVerificationStatus, CanVerifyTargetHeight, HasLightBlockType,
@@ -6,6 +5,7 @@ use hermes_comet_light_client_components::traits::{
     VerifyForward,
 };
 use hermes_comet_light_client_components::types::VerificationStatus;
+use hermes_prelude::*;
 use tendermint::block::Height;
 use tendermint_light_client_verifier::types::LightBlock;
 

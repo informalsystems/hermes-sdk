@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::chain::traits::{PollAssertDurationGetter, PollAssertDurationGetterComponent};
 

@@ -4,7 +4,7 @@
 
 use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 /**
    This is used for the chain context and the transaction context to declare

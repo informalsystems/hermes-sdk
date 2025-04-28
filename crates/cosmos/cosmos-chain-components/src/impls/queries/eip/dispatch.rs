@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::impls::{OsmosisQueryEip, QueryEipFromFeeMarket};
 use crate::traits::{EipQuerier, EipQuerierComponent};

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     ConsensusStateQuerier, ConsensusStateQuerierComponent, HasConsensusStateType, HasHeightType,
     HasIbcChainTypes,

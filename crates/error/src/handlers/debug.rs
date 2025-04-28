@@ -2,8 +2,8 @@ use alloc::sync::Arc;
 use core::fmt::Debug;
 
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent};
-use cgp::prelude::*;
 use eyre::eyre;
+use hermes_prelude::*;
 
 use crate::types::{Error, ErrorDetail};
 

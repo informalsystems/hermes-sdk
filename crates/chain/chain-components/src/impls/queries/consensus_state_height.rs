@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasClientIdType;
+use hermes_prelude::*;
 
 use crate::traits::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerier,

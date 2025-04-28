@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::HasClientIdType;
+use hermes_prelude::*;
 
 use crate::chain::traits::HasChainIdType;
 use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};

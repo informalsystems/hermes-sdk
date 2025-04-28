@@ -4,13 +4,13 @@ use core::marker::PhantomData;
 
 use cgp::core::field::UseField;
 use cgp::core::macros::blanket_trait;
-use cgp::prelude::*;
 use futures::channel::oneshot::{channel, Receiver, Sender};
 use futures::lock::Mutex;
 use hermes_chain_components::traits::{
     HasChannelIdType, HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence,
     HasPacketSrcChannelId, HasPacketSrcPortId, HasPortIdType, HasSequenceType,
 };
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{CanSpawnTask, HasRuntime, HasRuntimeType, Task};
 
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf, SequenceOf};

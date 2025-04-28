@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::HasClientIdType;
+use hermes_prelude::*;
 
 use crate::chain::traits::{
     CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,

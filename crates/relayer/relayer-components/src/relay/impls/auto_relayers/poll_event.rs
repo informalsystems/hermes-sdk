@@ -3,13 +3,13 @@ use alloc::format;
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::prelude::*;
 use hermes_chain_components::traits::{
     CanIncrementHeight, CanQueryBlockEvents, HasEventType, HasHeightType,
 };
 use hermes_chain_components::types::aliases::{EventOf, HeightOf};
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::{LevelInfo, LevelTrace};
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{CanRunConcurrentTasks, HasRuntime, Task};
 
 use crate::relay::traits::{

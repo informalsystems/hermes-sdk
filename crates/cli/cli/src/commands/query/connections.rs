@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
@@ -11,6 +10,7 @@ use hermes_cosmos_core::ibc::core::connection::types::proto::v1::QueryConnection
 use hermes_cosmos_core::ibc::core::connection::types::IdentifiedConnectionEnd;
 use hermes_cosmos_core::ibc::core::host::types::identifiers::ChainId;
 use hermes_cosmos_core::relayer::contexts::CosmosChain;
+use hermes_prelude::*;
 use http::Uri;
 use tracing::{info, warn};
 

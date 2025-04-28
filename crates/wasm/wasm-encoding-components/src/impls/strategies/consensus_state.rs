@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_core::encoding_components::traits::{
     CanConvert, CanDecode, CanEncode, Converter, ConverterComponent, Decoder, DecoderComponent,
     Encoder, EncoderComponent, HasEncodedType,
 };
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 

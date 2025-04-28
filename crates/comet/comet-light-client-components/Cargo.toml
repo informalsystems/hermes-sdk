@@ -13,4 +13,5 @@ description = """
 
 [dependencies]
 cgp                          = { workspace = true }
+hermes-prelude               = { workspace = true }
 hermes-chain-type-components = { workspace = true }

@@ -6,11 +6,11 @@ use core::time::Duration;
 
 use cgp::core::error::ErrorOf;
 use cgp::extra::runtime::HasRuntime;
-use cgp::prelude::*;
 use hermes_chain_components::traits::{
     CanAdjustHeight, CanQueryBlockTime, CanQueryChainHeight, HasHeightType, HeightOf,
 };
 use hermes_logging_components::traits::CanLog;
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{CanRunConcurrentTasks, Task};
 
 use crate::birelay::traits::{

@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::{AcknowledgementOf, HasAcknowledgementType};
+use hermes_prelude::*;
 
 use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::{HasRelayChains, PacketOf};

@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::transaction::traits::{
     FeeTypeProviderComponent, NonceTypeProviderComponent, ProvideTransactionType,
     SignerTypeProviderComponent, TransactionTypeComponent, TxHashTypeProviderComponent,
     TxResponseTypeProviderComponent,
 };
+use hermes_prelude::*;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use prost::Message as _;
 use tendermint::hash::Hash;

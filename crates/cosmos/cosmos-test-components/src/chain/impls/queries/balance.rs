@@ -1,9 +1,9 @@
 use core::num::ParseIntError;
 
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::{HasAddressType, HasAmountType, HasDenomType};
 use hermes_core::test_components::chain::traits::{BalanceQuerier, BalanceQuerierComponent};
 use hermes_cosmos_chain_components::traits::HasGrpcAddress;
+use hermes_prelude::*;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc_proto::cosmos::bank::v1beta1::query_client::QueryClient;

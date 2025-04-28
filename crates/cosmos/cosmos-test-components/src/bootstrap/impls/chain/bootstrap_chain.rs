@@ -1,6 +1,5 @@
 use alloc::collections::BTreeMap;
 
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::HasChainIdType;
 use hermes_core::runtime_components::traits::{HasChildProcessType, HasFilePathType, HasRuntime};
 use hermes_core::test_components::bootstrap::traits::{
@@ -9,6 +8,7 @@ use hermes_core::test_components::bootstrap::traits::{
 use hermes_core::test_components::chain::traits::HasWalletType;
 use hermes_core::test_components::chain_driver::traits::HasChainType;
 use hermes_core::test_components::driver::traits::HasChainDriverType;
+use hermes_prelude::*;
 
 use crate::bootstrap::traits::{
     CanAddWalletToGenesis, CanBuildChainDriver, CanCollectGenesisTransactions, CanGenerateChainId,

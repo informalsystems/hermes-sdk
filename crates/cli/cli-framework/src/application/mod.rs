@@ -4,7 +4,7 @@ mod boot;
 use std::path::Path;
 
 pub use boot::boot;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 
 use crate::command::CommandRunner;

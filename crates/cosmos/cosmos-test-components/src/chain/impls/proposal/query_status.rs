@@ -1,10 +1,10 @@
 use core::fmt::Debug;
 
-use cgp::prelude::*;
 use hermes_core::test_components::chain::traits::{
     HasProposalIdType, HasProposalStatusType, ProposalStatusQuerier, ProposalStatusQuerierComponent,
 };
 use hermes_cosmos_chain_components::traits::HasGrpcAddress;
+use hermes_prelude::*;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc_proto::cosmos::gov::v1::query_client::QueryClient;

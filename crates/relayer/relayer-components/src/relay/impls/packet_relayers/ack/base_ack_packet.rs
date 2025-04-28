@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::{AcknowledgementOf, HasOutgoingPacketType};
 use hermes_chain_components::types::aliases::HeightOf;
+use hermes_prelude::*;
 
 use crate::chain::traits::{
     CanBuildAckPacketMessage, CanBuildAckPacketPayload, CanQueryClientStateWithLatestHeight,

@@ -1,7 +1,6 @@
 use std::marker::PhantomData;
 use std::str::FromStr;
 
-use cgp::prelude::*;
 use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
@@ -15,6 +14,7 @@ use hermes_cosmos_core::ibc::core::host::types::identifiers::{
     ChainId, ChannelId, ClientId, PortId,
 };
 use hermes_cosmos_core::relayer::contexts::CosmosChain;
+use hermes_prelude::*;
 use http::Uri;
 use tracing::{info, warn};
 

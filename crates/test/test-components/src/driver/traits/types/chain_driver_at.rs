@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_type {
     name: ChainDriverTypeProviderAtComponent<I>,

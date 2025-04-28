@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use futures::stream::{self, StreamExt};
 use hermes_cli_components::traits::CanLoadBuilder;
 use hermes_cli_components::traits::CommandRunnerComponent;

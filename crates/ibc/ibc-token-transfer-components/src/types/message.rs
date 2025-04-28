@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountType};
 use hermes_ibc_components::traits::types::message::{
     IbcMessageTypeComponent, ProvideIbcMessageType,
 };
+use hermes_prelude::*;
 
 #[derive(HasField)]
 pub struct IbcTransferMessage<Chain, Counterparty>

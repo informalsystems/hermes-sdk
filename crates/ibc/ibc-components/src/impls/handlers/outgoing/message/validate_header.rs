@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::fields::message::app_id::HasIbcMessageAppIds;
 use crate::traits::fields::payload::app_id::HasPayloadAppIds;

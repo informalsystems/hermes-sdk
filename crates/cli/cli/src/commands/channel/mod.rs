@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_cli_components::traits::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
+use hermes_prelude::*;
 
 use crate::contexts::HermesApp;
 use crate::Result;

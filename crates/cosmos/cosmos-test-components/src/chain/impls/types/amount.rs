@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::{
     AmountDenomGetter, AmountDenomGetterComponent, AmountTypeProviderComponent, HasAmountType,
     HasDenomType,
 };
 use hermes_core::test_components::chain::traits::{AmountMethodsComponent, ProvideAmountMethods};
+use hermes_prelude::*;
 
 use crate::chain::types::{Amount, Denom};
 

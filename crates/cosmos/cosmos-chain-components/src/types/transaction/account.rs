@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc_proto::cosmos::auth::v1beta1::query_client::QueryClient;

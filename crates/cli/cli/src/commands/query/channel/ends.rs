@@ -1,6 +1,5 @@
 use std::str::FromStr;
 
-use cgp::prelude::*;
 use eyre::eyre;
 use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
@@ -19,6 +18,7 @@ use hermes_cosmos_core::ibc::cosmos_host::IBC_QUERY_PATH;
 use hermes_cosmos_core::ibc::primitives::proto::Protobuf;
 use hermes_cosmos_core::protobuf_encoding_components::types::any::Any;
 use hermes_cosmos_core::relayer::contexts::CosmosChain;
+use hermes_prelude::*;
 use serde::{Deserialize, Serialize};
 
 use crate::contexts::HermesApp;

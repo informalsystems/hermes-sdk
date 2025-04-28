@@ -1,10 +1,10 @@
-use cgp::prelude::*;
 use hermes_ibc_components::traits::fields::timeout::{
     TimeoutTimeComparer, TimeoutTimeComparerComponent,
 };
 use hermes_ibc_components::traits::queries::time::{
     CurrentTimeQuerier, CurrentTimeQuerierComponent,
 };
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

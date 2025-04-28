@@ -1,8 +1,8 @@
 use cgp::core::error::{
     ErrorRaiser, ErrorRaiserComponent, ErrorTypeProvider, ErrorTypeProviderComponent,
 };
-use cgp::prelude::*;
 use eyre::eyre;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::EmptyMessageResponse;
 use hermes_runtime::types::error::TokioRuntimeError;
 

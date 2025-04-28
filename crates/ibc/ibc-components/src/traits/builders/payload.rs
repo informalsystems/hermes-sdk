@@ -1,4 +1,4 @@
-use cgp::prelude::HasAsyncErrorType;
+use hermes_prelude::HasAsyncErrorType;
 
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;

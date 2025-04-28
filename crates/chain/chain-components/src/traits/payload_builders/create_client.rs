@@ -1,5 +1,5 @@
 use cgp::core::component::UseDelegate;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::{HasCreateClientPayloadOptionsType, HasCreateClientPayloadType};
 

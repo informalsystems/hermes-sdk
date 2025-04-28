@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_encoding_components::traits::{
     Decoder, DecoderComponent, Encoder, EncoderComponent, HasEncodedType,
 };
+use hermes_prelude::*;
 use prost::{DecodeError, Message};
 
 pub struct EncodeAsProtobuf;

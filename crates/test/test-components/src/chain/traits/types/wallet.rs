@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAddressType;
+use hermes_prelude::*;
 use hermes_relayer_components::transaction::traits::HasSignerType;
 
 pub type Wallet<Chain> = <Chain as HasWalletType>::Wallet;

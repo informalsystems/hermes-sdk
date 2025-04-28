@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
 use cgp::core::field::FieldGetter;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;

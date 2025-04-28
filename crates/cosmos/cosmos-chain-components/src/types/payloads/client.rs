@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 use ibc_client_tendermint::types::proto::v1::Fraction;
 
 use crate::types::{TendermintClientState, TendermintConsensusState, TendermintHeader};

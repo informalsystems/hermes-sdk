@@ -3,7 +3,7 @@ use alloc::string::String;
 use core::fmt::Debug;
 
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent};
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 pub struct RaiseDebugString;
 

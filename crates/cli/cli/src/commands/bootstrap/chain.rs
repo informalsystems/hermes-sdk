@@ -1,6 +1,5 @@
 use alloc::sync::Arc;
 
-use cgp::prelude::*;
 use hermes_cli_components::traits::{BootstrapLoader, BootstrapLoaderComponent, HasBootstrapType};
 use hermes_core::runtime_components::traits::HasRuntime;
 use hermes_cosmos_core::chain_components::types::DynamicGasConfig;
@@ -8,6 +7,7 @@ use hermes_cosmos_core::error::types::HermesError;
 use hermes_cosmos_core::integration_tests::contexts::{CosmosBootstrap, CosmosBootstrapFields};
 use hermes_cosmos_core::relayer::contexts::CosmosBuilder;
 use hermes_cosmos_core::runtime::types::runtime::HermesRuntime;
+use hermes_prelude::*;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct BootstrapCosmosChainArgs {

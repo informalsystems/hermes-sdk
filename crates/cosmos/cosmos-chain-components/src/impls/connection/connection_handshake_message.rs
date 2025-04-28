@@ -1,6 +1,5 @@
 use core::fmt::Display;
 
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::HasMessageType;
 use hermes_core::encoding_components::traits::{CanConvert, HasEncoding};
 use hermes_core::encoding_components::types::AsBytes;
@@ -18,6 +17,7 @@ use hermes_core::relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };
+use hermes_prelude::*;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc::core::connection::types::ConnectionEnd;

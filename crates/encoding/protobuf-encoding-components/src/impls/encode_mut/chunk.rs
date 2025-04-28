@@ -1,8 +1,8 @@
 use core::array::TryFromSliceError;
 use std::collections::BTreeMap;
 
-use cgp::prelude::{CanRaiseAsyncError, HasAsyncErrorType};
 use hermes_encoding_components::traits::HasDecodeBufferType;
+use hermes_prelude::{CanRaiseAsyncError, HasAsyncErrorType};
 use prost::bytes::Buf;
 use prost::encoding::{decode_key, decode_varint, WireType};
 use prost::DecodeError;

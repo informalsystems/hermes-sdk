@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
 use cgp::core::field::FieldGetter;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::traits::types::packet::packet::HasPacketType;

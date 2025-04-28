@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_cosmos_chain_components::traits::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::{
     CosmosChannelOpenAckMessage, CosmosChannelOpenConfirmMessage, CosmosChannelOpenInitMessage,
     CosmosChannelOpenTryMessage, CosmosInitChannelOptions,
 };
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     ChannelOpenAckMessageBuilder, ChannelOpenAckMessageBuilderComponent,
     ChannelOpenConfirmMessageBuilder, ChannelOpenConfirmMessageBuilderComponent,

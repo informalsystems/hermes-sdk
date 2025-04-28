@@ -1,6 +1,5 @@
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::prelude::*;
 use hermes_cosmos_chain_components::encoding::CosmosClientEncodingComponents;
 use hermes_cosmos_chain_components::impls::ProvideCosmosChainTypes;
 use hermes_cosmos_chain_components::types::TendermintClientState;
@@ -16,6 +15,7 @@ pub use hermes_encoding_components::traits::{SchemaGetterComponent, SchemaTypeCo
 use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::traits::EncodedLengthGetterComponent;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;

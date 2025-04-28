@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_core::logging_components::traits::CanLog;
 use hermes_core::logging_components::types::{LevelDebug, LevelTrace, LevelWarn};
 use hermes_core::relayer_components::chain::traits::{
@@ -11,6 +10,7 @@ use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::{HasChainNodeConfigType, HasDynamicGas};
 use hermes_cosmos_test_components::chain::types::CosmosTestWallet;
 use hermes_error::types::HermesError;
+use hermes_prelude::*;
 
 use crate::traits::{
     CanBuildRelayerChainConfig, ChainBuilderWithNodeConfig, ChainBuilderWithNodeConfigComponent,

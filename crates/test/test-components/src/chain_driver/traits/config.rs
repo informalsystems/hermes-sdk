@@ -1,7 +1,7 @@
 use alloc::string::String;
 
 use cgp::core::component::UseContext;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_component {
   provider: ConfigUpdater,

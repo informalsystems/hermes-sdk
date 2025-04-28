@@ -1,5 +1,4 @@
 use cgp::core::field::Index;
-use cgp::prelude::*;
 use hermes_core::relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_core::relayer_components::multi::traits::relay_at::HasRelayTypeAt;
@@ -8,6 +7,7 @@ use hermes_core::test_components::setup::traits::{
     BinaryChannelDriverBuilder, BinaryChannelDriverBuilderComponent, HasTestDriverType,
 };
 use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosChain, CosmosRelay};
+use hermes_prelude::*;
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::{CosmosBinaryChannelTestDriver, CosmosChainDriver, CosmosRelayDriver};

@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     HasIbcChainTypes, HasUpdateClientPayloadType, UpdateClientMessageBuilder,
     UpdateClientMessageBuilderComponent,
 };
+use hermes_prelude::*;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use prost_types::Any;

@@ -1,4 +1,3 @@
-use cgp::prelude::*;
 use hermes_core::encoding_components::traits::{
     CanConvert, CanEncode, HasDefaultEncoding, HasEncodedType,
 };
@@ -12,6 +11,7 @@ use hermes_cosmos_chain_components::types::{
     CosmosCreateClientMessage, CosmosCreateClientPayload, TendermintClientState,
     TendermintConsensusState,
 };
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 use hermes_wasm_encoding_components::types::{WasmClientState, WasmConsensusState};
 use ibc::core::client::types::Height;

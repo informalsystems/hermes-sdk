@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::HasHeightType;
 use hermes_comet_light_client_components::traits::{
     HasLightBlockType, LightBlockHeightGetter, LightBlockHeightGetterComponent,
     LightBlockTypeComponent, ProvideLightBlockType,
 };
+use hermes_prelude::*;
 use tendermint::block::Height;
 use tendermint_light_client_verifier::types::LightBlock;
 

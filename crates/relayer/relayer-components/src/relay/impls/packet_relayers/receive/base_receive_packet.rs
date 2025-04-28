@@ -1,10 +1,10 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::{
     CanBuildPacketFromWriteAck, CanExtractFromEvent, HasAcknowledgementType,
 };
 use hermes_chain_type_components::traits::HasMessageResponseEvents;
+use hermes_prelude::*;
 
 use crate::chain::traits::{
     CanBuildReceivePacketMessage, CanBuildReceivePacketPayload,

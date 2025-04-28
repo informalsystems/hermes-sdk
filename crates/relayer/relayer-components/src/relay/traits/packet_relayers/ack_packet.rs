@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::chain::traits::{AcknowledgementOf, HasAcknowledgementType};
 use crate::chain::types::aliases::HeightOf;

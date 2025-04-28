@@ -6,7 +6,6 @@ use cgp::core::component::{UseContext, UseDelegate};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::core::field::Index;
 use cgp::core::types::WithType;
-use cgp::prelude::*;
 use hermes_any_counterparty::contexts::AnyCounterparty;
 use hermes_cli_components::impls::{
     CreateClientOptionsParser, CreateClientOptionsParserComponent, CreateConnectionArgs,
@@ -49,6 +48,7 @@ use hermes_cosmos_core::relayer::contexts::{CosmosBuilder, CosmosChain};
 use hermes_cosmos_core::runtime::types::runtime::HermesRuntime;
 use hermes_cosmos_core::test_components::chain::types::Denom;
 use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
+use hermes_prelude::*;
 use serde::Serialize;
 
 use crate::commands::{

@@ -2,9 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
 use cgp::core::field::FieldGetter;
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAddressType;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
+use hermes_prelude::*;
 
 #[cgp_component {
   provider: MessageTransferAddressGetter,

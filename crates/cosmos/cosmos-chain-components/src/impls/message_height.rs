@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     CounterpartyMessageHeightGetter, CounterpartyMessageHeightGetterComponent, HasHeightType,
     HasMessageType,
 };
+use hermes_prelude::*;
 use ibc::core::client::types::Height;
 
 use crate::traits::CosmosMessage;

@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAmountType, HasDenomType};
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{HasChannelIdType, HasIbcChainTypes, HasPortIdType};
 
 #[cgp_component {

@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 use std::collections::{BTreeMap, BTreeSet};
 
 use cgp::core::component::UseContext;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use tendermint::block::Height;
 
 pub type VerificationTrace = BTreeMap<Height, BTreeSet<Height>>;

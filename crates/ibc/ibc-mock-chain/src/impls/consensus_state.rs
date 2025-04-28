@@ -2,13 +2,13 @@ use alloc::borrow::ToOwned;
 use alloc::string::String;
 use alloc::sync::Arc;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{
     ConsensusStateTypeComponent, ProvideConsensusStateType,
 };
 use hermes_ibc_components::traits::queries::consensus_state::{
     ConsensusStateQuerier, ConsensusStateQuerierComponent,
 };
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::{MockChain, MockChainState};

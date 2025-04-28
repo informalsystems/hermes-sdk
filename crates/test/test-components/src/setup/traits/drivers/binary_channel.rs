@@ -1,5 +1,5 @@
 use cgp::core::field::Index;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     HasChannelIdType, HasConnectionIdType, HasPortIdType,
 };

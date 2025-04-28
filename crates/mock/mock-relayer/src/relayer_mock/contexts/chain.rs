@@ -17,8 +17,8 @@ use std::sync::{Arc, Mutex};
 use std::vec;
 
 use cgp::core::field::HasField;
-use cgp::prelude::*;
 use eyre::eyre;
+use hermes_prelude::*;
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::types::aliases::{

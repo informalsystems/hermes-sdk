@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
 use cgp::core::field::Index;
 use cgp::core::Async;
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_relayer_components::birelay::traits::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::{HasIbcChainTypes, HasInitChannelOptionsType};
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};

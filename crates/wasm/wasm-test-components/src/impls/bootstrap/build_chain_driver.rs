@@ -2,7 +2,6 @@ use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use core::time::Duration;
 
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::{HasAmountType, HasDenomType};
 use hermes_core::relayer_components::transaction::traits::CanSendMessagesWithSigner;
 use hermes_core::runtime_components::traits::{
@@ -21,6 +20,7 @@ use hermes_cosmos_test_components::bootstrap::traits::{
     HasChainNodeConfigType,
 };
 use hermes_cosmos_test_components::chain::types::{Amount, Denom, ProposalStatus, ProposalVote};
+use hermes_prelude::*;
 
 use crate::traits::bootstrap::{HasGovernanceProposalAuthority, HasWasmClientByteCode};
 use crate::traits::chain::CanUploadWasmClientCode;

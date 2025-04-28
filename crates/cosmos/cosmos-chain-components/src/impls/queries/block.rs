@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     BlockQuerier, BlockQuerierComponent, HasBlockType, HasHeightType,
 };
+use hermes_prelude::*;
 use ibc::core::client::types::Height;
 use tendermint::block::{Block, Height as BlockHeight, Id as BlockId};
 use tendermint::Error as TendermintError;

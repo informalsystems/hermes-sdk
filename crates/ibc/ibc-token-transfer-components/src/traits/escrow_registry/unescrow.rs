@@ -1,6 +1,6 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAmountType, HasChannelIdType};
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
+use hermes_prelude::*;
 
 /**
    A token transfer module may escrow tokens on behalf of multiple

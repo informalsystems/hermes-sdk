@@ -1,6 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
+    use hermes_prelude::*;
     use hermes_relayer_components::chain::traits::{
         ChainStatusQuerierComponent, ConsensusStateQuerierComponent,
     };

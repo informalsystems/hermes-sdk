@@ -1,8 +1,8 @@
 use alloc::vec::Vec;
 
 use cgp::core::error::ErrorOf;
-use cgp::prelude::*;
 use hermes_chain_components::traits::{HasHeightType, HasMessageType};
+use hermes_prelude::*;
 
 use crate::chain::traits::CanSendMessages;
 use crate::chain::types::aliases::{HeightOf, MessageOf};

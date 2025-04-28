@@ -1,5 +1,4 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::prelude::*;
 use hermes_core::encoding_components::impls::GetDefaultEncoding;
 use hermes_core::encoding_components::traits::{
     CanConvert, CanConvertBothWays, CanEncode, CanEncodeAndDecode, DefaultEncodingGetter,
@@ -9,6 +8,7 @@ use hermes_core::encoding_components::traits::{
 use hermes_core::encoding_components::types::AsBytes;
 use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
 use hermes_cosmos_relayer::impls::HandleCosmosError;
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use hermes_wasm_encoding_components::types::{
     WasmClientMessage, WasmClientState, WasmConsensusState,

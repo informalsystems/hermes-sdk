@@ -1,8 +1,8 @@
 use cgp::core::component::UseDelegate;
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{
     CanUseCounterparty, HasChannelIdType, HasMessageType, HasPortIdType,
 };
+use hermes_prelude::*;
 
 use crate::traits::{
     ChannelOpenAckPayloadOf, ChannelOpenConfirmPayloadOf, ChannelOpenTryPayloadOf,

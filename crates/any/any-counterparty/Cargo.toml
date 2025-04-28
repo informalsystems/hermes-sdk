@@ -22,6 +22,7 @@ hermes-cosmos-chain-preset          = { workspace = true }
 hermes-encoding-components          = { workspace = true }
 hermes-protobuf-encoding-components = { workspace = true }
 
-cgp   = { workspace = true }
-ibc   = { workspace = true }
-serde = { workspace = true, features = [ "derive" ] }
+cgp            = { workspace = true }
+hermes-prelude = { workspace = true }
+ibc            = { workspace = true }
+serde          = { workspace = true, features = [ "derive" ] }

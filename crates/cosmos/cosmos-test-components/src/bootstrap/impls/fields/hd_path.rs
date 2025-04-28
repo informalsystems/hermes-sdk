@@ -1,7 +1,7 @@
 use core::str::FromStr;
 
-use cgp::prelude::*;
 use hdpath::StandardHDPath;
+use hermes_prelude::*;
 
 use crate::bootstrap::traits::{WalletHdPathComponent, WalletHdPathGetter};
 

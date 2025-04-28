@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::chain::traits::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,

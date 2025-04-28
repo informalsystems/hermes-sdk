@@ -1,9 +1,9 @@
 use core::marker::PhantomData;
 
 use cgp::core::field::FieldGetter;
-use cgp::prelude::*;
 use hermes_encoding_components::impls::{CombineEncoders, DecodeFrom, EncodeFieldWithGetter};
 use hermes_encoding_components::traits::{MutDecoderComponent, MutEncoderComponent, Transformer};
+use hermes_prelude::*;
 use prost_types::Any;
 
 use crate::impls::encode_mut::proto_field::bytes::EncodeByteField;

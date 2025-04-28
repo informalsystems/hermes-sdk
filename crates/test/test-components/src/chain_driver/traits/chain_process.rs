@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{ChildProcessOf, HasChildProcessType, HasRuntime};
 
 #[cgp_component {

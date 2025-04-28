@@ -18,6 +18,7 @@ hermes-cosmos-relayer = { workspace = true }
 
 eyre               = { workspace = true }
 cgp                = { workspace = true }
+hermes-prelude     = { workspace = true }
 clap               = { workspace = true }
 tokio              = { workspace = true, features = [ "full" ] }
 tracing            = { workspace = true }

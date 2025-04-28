@@ -12,6 +12,7 @@ description = """
 """
 
 [dependencies]
-cgp                          = { workspace = true, default-features = false }
+cgp                          = { workspace = true }
+hermes-prelude               = { workspace = true }
 hermes-chain-type-components = { workspace = true }
 hermes-encoding-components   = { workspace = true }

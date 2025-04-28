@@ -1,9 +1,9 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::{
     HasAcknowledgementType, HasPacketDstChannelId, HasPacketDstPortId, HasPacketSequence,
 };
+use hermes_prelude::*;
 
 use crate::chain::traits::CanQueryPacketIsReceived;
 use crate::chain::types::aliases::HeightOf;

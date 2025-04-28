@@ -1,7 +1,6 @@
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_core::chain_type_components::traits::HasMessageResponseType;
 use hermes_core::relayer_components::chain::traits::{
     ChannelOpenInitEventComponent, ChannelOpenTryEventComponent, ConnectionOpenInitEventComponent,
@@ -14,6 +13,7 @@ use hermes_core::relayer_components::chain::traits::{
     ProvideConnectionOpenTryEvent, ProvideCreateClientEvent, ProvideSendPacketEvent,
     ProvideWriteAckEvent, SendPacketEventComponent, WriteAckEventComponent,
 };
+use hermes_prelude::*;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::client::types::events::CLIENT_ID_ATTRIBUTE_KEY;
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, ConnectionId};

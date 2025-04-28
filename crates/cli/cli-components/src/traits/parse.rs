@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_component {
   provider: ArgParser,

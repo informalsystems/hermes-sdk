@@ -1,11 +1,11 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     HasChannelIdType, HasPacketDstChannelId, HasPacketDstPortId, HasPacketSrcChannelId,
     HasPacketSrcPortId, HasPortIdType, IncomingPacketFilter, IncomingPacketFilterComponent,
     OutgoingPacketFilter, OutgoingPacketFilterComponent,
 };
+use hermes_prelude::*;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};
 
 use crate::types::PacketFilterConfig;

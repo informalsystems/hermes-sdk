@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_core::runtime_components::traits::{FilePathOf, HasFilePathType, HasRuntime};
 use hermes_core::test_components::chain::traits::{HasWalletType, Wallet};
 use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_prelude::*;
 
 #[cgp_component {
   provider: WalletInitializer,

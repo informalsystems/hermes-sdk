@@ -1,5 +1,5 @@
 use cgp::core::component::UseContext;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::impls::handlers::incoming::dispatch::DispatchMintOrUnescrow;
 use crate::impls::handlers::incoming::mint::HandleIncomingMintTransfer;

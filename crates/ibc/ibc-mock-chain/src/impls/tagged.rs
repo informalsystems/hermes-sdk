@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::types::{ProvideType, TypeComponent};
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::contexts::chain::MockChain;
 use crate::types::tagged::Tagged;

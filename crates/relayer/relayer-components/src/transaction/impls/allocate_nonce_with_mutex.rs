@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use futures::lock::MutexGuard;
+use hermes_prelude::*;
 
 use crate::transaction::traits::{
     CanQueryNonce, HasMutexForNonceAllocation, NonceAllocator, NonceAllocatorComponent,

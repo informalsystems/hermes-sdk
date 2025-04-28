@@ -8,7 +8,6 @@ use cgp::core::component::UseDelegate;
 use cgp::core::error::{
     ErrorRaiser, ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent,
 };
-use cgp::prelude::*;
 use eyre::Report;
 use futures::channel::mpsc::SendError;
 use futures::channel::oneshot::Canceled;
@@ -40,6 +39,7 @@ use hermes_error::handlers::{
 };
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
 use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
     InvalidWireType, UnsupportedWireType,

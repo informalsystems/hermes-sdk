@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::{
     CanBuildPacketFromWriteAck, CanQueryPacketIsCleared, CanQueryPacketIsReceived,
     CanReadPacketFields,
 };
 use hermes_logging_components::traits::CanLog;
+use hermes_prelude::*;
 
 use crate::chain::traits::{CanQueryChainStatus, HasWriteAckEvent};
 use crate::relay::impls::{

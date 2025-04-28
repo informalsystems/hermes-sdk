@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[derive(Debug, HasField)]
 pub struct WasmConsensusState {

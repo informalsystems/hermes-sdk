@@ -1,9 +1,9 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_logging_components::traits::LoggerComponent;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::*;
 use hermes_relayer_components::multi::traits::chain_at::{

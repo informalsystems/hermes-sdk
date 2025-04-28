@@ -2,8 +2,8 @@ use core::marker::PhantomData;
 
 use cgp::core::component::WithProvider;
 use cgp::core::field::FieldGetter;
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasChannelIdType;
+use hermes_prelude::*;
 
 use crate::traits::types::packet::header::HasPacketHeaderType;
 

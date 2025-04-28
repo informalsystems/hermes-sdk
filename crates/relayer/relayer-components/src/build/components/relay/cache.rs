@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::build::traits::builders::relay_builder::{RelayBuilder, RelayBuilderComponent};
 use crate::build::traits::cache::HasRelayCache;

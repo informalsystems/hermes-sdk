@@ -1,6 +1,6 @@
 use alloc::string::String;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_component {
   name: FilePathTypeComponent,

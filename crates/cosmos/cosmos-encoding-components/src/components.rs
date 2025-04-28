@@ -1,12 +1,12 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::core::component::UseDelegate;
-    use cgp::prelude::*;
     use hermes_core::encoding_components::traits::{
         DecodeBufferTypeComponent, DecoderComponent, EncodeBufferTypeComponent,
         EncodedTypeComponent, EncoderComponent, MutDecoderComponent, MutEncoderComponent,
         SchemaTypeComponent,
     };
+    use hermes_prelude::*;
     use hermes_protobuf_encoding_components::components::ProtobufEncodingComponents;
     use hermes_protobuf_encoding_components::traits::EncodedLengthGetterComponent;
     use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;

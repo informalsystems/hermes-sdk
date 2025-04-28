@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_encoding_components::traits::{
     CanDecodeMut, CanEncodeMut, Decoder, DecoderComponent, Encoder, EncoderComponent,
     HasEncodeBufferType, HasEncodedType,
 };
+use hermes_prelude::*;
 
 use crate::impls::encode_mut::chunk::{CanDecodeProtoChunks, HasProtoChunksDecodeBuffer};
 

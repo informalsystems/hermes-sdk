@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasHeightType;
+use hermes_prelude::*;
 
 use crate::traits::{
     CanComputeNextVerificationHeight, CanFetchLightBlockWithStatus, CanQueryLightBlock,

@@ -1,8 +1,8 @@
 use core::fmt::{Debug, Display};
 
-use cgp::prelude::*;
 use hermes_logging_components::traits::{Logger, LoggerComponent};
 use hermes_logging_components::types::LogLevel;
+use hermes_prelude::*;
 use hermes_relayer_components::birelay::impls::LogAutoBiRelay;
 use hermes_relayer_components::birelay::traits::{HasBiRelayTypes, HasTwoWayRelay};
 use hermes_relayer_components::chain::traits::{HasChainId, HasClientIdType, HasHeightType};

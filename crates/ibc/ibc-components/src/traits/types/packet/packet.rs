@@ -1,6 +1,6 @@
 use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 /**
    This is an abstract type for an outgoing IBC packet. Incoming IBC packets

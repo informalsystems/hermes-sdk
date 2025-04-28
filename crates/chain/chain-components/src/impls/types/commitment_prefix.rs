@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::CommitmentPrefixTypeComponent;
+use hermes_prelude::*;
 
 use crate::traits::ProvideCommitmentPrefixType;
 

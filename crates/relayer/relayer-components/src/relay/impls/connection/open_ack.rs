@@ -1,10 +1,10 @@
 use alloc::format;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::HasChainId;
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::LevelInfo;
+use hermes_prelude::*;
 
 use crate::chain::traits::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenAckPayload, CanQueryChainHeight,

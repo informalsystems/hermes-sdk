@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{AmountOf, HasAmountType};
+use hermes_prelude::*;
 
 use crate::chain_driver::traits::HasChainType;
 

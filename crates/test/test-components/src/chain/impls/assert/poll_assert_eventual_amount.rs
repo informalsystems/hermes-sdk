@@ -2,10 +2,10 @@ use alloc::format;
 use core::fmt::Debug;
 use core::time::Duration;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::{HasAddressType, HasAmountDenom, HasAmountType};
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::LevelError;
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{CanSleep, HasRuntime};
 
 use crate::chain::traits::{

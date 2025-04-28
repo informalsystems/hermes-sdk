@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use toml::Value;
 
 use crate::bootstrap::traits::{CosmosSdkConfigModifier, CosmosSdkConfigModifierComponent};

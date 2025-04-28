@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     HasIbcChainTypes, PacketIsReceivedQuerier, PacketIsReceivedQuerierComponent,
 };
+use hermes_prelude::*;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};

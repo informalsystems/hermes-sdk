@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_ibc_components::traits::types::commitment::path::{
     CommitmentPathTypeComponent, ProvideCommitmentPathType,
 };
 use hermes_ibc_components::types::tags::commitment::receive::ReceivePacket;
 use hermes_ibc_components::types::tags::commitment::send::SendPacket;
+use hermes_prelude::*;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;

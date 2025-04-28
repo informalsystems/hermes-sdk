@@ -2,8 +2,8 @@ use core::marker::PhantomData;
 use std::collections::BTreeMap;
 
 use cgp::core::component::UseContext;
-use cgp::prelude::*;
 use hermes_comet_light_client_components::types::VerificationStatus;
+use hermes_prelude::*;
 use tendermint::block::Height;
 use tendermint_light_client_verifier::types::LightBlock;
 

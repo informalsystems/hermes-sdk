@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::chain::traits::HasMessageType;
 use crate::transaction::traits::{HasNonceType, HasSignerType, HasTxResponseType};

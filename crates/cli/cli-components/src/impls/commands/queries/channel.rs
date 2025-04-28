@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::impls::QueryChannelEndArgs;
 use crate::traits::{CanRunCommand, CommandRunner, CommandRunnerComponent};

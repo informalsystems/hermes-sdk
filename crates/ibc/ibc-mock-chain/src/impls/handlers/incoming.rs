@@ -1,6 +1,5 @@
 use alloc::string::String;
 
-use cgp::prelude::*;
 use hermes_ibc_components::traits::handlers::incoming::payload::{
     CanHandleIncomingPayload, IncomingPayloadHandler, IncomingPayloadHandlerComponent,
 };
@@ -8,6 +7,7 @@ use hermes_ibc_components::types::packet_header::IbcPacketHeader;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
 use hermes_ibc_components::types::tags::apps::any::AnyApp;
 use hermes_ibc_token_transfer_components::types::tags::IbcTransferApp;
+use hermes_prelude::*;
 
 use crate::contexts::chain::MockChain;
 use crate::types::packet_data::MockAnyPayloadData;

@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     ConnectionEndQuerier, ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerier,
     ConnectionEndWithProofsQuerierComponent, HasCommitmentProofType, HasConnectionEndType,
     HasIbcChainTypes,
 };
+use hermes_prelude::*;
 use ibc::core::client::types::Height;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc::core::host::types::identifiers::ConnectionId;

@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasAddressType;
+use hermes_prelude::*;
 
 /**
    A global-level caller associated with the abstract chain context.

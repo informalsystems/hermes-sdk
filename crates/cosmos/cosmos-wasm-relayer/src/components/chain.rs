@@ -1,7 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
     use hermes_cosmos_chain_preset::presets::CosmosChainPreset;
+    use hermes_prelude::*;
     use CosmosChainPreset::re_exports::*;
 
     use crate::impls::ProvideWrappedTendermintClientState;

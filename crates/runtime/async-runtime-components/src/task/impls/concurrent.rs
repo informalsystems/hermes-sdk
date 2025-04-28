@@ -1,8 +1,8 @@
 use alloc::boxed::Box;
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
 use futures_util::stream::{self, Stream, StreamExt};
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{
     ConcurrentTaskRunner, ConcurrentTaskRunnerComponent, Task,
 };

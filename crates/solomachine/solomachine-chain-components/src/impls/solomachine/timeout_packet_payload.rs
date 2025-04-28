@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_cosmos_chain_components::methods::encode_protobuf;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     HasClientStateType, HasHeightType, HasOutgoingPacketType, HasTimeoutUnorderedPacketPayloadType,
     TimeoutUnorderedPacketPayloadBuilder, TimeoutUnorderedPacketPayloadBuilderComponent,

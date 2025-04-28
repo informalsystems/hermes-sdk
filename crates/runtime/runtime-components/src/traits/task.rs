@@ -1,7 +1,7 @@
 use alloc::boxed::Box;
 use alloc::vec::Vec;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[async_trait]
 pub trait Task: Async {

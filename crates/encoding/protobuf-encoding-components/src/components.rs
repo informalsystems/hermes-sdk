@@ -1,13 +1,13 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::core::component::UseDelegate;
-    use cgp::prelude::*;
     use hermes_encoding_components::impls::{ProvideEncodedBytes, ProvideStringSchema};
     use hermes_encoding_components::traits::{
         DecodeBufferTypeComponent, DecoderComponent, EncodeBufferTypeComponent,
         EncodedTypeComponent, EncoderComponent, MutDecoderComponent, MutEncoderComponent,
         SchemaTypeComponent,
     };
+    use hermes_prelude::*;
     use prost_types::Any;
 
     use crate::impls::encode::buffer::EncodeProtoWithMutBuffer;

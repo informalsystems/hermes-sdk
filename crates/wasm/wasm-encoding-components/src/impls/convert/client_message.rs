@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_core::encoding_components::traits::{
     CanConvert, CanDecode, CanEncode, Converter, ConverterComponent, HasEncodedType,
 };
+use hermes_prelude::*;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 use ibc::clients::wasm_types::client_message::ClientMessage;
 use prost_types::Any;

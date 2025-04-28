@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_encoding_components::traits::{HasEncodeBufferType, MutEncoder, MutEncoderComponent};
+use hermes_prelude::*;
 use prost::bytes::BufMut;
 use prost::encoding::{encode_key, encode_varint, WireType};
 

@@ -1,10 +1,10 @@
 #![allow(clippy::ptr_arg)]
 
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{HasChainId, HasMessageType};
 use hermes_core::relayer_components::transaction::traits::{
     HasFeeType, HasNonceType, HasSignerType, HasTransactionType, TxEncoder, TxEncoderComponent,
 };
+use hermes_prelude::*;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::tx::v1beta1::mode_info::{Single, Sum};

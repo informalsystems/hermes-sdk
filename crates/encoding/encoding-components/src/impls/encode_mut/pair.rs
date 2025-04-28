@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp::core::component::UseContext;
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::traits::{
     HasDecodeBufferType, HasEncodeBufferType, MutDecoder, MutDecoderComponent, MutEncoder,

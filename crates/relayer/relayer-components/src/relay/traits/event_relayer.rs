@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_chain_components::traits::HasHeightType;
+use hermes_prelude::*;
 
 use crate::chain::traits::HasEventType;
 use crate::chain::types::aliases::EventOf;

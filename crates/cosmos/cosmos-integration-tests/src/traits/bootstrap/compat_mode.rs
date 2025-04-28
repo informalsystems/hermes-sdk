@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use tendermint_rpc::client::CompatMode;
 
 #[cgp_getter {

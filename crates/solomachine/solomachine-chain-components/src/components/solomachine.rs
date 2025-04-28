@@ -1,12 +1,12 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
     use hermes_chain_type_components::traits::{
         MessageResponseEventsGetterComponent, MessageResponseTypeComponent, TimeTypeComponent,
     };
     use hermes_cosmos_chain_components::impls::{
         BuildCosmosUpdateClientMessage, CosmosPacketFieldReader, ProvideCosmosChainTypes,
     };
+    use hermes_prelude::*;
     use hermes_relayer_components::chain::traits::{
         AckPacketPayloadTypeProviderComponent, ChainIdTypeProviderComponent,
         ChainStatusQuerierComponent, ChainStatusTypeComponent, ChannelEndTypeComponent,

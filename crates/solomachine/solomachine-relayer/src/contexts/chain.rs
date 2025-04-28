@@ -5,7 +5,6 @@ use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
-use cgp::prelude::*;
 use eyre::eyre;
 use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
@@ -19,6 +18,7 @@ use hermes_encoding_components::types::AsBytes;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::Error;
+use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenAckPayload,
     CanBuildConnectionOpenConfirmMessage, CanBuildConnectionOpenConfirmPayload,

@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::chain::traits::{HasIbcChainTypes, HasInitChannelOptionsType, InitChannelOptions};
 use crate::relay::traits::{CanInitChannel, CanRelayChannelOpenHandshake, HasRelayChains};

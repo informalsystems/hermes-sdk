@@ -1,12 +1,12 @@
 use alloc::string::String;
 
-use cgp::prelude::*;
 use hermes_ibc_components::traits::commitment::path::receive_packet::{
     ReceivePacketCommitmentPathBuilder, ReceivePacketCommitmentPathBuilderComponent,
 };
 use hermes_ibc_components::traits::commitment::path::send_packet::{
     SendPacketCommitmentPathBuilder, SendPacketCommitmentPathBuilderComponent,
 };
+use hermes_prelude::*;
 
 use crate::contexts::chain::{MockChain, MockChainComponents};
 use crate::types::channel_id::MockChannelId;

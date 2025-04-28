@@ -1,5 +1,5 @@
-use cgp::prelude::*;
 use hermes_core::runtime_components::traits::{FilePathOf, HasFilePathType, HasRuntime};
+use hermes_prelude::*;
 
 #[cgp_component {
   provider: GenesisTransactionsCollector,

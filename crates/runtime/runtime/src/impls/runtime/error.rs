@@ -6,7 +6,7 @@ use std::process::ExitStatus;
 use cgp::core::error::{
     ErrorRaiser, ErrorRaiserComponent, ErrorTypeProvider, ErrorTypeProviderComponent,
 };
-use cgp::prelude::{cgp_provider, *};
+use hermes_prelude::{cgp_provider, *};
 use hermes_tokio_runtime_components::impls::{
     CommandNotFound, ExecCommandFailure, PrematureChildProcessExitError,
 };

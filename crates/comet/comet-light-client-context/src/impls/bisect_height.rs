@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasHeightType;
 use hermes_comet_light_client_components::traits::{
     CanQueryLightBlock, GetHighestTrustedOrVerifiedBefore, HasLightBlockHeight,
     NextVerificationHeightComputer, NextVerificationHeightComputerComponent, NoInitialTrustedState,
 };
+use hermes_prelude::*;
 use tendermint::block::Height;
 
 pub struct BisectHeight;

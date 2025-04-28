@@ -1,7 +1,7 @@
 use core::convert::Infallible;
 
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, HasAsyncErrorType};
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 pub struct HandleInfallible;
 

@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
-use cgp::prelude::*;
 use hermes_encoding_components::traits::{CanConvert, HasEncoding};
+use hermes_prelude::*;
 
 use crate::traits::handlers::outgoing::message::{IbcMessageHandler, IbcMessageHandlerComponent};
 use crate::traits::types::message::HasIbcMessageType;

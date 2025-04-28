@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 use crate::driver::traits::{ChainDriverAt, HasChainDriverTypeAt};
 

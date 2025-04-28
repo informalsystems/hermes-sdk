@@ -1,7 +1,7 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     InitConnectionOptionsTypeComponent, ProvideInitConnectionOptionsType,
 };
+use hermes_prelude::*;
 
 use crate::types::CosmosInitConnectionOptions;
 

@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{FilePathOf, HasFilePathType, HasRuntimeType};
 use hermes_test_components::driver::traits::HasChainDriverType;
 

@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_core::runtime_components::traits::{FilePathOf, HasFilePathType};
 use hermes_core::runtime_components::traits::HasRuntimeType;
 

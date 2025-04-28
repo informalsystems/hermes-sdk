@@ -1,7 +1,6 @@
 use cgp::core::component::{UseContext, UseDelegate};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::WithDelegatedType;
-use cgp::prelude::*;
 use hermes_chain_components::traits::{HasHeightType, HeightTypeProviderComponent};
 use hermes_comet_light_client_components::impls::DoVerifyForward;
 use hermes_comet_light_client_components::traits::{
@@ -19,6 +18,7 @@ use hermes_comet_light_client_components::traits::{
 };
 use hermes_comet_light_client_components::types::{Verdict, VerificationStatus};
 use hermes_error::impls::UseHermesError;
+use hermes_prelude::*;
 use tendermint::block::Height;
 use tendermint::Time;
 use tendermint_light_client_verifier::options::Options;

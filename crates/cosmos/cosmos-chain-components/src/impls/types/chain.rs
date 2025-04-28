@@ -2,7 +2,6 @@ use alloc::sync::Arc;
 use core::time::Duration;
 
 use cgp::core::error::CanRaiseAsyncError;
-use cgp::prelude::*;
 use hermes_core::chain_type_components::impls::UseEventsMessageResponse;
 use hermes_core::chain_type_components::traits::{
     ChainIdTypeProviderComponent, EventTypeProviderComponent, HeightAdjuster,
@@ -29,6 +28,7 @@ use hermes_core::relayer_components::chain::traits::{
     ProvidePortIdType, ProvideSequenceType, ProvideTimeType, ProvideTimeoutType,
     SequenceTypeComponent, TimeMeasurer, TimeMeasurerComponent,
 };
+use hermes_prelude::*;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::client::types::error::ClientError;

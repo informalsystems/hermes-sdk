@@ -1,9 +1,9 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     ChannelEndQuerier, ChannelEndQuerierComponent, ChannelEndWithProofsQuerier,
     ChannelEndWithProofsQuerierComponent, HasChannelEndType, HasCommitmentProofType,
     HasIbcChainTypes,
 };
+use hermes_prelude::*;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChannelId, PortId};

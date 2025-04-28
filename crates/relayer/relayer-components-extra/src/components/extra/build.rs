@@ -1,6 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::prelude::*;
+    use hermes_prelude::*;
     use hermes_relayer_components::build::traits::builders::birelay_builder::BiRelayBuilderComponent;
     use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilderComponent;
     use hermes_relayer_components::build::traits::builders::relay_builder::RelayBuilderComponent;

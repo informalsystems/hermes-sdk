@@ -1,8 +1,8 @@
-use cgp::prelude::*;
 use hermes_core::relayer_components::chain::traits::{
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     ProvideCreateClientMessageOptionsType, ProvideCreateClientPayloadOptionsType,
 };
+use hermes_prelude::*;
 
 use crate::types::CosmosCreateClientOptions;
 

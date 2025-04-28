@@ -5,7 +5,6 @@ use core::ops::Deref;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::core::field::Index;
 use cgp::core::types::WithType;
-use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_core::logging_components::traits::LoggerComponent;
 use hermes_core::relayer_components::error::traits::{CanPerformRetry, RetryableErrorComponent};
@@ -30,6 +29,7 @@ use hermes_core::relayer_components_extra::components::extra::relay::ExtraRelayP
 use hermes_core::runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,
 };
+use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;

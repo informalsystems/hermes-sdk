@@ -2,13 +2,13 @@ use alloc::sync::Arc;
 use alloc::vec::Vec;
 
 use cgp::core::Async;
-use cgp::prelude::HasAsyncErrorType;
 use futures::channel::mpsc::{UnboundedReceiver, UnboundedSender};
 use futures::channel::oneshot;
 use futures::lock::Mutex;
 use hermes_chain_type_components::traits::{
     HasMessageResponseType, HasMessageType, MessageResponseOf,
 };
+use hermes_prelude::HasAsyncErrorType;
 use hermes_relayer_components::chain::types::aliases::MessageOf;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 

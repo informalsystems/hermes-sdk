@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use hermes_prelude::*;
 
 #[cgp_component {
   name: CommitmentPathTypeComponent,

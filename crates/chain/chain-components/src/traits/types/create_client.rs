@@ -1,7 +1,7 @@
 use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::ProvideType;
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasClientIdType;
+use hermes_prelude::*;
 
 #[cgp_component {
   name: CreateClientPayloadOptionsTypeComponent,

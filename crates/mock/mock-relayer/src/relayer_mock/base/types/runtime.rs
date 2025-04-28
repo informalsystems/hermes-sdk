@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
 use core::time::Duration;
 
-use cgp::prelude::HasErrorType;
+use hermes_prelude::HasErrorType;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime_components::traits::{CanSleep, HasTime};
 

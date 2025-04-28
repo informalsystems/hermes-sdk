@@ -1,10 +1,10 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_components::traits::{
     CanQueryPacketIsCleared, HasAcknowledgementType, HasHeightType, HasOutgoingPacketType,
     HasPacketSequence, HasPacketSrcChannelId, HasPacketSrcPortId,
 };
+use hermes_prelude::*;
 
 use crate::relay::traits::{
     AckPacketRelayer, AckPacketRelayerComponent, HasRelayChains, PacketRelayer,

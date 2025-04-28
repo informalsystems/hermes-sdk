@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use alloc::vec;
 
 use cgp::extra::run::{Runner, RunnerComponent};
-use cgp::prelude::*;
+use hermes_prelude::*;
 use hermes_runtime_components::traits::{CanRunConcurrentTasks, HasRuntime, Task};
 
 use crate::relay::traits::{

@@ -2,8 +2,8 @@ use alloc::vec;
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_chain_type_components::traits::HasHeightType;
+use hermes_prelude::*;
 
 use crate::traits::{
     CanQueryClientStateWithLatestHeight, ConsensusStateHeightsQuerier,

@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::*;
 use hermes_encoding_components::traits::{HasEncodeBufferType, MutEncoder, MutEncoderComponent};
+use hermes_prelude::*;
 
 use crate::impls::encode_mut::proto_field::length_delim::EncodeLengthDelimitedHeader;
 
