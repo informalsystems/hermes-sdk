@@ -14,7 +14,7 @@ description = """
 [dependencies]
 cgp                                 = { workspace = true }
 hermes-prelude                      = { workspace = true }
-hermes-core                         = { workspace = true }
+hermes-encoding-components          = { workspace = true }
 hermes-protobuf-encoding-components = { workspace = true }
 
 ibc       = { workspace = true }

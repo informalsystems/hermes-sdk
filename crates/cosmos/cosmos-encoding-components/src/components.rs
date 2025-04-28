@@ -1,7 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::core::component::UseDelegate;
-    use hermes_core::encoding_components::traits::{
+    use hermes_encoding_components::traits::{
         DecodeBufferTypeComponent, DecoderComponent, EncodeBufferTypeComponent,
         EncodedTypeComponent, EncoderComponent, MutDecoderComponent, MutEncoderComponent,
         SchemaTypeComponent,

@@ -1614,7 +1614,7 @@ name = "hermes-cosmos-encoding-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
- "hermes-core",
+ "hermes-encoding-components",
  "hermes-prelude",
  "hermes-protobuf-encoding-components",
  "ibc",
