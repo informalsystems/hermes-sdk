@@ -1,12 +1,12 @@
 use core::marker::PhantomData;
 
 use hermes_cli_components::traits::{ArgParser, ArgParserComponent};
-use hermes_cosmos_core::chain_components::types::CosmosInitChannelOptions;
-use hermes_cosmos_core::ibc::core::channel::types::channel::Order;
-use hermes_cosmos_core::ibc::core::channel::types::error::ChannelError;
-use hermes_cosmos_core::ibc::core::channel::types::Version;
-use hermes_cosmos_core::ibc::core::host::types::error::IdentifierError;
-use hermes_cosmos_core::ibc::core::host::types::identifiers::ConnectionId;
+use hermes_cosmos::chain_components::types::CosmosInitChannelOptions;
+use hermes_cosmos::ibc::core::channel::types::channel::Order;
+use hermes_cosmos::ibc::core::channel::types::error::ChannelError;
+use hermes_cosmos::ibc::core::channel::types::Version;
+use hermes_cosmos::ibc::core::host::types::error::IdentifierError;
+use hermes_cosmos::ibc::core::host::types::identifiers::ConnectionId;
 use hermes_prelude::*;
 
 #[cgp_auto_getter]

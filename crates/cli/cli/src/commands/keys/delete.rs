@@ -2,9 +2,9 @@ use eyre::eyre;
 use hermes_cli_components::traits::{CanLoadBuilder, CommandRunnerComponent};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_core::chain_components::impls::CosmosChainConfig;
-use hermes_cosmos_core::chain_components::types::KeyRing;
-use hermes_cosmos_core::ibc::core::host::types::identifiers::ChainId;
+use hermes_cosmos::chain_components::impls::CosmosChainConfig;
+use hermes_cosmos::chain_components::types::KeyRing;
+use hermes_cosmos::ibc::core::host::types::identifiers::ChainId;
 use hermes_prelude::*;
 use tracing::warn;
 

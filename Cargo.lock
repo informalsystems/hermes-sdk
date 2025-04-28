@@ -1435,7 +1435,7 @@ dependencies = [
  "hermes-cli-components",
  "hermes-cli-framework",
  "hermes-core",
- "hermes-cosmos-core",
+ "hermes-cosmos",
  "hermes-prelude",
  "http 1.3.1",
  "humantime",
@@ -1523,6 +1523,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-cosmos"
+version = "0.1.0"
+dependencies = [
+ "hermes-comet-light-client-context",
+ "hermes-core",
+ "hermes-cosmos-core",
+ "hermes-cosmos-integration-tests",
+ "hermes-cosmos-relayer",
+ "hermes-cosmos-wasm-relayer",
+ "hermes-error",
+ "hermes-runtime",
+]
+
+[[package]]
 name = "hermes-cosmos-chain-components"
 version = "0.1.0"
 dependencies = [
@@ -1586,18 +1600,12 @@ name = "hermes-cosmos-core"
 version = "0.1.0"
 dependencies = [
  "hermes-comet-light-client-components",
- "hermes-comet-light-client-context",
  "hermes-core",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-chain-preset",
  "hermes-cosmos-encoding-components",
- "hermes-cosmos-integration-tests",
- "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
- "hermes-cosmos-wasm-relayer",
- "hermes-error",
  "hermes-protobuf-encoding-components",
- "hermes-runtime",
  "hermes-tracing-logging-components",
  "hermes-wasm-client-components",
  "hermes-wasm-encoding-components",
