@@ -1,6 +1,5 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::Index;
-use cgp::core::types::WithType;
 use cgp::extra::run::RunnerComponent;
 use hermes_core::logging_components::traits::LoggerComponent;
 use hermes_core::relayer_components::birelay::traits::AutoBiRelayerComponent;
@@ -37,12 +36,14 @@ delegate_components! {
         RuntimeTypeProviderComponent: UseType<HermesRuntime>,
         RuntimeGetterComponent: UseField<symbol!("runtime")>,
         LoggerComponent: TracingLogger,
-        ChainTypeProviderAtComponent<Index<0>>: WithType<CosmosChain>,
-        ChainTypeProviderAtComponent<Index<1>>: WithType<CosmosChain>,
+        [
+            ChainTypeProviderAtComponent<Index<0>>,
+            ChainTypeProviderAtComponent<Index<1>>,
+        ]: UseType<CosmosChain>,
         [
             RelayTypeProviderAtComponent<Index<0>, Index<1>>,
             RelayTypeProviderAtComponent<Index<1>, Index<0>>,
-        ]: WithType<CosmosRelay>,
+        ]: UseType<CosmosRelay>,
         RelayGetterAtComponent<Index<0>, Index<1>>:
             UseField<symbol!("relay_a_to_b")>,
         RelayGetterAtComponent<Index<1>, Index<0>>:
