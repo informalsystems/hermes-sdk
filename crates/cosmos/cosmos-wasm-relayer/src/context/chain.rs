@@ -39,26 +39,26 @@ use hermes_core::runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_core::test_components::chain::traits::CanQueryBalance;
-use hermes_cosmos_chain_components::traits::{
+use hermes_cosmos_core::chain_components::traits::{
     CanQueryAbci, CanQueryUnbondingPeriod, GasConfigGetter, GasConfigGetterComponent,
     GrpcAddressGetter, GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
     TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent,
 };
-use hermes_cosmos_chain_components::types::{
+use hermes_cosmos_core::chain_components::types::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig, TendermintClientState,
     TendermintConsensusState,
 };
-use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
+use hermes_cosmos_core::chain_preset::delegate::DelegateCosmosChainComponents;
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
+use hermes_cosmos_core::wasm_test_components::components::WasmChainComponents;
+use hermes_cosmos_core::wasm_test_components::traits::chain::{
+    CanUploadWasmClientCode, StoreCodeMessageBuilderComponent, WasmClientCodeUploaderComponent,
+};
 use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_cosmos_relayer::impls::HandleCosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_tracing_logging_components::contexts::TracingLogger;
-use hermes_wasm_test_components::components::WasmChainComponents;
-use hermes_wasm_test_components::traits::chain::{
-    CanUploadWasmClientCode, StoreCodeMessageBuilderComponent, WasmClientCodeUploaderComponent,
-};
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;

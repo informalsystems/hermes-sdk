@@ -1,10 +1,12 @@
-use hermes_cosmos_chain_components::encoding::CosmosClientEncodingComponents;
-use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
-use hermes_prelude::*;
-use hermes_wasm_encoding_components::components::WasmEncodingComponents;
-use hermes_wasm_encoding_components::types::{
+use hermes_cosmos_core::chain_components::encoding::CosmosClientEncodingComponents;
+use hermes_cosmos_core::chain_components::types::{
+    TendermintClientState, TendermintConsensusState,
+};
+use hermes_cosmos_core::wasm_encoding_components::components::WasmEncodingComponents;
+use hermes_cosmos_core::wasm_encoding_components::types::{
     WasmClientMessage, WasmClientState, WasmConsensusState,
 };
+use hermes_prelude::*;
 
 pub struct WasmCosmosTypeUrlSchemas;
 

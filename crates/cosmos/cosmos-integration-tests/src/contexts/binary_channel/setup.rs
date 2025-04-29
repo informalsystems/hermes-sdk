@@ -14,7 +14,7 @@ use hermes_core::test_components::setup::traits::{
     InitChannelOptionsGetterAtComponent, InitConnectionOptionsGetterAtComponent,
     PortIdGetterAtComponent, TestDriverTypeProviderComponent,
 };
-use hermes_cosmos_chain_components::types::{
+use hermes_cosmos_core::chain_components::types::{
     CosmosCreateClientOptions, CosmosInitChannelOptions, CosmosInitConnectionOptions,
 };
 use hermes_cosmos_relayer::contexts::{CosmosBiRelay, CosmosBuilder, CosmosChain, CosmosRelay};

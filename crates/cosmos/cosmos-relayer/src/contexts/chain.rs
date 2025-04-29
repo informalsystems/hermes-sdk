@@ -50,27 +50,27 @@ use hermes_core::test_components::chain::traits::{
     IbcTokenTransferMessageBuilderComponent, ProposalStatusQuerierComponent,
     TokenIbcTransferrerComponent,
 };
-use hermes_cosmos_chain_components::impls::CosmosChainConfig;
-use hermes_cosmos_chain_components::traits::{
+use hermes_cosmos_core::chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_core::chain_components::traits::{
     EipQuerierComponent, GasConfigGetter, GasConfigGetterComponent, GrpcAddressGetter,
     GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
     TxExtensionOptionsGetter, TxExtensionOptionsGetterComponent, UnbondingPeriodQuerierComponent,
 };
-use hermes_cosmos_chain_components::types::{
+use hermes_cosmos_core::chain_components::types::{
     CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent, CosmosCommitmentProof,
     CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent, CosmosCreateClientEvent,
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig,
     PacketFilterConfig, Secp256k1KeyPair, TendermintClientState,
 };
-use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
-use hermes_prelude::*;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_tracing_logging_components::contexts::TracingLogger;
-use hermes_wasm_test_components::components::WasmChainComponents;
-use hermes_wasm_test_components::traits::chain::{
+use hermes_cosmos_core::chain_preset::delegate::DelegateCosmosChainComponents;
+use hermes_cosmos_core::chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
+use hermes_cosmos_core::wasm_test_components::components::WasmChainComponents;
+use hermes_cosmos_core::wasm_test_components::traits::chain::{
     StoreCodeMessageBuilderComponent, WasmClientCodeUploaderComponent,
 };
+use hermes_prelude::*;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::host::types::identifiers::ChainId;
 use ibc_proto::cosmos::tx::v1beta1::Fee;

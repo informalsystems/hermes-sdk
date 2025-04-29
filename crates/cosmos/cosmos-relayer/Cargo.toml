@@ -17,18 +17,11 @@ all-features = true
 [dependencies]
 cgp                                 = { workspace = true }
 hermes-prelude                      = { workspace = true }
-hermes-tracing-logging-components   = { workspace = true }
-hermes-protobuf-encoding-components = { workspace = true }
+hermes-cosmos-core                  = { workspace = true }
 hermes-runtime                      = { workspace = true }
 hermes-error                        = { workspace = true }
 hermes-core                         = { workspace = true }
-hermes-async-runtime-components     = { workspace = true }
-hermes-cosmos-chain-components      = { workspace = true }
-hermes-cosmos-test-components       = { workspace = true }
-hermes-cosmos-chain-preset          = { workspace = true }
 hermes-any-counterparty             = { workspace = true }
-hermes-wasm-client-components       = { workspace = true }
-hermes-wasm-test-components         = { workspace = true }
 
 ibc = { workspace = true }
 ibc-proto = { workspace = true }

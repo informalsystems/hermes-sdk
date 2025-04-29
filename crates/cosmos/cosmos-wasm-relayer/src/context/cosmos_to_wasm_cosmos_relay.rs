@@ -24,12 +24,12 @@ use hermes_core::relayer_components::relay::traits::CanRelayPacket;
 use hermes_core::runtime_components::traits::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_cosmos_chain_components::types::PacketFilterConfig;
+use hermes_cosmos_core::chain_components::types::PacketFilterConfig;
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
 use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_cosmos_relayer::impls::HandleCosmosError;
 use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, PortId, Sequence};
 
 use crate::context::chain::WasmCosmosChain;

@@ -7,7 +7,7 @@ use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_core::test_components::setup::traits::{
     InitChannelOptionsGetterAt, InitChannelOptionsGetterAtComponent,
 };
-use hermes_cosmos_chain_components::types::CosmosInitChannelOptions;
+use hermes_cosmos_core::chain_components::types::CosmosInitChannelOptions;
 use hermes_prelude::*;
 use ibc::core::host::types::identifiers::ConnectionId;
 
