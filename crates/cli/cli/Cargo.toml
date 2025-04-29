@@ -22,7 +22,7 @@ hermes-any-counterparty = { workspace = true }
 hermes-cli-components   = { workspace = true }
 hermes-cli-framework    = { workspace = true }
 hermes-core             = { workspace = true }
-hermes-cosmos-core      = { workspace = true }
+hermes-cosmos           = { workspace = true }
 
 clap       = { workspace = true, features = [ "derive" ] }
 dirs-next  = { workspace = true }

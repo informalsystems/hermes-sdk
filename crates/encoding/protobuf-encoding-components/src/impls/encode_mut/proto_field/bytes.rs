@@ -4,8 +4,9 @@ use hermes_encoding_components::traits::{
 use hermes_prelude::*;
 use prost::bytes::BufMut;
 
-use crate::impls::encode_mut::chunk::{HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunks};
-use crate::impls::encode_mut::proto_field::length_delim::EncodeLengthDelimitedHeader;
+use crate::impls::{
+    EncodeLengthDelimitedHeader, HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunks,
+};
 
 pub struct EncodeByteField<const TAG: u32>;
 

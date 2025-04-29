@@ -10,10 +10,10 @@ mod preset {
     use hermes_prelude::*;
     use prost_types::Any;
 
-    use crate::impls::encode::buffer::EncodeProtoWithMutBuffer;
-    use crate::impls::encode_mut::any::EncodeAny;
-    use crate::impls::types::decode_buffer::ProvideProtoChunksDecodeBuffer;
-    use crate::impls::types::encode_buffer::ProvideBytesEncodeBuffer;
+    use crate::impls::{
+        EncodeAny, EncodeProtoWithMutBuffer, ProvideBytesEncodeBuffer,
+        ProvideProtoChunksDecodeBuffer,
+    };
     use crate::traits::EncodedLengthGetterComponent;
     use crate::types::strategy::ViaProtobuf;
 

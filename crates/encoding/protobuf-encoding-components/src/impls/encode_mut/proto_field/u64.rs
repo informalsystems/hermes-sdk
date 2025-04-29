@@ -5,7 +5,7 @@ use hermes_prelude::*;
 use prost::bytes::BufMut;
 use prost::encoding::{encode_key, encode_varint, WireType};
 
-use crate::impls::encode_mut::chunk::{HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunks};
+use crate::impls::{HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunks};
 
 pub struct EncodeU64ProtoField<const TAG: u32>;
 

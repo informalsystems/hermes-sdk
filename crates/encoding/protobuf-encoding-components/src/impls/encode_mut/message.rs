@@ -6,9 +6,7 @@ use prost::bytes::BufMut;
 use prost::encoding::{encode_varint, WireType};
 use prost::{DecodeError, Message};
 
-use crate::impls::encode_mut::chunk::{
-    CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, ProtoChunk, ProtoChunks,
-};
+use crate::impls::{CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, ProtoChunk, ProtoChunks};
 use crate::traits::{EncodedLengthGetter, EncodedLengthGetterComponent};
 
 #[cgp_new_provider(MutEncoderComponent)]

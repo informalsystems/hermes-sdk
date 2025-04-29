@@ -17,13 +17,9 @@ hermes-prelude                    = { workspace = true }
 hermes-error                      = { workspace = true }
 hermes-runtime                    = { workspace = true }
 hermes-core                       = { workspace = true }
+hermes-cosmos-core                = { workspace = true }
 hermes-cosmos-relayer             = { workspace = true }
 hermes-ibc-test-suite             = { workspace = true }
-hermes-async-runtime-components   = { workspace = true }
-hermes-cosmos-chain-components    = { workspace = true }
-hermes-cosmos-test-components     = { workspace = true }
-hermes-wasm-test-components       = { workspace = true }
-hermes-tracing-logging-components = { workspace = true }
 
 ibc            = { workspace = true }
 ibc-proto      = { workspace = true }

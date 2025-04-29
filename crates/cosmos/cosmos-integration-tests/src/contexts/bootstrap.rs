@@ -10,25 +10,25 @@ use hermes_core::runtime_components::traits::{
 use hermes_core::test_components::bootstrap::traits::ChainBootstrapperComponent;
 use hermes_core::test_components::chain_driver::traits::ChainTypeProviderComponent;
 use hermes_core::test_components::driver::traits::ChainDriverTypeProviderComponent;
-use hermes_cosmos_chain_components::types::DynamicGasConfig;
-use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
-use hermes_cosmos_test_components::bootstrap::components::CosmosSdkBootstrapComponents;
-use hermes_cosmos_test_components::bootstrap::impls::{
+use hermes_cosmos_core::chain_components::types::DynamicGasConfig;
+use hermes_cosmos_core::test_components::bootstrap::components::CosmosSdkBootstrapComponents;
+use hermes_cosmos_core::test_components::bootstrap::impls::{
     BuildAndWaitChainDriver, GenerateStandardWalletConfig, NoModifyCosmosSdkConfig,
 };
-use hermes_cosmos_test_components::bootstrap::traits::{
+use hermes_cosmos_core::test_components::bootstrap::traits::{
     AccountPrefixGetterComponent, ChainCommandPathGetterComponent, ChainDriverBuilderComponent,
     ChainStoreDirGetterComponent, CometConfigModifierComponent,
     CosmosGenesisConfigModifierComponent, CosmosSdkConfigModifierComponent, DenomForStaking,
     DenomForTransfer, DenomPrefixGetterComponent, DynamicGasGetterComponent,
     RandomIdFlagGetterComponent, WalletConfigGeneratorComponent,
 };
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
+use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_tracing_logging_components::contexts::TracingLogger;
 
 use crate::contexts::CosmosChainDriver;
 use crate::impls::{

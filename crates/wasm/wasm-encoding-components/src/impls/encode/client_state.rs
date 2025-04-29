@@ -4,9 +4,9 @@ use hermes_core::encoding_components::traits::{
     MutDecoderComponent, MutEncoderComponent, Transformer,
 };
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::DecodeRequiredProtoField;
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::encode::EncodeLengthDelimitedProtoField;
+use hermes_protobuf_encoding_components::impls::{
+    DecodeRequiredProtoField, EncodeByteField, EncodeLengthDelimitedProtoField,
+};
 use ibc::core::client::types::Height;
 
 use crate::types::WasmClientState;

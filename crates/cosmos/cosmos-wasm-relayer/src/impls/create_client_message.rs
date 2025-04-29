@@ -6,14 +6,14 @@ use hermes_core::relayer_components::chain::traits::{
     CreateClientMessageBuilder, CreateClientMessageBuilderComponent,
     HasCreateClientMessageOptionsType, HasCreateClientPayloadType, HasMessageType,
 };
-use hermes_cosmos_chain_components::traits::{CosmosMessage, ToCosmosMessage};
-use hermes_cosmos_chain_components::types::{
+use hermes_cosmos_core::chain_components::traits::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_core::chain_components::types::{
     CosmosCreateClientMessage, CosmosCreateClientPayload, TendermintClientState,
     TendermintConsensusState,
 };
+use hermes_cosmos_core::protobuf_encoding_components::types::strategy::ViaAny;
+use hermes_cosmos_core::wasm_encoding_components::types::{WasmClientState, WasmConsensusState};
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::types::strategy::ViaAny;
-use hermes_wasm_encoding_components::types::{WasmClientState, WasmConsensusState};
 use ibc::core::client::types::Height;
 use prost_types::Any;
 

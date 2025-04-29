@@ -1,10 +1,10 @@
-use hermes_core::encoding_components::impls::EncoderPair;
-use hermes_core::encoding_components::traits::{
+use hermes_encoding_components::impls::EncoderPair;
+use hermes_encoding_components::traits::{
     HasDecodeBufferType, HasEncodeBufferType, MutDecoder, MutDecoderComponent, MutEncoder,
     MutEncoderComponent,
 };
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::u64::EncodeU64ProtoField;
+use hermes_protobuf_encoding_components::impls::EncodeU64ProtoField;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 

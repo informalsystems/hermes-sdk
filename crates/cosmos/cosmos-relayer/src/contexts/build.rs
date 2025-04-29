@@ -40,8 +40,8 @@ use hermes_core::relayer_components_extra::components::extra::build::ExtraBuildC
 use hermes_core::runtime_components::traits::{
     RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
-use hermes_cosmos_chain_components::impls::CosmosChainConfig;
-use hermes_cosmos_chain_components::types::{
+use hermes_cosmos_core::chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_core::chain_components::types::{
     PacketFilterConfig, Secp256k1KeyPair, KEYSTORE_DEFAULT_FOLDER, KEYSTORE_FILE_EXTENSION,
 };
 use hermes_error::types::Error;

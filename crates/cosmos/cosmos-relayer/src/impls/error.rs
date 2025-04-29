@@ -31,8 +31,14 @@ use hermes_core::relayer_components::transaction::traits::HasTxHashType;
 use hermes_core::test_components::chain::impls::{
     EventualAmountTimeoutError, MissingSendPacketEventError,
 };
-use hermes_cosmos_chain_components::impls::{AbciQueryError, BroadcastTxError, EipQueryError};
-use hermes_cosmos_test_components::chain::impls::ProposalFailed;
+use hermes_cosmos_core::chain_components::impls::{
+    AbciQueryError, BroadcastTxError, EipQueryError,
+};
+use hermes_cosmos_core::protobuf_encoding_components::impls::{
+    InvalidWireType, RequiredFieldTagNotFound, TypeUrlMismatchError, UnsupportedWireType,
+};
+use hermes_cosmos_core::test_components::chain::impls::ProposalFailed;
+use hermes_cosmos_core::wasm_test_components::impls::chain::ProposalIdNotFound;
 use hermes_error::handlers::{
     DebugError, DebugRetryableError, DisplayError, HandleInfallible, ReportError,
     ReportRetryableError, ReturnError, WrapErrorDetail,
@@ -40,13 +46,7 @@ use hermes_error::handlers::{
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
-use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
-    InvalidWireType, UnsupportedWireType,
-};
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
 use hermes_runtime::types::error::TokioRuntimeError;
-use hermes_wasm_test_components::impls::chain::ProposalIdNotFound;
 use http::uri::InvalidUri;
 use ibc::clients::tendermint::types::error::TendermintClientError;
 use ibc::core::channel::types::error::ChannelError;

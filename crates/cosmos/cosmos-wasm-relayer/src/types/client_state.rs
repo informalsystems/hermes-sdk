@@ -1,10 +1,10 @@
 use hermes_core::encoding_components::traits::{
     CanConvert, CanDecode, CanEncode, Converter, ConverterComponent, HasEncodedType,
 };
-use hermes_cosmos_chain_components::types::TendermintClientState;
+use hermes_cosmos_core::chain_components::types::TendermintClientState;
+use hermes_cosmos_core::protobuf_encoding_components::types::strategy::ViaAny;
+use hermes_cosmos_core::wasm_encoding_components::types::WasmClientState;
 use hermes_prelude::*;
-use hermes_protobuf_encoding_components::types::strategy::ViaAny;
-use hermes_wasm_encoding_components::types::WasmClientState;
 use ibc::core::client::types::Height;
 use prost_types::Any;
 

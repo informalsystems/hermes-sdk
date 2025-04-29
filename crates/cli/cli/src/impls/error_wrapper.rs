@@ -1,6 +1,6 @@
 use core::fmt::Display;
 
-use hermes_cosmos_core::error::types::Error;
+use hermes_cosmos::error::types::Error;
 
 pub trait ErrorWrapper {
     type Value;

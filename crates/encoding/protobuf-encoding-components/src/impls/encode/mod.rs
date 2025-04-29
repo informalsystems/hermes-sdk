@@ -1,1 +1,2 @@
-pub mod buffer;
+mod buffer;
+pub use buffer::*;

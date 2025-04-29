@@ -16,17 +16,19 @@ use hermes_core::test_components::chain_driver::traits::{
     DenomGetterComponent, RandomAmountGeneratorComponent, RelayerWallet, StakingDenom,
     TransferDenom, UserWallet, ValidatorWallet, WalletGetterComponent, WalletsGetterComponent,
 };
-use hermes_cosmos_chain_components::impls::RelayerConfig;
-use hermes_cosmos_relayer::contexts::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::traits::{
+use hermes_cosmos_core::chain_components::impls::RelayerConfig;
+use hermes_cosmos_core::test_components::bootstrap::traits::{
     ChainCommandPathGetter, ChainCommandPathGetterComponent,
 };
-use hermes_cosmos_test_components::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
-use hermes_cosmos_test_components::chain::types::{CosmosTestWallet, Denom};
-use hermes_cosmos_test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
-use hermes_cosmos_test_components::chain_driver::traits::{
+use hermes_cosmos_core::test_components::bootstrap::types::{
+    CosmosChainNodeConfig, CosmosGenesisConfig,
+};
+use hermes_cosmos_core::test_components::chain::types::{CosmosTestWallet, Denom};
+use hermes_cosmos_core::test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
+use hermes_cosmos_core::test_components::chain_driver::traits::{
     GrpcPortGetter, GrpcPortGetterComponent, RpcPortGetter, RpcPortGetterComponent,
 };
+use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_error::types::Error;

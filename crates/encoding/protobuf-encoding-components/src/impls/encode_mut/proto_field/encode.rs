@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use hermes_encoding_components::traits::{HasEncodeBufferType, MutEncoder, MutEncoderComponent};
 use hermes_prelude::*;
 
-use crate::impls::encode_mut::proto_field::length_delim::EncodeLengthDelimitedHeader;
+use crate::impls::EncodeLengthDelimitedHeader;
 
 pub struct EncodeLengthDelimitedProtoField<const TAG: u32, InEncoder>(pub PhantomData<InEncoder>);
 

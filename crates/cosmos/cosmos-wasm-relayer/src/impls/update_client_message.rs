@@ -2,8 +2,10 @@ use hermes_core::relayer_components::chain::traits::{
     HasIbcChainTypes, HasUpdateClientPayloadType, UpdateClientMessageBuilder,
     UpdateClientMessageBuilderComponent,
 };
-use hermes_cosmos_chain_components::traits::{CosmosMessage, ToCosmosMessage};
-use hermes_cosmos_chain_components::types::{CosmosUpdateClientMessage, CosmosUpdateClientPayload};
+use hermes_cosmos_core::chain_components::traits::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_core::chain_components::types::{
+    CosmosUpdateClientMessage, CosmosUpdateClientPayload,
+};
 use hermes_prelude::*;
 use ibc::clients::wasm_types::client_message::{ClientMessage, WASM_CLIENT_MESSAGE_TYPE_URL};
 use ibc::core::host::types::identifiers::ClientId;

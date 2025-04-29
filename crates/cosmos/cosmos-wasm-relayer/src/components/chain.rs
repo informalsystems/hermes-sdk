@@ -1,6 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
-    use hermes_cosmos_chain_preset::presets::CosmosChainPreset;
+    use hermes_cosmos_core::chain_preset::presets::CosmosChainPreset;
     use hermes_prelude::*;
     use CosmosChainPreset::re_exports::*;
 

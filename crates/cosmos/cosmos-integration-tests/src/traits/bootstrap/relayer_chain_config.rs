@@ -1,7 +1,7 @@
 use hermes_core::test_components::chain::traits::{HasWalletType, WalletOf};
 use hermes_core::test_components::chain_driver::traits::HasChainType;
-use hermes_cosmos_chain_components::impls::CosmosChainConfig;
-use hermes_cosmos_test_components::bootstrap::traits::{
+use hermes_cosmos_core::chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_core::test_components::bootstrap::traits::{
     HasChainGenesisConfigType, HasChainNodeConfigType,
 };
 use hermes_prelude::*;

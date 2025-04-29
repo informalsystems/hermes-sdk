@@ -11,7 +11,7 @@ mod preset {
         CounterpartyMessageHeightGetterComponent, CreateClientMessageBuilderComponent,
         CreateClientMessageOptionsTypeComponent, UpdateClientMessageBuilderComponent,
     };
-    use hermes_cosmos_chain_preset::presets::CosmosToCosmosComponents;
+    use hermes_cosmos_core::chain_preset::presets::CosmosToCosmosComponents;
     use hermes_prelude::*;
     use CosmosToCosmosComponents::re_exports::*;
 

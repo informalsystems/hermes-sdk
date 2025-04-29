@@ -6,7 +6,7 @@ use hermes_encoding_components::traits::{
 };
 use hermes_prelude::*;
 
-use crate::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
+use crate::impls::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
 
 pub struct EncodeViaAny<InStrategy>(pub PhantomData<InStrategy>);
 

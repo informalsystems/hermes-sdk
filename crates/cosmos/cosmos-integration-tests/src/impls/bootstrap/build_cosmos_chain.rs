@@ -5,10 +5,12 @@ use hermes_core::relayer_components::chain::traits::{
 };
 use hermes_core::runtime_components::traits::{CanSleep, HasRuntime};
 use hermes_core::test_components::chain_driver::traits::HasChainType;
-use hermes_cosmos_chain_components::traits::CanQueryGrpcServiceStatus;
+use hermes_cosmos_core::chain_components::traits::CanQueryGrpcServiceStatus;
+use hermes_cosmos_core::test_components::bootstrap::traits::{
+    HasChainNodeConfigType, HasDynamicGas,
+};
+use hermes_cosmos_core::test_components::chain::types::CosmosTestWallet;
 use hermes_cosmos_relayer::contexts::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::traits::{HasChainNodeConfigType, HasDynamicGas};
-use hermes_cosmos_test_components::chain::types::CosmosTestWallet;
 use hermes_error::types::HermesError;
 use hermes_prelude::*;
 

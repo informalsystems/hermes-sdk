@@ -9,11 +9,11 @@ use hermes_core::test_components::driver::traits::{
     RelayDriverGetterAtComponent, RelayDriverTypeProviderAtComponent,
 };
 use hermes_core::test_components::setup::traits::PortIdGetterAtComponent;
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_ibc_test_suite::traits::CanUseBinaryTestDriverMethods;
 use hermes_prelude::*;
-use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::{CosmosChainDriver, CosmosRelayDriver};

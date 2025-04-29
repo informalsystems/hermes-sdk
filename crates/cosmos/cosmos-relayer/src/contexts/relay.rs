@@ -29,9 +29,9 @@ use hermes_core::relayer_components_extra::components::extra::relay::ExtraRelayP
 use hermes_core::runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeOf, RuntimeTypeProviderComponent,
 };
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
 use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_tracing_logging_components::contexts::TracingLogger;
 use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::CosmosChain;

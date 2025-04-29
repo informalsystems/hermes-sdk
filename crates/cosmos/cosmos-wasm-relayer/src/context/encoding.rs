@@ -6,13 +6,15 @@ use hermes_core::encoding_components::traits::{
     HasEncodedType, HasEncodingType,
 };
 use hermes_core::encoding_components::types::AsBytes;
-use hermes_cosmos_chain_components::types::{TendermintClientState, TendermintConsensusState};
-use hermes_cosmos_relayer::impls::HandleCosmosError;
-use hermes_prelude::*;
-use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
-use hermes_wasm_encoding_components::types::{
+use hermes_cosmos_core::chain_components::types::{
+    TendermintClientState, TendermintConsensusState,
+};
+use hermes_cosmos_core::protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
+use hermes_cosmos_core::wasm_encoding_components::types::{
     WasmClientMessage, WasmClientState, WasmConsensusState,
 };
+use hermes_cosmos_relayer::impls::HandleCosmosError;
+use hermes_prelude::*;
 use ibc::core::client::types::Height;
 use prost_types::Any;
 
@@ -82,10 +84,10 @@ impl CheckWasmCosmosEncoding for WasmCosmosEncoding {}
 #[cfg(test)]
 mod test {
     use hermes_core::encoding_components::traits::{CanEncode, Decoder, Encoder};
+    use hermes_cosmos_core::protobuf_encoding_components::impls::EncodeProtoWithMutBuffer;
+    use hermes_cosmos_core::protobuf_encoding_components::types::strategy::ViaProtobuf;
+    use hermes_cosmos_core::wasm_encoding_components::types::WasmClientState;
     use hermes_error::types::HermesError;
-    use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
-    use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
-    use hermes_wasm_encoding_components::types::WasmClientState;
     use ibc::core::client::types::Height;
 
     use crate::context::encoding::WasmCosmosEncoding;

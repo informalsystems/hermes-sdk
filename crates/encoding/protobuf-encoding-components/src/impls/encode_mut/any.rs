@@ -6,8 +6,7 @@ use hermes_encoding_components::traits::{MutDecoderComponent, MutEncoderComponen
 use hermes_prelude::*;
 use prost_types::Any;
 
-use crate::impls::encode_mut::proto_field::bytes::EncodeByteField;
-use crate::impls::encode_mut::proto_field::string::EncodeStringField;
+use crate::impls::{EncodeByteField, EncodeStringField};
 
 pub struct EncodeAny;
 

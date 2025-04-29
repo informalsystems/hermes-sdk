@@ -1,5 +1,5 @@
 use eyre::eyre;
-use hermes_cosmos_core::ibc::clients::tendermint::types::TrustThreshold;
+use hermes_cosmos::ibc::clients::tendermint::types::TrustThreshold;
 use hermes_prelude::*;
 
 #[derive(Debug, clap::Parser, HasField)]

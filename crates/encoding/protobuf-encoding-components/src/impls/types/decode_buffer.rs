@@ -3,7 +3,7 @@ use hermes_encoding_components::traits::{
 };
 use hermes_prelude::*;
 
-use crate::impls::encode_mut::chunk::{CanDecodeProtoChunks, ProtoChunks};
+use crate::impls::{CanDecodeProtoChunks, ProtoChunks};
 
 pub struct ProvideProtoChunksDecodeBuffer;
 

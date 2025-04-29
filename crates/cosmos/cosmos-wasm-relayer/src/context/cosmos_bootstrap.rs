@@ -7,7 +7,26 @@ use hermes_core::runtime_components::traits::{
 };
 use hermes_core::test_components::chain_driver::traits::ChainTypeProviderComponent;
 use hermes_core::test_components::driver::traits::ChainDriverTypeProviderComponent;
-use hermes_cosmos_chain_components::types::DynamicGasConfig;
+use hermes_cosmos_core::chain_components::types::DynamicGasConfig;
+use hermes_cosmos_core::test_components::bootstrap::components::CosmosSdkBootstrapComponents;
+use hermes_cosmos_core::test_components::bootstrap::impls::{
+    BuildAndWaitChainDriver, GenerateStandardWalletConfig, NoModifyCometConfig,
+    NoModifyCosmosSdkConfig, NoModifyGenesisConfig,
+};
+use hermes_cosmos_core::test_components::bootstrap::traits::{
+    AccountPrefixGetterComponent, ChainCommandPathGetterComponent, ChainDriverBuilderComponent,
+    ChainStoreDirGetterComponent, CometConfigModifierComponent,
+    CosmosGenesisConfigModifierComponent, CosmosSdkConfigModifierComponent, DenomForStaking,
+    DenomForTransfer, DenomPrefixGetterComponent, DynamicGasGetterComponent,
+    RandomIdFlagGetterComponent, WalletConfigGeneratorComponent,
+};
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
+use hermes_cosmos_core::wasm_test_components::impls::bootstrap::{
+    BuildChainDriverAndInitWasmClient, ModifyWasmGenesisConfig, ModifyWasmNodeConfig,
+};
+use hermes_cosmos_core::wasm_test_components::traits::bootstrap::{
+    GovernanceProposalAuthorityGetterComponent, WasmClientByteCodeGetterComponent,
+};
 use hermes_cosmos_integration_tests::contexts::CosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::{
     BuildCosmosChainDriver, BuildCosmosChainWithNodeConfig, BuildRelayerChainConfig,
@@ -17,29 +36,10 @@ use hermes_cosmos_integration_tests::traits::{
     RelayerChainConfigBuilderComponent, UseCompatMode37,
 };
 use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
-use hermes_cosmos_test_components::bootstrap::components::CosmosSdkBootstrapComponents;
-use hermes_cosmos_test_components::bootstrap::impls::{
-    BuildAndWaitChainDriver, GenerateStandardWalletConfig, NoModifyCometConfig,
-    NoModifyCosmosSdkConfig, NoModifyGenesisConfig,
-};
-use hermes_cosmos_test_components::bootstrap::traits::{
-    AccountPrefixGetterComponent, ChainCommandPathGetterComponent, ChainDriverBuilderComponent,
-    ChainStoreDirGetterComponent, CometConfigModifierComponent,
-    CosmosGenesisConfigModifierComponent, CosmosSdkConfigModifierComponent, DenomForStaking,
-    DenomForTransfer, DenomPrefixGetterComponent, DynamicGasGetterComponent,
-    RandomIdFlagGetterComponent, WalletConfigGeneratorComponent,
-};
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
 use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_tracing_logging_components::contexts::TracingLogger;
-use hermes_wasm_test_components::impls::bootstrap::{
-    BuildChainDriverAndInitWasmClient, ModifyWasmGenesisConfig, ModifyWasmNodeConfig,
-};
-use hermes_wasm_test_components::traits::bootstrap::{
-    GovernanceProposalAuthorityGetterComponent, WasmClientByteCodeGetterComponent,
-};
 
 /**
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
