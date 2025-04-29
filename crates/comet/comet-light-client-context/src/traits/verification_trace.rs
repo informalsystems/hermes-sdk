@@ -18,7 +18,7 @@ pub trait HasVerificationTrace {
 }
 
 #[cgp_provider(VerificationTraceGetterComponent)]
-impl<Client> VerificationTraceGetter<Client> for UseContext
+impl<Client> VerificationTraceGetter<Client> for UseFields
 where
     Client: HasFieldMut<symbol!("verification_trace"), Value = VerificationTrace>,
 {

@@ -12,7 +12,7 @@ pub trait CanUpdateConfig<Config>: HasAsyncErrorType {
 }
 
 #[cgp_provider(ConfigUpdaterComponent)]
-impl<ChainDriver, Config> ConfigUpdater<ChainDriver, Config> for UseContext
+impl<ChainDriver, Config> ConfigUpdater<ChainDriver, Config> for UseFields
 where
     ChainDriver: CanUpdateConfig<Config>,
 {

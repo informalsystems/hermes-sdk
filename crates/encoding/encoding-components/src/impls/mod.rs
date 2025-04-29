@@ -20,5 +20,3 @@ pub use tagged::*;
 
 mod types;
 pub use types::*;
-
-mod with_context;

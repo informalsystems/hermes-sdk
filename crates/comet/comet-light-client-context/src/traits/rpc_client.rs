@@ -13,7 +13,7 @@ pub trait HasRpcClient: Async {
 }
 
 #[cgp_provider(RpcClientGetterComponent)]
-impl<Client> RpcClientGetter<Client> for UseContext
+impl<Client> RpcClientGetter<Client> for UseFields
 where
     Client: Async + HasField<symbol!("rpc_client"), Value = HttpClient>,
 {
