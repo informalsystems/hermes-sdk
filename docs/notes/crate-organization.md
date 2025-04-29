@@ -40,6 +40,40 @@ The main risk of monolithic crate is that it becomes very easy to write context-
 
 This section gives an overview of the crates currently present in Hermes SDK.
 
+### Meta Crates
+
+- `hermes-prelude` - Re-exports `cgp::prelude` as a proxy crate to mediate potential breaking changes.
+
+- `hermes-core` - Re-exports the following common abstract crates that are essential for building a relayer:
+    - `hermes-runtime-components`
+    - `hermes-logging-components`
+    - `hermes-encoding-components`
+    - `hermes-chain-type-components`
+    - `hermes-chain-components`
+    - `hermes-test-components`
+    - `hermes-relayer-components`
+    - `hermes-relayer-components-extra`
+
+- `hermes-cosmos-core` - Re-exports the following context-generic crates that are essential for building a Cosmos relayer:
+    - `hermes-cosmos-chain-components`
+    - `hermes-cosmos-test-components`
+    - `hermes-wasm-client-components`
+    - `hermes-wasm-encoding-components`
+    - `hermes-wasm-test-components`
+    - `hermes-cosmos-chain-preset`
+    - `hermes-cosmos-encoding-components`
+    - `hermes-protobuf-encoding-components`
+    - `hermes-tracing-logging-components `
+    - `hermes-comet-light-client-components`
+
+- `hermes-cosmos` - Re-exports the following concrete Cosmos contexts crates, in addition to everything from `hermes-cosmos-core`:
+    - `hermes-cosmos-relayer`
+    - `hermes-cosmos-wasm-relayer`
+    - `hermes-cosmos-integration-tests`
+    - `hermes-comet-light-client-context`
+    - `hermes-runtime`
+    - `hermes-error`
+
 ### Fully Abstract Core Crates
 
 - `hermes-encoding-components` - Contains encoding-agnostic traits that can be used to implement any encoding.

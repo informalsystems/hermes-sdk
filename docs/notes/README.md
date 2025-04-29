@@ -9,8 +9,10 @@
 - [Field Types](./field-types.md)
 - [Presets](./presets.md)
 - [`UseDelegate`](./use-delegate.md)
+- [Context Fields](./context-fields.md)
 
 ## Relayer Architecture
 
 - [Crate Organization](./crate-organization.md)
+- [Code Navigation](./navigation.md)
 - [Encoding](./encoding.md)
