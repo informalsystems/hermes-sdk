@@ -14,7 +14,7 @@ pub trait CanModifyCosmosSdkConfig: HasAsyncErrorType {
 }
 
 #[cgp_provider(CosmosSdkConfigModifierComponent)]
-impl<Bootstrap, Modifier> CosmosSdkConfigModifier<Bootstrap> for UseContext
+impl<Bootstrap, Modifier> CosmosSdkConfigModifier<Bootstrap> for UseFields
 where
     Bootstrap:
         HasAsyncErrorType + HasField<symbol!("cosmos_sdk_config_modifier"), Value = Modifier>,

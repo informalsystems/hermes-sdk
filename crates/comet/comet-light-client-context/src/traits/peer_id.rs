@@ -13,7 +13,7 @@ pub trait HasPeerId: Async {
 }
 
 #[cgp_provider(PeerIdGetterComponent)]
-impl<Client> PeerIdGetter<Client> for UseContext
+impl<Client> PeerIdGetter<Client> for UseFields
 where
     Client: Async + HasField<symbol!("peer_id"), Value = PeerId>,
 {

@@ -1,4 +1,4 @@
-use cgp::core::component::{UseContext, UseDelegate};
+use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::WithDelegatedType;
 use hermes_chain_components::traits::{HasHeightType, HeightTypeProviderComponent};
@@ -86,7 +86,7 @@ delegate_components! {
             VerificationTraceGetterComponent,
             VerifierComponent,
         ]:
-            UseContext,
+            UseFields,
         LightBlockQuerierComponent:
             QueryHighestTrustedOrVerifiedBefore,
         NextVerificationHeightComputerComponent:

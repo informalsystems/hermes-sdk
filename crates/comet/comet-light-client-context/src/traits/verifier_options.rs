@@ -13,7 +13,7 @@ pub trait HasVerifierOptions: Async {
 }
 
 #[cgp_provider(VerifierOptionsGetterComponent)]
-impl<Client> VerifierOptionsGetter<Client> for UseContext
+impl<Client> VerifierOptionsGetter<Client> for UseFields
 where
     Client: Async + HasField<symbol!("verifier_options"), Value = Options>,
 {
