@@ -2,8 +2,7 @@ use cgp::core::component::UseDelegate;
 use hermes_prelude::*;
 
 #[cgp_component {
-  provider: Logger,
-  context: Logging,
+    provider: Logger,
 }]
 #[async_trait]
 pub trait CanLog<Details>: Async
@@ -14,7 +13,7 @@ where
 }
 
 #[async_trait]
-pub trait CanLogMessage: Async {
+pub trait CanLogMessage {
     async fn log_message(&self, message: &str);
 }
 

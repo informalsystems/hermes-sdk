@@ -16,3 +16,4 @@
 - [Crate Organization](./crate-organization.md)
 - [Code Navigation](./navigation.md)
 - [Encoding](./encoding.md)
+- [Logging](./logging.md)
