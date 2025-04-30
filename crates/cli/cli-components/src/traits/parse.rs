@@ -4,8 +4,8 @@ use cgp::core::component::UseDelegate;
 use hermes_prelude::*;
 
 #[cgp_component {
-  provider: ArgParser,
-  context: App,
+    provider: ArgParser,
+    context: App,
 }]
 pub trait CanParseArg<Args, Tag>: HasAsyncErrorType {
     type Parsed: Async;

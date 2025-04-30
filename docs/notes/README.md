@@ -17,3 +17,4 @@
 - [Code Navigation](./navigation.md)
 - [Encoding](./encoding.md)
 - [Logging](./logging.md)
+- [CLI](./cli.md)
