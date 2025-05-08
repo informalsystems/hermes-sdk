@@ -83,7 +83,7 @@ basecoin                         = { version = "0.2.0" }
 bitcoin                          = { version = "0.31.2" }
 cgp                              = { version = "0.4.0", default-features = false }
 cgp-async                        = { version = "0.4.0" }
-clap                             = { version = "4.5.20" }
+clap                             = { version = "4.5.37" }
 dirs-next                        = { version = "2.0.0" }
 num-bigint                       = { version = "0.4" }
 num-rational                     = { version = "0.4.1" }
