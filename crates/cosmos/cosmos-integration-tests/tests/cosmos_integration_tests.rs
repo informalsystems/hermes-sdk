@@ -5,7 +5,6 @@ use hermes_cosmos_integration_tests::contexts::CosmosBinaryChannelTestDriver;
 use hermes_cosmos_integration_tests::init::{init_preset_bootstraps, init_test_runtime};
 use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::clearing::TestPacketClearing;
-use hermes_ibc_test_suite::tests::recover_client::TestRecoverClient;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 
 #[test]
@@ -40,6 +39,8 @@ fn test_packet_clearing() -> Result<(), Error> {
     Ok(())
 }
 
+// TODO: The current Gaia used, v18, uses a legacy client recovery method
+#[cfg(feature = "ibc-go-v8")]
 #[test]
 fn test_client_recovery() -> Result<(), Error> {
     let runtime = init_test_runtime();
@@ -48,7 +49,7 @@ fn test_client_recovery() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        TestRecoverClient::default().run_test(&setup).await?;
+        hermes_ibc_test_suite::tests::recover_client::TestRecoverClient::default().run_test(&setup).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
