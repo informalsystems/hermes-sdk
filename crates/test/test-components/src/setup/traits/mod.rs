@@ -22,6 +22,9 @@ pub use connection::*;
 mod create_client_options_at;
 pub use create_client_options_at::*;
 
+mod recover_client_options_at;
+pub use recover_client_options_at::*;
+
 mod driver;
 pub use driver::*;
 

@@ -1,3 +1,5 @@
+use core::fmt::Debug;
+
 use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::ProvideType;
 use hermes_prelude::*;
@@ -11,7 +13,7 @@ pub trait HasConsensusStateType<Counterparty>: Async {
     /**
         The consensus state of the `Self` chain's client on the `Counterparty` chain
     */
-    type ConsensusState: Async;
+    type ConsensusState: Async + Debug;
 }
 
 pub type ConsensusStateOf<Chain, Counterparty> =
@@ -34,7 +36,7 @@ impl<Chain, Counterparty, Provider, ConsensusState> ProvideConsensusStateType<Ch
 where
     Chain: Async,
     Provider: ProvideType<Chain, ConsensusStateTypeComponent, Type = ConsensusState>,
-    ConsensusState: Async,
+    ConsensusState: Async + Debug,
 {
     type ConsensusState = ConsensusState;
 }

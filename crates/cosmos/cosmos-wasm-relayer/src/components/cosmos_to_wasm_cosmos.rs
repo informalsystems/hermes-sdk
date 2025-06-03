@@ -25,6 +25,7 @@ mod preset {
             CreateClientMessageBuilderComponent,
             CreateClientMessageOptionsTypeComponent,
             UpdateClientMessageBuilderComponent,
+            ClientRecoveryComponent,
         ],
         | Components | {
             cgp_preset! {
@@ -35,6 +36,8 @@ mod preset {
                         ProvidCreateWasmTendermintMessageOptionsType,
                     UpdateClientMessageBuilderComponent:
                         BuildUpdateWasmTendermintClientMessage,
+                    ClientRecoveryComponent:
+                        RecoverClientWithGovernanceProposal,
                     Components:
                         CosmosToCosmosComponents::Provider,
                 }

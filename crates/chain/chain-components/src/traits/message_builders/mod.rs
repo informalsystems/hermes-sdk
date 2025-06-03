@@ -10,6 +10,8 @@ pub use connection_handshake::*;
 mod create_client;
 pub use create_client::*;
 
+mod recover_client;
+
 mod receive_packet;
 pub use receive_packet::*;
 

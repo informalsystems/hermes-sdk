@@ -1,3 +1,5 @@
+use core::fmt::Debug;
+
 use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::ProvideType;
 use hermes_prelude::*;
@@ -8,7 +10,7 @@ use hermes_prelude::*;
   context: Chain,
 }]
 pub trait HasUpdateClientPayloadType<Counterparty>: Async {
-    type UpdateClientPayload: Async;
+    type UpdateClientPayload: Async + Debug;
 }
 
 pub type UpdateClientPayloadOf<Chain, Counterparty> =
@@ -30,7 +32,7 @@ impl<Chain, Counterparty, Provider, UpdateClientPayload>
     ProvideUpdateClientPayloadType<Chain, Counterparty> for WithProvider<Provider>
 where
     Chain: Async,
-    UpdateClientPayload: Async,
+    UpdateClientPayload: Async + Debug,
     Provider: ProvideType<Chain, UpdateClientPayloadTypeComponent, Type = UpdateClientPayload>,
 {
     type UpdateClientPayload = UpdateClientPayload;

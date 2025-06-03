@@ -5,3 +5,11 @@ pub enum ProposalStatus {
     Passed,
     Rejected,
 }
+
+#[derive(Debug)]
+pub enum ProposalVote {
+    Yes,
+    Abstain,
+    No,
+    NoWithVeto,
+}

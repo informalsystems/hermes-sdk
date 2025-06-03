@@ -1,3 +1,5 @@
+use core::time::Duration;
+
 use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::ProvideType;
 use hermes_chain_type_components::traits::HasClientIdType;
@@ -116,4 +118,18 @@ where
     Provider: ProvideType<Chain, CreateClientPayloadTypeComponent, Type = CreateClientPayload>,
 {
     type CreateClientPayload = CreateClientPayload;
+}
+
+#[cgp_component {
+  name: OverrideCreateClientPayloadOptionsComponent,
+  provider: ProvideOverrideCreateClientPayloadOptions,
+  context: Chain,
+}]
+pub trait CanOverrideCreateClientPayloadOptions<Counterparty>:
+    HasCreateClientPayloadOptionsType<Counterparty>
+{
+    fn override_create_client_payload_options(
+        payload_options: &Self::CreateClientPayloadOptions,
+        new_period: Duration,
+    ) -> Self::CreateClientPayloadOptions;
 }

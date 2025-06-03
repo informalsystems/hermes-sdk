@@ -1,4 +1,7 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
+use hermes_core::chain_components::traits::{
+    ClientStatusMethodsComponent, ClientStatusQuerierComponent, ClientStatusTypeComponent,
+};
 use hermes_core::encoding_components::impls::GetDefaultEncoding;
 use hermes_core::encoding_components::traits::{
     CanConvert, CanDecode, DefaultEncodingGetter, DefaultEncodingGetterComponent,
@@ -12,7 +15,7 @@ use hermes_core::relayer_components::chain::traits::{
     ConnectionIdTypeComponent, HeightTypeProviderComponent, OutgoingPacketTypeComponent,
     PortIdTypeComponent, SequenceTypeComponent, TimeoutTypeComponent,
 };
-use hermes_cosmos_chain_components::impls::ProvideCosmosChainTypes;
+use hermes_cosmos_chain_components::impls::{ProvideCosmosChainTypes, QueryCosmosClientStatus};
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
@@ -22,7 +25,7 @@ use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use hermes_wasm_encoding_components::components::*;
 use hermes_wasm_encoding_components::types::WasmClientState;
 
-use crate::impls::ProvideWasmClientState;
+use crate::impls::{ProvideWasmClientState, ProvideWasmClientStatus};
 
 #[cgp_context(WasmCounterpartyComponents)]
 pub struct WasmCounterparty;
@@ -46,6 +49,11 @@ delegate_components! {
             ProvideCosmosChainTypes,
         ClientStateTypeComponent:
             ProvideWasmClientState,
+        [
+            ClientStatusTypeComponent,
+            ClientStatusMethodsComponent,
+        ]:
+            ProvideWasmClientStatus,
         EncodingGetterComponent<AsBytes>:
             GetDefaultEncoding,
     }
@@ -56,6 +64,7 @@ pub struct WasmCounterpartyCosmosComponents;
 delegate_components! {
     WasmCounterpartyCosmosComponents {
         ClientStateQuerierComponent: QueryAndConvertRawClientState,
+        ClientStatusQuerierComponent: QueryCosmosClientStatus,
     }
 }
 

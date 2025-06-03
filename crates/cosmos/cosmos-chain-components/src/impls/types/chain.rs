@@ -146,7 +146,7 @@ where
     Chain: HasTimeType<Time = Time>,
 {
     fn duration_since(earlier: &Time, later: &Time) -> Option<Duration> {
-        earlier.duration_since(*later).ok()
+        later.duration_since(*earlier).ok()
     }
 }
 

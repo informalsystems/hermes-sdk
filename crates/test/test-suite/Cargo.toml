@@ -20,3 +20,6 @@ hermes-logging-components    = { workspace = true }
 hermes-test-components       = { workspace = true }
 hermes-chain-components      = { workspace = true }
 hermes-chain-type-components = { workspace = true }
+hermes-runtime-components    = { workspace = true }
+
+tokio                        = { workspace = true }

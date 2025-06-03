@@ -5,6 +5,7 @@ use hermes_cosmos_integration_tests::contexts::CosmosBinaryChannelTestDriver;
 use hermes_cosmos_integration_tests::init::{init_preset_bootstraps, init_test_runtime};
 use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::clearing::TestPacketClearing;
+use hermes_ibc_test_suite::tests::recover_client::TestRecoverClient;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 
 #[test]
@@ -32,6 +33,22 @@ fn test_packet_clearing() -> Result<(), Error> {
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
         TestPacketClearing::default().run_test(&setup).await?;
+
+        <Result<(), Error>>::Ok(())
+    })?;
+
+    Ok(())
+}
+
+#[test]
+fn test_client_recovery() -> Result<(), Error> {
+    let runtime = init_test_runtime();
+
+    runtime.runtime.clone().block_on(async move {
+        let setup: CosmosBinaryChannelTestDriver =
+            init_preset_bootstraps(&runtime, Default::default()).await?;
+
+        TestRecoverClient::default().run_test(&setup).await?;
 
         <Result<(), Error>>::Ok(())
     })?;

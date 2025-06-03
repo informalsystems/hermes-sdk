@@ -1,8 +1,19 @@
+use alloc::string::String;
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::core::macros::blanket_trait;
+use hermes_chain_components::traits::{
+    CanBuildCreateClientMessage, CanBuildCreateClientPayload, CanBuildUpdateClientMessage,
+    CanBuildUpdateClientPayload, CanExtractFromMessageResponse,
+    CanOverrideCreateClientPayloadOptions, CanQueryClientStateWithLatestHeight,
+    CanQueryClientStatus, CanRecoverClient, CanSendMessages, CanSendSingleMessage,
+    HasClientStateFields, HasClientStateType, HasClientStatusMethods, HasClientStatusType,
+    HasCreateClientEvent, HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+    HasRecoverClientPayloadType,
+};
+use hermes_chain_components::types::aliases::ClientIdOf;
 use hermes_chain_type_components::traits::{DenomOf, HasAmountDenom};
 use hermes_logging_components::traits::CanLogMessage;
 use hermes_prelude::{CanRaiseError, HasAsyncErrorType, HasErrorType};
@@ -14,21 +25,30 @@ use hermes_relayer_components::chain::traits::{
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayAt;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::multi::traits::client_id_at::HasClientIdAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayAt;
 use hermes_relayer_components::relay::traits::{
     CanAutoRelayWithHeights, CanRelayReceivePacket, DestinationTarget, HasChainTargets,
     HasDstChain, HasSrcChain, SourceTarget,
 };
+use hermes_relayer_components::transaction::traits::CanSendMessagesWithSigner;
 use hermes_test_components::chain::traits::{
-    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
-    HasAmountMethods, HasDefaultMemo, HasWalletType, WalletOf,
+    CanAssertEventualAmount, CanBuildDepositProposalMessage, CanBuildVoteProposalMessage,
+    CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance, CanQueryProposalStatus,
+    HasAmountMethods, HasDefaultMemo, HasProposalIdType, HasProposalStatusType,
+    HasProposalVoteType, HasWalletSigner, HasWalletType, WalletOf,
 };
+use hermes_test_components::chain::types::{ProposalStatus, ProposalVote};
 use hermes_test_components::chain_driver::traits::{
-    CanGenerateRandomAmount, HasChain, HasDenom, HasWallet, TransferDenom, UserWallet,
+    CanGenerateRandomAmount, HasChain, HasDenom, HasWallet, StakingDenom, TransferDenom,
+    UserWallet, ValidatorWallet,
 };
 use hermes_test_components::driver::traits::{HasChainDriverAt, HasChannelIdAt, HasRelayDriverAt};
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
-use hermes_test_components::setup::traits::HasPortIdAt;
+use hermes_test_components::setup::traits::{
+    HasCreateClientMessageOptionsAt, HasCreateClientPayloadOptionsAt, HasPortIdAt,
+    HasRecoverClientPayloadOptionsAt,
+};
 
 #[blanket_trait]
 pub trait HasBinaryTestDriverFields<A, B>:
@@ -50,6 +70,7 @@ pub trait HasBinaryTestDriverFields<A, B>:
     + CanRaiseError<ErrorOf<Self::RelayDriver>>
     + CanRaiseError<ErrorOf<Self::ChainDriverA>>
     + CanRaiseError<ErrorOf<Self::ChainDriverB>>
+    + CanRaiseError<String>
 {
     type ChainDriverA: HasErrorType + HasChain<Chain = Self::ChainA>;
 
@@ -111,22 +132,52 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
         B,
         RelayDriver: CanRunRelayerInBackground,
         ChainDriverA: HasDenom<TransferDenom>
+                          + HasDenom<StakingDenom>
                           + HasWallet<UserWallet<0>>
                           + HasWallet<UserWallet<1>>
+                          + HasWallet<ValidatorWallet>
                           + CanGenerateRandomAmount,
         ChainDriverB: HasDenom<TransferDenom>
+                          + HasDenom<StakingDenom>
                           + HasWallet<UserWallet<0>>
                           + HasWallet<UserWallet<1>>
+                          + HasWallet<ValidatorWallet>
                           + CanGenerateRandomAmount,
         ChainA: HasChainId
                     + HasWalletType
+                    + HasWalletSigner
                     + CanQueryBalance
                     + CanQueryChainStatus
                     + HasAmountMethods
                     + HasAmountDenom
                     + CanAssertEventualAmount
                     + HasDefaultMemo
-                    + HasIbcChainTypes<Self::ChainB>
+                    + CanSendSingleMessage
+                    + CanSendMessages
+                    + CanSendMessagesWithSigner
+                    + HasProposalIdType<ProposalId = u64>
+                    + HasProposalStatusType<ProposalStatus = ProposalStatus>
+                    + HasProposalVoteType<ProposalVote = ProposalVote>
+                    + CanQueryProposalStatus
+                    + CanBuildDepositProposalMessage
+                    + CanBuildVoteProposalMessage
+                    + HasCreateClientPayloadOptionsType<Self::ChainB>
+                    + CanBuildCreateClientPayload<Self::ChainB>
+                    + CanBuildCreateClientMessage<Self::ChainB>
+                    + CanRecoverClient<Self::ChainB>
+                    + HasCreateClientEvent<Self::ChainB>
+                    + CanOverrideCreateClientPayloadOptions<Self::ChainB>
+                    + HasClientStateType<Self::ChainB>
+                    + HasClientStatusType<Self::ChainB>
+                    + HasClientStatusMethods<Self::ChainB>
+                    + CanQueryClientStateWithLatestHeight<Self::ChainB>
+                    + CanQueryClientStatus<Self::ChainB>
+                    + HasClientStateFields<Self::ChainB>
+                    + CanBuildUpdateClientPayload<Self::ChainB>
+                    + CanBuildUpdateClientMessage<Self::ChainB>
+                    + CanExtractFromMessageResponse<
+            <Self::ChainA as HasCreateClientEvent<Self::ChainB>>::CreateClientEvent,
+        > + HasIbcChainTypes<Self::ChainB>
                     + CanReadPacketFields<Self::ChainB>
                     + CanQueryPacketIsCleared<Self::ChainB>
                     + CanQueryPacketIsReceived<Self::ChainB>
@@ -134,13 +185,39 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + CanConvertIbcTransferredAmount<Self::ChainB>,
         ChainB: HasChainId
                     + HasWalletType
+                    + HasWalletSigner
                     + CanQueryBalance
                     + CanQueryChainStatus
                     + HasAmountMethods
                     + HasAmountDenom
                     + CanAssertEventualAmount
                     + HasDefaultMemo
-                    + HasIbcChainTypes<Self::ChainA>
+                    + CanSendSingleMessage
+                    + CanSendMessages
+                    + CanSendMessagesWithSigner
+                    + HasProposalIdType<ProposalId = u64>
+                    + HasProposalStatusType<ProposalStatus = ProposalStatus>
+                    + HasProposalVoteType<ProposalVote = ProposalVote>
+                    + CanQueryProposalStatus
+                    + CanBuildDepositProposalMessage
+                    + CanBuildVoteProposalMessage
+                    + HasCreateClientPayloadOptionsType<Self::ChainA>
+                    + CanBuildCreateClientPayload<Self::ChainA>
+                    + CanBuildCreateClientMessage<Self::ChainA>
+                    + CanRecoverClient<Self::ChainA>
+                    + HasCreateClientEvent<Self::ChainA>
+                    + CanOverrideCreateClientPayloadOptions<Self::ChainA>
+                    + HasClientStateType<Self::ChainA>
+                    + HasClientStatusType<Self::ChainA>
+                    + HasClientStatusMethods<Self::ChainA>
+                    + CanQueryClientStateWithLatestHeight<Self::ChainA>
+                    + CanQueryClientStatus<Self::ChainA>
+                    + HasClientStateFields<Self::ChainA>
+                    + CanBuildUpdateClientPayload<Self::ChainA>
+                    + CanBuildUpdateClientMessage<Self::ChainA>
+                    + CanExtractFromMessageResponse<
+            <Self::ChainB as HasCreateClientEvent<Self::ChainA>>::CreateClientEvent,
+        > + HasIbcChainTypes<Self::ChainA>
                     + CanReadPacketFields<Self::ChainA>
                     + CanQueryPacketIsCleared<Self::ChainA>
                     + CanQueryPacketIsReceived<Self::ChainA>
@@ -159,6 +236,14 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
     + HasChannelIdAt<B, A>
     + HasPortIdAt<A, B>
     + HasPortIdAt<B, A>
+    + HasClientIdAt<A, B>
+    + HasClientIdAt<B, A>
+    + HasCreateClientPayloadOptionsAt<A, B>
+    + HasCreateClientPayloadOptionsAt<B, A>
+    + HasCreateClientMessageOptionsAt<A, B>
+    + HasCreateClientMessageOptionsAt<B, A>
+    + HasRecoverClientPayloadOptionsAt<A>
+    + HasRecoverClientPayloadOptionsAt<B>
 {
     fn channel_id_a(&self) -> &ChannelIdOf<Self::ChainA, Self::ChainB> {
         self.channel_id_at(PhantomData::<(A, B)>)
@@ -176,12 +261,28 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
         self.port_id_at(PhantomData::<(B, A)>)
     }
 
+    fn client_id_a(&self) -> &ClientIdOf<Self::ChainA, Self::ChainB> {
+        self.client_id_at(PhantomData::<(A, B)>)
+    }
+
+    fn client_id_b(&self) -> &ClientIdOf<Self::ChainB, Self::ChainA> {
+        self.client_id_at(PhantomData::<(B, A)>)
+    }
+
     fn transfer_denom_a(&self) -> &DenomOf<Self::ChainA> {
         self.chain_driver_a().denom(PhantomData::<TransferDenom>)
     }
 
     fn transfer_denom_b(&self) -> &DenomOf<Self::ChainB> {
         self.chain_driver_b().denom(PhantomData::<TransferDenom>)
+    }
+
+    fn staking_denom_a(&self) -> &DenomOf<Self::ChainA> {
+        self.chain_driver_a().denom(PhantomData::<StakingDenom>)
+    }
+
+    fn staking_denom_b(&self) -> &DenomOf<Self::ChainB> {
+        self.chain_driver_b().denom(PhantomData::<StakingDenom>)
     }
 
     fn user_wallet_a1(&self) -> &WalletOf<Self::ChainA> {
@@ -198,5 +299,29 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
 
     fn user_wallet_b2(&self) -> &WalletOf<Self::ChainB> {
         self.chain_driver_b().wallet(PhantomData::<UserWallet<1>>)
+    }
+
+    fn create_client_payload_options_a_to_b(&self) -> &<Self::ChainA as HasCreateClientPayloadOptionsType<Self::ChainB>>::CreateClientPayloadOptions{
+        self.create_client_payload_options(PhantomData::<(A, B)>)
+    }
+
+    fn create_client_payload_options_b_to_a(&self) -> &<Self::ChainB as HasCreateClientPayloadOptionsType<Self::ChainA>>::CreateClientPayloadOptions{
+        self.create_client_payload_options(PhantomData::<(B, A)>)
+    }
+
+    fn create_client_message_options_a_to_b(&self) -> &<Self::ChainA as HasCreateClientMessageOptionsType<Self::ChainB>>::CreateClientMessageOptions{
+        self.create_client_message_options(PhantomData::<(A, B)>)
+    }
+
+    fn recover_client_payload_options_a(
+        &self,
+    ) -> &<Self::ChainA as HasRecoverClientPayloadType>::RecoverClientPayload {
+        self.recover_client_payload_options(PhantomData::<A>)
+    }
+
+    fn recover_client_payload_options_b(
+        &self,
+    ) -> &<Self::ChainB as HasRecoverClientPayloadType>::RecoverClientPayload {
+        self.recover_client_payload_options(PhantomData::<B>)
     }
 }
