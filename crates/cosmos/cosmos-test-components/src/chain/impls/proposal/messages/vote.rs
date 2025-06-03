@@ -11,8 +11,6 @@ use ibc_proto::cosmos::gov::v1::MsgVote;
 use ibc_proto::google::protobuf::Any;
 use prost::{Message, Name};
 
-//use crate::chain::types::ProposalVote;
-
 pub struct BuildVoteProposalMessage;
 
 #[derive(Debug)]

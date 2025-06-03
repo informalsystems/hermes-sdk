@@ -1784,7 +1784,6 @@ dependencies = [
  "hermes-logging-components",
  "hermes-prelude",
  "hermes-relayer-components",
- "hermes-runtime-components",
  "hermes-test-components",
  "tokio",
 ]

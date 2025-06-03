@@ -49,7 +49,9 @@ fn test_client_recovery() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        hermes_ibc_test_suite::tests::recover_client::TestRecoverClient::default().run_test(&setup).await?;
+        hermes_ibc_test_suite::tests::recover_client::TestRecoverClient::default()
+            .run_test(&setup)
+            .await?;
 
         <Result<(), Error>>::Ok(())
     })?;
