@@ -1,6 +1,7 @@
 use alloc::boxed::Box;
-use alloc::format;
+use alloc::{format, vec};
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use cgp::core::error::ErrorOf;
 use hermes_chain_components::traits::{
@@ -10,7 +11,7 @@ use hermes_chain_components::types::aliases::{EventOf, HeightOf};
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::{LevelInfo, LevelTrace};
 use hermes_prelude::*;
-use hermes_runtime_components::traits::{CanRunConcurrentTasks, HasRuntime, Task};
+use hermes_runtime_components::traits::{CanRunConcurrentTasks, CanSleep, HasRuntime, Task};
 
 use crate::relay::traits::{
     AutoRelayerWithHeights, AutoRelayerWithHeightsComponent, CanRelayEvent, HasTargetChainTypes,
@@ -30,7 +31,7 @@ where
         + CanRaiseAsyncError<ErrorOf<Relay::TargetChain>>,
     Target: RelayTarget,
     Relay::TargetChain: CanIncrementHeight + CanQueryBlockEvents,
-    Relay::Runtime: CanRunConcurrentTasks,
+    Relay::Runtime: CanRunConcurrentTasks + CanSleep,
 {
     async fn auto_relay_with_heights(
         relay: &Relay,
@@ -56,17 +57,37 @@ where
             .await;
 
         loop {
-            let events = chain
+            let maybe_events = chain
                 .query_block_events(&height)
                 .await
-                .map_err(Relay::raise_error)?;
+                .map_err(Relay::raise_error);
 
-            relay
-                .log(
-                    &format!("Queried {} events at height `{height}`", events.len()),
-                    &LevelTrace,
-                )
-                .await;
+            // TODO: Introduce retry mechanism
+            let events = match maybe_events {
+                Ok(events) => {
+                    relay
+                        .log(
+                            &format!("Queried {} events at height `{height}`", events.len()),
+                            &LevelTrace,
+                        )
+                        .await;
+                    height = Relay::TargetChain::increment_height(&height)
+                        .map_err(Relay::raise_error)?;
+                    events
+                }
+                Err(e) => {
+                    relay
+                        .log(
+                            &format!(
+                                "failed to retrieve events due to `{e:?}`. Will retry in 1 second"
+                            ),
+                            &LevelTrace,
+                        )
+                        .await;
+                    runtime.sleep(Duration::from_secs(1)).await;
+                    vec![]
+                }
+            };
 
             let tasks = events
                 .into_iter()
@@ -80,8 +101,6 @@ where
                 .collect();
 
             runtime.run_concurrent_tasks(tasks).await;
-
-            height = Relay::TargetChain::increment_height(&height).map_err(Relay::raise_error)?;
 
             if let Some(end_height) = end_height {
                 if &height > end_height {
