@@ -2,6 +2,8 @@
    Trait definition for [`HasEventType`].
 */
 
+use core::fmt::Debug;
+
 use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
 use hermes_prelude::*;
@@ -44,5 +46,5 @@ pub trait HasEventType: Sized + Async {
        [`WriteAckEvent`](crate::traits::HasWriteAckEvent::WriteAckEvent),
        and _extraction_ methods to parse the variant information from the event.
     */
-    type Event: Async;
+    type Event: Async + Debug;
 }
