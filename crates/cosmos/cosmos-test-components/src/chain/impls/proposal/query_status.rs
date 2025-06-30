@@ -69,8 +69,7 @@ where
             }
             _ => {
                 return Err(Chain::raise_error(format!(
-                    "unknown proposal status for proposal: {:?}",
-                    proposal
+                    "unknown proposal status for proposal: {proposal:?}"
                 )));
             }
         };

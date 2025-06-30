@@ -68,10 +68,7 @@ where
         app.write_config(&config).await?;
 
         app.log(
-            &format!(
-                "Added the following chain config to the main config file:\n{}",
-                chain_config
-            ),
+            &format!("Added the following chain config to the main config file:\n{chain_config}"),
             &LevelInfo,
         )
         .await;

@@ -18,7 +18,7 @@ where
     fn wrap_error(error: Error, detail: Detail) -> Error {
         Error {
             is_retryable: error.is_retryable,
-            detail: ErrorDetail::Wrapped(format!("{:?}", detail), Arc::new(error.detail)),
+            detail: ErrorDetail::Wrapped(format!("{detail:?}"), Arc::new(error.detail)),
         }
     }
 }

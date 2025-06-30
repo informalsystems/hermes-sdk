@@ -23,7 +23,7 @@ where
     ) -> Result<ChainDriverAt<Setup, Index<I>>, Setup::Error> {
         let bootstrap = setup.chain_bootstrap(PhantomData);
 
-        let chain_name = format!("chain-{}", I);
+        let chain_name = format!("chain-{I}");
 
         let chain = bootstrap
             .bootstrap_chain(&chain_name)

@@ -89,8 +89,8 @@ where
 
         app.log(
             &format!(
-                "Creating channel between {}:{} and {}:{} ...",
-                target_chain_id, target_client_id, counterparty_chain_id, counterparty_client_id,
+                "Creating channel between {target_chain_id}:{target_client_id} \
+                and {counterparty_chain_id}:{counterparty_client_id} ..."
             ),
             &LevelInfo,
         )
@@ -107,8 +107,8 @@ where
 
         app.log(
             &format!(
-                "Channel {}:{} successfully created between {} and {}",
-                target_channel_id, counterparty_channel_id, target_chain_id, counterparty_chain_id,
+                "Channel {target_channel_id}:{counterparty_channel_id} successfully \
+                created between {target_chain_id} and {counterparty_chain_id}"
             ),
             &LevelInfo,
         )

@@ -49,8 +49,7 @@ where
         }
 
         Err(Chain::raise_error(format!(
-            "Governance proposal {} was not in expected status {:?}",
-            proposal_id, allowed_statuses,
+            "Governance proposal {proposal_id} was not in expected status {allowed_statuses:?}"
         )))
     }
 }

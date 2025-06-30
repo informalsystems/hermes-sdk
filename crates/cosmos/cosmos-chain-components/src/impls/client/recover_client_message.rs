@@ -8,7 +8,6 @@ use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::gov::v1::MsgSubmitProposal;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::MsgRecoverClient;
-use prost::Message;
 
 use crate::impls::client::CosmosRecoverClientPayload;
 use crate::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
@@ -59,10 +58,8 @@ where
 impl DynCosmosMessage for MsgRecoverClientProposal {
     fn encode_protobuf(&self, signer: &Signer) -> Any {
         let proposal_message = MsgSubmitProposal {
-            messages: vec![Any {
-                type_url: "/ibc.core.client.v1.MsgRecoverClient".into(),
-                value: self.proposal_message.encode_to_vec(),
-            }],
+            messages: vec![Any::from_msg(&self.proposal_message)
+                .expect("failed to convert `MsgRecoverClient` to `Any`")],
             initial_deposit: vec![Coin {
                 denom: self.deposit_denom.clone(),
                 amount: self.deposit_amount.to_string(),
@@ -74,9 +71,6 @@ impl DynCosmosMessage for MsgRecoverClientProposal {
             expedited: false,
         };
 
-        Any {
-            type_url: "/cosmos.gov.v1.MsgSubmitProposal".into(),
-            value: proposal_message.encode_to_vec(),
-        }
+        Any::from_msg(&proposal_message).expect("failed to convert `MsgSubmitProposal` to `Any`")
     }
 }

@@ -78,8 +78,8 @@ where
 
         driver
             .log_message(&format!(
-                "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
-                chain_id_a, chain_id_b, a_to_b_amount, denom_a
+                "Sending IBC transfer from chain {chain_id_a} to chain {chain_id_b} \
+                with amount of {a_to_b_amount} {denom_a}"
             ))
             .await;
 
@@ -117,8 +117,7 @@ where
 
         driver
             .log_message(&format!(
-                "Waiting for user on chain B to receive IBC transferred amount of {}",
-                balance_b1
+                "Waiting for user on chain B to receive IBC transferred amount of {balance_b1}"
             ))
             .await;
 
@@ -135,8 +134,7 @@ where
 
         driver
             .log_message(&format!(
-                "Sending IBC transfer from chain {} to chain {} with amount of {}",
-                chain_id_b, chain_id_a, b_to_a_amount,
+                "Sending IBC transfer from chain {chain_id_b} to chain {chain_id_a} with amount of {b_to_a_amount}"
             ))
             .await;
 
@@ -190,8 +188,7 @@ where
 
         driver
             .log_message(&format!(
-                "successfully performed reverse IBC transfer from chain {} back to chain {}",
-                chain_id_b, chain_id_a,
+                "successfully performed reverse IBC transfer from chain {chain_id_b} back to chain {chain_id_a}"
             ))
             .await;
 

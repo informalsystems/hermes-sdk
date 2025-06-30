@@ -92,11 +92,11 @@ mod test {
 
         let bytes1 = height.encode_vec();
 
-        println!("bytes1: {:?}", bytes1);
+        println!("bytes1: {bytes1:?}");
 
         let bytes2 = CosmosEncoding.encode(&height)?;
 
-        println!("bytes2: {:?}", bytes2);
+        println!("bytes2: {bytes2:?}");
 
         assert_eq!(bytes1, bytes2);
 

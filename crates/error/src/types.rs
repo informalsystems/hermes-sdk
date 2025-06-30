@@ -77,7 +77,7 @@ impl Debug for ErrorDetail {
         match self {
             ErrorDetail::Report(report) => Debug::fmt(report, f),
             ErrorDetail::Wrapped(message, detail) => {
-                write!(f, "{}: {:?}", message, detail)
+                write!(f, "{message}: {detail:?}")
             }
         }
     }

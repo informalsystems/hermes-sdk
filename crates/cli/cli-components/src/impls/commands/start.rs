@@ -105,7 +105,7 @@ where
             .map_err(App::raise_error)?;
 
         app.log(
-            &format!("Relaying between {} and {}...", chain_id_a, chain_id_b,),
+            &format!("Relaying between {chain_id_a} and {chain_id_b}..."),
             &LevelInfo,
         )
         .await;

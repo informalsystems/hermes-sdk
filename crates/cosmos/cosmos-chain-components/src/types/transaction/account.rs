@@ -47,7 +47,7 @@ where
     let resp_account = response
         .into_inner()
         .account
-        .ok_or_else(|| format!("empty account for address `{}`", account_address))
+        .ok_or_else(|| format!("empty account for address `{account_address}`"))
         .map_err(Chain::raise_error)?;
 
     let base_account = if resp_account.type_url == "/cosmos.auth.v1beta1.BaseAccount" {
