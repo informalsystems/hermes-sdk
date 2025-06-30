@@ -1,7 +1,10 @@
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
+use hermes_core::chain_components::traits::{
+    ClientStatusMethodsComponent, ClientStatusQuerierComponent, ClientStatusTypeComponent,
+};
 use hermes_cosmos_chain_components::encoding::CosmosClientEncodingComponents;
-use hermes_cosmos_chain_components::impls::ProvideCosmosChainTypes;
+use hermes_cosmos_chain_components::impls::{ProvideCosmosChainTypes, QueryCosmosClientStatus};
 use hermes_cosmos_chain_components::types::TendermintClientState;
 use hermes_cosmos_chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_encoding_components::impls::GetDefaultEncoding;
@@ -33,7 +36,7 @@ use hermes_relayer_components::chain::traits::{
 
 use crate::impls::{
     AnyClientConverterComponents, AnyClientEncoderComponents, ProvideAnyClientState,
-    ProvideAnyConsensusState,
+    ProvideAnyClientStatus, ProvideAnyConsensusState,
 };
 use crate::types::{AnyClientState, AnyConsensusState};
 
@@ -64,6 +67,11 @@ delegate_components! {
         ]:
             ProvideAnyClientState,
         [
+            ClientStatusTypeComponent,
+            ClientStatusMethodsComponent,
+        ]:
+            ProvideAnyClientStatus,
+        [
             ConsensusStateTypeComponent,
             ConsensusStateFieldComponent,
         ]:
@@ -81,6 +89,8 @@ delegate_components! {
             ClientStateQuerierComponent,
             AllClientStatesQuerierComponent,
         ]: QueryAndConvertRawClientState,
+        ClientStatusQuerierComponent:
+            QueryCosmosClientStatus,
         [
             ConsensusStateQuerierComponent,
             ConsensusStateWithProofsQuerierComponent,

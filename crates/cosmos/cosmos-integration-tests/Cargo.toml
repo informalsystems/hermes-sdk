@@ -11,6 +11,9 @@ description = """
     Implementation of an IBC Relayer in Rust, as a library
 """
 
+[features]
+ibc-go-v8 = []
+
 [dependencies]
 cgp                               = { workspace = true }
 hermes-prelude                    = { workspace = true }

@@ -1,3 +1,5 @@
+use core::fmt::Debug;
+
 use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::ProvideType;
 use hermes_prelude::*;
@@ -11,7 +13,7 @@ pub trait HasClientStateType<Counterparty>: Async {
     /**
         The client state of the `Self` chain's client on the `Counterparty` chain
     */
-    type ClientState: Async;
+    type ClientState: Async + Debug;
 }
 
 pub type ClientStateOf<Chain, Counterparty> =
@@ -34,7 +36,7 @@ impl<Chain, Counterparty, Provider, ClientState> ProvideClientStateType<Chain, C
 where
     Chain: Async,
     Provider: ProvideType<Chain, ClientStateTypeComponent, Type = ClientState>,
-    ClientState: Async,
+    ClientState: Async + Debug,
 {
     type ClientState = ClientState;
 }

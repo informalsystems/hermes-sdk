@@ -50,7 +50,7 @@ impl Display for TokioRuntimeError {
                 stderr,
                 ..
             } => {
-                write!(f, "expected child process to be running, but it exited immediately with exit status {} and stderr: {}", exit_status, stderr)?;
+                write!(f, "expected child process to be running, but it exited immediately with exit status {exit_status} and stderr: {stderr}")?;
             }
             Self::ExecCommandFailure {
                 command,
@@ -60,22 +60,19 @@ impl Display for TokioRuntimeError {
             } => {
                 write!(
                     f,
-                    "execution of command {} failed with exit code {:?}. stderr: {}",
-                    command, exit_code, stderr
+                    "execution of command {command} failed with exit code {exit_code:?}. stderr: {stderr}"
                 )?;
             }
             Self::ChildProcessExitFailure { exit_status } => {
                 write!(
                     f,
-                    "child process exited with non-success status {}",
-                    exit_status
+                    "child process exited with non-success status {exit_status}"
                 )?;
             }
             Self::CommandNotFound { command } => {
                 write!(
                     f,
-                    "failed to execute command due to command not found: {}",
-                    command
+                    "failed to execute command due to command not found: {command}"
                 )?;
             }
         };

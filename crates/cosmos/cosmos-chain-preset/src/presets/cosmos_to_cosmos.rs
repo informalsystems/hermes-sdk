@@ -1,5 +1,9 @@
 #[cgp::re_export_imports]
 mod preset {
+    use hermes_core::chain_components::traits::{
+        ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
+        ClientStatusTypeComponent, RecoverClientPayloadTypeComponent,
+    };
     use hermes_core::relayer_components::chain::impls::{
         QueryAndConvertRawClientState, QueryAndConvertRawConsensusState,
     };
@@ -31,8 +35,9 @@ mod preset {
         BuildTendermintUpdateClientPayload, CosmosPacketFieldReader,
         GetCosmosCounterpartyMessageHeight, ProvideCosmosCreateClientSettings,
         ProvideCosmosPayloadTypes, ProvideNoCreateClientMessageOptionsType,
-        ProvideTendermintClientState, ProvideTendermintConsensusState,
-        QueryConsensusStateHeightsFromGrpc,
+        ProvideTendermintClientState, ProvideTendermintClientStatus,
+        ProvideTendermintConsensusState, QueryConsensusStateHeightsFromGrpc,
+        QueryCosmosClientStatus, RecoverClientWithGovernanceProposal,
     };
     use hermes_cosmos_test_components::chain::impls::ConvertCosmosIbcAmount;
     use hermes_prelude::*;
@@ -45,6 +50,11 @@ mod preset {
             ]:
                 ProvideTendermintClientState,
             [
+                ClientStatusTypeComponent,
+                ClientStatusMethodsComponent,
+            ]:
+                ProvideTendermintClientStatus,
+            [
                 ConsensusStateTypeComponent,
                 ConsensusStateFieldComponent,
             ]:
@@ -52,6 +62,7 @@ mod preset {
             [
                 CreateClientPayloadTypeComponent,
                 UpdateClientPayloadTypeComponent,
+                RecoverClientPayloadTypeComponent,
             ]:
                 ProvideCosmosPayloadTypes,
             CreateClientPayloadOptionsTypeComponent:
@@ -62,6 +73,8 @@ mod preset {
                 AllClientStatesQuerierComponent,
             ]:
                 QueryAndConvertRawClientState,
+            ClientStatusQuerierComponent:
+                QueryCosmosClientStatus,
             [
                 ConsensusStateQuerierComponent,
                 ConsensusStateWithProofsQuerierComponent,
@@ -71,6 +84,8 @@ mod preset {
                 ProvideNoCreateClientMessageOptionsType,
             CreateClientMessageBuilderComponent:
                 BuildAnyCreateClientMessage,
+            ClientRecoveryComponent:
+                RecoverClientWithGovernanceProposal,
             UpdateClientMessageBuilderComponent:
                 BuildCosmosUpdateClientMessage,
             CreateClientPayloadBuilderComponent:

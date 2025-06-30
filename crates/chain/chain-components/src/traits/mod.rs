@@ -16,6 +16,9 @@ pub use payload_builders::*;
 mod queries;
 pub use queries::*;
 
+mod recover_client;
+pub use recover_client::*;
+
 mod send_message;
 pub use send_message::*;
 

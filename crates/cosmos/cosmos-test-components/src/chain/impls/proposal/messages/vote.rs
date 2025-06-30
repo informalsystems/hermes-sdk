@@ -5,12 +5,11 @@ use hermes_core::test_components::chain::traits::{
 };
 use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
 use hermes_prelude::*;
+use hermes_test_components::chain::types::ProposalVote;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::gov::v1::MsgVote;
 use ibc_proto::google::protobuf::Any;
 use prost::{Message, Name};
-
-use crate::chain::types::ProposalVote;
 
 pub struct BuildVoteProposalMessage;
 

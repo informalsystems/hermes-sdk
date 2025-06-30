@@ -99,8 +99,7 @@ impl CommandRunner<HermesApp> for KeysDeleteCmd {
                         .exit()
                 }
                 Err(e) => Output::error(format!(
-                    "`keys delete` command failed to delete all keys: {}",
-                    e
+                    "`keys delete` command failed to delete all keys: {e}"
                 ))
                 .exit(),
             },
@@ -111,8 +110,7 @@ impl CommandRunner<HermesApp> for KeysDeleteCmd {
                 ))
                 .exit(),
                 Err(e) => Output::error(format!(
-                    "`keys delete` command failed to delete key `{key_name}`: {}",
-                    e
+                    "`keys delete` command failed to delete key `{key_name}`: {e}"
                 ))
                 .exit(),
             },

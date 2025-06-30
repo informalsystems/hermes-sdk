@@ -166,7 +166,39 @@ async fn setup_osmosis_to_osmosis(
         true,
         "./test-data",
         "coin".into(),
-        |_| Ok(()),
+        |config| {
+            let gov_params = config
+                .get_mut("app_state")
+                .and_then(|app_state| app_state.get_mut("gov"))
+                .and_then(|gov| gov.get_mut("params"))
+                .and_then(|gov_params| gov_params.as_object_mut())
+                .unwrap();
+
+            gov_params.insert(
+                "max_deposit_period".to_owned(),
+                JsonValue::String("6s".to_owned()),
+            );
+
+            if gov_params.contains_key("expedited_voting_period") {
+                gov_params.insert(
+                    "expedited_voting_period".to_owned(),
+                    JsonValue::String("5s".to_owned()),
+                );
+            }
+
+            let voting_period = config
+                .get_mut("app_state")
+                .and_then(|app_state| app_state.get_mut("gov"))
+                .and_then(|gov| gov.get_mut("params"))
+                .and_then(|voting_params| voting_params.as_object_mut())
+                .unwrap();
+
+            voting_period.insert(
+                "voting_period".to_owned(),
+                serde_json::Value::String("10s".to_owned()),
+            );
+            Ok(())
+        },
         |_| Ok(()),
         packet_filter.clone(),
     );

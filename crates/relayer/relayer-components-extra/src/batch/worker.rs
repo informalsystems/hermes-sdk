@@ -350,7 +350,7 @@ where
                 self.log(
                     "inner sender returned error result, sending error back to caller",
                     &LogBatchWorker {
-                        details: &format!("error = {:?}", e),
+                        details: &format!("error = {e:?}"),
                         log_level: LogLevel::Trace,
                         phantom: PhantomData,
                     },

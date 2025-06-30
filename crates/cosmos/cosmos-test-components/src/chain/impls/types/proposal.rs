@@ -3,8 +3,7 @@ use hermes_core::test_components::chain::traits::{
     ProvideProposalIdType, ProvideProposalStatusType, ProvideProposalVoteType,
 };
 use hermes_prelude::*;
-
-use crate::chain::types::{ProposalStatus, ProposalVote};
+use hermes_test_components::chain::types::{ProposalStatus, ProposalVote};
 
 pub struct ProvideCosmosProposalTypes;
 

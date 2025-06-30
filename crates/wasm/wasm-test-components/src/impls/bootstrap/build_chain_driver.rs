@@ -19,8 +19,9 @@ use hermes_cosmos_test_components::bootstrap::traits::{
     ChainDriverBuilder, ChainDriverBuilderComponent, HasChainGenesisConfigType,
     HasChainNodeConfigType,
 };
-use hermes_cosmos_test_components::chain::types::{Amount, Denom, ProposalStatus, ProposalVote};
+use hermes_cosmos_test_components::chain::types::{Amount, Denom};
 use hermes_prelude::*;
+use hermes_test_components::chain::types::{ProposalStatus, ProposalVote};
 
 use crate::traits::bootstrap::{HasGovernanceProposalAuthority, HasWasmClientByteCode};
 use crate::traits::chain::CanUploadWasmClientCode;

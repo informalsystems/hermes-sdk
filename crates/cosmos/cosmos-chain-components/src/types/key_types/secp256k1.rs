@@ -55,14 +55,13 @@ impl FromStr for EncodedPubKey {
                 // Input is not syntactically-correct JSON.
                 // Attempt to decode via Bech32, for backwards compatibility with the old format.
                 let (_, data, _) = bech32::decode(s)
-                    .map_err(|e| format!("cannot generate bech32 account. Cause: {}", e))?;
+                    .map_err(|e| format!("cannot generate bech32 account. Cause: {e}"))?;
                 let bech32_bytes = Vec::from_base32(&data)
-                    .map_err(|e| format!("cannot generate bech32 account. Cause: {}", e))?;
+                    .map_err(|e| format!("cannot generate bech32 account. Cause: {e}"))?;
                 Ok(Self::Bech32(bech32_bytes))
             }
             Err(e) => Err(format!(
-                "cannot deserialize the encoded public key {}. Cause: {}",
-                s, e
+                "cannot deserialize the encoded public key {s}. Cause: {e}"
             )),
         }
     }

@@ -7,6 +7,9 @@ pub use client_id::*;
 mod client_state;
 pub use client_state::*;
 
+mod client_status;
+pub use client_status::*;
+
 mod connection_id;
 pub use connection_id::*;
 

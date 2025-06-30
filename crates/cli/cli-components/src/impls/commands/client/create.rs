@@ -110,11 +110,8 @@ where
 
         app.log(
             &format!(
-                "Creating client on target chain `{}` with counterparty chain `{}`. Create options: {:?}, {:?}",
-                target_chain_id,
-                counterparty_chain_id,
-                message_options,
-                payload_options,
+                "Creating client on target chain `{target_chain_id}` with counterparty chain `{counterparty_chain_id}`. \
+                Create options: {message_options:?}, {payload_options:?}"
             ),
             &LevelInfo).await;
 
@@ -129,18 +126,12 @@ where
         .map_err(|e| {
             App::wrap_error(
                 App::raise_error(e),
-                format!(
-                    "Failed to create client on target chain {}",
-                    target_chain_id
-                ),
+                format!("Failed to create client on target chain {target_chain_id}"),
             )
         })?;
 
         app.log(
-            &format!(
-                "Successfully created client {} on target chain `{}`",
-                client_id, target_chain_id
-            ),
+            &format!("Successfully created client {client_id} on target chain `{target_chain_id}`"),
             &LevelInfo,
         )
         .await;

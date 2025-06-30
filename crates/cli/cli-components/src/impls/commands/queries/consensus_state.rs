@@ -101,8 +101,7 @@ where
 
                 heights.into_iter().next().ok_or_else(|| {
                     App::raise_error(format!(
-                        "no consensus state found for client {} on chain {}",
-                        client_id, chain_id
+                        "no consensus state found for client {client_id} on chain {chain_id}"
                     ))
                 })?
             }

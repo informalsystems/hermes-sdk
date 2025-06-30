@@ -1,3 +1,6 @@
+use hermes_core::chain_components::traits::{
+    ProvideRecoverClientPayloadType, RecoverClientPayloadTypeComponent,
+};
 use hermes_core::relayer_components::chain::impls::{
     ProvideChannelPayloadTypes, ProvideConnectionPayloadTypes, ProvidePacketPayloadTypes,
 };
@@ -12,6 +15,7 @@ use hermes_core::relayer_components::chain::traits::{
 };
 use hermes_prelude::*;
 
+use crate::impls::CosmosRecoverClientPayload;
 use crate::types::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
 
 pub struct ProvideCosmosPayloadTypes;
@@ -56,4 +60,12 @@ where
     Chain: Async,
 {
     type UpdateClientPayload = CosmosUpdateClientPayload;
+}
+
+#[cgp_provider(RecoverClientPayloadTypeComponent)]
+impl<Chain> ProvideRecoverClientPayloadType<Chain> for ProvideCosmosPayloadTypes
+where
+    Chain: Async,
+{
+    type RecoverClientPayload = CosmosRecoverClientPayload;
 }

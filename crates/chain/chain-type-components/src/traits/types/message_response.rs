@@ -1,3 +1,5 @@
+use core::fmt::Debug;
+
 use hermes_prelude::*;
 
 #[cgp_component {
@@ -6,7 +8,7 @@ use hermes_prelude::*;
   context: Chain,
 }]
 pub trait HasMessageResponseType: Async {
-    type MessageResponse: Async;
+    type MessageResponse: Async + Debug;
 }
 
 pub type MessageResponseOf<Chain> = <Chain as HasMessageResponseType>::MessageResponse;

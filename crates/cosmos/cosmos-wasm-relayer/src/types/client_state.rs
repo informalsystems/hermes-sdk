@@ -8,6 +8,7 @@ use hermes_prelude::*;
 use ibc::core::client::types::Height;
 use prost_types::Any;
 
+#[derive(Debug)]
 pub struct WasmTendermintClientState {
     pub tendermint_client_state: TendermintClientState,
     pub wasm_code_hash: Vec<u8>,

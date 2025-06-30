@@ -5,6 +5,9 @@ use core::time::Duration;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::AnyCounterparty;
+use hermes_core::chain_components::traits::{
+    ClientRecoveryComponent, ClientStatusQuerierComponent, HasRecoverClientPayloadType,
+};
 use hermes_core::chain_type_components::traits::{
     ChainIdGetterComponent, HasEventType, HasMessageResponseType,
     MessageResponseEventsGetterComponent,
@@ -50,7 +53,7 @@ use hermes_core::test_components::chain::traits::{
     IbcTokenTransferMessageBuilderComponent, ProposalStatusQuerierComponent,
     TokenIbcTransferrerComponent,
 };
-use hermes_cosmos_core::chain_components::impls::CosmosChainConfig;
+use hermes_cosmos_core::chain_components::impls::{CosmosChainConfig, CosmosRecoverClientPayload};
 use hermes_cosmos_core::chain_components::traits::{
     EipQuerierComponent, GasConfigGetter, GasConfigGetterComponent, GrpcAddressGetter,
     GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
@@ -251,6 +254,7 @@ pub trait CanUseCosmosChain:
     + HasEventType<Event = Arc<AbciEvent>>
     + HasCreateClientPayloadType<CosmosChain, CreateClientPayload = CosmosCreateClientPayload>
     + HasUpdateClientPayloadType<CosmosChain, UpdateClientPayload = CosmosUpdateClientPayload>
+    + HasRecoverClientPayloadType<RecoverClientPayload = CosmosRecoverClientPayload>
     + HasCreateClientMessageOptionsType<CosmosChain, CreateClientMessageOptions = ()>
     + HasCreateClientPayloadOptionsType<
         CosmosChain,
@@ -309,6 +313,7 @@ check_components! {
             CreateClientMessageBuilderComponent,
             UpdateClientMessageBuilderComponent,
             UpdateClientPayloadBuilderComponent,
+            ClientRecoveryComponent,
             IbcTokenTransferMessageBuilderComponent,
 
             IncomingPacketFilterComponent,
@@ -321,6 +326,7 @@ check_components! {
             ClientStateQuerierComponent,
             AllClientStatesQuerierComponent,
             ConsensusStateQuerierComponent,
+            ClientStatusQuerierComponent,
         ]: [
             CosmosChain,
             AnyCounterparty,

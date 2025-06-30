@@ -1,6 +1,11 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::core::component::UseDelegate;
+    use hermes_core::chain_components::traits::{
+        ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
+        ClientStatusTypeComponent, OverrideCreateClientPayloadOptionsComponent,
+        RecoverClientPayloadTypeComponent,
+    };
     use hermes_core::chain_type_components::traits::{
         AddressTypeProviderComponent, AmountDenomGetterComponent, AmountTypeProviderComponent,
         DenomTypeComponent, HeightAdjusterComponent, HeightIncrementerComponent,
@@ -104,16 +109,17 @@ mod preset {
     use hermes_cosmos_chain_components::impls::{
         BroadcastCosmosTx, BuildCosmosPacketMessages, DispatchQueryEip,
         DynamicConvertCosmosGasToFee, EncodeCosmosTx, EstimateCosmosTxFee, FilterPacketWithConfig,
-        FixedPollTimeoutSecs, ParseCosmosTxResponseAsEvents, ProvideAnyRawClientState,
-        ProvideAnyRawConsensusState, ProvideCosmosChainTypes, ProvideCosmosEvents,
-        ProvideCosmosInitChannelOptionsType, ProvideCosmosInitConnectionOptionsType,
-        ProvideCosmosPayloadTypes, QueryAbci, QueryAbciWithRetry, QueryChainIdFromAbci,
-        QueryCometBlock, QueryCosmosAccount, QueryCosmosBlockEvents, QueryCosmosChainStatus,
-        QueryCosmosChannelEndFromAbci, QueryCosmosClientStateFromAbci,
-        QueryCosmosConnectionEndFromAbci, QueryCosmosConsensusStateFromAbci,
-        QueryCosmosPacketIsReceived, QueryCosmosTxResponse, QueryCounterpartyConnectionId,
-        QueryPacketAcknowledgementFromAbci, QueryPacketCommitmentFromAbci,
-        QueryPacketReceiptFromAbci, StakingParamsUnbondingPeriod, UseCosmosTransactionTypes,
+        FixedPollTimeoutSecs, OverrideCosmosCreateClientPayloadOptions,
+        ParseCosmosTxResponseAsEvents, ProvideAnyRawClientState, ProvideAnyRawConsensusState,
+        ProvideCosmosChainTypes, ProvideCosmosEvents, ProvideCosmosInitChannelOptionsType,
+        ProvideCosmosInitConnectionOptionsType, ProvideCosmosPayloadTypes, QueryAbci,
+        QueryAbciWithRetry, QueryChainIdFromAbci, QueryCometBlock, QueryCosmosAccount,
+        QueryCosmosBlockEvents, QueryCosmosChainStatus, QueryCosmosChannelEndFromAbci,
+        QueryCosmosClientStateFromAbci, QueryCosmosConnectionEndFromAbci,
+        QueryCosmosConsensusStateFromAbci, QueryCosmosPacketIsReceived, QueryCosmosTxResponse,
+        QueryCounterpartyConnectionId, QueryPacketAcknowledgementFromAbci,
+        QueryPacketCommitmentFromAbci, QueryPacketReceiptFromAbci, StakingParamsUnbondingPeriod,
+        UseCosmosTransactionTypes,
     };
     use hermes_cosmos_chain_components::traits::{
         AbciQuerierComponent, EipQuerierComponent, GasToFeeConverterComponent,
@@ -201,6 +207,8 @@ mod preset {
                 ProvideAnyRawConsensusState,
             ConsensusStateHeightQuerierComponent:
                 QueryConsensusStateHeightsAndFindHeightBefore,
+            OverrideCreateClientPayloadOptionsComponent:
+                OverrideCosmosCreateClientPayloadOptions,
             [
                 RawClientStateQuerierComponent,
                 RawClientStateWithProofsQuerierComponent,
@@ -388,6 +396,7 @@ mod preset {
                 CreateClientPayloadTypeComponent,
                 UpdateClientPayloadTypeComponent,
                 CreateClientPayloadOptionsTypeComponent,
+                RecoverClientPayloadTypeComponent,
 
                 ConsensusStateHeightsQuerierComponent,
                 CounterpartyMessageHeightGetterComponent,
@@ -400,9 +409,15 @@ mod preset {
                 CreateClientPayloadBuilderComponent,
                 UpdateClientPayloadBuilderComponent,
 
+                ClientRecoveryComponent,
+
                 ClientStateQuerierComponent,
                 ClientStateWithProofsQuerierComponent,
                 AllClientStatesQuerierComponent,
+
+                ClientStatusQuerierComponent,
+                ClientStatusTypeComponent,
+                ClientStatusMethodsComponent,
 
                 ConsensusStateQuerierComponent,
                 ConsensusStateWithProofsQuerierComponent,

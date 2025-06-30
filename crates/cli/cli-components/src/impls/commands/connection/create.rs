@@ -99,8 +99,8 @@ where
 
         app.log(
             &format!(
-                "Creating connection between {}:{} and {}:{}...",
-                target_chain_id, target_client_id, counterparty_chain_id, counterparty_client_id
+                "Creating connection between {target_chain_id}:{target_client_id} \
+                and {counterparty_chain_id}:{counterparty_client_id}..."
             ),
             &LevelInfo,
         )
@@ -124,13 +124,8 @@ where
 
         app.log(
             &format!(
-                "Connection {}:{} successfully created between {}:{} and {}:{}",
-                target_connection_id,
-                counterparty_connection_id,
-                target_chain_id,
-                target_client_id,
-                counterparty_chain_id,
-                counterparty_client_id,
+                "Connection {target_connection_id}:{counterparty_connection_id} successfully created \
+                between {target_chain_id}:{target_client_id} and {counterparty_chain_id}:{counterparty_client_id}"
             ),
             &LevelInfo,
         )

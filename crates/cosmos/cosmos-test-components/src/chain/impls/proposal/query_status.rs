@@ -5,14 +5,13 @@ use hermes_core::test_components::chain::traits::{
 };
 use hermes_cosmos_chain_components::traits::HasGrpcAddress;
 use hermes_prelude::*;
+use hermes_test_components::chain::types::ProposalStatus;
 use http::uri::InvalidUri;
 use http::Uri;
 use ibc_proto::cosmos::gov::v1::query_client::QueryClient;
 use ibc_proto::cosmos::gov::v1::{Proposal, QueryProposalRequest};
 use tonic::transport::Error as TransportError;
 use tonic::Status;
-
-use crate::chain::types::ProposalStatus;
 
 pub struct QueryProposalStatusWithGrpc;
 
@@ -70,8 +69,7 @@ where
             }
             _ => {
                 return Err(Chain::raise_error(format!(
-                    "unknown proposal status for proposal: {:?}",
-                    proposal
+                    "unknown proposal status for proposal: {proposal:?}"
                 )));
             }
         };

@@ -88,15 +88,15 @@ where
 
         match client_status {
             ClientStatus::Frozen => {
-                app.log(&format!("Client `{}` is frozen", client_id), &LevelInfo)
+                app.log(&format!("Client `{client_id}` is frozen"), &LevelInfo)
                     .await;
             }
             ClientStatus::Expired => {
-                app.log(&format!("Client `{}` has expired", client_id), &LevelInfo)
+                app.log(&format!("Client `{client_id}` has expired"), &LevelInfo)
                     .await;
             }
             ClientStatus::Active => {
-                app.log(&format!("Client `{}` is active", client_id), &LevelInfo)
+                app.log(&format!("Client `{client_id}` is active"), &LevelInfo)
                     .await;
             }
         }

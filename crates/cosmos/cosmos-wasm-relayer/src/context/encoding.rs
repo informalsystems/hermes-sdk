@@ -105,7 +105,7 @@ mod test {
             &wasm_client_state,
         )?;
 
-        println!("bytes1: {:?}", bytes1);
+        println!("bytes1: {bytes1:?}");
 
         let bytes2 = <EncodeProtoWithMutBuffer as Encoder<
             WasmCosmosEncoding,
@@ -113,7 +113,7 @@ mod test {
             WasmClientState,
         >>::encode(&WasmCosmosEncoding, &wasm_client_state)?;
 
-        println!("bytes2: {:?}", bytes2);
+        println!("bytes2: {bytes2:?}");
 
         assert_eq!(bytes1, bytes2);
 
@@ -123,7 +123,7 @@ mod test {
             WasmClientState,
         >>::decode(&WasmCosmosEncoding, &bytes1)?;
 
-        println!("decoded client state: {:?}", client_state_2);
+        println!("decoded client state: {client_state_2:?}");
 
         assert_eq!(client_state_2, wasm_client_state);
 
