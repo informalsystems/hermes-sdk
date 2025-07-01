@@ -29,6 +29,7 @@ secp256k1  = { workspace = true }
 serde      = { workspace = true }
 serde_json = { workspace = true }
 time       = { workspace = true }
+tokio      = { workspace = true }
 toml       = { workspace = true }
 tonic      = { workspace = true }
 

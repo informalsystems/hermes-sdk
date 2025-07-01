@@ -13,8 +13,10 @@ use hermes_core::test_components::setup::traits::{
     CreateClientMessageOptionsGetterAtComponent, CreateClientPayloadOptionsGetterAtComponent,
     PortIdGetterAtComponent, RecoverClientPayloadOptionsGetterAtComponent,
 };
+use hermes_core::test_components::test_case::traits::recover_client::RecoverClientHandlerComponent;
 use hermes_cosmos_core::chain_components::impls::CosmosRecoverClientPayload;
 use hermes_cosmos_core::chain_components::types::CosmosCreateClientOptions;
+use hermes_cosmos_core::test_components::chain::impls::RecoverClientWithProposals;
 use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
@@ -63,6 +65,8 @@ delegate_components! {
         ]:
             UseCosmosTestTypes,
         LoggerComponent: TracingLogger,
+        RecoverClientHandlerComponent:
+            RecoverClientWithProposals,
         ChainDriverGetterAtComponent<Index<0>>:
             UseField<symbol!("chain_driver_a")>,
         ChainDriverGetterAtComponent<Index<1>>:
