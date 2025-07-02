@@ -2,8 +2,10 @@ use core::marker::PhantomData;
 
 use cgp::core::field::Index;
 use hermes_prelude::*;
-use hermes_test_components::chain::traits::{CanUploadWasmContract, HasWalletType};
-use hermes_test_components::chain_driver::traits::{HasWallet, UserWallet};
+use hermes_test_components::chain::traits::{
+    CanInstantiateWasmContract, CanUploadWasmContract, HasWalletType,
+};
+use hermes_test_components::chain_driver::traits::{HasDenom, HasWallet, StakingDenom, UserWallet};
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
@@ -39,9 +41,18 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
-        let _ = chain_a
+        let code_ids = chain_a
             .upload_wasm_contract(&alloc::vec![], user_address)
-            .await;
+            .await
+            .unwrap();
+
+        let denom_a = chain_driver_a.denom(PhantomData::<StakingDenom>);
+
+        for code_id in code_ids.iter() {
+            let _ = chain_a
+                .instantiate_wasm_contract(user_address, user_address, *code_id, denom_a)
+                .await;
+        }
 
         Ok(())
     }

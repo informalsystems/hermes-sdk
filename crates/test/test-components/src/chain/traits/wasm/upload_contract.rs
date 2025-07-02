@@ -11,5 +11,5 @@ pub trait CanUploadWasmContract: HasAddressType + HasAsyncErrorType {
         &self,
         wasm_client_bytes: &[u8],
         sender: &Self::Address,
-    ) -> Result<(), Self::Error>;
+    ) -> Result<alloc::vec::Vec<u64>, Self::Error>;
 }

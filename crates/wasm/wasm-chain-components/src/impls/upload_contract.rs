@@ -45,7 +45,7 @@ where
         chain: &Chain,
         _wasm_byte_code: &[u8],
         sender: &Chain::Address,
-    ) -> Result<(), Chain::Error> {
+    ) -> Result<Vec<u64>, Chain::Error> {
         let env_wasm = std::env::var("WASM_FILES").expect("Wasm file is required");
 
         let raw_wasm_code_paths: Vec<&str> = env_wasm.split(',').collect();
@@ -87,7 +87,7 @@ where
                 .await;
         }
 
-        Ok(())
+        Ok(vec![0])
     }
 }
 pub struct UploadCosmosWasmContract;
@@ -105,7 +105,7 @@ where
         chain: &Chain,
         wasm_byte_code: &[u8],
         sender: &Chain::Address,
-    ) -> Result<(), Chain::Error> {
+    ) -> Result<Vec<u64>, Chain::Error> {
         let message = StoreCodeMessage {
             wasm_byte_code: wasm_byte_code.to_vec(),
             sender: sender.to_string(),
@@ -123,7 +123,7 @@ where
             )
             .await;
 
-        Ok(())
+        Ok(vec![0])
     }
 }
 

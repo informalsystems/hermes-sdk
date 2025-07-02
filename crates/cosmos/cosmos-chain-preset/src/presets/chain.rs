@@ -133,7 +133,8 @@ mod preset {
         QueryProposalStatusWithGrpc, UseCosmosAmount,
     };
     use hermes_prelude::*;
-    use hermes_wasm_chain_components::impls::upload_contract::UploadCosmosWasmContract;
+    use hermes_test_components::chain::traits::WasmContractInstantiatorComponent;
+    use hermes_wasm_chain_components::impls::{InstantiateWasmContracts, UploadCosmosWasmContract};
 
     use crate::delegate::DelegateCosmosChainComponents;
 
@@ -380,6 +381,8 @@ mod preset {
 
             WasmContractUploaderComponent:
                 UploadCosmosWasmContract,
+            WasmContractInstantiatorComponent:
+                InstantiateWasmContracts,
             PollAssertDurationGetterComponent:
                 ProvidePollAssertDuration<1, 300>,
             ProposalStatusQuerierComponent:
