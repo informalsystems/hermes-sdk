@@ -18,3 +18,6 @@ pub use transfer::*;
 
 mod types;
 pub use types::*;
+
+mod wasm;
+pub use wasm::*;

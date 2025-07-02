@@ -105,6 +105,7 @@ mod preset {
         ProposalStatusPollerComponent, ProposalStatusQuerierComponent, ProposalStatusTypeComponent,
         ProposalVoteTypeComponent, TokenIbcTransferrerComponent,
         VoteProposalMessageBuilderComponent, WalletSignerComponent, WalletTypeComponent,
+        WasmContractUploaderComponent,
     };
     use hermes_cosmos_chain_components::impls::{
         BroadcastCosmosTx, BuildCosmosPacketMessages, DispatchQueryEip,
@@ -132,6 +133,7 @@ mod preset {
         QueryProposalStatusWithGrpc, UseCosmosAmount,
     };
     use hermes_prelude::*;
+    use hermes_wasm_chain_components::impls::upload_contract::UploadCosmosWasmContract;
 
     use crate::delegate::DelegateCosmosChainComponents;
 
@@ -375,6 +377,9 @@ mod preset {
                 QueryCosmosBalance,
             EventualAmountAsserterComponent:
                 PollAssertEventualAmount,
+
+            WasmContractUploaderComponent:
+                UploadCosmosWasmContract,
             PollAssertDurationGetterComponent:
                 ProvidePollAssertDuration<1, 300>,
             ProposalStatusQuerierComponent:

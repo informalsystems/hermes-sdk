@@ -33,7 +33,8 @@ use hermes_relayer_components::relay::traits::{
 };
 use hermes_test_components::chain::traits::{
     CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
-    HasAmountMethods, HasDefaultMemo, HasWalletSigner, HasWalletType, WalletOf,
+    CanUploadWasmContract, HasAmountMethods, HasDefaultMemo, HasWalletSigner, HasWalletType,
+    WalletOf,
 };
 use hermes_test_components::chain_driver::traits::{
     CanGenerateRandomAmount, HasChain, HasDenom, HasWallet, StakingDenom, TransferDenom, UserWallet,
@@ -137,6 +138,7 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                           + HasWallet<UserWallet<1>>
                           + CanGenerateRandomAmount,
         ChainA: HasChainId
+                    + CanUploadWasmContract
                     + HasWalletType
                     + HasWalletSigner
                     + CanQueryBalance

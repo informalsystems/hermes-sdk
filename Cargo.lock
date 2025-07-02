@@ -1593,6 +1593,8 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-prelude",
+ "hermes-test-components",
+ "hermes-wasm-chain-components",
 ]
 
 [[package]]
@@ -1909,6 +1911,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-wasm-chain-components"
+version = "0.1.0"
+dependencies = [
+ "hermes-core",
+ "hermes-cosmos-chain-components",
+ "hermes-prelude",
+ "ibc",
+ "ibc-proto",
+ "prost",
+ "sha2 0.10.8",
+ "tendermint-proto",
+ "tokio",
+]
+
+[[package]]
 name = "hermes-wasm-client-components"
 version = "0.1.0"
 dependencies = [
@@ -1951,6 +1968,7 @@ dependencies = [
  "hermes-cosmos-test-components",
  "hermes-prelude",
  "hermes-test-components",
+ "hermes-wasm-chain-components",
  "ibc",
  "ibc-proto",
  "prost",
