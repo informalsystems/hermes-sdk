@@ -24,3 +24,6 @@ pub use proof::*;
 
 mod transaction;
 pub use transaction::*;
+
+mod wasm;
+pub use wasm::*;

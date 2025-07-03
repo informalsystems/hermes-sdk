@@ -1,4 +1,4 @@
-use hermes_chain_type_components::traits::HasAddressType;
+use hermes_chain_type_components::traits::{HasAddressType, HasWasmAccessType};
 use hermes_prelude::*;
 
 #[cgp_component {
@@ -6,10 +6,11 @@ use hermes_prelude::*;
   context: Chain,
 }]
 #[async_trait]
-pub trait CanUploadWasmContract: HasAddressType + HasAsyncErrorType {
+pub trait CanUploadWasmContract: HasAddressType + HasWasmAccessType + HasAsyncErrorType {
     async fn upload_wasm_contract(
         &self,
         wasm_client_bytes: &[u8],
         sender: &Self::Address,
-    ) -> Result<alloc::vec::Vec<u64>, Self::Error>;
+        access_type: &Self::WasmAccess,
+    ) -> Result<u64, Self::Error>;
 }

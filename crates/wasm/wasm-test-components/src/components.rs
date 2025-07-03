@@ -2,7 +2,7 @@ use hermes_prelude::*;
 use hermes_test_components::chain::traits::{
     WasmContractInstantiatorComponent, WasmContractUploaderComponent,
 };
-use hermes_wasm_chain_components::impls::{InstantiateWasmContracts, UploadWasmContractsFromEnv};
+use hermes_wasm_chain_components::impls::{InstantiateWasmContracts, UploadCosmosWasmContract};
 
 use crate::impls::chain::{BuildStoreCodeMessage, SendStoreCodeProposalMessage};
 use crate::traits::chain::{StoreCodeMessageBuilderComponent, WasmClientCodeUploaderComponent};
@@ -16,7 +16,7 @@ delegate_components! {
         WasmClientCodeUploaderComponent:
             SendStoreCodeProposalMessage,
         WasmContractUploaderComponent:
-            UploadWasmContractsFromEnv,
+            UploadCosmosWasmContract,
         WasmContractInstantiatorComponent:
             InstantiateWasmContracts,
     }

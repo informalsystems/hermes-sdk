@@ -42,3 +42,6 @@ pub use time::*;
 
 mod timeout;
 pub use timeout::*;
+
+mod wasm;
+pub use wasm::*;

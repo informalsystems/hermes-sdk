@@ -11,7 +11,8 @@ pub trait CanInstantiateWasmContract: HasAddressType + HasDenomType + HasAsyncEr
         &self,
         sender: &Self::Address,
         admin: &Self::Address,
+        msg: &[u8],
         code_id: u64,
         funds: &Self::Denom,
-    ) -> Result<(), Self::Error>;
+    ) -> Result<Self::Address, Self::Error>;
 }

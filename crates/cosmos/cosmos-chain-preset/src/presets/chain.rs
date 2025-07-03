@@ -4,7 +4,7 @@ mod preset {
     use hermes_core::chain_components::traits::{
         ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
         ClientStatusTypeComponent, OverrideCreateClientPayloadOptionsComponent,
-        RecoverClientPayloadTypeComponent,
+        RecoverClientPayloadTypeComponent, WasmAccessTypeProviderComponent,
     };
     use hermes_core::chain_type_components::traits::{
         AddressTypeProviderComponent, AmountDenomGetterComponent, AmountTypeProviderComponent,
@@ -154,6 +154,7 @@ mod preset {
                 MessageResponseTypeComponent,
                 MessageResponseEventsGetterComponent,
                 MessageSizeEstimatorComponent,
+                WasmAccessTypeProviderComponent,
                 EventTypeProviderComponent,
                 ClientIdTypeComponent,
                 ConnectionIdTypeComponent,
