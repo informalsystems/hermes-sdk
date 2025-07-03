@@ -82,6 +82,10 @@ where
 
         let seed_content = OutputGetter::get_exec_output(add_wallet_output);
 
+        let start = seed_content.find('{').unwrap();
+        let end = seed_content.rfind('}').unwrap();
+        let seed_content = seed_content[start..=end].to_string();
+
         let json_val: json::Value =
             json::from_str(&seed_content).map_err(Bootstrap::raise_error)?;
 
