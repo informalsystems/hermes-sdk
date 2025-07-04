@@ -12,11 +12,11 @@ description = """
 """
 
 [dependencies]
-hermes-core                          = { workspace = true }
-hermes-cosmos-core                   = { workspace = true }
-hermes-cosmos-integration-tests      = { workspace = true }
-hermes-cosmos-relayer                = { workspace = true }
-hermes-cosmos-wasm-relayer           = { workspace = true }
-hermes-runtime                       = { workspace = true }
-hermes-error                         = { workspace = true }
-hermes-comet-light-client-context    = { workspace = true }
+hermes-core                       = { workspace = true }
+hermes-cosmos-core                = { workspace = true }
+hermes-cosmos-integration-tests   = { workspace = true }
+hermes-cosmos-relayer             = { workspace = true }
+hermes-cosmos-wasm-relayer        = { workspace = true }
+hermes-runtime                    = { workspace = true }
+hermes-error                      = { workspace = true }
+hermes-comet-light-client-context = { workspace = true }

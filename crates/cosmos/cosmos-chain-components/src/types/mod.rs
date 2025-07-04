@@ -33,3 +33,6 @@ pub use tendermint::*;
 
 mod transaction;
 pub use transaction::*;
+
+mod wasm;
+pub use wasm::*;
