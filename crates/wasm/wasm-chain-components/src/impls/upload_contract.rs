@@ -4,13 +4,13 @@ use std::sync::Arc;
 use hermes_core::chain_components::traits::{CanSendSingleMessage, HasAddressType, HasMessageType};
 use hermes_cosmos_chain_components::impls::{MsgStoreCode, WasmAccessConfig};
 use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
-use hermes_cosmos_chain_components::types::AbciEvent;
+use hermes_cosmos_chain_components::types::{AbciEvent, HasWasmAccessType};
 use hermes_prelude::*;
 use ibc::primitives::proto::Any;
 use ibc::primitives::Signer;
 use prost::Message;
 
-use crate::traits::{HasWasmAccessType, WasmContractUploader, WasmContractUploaderComponent};
+use crate::traits::{WasmContractUploader, WasmContractUploaderComponent};
 
 #[derive(Debug)]
 pub struct StoreCodeMessage {

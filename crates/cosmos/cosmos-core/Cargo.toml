@@ -22,6 +22,7 @@ hermes-tracing-logging-components    = { workspace = true }
 hermes-wasm-client-components        = { workspace = true }
 hermes-wasm-encoding-components      = { workspace = true }
 hermes-wasm-test-components          = { workspace = true }
+hermes-wasm-chain-components         = { workspace = true }
 hermes-comet-light-client-components = { workspace = true }
 
 ibc              = { workspace = true }

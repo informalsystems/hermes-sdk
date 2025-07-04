@@ -24,6 +24,7 @@ hermes-core                     = { workspace = true }
 hermes-cosmos-integration-tests = { workspace = true }
 hermes-cosmos-relayer           = { workspace = true }
 hermes-any-counterparty         = { workspace = true }
+hermes-wasm-chain-components    = { workspace = true }
 
 ibc = { workspace = true }
 ibc-proto = { workspace = true }

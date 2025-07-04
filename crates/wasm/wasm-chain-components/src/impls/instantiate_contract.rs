@@ -3,8 +3,6 @@ use std::sync::Arc;
 use hermes_core::chain_components::traits::{
     CanSendSingleMessage, HasAddressType, HasDenomType, HasMessageType,
 };
-use hermes_core::logging_components::traits::CanLog;
-use hermes_core::logging_components::types::LevelDebug;
 use hermes_cosmos_chain_components::impls::MsgInstantiateContract;
 use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::AbciEvent;
@@ -35,7 +33,6 @@ where
         + HasDenomType
         + CanSendSingleMessage<MessageResponse = Vec<Arc<AbciEvent>>>
         + HasMessageType<Message = CosmosMessage>
-        + CanLog<LevelDebug>
         + CanRaiseAsyncError<String>,
 {
     async fn instantiate_wasm_contract(

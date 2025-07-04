@@ -2,10 +2,13 @@ use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use core::time::Duration;
 
+use hermes_core::chain_components::traits::HasAddressType;
 use hermes_core::chain_type_components::traits::{HasAmountType, HasDenomType};
-use hermes_core::relayer_components::transaction::traits::CanSendMessagesWithSigner;
+use hermes_core::relayer_components::transaction::traits::{
+    CanSendMessagesWithSigner, HasSignerType,
+};
 use hermes_core::runtime_components::traits::{
-    CanSleep, HasChildProcessType, HasFilePathType, HasRuntime,
+    CanSleep, CanWriteStringToFile, HasChildProcessType, HasFilePathType, HasRuntime,
 };
 use hermes_core::test_components::chain::traits::{
     CanBuildDepositProposalMessage, CanBuildVoteProposalMessage, CanPollProposalStatus,
@@ -15,15 +18,21 @@ use hermes_core::test_components::chain_driver::traits::{
     HasChain, HasChainType, HasDenom, HasWallet, StakingDenom, ValidatorWallet,
 };
 use hermes_core::test_components::driver::traits::HasChainDriverType;
+use hermes_cosmos_chain_components::impls::WasmAccessConfig;
+use hermes_cosmos_chain_components::types::{HasWasmAccessType, Secp256k1KeyPair};
 use hermes_cosmos_test_components::bootstrap::traits::{
     ChainDriverBuilder, ChainDriverBuilderComponent, HasChainGenesisConfigType,
-    HasChainNodeConfigType,
+    HasChainNodeConfigType, HasChainStoreDir,
 };
 use hermes_cosmos_test_components::chain::types::{Amount, Denom};
 use hermes_prelude::*;
 use hermes_test_components::chain::types::{ProposalStatus, ProposalVote};
+use hermes_wasm_chain_components::traits::{CanInstantiateWasmContract, CanUploadWasmContract};
+use ibc::primitives::Signer;
 
-use crate::traits::bootstrap::{HasGovernanceProposalAuthority, HasWasmClientByteCode};
+use crate::traits::bootstrap::{
+    HasGovernanceProposalAuthority, HasWasmAdditionalByteCode, HasWasmClientByteCode,
+};
 use crate::traits::chain::CanUploadWasmClientCode;
 
 pub struct BuildChainDriverAndInitWasmClient<InBuilder>(pub PhantomData<InBuilder>);
@@ -38,9 +47,12 @@ where
         + HasChainGenesisConfigType
         + HasChainNodeConfigType
         + HasWasmClientByteCode
+        + HasWasmAdditionalByteCode
+        + HasChainStoreDir
         + HasGovernanceProposalAuthority
-        + CanRaiseAsyncError<Chain::Error>,
-    Runtime: HasChildProcessType + HasFilePathType + CanSleep,
+        + CanRaiseAsyncError<Chain::Error>
+        + CanRaiseAsyncError<Runtime::Error>,
+    Runtime: HasChildProcessType + HasFilePathType + CanSleep + CanWriteStringToFile,
     Chain: HasWalletSigner
         + HasProposalIdType
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
@@ -48,11 +60,15 @@ where
         + HasAmountType<Amount = Amount>
         + HasDenomType<Denom = Denom>
         + CanUploadWasmClientCode
-        + CanUploadWasmClientCode
+        + CanUploadWasmContract
+        + CanInstantiateWasmContract
+        + HasWasmAccessType<WasmAccess = WasmAccessConfig>
         + CanPollProposalStatus
         + CanBuildDepositProposalMessage
         + CanBuildVoteProposalMessage
-        + CanSendMessagesWithSigner,
+        + CanSendMessagesWithSigner
+        + HasAddressType<Address = String>
+        + HasSignerType<Signer = Secp256k1KeyPair>,
     ChainDriver: HasChain<Chain = Chain> + HasWallet<ValidatorWallet> + HasDenom<StakingDenom>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
 {
@@ -133,6 +149,50 @@ where
 
         chain
             .poll_proposal_status(&proposal_id, &[ProposalStatus::Passed])
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
+        let chain_home_dir = bootstrap.chain_store_dir();
+
+        // Write the wallet secret as a file so that a tester can use it during manual tests
+        let wasm_addresses_file = Runtime::join_file_path(
+            chain_home_dir,
+            &Runtime::file_path_from_string(&format!("wasm-addresses.env")),
+        );
+
+        let mut lines = vec![];
+
+        let sender: Signer = Chain::wallet_signer(validator_wallet).account().into();
+
+        // Upload and instantiate additional Wasm contracts
+        for additional_wasm_code in bootstrap.wasm_additional_byte_codes().iter() {
+            // TODO: Set correct access type
+            let code_id = chain
+                .upload_wasm_contract(
+                    additional_wasm_code.as_slice(),
+                    &sender.as_ref().to_string(),
+                    &WasmAccessConfig::Everybody,
+                )
+                .await
+                .map_err(Bootstrap::raise_error)?;
+            let contract_address = chain
+                .instantiate_wasm_contract(
+                    bootstrap.governance_proposal_authority(),
+                    bootstrap.governance_proposal_authority(),
+                    b"{}".to_vec().as_slice(),
+                    code_id,
+                    staking_denom,
+                )
+                .await
+                .map_err(Bootstrap::raise_error)?;
+            lines.push(format!("WASM_ADDRESS_{code_id}={contract_address}"));
+        }
+
+        let wasm_addresses = lines.join("\n");
+
+        bootstrap
+            .runtime()
+            .write_string_to_file(&wasm_addresses_file, &wasm_addresses)
             .await
             .map_err(Bootstrap::raise_error)?;
 
