@@ -2,7 +2,6 @@ use alloc::sync::Arc;
 use core::time::Duration;
 
 use cgp::core::error::CanRaiseAsyncError;
-use hermes_core::chain_components::traits::WasmAccessTypeProviderComponent;
 use hermes_core::chain_type_components::impls::UseEventsMessageResponse;
 use hermes_core::chain_type_components::traits::{
     ChainIdTypeProviderComponent, EventTypeProviderComponent, HeightAdjuster,
@@ -45,7 +44,6 @@ use tendermint::block::{Block, Id as BlockId};
 use tendermint::{Hash, Time};
 use time::OffsetDateTime;
 
-use crate::impls::WasmAccessConfig;
 use crate::traits::CosmosMessage;
 use crate::types::{ChainStatus, UseCosmosCommitmentProof};
 
@@ -61,8 +59,6 @@ delegate_components! {
             UseType<CosmosMessage>,
         EventTypeProviderComponent:
             UseType<Arc<AbciEvent>>,
-        WasmAccessTypeProviderComponent:
-            UseType<WasmAccessConfig>,
         [
             MessageResponseTypeComponent,
             MessageResponseEventsGetterComponent,

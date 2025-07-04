@@ -5,9 +5,6 @@ use hermes_core::chain_components::traits::{
 };
 use hermes_core::logging_components::traits::CanLog;
 use hermes_core::logging_components::types::LevelDebug;
-use hermes_core::test_components::chain::traits::{
-    WasmContractInstantiator, WasmContractInstantiatorComponent,
-};
 use hermes_cosmos_chain_components::impls::MsgInstantiateContract;
 use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::AbciEvent;
@@ -16,6 +13,8 @@ use ibc::primitives::proto::Any;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use prost::Message;
+
+use crate::traits::{WasmContractInstantiator, WasmContractInstantiatorComponent};
 
 #[derive(Debug)]
 pub struct InstantiateMessage {

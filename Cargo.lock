@@ -1593,8 +1593,6 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-prelude",
- "hermes-test-components",
- "hermes-wasm-chain-components",
 ]
 
 [[package]]

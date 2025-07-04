@@ -17,5 +17,3 @@ hermes-prelude                 = { workspace = true }
 hermes-core                    = { workspace = true }
 hermes-cosmos-chain-components = { workspace = true }
 hermes-cosmos-test-components  = { workspace = true }
-hermes-test-components         = { workspace = true }
-hermes-wasm-chain-components   = { workspace = true }

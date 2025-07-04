@@ -1,5 +1,7 @@
-use hermes_chain_type_components::traits::{HasAddressType, HasWasmAccessType};
+use hermes_core::chain_components::traits::HasAddressType;
 use hermes_prelude::*;
+
+use crate::traits::HasWasmAccessType;
 
 #[cgp_component {
   provider: WasmContractUploader,

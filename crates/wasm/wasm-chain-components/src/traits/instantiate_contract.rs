@@ -1,4 +1,4 @@
-use hermes_chain_type_components::traits::{HasAddressType, HasDenomType};
+use hermes_core::chain_components::traits::{HasAddressType, HasDenomType};
 use hermes_prelude::*;
 
 #[cgp_component {

@@ -1,3 +1,6 @@
+mod access;
+pub use access::*;
+
 mod instantiate_contract;
 pub use instantiate_contract::*;
 

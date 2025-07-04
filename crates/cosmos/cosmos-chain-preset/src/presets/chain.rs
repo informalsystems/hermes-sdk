@@ -4,7 +4,7 @@ mod preset {
     use hermes_core::chain_components::traits::{
         ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
         ClientStatusTypeComponent, OverrideCreateClientPayloadOptionsComponent,
-        RecoverClientPayloadTypeComponent, WasmAccessTypeProviderComponent,
+        RecoverClientPayloadTypeComponent,
     };
     use hermes_core::chain_type_components::traits::{
         AddressTypeProviderComponent, AmountDenomGetterComponent, AmountTypeProviderComponent,
@@ -105,7 +105,6 @@ mod preset {
         ProposalStatusPollerComponent, ProposalStatusQuerierComponent, ProposalStatusTypeComponent,
         ProposalVoteTypeComponent, TokenIbcTransferrerComponent,
         VoteProposalMessageBuilderComponent, WalletSignerComponent, WalletTypeComponent,
-        WasmContractUploaderComponent,
     };
     use hermes_cosmos_chain_components::impls::{
         BroadcastCosmosTx, BuildCosmosPacketMessages, DispatchQueryEip,
@@ -133,8 +132,6 @@ mod preset {
         QueryProposalStatusWithGrpc, UseCosmosAmount,
     };
     use hermes_prelude::*;
-    use hermes_test_components::chain::traits::WasmContractInstantiatorComponent;
-    use hermes_wasm_chain_components::impls::{InstantiateWasmContracts, UploadCosmosWasmContract};
 
     use crate::delegate::DelegateCosmosChainComponents;
 
@@ -154,7 +151,6 @@ mod preset {
                 MessageResponseTypeComponent,
                 MessageResponseEventsGetterComponent,
                 MessageSizeEstimatorComponent,
-                WasmAccessTypeProviderComponent,
                 EventTypeProviderComponent,
                 ClientIdTypeComponent,
                 ConnectionIdTypeComponent,
@@ -379,11 +375,6 @@ mod preset {
                 QueryCosmosBalance,
             EventualAmountAsserterComponent:
                 PollAssertEventualAmount,
-
-            WasmContractUploaderComponent:
-                UploadCosmosWasmContract,
-            WasmContractInstantiatorComponent:
-                InstantiateWasmContracts,
             PollAssertDurationGetterComponent:
                 ProvidePollAssertDuration<1, 300>,
             ProposalStatusQuerierComponent:
