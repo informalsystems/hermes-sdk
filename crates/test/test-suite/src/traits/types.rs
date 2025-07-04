@@ -173,6 +173,8 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + CanIbcTransferToken<Self::ChainB>
                     + CanConvertIbcTransferredAmount<Self::ChainB>,
         ChainB: HasChainId
+                    + CanUploadWasmContract
+                    + CanInstantiateWasmContract
                     + HasWalletType
                     + HasWalletSigner
                     + CanQueryBalance
