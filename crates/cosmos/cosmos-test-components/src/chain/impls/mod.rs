@@ -7,6 +7,9 @@ pub use messages::*;
 mod proposal;
 pub use proposal::*;
 
+mod recover_client;
+pub use recover_client::*;
+
 mod queries;
 pub use queries::*;
 

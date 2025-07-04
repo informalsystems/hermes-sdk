@@ -11,21 +11,10 @@ use hermes_chain_components::traits::{
     CanSendSingleMessage, HasClientStateFields, HasClientStatusMethods, HasCreateClientEvent,
 };
 use hermes_prelude::*;
-use hermes_relayer_components::transaction::traits::CanSendMessagesWithSigner;
-use hermes_test_components::chain::traits::{
-    CanBuildDepositProposalMessage, CanBuildVoteProposalMessage, CanQueryProposalStatus,
-    HasWalletSigner,
-};
-use hermes_test_components::chain::types::{ProposalStatus, ProposalVote};
-use hermes_test_components::chain_driver::traits::{
-    CanGenerateRandomAmount, HasWallet, ValidatorWallet,
-};
+use hermes_test_components::test_case::traits::recover_client::CanHandleRecoverClient;
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
 use crate::traits::CanUseBinaryTestDriverMethods;
-
-const MAX_RETRIES_FOR_PROPOSAL_STATUS: usize = 15;
-const WAIT_SECONDS_FOR_PROPOSAL_STATUS: u64 = 1;
 
 pub struct TestRecoverClient<A = Index<0>, B = Index<1>>(pub PhantomData<(A, B)>);
 
@@ -37,7 +26,8 @@ impl<A, B> Default for TestRecoverClient<A, B> {
 
 impl<Driver, A, B> TestCase<Driver> for TestRecoverClient<A, B>
 where
-    Driver: CanUseBinaryTestDriverMethods<A, B>,
+    Driver: CanUseBinaryTestDriverMethods<A, B>
+        + CanHandleRecoverClient<Driver::ChainDriverA, Driver::ChainA, Driver::ChainB>,
     A: Async,
     B: Async,
 {
@@ -45,10 +35,6 @@ where
         let chain_a = driver.chain_a();
 
         let chain_b = driver.chain_b();
-
-        let chain_driver_a = driver.chain_driver_a();
-
-        let validator_wallet = chain_driver_a.wallet(PhantomData::<ValidatorWallet>);
 
         let create_client_payload_options_b_to_a = driver.create_client_payload_options_b_to_a();
 
@@ -217,91 +203,8 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
-        let denom_a = driver.staking_denom_a();
-
-        let deposit_amount = chain_driver_a.fixed_amount(11000000, denom_a).await;
-
-        // Wait before querying proposal
-        tokio::time::sleep(Duration::from_secs(2)).await;
-
-        let proposal_status = chain_a
-            .query_proposal_status(&1)
+        driver
+            .handle_recover_client(subject_client_id, substitute_client_id)
             .await
-            .map_err(Driver::raise_error)?;
-
-        if proposal_status == ProposalStatus::DepositPeriod {
-            let deposit_message = chain_a.build_deposit_proposal_message(&1, &deposit_amount);
-
-            chain_a
-                .send_messages_with_signer(
-                    Driver::ChainA::wallet_signer(validator_wallet),
-                    &[deposit_message],
-                )
-                .await
-                .map_err(Driver::raise_error)?;
-        }
-
-        let mut try_number = 0;
-        loop {
-            let proposal_status = chain_a
-                .query_proposal_status(&1)
-                .await
-                .map_err(Driver::raise_error)?;
-
-            if proposal_status == ProposalStatus::VotingPeriod {
-                let voting_message = chain_a.build_vote_proposal_message(&1, &ProposalVote::Yes);
-
-                chain_a
-                    .send_messages_with_signer(
-                        Driver::ChainA::wallet_signer(validator_wallet),
-                        &[voting_message],
-                    )
-                    .await
-                    .map_err(Driver::raise_error)?;
-
-                break;
-            }
-
-            if try_number > MAX_RETRIES_FOR_PROPOSAL_STATUS {
-                return Err(Driver::raise_error(format!("Client recovery proposal failed, expected proposal to be in voting period but is {proposal_status:?}")));
-            }
-            try_number += 1;
-
-            tokio::time::sleep(Duration::from_secs(WAIT_SECONDS_FOR_PROPOSAL_STATUS)).await;
-        }
-
-        try_number = 0;
-        loop {
-            let proposal_status = chain_a
-                .query_proposal_status(&1)
-                .await
-                .map_err(Driver::raise_error)?;
-
-            if proposal_status == ProposalStatus::Passed {
-                // Wait before querying client status
-                tokio::time::sleep(Duration::from_secs(2)).await;
-
-                let subject_client_status = chain_a
-                    .query_client_status(PhantomData, subject_client_id)
-                    .await
-                    .map_err(Driver::raise_error)?;
-
-                if Driver::ChainB::client_status_is_active(&subject_client_status) {
-                    driver
-                        .log_message(&format!(
-                            "successfully performed client recovery for subject client {subject_client_id} to substitute client {substitute_client_id}"
-                        ))
-                        .await;
-
-                    return Ok(());
-                }
-            }
-            if try_number == 15 {
-                return Err(Driver::raise_error(format!("Client recovery proposal failed, expected proposal to have passed but is {proposal_status:?}")));
-            }
-            try_number += 1;
-
-            tokio::time::sleep(Duration::from_secs(WAIT_SECONDS_FOR_PROPOSAL_STATUS)).await;
-        }
     }
 }

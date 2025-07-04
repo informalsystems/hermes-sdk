@@ -31,17 +31,12 @@ use hermes_relayer_components::relay::traits::{
     CanAutoRelayWithHeights, CanRelayReceivePacket, DestinationTarget, HasChainTargets,
     HasDstChain, HasSrcChain, SourceTarget,
 };
-use hermes_relayer_components::transaction::traits::CanSendMessagesWithSigner;
 use hermes_test_components::chain::traits::{
-    CanAssertEventualAmount, CanBuildDepositProposalMessage, CanBuildVoteProposalMessage,
-    CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance, CanQueryProposalStatus,
-    HasAmountMethods, HasDefaultMemo, HasProposalIdType, HasProposalStatusType,
-    HasProposalVoteType, HasWalletSigner, HasWalletType, WalletOf,
+    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
+    HasAmountMethods, HasDefaultMemo, HasWalletSigner, HasWalletType, WalletOf,
 };
-use hermes_test_components::chain::types::{ProposalStatus, ProposalVote};
 use hermes_test_components::chain_driver::traits::{
-    CanGenerateRandomAmount, HasChain, HasDenom, HasWallet, StakingDenom, TransferDenom,
-    UserWallet, ValidatorWallet,
+    CanGenerateRandomAmount, HasChain, HasDenom, HasWallet, StakingDenom, TransferDenom, UserWallet,
 };
 use hermes_test_components::driver::traits::{HasChainDriverAt, HasChannelIdAt, HasRelayDriverAt};
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
@@ -135,13 +130,11 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                           + HasDenom<StakingDenom>
                           + HasWallet<UserWallet<0>>
                           + HasWallet<UserWallet<1>>
-                          + HasWallet<ValidatorWallet>
                           + CanGenerateRandomAmount,
         ChainDriverB: HasDenom<TransferDenom>
                           + HasDenom<StakingDenom>
                           + HasWallet<UserWallet<0>>
                           + HasWallet<UserWallet<1>>
-                          + HasWallet<ValidatorWallet>
                           + CanGenerateRandomAmount,
         ChainA: HasChainId
                     + HasWalletType
@@ -154,13 +147,6 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + HasDefaultMemo
                     + CanSendSingleMessage
                     + CanSendMessages
-                    + CanSendMessagesWithSigner
-                    + HasProposalIdType<ProposalId = u64>
-                    + HasProposalStatusType<ProposalStatus = ProposalStatus>
-                    + HasProposalVoteType<ProposalVote = ProposalVote>
-                    + CanQueryProposalStatus
-                    + CanBuildDepositProposalMessage
-                    + CanBuildVoteProposalMessage
                     + HasCreateClientPayloadOptionsType<Self::ChainB>
                     + CanBuildCreateClientPayload<Self::ChainB>
                     + CanBuildCreateClientMessage<Self::ChainB>
@@ -194,13 +180,6 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + HasDefaultMemo
                     + CanSendSingleMessage
                     + CanSendMessages
-                    + CanSendMessagesWithSigner
-                    + HasProposalIdType<ProposalId = u64>
-                    + HasProposalStatusType<ProposalStatus = ProposalStatus>
-                    + HasProposalVoteType<ProposalVote = ProposalVote>
-                    + CanQueryProposalStatus
-                    + CanBuildDepositProposalMessage
-                    + CanBuildVoteProposalMessage
                     + HasCreateClientPayloadOptionsType<Self::ChainA>
                     + CanBuildCreateClientPayload<Self::ChainA>
                     + CanBuildCreateClientMessage<Self::ChainA>
