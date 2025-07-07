@@ -5,7 +5,7 @@ use core::time::Duration;
 use hermes_core::chain_components::traits::HasAddressType;
 use hermes_core::chain_type_components::traits::{HasAmountType, HasDenomType};
 use hermes_core::relayer_components::transaction::traits::{
-    CanSendMessagesWithSigner, HasSignerType,
+    CanSendMessagesWithSigner, HasDefaultSigner,
 };
 use hermes_core::runtime_components::traits::{
     CanSleep, CanWriteStringToFile, HasChildProcessType, HasFilePathType, HasRuntime,
@@ -55,6 +55,7 @@ where
     Runtime: HasChildProcessType + HasFilePathType + CanSleep + CanWriteStringToFile,
     Chain: HasWalletSigner
         + HasProposalIdType
+        + HasDefaultSigner<Signer = Secp256k1KeyPair>
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasProposalVoteType<ProposalVote = ProposalVote>
         + HasAmountType<Amount = Amount>
@@ -67,8 +68,7 @@ where
         + CanBuildDepositProposalMessage
         + CanBuildVoteProposalMessage
         + CanSendMessagesWithSigner
-        + HasAddressType<Address = String>
-        + HasSignerType<Signer = Secp256k1KeyPair>,
+        + HasAddressType<Address = String>,
     ChainDriver: HasChain<Chain = Chain> + HasWallet<ValidatorWallet> + HasDenom<StakingDenom>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
 {
@@ -157,12 +157,12 @@ where
         // Write the wallet secret as a file so that a tester can use it during manual tests
         let wasm_addresses_file = Runtime::join_file_path(
             chain_home_dir,
-            &Runtime::file_path_from_string(&format!("wasm-addresses.env")),
+            &Runtime::file_path_from_string("wasm-addresses.env"),
         );
 
         let mut lines = vec![];
 
-        let sender: Signer = Chain::wallet_signer(validator_wallet).account().into();
+        let sender: Signer = chain.get_default_signer().account().into();
 
         // Upload and instantiate additional Wasm contracts
         for additional_wasm_code in bootstrap.wasm_additional_byte_codes().iter() {
@@ -177,7 +177,7 @@ where
                 .map_err(Bootstrap::raise_error)?;
             let contract_address = chain
                 .instantiate_wasm_contract(
-                    bootstrap.governance_proposal_authority(),
+                    &sender.as_ref().to_string(),
                     bootstrap.governance_proposal_authority(),
                     b"{}".to_vec().as_slice(),
                     code_id,
