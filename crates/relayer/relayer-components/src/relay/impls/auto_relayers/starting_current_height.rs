@@ -1,9 +1,11 @@
+use core::time::Duration;
+
 use cgp::core::error::ErrorOf;
 use hermes_chain_components::traits::CanQueryChainHeight;
 use hermes_prelude::*;
 
 use crate::relay::traits::{
-    CanAutoRelayWithHeights, HasTargetChains, RelayTarget, TargetAutoRelayer,
+    CanAutoRelayWithHeights, CanRefreshClient, HasTargetChains, RelayTarget, TargetAutoRelayer,
     TargetAutoRelayerComponent,
 };
 
@@ -14,6 +16,7 @@ impl<Relay, Target> TargetAutoRelayer<Relay, Target> for AutoRelayStartingCurren
 where
     Relay: HasTargetChains<Target>
         + CanAutoRelayWithHeights<Target>
+        + CanRefreshClient<Target>
         + CanRaiseAsyncError<ErrorOf<Relay::TargetChain>>,
     Target: RelayTarget,
     Relay::TargetChain: CanQueryChainHeight,
@@ -25,8 +28,11 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        relay
-            .auto_relay_with_heights(target, &start_height, None)
-            .await
+        let auto_relay_task = relay.auto_relay_with_heights(target, &start_height, None);
+        let auto_refresh_task = relay.auto_refresh_client(target, Duration::from_secs(10));
+
+        let _ = futures::join!(auto_relay_task, auto_refresh_task);
+
+        Ok(())
     }
 }

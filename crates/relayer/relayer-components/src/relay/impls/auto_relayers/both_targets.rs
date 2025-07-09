@@ -1,13 +1,14 @@
 use alloc::boxed::Box;
 use alloc::vec;
+use core::time::Duration;
 
 use cgp::extra::run::{Runner, RunnerComponent};
 use hermes_prelude::*;
 use hermes_runtime_components::traits::{CanRunConcurrentTasks, HasRuntime, Task};
 
 use crate::relay::traits::{
-    CanAutoRelayTarget, CanRaiseRelayChainErrors, DestinationTarget, HasRelayClientIds,
-    SourceTarget,
+    CanAutoRelayTarget, CanRaiseRelayChainErrors, CanRefreshClient, DestinationTarget,
+    HasRelayClientIds, SourceTarget,
 };
 
 pub struct RelayBothTargets;
@@ -28,15 +29,27 @@ where
         + CanRaiseRelayChainErrors
         + HasRuntime
         + CanAutoRelayTarget<SourceTarget>
-        + CanAutoRelayTarget<DestinationTarget>,
+        + CanAutoRelayTarget<DestinationTarget>
+        + CanRefreshClient<SourceTarget>
+        + CanRefreshClient<DestinationTarget>,
 {
     async fn run(self) {
         match self.target {
             EitherTarget::Source => {
-                let _ = self.relay.auto_relay(SourceTarget).await;
+                let auto_relay_task = self.relay.auto_relay(SourceTarget);
+                let auto_refresh_task = self
+                    .relay
+                    .auto_refresh_client(SourceTarget, Duration::from_secs(10));
+
+                let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
             EitherTarget::Destination => {
-                let _ = self.relay.auto_relay(DestinationTarget).await;
+                let auto_relay_task = self.relay.auto_relay(DestinationTarget);
+                let auto_refresh_task = self
+                    .relay
+                    .auto_refresh_client(SourceTarget, Duration::from_secs(10));
+
+                let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
         }
     }
@@ -50,6 +63,8 @@ where
         + HasRuntime
         + CanAutoRelayTarget<SourceTarget>
         + CanAutoRelayTarget<DestinationTarget>
+        + CanRefreshClient<SourceTarget>
+        + CanRefreshClient<DestinationTarget>
         + CanRaiseRelayChainErrors,
     Relay::Runtime: CanRunConcurrentTasks,
 {
