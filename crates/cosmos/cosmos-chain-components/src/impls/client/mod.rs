@@ -15,3 +15,9 @@ pub use update_client_message::*;
 
 mod update_client_payload;
 pub use update_client_payload::*;
+
+mod upgrade_client_message;
+pub use upgrade_client_message::*;
+
+mod upgrade_client_payload;
+pub use upgrade_client_payload::*;
