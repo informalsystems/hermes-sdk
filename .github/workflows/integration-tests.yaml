@@ -75,7 +75,7 @@ jobs:
       - name: run integration tests
         env:
           RUST_BACKTRACE: 1
-          TEST_PRESET: ${{ matrix.preset }}
+          TEST_PRESET: ${{ matrix.chain.preset }}
           NEW_TRUSTING_PERIOD: 20
         run: |
             nix develop -c \
