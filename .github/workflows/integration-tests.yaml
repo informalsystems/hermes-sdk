@@ -16,9 +16,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        preset:
-          - GaiaToGaia
-          - OsmosisToGaia
+        chain:
+          - preset: GaiaToGaia
+            features: ''
+          - preset: OsmosisToGaia
+            features: ''
+          - preset: OsmosisToOsmosis
+            features: ibc-go-v8
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v30
@@ -33,21 +37,30 @@ jobs:
       - name: run integration tests
         env:
           RUST_BACKTRACE: 1
-          TEST_PRESET: ${{ matrix.preset }}
+          TEST_PRESET: ${{ matrix.chain.preset }}
         run: |
             nix develop -c \
               nix shell .#gaia .#celestia-app .#ibc-go-v8-simapp .#osmosis -c \
                 cargo nextest run -p hermes-cosmos-integration-tests \
-                --test-threads=2
+                --test-threads=2 \
+                --features=${{ matrix.chain.features }} \
+                --test bootstrap \
+                --test filter \
+                --test cosmos_integration_tests
 
-  osmosis-integration-tests:
+  cosmos-modified-integration-tests:
     runs-on: ubuntu-22.04
     timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        preset:
-          - OsmosisToOsmosis
+        chain:
+          - preset: GaiaToGaia
+            features: ''
+          - preset: OsmosisToGaia
+            features: ''
+          - preset: OsmosisToOsmosis
+            features: ibc-go-v8
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v30
@@ -63,11 +76,14 @@ jobs:
         env:
           RUST_BACKTRACE: 1
           TEST_PRESET: ${{ matrix.preset }}
+          NEW_TRUSTING_PERIOD: 20
         run: |
             nix develop -c \
               nix shell .#gaia .#celestia-app .#ibc-go-v8-simapp .#osmosis -c \
                 cargo nextest run -p hermes-cosmos-integration-tests \
-                --test-threads=2 --features=ibc-go-v8
+                --test-threads=2 \
+                --features=${{ matrix.chain.features }} \
+                --test cosmos_modified_integration_tests \
 
   wasm-cosmos-integration-tests:
     runs-on: ubuntu-22.04
