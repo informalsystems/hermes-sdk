@@ -93,6 +93,7 @@ impl<Chain> Debug for ProposalFailed<'_, Chain> {
             .field("title", &self.proposal.title)
             .field("summary", &self.proposal.summary)
             .field("proposer", &self.proposal.proposer)
+            .field("failed_reason", &self.proposal.failed_reason)
             .finish()
     }
 }
