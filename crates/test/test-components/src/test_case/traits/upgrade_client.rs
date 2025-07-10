@@ -1,6 +1,8 @@
 use hermes_chain_type_components::traits::HasClientIdType;
 use hermes_prelude::*;
 
+use crate::chain_driver::traits::HasSetupUpgradeClientTestResultType;
+
 #[cgp_component {
   provider: UpgradeClientHandler,
   context: Driver,
@@ -8,9 +10,13 @@ use hermes_prelude::*;
 #[async_trait]
 pub trait CanHandleUpgradeClient<ChainDriverA, ChainA, ChainB>: HasAsyncErrorType
 where
+    ChainDriverA: HasSetupUpgradeClientTestResultType,
     ChainA: HasClientIdType<ChainB>,
 {
-    async fn handle_upgrade_client(&self) -> Result<(), Self::Error>;
+    async fn handle_upgrade_client(
+        &self,
+        setup_result: &ChainDriverA::SetupUpgradeClientTestResult,
+    ) -> Result<(), Self::Error>;
 }
 
 #[cgp_component {
@@ -20,7 +26,10 @@ where
 #[async_trait]
 pub trait CanSetupUpgradeClientTest<ChainDriverA, ChainA, ChainB>: HasAsyncErrorType
 where
+    ChainDriverA: HasSetupUpgradeClientTestResultType,
     ChainA: HasClientIdType<ChainB>,
 {
-    async fn setup_upgrade_client_test(&self) -> Result<(), Self::Error>;
+    async fn setup_upgrade_client_test(
+        &self,
+    ) -> Result<ChainDriverA::SetupUpgradeClientTestResult, Self::Error>;
 }

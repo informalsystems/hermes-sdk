@@ -10,7 +10,9 @@ use hermes_core::logging_components::types::LevelDebug;
 use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_core::relayer_components::multi::traits::client_id_at::HasClientIdAt;
 use hermes_core::relayer_components::transaction::traits::CanSendMessagesWithSigner;
-use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::traits::{
+    CosmosMessage, DynCosmosMessage, HasGrpcAddress, ToCosmosMessage,
+};
 use hermes_cosmos_chain_components::types::TendermintClientState;
 use hermes_prelude::*;
 use hermes_test_components::chain::traits::{
@@ -19,13 +21,15 @@ use hermes_test_components::chain::traits::{
 };
 use hermes_test_components::chain::types::{ProposalStatus, ProposalVote};
 use hermes_test_components::chain_driver::traits::{
-    CanGenerateRandomAmount, HasChain, HasDenom, HasWallet, StakingDenom, ValidatorWallet,
+    CanGenerateRandomAmount, HasChain, HasDenom, HasSetupUpgradeClientTestResultType, HasWallet,
+    StakingDenom, ValidatorWallet,
 };
 use hermes_test_components::driver::traits::HasChainDriverAt;
 use hermes_test_components::test_case::traits::upgrade_client::{
     SetupUpgradeClientTestHandler, SetupUpgradeClientTestHandlerComponent, UpgradeClientHandler,
     UpgradeClientHandlerComponent,
 };
+use http::Uri;
 use ibc::clients::tendermint::types::TrustThreshold;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::{ChainId, ClientId};
@@ -33,10 +37,13 @@ use ibc::cosmos_host::proto::v1beta1::Plan;
 use ibc::primitives::proto::Any;
 use ibc::primitives::Signer;
 use ibc_proto::cosmos::base::v1beta1::Coin;
-use ibc_proto::cosmos::gov::v1::MsgSubmitProposal;
+use ibc_proto::cosmos::gov::v1::query_client::QueryClient;
+use ibc_proto::cosmos::gov::v1::{MsgSubmitProposal, QueryProposalRequest};
 use ibc_proto::ibc::core::client::v1::MsgIbcSoftwareUpgrade;
+use prost::Message;
 
 use crate::chain::types::Amount;
+use crate::chain_driver::impls::CosmosProposalSetupClientUpgradeResult;
 
 const MAX_RETRIES_FOR_PROPOSAL_STATUS: usize = 15;
 const WAIT_SECONDS_FOR_PROPOSAL_STATUS: u64 = 1;
@@ -48,10 +55,16 @@ impl<Driver, ChainDriverA, ChainA, ChainB>
     UpgradeClientHandler<Driver, ChainDriverA, ChainA, ChainB> for CosmosHandleUpgradeClient
 where
     Driver: HasChainDriverAt<Index<0>, ChainDriver = ChainDriverA> + HasAsyncErrorType,
-    ChainDriverA: HasChain<Chain = ChainA>,
+    ChainDriverA: HasChain<Chain = ChainA>
+        + HasSetupUpgradeClientTestResultType<
+            SetupUpgradeClientTestResult = CosmosProposalSetupClientUpgradeResult,
+        >,
     ChainA: HasClientIdType<ChainB, ClientId = ClientId>,
 {
-    async fn handle_upgrade_client(_driver: &Driver) -> Result<(), Driver::Error> {
+    async fn handle_upgrade_client(
+        _driver: &Driver,
+        _setup_result: &CosmosProposalSetupClientUpgradeResult,
+    ) -> Result<(), Driver::Error> {
         Ok(())
     }
 }
@@ -69,11 +82,15 @@ where
         + HasChainTypeAt<Index<0>, Chain = ChainA>
         + HasChainTypeAt<Index<1>, Chain = ChainB>
         + CanLog<LevelDebug>
-        + CanRaiseAsyncError<String>,
+        + CanRaiseAsyncError<String>
+        + CanRaiseAsyncError<&'static str>,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasWallet<ValidatorWallet>
         + CanGenerateRandomAmount
-        + HasDenom<StakingDenom>,
+        + HasDenom<StakingDenom>
+        + HasSetupUpgradeClientTestResultType<
+            SetupUpgradeClientTestResult = CosmosProposalSetupClientUpgradeResult,
+        >,
     ChainDriverB: HasChain<Chain = ChainB>,
     ChainA: CanQueryProposalStatus<ProposalId = u64, ProposalStatus = ProposalStatus>
         + CanBuildDepositProposalMessage
@@ -83,10 +100,13 @@ where
         + HasClientStateType<ChainB, ClientState = TendermintClientState>
         + HasWalletSigner
         + HasAmountType<Amount = Amount>
+        + HasGrpcAddress
         + CanSendMessagesWithSigner<Message = CosmosMessage>,
     ChainB: CanQueryClientStateWithLatestHeight<ChainA>,
 {
-    async fn setup_upgrade_client_test(driver: &Driver) -> Result<(), Driver::Error> {
+    async fn setup_upgrade_client_test(
+        driver: &Driver,
+    ) -> Result<CosmosProposalSetupClientUpgradeResult, Driver::Error> {
         let chain_driver_a = driver.chain_driver_at(PhantomData::<Index<0>>);
 
         let chain_a = chain_driver_a.chain();
@@ -214,7 +234,48 @@ where
                 driver
                     .log("chain upgrade proposal `1` passed", &LevelDebug)
                     .await;
-                return Ok(());
+
+                let mut client = QueryClient::connect(
+                    Uri::try_from(&chain_a.grpc_address().to_string()).map_err(|e| {
+                        Driver::raise_error(format!("failed to convert grpc address to Uri: {e:?}"))
+                    })?,
+                )
+                .await
+                .map_err(|e| {
+                    Driver::raise_error(format!("failed to connect QueryClient: {e:?}"))
+                })?;
+
+                let request = tonic::Request::new(QueryProposalRequest { proposal_id: 1 });
+
+                let response = client
+                    .proposal(request)
+                    .await
+                    .map(|r| r.into_inner())
+                    .map_err(|e| {
+                        Driver::raise_error(format!(
+                            "failed to extract Proposal from query result: {e:?}"
+                        ))
+                    })?;
+
+                let proposal = response
+                    .proposal
+                    .ok_or_else(|| Driver::raise_error("proposal not found: `1`"))?;
+
+                let passed_proposal = MsgIbcSoftwareUpgrade::decode(
+                    proposal.messages.first().unwrap().value.as_slice(),
+                )
+                .unwrap();
+
+                let upgrade_height = passed_proposal
+                    .plan
+                    .ok_or_else(|| {
+                        Driver::raise_error("query passed proposal `1` doesn't have a `Plan`")
+                    })?
+                    .height;
+
+                return Ok(CosmosProposalSetupClientUpgradeResult {
+                    height: upgrade_height,
+                });
             }
 
             if try_number > MAX_RETRIES_FOR_PROPOSAL_STATUS {

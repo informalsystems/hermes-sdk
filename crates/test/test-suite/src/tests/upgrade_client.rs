@@ -26,8 +26,8 @@ where
     B: Async,
 {
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
-        driver.setup_upgrade_client_test().await?;
+        let setup_result = driver.setup_upgrade_client_test().await?;
 
-        driver.handle_upgrade_client().await
+        driver.handle_upgrade_client(&setup_result).await
     }
 }
