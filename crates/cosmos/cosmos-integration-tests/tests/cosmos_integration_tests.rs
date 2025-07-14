@@ -40,6 +40,8 @@ fn test_packet_clearing() -> Result<(), Error> {
     Ok(())
 }
 
+// TODO: The current Gaia used, v18, uses a legacy proposals
+#[cfg(feature = "ibc-go-v8")]
 #[test]
 fn test_upgrade_client() -> Result<(), Error> {
     let runtime = init_test_runtime();
