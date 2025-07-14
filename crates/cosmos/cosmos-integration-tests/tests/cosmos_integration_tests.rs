@@ -6,7 +6,6 @@ use hermes_cosmos_integration_tests::init::{init_preset_bootstraps, init_test_ru
 use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::clearing::TestPacketClearing;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
-use hermes_ibc_test_suite::tests::upgrade_client::TestUpgradeClient;
 
 #[test]
 fn test_ibc_transfer() -> Result<(), Error> {
@@ -50,7 +49,9 @@ fn test_upgrade_client() -> Result<(), Error> {
         let setup: CosmosBinaryChannelTestDriver =
             init_preset_bootstraps(&runtime, Default::default()).await?;
 
-        TestUpgradeClient::default().run_test(&setup).await?;
+        hermes_ibc_test_suite::tests::upgrade_client::TestUpgradeClient::default()
+            .run_test(&setup)
+            .await?;
 
         <Result<(), Error>>::Ok(())
     })?;
