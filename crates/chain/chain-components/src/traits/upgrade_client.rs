@@ -1,5 +1,5 @@
 use cgp::core::component::UseDelegate;
-use hermes_chain_type_components::traits::{HasClientIdType, HasMessageType};
+use hermes_chain_type_components::traits::{HasClientIdType, HasHeightType, HasMessageType};
 use hermes_prelude::*;
 
 #[cgp_component {
@@ -38,7 +38,9 @@ where
 }]
 #[async_trait]
 pub trait CanUpgradeClient<Counterparty>:
-    HasClientIdType<Counterparty> + HasUpgradeClientPayloadType + HasMessageType
+    HasClientIdType<Counterparty> + HasMessageType + HasAsyncErrorType
+where
+    Counterparty: HasUpgradeClientPayloadType,
 {
     /**
        Build message to upgrade client.
@@ -46,6 +48,23 @@ pub trait CanUpgradeClient<Counterparty>:
     async fn upgrade_client_message(
         &self,
         client_id: &Self::ClientId,
-        upgrade_client_payload: &Self::UpgradeClientPayload,
-    ) -> Self::Message;
+        upgrade_client_payload: &Counterparty::UpgradeClientPayload,
+    ) -> Result<Self::Message, Self::Error>;
+}
+
+#[cgp_component {
+    provider: ClientUpgradePayloadBuilder,
+    context: Chain,
+}]
+#[async_trait]
+pub trait CanBuildClientUpgradePayload<Counterparty>:
+    HasHeightType + HasUpgradeClientPayloadType + HasAsyncErrorType
+{
+    /**
+       Build message to upgrade client.
+    */
+    async fn upgrade_client_payload(
+        &self,
+        upgrade_height: &Self::Height,
+    ) -> Result<Self::UpgradeClientPayload, Self::Error>;
 }

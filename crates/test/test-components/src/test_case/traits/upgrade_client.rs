@@ -1,4 +1,3 @@
-use hermes_chain_type_components::traits::HasClientIdType;
 use hermes_prelude::*;
 
 use crate::chain_driver::traits::HasSetupUpgradeClientTestResultType;
@@ -11,7 +10,6 @@ use crate::chain_driver::traits::HasSetupUpgradeClientTestResultType;
 pub trait CanHandleUpgradeClient<ChainDriverA, ChainA, ChainB>: HasAsyncErrorType
 where
     ChainDriverA: HasSetupUpgradeClientTestResultType,
-    ChainA: HasClientIdType<ChainB>,
 {
     async fn handle_upgrade_client(
         &self,
@@ -27,7 +25,6 @@ where
 pub trait CanSetupUpgradeClientTest<ChainDriverA, ChainA, ChainB>: HasAsyncErrorType
 where
     ChainDriverA: HasSetupUpgradeClientTestResultType,
-    ChainA: HasClientIdType<ChainB>,
 {
     async fn setup_upgrade_client_test(
         &self,

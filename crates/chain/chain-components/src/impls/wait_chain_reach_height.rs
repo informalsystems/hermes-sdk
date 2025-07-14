@@ -1,3 +1,5 @@
+use alloc::format;
+use alloc::string::String;
 use core::time::Duration;
 
 use hermes_prelude::*;
@@ -15,7 +17,7 @@ pub trait CanWaitChainReachHeight: HasHeightType + HasAsyncErrorType {
 
 impl<Chain> CanWaitChainReachHeight for Chain
 where
-    Chain: CanQueryChainHeight + HasRuntime,
+    Chain: CanQueryChainHeight + HasRuntime + CanRaiseAsyncError<String>,
     Chain::Runtime: CanSleep,
     Chain::Height: Clone,
 {
@@ -23,7 +25,8 @@ where
         &self,
         height: &Chain::Height,
     ) -> Result<Chain::Height, Chain::Error> {
-        loop {
+        // Wait at maximum 1 minute
+        for _ in 0..600 {
             let current_height = self.query_chain_height().await?;
 
             if &current_height >= height {
@@ -32,5 +35,7 @@ where
                 self.runtime().sleep(Duration::from_millis(100)).await;
             }
         }
+        let current_height = self.query_chain_height().await?;
+        Err(Chain::raise_error(format!("chain failed to reached desired height `{height:?}` after 1 minute. Current chain height `{current_height:?}`")))
     }
 }

@@ -45,7 +45,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
         fields: Arc::new(CosmosBootstrapFields {
             runtime: runtime.clone(),
             cosmos_builder: builder.clone(),
-            should_randomize_identifiers: true,
+            should_randomize_identifiers: false,
             chain_store_dir: store_dir.join("chains"),
             chain_command_path: "simd".into(),
             account_prefix: "cosmos".into(),
