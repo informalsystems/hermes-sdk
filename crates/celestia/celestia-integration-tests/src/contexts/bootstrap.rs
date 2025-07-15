@@ -33,15 +33,15 @@ use hermes_cosmos_integration_tests::traits::{
 use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
 use hermes_cosmos_test_components::bootstrap::components::LegacyCosmosSdkBootstrapComponents;
 use hermes_cosmos_test_components::bootstrap::impls::{
-    NoModifyCometConfig, NoModifyCosmosSdkConfig, NoModifyGenesisConfig,
+    NoModifyCometConfig, NoModifyCosmosSdkConfig, NoModifyGenesisConfig, StartCosmosChain,
 };
 use hermes_cosmos_test_components::bootstrap::traits::{
     AccountPrefixGetter, AccountPrefixGetterComponent, ChainCommandPathGetter,
-    ChainCommandPathGetterComponent, ChainDriverBuilderComponent, ChainStoreDirGetterComponent,
-    CometConfigModifierComponent, CosmosGenesisConfigModifierComponent,
-    CosmosSdkConfigModifierComponent, DenomForStaking, DenomForTransfer, DenomPrefixGetter,
-    DenomPrefixGetterComponent, DynamicGasGetterComponent, RandomIdFlagGetterComponent,
-    UseRandomIdFlag, WalletConfigGeneratorComponent,
+    ChainCommandPathGetterComponent, ChainDriverBuilderComponent, ChainFullNodeStarterComponent,
+    ChainStoreDirGetterComponent, CometConfigModifierComponent,
+    CosmosGenesisConfigModifierComponent, CosmosSdkConfigModifierComponent, DenomForStaking,
+    DenomForTransfer, DenomPrefixGetter, DenomPrefixGetterComponent, DynamicGasGetterComponent,
+    RandomIdFlagGetterComponent, UseRandomIdFlag, WalletConfigGeneratorComponent,
 };
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
@@ -115,6 +115,7 @@ delegate_components! {
             BuildCosmosChainWithNodeConfig,
         ChainDriverBuilderComponent:
             BuildCosmosChainDriver,
+        ChainFullNodeStarterComponent: StartCosmosChain,
     }
 }
 
