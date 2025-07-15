@@ -37,3 +37,12 @@ where
 {
     type UpdateClientPayload = UpdateClientPayload;
 }
+
+#[cgp_component {
+  name: UpdateClientEventComponent,
+  provider: ProvideUpdateClientEvent,
+  context: Chain,
+}]
+pub trait HasUpdateClientEvent {
+    type UpdateClientEvent: Async;
+}

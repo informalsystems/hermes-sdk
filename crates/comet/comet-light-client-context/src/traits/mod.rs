@@ -1,3 +1,4 @@
+pub mod chain_id;
 pub mod current_time;
 pub mod light_block_store;
 pub mod peer_id;

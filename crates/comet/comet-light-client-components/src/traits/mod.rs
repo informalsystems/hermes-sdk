@@ -7,6 +7,9 @@ pub use fetch_light_block::*;
 mod light_block;
 pub use light_block::*;
 
+mod misbehaviour_detector;
+pub use misbehaviour_detector::*;
+
 mod query_light_block;
 pub use query_light_block::*;
 

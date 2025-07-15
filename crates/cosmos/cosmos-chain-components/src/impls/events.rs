@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
+use hermes_core::chain_components::traits::{ProvideUpdateClientEvent, UpdateClientEventComponent};
 use hermes_core::chain_type_components::traits::HasMessageResponseType;
 use hermes_core::relayer_components::chain::traits::{
     ChannelOpenInitEventComponent, ChannelOpenTryEventComponent, ConnectionOpenInitEventComponent,
@@ -15,7 +16,7 @@ use hermes_core::relayer_components::chain::traits::{
 };
 use hermes_prelude::*;
 use ibc::core::channel::types::packet::Packet;
-use ibc::core::client::types::events::CLIENT_ID_ATTRIBUTE_KEY;
+use ibc::core::client::types::events::{CLIENT_ID_ATTRIBUTE_KEY, HEADER_ATTRIBUTE_KEY};
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, ConnectionId};
 use tendermint::abci::Event as AbciEvent;
 
@@ -24,7 +25,8 @@ use crate::types::{
     try_conn_open_init_from_abci_event, try_conn_open_try_from_abci_event,
     try_send_packet_from_abci_event, try_write_acknowledgment_from_abci_event,
     CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent, CosmosConnectionOpenInitEvent,
-    CosmosConnectionOpenTryEvent, CosmosCreateClientEvent, SendPacketEvent, WriteAckEvent,
+    CosmosConnectionOpenTryEvent, CosmosCreateClientEvent, CosmosUpdateClientEvent,
+    SendPacketEvent, WriteAckEvent,
 };
 
 pub struct ProvideCosmosEvents;
@@ -57,6 +59,40 @@ where
                     let client_id = tag.value_str().ok()?.parse().ok()?;
 
                     return Some(CosmosCreateClientEvent { client_id });
+                }
+            }
+        }
+
+        None
+    }
+}
+
+#[cgp_provider(UpdateClientEventComponent)]
+impl<Chain> ProvideUpdateClientEvent<Chain> for ProvideCosmosEvents {
+    type UpdateClientEvent = CosmosUpdateClientEvent;
+}
+
+#[cgp_provider(EventExtractorComponent)]
+impl<Chain> EventExtractor<Chain, CosmosUpdateClientEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosUpdateClientEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosUpdateClientEvent> {
+        if event.kind == "update_client" {
+            for tag in &event.attributes {
+                if tag.key_bytes() == HEADER_ATTRIBUTE_KEY.as_bytes() {
+                    let _header = tag.value_str().ok()?;
+
+                    tracing::warn!("tag: {tag:?}");
+
+                    return Some(CosmosUpdateClientEvent {
+                        // TODO: Fix this
+                        header: None,
+                    });
                 }
             }
         }

@@ -22,4 +22,6 @@ hermes-comet-light-client-components = { workspace = true }
 eyre                             = { workspace = true }
 tendermint                       = { workspace = true }
 tendermint-rpc                   = { workspace = true }
+tendermint-light-client          = { workspace = true }
+tendermint-light-client-detector = { workspace = true }
 tendermint-light-client-verifier = { workspace = true }

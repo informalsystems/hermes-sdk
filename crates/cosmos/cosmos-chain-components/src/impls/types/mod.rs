@@ -16,6 +16,9 @@ pub use consensus_state::*;
 mod create_client_options;
 pub use create_client_options::*;
 
+mod evidence;
+pub use evidence::*;
+
 mod payload;
 pub use payload::*;
 

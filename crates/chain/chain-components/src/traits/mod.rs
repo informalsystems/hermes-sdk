@@ -7,6 +7,9 @@ pub use extract_data::*;
 mod message_builders;
 pub use message_builders::*;
 
+mod misbehaviour;
+pub use misbehaviour::*;
+
 mod packet;
 pub use packet::*;
 
