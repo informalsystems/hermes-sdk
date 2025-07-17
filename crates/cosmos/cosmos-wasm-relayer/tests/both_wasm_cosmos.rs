@@ -52,7 +52,8 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
         let wasm_additional_byte_code = match var("ADDITIONAL_WASM_FILE_PATH") {
             Ok(paths_str) => paths_str
                 .split(',')
-                .map(|s| std::fs::read(PathBuf::from(s)))
+                .map(PathBuf::from)
+                .map(std::fs::read)
                 .collect::<Result<Vec<_>, _>>()?,
             Err(_) => vec![],
         };
