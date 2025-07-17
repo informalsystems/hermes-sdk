@@ -179,7 +179,7 @@ where
                 .instantiate_wasm_contract(
                     &sender.as_ref().to_string(),
                     bootstrap.governance_proposal_authority(),
-                    b"{}".to_vec().as_slice(),
+                    b"{}",
                     code_id,
                     staking_denom,
                 )
