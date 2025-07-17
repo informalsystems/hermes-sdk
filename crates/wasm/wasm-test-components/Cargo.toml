@@ -1,15 +1,13 @@
 [package]
-name = "hermes-wasm-test-components"
-version = { workspace = true }
-edition = { workspace = true }
-license = { workspace = true }
-keywords = { workspace = true }
-repository = { workspace = true }
-authors = { workspace = true }
+name         = "hermes-wasm-test-components"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
 rust-version = { workspace = true }
-description = """
-    Context-generic client components for communicating with a 08-wasm client enabled node
-"""
+description  = "Context-generic client components for communicating with a 08-wasm client enabled node"
 
 [dependencies]
 cgp                            = { workspace = true }

@@ -1,15 +1,13 @@
 [package]
-name = "hermes-cosmos-chain-components"
-version = { workspace = true }
-edition = { workspace = true }
-license = { workspace = true }
-keywords = { workspace = true }
-repository = { workspace = true }
-authors = { workspace = true }
+name         = "hermes-cosmos-chain-components"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
 rust-version = { workspace = true }
-description = """
-    Implementation of an IBC Relayer in Rust, as a library
-"""
+description  = "Implementation of an IBC Relayer in Rust, as a library"
 
 [dependencies]
 cgp                                  = { workspace = true }
