@@ -54,7 +54,7 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
                 .split(',')
                 .map(PathBuf::from)
                 .map(std::fs::read)
-                .collect::<Result<Vec<_>, _>>()?,
+                .collect::<Result<_, _>>()?,
             Err(_) => vec![],
         };
 
