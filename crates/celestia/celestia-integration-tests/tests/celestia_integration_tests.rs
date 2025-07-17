@@ -42,7 +42,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
         fields: Arc::new(CosmosBootstrapFields {
             runtime: runtime.clone(),
             cosmos_builder: builder.clone(),
-            should_randomize_identifiers: false,
+            should_randomize_identifiers: true,
             chain_store_dir: "./test-data/chains".into(),
             chain_command_path: "gaiad".into(),
             account_prefix: "cosmos".into(),
