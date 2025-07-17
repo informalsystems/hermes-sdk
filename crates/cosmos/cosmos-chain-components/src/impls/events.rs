@@ -18,6 +18,9 @@ use hermes_prelude::*;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::client::types::events::{CLIENT_ID_ATTRIBUTE_KEY, HEADER_ATTRIBUTE_KEY};
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, ConnectionId};
+use ibc_client_tendermint::types::proto::v1::Header;
+use prost::Message;
+use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::types::{
@@ -83,20 +86,31 @@ where
         event: &Chain::Event,
     ) -> Option<CosmosUpdateClientEvent> {
         if event.kind == "update_client" {
-            for tag in &event.attributes {
-                if tag.key_bytes() == HEADER_ATTRIBUTE_KEY.as_bytes() {
-                    let _header = tag.value_str().ok()?;
+            let raw_header = event
+                .attributes
+                .iter()
+                .find(|tag| tag.key_bytes() == HEADER_ATTRIBUTE_KEY.as_bytes())?
+                .value_str()
+                .ok()?;
 
-                    tracing::warn!("tag: {tag:?}");
+            let raw_client_id = event
+                .attributes
+                .iter()
+                .find(|tag| tag.key_bytes() == CLIENT_ID_ATTRIBUTE_KEY.as_bytes())?
+                .value_str()
+                .ok()?;
 
-                    return Some(CosmosUpdateClientEvent {
-                        // TODO: Fix this
-                        header: None,
-                    });
-                }
-            }
+            let header = subtle_encoding::hex::decode(raw_header).ok()?;
+            let any_header = Any::decode(header.as_slice()).ok()?;
+            let decoded_header = Header::decode(any_header.value.as_slice()).ok()?;
+
+            let client_id = raw_client_id.parse().ok()?;
+
+            return Some(CosmosUpdateClientEvent {
+                client_id,
+                header: decoded_header,
+            });
         }
-
         None
     }
 }

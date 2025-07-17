@@ -3,8 +3,9 @@ mod preset {
     use cgp::core::component::UseDelegate;
     use hermes_core::chain_components::traits::{
         ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
-        ClientStatusTypeComponent, OverrideCreateClientPayloadOptionsComponent,
-        RecoverClientPayloadTypeComponent,
+        ClientStatusTypeComponent, EvidenceTypeProviderComponent, MisbehaviourCheckerComponent,
+        OverrideCreateClientPayloadOptionsComponent, RecoverClientPayloadTypeComponent,
+        UpdateClientEventComponent,
     };
     use hermes_core::chain_type_components::traits::{
         AddressTypeProviderComponent, AmountDenomGetterComponent, AmountTypeProviderComponent,
@@ -171,10 +172,12 @@ mod preset {
                 AcknowledgementTypeProviderComponent,
                 AckCommitmentHashTypeProviderComponent,
                 PacketReceiptTypeComponent,
+                EvidenceTypeProviderComponent,
             ]:
                 ProvideCosmosChainTypes,
             [
                 CreateClientEventComponent,
+                UpdateClientEventComponent,
                 ConnectionOpenInitEventComponent,
                 ConnectionOpenTryEventComponent,
                 ChannelOpenInitEventComponent,
@@ -443,6 +446,8 @@ mod preset {
                 PacketTimeoutTimestampGetterComponent,
 
                 IbcTransferredAmountConverterComponent,
+
+                MisbehaviourCheckerComponent,
             ]:
                 UseDelegate<DelegateCosmosChainComponents>,
         }

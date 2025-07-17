@@ -5,6 +5,8 @@ pub struct CosmosCreateClientEvent {
     pub client_id: ClientId,
 }
 
+#[derive(Debug, Clone)]
 pub struct CosmosUpdateClientEvent {
-    pub header: Option<Header>,
+    pub client_id: ClientId,
+    pub header: Header,
 }

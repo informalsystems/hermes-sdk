@@ -1518,6 +1518,7 @@ dependencies = [
  "hermes-comet-light-client-components",
  "hermes-error",
  "hermes-prelude",
+ "ibc-client-tendermint",
  "tendermint",
  "tendermint-light-client",
  "tendermint-light-client-detector",
@@ -1613,6 +1614,7 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-prelude",
+ "ibc-client-tendermint",
 ]
 
 [[package]]

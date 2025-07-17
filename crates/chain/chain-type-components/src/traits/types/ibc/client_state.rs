@@ -1,3 +1,4 @@
+use core::clone::Clone;
 use core::fmt::Debug;
 
 use cgp::core::component::{UseDelegate, WithProvider};
@@ -13,7 +14,7 @@ pub trait HasClientStateType<Counterparty>: Async {
     /**
         The client state of the `Self` chain's client on the `Counterparty` chain
     */
-    type ClientState: Async + Debug;
+    type ClientState: Async + Clone + Debug;
 }
 
 pub type ClientStateOf<Chain, Counterparty> =
@@ -36,7 +37,7 @@ impl<Chain, Counterparty, Provider, ClientState> ProvideClientStateType<Chain, C
 where
     Chain: Async,
     Provider: ProvideType<Chain, ClientStateTypeComponent, Type = ClientState>,
-    ClientState: Async + Debug,
+    ClientState: Async + Clone + Debug,
 {
     type ClientState = ClientState;
 }

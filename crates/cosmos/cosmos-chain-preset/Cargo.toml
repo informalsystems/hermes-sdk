@@ -17,3 +17,4 @@ hermes-prelude                 = { workspace = true }
 hermes-core                    = { workspace = true }
 hermes-cosmos-chain-components = { workspace = true }
 hermes-cosmos-test-components  = { workspace = true }
+ibc-client-tendermint          = { workspace = true }

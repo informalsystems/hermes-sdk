@@ -1,7 +1,8 @@
-use hermes_chain_type_components::traits::{HasClientStateType, HasEventType};
+use cgp::core::component::UseDelegate;
+use hermes_chain_type_components::traits::HasEvidenceType;
 use hermes_prelude::*;
 
-use crate::traits::HasEvidenceType;
+use crate::traits::HasUpdateClientEvent;
 
 #[cgp_component {
   provider: MisbehaviourChecker,
@@ -9,11 +10,26 @@ use crate::traits::HasEvidenceType;
 }]
 #[async_trait]
 pub trait CanCheckMisbehaviour<Counterparty>:
-    HasEventType + HasClientStateType<Counterparty> + HasEvidenceType + HasAsyncErrorType
+    HasUpdateClientEvent + HasEvidenceType + HasAsyncErrorType
 {
     async fn check_misbehaviour(
         &self,
-        update_event: &Self::Event,
-        client_state: &Self::ClientState,
+        update_event: &Self::UpdateClientEvent,
     ) -> Result<Option<Self::Evidence>, Self::Error>;
+}
+
+#[cgp_provider(MisbehaviourCheckerComponent)]
+impl<Chain, Counterparty, Components> MisbehaviourChecker<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: HasUpdateClientEvent + HasEvidenceType + HasAsyncErrorType,
+    Components: DelegateComponent<Counterparty>,
+    Components::Delegate: MisbehaviourChecker<Chain, Counterparty>,
+{
+    async fn check_misbehaviour(
+        chain: &Chain,
+        update_event: &Chain::UpdateClientEvent,
+    ) -> Result<Option<Chain::Evidence>, Chain::Error> {
+        Components::Delegate::check_misbehaviour(chain, update_event).await
+    }
 }

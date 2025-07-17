@@ -1,13 +1,15 @@
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::types::WithDelegatedType;
-use hermes_chain_components::traits::{HasHeightType, HeightTypeProviderComponent};
+use hermes_chain_components::traits::{
+    EvidenceTypeProviderComponent, HasHeightType, HeightTypeProviderComponent,
+};
 use hermes_comet_light_client_components::impls::DoVerifyForward;
 use hermes_comet_light_client_components::traits::{
     CanBuildLightBlocksForUpdateClient, CanComputeNextVerificationHeight, CanDetectMisbehaviour,
     CanFetchLightBlock, CanFetchLightBlockWithStatus, CanQueryLightBlock,
     CanTraceVerificationHeight, CanUpdateVerificationStatus, CanValidateLightBlock,
-    CanVerifyTargetHeight, CanVerifyUpdateHeader, DivergenceTypeComponent,
+    CanVerifyTargetHeight, CanVerifyUpdateHeader, DivergenceTypeProviderComponent,
     GetHighestTrustedOrVerifiedBefore, HasLightBlockHeight, HasLightBlockType, HasVerdictType,
     HasVerificationStatusType, IsWithinTrustingPeriod, LightBlockFetcherComponent,
     LightBlockHeightGetterComponent, LightBlockQuerierComponent, LightBlockTypeComponent,
@@ -80,7 +82,8 @@ delegate_components! {
             HeightTypeProviderComponent,
             VerificationStatusTypeComponent,
             VerdictTypeComponent,
-            DivergenceTypeComponent,
+            DivergenceTypeProviderComponent,
+            EvidenceTypeProviderComponent,
         ]:
             WithDelegatedType<CometLightClientTypes>,
         [
