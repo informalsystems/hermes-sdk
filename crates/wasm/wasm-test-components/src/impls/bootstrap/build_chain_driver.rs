@@ -27,6 +27,7 @@ use hermes_cosmos_test_components::bootstrap::traits::{
 use hermes_cosmos_test_components::chain::types::{Amount, Denom};
 use hermes_prelude::*;
 use hermes_test_components::chain::types::{ProposalStatus, ProposalVote};
+use hermes_test_components::chain_driver::traits::CanGenerateRandomAmount;
 use hermes_wasm_chain_components::traits::{CanInstantiateWasmContract, CanUploadWasmContract};
 use ibc::primitives::Signer;
 
@@ -69,7 +70,10 @@ where
         + CanBuildVoteProposalMessage
         + CanSendMessagesWithSigner
         + HasAddressType<Address = String>,
-    ChainDriver: HasChain<Chain = Chain> + HasWallet<ValidatorWallet> + HasDenom<StakingDenom>,
+    ChainDriver: HasChain<Chain = Chain>
+        + HasWallet<ValidatorWallet>
+        + HasDenom<StakingDenom>
+        + CanGenerateRandomAmount,
     InBuilder: ChainDriverBuilder<Bootstrap>,
 {
     async fn build_chain_driver(
@@ -93,6 +97,8 @@ where
         let validator_wallet = chain_driver.wallet(PhantomData::<ValidatorWallet>);
 
         let staking_denom = chain_driver.denom(PhantomData::<StakingDenom>);
+
+        let instantiate_amount = chain_driver.fixed_amount(11000000, staking_denom).await;
 
         let proposal_id = chain
             .upload_wasm_client_code(
@@ -181,7 +187,7 @@ where
                     bootstrap.governance_proposal_authority(),
                     b"{}",
                     code_id,
-                    staking_denom,
+                    &instantiate_amount,
                 )
                 .await
                 .map_err(Bootstrap::raise_error)?;

@@ -1,7 +1,8 @@
 use std::sync::Arc;
 
 use hermes_core::chain_components::traits::{
-    CanSendSingleMessage, HasAddressType, HasDenomType, HasMessageType,
+    CanSendSingleMessage, HasAddressType, HasAmountDenom, HasAmountQuantity, HasAmountType,
+    HasMessageType,
 };
 use hermes_cosmos_chain_components::impls::MsgInstantiateContract;
 use hermes_cosmos_chain_components::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
@@ -30,7 +31,9 @@ pub struct InstantiateWasmContracts;
 impl<Chain> WasmContractInstantiator<Chain> for InstantiateWasmContracts
 where
     Chain: HasAddressType<Address = String>
-        + HasDenomType
+        + HasAmountType
+        + HasAmountDenom
+        + HasAmountQuantity
         + CanSendSingleMessage<MessageResponse = Vec<Arc<AbciEvent>>>
         + HasMessageType<Message = CosmosMessage>
         + CanRaiseAsyncError<String>,
@@ -41,12 +44,11 @@ where
         admin: &Chain::Address,
         msg: &[u8],
         code_id: u64,
-        funds_denom: &Chain::Denom,
+        funds_amount: &Chain::Amount,
     ) -> Result<Chain::Address, Chain::Error> {
-        // TODO: Use meaningful value instead of hardcoded value
         let fund = Coin {
-            denom: funds_denom.to_string(),
-            amount: "1000000".to_string(),
+            denom: Chain::amount_denom(funds_amount).to_string(),
+            amount: Chain::amount_quantity(funds_amount).to_string(),
         };
 
         let message = InstantiateMessage {
