@@ -11,11 +11,11 @@ use hermes_cosmos_core::chain_components::types::DynamicGasConfig;
 use hermes_cosmos_core::test_components::bootstrap::components::CosmosSdkBootstrapComponents;
 use hermes_cosmos_core::test_components::bootstrap::impls::{
     BuildAndWaitChainDriver, GenerateStandardWalletConfig, NoModifyCometConfig,
-    NoModifyCosmosSdkConfig, NoModifyGenesisConfig,
+    NoModifyCosmosSdkConfig, NoModifyGenesisConfig, StartCosmosChain,
 };
 use hermes_cosmos_core::test_components::bootstrap::traits::{
     AccountPrefixGetterComponent, ChainCommandPathGetterComponent, ChainDriverBuilderComponent,
-    ChainStoreDirGetterComponent, CometConfigModifierComponent,
+    ChainFullNodeStarterComponent, ChainStoreDirGetterComponent, CometConfigModifierComponent,
     CosmosGenesisConfigModifierComponent, CosmosSdkConfigModifierComponent, DenomForStaking,
     DenomForTransfer, DenomPrefixGetterComponent, DynamicGasGetterComponent,
     RandomIdFlagGetterComponent, WalletConfigGeneratorComponent,
@@ -25,7 +25,8 @@ use hermes_cosmos_core::wasm_test_components::impls::bootstrap::{
     BuildChainDriverAndInitWasmClient, ModifyWasmGenesisConfig, ModifyWasmNodeConfig,
 };
 use hermes_cosmos_core::wasm_test_components::traits::bootstrap::{
-    GovernanceProposalAuthorityGetterComponent, WasmClientByteCodeGetterComponent,
+    GovernanceProposalAuthorityGetterComponent, WasmAdditionalByteCodeGetterComponent,
+    WasmClientByteCodeGetterComponent,
 };
 use hermes_cosmos_integration_tests::contexts::CosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::{
@@ -57,6 +58,7 @@ pub struct CosmosWithWasmClientBootstrap {
     pub staking_denom_prefix: String,
     pub transfer_denom_prefix: String,
     pub wasm_client_byte_code: Vec<u8>,
+    pub wasm_additional_byte_code: Vec<Vec<u8>>,
     pub governance_proposal_authority: String,
     pub dynamic_gas: Option<DynamicGasConfig>,
 }
@@ -94,6 +96,8 @@ delegate_components! {
             UseField<symbol!("cosmos_builder")>,
         WasmClientByteCodeGetterComponent:
             UseField<symbol!("wasm_client_byte_code")>,
+        WasmAdditionalByteCodeGetterComponent:
+            UseField<symbol!("wasm_additional_byte_code")>,
         GovernanceProposalAuthorityGetterComponent:
             UseField<symbol!("governance_proposal_authority")>,
         CompatModeGetterComponent:
@@ -110,5 +114,6 @@ delegate_components! {
             ModifyWasmGenesisConfig<NoModifyGenesisConfig>,
         CometConfigModifierComponent:
             ModifyWasmNodeConfig<NoModifyCometConfig>,
+        ChainFullNodeStarterComponent: StartCosmosChain,
     }
 }

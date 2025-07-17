@@ -5,8 +5,7 @@ use core::time::Duration;
 use cgp::core::field::Index;
 use hermes_chain_components::traits::{
     CanBuildCreateClientMessage, CanBuildCreateClientPayload, CanBuildUpdateClientMessage,
-    CanBuildUpdateClientPayload, CanExtractFromMessageResponse,
-    CanOverrideCreateClientPayloadOptions, CanQueryChainHeight,
+    CanBuildUpdateClientPayload, CanExtractFromMessageResponse, CanQueryChainHeight,
     CanQueryClientStateWithLatestHeight, CanQueryClientStatus, CanRecoverClient, CanSendMessages,
     CanSendSingleMessage, HasClientStateFields, HasClientStatusMethods, HasCreateClientEvent,
 };
@@ -36,40 +35,7 @@ where
 
         let chain_b = driver.chain_b();
 
-        let create_client_payload_options_b_to_a = driver.create_client_payload_options_b_to_a();
-
-        let subject_create_client_payload_options_b_to_a =
-            Driver::ChainB::override_create_client_payload_options(
-                create_client_payload_options_b_to_a,
-                Duration::from_secs(40),
-            );
-
-        let subject_client_payload = chain_b
-            .build_create_client_payload(&subject_create_client_payload_options_b_to_a)
-            .await
-            .map_err(Driver::raise_error)?;
-
-        let create_client_message_options_b_to_a = driver.create_client_message_options_a_to_b();
-
-        let message = chain_a
-            .build_create_client_message(
-                create_client_message_options_b_to_a,
-                subject_client_payload,
-            )
-            .await
-            .map_err(Driver::raise_error)?;
-
-        let response = chain_a
-            .send_message(message)
-            .await
-            .map_err(Driver::raise_error)?;
-
-        let create_client_event = chain_a
-            .try_extract_from_message_response(PhantomData, &response)
-            .ok_or_else(|| format!("failed to extract client ID from response: {response:?}"))
-            .map_err(Driver::raise_error)?;
-
-        let subject_client_id = Driver::ChainA::create_client_event_client_id(&create_client_event);
+        let subject_client_id = driver.client_id_a();
 
         let latest_height_b = chain_b
             .query_chain_height()
@@ -114,6 +80,8 @@ where
             Driver::ChainB::client_status_is_expired(&subject_client_status),
             "expected subject client to be expired before recover process"
         );
+
+        let create_client_message_options_b_to_a = driver.create_client_message_options_a_to_b();
 
         let substituate_create_client_payload_options_b_to_a =
             driver.create_client_payload_options_b_to_a();

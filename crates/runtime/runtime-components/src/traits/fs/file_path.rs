@@ -1,4 +1,5 @@
 use alloc::string::String;
+use core::fmt::Debug;
 
 use hermes_prelude::*;
 
@@ -8,7 +9,7 @@ use hermes_prelude::*;
   context: Runtime,
 }]
 pub trait HasFilePathType: Async {
-    type FilePath: Async;
+    type FilePath: Async + Debug;
 
     fn file_path_from_string(path: &str) -> Self::FilePath;
 

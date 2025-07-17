@@ -1,28 +1,26 @@
 [package]
-name = "hermes-cosmos-integration-tests"
-version = { workspace = true }
-edition = { workspace = true }
-license = { workspace = true }
-keywords = { workspace = true }
-repository = { workspace = true }
-authors = { workspace = true }
+name         = "hermes-cosmos-integration-tests"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
 rust-version = { workspace = true }
-description = """
-    Implementation of an IBC Relayer in Rust, as a library
-"""
+description  = "Implementation of an IBC Relayer in Rust, as a library"
 
 [features]
-ibc-go-v8 = []
+ibc-go-v8 = [  ]
 
 [dependencies]
-cgp                               = { workspace = true }
-hermes-prelude                    = { workspace = true }
-hermes-error                      = { workspace = true }
-hermes-runtime                    = { workspace = true }
-hermes-core                       = { workspace = true }
-hermes-cosmos-core                = { workspace = true }
-hermes-cosmos-relayer             = { workspace = true }
-hermes-ibc-test-suite             = { workspace = true }
+cgp                   = { workspace = true }
+hermes-prelude        = { workspace = true }
+hermes-error          = { workspace = true }
+hermes-runtime        = { workspace = true }
+hermes-core           = { workspace = true }
+hermes-cosmos-core    = { workspace = true }
+hermes-cosmos-relayer = { workspace = true }
+hermes-ibc-test-suite = { workspace = true }
 
 ibc            = { workspace = true }
 ibc-proto      = { workspace = true }

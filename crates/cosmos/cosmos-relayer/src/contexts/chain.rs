@@ -64,11 +64,14 @@ use hermes_cosmos_core::chain_components::types::{
     CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent, CosmosCommitmentProof,
     CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent, CosmosCreateClientEvent,
     CosmosCreateClientOptions, CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig,
-    PacketFilterConfig, Secp256k1KeyPair, TendermintClientState,
+    PacketFilterConfig, Secp256k1KeyPair, TendermintClientState, WasmAccessTypeProviderComponent,
 };
 use hermes_cosmos_core::chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_core::chain_preset::presets::{CosmosChainPreset, CosmosToCosmosComponents};
 use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
+use hermes_cosmos_core::wasm_chain_components::traits::{
+    WasmContractInstantiatorComponent, WasmContractUploaderComponent,
+};
 use hermes_cosmos_core::wasm_test_components::components::WasmChainComponents;
 use hermes_cosmos_core::wasm_test_components::traits::chain::{
     StoreCodeMessageBuilderComponent, WasmClientCodeUploaderComponent,
@@ -137,6 +140,9 @@ delegate_components! {
         [
             StoreCodeMessageBuilderComponent,
             WasmClientCodeUploaderComponent,
+            WasmContractUploaderComponent,
+            WasmContractInstantiatorComponent,
+            WasmAccessTypeProviderComponent,
         ]:
             WasmChainComponents,
 
@@ -286,6 +292,9 @@ check_components! {
         MessageResponseEventsGetterComponent,
 
         WasmClientCodeUploaderComponent,
+        WasmContractUploaderComponent,
+        WasmContractInstantiatorComponent,
+        WasmAccessTypeProviderComponent,
         EventualAmountAsserterComponent,
 
         [
