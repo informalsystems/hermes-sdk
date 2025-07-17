@@ -1,7 +1,8 @@
 use core::marker::PhantomData;
 
 use hermes_chain_components::traits::{
-    CanBuildPacketFromSendPacket, CanExtractFromEvent, CanQueryChainHeight,
+    CanBuildPacketFromSendPacket, CanCheckMisbehaviour, CanExtractFromEvent, CanQueryChainHeight,
+    HasUpdateClientEvent,
 };
 use hermes_logging_components::traits::CanLog;
 use hermes_prelude::*;
@@ -46,8 +47,11 @@ where
         + CanRaiseRelayChainErrors,
     SrcChain: HasErrorType
         + HasSendPacketEvent<Relay::DstChain>
+        + HasUpdateClientEvent
         + CanExtractFromEvent<SrcChain::SendPacketEvent>
-        + CanBuildPacketFromSendPacket<Relay::DstChain>,
+        + CanExtractFromEvent<SrcChain::UpdateClientEvent>
+        + CanBuildPacketFromSendPacket<Relay::DstChain>
+        + CanCheckMisbehaviour<Relay::DstChain>,
     MatchPacketDestinationChain: RelayPacketFilter<Relay>,
 {
     async fn relay_chain_event(
@@ -56,7 +60,9 @@ where
     ) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
 
-        if let Some(send_packet_event) = src_chain.try_extract_from_event(PhantomData, event) {
+        if let Some(send_packet_event) =
+            src_chain.try_extract_from_event(PhantomData::<SrcChain::SendPacketEvent>, event)
+        {
             let packet = src_chain
                 .build_packet_from_send_packet_event(&send_packet_event)
                 .await
@@ -65,6 +71,13 @@ where
             if MatchPacketDestinationChain::should_relay_packet(relay, &packet).await? {
                 relay.relay_packet(&packet).await?;
             }
+        } else if let Some(upgrade_event) =
+            src_chain.try_extract_from_event(PhantomData::<SrcChain::UpdateClientEvent>, event)
+        {
+            let _maybe_misbehaviour = src_chain
+                .check_misbehaviour(&upgrade_event)
+                .await
+                .map_err(Relay::raise_error)?;
         }
 
         Ok(())

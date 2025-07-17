@@ -15,15 +15,15 @@ description = """
 all-features = true
 
 [dependencies]
-cgp                                 = { workspace = true }
-hermes-prelude                      = { workspace = true }
-hermes-cosmos-core                  = { workspace = true }
-hermes-error                        = { workspace = true }
-hermes-runtime                      = { workspace = true }
-hermes-core                         = { workspace = true }
-hermes-cosmos-integration-tests     = { workspace = true }
-hermes-cosmos-relayer               = { workspace = true }
-hermes-any-counterparty             = { workspace = true }
+cgp                             = { workspace = true }
+hermes-prelude                  = { workspace = true }
+hermes-cosmos-core              = { workspace = true }
+hermes-error                    = { workspace = true }
+hermes-runtime                  = { workspace = true }
+hermes-core                     = { workspace = true }
+hermes-cosmos-integration-tests = { workspace = true }
+hermes-cosmos-relayer           = { workspace = true }
+hermes-any-counterparty         = { workspace = true }
 
 ibc = { workspace = true }
 ibc-proto = { workspace = true }

@@ -25,6 +25,7 @@ ibc = { workspace = true }
 ibc-proto = { workspace = true, features = [ "client", "transport" ] }
 ibc-client-tendermint = { workspace = true }
 tendermint = { workspace = true, features = [ "secp256k1" ] }
+tendermint-light-client-verifier = { workspace = true }
 tendermint-proto = { workspace = true }
 tendermint-rpc = { workspace = true, features = [
   "http-client",

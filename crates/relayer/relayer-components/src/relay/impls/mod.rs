@@ -16,6 +16,9 @@ pub use event_relayers::*;
 mod message_senders;
 pub use message_senders::*;
 
+mod misbehaviour;
+pub use misbehaviour::*;
+
 mod packet_filters;
 pub use packet_filters::*;
 

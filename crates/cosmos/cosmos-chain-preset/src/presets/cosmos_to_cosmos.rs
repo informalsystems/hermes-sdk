@@ -2,7 +2,7 @@
 mod preset {
     use hermes_core::chain_components::traits::{
         ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
-        ClientStatusTypeComponent, RecoverClientPayloadTypeComponent,
+        ClientStatusTypeComponent, MisbehaviourCheckerComponent, RecoverClientPayloadTypeComponent,
     };
     use hermes_core::relayer_components::chain::impls::{
         QueryAndConvertRawClientState, QueryAndConvertRawConsensusState,
@@ -32,7 +32,7 @@ mod preset {
         BuildAnyCreateClientMessage, BuildCosmosChannelHandshakeMessage,
         BuildCosmosConnectionHandshakeMessage, BuildCosmosCreateClientPayload,
         BuildCosmosPacketMessages, BuildCosmosUpdateClientMessage,
-        BuildTendermintUpdateClientPayload, CosmosPacketFieldReader,
+        BuildTendermintUpdateClientPayload, CheckTendermintMisbehaviour, CosmosPacketFieldReader,
         GetCosmosCounterpartyMessageHeight, ProvideCosmosCreateClientSettings,
         ProvideCosmosPayloadTypes, ProvideNoCreateClientMessageOptionsType,
         ProvideTendermintClientState, ProvideTendermintClientStatus,
@@ -129,6 +129,8 @@ mod preset {
 
             IbcTransferredAmountConverterComponent:
                 ConvertCosmosIbcAmount,
+
+            MisbehaviourCheckerComponent: CheckTendermintMisbehaviour,
         }
     }
 }
