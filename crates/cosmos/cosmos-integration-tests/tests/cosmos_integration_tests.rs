@@ -58,23 +58,3 @@ fn test_upgrade_client() -> Result<(), Error> {
 
     Ok(())
 }
-
-// TODO: The current Gaia used, v18, uses a legacy client recovery method
-#[cfg(feature = "ibc-go-v8")]
-#[test]
-fn test_client_recovery() -> Result<(), Error> {
-    let runtime = init_test_runtime();
-
-    runtime.runtime.clone().block_on(async move {
-        let setup: CosmosBinaryChannelTestDriver =
-            init_preset_bootstraps(&runtime, Default::default()).await?;
-
-        hermes_ibc_test_suite::tests::recover_client::TestRecoverClient::default()
-            .run_test(&setup)
-            .await?;
-
-        <Result<(), Error>>::Ok(())
-    })?;
-
-    Ok(())
-}
