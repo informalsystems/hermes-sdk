@@ -2,6 +2,7 @@ use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use hermes_any_counterparty::contexts::AnyCounterparty;
+use hermes_core::chain_components::traits::BlockTimeQuerierComponent;
 use hermes_core::encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
     HasDefaultEncoding,
@@ -119,6 +120,8 @@ delegate_components! {
             UseField<symbol!("key_entry")>,
         ChainIdGetterComponent:
             UseField<symbol!("chain_id")>,
+        BlockTimeQuerierComponent:
+            UseField<symbol!("block_time")>,
     }
 }
 

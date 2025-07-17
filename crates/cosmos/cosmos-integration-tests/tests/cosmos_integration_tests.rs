@@ -38,3 +38,23 @@ fn test_packet_clearing() -> Result<(), Error> {
 
     Ok(())
 }
+
+// TODO: The current Gaia used, v18, uses a legacy proposals
+#[cfg(feature = "ibc-go-v8")]
+#[test]
+fn test_upgrade_client() -> Result<(), Error> {
+    let runtime = init_test_runtime();
+
+    runtime.runtime.clone().block_on(async move {
+        let setup: CosmosBinaryChannelTestDriver =
+            init_preset_bootstraps(&runtime, Default::default()).await?;
+
+        hermes_ibc_test_suite::tests::upgrade_client::TestUpgradeClient::default()
+            .run_test(&setup)
+            .await?;
+
+        <Result<(), Error>>::Ok(())
+    })?;
+
+    Ok(())
+}

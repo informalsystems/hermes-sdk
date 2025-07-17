@@ -3,9 +3,10 @@ mod preset {
     use cgp::core::component::UseDelegate;
     use hermes_core::chain_components::traits::{
         AmountQuantityGetterComponent, ClientRecoveryComponent, ClientStatusMethodsComponent,
-        ClientStatusQuerierComponent, ClientStatusTypeComponent,
-        OverrideCreateClientPayloadOptionsComponent, QuantityTypeComponent,
-        RecoverClientPayloadTypeComponent,
+        ClientStatusQuerierComponent, ClientStatusTypeComponent, ClientUpgradeComponent,
+        ClientUpgradePayloadBuilderComponent, OverrideCreateClientPayloadOptionsComponent,
+        QuantityTypeComponent, RecoverClientPayloadTypeComponent,
+        UpgradeClientPayloadTypeComponent,
     };
     use hermes_core::chain_type_components::traits::{
         AddressTypeProviderComponent, AmountDenomGetterComponent, AmountTypeProviderComponent,
@@ -401,6 +402,7 @@ mod preset {
                 UpdateClientPayloadTypeComponent,
                 CreateClientPayloadOptionsTypeComponent,
                 RecoverClientPayloadTypeComponent,
+                UpgradeClientPayloadTypeComponent,
 
                 ConsensusStateHeightsQuerierComponent,
                 CounterpartyMessageHeightGetterComponent,
@@ -414,6 +416,8 @@ mod preset {
                 UpdateClientPayloadBuilderComponent,
 
                 ClientRecoveryComponent,
+                ClientUpgradeComponent,
+                ClientUpgradePayloadBuilderComponent,
 
                 ClientStateQuerierComponent,
                 ClientStateWithProofsQuerierComponent,

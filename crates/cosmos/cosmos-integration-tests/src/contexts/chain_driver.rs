@@ -13,8 +13,10 @@ use hermes_core::test_components::chain_driver::traits::{
     ChainGetter, ChainGetterComponent, ChainHomeDirGetter, ChainHomeDirGetterComponent,
     ChainProcessTaker, ChainProcessTakerComponent, ChainStartupWaiterComponent, ChainTypeProvider,
     ChainTypeProviderComponent, ConfigUpdater, ConfigUpdaterComponent, DenomGetter,
-    DenomGetterComponent, RandomAmountGeneratorComponent, RelayerWallet, StakingDenom,
-    TransferDenom, UserWallet, ValidatorWallet, WalletGetterComponent, WalletsGetterComponent,
+    DenomGetterComponent, RandomAmountGeneratorComponent, RelayerWallet,
+    SetupUpgradeClientTestResultTypeProvider, SetupUpgradeClientTestResultTypeProviderComponent,
+    StakingDenom, TransferDenom, UserWallet, ValidatorWallet, WalletGetterComponent,
+    WalletsGetterComponent,
 };
 use hermes_cosmos_core::chain_components::impls::RelayerConfig;
 use hermes_cosmos_core::test_components::bootstrap::traits::{
@@ -25,6 +27,7 @@ use hermes_cosmos_core::test_components::bootstrap::types::{
 };
 use hermes_cosmos_core::test_components::chain::types::{CosmosTestWallet, Denom};
 use hermes_cosmos_core::test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
+use hermes_cosmos_core::test_components::chain_driver::impls::CosmosProposalSetupClientUpgradeResult;
 use hermes_cosmos_core::test_components::chain_driver::traits::{
     GrpcPortGetter, GrpcPortGetterComponent, RpcPortGetter, RpcPortGetterComponent,
 };
@@ -80,6 +83,11 @@ delegate_components! {
         WalletGetterComponent<UserWallet<1>>:
             UseField<symbol!("user_wallet_b")>,
     }
+}
+
+#[cgp_provider(SetupUpgradeClientTestResultTypeProviderComponent)]
+impl SetupUpgradeClientTestResultTypeProvider<CosmosChainDriver> for CosmosChainDriverComponents {
+    type SetupUpgradeClientTestResult = CosmosProposalSetupClientUpgradeResult;
 }
 
 #[cgp_provider(ChainTypeProviderComponent)]

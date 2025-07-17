@@ -6,7 +6,8 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWr
 use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::AnyCounterparty;
 use hermes_core::chain_components::traits::{
-    ClientRecoveryComponent, ClientStatusQuerierComponent, HasRecoverClientPayloadType,
+    ClientRecoveryComponent, ClientStatusQuerierComponent, ClientUpgradeComponent,
+    ClientUpgradePayloadBuilderComponent, HasRecoverClientPayloadType,
 };
 use hermes_core::chain_type_components::traits::{
     ChainIdGetterComponent, HasEventType, HasMessageResponseType,
@@ -323,6 +324,8 @@ check_components! {
             UpdateClientMessageBuilderComponent,
             UpdateClientPayloadBuilderComponent,
             ClientRecoveryComponent,
+            ClientUpgradeComponent,
+            ClientUpgradePayloadBuilderComponent,
             IbcTokenTransferMessageBuilderComponent,
 
             IncomingPacketFilterComponent,

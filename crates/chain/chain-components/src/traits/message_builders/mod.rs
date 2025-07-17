@@ -20,3 +20,5 @@ pub use timeout_unordered_packet::*;
 
 mod update_client;
 pub use update_client::*;
+
+mod upgrade_client;
