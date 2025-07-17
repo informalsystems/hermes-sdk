@@ -14,10 +14,11 @@ use hermes_cosmos_core::chain_components::types::DynamicGasConfig;
 use hermes_cosmos_core::test_components::bootstrap::components::CosmosSdkBootstrapComponents;
 use hermes_cosmos_core::test_components::bootstrap::impls::{
     BuildAndWaitChainDriver, GenerateStandardWalletConfig, NoModifyCosmosSdkConfig,
+    StartCosmosChain,
 };
 use hermes_cosmos_core::test_components::bootstrap::traits::{
     AccountPrefixGetterComponent, ChainCommandPathGetterComponent, ChainDriverBuilderComponent,
-    ChainStoreDirGetterComponent, CometConfigModifierComponent,
+    ChainFullNodeStarterComponent, ChainStoreDirGetterComponent, CometConfigModifierComponent,
     CosmosGenesisConfigModifierComponent, CosmosSdkConfigModifierComponent, DenomForStaking,
     DenomForTransfer, DenomPrefixGetterComponent, DynamicGasGetterComponent,
     RandomIdFlagGetterComponent, WalletConfigGeneratorComponent,
@@ -122,6 +123,7 @@ delegate_components! {
             BuildCosmosChainWithNodeConfig,
         ChainDriverBuilderComponent:
             BuildAndWaitChainDriver<BuildCosmosChainDriver>,
+        ChainFullNodeStarterComponent: StartCosmosChain,
     }
 }
 
