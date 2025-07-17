@@ -8,7 +8,6 @@ use hermes_cosmos_chain_components::types::{AbciEvent, HasWasmAccessType};
 use hermes_prelude::*;
 use ibc::primitives::proto::Any;
 use ibc::primitives::Signer;
-use prost::Message;
 
 use crate::traits::{WasmContractUploader, WasmContractUploaderComponent};
 
@@ -82,9 +81,6 @@ impl DynCosmosMessage for StoreCodeMessage {
             instantiate_permission: Some(self.instantiate_permission.clone().into()),
         };
 
-        Any {
-            type_url: "/cosmwasm.wasm.v1.MsgStoreCode".into(),
-            value: store_code_message.encode_to_vec(),
-        }
+        Any::from_msg(&store_code_message).expect("Failed to convert `MsgStoreCode` to `Any`")
     }
 }
