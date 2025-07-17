@@ -1,15 +1,13 @@
 [package]
-name = "hermes-cosmos-core"
-version = { workspace = true }
-edition = { workspace = true }
-license = { workspace = true }
-keywords = { workspace = true }
-repository = { workspace = true }
-authors = { workspace = true }
+name         = "hermes-cosmos-core"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
 rust-version = { workspace = true }
-description = """
-    Implementation of an IBC Relayer in Rust, as a library
-"""
+description  = "Implementation of an IBC Relayer in Rust, as a library"
 
 [dependencies]
 hermes-core                          = { workspace = true }
@@ -22,6 +20,7 @@ hermes-tracing-logging-components    = { workspace = true }
 hermes-wasm-client-components        = { workspace = true }
 hermes-wasm-encoding-components      = { workspace = true }
 hermes-wasm-test-components          = { workspace = true }
+hermes-wasm-chain-components         = { workspace = true }
 hermes-comet-light-client-components = { workspace = true }
 
 ibc              = { workspace = true }

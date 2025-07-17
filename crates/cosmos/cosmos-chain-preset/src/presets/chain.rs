@@ -2,8 +2,9 @@
 mod preset {
     use cgp::core::component::UseDelegate;
     use hermes_core::chain_components::traits::{
-        ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
-        ClientStatusTypeComponent, OverrideCreateClientPayloadOptionsComponent,
+        AmountQuantityGetterComponent, ClientRecoveryComponent, ClientStatusMethodsComponent,
+        ClientStatusQuerierComponent, ClientStatusTypeComponent,
+        OverrideCreateClientPayloadOptionsComponent, QuantityTypeComponent,
         RecoverClientPayloadTypeComponent,
     };
     use hermes_core::chain_type_components::traits::{
@@ -128,8 +129,8 @@ mod preset {
     use hermes_cosmos_test_components::chain::impls::{
         BuildCosmosChainIdFromString, BuildCosmosIbcTransferMessage, BuildDepositProposalMessage,
         BuildVoteProposalMessage, IbcTransferTimeoutAfterSeconds, PollProposalStatus,
-        ProvideCosmosProposalTypes, ProvideCosmosTestWallet, ProvideIbcDenom, QueryCosmosBalance,
-        QueryProposalStatusWithGrpc, UseCosmosAmount,
+        ProvideCosmosProposalTypes, ProvideCosmosTestWallet, ProvideIbcDenom, ProvideIbcQuantity,
+        QueryCosmosBalance, QueryProposalStatusWithGrpc, UseCosmosAmount,
     };
     use hermes_prelude::*;
 
@@ -348,6 +349,7 @@ mod preset {
             [
                 AmountTypeProviderComponent,
                 AmountDenomGetterComponent,
+                AmountQuantityGetterComponent,
                 AmountMethodsComponent,
             ]:
                 UseCosmosAmount,
@@ -359,6 +361,8 @@ mod preset {
                 ProvideCosmosProposalTypes,
             DenomTypeComponent:
                 ProvideIbcDenom,
+            QuantityTypeComponent:
+                ProvideIbcQuantity,
             AddressTypeProviderComponent:
                 UseType<String>,
             MemoTypeProviderComponent:
