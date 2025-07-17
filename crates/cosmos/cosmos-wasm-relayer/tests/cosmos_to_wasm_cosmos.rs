@@ -67,15 +67,10 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
         };
 
         let wasm_additional_byte_code = match var("ADDITIONAL_WASM_FILE_PATH") {
-            Ok(paths_str) => {
-                let paths: Vec<PathBuf> = paths_str.split(',').map(PathBuf::from).collect();
-
-                let mut byte_code = Vec::with_capacity(paths.len());
-                for path in paths {
-                    byte_code.push(tokio::fs::read(path).await?);
-                }
-                byte_code
-            }
+            Ok(paths_str) => paths_str
+                .split(',')
+                .map(|s| std::fs::read(PathBuf::from(s)))
+                .collect::<Result<Vec<_>, _>>()?,
             Err(_) => vec![],
         };
 
