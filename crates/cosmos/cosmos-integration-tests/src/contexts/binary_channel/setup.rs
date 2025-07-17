@@ -1,3 +1,6 @@
+use core::time::Duration;
+use std::env::var;
+
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::core::field::{Index, UseField, WithField};
 use hermes_core::relayer_components::multi::traits::birelay_at::BiRelayTypeProviderAtComponent;
@@ -49,11 +52,23 @@ impl<BootstrapA, BootstrapB> CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
         bootstrap_b: BootstrapB,
         builder: CosmosBuilder,
     ) -> Self {
+        let create_client_payload_options =
+            if let Ok(raw_trusting_period) = var("NEW_TRUSTING_PERIOD") {
+                let new_trusting_period = raw_trusting_period
+                    .parse::<u64>()
+                    .expect("NEW_TRUSTING_PERIOD should be set to a u64 value");
+                CosmosCreateClientOptions {
+                    trusting_period: Duration::from_secs(new_trusting_period),
+                    ..Default::default()
+                }
+            } else {
+                Default::default()
+            };
         Self {
             bootstrap_a,
             bootstrap_b,
             builder,
-            create_client_payload_options: Default::default(),
+            create_client_payload_options,
             create_client_message_options: Default::default(),
             init_connection_options: Default::default(),
             init_channel_options: Default::default(),
