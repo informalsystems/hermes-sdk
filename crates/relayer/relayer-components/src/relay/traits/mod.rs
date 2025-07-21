@@ -22,9 +22,6 @@ pub use event_relayer::*;
 mod ibc_message_sender;
 pub use ibc_message_sender::*;
 
-mod misbehaviour;
-pub use misbehaviour::*;
-
 mod packet_filter;
 pub use packet_filter::*;
 

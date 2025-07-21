@@ -2,7 +2,8 @@
 mod preset {
     use hermes_core::chain_components::traits::{
         ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
-        ClientStatusTypeComponent, MisbehaviourCheckerComponent, RecoverClientPayloadTypeComponent,
+        ClientStatusTypeComponent, MisbehaviourCheckerComponent,
+        MisbehaviourMessageBuilderComponent, RecoverClientPayloadTypeComponent,
     };
     use hermes_core::relayer_components::chain::impls::{
         QueryAndConvertRawClientState, QueryAndConvertRawConsensusState,
@@ -38,6 +39,7 @@ mod preset {
         ProvideTendermintClientState, ProvideTendermintClientStatus,
         ProvideTendermintConsensusState, QueryConsensusStateHeightsFromGrpc,
         QueryCosmosClientStatus, RecoverClientWithGovernanceProposal,
+        TendermintMisbehaviourMessageBuilder,
     };
     use hermes_cosmos_test_components::chain::impls::ConvertCosmosIbcAmount;
     use hermes_prelude::*;
@@ -131,6 +133,7 @@ mod preset {
                 ConvertCosmosIbcAmount,
 
             MisbehaviourCheckerComponent: CheckTendermintMisbehaviour,
+            MisbehaviourMessageBuilderComponent: TendermintMisbehaviourMessageBuilder,
         }
     }
 }

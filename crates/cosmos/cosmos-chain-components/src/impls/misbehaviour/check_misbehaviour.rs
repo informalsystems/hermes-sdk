@@ -1,5 +1,6 @@
-use core::marker::PhantomData;
+//use core::marker::PhantomData;
 
+use cgp::extra::runtime::HasRuntime;
 use hermes_comet_light_client_components::traits::{CanDetectMisbehaviour, CanFetchLightBlock};
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use hermes_core::chain_components::traits::{
@@ -7,7 +8,8 @@ use hermes_core::chain_components::traits::{
     HasEvidenceType, HasUpdateClientEvent, MisbehaviourChecker, MisbehaviourCheckerComponent,
 };
 use hermes_core::logging_components::traits::CanLog;
-use hermes_core::logging_components::types::{LevelDebug, LevelError, LevelWarn};
+use hermes_core::logging_components::types::LevelDebug;
+use hermes_core::runtime_components::traits::CanSleep;
 use hermes_error::HermesError;
 use hermes_prelude::*;
 use ibc::core::client::types::Height;
@@ -28,38 +30,36 @@ pub struct CheckTendermintMisbehaviour;
 #[cgp_provider(MisbehaviourCheckerComponent)]
 impl<Chain, Counterparty> MisbehaviourChecker<Chain, Counterparty> for CheckTendermintMisbehaviour
 where
-    Chain: HasEvidenceType<Evidence = Misbehaviour>
-        + HasUpdateClientEvent
+    Chain: HasUpdateClientEvent
         + HasRpcClient
+        + HasRuntime
         + HasChainId
         + CanQueryClientState<Counterparty, ClientId = ClientId>
         + CanQueryChainHeight<Height = Height>
-        + HasUpdateClientEvent<UpdateClientEvent = CosmosUpdateClientEvent>
         + CanExtractFromEvent<Chain::UpdateClientEvent>
+        + HasClientStateType<Counterparty>
         + CanLog<LevelDebug>
-        + CanLog<LevelWarn>
-        + CanLog<LevelError>
         + CanRaiseAsyncError<TendermintError>
         + CanRaiseAsyncError<TendermintRpcError>
         + CanRaiseAsyncError<TendermintClientError>
         + CanRaiseAsyncError<HermesError>
         + CanRaiseAsyncError<String>,
-    Counterparty: HasClientStateType<Chain>,
-    TendermintClientState: From<Counterparty::ClientState>,
+    Counterparty: HasEvidenceType<Evidence = Misbehaviour>
+        + HasUpdateClientEvent<UpdateClientEvent = CosmosUpdateClientEvent>,
+    TendermintClientState: From<Chain::ClientState>,
+    Chain::Runtime: CanSleep,
 {
     async fn check_misbehaviour(
         chain: &Chain,
-        update_client_event: &Chain::UpdateClientEvent,
-    ) -> Result<Option<Chain::Evidence>, Chain::Error> {
+        update_client_event: &Counterparty::UpdateClientEvent,
+        client_state: &Chain::ClientState,
+    ) -> Result<Option<Counterparty::Evidence>, Chain::Error> {
         let raw_trusted_height = update_client_event.header.trusted_height.unwrap();
         let trusted_height = Height::try_from(raw_trusted_height).unwrap();
         let tm_trusted_height = TendermintHeight::try_from(trusted_height.revision_height())
             .map_err(Chain::raise_error)?;
-        let client_state = chain
-            .query_client_state(PhantomData, &update_client_event.client_id, &trusted_height)
-            .await?;
 
-        let tm_client_state = TendermintClientState::from(client_state);
+        let tm_client_state = TendermintClientState::from(client_state.clone());
 
         let update_header = update_client_event.header.clone();
 
@@ -132,6 +132,12 @@ where
             .try_into()
             .unwrap();
 
+        // Required to avoid bad witness error
+        chain
+            .runtime()
+            .sleep(core::time::Duration::from_secs(5))
+            .await;
+
         if trusted_block.validators.hash() != event_trusted_validator_set.hash() {
             return Err(Chain::raise_error(format!(
                 "mismatch between the trusted validator set of the update \
@@ -149,6 +155,12 @@ where
 
         match maybe_divergence {
             Some(divergence) => {
+                chain
+                    .log(
+                        "Found divergence while checking for misbehaviour",
+                        &LevelDebug,
+                    )
+                    .await;
                 let supporting = divergence
                     .evidence
                     .witness_trace
@@ -229,7 +241,15 @@ where
                     }),
                 }))
             }
-            None => Ok(None),
+            None => {
+                chain
+                    .log(
+                        "No divergence found while checking for misbehaviour",
+                        &LevelDebug,
+                    )
+                    .await;
+                Ok(None)
+            }
         }
     }
 }

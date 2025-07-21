@@ -11,7 +11,7 @@ use hermes_core::test_components::driver::traits::{
 };
 use hermes_core::test_components::setup::traits::{
     CreateClientMessageOptionsGetterAtComponent, CreateClientPayloadOptionsGetterAtComponent,
-    PortIdGetterAtComponent, RecoverClientPayloadOptionsGetterAtComponent,
+    FullNodeForkerComponent, PortIdGetterAtComponent, RecoverClientPayloadOptionsGetterAtComponent,
 };
 use hermes_core::test_components::test_case::traits::recover_client::RecoverClientHandlerComponent;
 use hermes_cosmos_core::chain_components::impls::CosmosRecoverClientPayload;
@@ -25,7 +25,7 @@ use hermes_prelude::*;
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, ConnectionId, PortId};
 
 use crate::contexts::{CosmosChainDriver, CosmosRelayDriver};
-use crate::impls::UseCosmosTestTypes;
+use crate::impls::{ForkSecondFullNode, UseCosmosTestTypes};
 
 #[cgp_context(CosmosBinaryChannelTestDriverComponents)]
 #[derive(HasField)]
@@ -67,6 +67,8 @@ delegate_components! {
         LoggerComponent: TracingLogger,
         RecoverClientHandlerComponent:
             RecoverClientWithProposals,
+        FullNodeForkerComponent:
+            ForkSecondFullNode,
         ChainDriverGetterAtComponent<Index<0>>:
             UseField<symbol!("chain_driver_a")>,
         ChainDriverGetterAtComponent<Index<1>>:

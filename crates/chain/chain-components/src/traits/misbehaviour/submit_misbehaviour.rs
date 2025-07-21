@@ -17,12 +17,12 @@ pub trait CanBuildMisbehaviourMessage<Counterparty>:
 }
 
 #[cgp_provider(MisbehaviourMessageBuilderComponent)]
-impl<Chain, Counterparty, Components> MisbehaviourMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Components, Delegate> MisbehaviourMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
     Chain: HasMessageType + HasEvidenceType + HasAsyncErrorType,
-    Components: DelegateComponent<Counterparty>,
-    Components::Delegate: MisbehaviourMessageBuilder<Chain, Counterparty>,
+    Delegate: MisbehaviourMessageBuilder<Chain, Counterparty>,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
 {
     async fn build_misbehaviour_message(
         chain: &Chain,
