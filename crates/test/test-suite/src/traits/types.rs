@@ -36,7 +36,8 @@ use hermes_test_components::chain::traits::{
     HasAmountMethods, HasDefaultMemo, HasWalletSigner, HasWalletType, WalletOf,
 };
 use hermes_test_components::chain_driver::traits::{
-    CanGenerateRandomAmount, HasChain, HasDenom, HasWallet, StakingDenom, TransferDenom, UserWallet,
+    CanGenerateRandomAmount, HasChain, HasDenom, HasSetupUpgradeClientTestResultType, HasWallet,
+    StakingDenom, TransferDenom, UserWallet,
 };
 use hermes_test_components::driver::traits::{HasChainDriverAt, HasChannelIdAt, HasRelayDriverAt};
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
@@ -130,12 +131,14 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                           + HasDenom<StakingDenom>
                           + HasWallet<UserWallet<0>>
                           + HasWallet<UserWallet<1>>
-                          + CanGenerateRandomAmount,
+                          + CanGenerateRandomAmount
+                          + HasSetupUpgradeClientTestResultType,
         ChainDriverB: HasDenom<TransferDenom>
                           + HasDenom<StakingDenom>
                           + HasWallet<UserWallet<0>>
                           + HasWallet<UserWallet<1>>
-                          + CanGenerateRandomAmount,
+                          + CanGenerateRandomAmount
+                          + HasSetupUpgradeClientTestResultType,
         ChainA: HasChainId
                     + HasWalletType
                     + HasWalletSigner

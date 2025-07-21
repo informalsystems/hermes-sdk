@@ -66,6 +66,15 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             hasher.finalize().into()
         };
 
+        let wasm_additional_byte_code = match var("ADDITIONAL_WASM_FILE_PATH") {
+            Ok(paths_str) => paths_str
+                .split(',')
+                .map(PathBuf::from)
+                .map(std::fs::read)
+                .collect::<Result<_, _>>()?,
+            Err(_) => vec![],
+        };
+
         let simd_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
             runtime: runtime.clone(),
             cosmos_builder: builder.clone(),
@@ -76,6 +85,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             staking_denom_prefix: "stake".into(),
             transfer_denom_prefix: "coin".into(),
             wasm_client_byte_code,
+            wasm_additional_byte_code,
             governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
             dynamic_gas: None,
         });

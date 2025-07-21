@@ -7,7 +7,8 @@ use core::time::Duration;
 use cgp::core::error::ErrorOf;
 use cgp::extra::runtime::HasRuntime;
 use hermes_chain_components::traits::{
-    CanAdjustHeight, CanQueryBlockTime, CanQueryChainHeight, HasHeightType, HeightOf,
+    CanAdjustHeight, CanQueryBlockTime, CanQueryChainHeight, CanSendMessages, HasHeightType,
+    HeightOf,
 };
 use hermes_logging_components::traits::CanLog;
 use hermes_prelude::*;
@@ -17,8 +18,8 @@ use crate::birelay::traits::{
     AutoBiRelayer, AutoBiRelayerComponent, HasBiRelayTypes, HasTwoWayRelay,
 };
 use crate::relay::traits::{
-    CanAutoRelayWithHeights, DestinationTarget, HasChainTargets, HasDstChain, HasRelayChains,
-    HasSrcChain, SourceTarget,
+    CanAutoRelayWithHeights, CanRefreshClient, DestinationTarget, HasChainTargets, HasDstChain,
+    HasRelayChains, HasSrcChain, SourceTarget,
 };
 
 pub struct LogAutoBiRelay<'a, BiRelay>
@@ -49,14 +50,18 @@ where
         + HasDstChain
         + HasChainTargets
         + CanAutoRelayWithHeights<SourceTarget>
-        + CanAutoRelayWithHeights<DestinationTarget>,
+        + CanAutoRelayWithHeights<DestinationTarget>
+        + CanRefreshClient<SourceTarget>
+        + CanRefreshClient<DestinationTarget>,
     BiRelay::RelayBToA: Clone
         + HasRelayChains
         + HasChainTargets
         + CanAutoRelayWithHeights<SourceTarget>
-        + CanAutoRelayWithHeights<DestinationTarget>,
-    BiRelay::ChainA: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight,
-    BiRelay::ChainB: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight,
+        + CanAutoRelayWithHeights<DestinationTarget>
+        + CanRefreshClient<SourceTarget>
+        + CanRefreshClient<DestinationTarget>,
+    BiRelay::ChainA: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight + CanSendMessages,
+    BiRelay::ChainB: CanQueryChainHeight + CanQueryBlockTime + CanAdjustHeight + CanSendMessages,
     BiRelay::Runtime: CanRunConcurrentTasks,
 {
     async fn auto_bi_relay(
@@ -211,10 +216,14 @@ where
     BiRelay: HasBiRelayTypes,
     BiRelay::RelayAToB: HasChainTargets
         + CanAutoRelayWithHeights<SourceTarget>
-        + CanAutoRelayWithHeights<DestinationTarget>,
+        + CanAutoRelayWithHeights<DestinationTarget>
+        + CanRefreshClient<SourceTarget>
+        + CanRefreshClient<DestinationTarget>,
     BiRelay::RelayBToA: HasChainTargets
         + CanAutoRelayWithHeights<SourceTarget>
-        + CanAutoRelayWithHeights<DestinationTarget>,
+        + CanAutoRelayWithHeights<DestinationTarget>
+        + CanRefreshClient<SourceTarget>
+        + CanRefreshClient<DestinationTarget>,
 {
     async fn run(self) {
         match self {
@@ -223,36 +232,54 @@ where
                 start_height,
                 end_height,
             } => {
-                let _ = relay
-                    .auto_relay_with_heights(SourceTarget, &start_height, end_height.as_ref())
-                    .await;
+                let auto_relay_task =
+                    relay.auto_relay_with_heights(SourceTarget, &start_height, end_height.as_ref());
+                let auto_refresh_task =
+                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(10));
+
+                let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
             BiRelayTask::DestinationAToB {
                 relay,
                 start_height,
                 end_height,
             } => {
-                let _ = relay
-                    .auto_relay_with_heights(DestinationTarget, &start_height, end_height.as_ref())
-                    .await;
+                let auto_relay_task = relay.auto_relay_with_heights(
+                    DestinationTarget,
+                    &start_height,
+                    end_height.as_ref(),
+                );
+                let auto_refresh_task =
+                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(10));
+
+                let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
             BiRelayTask::SourceBToA {
                 relay,
                 start_height,
                 end_height,
             } => {
-                let _ = relay
-                    .auto_relay_with_heights(SourceTarget, &start_height, end_height.as_ref())
-                    .await;
+                let auto_relay_task =
+                    relay.auto_relay_with_heights(SourceTarget, &start_height, end_height.as_ref());
+                let auto_refresh_task =
+                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(10));
+
+                let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
             BiRelayTask::DestinationBToA {
                 relay,
                 start_height,
                 end_height,
             } => {
-                let _ = relay
-                    .auto_relay_with_heights(DestinationTarget, &start_height, end_height.as_ref())
-                    .await;
+                let auto_relay_task = relay.auto_relay_with_heights(
+                    DestinationTarget,
+                    &start_height,
+                    end_height.as_ref(),
+                );
+                let auto_refresh_task =
+                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(10));
+
+                let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
         }
     }

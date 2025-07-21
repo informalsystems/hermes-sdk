@@ -53,6 +53,7 @@ members = [
   "crates/wasm/wasm-client-components",
   "crates/wasm/wasm-encoding-components",
   "crates/wasm/wasm-test-components",
+  "crates/wasm/wasm-chain-components",
 ]
 
 [workspace.package]
@@ -171,6 +172,7 @@ hermes-celestia-integration-tests = { version = "0.1.0" }
 hermes-wasm-client-components   = { version = "0.1.0" }
 hermes-wasm-encoding-components = { version = "0.1.0" }
 hermes-wasm-test-components     = { version = "0.1.0" }
+hermes-wasm-chain-components    = { version = "0.1.0" }
 
 [patch.crates-io]
 cgp             = { git = "https://github.com/contextgeneric/cgp.git" }
@@ -240,3 +242,4 @@ hermes-celestia-integration-tests = { path = "./crates/celestia/celestia-integra
 hermes-wasm-client-components   = { path = "./crates/wasm/wasm-client-components" }
 hermes-wasm-encoding-components = { path = "./crates/wasm/wasm-encoding-components" }
 hermes-wasm-test-components     = { path = "./crates/wasm/wasm-test-components" }
+hermes-wasm-chain-components    = { path = "./crates/wasm/wasm-chain-components" }

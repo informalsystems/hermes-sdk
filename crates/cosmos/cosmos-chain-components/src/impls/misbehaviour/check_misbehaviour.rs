@@ -4,8 +4,8 @@ use cgp::extra::runtime::HasRuntime;
 use hermes_comet_light_client_components::traits::{CanDetectMisbehaviour, CanFetchLightBlock};
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use hermes_core::chain_components::traits::{
-    CanExtractFromEvent, CanQueryClientState, HasChainId, HasClientStateType,
-    HasEvidenceType, HasUpdateClientEvent, MisbehaviourChecker, MisbehaviourCheckerComponent,
+    CanExtractFromEvent, CanQueryClientState, HasChainId, HasClientStateType, HasEvidenceType,
+    HasUpdateClientEvent, MisbehaviourChecker, MisbehaviourCheckerComponent,
 };
 use hermes_core::logging_components::traits::CanLog;
 use hermes_core::logging_components::types::LevelDebug;

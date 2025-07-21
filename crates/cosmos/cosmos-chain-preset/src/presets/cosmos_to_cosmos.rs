@@ -2,8 +2,9 @@
 mod preset {
     use hermes_core::chain_components::traits::{
         ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
-        ClientStatusTypeComponent, MisbehaviourCheckerComponent,
-        MisbehaviourMessageBuilderComponent, RecoverClientPayloadTypeComponent,
+        ClientStatusTypeComponent, ClientUpgradeComponent, ClientUpgradePayloadBuilderComponent,
+        MisbehaviourCheckerComponent, MisbehaviourMessageBuilderComponent,
+        RecoverClientPayloadTypeComponent, UpgradeClientPayloadTypeComponent,
     };
     use hermes_core::relayer_components::chain::impls::{
         QueryAndConvertRawClientState, QueryAndConvertRawConsensusState,
@@ -33,13 +34,14 @@ mod preset {
         BuildAnyCreateClientMessage, BuildCosmosChannelHandshakeMessage,
         BuildCosmosConnectionHandshakeMessage, BuildCosmosCreateClientPayload,
         BuildCosmosPacketMessages, BuildCosmosUpdateClientMessage,
-        BuildTendermintUpdateClientPayload, CheckTendermintMisbehaviour, CosmosPacketFieldReader,
+        BuildTendermintUpdateClientPayload, CheckTendermintMisbehaviour,
+        CosmosClientUpgradePayloadBuilder, CosmosPacketFieldReader,
         GetCosmosCounterpartyMessageHeight, ProvideCosmosCreateClientSettings,
         ProvideCosmosPayloadTypes, ProvideNoCreateClientMessageOptionsType,
         ProvideTendermintClientState, ProvideTendermintClientStatus,
         ProvideTendermintConsensusState, QueryConsensusStateHeightsFromGrpc,
         QueryCosmosClientStatus, RecoverClientWithGovernanceProposal,
-        TendermintMisbehaviourMessageBuilder,
+        TendermintMisbehaviourMessageBuilder, UpgradeClientWithGovernanceProposal,
     };
     use hermes_cosmos_test_components::chain::impls::ConvertCosmosIbcAmount;
     use hermes_prelude::*;
@@ -65,6 +67,7 @@ mod preset {
                 CreateClientPayloadTypeComponent,
                 UpdateClientPayloadTypeComponent,
                 RecoverClientPayloadTypeComponent,
+                UpgradeClientPayloadTypeComponent,
             ]:
                 ProvideCosmosPayloadTypes,
             CreateClientPayloadOptionsTypeComponent:
@@ -88,6 +91,10 @@ mod preset {
                 BuildAnyCreateClientMessage,
             ClientRecoveryComponent:
                 RecoverClientWithGovernanceProposal,
+            ClientUpgradeComponent:
+                UpgradeClientWithGovernanceProposal,
+            ClientUpgradePayloadBuilderComponent:
+                CosmosClientUpgradePayloadBuilder,
             UpdateClientMessageBuilderComponent:
                 BuildCosmosUpdateClientMessage,
             CreateClientPayloadBuilderComponent:

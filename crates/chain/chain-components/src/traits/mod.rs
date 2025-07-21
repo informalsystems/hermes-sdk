@@ -27,3 +27,6 @@ pub use send_message::*;
 
 mod types;
 pub use types::*;
+
+mod upgrade_client;
+pub use upgrade_client::*;

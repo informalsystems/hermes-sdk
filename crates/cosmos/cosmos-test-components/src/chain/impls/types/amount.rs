@@ -1,3 +1,6 @@
+use hermes_core::chain_components::traits::{
+    AmountQuantityGetter, AmountQuantityGetterComponent, HasQuantityType,
+};
 use hermes_core::chain_type_components::traits::{
     AmountDenomGetter, AmountDenomGetterComponent, AmountTypeProviderComponent, HasAmountType,
     HasDenomType,
@@ -22,6 +25,16 @@ where
 {
     fn amount_denom(amount: &Amount) -> &Denom {
         &amount.denom
+    }
+}
+
+#[cgp_provider(AmountQuantityGetterComponent)]
+impl<Chain> AmountQuantityGetter<Chain> for UseCosmosAmount
+where
+    Chain: HasAmountType<Amount = Amount> + HasQuantityType<Quantity = u128>,
+{
+    fn amount_quantity(amount: &Amount) -> &u128 {
+        &amount.quantity
     }
 }
 

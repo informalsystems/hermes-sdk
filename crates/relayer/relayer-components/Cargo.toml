@@ -1,15 +1,13 @@
 [package]
-name = "hermes-relayer-components"
-version = { workspace = true }
-edition = { workspace = true }
-license = { workspace = true }
-keywords = { workspace = true }
-repository = { workspace = true }
-authors = { workspace = true }
+name         = "hermes-relayer-components"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
 rust-version = { workspace = true }
-description = """
-    Implementation of an IBC Relayer in Rust, as a library
-"""
+description  = "Implementation of an IBC Relayer in Rust, as a library"
 
 [dependencies]
 cgp                          = { workspace = true }
@@ -20,4 +18,4 @@ hermes-encoding-components   = { workspace = true }
 hermes-chain-components      = { workspace = true }
 hermes-chain-type-components = { workspace = true }
 
-futures = { workspace = true, features = [ "std" ] }
+futures = { workspace = true, features = [ "std", "async-await" ] }

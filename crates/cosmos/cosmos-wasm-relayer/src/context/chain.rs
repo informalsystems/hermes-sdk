@@ -2,6 +2,7 @@ use core::ops::Deref;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use hermes_any_counterparty::contexts::AnyCounterparty;
+use hermes_core::chain_components::traits::BlockTimeQuerierComponent;
 use hermes_core::encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
     HasDefaultEncoding,
@@ -46,7 +47,7 @@ use hermes_cosmos_core::chain_components::traits::{
 };
 use hermes_cosmos_core::chain_components::types::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload, GasConfig, TendermintClientState,
-    TendermintConsensusState,
+    TendermintConsensusState, WasmAccessTypeProviderComponent,
 };
 use hermes_cosmos_core::chain_preset::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
@@ -59,6 +60,9 @@ use hermes_cosmos_relayer::impls::HandleCosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_wasm_chain_components::traits::{
+    WasmContractInstantiatorComponent, WasmContractUploaderComponent,
+};
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use prost_types::Any;
@@ -105,6 +109,9 @@ delegate_components! {
         [
             StoreCodeMessageBuilderComponent,
             WasmClientCodeUploaderComponent,
+            WasmAccessTypeProviderComponent,
+            WasmContractUploaderComponent,
+            WasmContractInstantiatorComponent,
         ]:
             WasmChainComponents,
         NonceAllocationMutexGetterComponent:
@@ -113,6 +120,8 @@ delegate_components! {
             UseField<symbol!("key_entry")>,
         ChainIdGetterComponent:
             UseField<symbol!("chain_id")>,
+        BlockTimeQuerierComponent:
+            UseField<symbol!("block_time")>,
     }
 }
 

@@ -8,15 +8,14 @@ mod preset {
         BootstrapCosmosChain, CollectCosmosGentxs, CreateChainHomeDirFromTestDir,
         GenerateRandomChainId, GetCosmosGenesisDenoms, GetStdOut, InitCosmosChainData,
         InitCosmosTestWallet, ProvideCosmosChainNodeConfigType, ProvideCosmosGenesisConfigType,
-        ProvideCosmosHdPath, ProvideCosmosWalletConfigType, StartCosmosChain,
-        UpdateCosmosChainNodeConfig, UpdateCosmosGenesisConfig,
+        ProvideCosmosHdPath, ProvideCosmosWalletConfigType, UpdateCosmosChainNodeConfig,
+        UpdateCosmosGenesisConfig,
     };
     use crate::bootstrap::traits::{
-        ChainDataInitializerComponent, ChainFullNodeStarterComponent,
-        ChainGenesisConfigInitializerComponent, ChainGenesisConfigTypeComponent,
-        ChainHomeDirInitializerComponent, ChainIdGeneratorComponent,
-        ChainNodeConfigInitializerComponent, ChainNodeConfigTypeComponent,
-        GenesisAccountAdderComponent, GenesisDenomGetterComponent,
+        ChainDataInitializerComponent, ChainGenesisConfigInitializerComponent,
+        ChainGenesisConfigTypeComponent, ChainHomeDirInitializerComponent,
+        ChainIdGeneratorComponent, ChainNodeConfigInitializerComponent,
+        ChainNodeConfigTypeComponent, GenesisAccountAdderComponent, GenesisDenomGetterComponent,
         GenesisTransactionsCollectorComponent, GenesisValidatorAdderComponent,
         GenesisWalletAdderComponent, WalletConfigFieldsComponent, WalletConfigTypeComponent,
         WalletHdPathComponent, WalletInitializerComponent,
@@ -43,7 +42,6 @@ mod preset {
             ChainNodeConfigInitializerComponent: UpdateCosmosChainNodeConfig,
             ChainGenesisConfigInitializerComponent: UpdateCosmosGenesisConfig,
             GenesisWalletAdderComponent: AddCosmosWalletToGenesis,
-            ChainFullNodeStarterComponent: StartCosmosChain,
             ChainBootstrapperComponent: BootstrapCosmosChain,
         }
     }
