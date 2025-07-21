@@ -17,6 +17,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
     async fn fork_full_node(
         driver: &CosmosBinaryChannelTestDriver,
     ) -> Result<CosmosBinaryChannelTestDriver, HermesError> {
+        // Retrieve necessary full node data
         let genesis_config = driver.chain_driver_b.genesis_config.clone();
         let chain_node_config = driver.chain_driver_b.chain_node_config.clone();
         let chain_home_dir = driver
@@ -25,6 +26,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
             .chain_home_dir
             .clone();
 
+        // Build forked full node data
         let fork_chain_home_dir = chain_home_dir
             .as_path()
             .parent()
@@ -75,6 +77,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
             }),
         };
 
+        // Create forked full node directory and copy full node data inside
         runtime.create_dir(&fork_chain_home_dir).await.unwrap();
 
         // Copy data to fork
@@ -87,6 +90,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
 
         let mut toml_value: toml::Table = fork_chain_config.parse()?;
 
+        // Update RPC and P2P addresses to avoid collision
         toml_value
             .get_mut("rpc")
             .and_then(|rpc| rpc.as_table_mut())

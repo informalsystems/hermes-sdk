@@ -31,8 +31,6 @@ where
 
         let chain_a = driver.chain_a();
 
-        let chain_b = driver.chain_b();
-
         let client_id_a = driver.client_id_a();
 
         driver
@@ -41,13 +39,7 @@ where
 
         tokio::time::sleep(Duration::from_secs(10)).await;
 
-        let _forked_setup = driver.fork_full_node().await?;
-
-        // TODO: Bootstrap and start forked nodes
-        /*
-
-        let bootstrap = self.chain_bootstrap(PhantomData);
-        */
+        let forked_setup = driver.fork_full_node().await?;
 
         // Start relayer
         let _handle = relay_driver
@@ -59,10 +51,7 @@ where
 
         tokio::time::sleep(Duration::from_secs(10)).await;
 
-        // TODO: Create RelayDriver using fork configuration
-
-        // FIXME
-        let chain_b_fork = chain_b;
+        let chain_b_fork = forked_setup.chain_b();
 
         let latest_height_b = chain_b_fork
             .query_chain_height()

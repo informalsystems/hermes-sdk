@@ -4,7 +4,7 @@ use cgp::extra::runtime::HasRuntime;
 use hermes_comet_light_client_components::traits::{CanDetectMisbehaviour, CanFetchLightBlock};
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use hermes_core::chain_components::traits::{
-    CanExtractFromEvent, CanQueryChainHeight, CanQueryClientState, HasChainId, HasClientStateType,
+    CanExtractFromEvent, CanQueryClientState, HasChainId, HasClientStateType,
     HasEvidenceType, HasUpdateClientEvent, MisbehaviourChecker, MisbehaviourCheckerComponent,
 };
 use hermes_core::logging_components::traits::CanLog;
@@ -35,7 +35,6 @@ where
         + HasRuntime
         + HasChainId
         + CanQueryClientState<Counterparty, ClientId = ClientId>
-        + CanQueryChainHeight<Height = Height>
         + CanExtractFromEvent<Chain::UpdateClientEvent>
         + HasClientStateType<Counterparty>
         + CanLog<LevelDebug>
@@ -54,6 +53,10 @@ where
         update_client_event: &Counterparty::UpdateClientEvent,
         client_state: &Chain::ClientState,
     ) -> Result<Option<Counterparty::Evidence>, Chain::Error> {
+        chain
+            .runtime()
+            .sleep(core::time::Duration::from_millis(200))
+            .await;
         let raw_trusted_height = update_client_event.header.trusted_height.unwrap();
         let trusted_height = Height::try_from(raw_trusted_height).unwrap();
         let tm_trusted_height = TendermintHeight::try_from(trusted_height.revision_height())
@@ -63,12 +66,7 @@ where
 
         let update_header = update_client_event.header.clone();
 
-        let latest_height = chain.query_chain_height().await?;
-
         let rpc_client = chain.rpc_client().clone();
-
-        let tendermint_latest_height = TendermintHeight::try_from(latest_height.revision_height())
-            .map_err(Chain::raise_error)?;
 
         let status = rpc_client.status().await.map_err(Chain::raise_error)?;
 
@@ -122,7 +120,7 @@ where
         };
 
         let trusted_block = light_client
-            .fetch_light_block(&tendermint_latest_height)
+            .fetch_light_block(&tm_trusted_height.increment())
             .await
             .map_err(Chain::raise_error)?;
 
