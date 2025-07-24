@@ -41,6 +41,8 @@ where
 
         let forked_setup = driver.fork_full_node().await?;
 
+        tokio::time::sleep(Duration::from_secs(10)).await;
+
         // Start relayer
         let _handle = relay_driver
             .run_relayer_in_background()
@@ -65,6 +67,12 @@ where
 
         let client_a_state_height = Driver::ChainB::client_state_latest_height(&client_a_state);
 
+        driver
+            .log_message(&alloc::format!(
+                "Will build manual client update payload from fork at height: {latest_height_b:?}"
+            ))
+            .await;
+
         let update_client_a_payload = chain_b_fork
             .build_update_client_payload(&client_a_state_height, &latest_height_b, client_a_state)
             .await
@@ -75,12 +83,57 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
-        chain_a
+        driver
+            .log_message(&alloc::format!(
+                "Will send manual client update built from fork: {messages:?}"
+            ))
+            .await;
+
+        let result = chain_a
             .send_messages(messages)
             .await
             .map_err(Driver::raise_error)?;
 
-        tokio::time::sleep(core::time::Duration::from_secs(50)).await;
+        driver
+            .log_message(&alloc::format!("Manual client update result: {result:?}"))
+            .await;
+
+        tokio::time::sleep(core::time::Duration::from_secs(5)).await;
+
+        /*let latest_height_b = chain_b_fork
+            .query_chain_height()
+            .await
+            .map_err(Driver::raise_error)?;
+
+        let client_a_state = chain_a
+            .query_client_state_with_latest_height(PhantomData, client_id_a)
+            .await
+            .map_err(Driver::raise_error)?;
+
+        let client_a_state_height = Driver::ChainB::client_state_latest_height(&client_a_state);
+
+        driver.log_message(&alloc::format!("Will build second manual client update payload from fork at height: {latest_height_b:?}")).await;
+
+        let update_client_a_payload = chain_b_fork
+            .build_update_client_payload(&client_a_state_height, &latest_height_b, client_a_state)
+            .await
+            .map_err(Driver::raise_error)?;
+
+        let messages = chain_a
+            .build_update_client_message(client_id_a, update_client_a_payload)
+            .await
+            .map_err(Driver::raise_error)?;
+
+        driver.log_message(&alloc::format!("Will send second manual client update built from fork: {messages:?}")).await;
+
+        let result = chain_a
+            .send_messages(messages)
+            .await
+            .map_err(Driver::raise_error)?;
+
+        driver.log_message(&alloc::format!("Second manual client update result: {result:?}")).await;*/
+
+        tokio::time::sleep(core::time::Duration::from_secs(120)).await;
 
         Ok(())
     }

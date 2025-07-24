@@ -4,7 +4,7 @@ use core::marker::PhantomData;
 use hermes_chain_components::traits::{
     CanBuildMisbehaviourMessage, CanBuildPacketFromSendPacket, CanCheckMisbehaviour,
     CanExtractFromEvent, CanQueryChainHeight, CanQueryClientStateWithLatestHeight, CanSendMessages,
-    HasClientStateType, HasUpdateClientEvent,
+    HasChainId, HasClientStateType, HasUpdateClientEvent,
 };
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::{LevelDebug, LevelInfo, LevelTrace};
@@ -51,8 +51,10 @@ where
         + CanLog<LevelTrace>
         + HasRelayClientIds
         + CanRelayPacket
-        + CanRaiseRelayChainErrors,
+        + CanRaiseRelayChainErrors
+        + CanRaiseAsyncError<&'static str>,
     SrcChain: HasErrorType
+        + HasChainId
         + HasSendPacketEvent<DstChain, SendPacketEvent = SendP>
         + HasUpdateClientEvent
         + HasClientStateType<DstChain>
@@ -86,13 +88,6 @@ where
         } else if let Some(update_client_event) =
             src_chain.try_extract_from_event(PhantomData::<SrcChain::UpdateClientEvent>, event)
         {
-            relay
-                .log(
-                    "Found update client event, checking for misbehaviour",
-                    &LevelDebug,
-                )
-                .await;
-
             let src_client_id = relay.src_client_id();
             let client_state = src_chain
                 .query_client_state_with_latest_height(PhantomData, src_client_id)
@@ -110,6 +105,7 @@ where
                             &LevelDebug,
                         )
                         .await;
+
                     let msg = src_chain
                         .build_misbehaviour_message(&evidence)
                         .await
@@ -121,7 +117,11 @@ where
                         .map_err(Relay::raise_error)?
                         .into_iter()
                         .next()
-                        .unwrap();
+                        .ok_or_else(|| {
+                            Relay::raise_error(
+                                "failed to extract events from submitting misbehaviour",
+                            )
+                        })?;
 
                     // TODO: remove
                     relay

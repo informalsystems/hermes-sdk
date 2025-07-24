@@ -8,11 +8,12 @@ use hermes_core::chain_components::traits::{
     HasUpdateClientEvent, MisbehaviourChecker, MisbehaviourCheckerComponent,
 };
 use hermes_core::logging_components::traits::CanLog;
-use hermes_core::logging_components::types::LevelDebug;
+use hermes_core::logging_components::types::{LevelDebug, LevelWarn};
 use hermes_core::runtime_components::traits::CanSleep;
 use hermes_error::HermesError;
 use hermes_prelude::*;
 use ibc::core::client::types::Height;
+use ibc::core::host::types::error::DecodingError;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc_client_tendermint::types::error::TendermintClientError;
 use ibc_client_tendermint::types::proto::v1::{Header, Misbehaviour};
@@ -38,11 +39,14 @@ where
         + CanExtractFromEvent<Chain::UpdateClientEvent>
         + HasClientStateType<Counterparty>
         + CanLog<LevelDebug>
+        + CanLog<LevelWarn>
         + CanRaiseAsyncError<TendermintError>
         + CanRaiseAsyncError<TendermintRpcError>
         + CanRaiseAsyncError<TendermintClientError>
         + CanRaiseAsyncError<HermesError>
-        + CanRaiseAsyncError<String>,
+        + CanRaiseAsyncError<DecodingError>
+        + CanRaiseAsyncError<String>
+        + CanRaiseAsyncError<&'static str>,
     Counterparty: HasEvidenceType<Evidence = Misbehaviour>
         + HasUpdateClientEvent<UpdateClientEvent = CosmosUpdateClientEvent>,
     TendermintClientState: From<Chain::ClientState>,
@@ -53,18 +57,41 @@ where
         update_client_event: &Counterparty::UpdateClientEvent,
         client_state: &Chain::ClientState,
     ) -> Result<Option<Counterparty::Evidence>, Chain::Error> {
+        // FIXME: Taken from Hermes v1 implementation
         chain
             .runtime()
             .sleep(core::time::Duration::from_millis(200))
             .await;
-        let raw_trusted_height = update_client_event.header.trusted_height.unwrap();
-        let trusted_height = Height::try_from(raw_trusted_height).unwrap();
+
+        let event_header = update_client_event.header.clone();
+
+        let event_signed_header = event_header.signed_header.ok_or_else(|| {
+            Chain::raise_error("`signed_header` missing from `Header` in Update Client event")
+        })?;
+
+        let event_signed_header_header = event_signed_header.header.clone().ok_or_else(|| {
+            Chain::raise_error("`header` missing from `SignedHeader` in Update Client event")
+        })?;
+
+        let event_trusted_validator_set: Set = event_header
+            .trusted_validators
+            .ok_or_else(|| {
+                Chain::raise_error(
+                    "`trusted_validators` missing from `Header` in Update Client event",
+                )
+            })?
+            .try_into()
+            .map_err(Chain::raise_error)?;
+
+        let raw_trusted_height = event_header.trusted_height.ok_or_else(|| {
+            Chain::raise_error("`trusted_height` missing from `Header` in Update Client event")
+        })?;
+
+        let trusted_height = Height::try_from(raw_trusted_height).map_err(Chain::raise_error)?;
         let tm_trusted_height = TendermintHeight::try_from(trusted_height.revision_height())
             .map_err(Chain::raise_error)?;
 
         let tm_client_state = TendermintClientState::from(client_state.clone());
-
-        let update_header = update_client_event.header.clone();
 
         let rpc_client = chain.rpc_client().clone();
 
@@ -85,22 +112,18 @@ where
             light_client_options,
         );
 
-        let signed_header_from_event = update_header.signed_header.unwrap();
+        let next_validator_height = (event_signed_header_header.height + 1) as u32;
 
-        let next_validator_height =
-            (signed_header_from_event.clone().header.unwrap().height + 1) as u32;
-        let next_validator_proposer_address = signed_header_from_event
+        let next_validator_proposer_address = event_signed_header_header
             .clone()
-            .header
-            .unwrap()
             .proposer_address
             .try_into()
-            .unwrap();
+            .map_err(Chain::raise_error)?;
 
         let next_validators = rpc_client
             .validators(next_validator_height, Paging::All)
             .await
-            .unwrap()
+            .map_err(Chain::raise_error)?
             .validators;
 
         let next_validator_set =
@@ -108,42 +131,34 @@ where
                 .map_err(Chain::raise_error)?;
 
         let target_block: LightBlock = LightBlock {
-            signed_header: signed_header_from_event.clone().clone().try_into().unwrap(),
-            validators: update_header
-                .validator_set
-                .unwrap()
-                .clone()
-                .try_into()
-                .unwrap(),
+            signed_header: event_signed_header.try_into().map_err(Chain::raise_error)?,
+            validators: event_trusted_validator_set.clone(),
             next_validators: next_validator_set,
             provider: peer_id,
         };
 
         let trusted_block = light_client
-            .fetch_light_block(&tm_trusted_height.increment())
+            .fetch_light_block(&tm_trusted_height)
             .await
             .map_err(Chain::raise_error)?;
-
-        let event_trusted_validator_set: Set = update_header
-            .trusted_validators
-            .unwrap()
-            .try_into()
-            .unwrap();
 
         // Required to avoid bad witness error
         chain
             .runtime()
-            .sleep(core::time::Duration::from_secs(5))
+            .sleep(core::time::Duration::from_secs(1))
             .await;
 
         if trusted_block.validators.hash() != event_trusted_validator_set.hash() {
-            return Err(Chain::raise_error(format!(
-                "mismatch between the trusted validator set of the update \
-                header ({}) and that of the trusted block that was fetched ({}), \
-                aborting misbehaviour detection.",
-                trusted_block.validators.hash(),
-                event_trusted_validator_set.hash()
-            )));
+            chain
+                .log(
+                    &format!(
+                        "validator hash mismatch (trusted: {}, header: {}), continuing...",
+                        trusted_block.validators.hash(),
+                        event_trusted_validator_set.hash()
+                    ),
+                    &LevelWarn,
+                )
+                .await;
         }
 
         let maybe_divergence = light_client
@@ -151,6 +166,7 @@ where
             .await
             .map_err(Chain::raise_error)?;
 
+        // FIXME: Divergence never seems to be caught
         match maybe_divergence {
             Some(divergence) => {
                 chain
@@ -189,10 +205,22 @@ where
                     };
 
                     // This header is now considered to be the currently trusted header
-                    current_trusted_height = header.trusted_height.unwrap().try_into().unwrap();
+                    current_trusted_height = header
+                        .trusted_height
+                        .ok_or_else(|| {
+                            Chain::raise_error("`trusted_height` missing from support `Header`")
+                        })?
+                        .try_into()
+                        .map_err(Chain::raise_error)?;
 
                     let next_height = TendermintHeight::try_from(
-                        header.trusted_height.unwrap().revision_height + 1,
+                        header
+                            .trusted_height
+                            .ok_or_else(|| {
+                                Chain::raise_error("`trusted_height` missing from support `Header`")
+                            })?
+                            .revision_height
+                            + 1,
                     )
                     .map_err(Chain::raise_error)?;
 
@@ -215,14 +243,29 @@ where
                     match supporting_headers.last() {
                         Some(prev_header) => {
                             let prev_height = TendermintHeight::try_from(
-                                prev_header.trusted_height.unwrap().revision_height + 1,
+                                prev_header
+                                    .trusted_height
+                                    .ok_or_else(|| {
+                                        Chain::raise_error(
+                                            "`trusted_height` missing from previous `Header`",
+                                        )
+                                    })?
+                                    .revision_height
+                                    + 1,
                             )
                             .map_err(Chain::raise_error)?;
                             let prev_succ = light_client
                                 .fetch_light_block(&prev_height)
                                 .await
                                 .map_err(Chain::raise_error)?;
-                            (prev_header.trusted_height.unwrap(), prev_succ.validators)
+                            (
+                                prev_header.trusted_height.ok_or_else(|| {
+                                    Chain::raise_error(
+                                        "`trusted_height` missing from previous `Header`",
+                                    )
+                                })?,
+                                prev_succ.validators,
+                            )
                         }
                         None => (trusted_height.into(), trusted_validator_set),
                     };

@@ -70,10 +70,6 @@ where
 
         let mut provider = Provider::new(client.chain_id().clone(), instance, rpc_client.clone());
 
-        tracing::warn!("provider: {provider:?}");
-        tracing::warn!("clock_drift: {:?}", options.clock_drift);
-        tracing::warn!("trusting_period: {:?}", options.trusting_period);
-
         detect_divergence::<Sha256>(
             None,
             &mut provider,

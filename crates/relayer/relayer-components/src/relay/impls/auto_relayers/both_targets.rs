@@ -39,7 +39,7 @@ where
                 let auto_relay_task = self.relay.auto_relay(SourceTarget);
                 let auto_refresh_task = self
                     .relay
-                    .auto_refresh_client(SourceTarget, Duration::from_secs(10));
+                    .auto_refresh_client(SourceTarget, Duration::from_secs(20));
 
                 let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
@@ -47,7 +47,7 @@ where
                 let auto_relay_task = self.relay.auto_relay(DestinationTarget);
                 let auto_refresh_task = self
                     .relay
-                    .auto_refresh_client(SourceTarget, Duration::from_secs(10));
+                    .auto_refresh_client(SourceTarget, Duration::from_secs(20));
 
                 let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }

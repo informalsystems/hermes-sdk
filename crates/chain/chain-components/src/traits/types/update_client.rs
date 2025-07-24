@@ -44,5 +44,5 @@ where
   context: Chain,
 }]
 pub trait HasUpdateClientEvent {
-    type UpdateClientEvent: Async;
+    type UpdateClientEvent: Async + Debug;
 }

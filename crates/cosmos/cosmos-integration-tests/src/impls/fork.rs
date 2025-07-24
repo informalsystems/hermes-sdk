@@ -1,7 +1,8 @@
 use alloc::sync::Arc;
 use std::path::PathBuf;
 
-use hermes_core::runtime_components::traits::CanCreateDir;
+use cgp::extra::runtime::HasRuntime;
+use hermes_core::runtime_components::traits::{CanCreateDir, CanExecCommand, CanSleep};
 use hermes_core::test_components::setup::traits::{FullNodeForker, FullNodeForkerComponent};
 use hermes_cosmos_core::test_components::bootstrap::traits::CanStartChainFullNodes;
 use hermes_cosmos_relayer::contexts::CosmosBuilder;
@@ -26,6 +27,60 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
             .chain_home_dir
             .clone();
 
+        let runtime = driver.chain_driver_b.chain.runtime.clone();
+        let builder = CosmosBuilder::new_with_default(runtime.clone());
+
+        let node_bootstrap = CosmosBootstrap {
+            fields: Arc::new(CosmosBootstrapFields {
+                runtime: runtime.clone(),
+                cosmos_builder: builder.clone(),
+                should_randomize_identifiers: true,
+                chain_store_dir: chain_home_dir.clone(),
+                chain_command_path: driver.chain_driver_b.chain_command_path.clone(),
+                account_prefix: driver
+                    .chain_driver_b
+                    .chain
+                    .chain_config
+                    .account_prefix
+                    .clone(),
+                staking_denom_prefix: driver
+                    .chain_driver_b
+                    .genesis_config
+                    .staking_denom
+                    .to_string(),
+                transfer_denom_prefix: driver
+                    .chain_driver_b
+                    .genesis_config
+                    .transfer_denom
+                    .to_string(),
+                genesis_config_modifier: Box::new(|_| Ok(())),
+                comet_config_modifier: Box::new(|_| Ok(())),
+                dynamic_gas: driver
+                    .chain_driver_b
+                    .chain
+                    .chain_config
+                    .gas_config
+                    .dynamic_gas_config
+                    .clone(),
+            }),
+        };
+
+        // Stop full node
+        runtime
+            .exec_command(
+                &PathBuf::from("pkill".to_string()),
+                &["-f", &driver.chain_driver_b.chain.chain_id.to_string()],
+            )
+            .await
+            .unwrap();
+
+        driver
+            .relay_driver
+            .birelay
+            .runtime()
+            .sleep(core::time::Duration::from_secs(5))
+            .await;
+
         // Build forked full node data
         let fork_chain_home_dir = chain_home_dir
             .as_path()
@@ -36,11 +91,9 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
         fork_chain_node_config.chain_home_dir = fork_chain_home_dir.clone();
         fork_chain_node_config.rpc_port += 1;
         fork_chain_node_config.p2p_port += 1;
+        fork_chain_node_config.grpc_port += 1;
         let fork_rpc_port = fork_chain_node_config.rpc_port;
         let fork_p2p_port = fork_chain_node_config.p2p_port;
-
-        let runtime = driver.chain_driver_b.chain.runtime.clone();
-        let builder = CosmosBuilder::new_with_default(runtime.clone());
 
         let fork_bootstrap = CosmosBootstrap {
             fields: Arc::new(CosmosBootstrapFields {
@@ -111,13 +164,26 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
         std::fs::write(fork_chain_config_path, toml::to_string(&toml_value)?)?;
 
         // Start the forked chain full node in the background, and return the child process handle
-        let chain_processes = fork_bootstrap
+        let mut chain_processes = fork_bootstrap
             .start_chain_full_nodes(
                 &fork_chain_home_dir,
                 &fork_chain_node_config,
                 &genesis_config,
             )
             .await?;
+
+        driver
+            .relay_driver
+            .birelay
+            .runtime()
+            .sleep(core::time::Duration::from_secs(1))
+            .await;
+
+        let mut node_chain_processes = node_bootstrap
+            .start_chain_full_nodes(&chain_home_dir, &chain_node_config, &genesis_config)
+            .await?;
+
+        chain_processes.append(&mut node_chain_processes);
 
         let fork_chain_a_driver = CosmosChainDriver {
             chain: driver.chain_driver_a.chain.clone(),
