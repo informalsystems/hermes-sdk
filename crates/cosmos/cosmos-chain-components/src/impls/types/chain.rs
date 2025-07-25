@@ -1,7 +1,12 @@
 use alloc::sync::Arc;
 use core::time::Duration;
+use std::str::FromStr;
 
 use cgp::core::error::CanRaiseAsyncError;
+use hermes_core::chain_components::traits::{
+    EvidenceFieldsGetter, EvidenceFieldsGetterComponent, EvidenceTypeProvider,
+    EvidenceTypeProviderComponent, HasClientIdType, HasEvidenceType,
+};
 use hermes_core::chain_type_components::impls::UseEventsMessageResponse;
 use hermes_core::chain_type_components::traits::{
     ChainIdTypeProviderComponent, EventTypeProviderComponent, HeightAdjuster,
@@ -38,6 +43,7 @@ use ibc::core::host::types::identifiers::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId, Sequence,
 };
 use ibc::primitives::{Signer, Timestamp};
+use ibc_client_tendermint::types::proto::v1::Misbehaviour;
 use prost::{EncodeError, Message};
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
@@ -274,4 +280,24 @@ where
     Chain: Async,
 {
     type ChannelEnd = ChannelEnd;
+}
+
+#[cgp_provider(EvidenceTypeProviderComponent)]
+impl<Chain> EvidenceTypeProvider<Chain> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type Evidence = Misbehaviour;
+}
+
+#[cgp_provider(EvidenceFieldsGetterComponent)]
+impl<Chain, Counterparty> EvidenceFieldsGetter<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: HasEvidenceType<Evidence = Misbehaviour>
+        + HasClientIdType<Counterparty, ClientId = ClientId>,
+{
+    #[allow(deprecated)]
+    fn evidence_client_id(evidence: &Misbehaviour) -> ClientId {
+        ClientId::from_str(evidence.client_id.as_str()).expect("Invalid client ID in evidence")
+    }
 }

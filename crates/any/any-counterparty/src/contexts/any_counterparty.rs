@@ -2,6 +2,7 @@ use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use hermes_core::chain_components::traits::{
     ClientStatusMethodsComponent, ClientStatusQuerierComponent, ClientStatusTypeComponent,
+    EvidenceTypeProviderComponent,
 };
 use hermes_cosmos_chain_components::encoding::CosmosClientEncodingComponents;
 use hermes_cosmos_chain_components::impls::{ProvideCosmosChainTypes, QueryCosmosClientStatus};
@@ -48,6 +49,7 @@ delegate_components! {
         EncodingTypeProviderComponent<AsBytes>:
             UseType<AnyClientEncoding>,
         [
+            EvidenceTypeProviderComponent,
             HeightTypeProviderComponent,
             HeightFieldComponent,
             TimeoutTypeComponent,

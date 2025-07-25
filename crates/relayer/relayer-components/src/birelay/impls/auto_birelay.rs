@@ -235,7 +235,7 @@ where
                 let auto_relay_task =
                     relay.auto_relay_with_heights(SourceTarget, &start_height, end_height.as_ref());
                 let auto_refresh_task =
-                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(10));
+                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(20));
 
                 let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
@@ -250,7 +250,7 @@ where
                     end_height.as_ref(),
                 );
                 let auto_refresh_task =
-                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(10));
+                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(20));
 
                 let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
@@ -262,7 +262,7 @@ where
                 let auto_relay_task =
                     relay.auto_relay_with_heights(SourceTarget, &start_height, end_height.as_ref());
                 let auto_refresh_task =
-                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(10));
+                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(20));
 
                 let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }
@@ -277,7 +277,7 @@ where
                     end_height.as_ref(),
                 );
                 let auto_refresh_task =
-                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(10));
+                    relay.auto_refresh_client(SourceTarget, Duration::from_secs(20));
 
                 let _ = futures::join!(auto_relay_task, auto_refresh_task);
             }

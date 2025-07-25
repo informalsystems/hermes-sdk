@@ -22,6 +22,9 @@ pub use denom::*;
 mod event;
 pub use event::*;
 
+mod evidence;
+pub use evidence::*;
+
 mod height;
 pub use height::*;
 

@@ -18,7 +18,7 @@ use hermes_prelude::*;
 use tokio::task::AbortHandle;
 
 #[cgp_context(CosmosRelayDriverComponents)]
-#[derive(HasField)]
+#[derive(Clone, HasField)]
 pub struct CosmosRelayDriver {
     pub birelay: CosmosBiRelay,
 }

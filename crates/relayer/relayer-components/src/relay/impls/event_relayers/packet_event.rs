@@ -1,9 +1,13 @@
+use alloc::{format, vec};
 use core::marker::PhantomData;
 
 use hermes_chain_components::traits::{
-    CanBuildPacketFromSendPacket, CanExtractFromEvent, CanQueryChainHeight,
+    CanBuildMisbehaviourMessage, CanBuildPacketFromSendPacket, CanCheckMisbehaviour,
+    CanExtractFromEvent, CanQueryChainHeight, CanQueryClientStateWithLatestHeight, CanSendMessages,
+    HasClientStateType, HasUpdateClientEvent,
 };
 use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::{LevelDebug, LevelWarn};
 use hermes_prelude::*;
 
 use crate::chain::traits::{CanBuildPacketFromWriteAck, HasSendPacketEvent};
@@ -38,16 +42,24 @@ use crate::relay::traits::{
 pub struct PacketEventRelayer;
 
 #[cgp_provider(EventRelayerComponent)]
-impl<Relay, SrcChain> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
+impl<Relay, SrcChain, DstChain> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
-    Relay: HasRelayChains<SrcChain = SrcChain>
+    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + CanLog<LevelDebug>
+        + CanLog<LevelWarn>
         + HasRelayClientIds
         + CanRelayPacket
         + CanRaiseRelayChainErrors,
     SrcChain: HasErrorType
-        + HasSendPacketEvent<Relay::DstChain>
+        + HasSendPacketEvent<DstChain>
+        + HasUpdateClientEvent
+        + CanQueryClientStateWithLatestHeight<DstChain>
         + CanExtractFromEvent<SrcChain::SendPacketEvent>
-        + CanBuildPacketFromSendPacket<Relay::DstChain>,
+        + CanExtractFromEvent<SrcChain::UpdateClientEvent>
+        + CanBuildPacketFromSendPacket<DstChain>
+        + CanBuildMisbehaviourMessage<DstChain>
+        + CanSendMessages,
+    DstChain: CanCheckMisbehaviour<SrcChain> + HasClientStateType<SrcChain> + HasErrorType,
     MatchPacketDestinationChain: RelayPacketFilter<Relay>,
 {
     async fn relay_chain_event(
@@ -55,8 +67,11 @@ where
         event: &EventOf<Relay::SrcChain>,
     ) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
+        let dst_chain = relay.dst_chain();
 
-        if let Some(send_packet_event) = src_chain.try_extract_from_event(PhantomData, event) {
+        if let Some(send_packet_event) =
+            src_chain.try_extract_from_event(PhantomData::<SrcChain::SendPacketEvent>, event)
+        {
             let packet = src_chain
                 .build_packet_from_send_packet_event(&send_packet_event)
                 .await
@@ -64,6 +79,49 @@ where
 
             if MatchPacketDestinationChain::should_relay_packet(relay, &packet).await? {
                 relay.relay_packet(&packet).await?;
+            }
+        } else if let Some(update_client_event) =
+            src_chain.try_extract_from_event(PhantomData::<SrcChain::UpdateClientEvent>, event)
+        {
+            let src_client_id = relay.src_client_id();
+            let client_state = src_chain
+                .query_client_state_with_latest_height(PhantomData, src_client_id)
+                .await
+                .map_err(Relay::raise_error)?;
+
+            match dst_chain
+                .check_misbehaviour(&update_client_event, &client_state)
+                .await
+            {
+                Ok(Some(evidence)) => {
+                    relay
+                        .log(
+                            "Found misbehaviour, will build message and submit",
+                            &LevelDebug,
+                        )
+                        .await;
+
+                    let msg = src_chain
+                        .build_misbehaviour_message(&evidence)
+                        .await
+                        .map_err(Relay::raise_error)?;
+
+                    src_chain
+                        .send_messages(vec![msg])
+                        .await
+                        .map_err(Relay::raise_error)?;
+                }
+                Ok(None) => {
+                    relay.log("no misbehaviour detected", &LevelDebug).await;
+                }
+                Err(e) => {
+                    relay
+                        .log(
+                            &format!("error checking for misbehaviour: {e:?}"),
+                            &LevelWarn,
+                        )
+                        .await;
+                }
             }
         }
 

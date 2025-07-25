@@ -29,7 +29,7 @@ where
             .map_err(Relay::raise_error)?;
 
         let auto_relay_task = relay.auto_relay_with_heights(target, &start_height, None);
-        let auto_refresh_task = relay.auto_refresh_client(target, Duration::from_secs(10));
+        let auto_refresh_task = relay.auto_refresh_client(target, Duration::from_secs(20));
 
         let _ = futures::join!(auto_relay_task, auto_refresh_task);
 

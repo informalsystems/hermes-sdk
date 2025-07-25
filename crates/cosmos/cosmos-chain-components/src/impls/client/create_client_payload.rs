@@ -94,6 +94,7 @@ where
             .map_err(Chain::raise_error)?;
 
         let light_client = CometLightClient::new(
+            chain.chain_id().to_string(),
             current_time,
             peer_id,
             rpc_client.clone(),
