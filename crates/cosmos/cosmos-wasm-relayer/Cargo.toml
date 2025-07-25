@@ -1,11 +1,11 @@
 [package]
-name = "hermes-cosmos-wasm-relayer"
-version = { workspace = true }
-edition = { workspace = true }
-license = { workspace = true }
-keywords = { workspace = true }
-repository = { workspace = true }
-authors = { workspace = true }
+name         = "hermes-cosmos-wasm-relayer"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
 rust-version = { workspace = true }
 description  = "Implementation of an IBC Relayer in Rust, as a library"
 
@@ -13,15 +13,15 @@ description  = "Implementation of an IBC Relayer in Rust, as a library"
 all-features = true
 
 [dependencies]
-cgp                                 = { workspace = true }
-hermes-prelude                      = { workspace = true }
-hermes-cosmos-core                  = { workspace = true }
-hermes-error                        = { workspace = true }
-hermes-runtime                      = { workspace = true }
-hermes-core                         = { workspace = true }
-hermes-cosmos-integration-tests     = { workspace = true }
-hermes-cosmos-relayer               = { workspace = true }
-hermes-any-counterparty             = { workspace = true }
+cgp                             = { workspace = true }
+hermes-prelude                  = { workspace = true }
+hermes-cosmos-core              = { workspace = true }
+hermes-error                    = { workspace = true }
+hermes-runtime                  = { workspace = true }
+hermes-core                     = { workspace = true }
+hermes-cosmos-integration-tests = { workspace = true }
+hermes-cosmos-relayer           = { workspace = true }
+hermes-any-counterparty         = { workspace = true }
 hermes-wasm-chain-components    = { workspace = true }
 
 ibc = { workspace = true }
