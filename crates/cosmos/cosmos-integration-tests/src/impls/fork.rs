@@ -73,8 +73,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
                 &PathBuf::from("pkill".to_string()),
                 &["-f", &driver.chain_driver_b.chain.chain_id.to_string()],
             )
-            .await
-            .unwrap();
+            .await?;
 
         driver
             .relay_driver
@@ -87,7 +86,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
         let fork_chain_home_dir = chain_home_dir
             .as_path()
             .parent()
-            .unwrap()
+            .expect("failed to retrieve parent path of the chain home directory")
             .join(format!("fork-{}", driver.chain_driver_b.chain.chain_id));
         let mut fork_chain_node_config = chain_node_config.clone();
         fork_chain_node_config.chain_home_dir = fork_chain_home_dir.clone();
@@ -133,7 +132,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
         };
 
         // Create forked full node directory and copy full node data inside
-        runtime.create_dir(&fork_chain_home_dir).await.unwrap();
+        runtime.create_dir(&fork_chain_home_dir).await?;
 
         // Copy data to fork
         copy_dir_recursive(&chain_home_dir, &fork_chain_home_dir);
@@ -202,8 +201,8 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
             fork_chain_node_config.rpc_port
         );
 
-        fork_b_chain_config.grpc_addr = Url::from_str(&fork_b_grpc_url_str).unwrap();
-        fork_b_chain_config.rpc_addr = Url::from_str(&fork_b_rpc_url_str).unwrap();
+        fork_b_chain_config.grpc_addr = Url::from_str(&fork_b_grpc_url_str)?;
+        fork_b_chain_config.rpc_addr = Url::from_str(&fork_b_rpc_url_str)?;
 
         let mut fork_b_rpc_client = HttpClient::new(fork_b_chain_config.rpc_addr.clone())?;
         fork_b_rpc_client.set_compat_mode(driver.chain_driver_b.chain.compat_mode);
