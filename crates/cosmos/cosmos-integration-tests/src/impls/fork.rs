@@ -1,13 +1,15 @@
 use alloc::sync::Arc;
+use core::str::FromStr;
 use std::path::PathBuf;
 
 use cgp::extra::runtime::HasRuntime;
 use hermes_core::runtime_components::traits::{CanCreateDir, CanExecCommand, CanSleep};
 use hermes_core::test_components::setup::traits::{FullNodeForker, FullNodeForkerComponent};
 use hermes_cosmos_core::test_components::bootstrap::traits::CanStartChainFullNodes;
-use hermes_cosmos_relayer::contexts::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
 use hermes_error::HermesError;
 use hermes_prelude::*;
+use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::{
     CosmosBinaryChannelTestDriver, CosmosBootstrap, CosmosBootstrapFields, CosmosChainDriver,
@@ -185,6 +187,37 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
 
         chain_processes.append(&mut node_chain_processes);
 
+        let mut fork_b_chain_config = driver.chain_driver_b.chain.chain_config.clone();
+
+        let fork_b_grpc_url_str = format!(
+            "{}://{}:{}",
+            driver.chain_driver_b.chain.chain_config.grpc_addr.scheme(),
+            driver.chain_driver_b.chain.chain_config.grpc_addr.host(),
+            fork_chain_node_config.grpc_port
+        );
+        let fork_b_rpc_url_str = format!(
+            "{}://{}:{}",
+            driver.chain_driver_b.chain.chain_config.rpc_addr.scheme(),
+            driver.chain_driver_b.chain.chain_config.rpc_addr.host(),
+            fork_chain_node_config.rpc_port
+        );
+
+        fork_b_chain_config.grpc_addr = Url::from_str(&fork_b_grpc_url_str).unwrap();
+        fork_b_chain_config.rpc_addr = Url::from_str(&fork_b_rpc_url_str).unwrap();
+
+        let mut fork_b_rpc_client = HttpClient::new(fork_b_chain_config.rpc_addr.clone())?;
+        fork_b_rpc_client.set_compat_mode(driver.chain_driver_b.chain.compat_mode);
+
+        let forked_chain_b = CosmosChain::new(
+            fork_b_chain_config,
+            fork_b_rpc_client,
+            driver.chain_driver_b.chain.compat_mode,
+            driver.chain_driver_b.chain.key_entry.clone(),
+            driver.chain_driver_b.chain.runtime.clone(),
+            driver.chain_driver_b.chain.telemetry.clone(),
+            driver.chain_driver_b.chain.packet_filter.clone(),
+        );
+
         let fork_chain_a_driver = CosmosChainDriver {
             chain: driver.chain_driver_a.chain.clone(),
             chain_command_path: driver.chain_driver_a.chain_command_path.clone(),
@@ -199,7 +232,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
         };
 
         let fork_chain_b_driver = CosmosChainDriver {
-            chain: driver.chain_driver_b.chain.clone(),
+            chain: forked_chain_b,
             chain_command_path: driver.chain_driver_b.chain_command_path.clone(),
             chain_node_config: fork_chain_node_config,
             genesis_config,

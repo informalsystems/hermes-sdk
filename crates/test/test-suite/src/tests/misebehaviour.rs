@@ -3,7 +3,8 @@ use core::time::Duration;
 
 use hermes_chain_components::traits::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, CanQueryChainHeight,
-    CanQueryClientStateWithLatestHeight, CanSendMessages, HasClientStateFields,
+    CanQueryClientStateWithLatestHeight, CanQueryClientStatus, CanSendMessages,
+    HasClientStateFields, HasClientStatusMethods,
 };
 use hermes_prelude::*;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
@@ -22,7 +23,8 @@ impl<A, B> Default for TestMisbehaviourDetection<A, B> {
 
 impl<Driver, A, B> TestCase<Driver> for TestMisbehaviourDetection<A, B>
 where
-    Driver: CanUseBinaryTestDriverMethods<A, B> + CanForkFullNode,
+    Driver:
+        CanUseBinaryTestDriverMethods<A, B> + CanForkFullNode + CanRaiseAsyncError<&'static str>,
     A: Async,
     B: Async,
 {
@@ -67,12 +69,6 @@ where
 
         let client_a_state_height = Driver::ChainB::client_state_latest_height(&client_a_state);
 
-        driver
-            .log_message(&alloc::format!(
-                "Will build manual client update payload from fork at height: {latest_height_b:?}"
-            ))
-            .await;
-
         let update_client_a_payload = chain_b_fork
             .build_update_client_payload(&client_a_state_height, &latest_height_b, client_a_state)
             .await
@@ -83,58 +79,39 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
-        driver
-            .log_message(&alloc::format!(
-                "Will send manual client update built from fork: {messages:?}"
-            ))
-            .await;
+        tokio::time::sleep(core::time::Duration::from_secs(2)).await;
 
-        let result = chain_a
+        chain_a
             .send_messages(messages)
             .await
             .map_err(Driver::raise_error)?;
-
-        driver
-            .log_message(&alloc::format!("Manual client update result: {result:?}"))
-            .await;
 
         tokio::time::sleep(core::time::Duration::from_secs(5)).await;
 
-        /*let latest_height_b = chain_b_fork
-            .query_chain_height()
-            .await
-            .map_err(Driver::raise_error)?;
+        driver
+            .log_message("Will assert the client is eventually frozen")
+            .await;
 
-        let client_a_state = chain_a
-            .query_client_state_with_latest_height(PhantomData, client_id_a)
-            .await
-            .map_err(Driver::raise_error)?;
+        for _ in 0..20 {
+            let client_status = chain_a
+                .query_client_status(PhantomData, client_id_a)
+                .await
+                .map_err(Driver::raise_error)?;
 
-        let client_a_state_height = Driver::ChainB::client_state_latest_height(&client_a_state);
+            if Driver::ChainB::client_status_is_frozen(&client_status) {
+                driver
+                    .log_message(
+                        "Client is frozen after misbehaviour has been detected and submitted",
+                    )
+                    .await;
 
-        driver.log_message(&alloc::format!("Will build second manual client update payload from fork at height: {latest_height_b:?}")).await;
+                return Ok(());
+            }
+            tokio::time::sleep(core::time::Duration::from_secs(1)).await;
+        }
 
-        let update_client_a_payload = chain_b_fork
-            .build_update_client_payload(&client_a_state_height, &latest_height_b, client_a_state)
-            .await
-            .map_err(Driver::raise_error)?;
-
-        let messages = chain_a
-            .build_update_client_message(client_id_a, update_client_a_payload)
-            .await
-            .map_err(Driver::raise_error)?;
-
-        driver.log_message(&alloc::format!("Will send second manual client update built from fork: {messages:?}")).await;
-
-        let result = chain_a
-            .send_messages(messages)
-            .await
-            .map_err(Driver::raise_error)?;
-
-        driver.log_message(&alloc::format!("Second manual client update result: {result:?}")).await;*/
-
-        tokio::time::sleep(core::time::Duration::from_secs(120)).await;
-
-        Ok(())
+        Err(Driver::raise_error(
+            "Failed to detect and submit misbehaviour",
+        ))
     }
 }

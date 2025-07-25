@@ -4,8 +4,8 @@ use cgp::extra::runtime::HasRuntime;
 use hermes_comet_light_client_components::traits::{CanDetectMisbehaviour, CanFetchLightBlock};
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
 use hermes_core::chain_components::traits::{
-    CanExtractFromEvent, CanQueryClientState, HasChainId, HasClientStateType, HasEvidenceType,
-    HasUpdateClientEvent, MisbehaviourChecker, MisbehaviourCheckerComponent,
+    HasChainId, HasClientStateType, HasEvidenceType, HasUpdateClientEvent, MisbehaviourChecker,
+    MisbehaviourCheckerComponent,
 };
 use hermes_core::logging_components::traits::CanLog;
 use hermes_core::logging_components::types::{LevelDebug, LevelWarn};
@@ -14,7 +14,6 @@ use hermes_error::HermesError;
 use hermes_prelude::*;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::error::DecodingError;
-use ibc::core::host::types::identifiers::ClientId;
 use ibc_client_tendermint::types::error::TendermintClientError;
 use ibc_client_tendermint::types::proto::v1::{Header, Misbehaviour};
 use tendermint::block::Height as TendermintHeight;
@@ -31,12 +30,9 @@ pub struct CheckTendermintMisbehaviour;
 #[cgp_provider(MisbehaviourCheckerComponent)]
 impl<Chain, Counterparty> MisbehaviourChecker<Chain, Counterparty> for CheckTendermintMisbehaviour
 where
-    Chain: HasUpdateClientEvent
-        + HasRpcClient
+    Chain: HasRpcClient
         + HasRuntime
         + HasChainId
-        + CanQueryClientState<Counterparty, ClientId = ClientId>
-        + CanExtractFromEvent<Chain::UpdateClientEvent>
         + HasClientStateType<Counterparty>
         + CanLog<LevelDebug>
         + CanLog<LevelWarn>
@@ -45,7 +41,6 @@ where
         + CanRaiseAsyncError<TendermintClientError>
         + CanRaiseAsyncError<HermesError>
         + CanRaiseAsyncError<DecodingError>
-        + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<&'static str>,
     Counterparty: HasEvidenceType<Evidence = Misbehaviour>
         + HasUpdateClientEvent<UpdateClientEvent = CosmosUpdateClientEvent>,
@@ -57,12 +52,6 @@ where
         update_client_event: &Counterparty::UpdateClientEvent,
         client_state: &Chain::ClientState,
     ) -> Result<Option<Counterparty::Evidence>, Chain::Error> {
-        // FIXME: Taken from Hermes v1 implementation
-        chain
-            .runtime()
-            .sleep(core::time::Duration::from_millis(200))
-            .await;
-
         let event_header = update_client_event.header.clone();
 
         let event_signed_header = event_header.signed_header.ok_or_else(|| {
@@ -138,7 +127,7 @@ where
         };
 
         let trusted_block = light_client
-            .fetch_light_block(&tm_trusted_height)
+            .fetch_light_block(&tm_trusted_height.increment())
             .await
             .map_err(Chain::raise_error)?;
 

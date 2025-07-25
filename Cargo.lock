@@ -1524,7 +1524,6 @@ dependencies = [
  "tendermint-light-client-detector",
  "tendermint-light-client-verifier",
  "tendermint-rpc",
- "tracing",
 ]
 
 [[package]]

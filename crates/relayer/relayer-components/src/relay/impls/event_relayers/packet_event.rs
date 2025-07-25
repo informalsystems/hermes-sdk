@@ -4,10 +4,10 @@ use core::marker::PhantomData;
 use hermes_chain_components::traits::{
     CanBuildMisbehaviourMessage, CanBuildPacketFromSendPacket, CanCheckMisbehaviour,
     CanExtractFromEvent, CanQueryChainHeight, CanQueryClientStateWithLatestHeight, CanSendMessages,
-    HasChainId, HasClientStateType, HasUpdateClientEvent,
+    HasClientStateType, HasUpdateClientEvent,
 };
 use hermes_logging_components::traits::CanLog;
-use hermes_logging_components::types::{LevelDebug, LevelInfo, LevelTrace};
+use hermes_logging_components::types::{LevelDebug, LevelWarn};
 use hermes_prelude::*;
 
 use crate::chain::traits::{CanBuildPacketFromWriteAck, HasSendPacketEvent};
@@ -42,27 +42,22 @@ use crate::relay::traits::{
 pub struct PacketEventRelayer;
 
 #[cgp_provider(EventRelayerComponent)]
-impl<Relay, SrcChain, DstChain, SendP: Async> EventRelayer<Relay, SourceTarget>
-    for PacketEventRelayer
+impl<Relay, SrcChain, DstChain> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanLog<LevelDebug>
-        + CanLog<LevelInfo>
-        + CanLog<LevelTrace>
+        + CanLog<LevelWarn>
         + HasRelayClientIds
         + CanRelayPacket
-        + CanRaiseRelayChainErrors
-        + CanRaiseAsyncError<&'static str>,
+        + CanRaiseRelayChainErrors,
     SrcChain: HasErrorType
-        + HasChainId
-        + HasSendPacketEvent<DstChain, SendPacketEvent = SendP>
+        + HasSendPacketEvent<DstChain>
         + HasUpdateClientEvent
-        + HasClientStateType<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
-        + CanExtractFromEvent<SendP>
+        + CanExtractFromEvent<SrcChain::SendPacketEvent>
         + CanExtractFromEvent<SrcChain::UpdateClientEvent>
-        + CanBuildPacketFromSendPacket<Relay::DstChain>
-        + CanBuildMisbehaviourMessage<Relay::DstChain>
+        + CanBuildPacketFromSendPacket<DstChain>
+        + CanBuildMisbehaviourMessage<DstChain>
         + CanSendMessages,
     DstChain: CanCheckMisbehaviour<SrcChain> + HasClientStateType<SrcChain> + HasErrorType,
     MatchPacketDestinationChain: RelayPacketFilter<Relay>,
@@ -111,32 +106,21 @@ where
                         .await
                         .map_err(Relay::raise_error)?;
 
-                    let events = src_chain
+                    src_chain
                         .send_messages(vec![msg])
                         .await
-                        .map_err(Relay::raise_error)?
-                        .into_iter()
-                        .next()
-                        .ok_or_else(|| {
-                            Relay::raise_error(
-                                "failed to extract events from submitting misbehaviour",
-                            )
-                        })?;
-
-                    // TODO: remove
-                    relay
-                        .log(
-                            &format!("misbehaviour submission response: {events:?}"),
-                            &LevelInfo,
-                        )
-                        .await;
+                        .map_err(Relay::raise_error)?;
                 }
                 Ok(None) => {
                     relay.log("no misbehaviour detected", &LevelDebug).await;
                 }
                 Err(e) => {
-                    relay.log(&format!("error: {e:?}"), &LevelDebug).await;
-                    return Err(Relay::raise_error(e));
+                    relay
+                        .log(
+                            &format!("error checking for misbehaviour: {e:?}"),
+                            &LevelWarn,
+                        )
+                        .await;
                 }
             }
         }
