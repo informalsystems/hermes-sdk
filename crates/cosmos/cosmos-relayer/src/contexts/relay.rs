@@ -1,6 +1,7 @@
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 use core::ops::Deref;
+use core::time::Duration;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use cgp::core::field::Index;
@@ -12,6 +13,9 @@ use hermes_core::relayer_components::multi::traits::chain_at::{
     ChainAt, ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };
 use hermes_core::relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
+use hermes_core::relayer_components::multi::traits::refresh_rate::{
+    RefreshRateAtoBGetterComponent, RefreshRateBtoAGetterComponent,
+};
 use hermes_core::relayer_components::multi::traits::relay_at::ClientIdAt;
 use hermes_core::relayer_components::multi::types::tags::{Dst, Src};
 use hermes_core::relayer_components::relay::impls::{
@@ -53,6 +57,8 @@ pub struct CosmosRelayFields {
     pub packet_lock_mutex: PacketMutexOf<CosmosRelay>,
     pub message_batch_sender_a: MessageBatchSenderOf<CosmosRelay, Index<0>>,
     pub message_batch_sender_b: MessageBatchSenderOf<CosmosRelay, Index<1>>,
+    pub refresh_rate_a_to_b: Option<Duration>,
+    pub refresh_rate_b_to_a: Option<Duration>,
 }
 
 pub trait HasCosmosRelayFields: Send + Sync + 'static {
@@ -82,6 +88,8 @@ impl CosmosRelay {
         dst_client_id: ClientId,
         src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
+        refresh_rate_a_to_b: Option<Duration>,
+        refresh_rate_b_to_a: Option<Duration>,
     ) -> Self {
         let relay = Self {
             fields: Arc::new(CosmosRelayFields {
@@ -93,6 +101,8 @@ impl CosmosRelay {
                 message_batch_sender_a: src_chain_message_batch_sender,
                 message_batch_sender_b: dst_chain_message_batch_sender,
                 packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
+                refresh_rate_a_to_b,
+                refresh_rate_b_to_a,
             }),
         };
 
@@ -131,6 +141,10 @@ delegate_components! {
             UseField<symbol!("message_batch_sender_a")>,
         MessageBatchSenderGetterComponent<Index<1>>:
             UseField<symbol!("message_batch_sender_b")>,
+        RefreshRateAtoBGetterComponent:
+            UseField<symbol!("refresh_rate_a_to_b")>,
+        RefreshRateBtoAGetterComponent:
+            UseField<symbol!("refresh_rate_b_to_a")>,
         [
             ChainTypeProviderAtComponent<Src>,
             ChainTypeProviderAtComponent<Dst>,

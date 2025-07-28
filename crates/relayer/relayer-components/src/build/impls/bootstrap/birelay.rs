@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use cgp::core::Async;
 use hermes_prelude::*;
@@ -37,6 +38,8 @@ pub trait CanBootstrapBiRelay<A, B>:
         payload_options_b: &CreateClientPayloadOptionsOf<ChainAt<Self, B>, ChainAt<Self, A>>,
         message_options_a: &CreateClientMessageOptionsOf<ChainAt<Self, A>, ChainAt<Self, B>>,
         message_options_b: &CreateClientMessageOptionsOf<ChainAt<Self, B>, ChainAt<Self, A>>,
+        refresh_rate_a_to_b: Option<Duration>,
+        refresh_rate_b_to_a: Option<Duration>,
     ) -> Result<Self::BiRelay, Self::Error>;
 }
 
@@ -71,6 +74,8 @@ where
         payload_options_b: &ChainB::CreateClientPayloadOptions,
         message_options_a: &ChainA::CreateClientMessageOptions,
         message_options_b: &ChainB::CreateClientMessageOptions,
+        refresh_rate_a_to_b: Option<Duration>,
+        refresh_rate_b_to_a: Option<Duration>,
     ) -> Result<Build::BiRelay, Build::Error> {
         let relay_a_to_b = self
             .bootstrap_relay(
@@ -81,6 +86,8 @@ where
                 payload_options_b,
                 message_options_a,
                 message_options_b,
+                refresh_rate_a_to_b,
+                refresh_rate_b_to_a,
             )
             .await?;
 
@@ -90,6 +97,8 @@ where
                 chain_id_b,
                 relay_a_to_b.src_client_id(),
                 relay_a_to_b.dst_client_id(),
+                refresh_rate_a_to_b,
+                refresh_rate_b_to_a,
             )
             .await?;
 

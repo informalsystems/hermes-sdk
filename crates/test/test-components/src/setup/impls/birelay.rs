@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use cgp::core::error::{CanRaiseAsyncError, ErrorOf};
 use cgp::core::Async;
@@ -36,9 +37,19 @@ where
         chain_b: &ChainAt<Setup, B>,
         client_id_a: &ClientIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
         client_id_b: &ClientIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
+        refresh_rate_a_to_b: Option<Duration>,
+        refresh_rate_b_to_a: Option<Duration>,
     ) -> Result<BiRelayAt<Setup, A, B>, Setup::Error> {
         let (relay_a_to_b, relay_b_to_a) = setup
-            .setup_relays(PhantomData, chain_a, chain_b, client_id_a, client_id_b)
+            .setup_relays(
+                PhantomData,
+                chain_a,
+                chain_b,
+                client_id_a,
+                client_id_b,
+                refresh_rate_a_to_b,
+                refresh_rate_b_to_a,
+            )
             .await?;
 
         let birelay = setup

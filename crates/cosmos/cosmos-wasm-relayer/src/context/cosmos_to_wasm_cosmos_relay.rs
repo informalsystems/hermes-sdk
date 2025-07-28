@@ -1,3 +1,4 @@
+use core::time::Duration;
 use std::collections::BTreeSet;
 use std::sync::Arc;
 
@@ -15,6 +16,9 @@ use hermes_core::relayer_components::multi::traits::chain_at::{
     ChainGetterAtComponent, ChainTypeProviderAtComponent,
 };
 use hermes_core::relayer_components::multi::traits::client_id_at::ClientIdAtGetterComponent;
+use hermes_core::relayer_components::multi::traits::refresh_rate::{
+    RefreshRateAtoBGetterComponent, RefreshRateBtoAGetterComponent,
+};
 use hermes_core::relayer_components::multi::types::tags::{Dst, Src};
 use hermes_core::relayer_components::relay::impls::{
     CanBootstrapChannel, CanBootstrapConnection, LogSkipRelayLockedPacket,
@@ -44,9 +48,12 @@ pub struct CosmosToWasmCosmosRelay {
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilterConfig,
     pub packet_lock_mutex: Arc<Mutex<BTreeSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
+    pub refresh_rate_a_to_b: Option<Duration>,
+    pub refresh_rate_b_to_a: Option<Duration>,
 }
 
 impl CosmosToWasmCosmosRelay {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         runtime: HermesRuntime,
         src_chain: CosmosChain,
@@ -54,6 +61,8 @@ impl CosmosToWasmCosmosRelay {
         src_client_id: ClientId,
         dst_client_id: ClientId,
         packet_filter: PacketFilterConfig,
+        refresh_rate_a_to_b: Option<Duration>,
+        refresh_rate_b_to_a: Option<Duration>,
     ) -> Self {
         Self {
             runtime,
@@ -63,6 +72,8 @@ impl CosmosToWasmCosmosRelay {
             dst_client_id,
             packet_filter,
             packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
+            refresh_rate_a_to_b,
+            refresh_rate_b_to_a,
         }
     }
 }
@@ -94,6 +105,10 @@ delegate_components! {
             UseField<symbol!("dst_client_id")>,
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
+        RefreshRateAtoBGetterComponent:
+            UseField<symbol!("refresh_rate_a_to_b")>,
+        RefreshRateBtoAGetterComponent:
+            UseField<symbol!("refresh_rate_b_to_a")>,
     }
 }
 

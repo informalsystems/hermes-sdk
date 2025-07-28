@@ -1,5 +1,7 @@
 use core::time::Duration;
 
+use hermes_chain_components::traits::HasHeightType;
+use hermes_chain_components::types::aliases::HeightOf;
 use hermes_prelude::*;
 
 use crate::relay::traits::{HasTargetChainTypes, RelayTarget};
@@ -10,7 +12,8 @@ use crate::relay::traits::{HasTargetChainTypes, RelayTarget};
     context: Relay,
 }]
 #[async_trait]
-pub trait CanRefreshClient<Target>: HasTargetChainTypes<Target> + HasAsyncErrorType
+pub trait CanRefreshClient<Target>:
+    HasTargetChainTypes<Target, TargetChain: HasHeightType> + HasAsyncErrorType
 where
     Target: RelayTarget,
 {
@@ -18,5 +21,6 @@ where
         &self,
         target: Target,
         interval: Duration,
+        end_height: Option<&HeightOf<Self::TargetChain>>,
     ) -> Result<(), Self::Error>;
 }

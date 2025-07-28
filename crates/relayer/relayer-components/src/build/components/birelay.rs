@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use hermes_prelude::*;
 
@@ -21,6 +22,8 @@ where
         chain_id_b: &ChainIdAt<Build, B>,
         client_id_a: &ClientIdAt<Build, A, B>,
         client_id_b: &ClientIdAt<Build, B, A>,
+        refresh_rate_a_to_b: Option<Duration>,
+        refresh_rate_b_to_a: Option<Duration>,
     ) -> Result<Build::BiRelay, Build::Error> {
         let relay_a_to_b = build
             .build_relay(
@@ -29,6 +32,8 @@ where
                 chain_id_b,
                 client_id_a,
                 client_id_b,
+                refresh_rate_a_to_b,
+                refresh_rate_b_to_a,
             )
             .await?;
 
@@ -39,6 +44,8 @@ where
                 chain_id_a,
                 client_id_b,
                 client_id_a,
+                refresh_rate_a_to_b,
+                refresh_rate_b_to_a,
             )
             .await?;
 

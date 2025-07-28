@@ -55,6 +55,7 @@ where
 
         let (client_id_a, client_id_b) = setup.setup_clients(chain_a, chain_b).await?;
 
+        // TODO: FIXME
         let birelay = setup
             .setup_birelay(
                 PhantomData::<(Index<0>, Index<1>)>,
@@ -62,6 +63,8 @@ where
                 chain_b,
                 &client_id_a,
                 &client_id_b,
+                None,
+                None,
             )
             .await?;
 

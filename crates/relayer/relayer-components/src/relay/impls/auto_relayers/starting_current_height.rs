@@ -21,7 +21,11 @@ where
     Target: RelayTarget,
     Relay::TargetChain: CanQueryChainHeight,
 {
-    async fn auto_relay(relay: &Relay, target: Target) -> Result<(), Relay::Error> {
+    async fn auto_relay(
+        relay: &Relay,
+        target: Target,
+        refresh_rate: Option<Duration>,
+    ) -> Result<(), Relay::Error> {
         let start_height = relay
             .target_chain()
             .query_chain_height()
@@ -29,9 +33,14 @@ where
             .map_err(Relay::raise_error)?;
 
         let auto_relay_task = relay.auto_relay_with_heights(target, &start_height, None);
-        let auto_refresh_task = relay.auto_refresh_client(target, Duration::from_secs(10));
 
-        let _ = futures::join!(auto_relay_task, auto_refresh_task);
+        if let Some(refresh_rate) = refresh_rate {
+            let auto_refresh_task = relay.auto_refresh_client(target, refresh_rate, None);
+
+            let _ = futures::join!(auto_relay_task, auto_refresh_task);
+        } else {
+            let _ = auto_relay_task.await;
+        }
 
         Ok(())
     }

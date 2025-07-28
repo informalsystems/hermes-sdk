@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use hermes_chain_components::traits::HasClientIdType;
 use hermes_prelude::*;
@@ -25,5 +26,7 @@ pub trait CanBuildRelay<Src: Async, Dst: Async>:
         dst_chain_id: &ChainIdAt<Self, Dst>,
         src_client_id: &ClientIdAt<Self, Src, Dst>,
         dst_client_id: &ClientIdAt<Self, Dst, Src>,
+        refresh_rate_a_to_b: Option<Duration>,
+        refresh_rate_b_to_a: Option<Duration>,
     ) -> Result<Self::Relay, Self::Error>;
 }
