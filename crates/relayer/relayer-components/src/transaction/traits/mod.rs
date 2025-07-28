@@ -1,3 +1,6 @@
+mod client_refresh_rate;
+pub use client_refresh_rate::*;
+
 mod default_signer;
 pub use default_signer::*;
 

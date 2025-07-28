@@ -1,4 +1,5 @@
 use core::ops::Deref;
+use core::time::Duration;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use hermes_any_counterparty::contexts::AnyCounterparty;
@@ -32,8 +33,9 @@ use hermes_core::relayer_components::chain::traits::{
 use hermes_core::relayer_components::error::traits::{HasRetryableError, RetryableErrorComponent};
 use hermes_core::relayer_components::transaction::impls::{GetGlobalNonceMutex, HasPollTimeout};
 use hermes_core::relayer_components::transaction::traits::{
-    CanPollTxResponse, CanQueryTxResponse, CanSubmitTx, DefaultSignerGetterComponent,
-    FeeForSimulationGetter, FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent,
+    CanPollTxResponse, CanQueryTxResponse, CanSubmitTx, ClientRefreshRateGetter,
+    ClientRefreshRateGetterComponent, DefaultSignerGetterComponent, FeeForSimulationGetter,
+    FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent,
 };
 use hermes_core::relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_core::runtime_components::traits::{
@@ -174,6 +176,13 @@ impl RpcClientGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 
     fn rpc_address(chain: &WasmCosmosChain) -> &Url {
         &chain.chain_config.rpc_addr
+    }
+}
+
+#[cgp_provider(ClientRefreshRateGetterComponent)]
+impl ClientRefreshRateGetter<WasmCosmosChain> for WasmCosmosChainComponents {
+    fn client_refresh_rate(chain: &WasmCosmosChain) -> &Option<Duration> {
+        &chain.chain_config.client_refresh_rate
     }
 }
 

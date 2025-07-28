@@ -41,9 +41,9 @@ use hermes_core::relayer_components::transaction::impls::{
     GetGlobalNonceMutex, LogSendMessagesWithSignerAndNonce, TxNoResponseError,
 };
 use hermes_core::relayer_components::transaction::traits::{
-    DefaultSignerGetterComponent, FeeForSimulationGetter, FeeForSimulationGetterComponent,
-    NonceAllocationMutexGetterComponent, TxResponsePollerComponent, TxResponseQuerierComponent,
-    TxSubmitterComponent,
+    ClientRefreshRateGetter, ClientRefreshRateGetterComponent, DefaultSignerGetterComponent,
+    FeeForSimulationGetter, FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent,
+    TxResponsePollerComponent, TxResponseQuerierComponent, TxSubmitterComponent,
 };
 use hermes_core::relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_core::runtime_components::traits::{
@@ -188,6 +188,13 @@ impl FeeForSimulationGetter<CosmosChain> for CosmosChainContextComponents {
 impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainContextComponents {
     fn ibc_commitment_prefix(chain: &CosmosChain) -> &Vec<u8> {
         &chain.ibc_commitment_prefix
+    }
+}
+
+#[cgp_provider(ClientRefreshRateGetterComponent)]
+impl ClientRefreshRateGetter<CosmosChain> for CosmosChainContextComponents {
+    fn client_refresh_rate(chain: &CosmosChain) -> &Option<Duration> {
+        &chain.chain_config.client_refresh_rate
     }
 }
 

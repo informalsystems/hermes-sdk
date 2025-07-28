@@ -6,6 +6,7 @@ use hermes_relayer_components::chain::traits::{
     HasCreateClientPayloadOptionsType, HasIbcChainTypes,
 };
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::transaction::traits::HasClientRefreshRate;
 
 use crate::chain_driver::traits::HasChain;
 use crate::driver::traits::ChainDriverAt;
@@ -33,10 +34,14 @@ where
         + CanBuildTestDriverWithBinaryChannel,
     ChainDriverAt<Setup, Index<0>>: HasChain<Chain = ChainA>,
     ChainDriverAt<Setup, Index<1>>: HasChain<Chain = ChainB>,
-    ChainA:
-        HasIbcChainTypes<ChainB> + HasCreateClientPayloadOptionsType<ChainB> + HasAsyncErrorType,
-    ChainB:
-        HasIbcChainTypes<ChainA> + HasCreateClientPayloadOptionsType<ChainA> + HasAsyncErrorType,
+    ChainA: HasIbcChainTypes<ChainB>
+        + HasCreateClientPayloadOptionsType<ChainB>
+        + HasClientRefreshRate
+        + HasAsyncErrorType,
+    ChainB: HasIbcChainTypes<ChainA>
+        + HasCreateClientPayloadOptionsType<ChainA>
+        + HasClientRefreshRate
+        + HasAsyncErrorType,
 {
     async fn build_driver(setup: &Setup) -> Result<Setup::TestDriver, Setup::Error> {
         let chain_driver_a = setup.setup_chain(PhantomData::<Index<0>>).await?;
@@ -55,7 +60,6 @@ where
 
         let (client_id_a, client_id_b) = setup.setup_clients(chain_a, chain_b).await?;
 
-        // TODO: FIXME
         let birelay = setup
             .setup_birelay(
                 PhantomData::<(Index<0>, Index<1>)>,
@@ -63,8 +67,8 @@ where
                 chain_b,
                 &client_id_a,
                 &client_id_b,
-                None,
-                None,
+                *chain_a.client_refresh_rate(),
+                *chain_b.client_refresh_rate(),
             )
             .await?;
 

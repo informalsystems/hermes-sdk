@@ -37,6 +37,10 @@ pub struct CosmosChainConfig {
     pub extension_options: Vec<Any>,
 
     pub block_time: Duration,
+
+    // TODO: This can be improved by having refresh rate binded to
+    // specific client IDs
+    pub client_refresh_rate: Option<Duration>,
 }
 
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
