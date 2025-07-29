@@ -124,7 +124,7 @@ delegate_components! {
         DefaultSignerGetterComponent:
             UseField<symbol!("key_entry")>,
         SignerGetterComponent:
-            SignerWithIndexGetter,
+            SignerWithIndexGetter<symbol!("key_entry"), symbol!("additional_key_entries")>,
         ChainIdGetterComponent:
             UseField<symbol!("chain_id")>,
         BlockTimeQuerierComponent:
