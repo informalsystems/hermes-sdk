@@ -30,10 +30,13 @@ use hermes_core::relayer_components::chain::traits::{
     IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
 use hermes_core::relayer_components::error::traits::{HasRetryableError, RetryableErrorComponent};
-use hermes_core::relayer_components::transaction::impls::{GetGlobalNonceMutex, HasPollTimeout};
+use hermes_core::relayer_components::transaction::impls::{
+    GetGlobalNonceMutex, GetGlobalSignerMutex, HasPollTimeout, SignerWithIndexGetter,
+};
 use hermes_core::relayer_components::transaction::traits::{
     CanPollTxResponse, CanQueryTxResponse, CanSubmitTx, DefaultSignerGetterComponent,
     FeeForSimulationGetter, FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent,
+    SignerGetterComponent, SignerMutexGetterComponent,
 };
 use hermes_core::relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_core::runtime_components::traits::{
@@ -116,8 +119,12 @@ delegate_components! {
             WasmChainComponents,
         NonceAllocationMutexGetterComponent:
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
+        SignerMutexGetterComponent:
+            GetGlobalSignerMutex<symbol!("signer_mutex"), symbol!("additional_key_entries")>,
         DefaultSignerGetterComponent:
             UseField<symbol!("key_entry")>,
+        SignerGetterComponent:
+            SignerWithIndexGetter,
         ChainIdGetterComponent:
             UseField<symbol!("chain_id")>,
         BlockTimeQuerierComponent:

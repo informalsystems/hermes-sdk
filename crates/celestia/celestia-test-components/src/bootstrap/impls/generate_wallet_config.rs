@@ -80,12 +80,22 @@ where
             validator_staked_amount: None,
         };
 
+        let relayer_2 = CosmosWalletConfig {
+            wallet_id: "relayer-2".to_owned(),
+            genesis_balances: vec![
+                Amount::new(1_000_000_000_000_000_000, denom_for_staking.clone()),
+                Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
+            ],
+            validator_staked_amount: None,
+        };
+
         Ok(BTreeMap::from([
             ("validator".into(), validator),
             ("sequencer".into(), sequencer),
             ("user1".into(), user1),
             ("user2".into(), user2),
             ("relayer".into(), relayer),
+            ("relayer-2".into(), relayer_2),
         ]))
     }
 }

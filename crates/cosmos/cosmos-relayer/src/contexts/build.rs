@@ -176,6 +176,7 @@ impl CosmosBuilder {
         chain_config: CosmosChainConfig,
     ) -> Result<CosmosChain, Error> {
         let key = get_keypair(&chain_config)?;
+        let additional_keys = get_additional_keypair(&chain_config)?;
 
         let mut rpc_client = HttpClient::new(chain_config.rpc_addr.clone())?;
 
@@ -194,6 +195,7 @@ impl CosmosBuilder {
             rpc_client,
             compat_mode,
             key,
+            additional_keys,
             self.runtime.clone(),
             self.telemetry.clone(),
             self.packet_filter.clone(),
@@ -245,6 +247,34 @@ pub fn get_keypair(chain_config: &CosmosChainConfig) -> Result<Secp256k1KeyPair,
     let key_entry = serde_json::from_reader(file)?;
 
     Ok(key_entry)
+}
+
+pub fn get_additional_keypair(
+    chain_config: &CosmosChainConfig,
+) -> Result<Vec<Secp256k1KeyPair>, Error> {
+    let ks_folder = &chain_config.key_store_folder;
+
+    let ks_folder = match ks_folder {
+        Some(folder) => folder.to_owned(),
+        None => {
+            let home =
+                dirs_next::home_dir().ok_or_else(|| eyre!("failed to retrieve home directory"))?;
+            home.join(KEYSTORE_DEFAULT_FOLDER)
+        }
+    };
+
+    let mut key_entries: Vec<Secp256k1KeyPair> = vec![];
+    for additional_key_name in chain_config.additional_key_names.iter() {
+        let mut filename = ks_folder.join(additional_key_name.clone());
+        filename.set_extension(KEYSTORE_FILE_EXTENSION);
+
+        let file = File::open(&filename)?;
+
+        let key_entry = serde_json::from_reader(file)?;
+        key_entries.push(key_entry);
+    }
+
+    Ok(key_entries)
 }
 
 #[cgp_provider(ChainBuilderComponent)]

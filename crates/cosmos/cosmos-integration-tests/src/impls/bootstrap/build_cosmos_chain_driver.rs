@@ -61,6 +61,15 @@ where
             })?
             .clone();
 
+        let additional_relayer_wallet = wallets
+            .get("relayer-2")
+            .ok_or_else(|| {
+                Bootstrap::raise_error(
+                    "expect relayer-2 wallet to be provided in the list of test wallets",
+                )
+            })?
+            .clone();
+
         let user_wallet_a = wallets
             .get("user1")
             .ok_or_else(|| {
@@ -80,7 +89,12 @@ where
             .clone();
 
         let chain = bootstrap
-            .build_chain_with_node_config(&chain_node_config, &genesis_config, &relayer_wallet)
+            .build_chain_with_node_config(
+                &chain_node_config,
+                &genesis_config,
+                &relayer_wallet,
+                vec![&additional_relayer_wallet],
+            )
             .await?;
 
         let chain_command_path = bootstrap.chain_command_path().clone();

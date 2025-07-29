@@ -5,7 +5,7 @@ mod preset {
     use crate::chain::traits::MessageSenderComponent;
     use crate::transaction::impls::{
         AllocateNonceAndSendMessages, AllocateNonceWithMutex, EstimateFeesAndSendTx,
-        PollTxResponse, SendMessagesWithDefaultSigner,
+        PollTxResponse, SendMessagesWithIndexedSigner,
     };
     use crate::transaction::traits::{
         MessagesWithSignerAndNonceSenderComponent, MessagesWithSignerSenderComponent,
@@ -14,7 +14,7 @@ mod preset {
 
     cgp_preset! {
         DefaultTxComponents {
-            MessageSenderComponent: SendMessagesWithDefaultSigner,
+            MessageSenderComponent: SendMessagesWithIndexedSigner,
             MessagesWithSignerSenderComponent: AllocateNonceAndSendMessages,
             MessagesWithSignerAndNonceSenderComponent: EstimateFeesAndSendTx,
             NonceAllocatorComponent: AllocateNonceWithMutex,
