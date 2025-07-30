@@ -107,7 +107,7 @@ where
                         .map_err(Relay::raise_error)?;
 
                     src_chain
-                        .send_messages(vec![msg])
+                        .send_message(msg)
                         .await
                         .map_err(Relay::raise_error)?;
                 }

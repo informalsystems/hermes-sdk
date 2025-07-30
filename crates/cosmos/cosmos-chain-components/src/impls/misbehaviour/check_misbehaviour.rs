@@ -207,8 +207,8 @@ where
                             .ok_or_else(|| {
                                 Chain::raise_error("`trusted_height` missing from support `Header`")
                             })?
-                            .revision_height
-                            + 1,
+                            .increment()
+                            .revision_height,
                     )
                     .map_err(Chain::raise_error)?;
 
