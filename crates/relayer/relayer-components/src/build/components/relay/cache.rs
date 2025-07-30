@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use hermes_prelude::*;
 
@@ -26,6 +27,8 @@ where
         dst_chain_id: &ChainIdAt<Build, Dst>,
         src_client_id: &ClientIdAt<Build, Src, Dst>,
         dst_client_id: &ClientIdAt<Build, Dst, Src>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<Build::Relay, Build::Error> {
         let relay_id = (
             src_chain_id.clone(),
@@ -46,6 +49,8 @@ where
                 dst_chain_id,
                 src_client_id,
                 dst_client_id,
+                refresh_rate_a,
+                refresh_rate_b,
             )
             .await?;
             cache.insert(relay_id, relay.clone());

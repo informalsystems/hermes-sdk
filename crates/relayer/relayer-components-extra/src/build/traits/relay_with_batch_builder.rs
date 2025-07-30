@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::HasClientIdType;
@@ -27,5 +28,7 @@ pub trait CanBuildRelayWithBatch<A: Async, B: Async>: HasAsyncErrorType
         dst_chain: ChainAt<Self, B>,
         src_batch_sender: MessageBatchSenderOf<Self::Relay, Src>,
         dst_batch_sender: MessageBatchSenderOf<Self::Relay, Dst>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<Self::Relay, Self::Error>;
 }

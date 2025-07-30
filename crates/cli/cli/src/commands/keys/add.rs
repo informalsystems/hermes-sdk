@@ -93,10 +93,15 @@ pub struct KeysAddCmd {
 
 impl KeysAddCmd {
     fn options(&self, chain_config: &CosmosChainConfig) -> eyre::Result<KeysAddOptions> {
-        let name = self
-            .key_name
-            .clone()
-            .unwrap_or_else(|| chain_config.key_name.to_string());
+        let name = if let Some(name) = &self.key_name {
+            name.clone()
+        } else {
+            chain_config
+                .key_names
+                .first()
+                .ok_or_else(|| eyre!("at least 1 signer needs to be configured"))?
+                .clone()
+        };
 
         let hd_path = StandardHDPath::from_str(&self.hd_path)
             .map_err(|_| eyre!("invalid derivation path: {}", self.hd_path))?;

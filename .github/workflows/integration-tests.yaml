@@ -77,6 +77,7 @@ jobs:
           RUST_BACKTRACE: 1
           TEST_PRESET: ${{ matrix.chain.preset }}
           NEW_TRUSTING_PERIOD: 30
+          COSMOS_REFRESH_RATE: 20
         run: |
             nix develop -c \
               nix shell .#gaia .#celestia-app .#ibc-go-v8-simapp .#osmosis -c \

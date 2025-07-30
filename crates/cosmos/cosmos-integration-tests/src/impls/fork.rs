@@ -211,7 +211,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
             fork_b_chain_config,
             fork_b_rpc_client,
             driver.chain_driver_b.chain.compat_mode,
-            driver.chain_driver_b.chain.key_entry.clone(),
+            driver.chain_driver_b.chain.key_entries.clone(),
             driver.chain_driver_b.chain.runtime.clone(),
             driver.chain_driver_b.chain.telemetry.clone(),
             driver.chain_driver_b.chain.packet_filter.clone(),

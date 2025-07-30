@@ -2,6 +2,7 @@ use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 use core::ops::Deref;
+use core::time::Duration;
 use std::collections::HashMap;
 use std::fs::File;
 use std::str::FromStr;
@@ -175,7 +176,7 @@ impl CosmosBuilder {
         &self,
         chain_config: CosmosChainConfig,
     ) -> Result<CosmosChain, Error> {
-        let key = get_keypair(&chain_config)?;
+        let keys = get_keypair(&chain_config)?;
 
         let mut rpc_client = HttpClient::new(chain_config.rpc_addr.clone())?;
 
@@ -193,7 +194,7 @@ impl CosmosBuilder {
             chain_config,
             rpc_client,
             compat_mode,
-            key,
+            keys,
             self.runtime.clone(),
             self.telemetry.clone(),
             self.packet_filter.clone(),
@@ -210,6 +211,8 @@ impl CosmosBuilder {
         dst_chain: CosmosChain,
         src_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<CosmosRelay, Error> {
         let relay = CosmosRelay::new(
             self.runtime.clone(),
@@ -219,13 +222,15 @@ impl CosmosBuilder {
             dst_client_id.clone(),
             src_batch_sender,
             dst_batch_sender,
+            refresh_rate_a,
+            refresh_rate_b,
         );
 
         Ok(relay)
     }
 }
 
-pub fn get_keypair(chain_config: &CosmosChainConfig) -> Result<Secp256k1KeyPair, Error> {
+pub fn get_keypair(chain_config: &CosmosChainConfig) -> Result<Vec<Secp256k1KeyPair>, Error> {
     let ks_folder = &chain_config.key_store_folder;
 
     let ks_folder = match ks_folder {
@@ -237,14 +242,18 @@ pub fn get_keypair(chain_config: &CosmosChainConfig) -> Result<Secp256k1KeyPair,
         }
     };
 
-    let mut filename = ks_folder.join(chain_config.key_name.clone());
-    filename.set_extension(KEYSTORE_FILE_EXTENSION);
+    let mut key_entries: Vec<Secp256k1KeyPair> = vec![];
+    for key_name in chain_config.key_names.iter() {
+        let mut filename = ks_folder.join(key_name.clone());
+        filename.set_extension(KEYSTORE_FILE_EXTENSION);
 
-    let file = File::open(&filename)?;
+        let file = File::open(&filename)?;
 
-    let key_entry = serde_json::from_reader(file)?;
+        let key_entry = serde_json::from_reader(file)?;
+        key_entries.push(key_entry);
+    }
 
-    Ok(key_entry)
+    Ok(key_entries)
 }
 
 #[cgp_provider(ChainBuilderComponent)]
@@ -280,6 +289,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildCom
         dst_chain: CosmosChain,
         src_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<CosmosRelay, Error> {
         let relay = build.build_cosmos_relay(
             src_client_id,
@@ -288,6 +299,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildCom
             dst_chain,
             src_batch_sender,
             dst_batch_sender,
+            refresh_rate_a,
+            refresh_rate_b,
         )?;
 
         Ok(relay)
@@ -305,6 +318,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildCom
         dst_chain: CosmosChain,
         src_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<CosmosRelay, Error> {
         let relay = build.build_cosmos_relay(
             src_client_id,
@@ -313,6 +328,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildCom
             dst_chain,
             src_batch_sender,
             dst_batch_sender,
+            refresh_rate_a,
+            refresh_rate_b,
         )?;
 
         Ok(relay)

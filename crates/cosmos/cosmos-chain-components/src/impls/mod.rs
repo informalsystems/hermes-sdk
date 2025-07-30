@@ -10,6 +10,9 @@ pub use commitment_prefix::*;
 mod connection;
 pub use connection::*;
 
+mod default_signer;
+pub use default_signer::*;
+
 mod events;
 pub use events::*;
 
