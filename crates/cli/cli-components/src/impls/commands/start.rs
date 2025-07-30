@@ -57,11 +57,11 @@ pub struct StartRelayerArgs {
     #[clap(long = "stop-after-blocks", required = false)]
     stop_after_blocks: Option<humantime::Duration>,
 
-    #[clap(long = "refresh-rate-a-to-b", required = false)]
-    refresh_rate_a_to_b: Option<humantime::Duration>,
+    #[clap(long = "refresh-rate-a", required = false)]
+    refresh_rate_a: Option<humantime::Duration>,
 
-    #[clap(long = "refresh-rate-b-to-a", required = false)]
-    refresh_rate_b_to_a: Option<humantime::Duration>,
+    #[clap(long = "refresh-rate-b", required = false)]
+    refresh_rate_b: Option<humantime::Duration>,
 }
 
 #[cgp_auto_getter]
@@ -73,9 +73,9 @@ pub trait HasClearPacketFields {
 
 #[cgp_auto_getter]
 pub trait HasRefreshClientFields {
-    fn refresh_rate_a_to_b(&self) -> &Option<humantime::Duration>;
+    fn refresh_rate_a(&self) -> &Option<humantime::Duration>;
 
-    fn refresh_rate_b_to_a(&self) -> &Option<humantime::Duration>;
+    fn refresh_rate_b(&self) -> &Option<humantime::Duration>;
 }
 
 #[cgp_new_provider(CommandRunnerComponent)]
@@ -112,8 +112,8 @@ where
         let clear_past_blocks = *args.clear_past_blocks();
         let stop_after_blocks = *args.stop_after_blocks();
 
-        let refresh_rate_a_to_b = *args.refresh_rate_a_to_b();
-        let refresh_rate_b_to_a = *args.refresh_rate_b_to_a();
+        let refresh_rate_a = *args.refresh_rate_a();
+        let refresh_rate_b = *args.refresh_rate_b();
 
         let birelay = builder
             .build_birelay(
@@ -121,8 +121,8 @@ where
                 &chain_id_b,
                 &client_id_a,
                 &client_id_b,
-                refresh_rate_a_to_b.map(Into::into),
-                refresh_rate_b_to_a.map(Into::into),
+                refresh_rate_a.map(Into::into),
+                refresh_rate_b.map(Into::into),
             )
             .await
             .map_err(App::raise_error)?;
@@ -137,8 +137,8 @@ where
             .auto_bi_relay(
                 clear_past_blocks.map(Into::into),
                 stop_after_blocks.map(Into::into),
-                refresh_rate_a_to_b.map(Into::into),
-                refresh_rate_b_to_a.map(Into::into),
+                refresh_rate_a.map(Into::into),
+                refresh_rate_b.map(Into::into),
             )
             .await
             .map_err(|e| App::wrap_error(App::raise_error(e), "Relayer failed to start"))?;
