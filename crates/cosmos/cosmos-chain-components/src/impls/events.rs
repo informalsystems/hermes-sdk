@@ -32,6 +32,9 @@ use crate::types::{
     SendPacketEvent, WriteAckEvent,
 };
 
+pub const CREATE_CLIENT_EVENT_KIND: &str = "create_client";
+pub const UPDATE_CLIENT_EVENT_KIND: &str = "update_client";
+
 pub struct ProvideCosmosEvents;
 
 #[cgp_provider(CreateClientEventComponent)]
@@ -56,7 +59,7 @@ where
         _tag: PhantomData<CosmosCreateClientEvent>,
         event: &Chain::Event,
     ) -> Option<CosmosCreateClientEvent> {
-        if event.kind == "create_client" {
+        if event.kind == CREATE_CLIENT_EVENT_KIND {
             for tag in &event.attributes {
                 if tag.key_bytes() == CLIENT_ID_ATTRIBUTE_KEY.as_bytes() {
                     let client_id = tag.value_str().ok()?.parse().ok()?;
@@ -85,7 +88,7 @@ where
         _tag: PhantomData<CosmosUpdateClientEvent>,
         event: &Chain::Event,
     ) -> Option<CosmosUpdateClientEvent> {
-        if event.kind == "update_client" {
+        if event.kind == UPDATE_CLIENT_EVENT_KIND {
             let raw_header = event
                 .attributes
                 .iter()
