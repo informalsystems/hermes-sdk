@@ -155,7 +155,6 @@ where
             .await
             .map_err(Chain::raise_error)?;
 
-        // FIXME: Divergence never seems to be caught
         match maybe_divergence {
             Some(divergence) => {
                 chain
