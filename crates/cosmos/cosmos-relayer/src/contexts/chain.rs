@@ -55,7 +55,9 @@ use hermes_core::test_components::chain::traits::{
     IbcTokenTransferMessageBuilderComponent, ProposalStatusQuerierComponent,
     TokenIbcTransferrerComponent,
 };
-use hermes_cosmos_core::chain_components::impls::{CosmosChainConfig, CosmosRecoverClientPayload};
+use hermes_cosmos_core::chain_components::impls::{
+    CosmosChainConfig, CosmosRecoverClientPayload, GetFirstSignerAsDefault,
+};
 use hermes_cosmos_core::chain_components::traits::{
     EipQuerierComponent, GasConfigGetter, GasConfigGetterComponent, GrpcAddressGetter,
     GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
@@ -106,8 +108,7 @@ pub struct BaseCosmosChain {
     pub telemetry: CosmosTelemetry,
     pub ibc_commitment_prefix: Vec<u8>,
     pub rpc_client: HttpClient,
-    pub key_entry: Secp256k1KeyPair,
-    pub additional_key_entries: Vec<Secp256k1KeyPair>,
+    pub key_entries: Vec<Secp256k1KeyPair>,
     pub packet_filter: PacketFilterConfig,
     pub block_time: Duration,
     pub nonce_mutex: Arc<Mutex<()>>,
@@ -152,13 +153,13 @@ delegate_components! {
         NonceAllocationMutexGetterComponent:
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
         SignerMutexGetterComponent:
-            GetGlobalSignerMutex<symbol!("signer_mutex"), symbol!("additional_key_entries")>,
+            GetGlobalSignerMutex<symbol!("signer_mutex"), symbol!("key_entries")>,
         BlockTimeQuerierComponent:
             UseField<symbol!("block_time")>,
         DefaultSignerGetterComponent:
-            UseField<symbol!("key_entry")>,
+            GetFirstSignerAsDefault<symbol!("key_entries")>,
         SignerGetterComponent:
-            SignerWithIndexGetter<symbol!("key_entry"), symbol!("additional_key_entries")>,
+            SignerWithIndexGetter<symbol!("key_entries")>,
         ChainIdGetterComponent:
             UseField<symbol!("chain_id")>,
     }
@@ -203,8 +204,7 @@ impl CosmosChain {
         chain_config: CosmosChainConfig,
         rpc_client: HttpClient,
         compat_mode: CompatMode,
-        key_entry: Secp256k1KeyPair,
-        additional_key_entries: Vec<Secp256k1KeyPair>,
+        key_entries: Vec<Secp256k1KeyPair>,
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
         packet_filter: PacketFilterConfig,
@@ -224,8 +224,7 @@ impl CosmosChain {
                 telemetry,
                 ibc_commitment_prefix,
                 rpc_client,
-                key_entry,
-                additional_key_entries,
+                key_entries,
                 nonce_mutex: Arc::new(Mutex::new(())),
                 signer_mutex: Arc::new(Mutex::new(0)),
                 packet_filter,

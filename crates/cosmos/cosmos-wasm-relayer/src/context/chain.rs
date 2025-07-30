@@ -43,6 +43,7 @@ use hermes_core::runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_core::test_components::chain::traits::CanQueryBalance;
+use hermes_cosmos_core::chain_components::impls::GetFirstSignerAsDefault;
 use hermes_cosmos_core::chain_components::traits::{
     CanQueryAbci, CanQueryUnbondingPeriod, GasConfigGetter, GasConfigGetterComponent,
     GrpcAddressGetter, GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
@@ -120,11 +121,11 @@ delegate_components! {
         NonceAllocationMutexGetterComponent:
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
         SignerMutexGetterComponent:
-            GetGlobalSignerMutex<symbol!("signer_mutex"), symbol!("additional_key_entries")>,
+            GetGlobalSignerMutex<symbol!("signer_mutex"), symbol!("key_entries")>,
         DefaultSignerGetterComponent:
-            UseField<symbol!("key_entry")>,
+            GetFirstSignerAsDefault<symbol!("key_entries")>,
         SignerGetterComponent:
-            SignerWithIndexGetter<symbol!("key_entry"), symbol!("additional_key_entries")>,
+            SignerWithIndexGetter<symbol!("key_entries")>,
         ChainIdGetterComponent:
             UseField<symbol!("chain_id")>,
         BlockTimeQuerierComponent:

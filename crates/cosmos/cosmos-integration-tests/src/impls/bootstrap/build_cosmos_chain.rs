@@ -42,16 +42,10 @@ where
         bootstrap: &Bootstrap,
         chain_node_config: &Bootstrap::ChainNodeConfig,
         chain_genesis_config: &Bootstrap::ChainGenesisConfig,
-        relayer_wallet: &CosmosTestWallet,
-        additional_relayer_wallets: Vec<&CosmosTestWallet>,
+        relayer_wallets: Vec<&CosmosTestWallet>,
     ) -> Result<CosmosChain, Bootstrap::Error> {
         let relayer_chain_config = bootstrap
-            .build_relayer_chain_config(
-                chain_node_config,
-                chain_genesis_config,
-                relayer_wallet,
-                additional_relayer_wallets,
-            )
+            .build_relayer_chain_config(chain_node_config, chain_genesis_config, relayer_wallets)
             .await?;
 
         let chain = bootstrap

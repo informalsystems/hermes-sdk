@@ -16,7 +16,7 @@ where
         + HasField<AdditionalTag, Value = Vec<Chain::Signer>>,
 {
     fn mutex_for_signer<'a>(chain: &'a Chain) -> (&'a Mutex<usize>, usize) {
-        let additional_signers_len = chain.get_field(PhantomData::<AdditionalTag>).len();
-        (chain.get_field(PhantomData::<Tag>), additional_signers_len)
+        let signers_len = chain.get_field(PhantomData::<AdditionalTag>).len();
+        (chain.get_field(PhantomData::<Tag>), signers_len)
     }
 }

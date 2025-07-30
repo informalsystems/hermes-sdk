@@ -61,7 +61,7 @@ where
             })?
             .clone();
 
-        let additional_relayer_wallet = wallets
+        let relayer_2_wallet = wallets
             .get("relayer-2")
             .ok_or_else(|| {
                 Bootstrap::raise_error(
@@ -92,8 +92,7 @@ where
             .build_chain_with_node_config(
                 &chain_node_config,
                 &genesis_config,
-                &relayer_wallet,
-                vec![&additional_relayer_wallet],
+                vec![&relayer_wallet, &relayer_2_wallet],
             )
             .await?;
 

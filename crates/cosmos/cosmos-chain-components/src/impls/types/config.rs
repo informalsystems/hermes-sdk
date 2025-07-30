@@ -19,8 +19,7 @@ pub struct CosmosChainConfig {
     pub grpc_addr: Url,
     pub account_prefix: String,
     pub key_store_folder: Option<PathBuf>,
-    pub key_name: String,
-    pub additional_key_names: Vec<String>,
+    pub key_names: Vec<String>,
     pub store_prefix: String,
 
     pub clock_drift: Duration,

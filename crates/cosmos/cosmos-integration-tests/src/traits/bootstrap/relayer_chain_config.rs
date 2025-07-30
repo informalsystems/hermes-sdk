@@ -23,7 +23,6 @@ where
         &self,
         chain_node_config: &Self::ChainNodeConfig,
         chain_genesis_config: &Self::ChainGenesisConfig,
-        relayer_wallet: &WalletOf<Self::Chain>,
-        additional_relayer_wallets: Vec<&WalletOf<Self::Chain>>,
+        relayer_wallets: Vec<&WalletOf<Self::Chain>>,
     ) -> Result<CosmosChainConfig, Self::Error>;
 }
