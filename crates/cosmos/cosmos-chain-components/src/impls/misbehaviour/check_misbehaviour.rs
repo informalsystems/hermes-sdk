@@ -8,7 +8,7 @@ use hermes_core::chain_components::traits::{
     MisbehaviourCheckerComponent,
 };
 use hermes_core::logging_components::traits::CanLog;
-use hermes_core::logging_components::types::{LevelDebug, LevelWarn};
+use hermes_core::logging_components::types::LevelDebug;
 use hermes_core::runtime_components::traits::CanSleep;
 use hermes_error::HermesError;
 use hermes_prelude::*;
@@ -35,7 +35,6 @@ where
         + HasChainId
         + HasClientStateType<Counterparty>
         + CanLog<LevelDebug>
-        + CanLog<LevelWarn>
         + CanRaiseAsyncError<TendermintError>
         + CanRaiseAsyncError<TendermintRpcError>
         + CanRaiseAsyncError<TendermintClientError>
@@ -138,16 +137,7 @@ where
             .await;
 
         if trusted_block.validators.hash() != event_trusted_validator_set.hash() {
-            chain
-                .log(
-                    &format!(
-                        "validator hash mismatch (trusted: {}, header: {}), continuing...",
-                        trusted_block.validators.hash(),
-                        event_trusted_validator_set.hash()
-                    ),
-                    &LevelWarn,
-                )
-                .await;
+            return Err(Chain::raise_error("validator hash for trusted block and client update event don't match. Aborting misbehaviour detection"));
         }
 
         let maybe_divergence = light_client
