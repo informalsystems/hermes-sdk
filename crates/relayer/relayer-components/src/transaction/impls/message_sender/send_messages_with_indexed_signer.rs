@@ -9,10 +9,10 @@ use hermes_prelude::*;
 use crate::chain::traits::MessageSender;
 use crate::transaction::traits::{CanSendMessagesWithSigner, HasMutexForSigner, HasSigner};
 
-pub struct SendMessagesWithIndexedSigner;
+pub struct SendMessagesWithRoundRobinSigner;
 
 #[cgp_provider(MessageSenderComponent)]
-impl<Chain> MessageSender<Chain> for SendMessagesWithIndexedSigner
+impl<Chain> MessageSender<Chain> for SendMessagesWithRoundRobinSigner
 where
     Chain:
         HasChainId + HasSigner + HasMutexForSigner + CanSendMessagesWithSigner + CanLog<LevelDebug>,
