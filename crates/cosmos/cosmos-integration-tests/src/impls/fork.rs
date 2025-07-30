@@ -69,6 +69,8 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
         };
 
         // Stop full node
+        // `pkill` is used here instead of `Child::kill()` as the `kill()` method requires
+        // the child process to be mutable.
         runtime
             .exec_command(
                 &PathBuf::from("pkill".to_string()),
@@ -218,6 +220,8 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
             driver.chain_driver_b.chain.packet_filter.clone(),
         );
 
+        // Since we keep 2 instances of `CosmosBinaryChannelTestDriver` but only fork the node B
+        // the node A in the fork doesn't have the chain process
         let fork_chain_a_driver = CosmosChainDriver {
             chain: driver.chain_driver_a.chain.clone(),
             chain_command_path: driver.chain_driver_a.chain_command_path.clone(),
