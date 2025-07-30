@@ -48,7 +48,7 @@ where
         bootstrap: &Bootstrap,
         chain_node_config: &CosmosChainNodeConfig,
         chain_genesis_config: &CosmosGenesisConfig,
-        relayer_wallet: &CosmosTestWallet,
+        relayer_wallets: Vec<&CosmosTestWallet>,
     ) -> Result<CosmosChainConfig, Bootstrap::Error> {
         let gas_multiplier = 1.3;
         let gas_price = 1.0;
@@ -77,10 +77,9 @@ where
             dynamic_gas_config: bootstrap.dynamic_gas().clone(),
         };
 
-        let keypair = &relayer_wallet.keypair;
-        let key_name = relayer_wallet.id.clone();
         let key_store_folder = chain_node_config.chain_home_dir.join("hermes_keyring");
 
+        let mut key_names = vec![];
         {
             let runtime = bootstrap.runtime();
 
@@ -89,16 +88,23 @@ where
                 .await
                 .map_err(Bootstrap::raise_error)?;
 
-            let mut file_path = key_store_folder.join(key_name.clone());
-            file_path.set_extension(KEYSTORE_FILE_EXTENSION);
+            for wallet in relayer_wallets.iter() {
+                let keypair = &wallet.keypair;
+                let key_name = wallet.id.clone();
 
-            let keypair_str =
-                serde_json::to_string_pretty(keypair).map_err(Bootstrap::raise_error)?;
+                let mut file_path = key_store_folder.join(key_name.clone());
+                file_path.set_extension(KEYSTORE_FILE_EXTENSION);
 
-            runtime
-                .write_string_to_file(&file_path, &keypair_str)
-                .await
-                .map_err(Bootstrap::raise_error)?;
+                let keypair_str =
+                    serde_json::to_string_pretty(keypair).map_err(Bootstrap::raise_error)?;
+
+                runtime
+                    .write_string_to_file(&file_path, &keypair_str)
+                    .await
+                    .map_err(Bootstrap::raise_error)?;
+
+                key_names.push(key_name);
+            }
         }
 
         let client_refresh_rate = var("COSMOS_REFRESH_RATE")
@@ -119,7 +125,7 @@ where
                 .map_err(Bootstrap::raise_error)?,
             rpc_timeout: Duration::from_secs(10),
             account_prefix: bootstrap.account_prefix().into(),
-            key_name,
+            key_names,
             key_store_folder: Some(key_store_folder),
             store_prefix: "ibc".to_string(),
             max_msg_num: Default::default(),

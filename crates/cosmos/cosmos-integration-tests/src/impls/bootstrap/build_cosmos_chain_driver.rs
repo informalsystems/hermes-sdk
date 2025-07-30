@@ -52,11 +52,20 @@ where
             })?
             .clone();
 
-        let relayer_wallet = wallets
-            .get("relayer")
+        let relayer_wallet_1 = wallets
+            .get("relayer1")
             .ok_or_else(|| {
                 Bootstrap::raise_error(
                     "expect relayer wallet to be provided in the list of test wallets",
+                )
+            })?
+            .clone();
+
+        let relayer_wallet_2 = wallets
+            .get("relayer2")
+            .ok_or_else(|| {
+                Bootstrap::raise_error(
+                    "expect relayer-2 wallet to be provided in the list of test wallets",
                 )
             })?
             .clone();
@@ -80,7 +89,11 @@ where
             .clone();
 
         let chain = bootstrap
-            .build_chain_with_node_config(&chain_node_config, &genesis_config, &relayer_wallet)
+            .build_chain_with_node_config(
+                &chain_node_config,
+                &genesis_config,
+                vec![&relayer_wallet_1, &relayer_wallet_2],
+            )
             .await?;
 
         let chain_command_path = bootstrap.chain_command_path().clone();
@@ -92,7 +105,7 @@ where
             genesis_config,
             chain_processes,
             validator_wallet,
-            relayer_wallet,
+            relayer_wallet: relayer_wallet_1,
             user_wallet_a,
             user_wallet_b,
             wallets,

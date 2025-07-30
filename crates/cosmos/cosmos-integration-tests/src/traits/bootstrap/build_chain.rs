@@ -19,6 +19,6 @@ where
         &self,
         chain_node_config: &Self::ChainNodeConfig,
         chain_genesis_config: &Self::ChainGenesisConfig,
-        relayer_wallet: &WalletOf<Self::Chain>,
+        relayer_wallets: Vec<&WalletOf<Self::Chain>>,
     ) -> Result<Self::Chain, Self::Error>;
 }

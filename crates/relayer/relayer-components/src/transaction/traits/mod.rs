@@ -1,9 +1,6 @@
 mod client_refresh_rate;
 pub use client_refresh_rate::*;
 
-mod default_signer;
-pub use default_signer::*;
-
 mod encode_tx;
 pub use encode_tx::*;
 
@@ -27,6 +24,9 @@ pub use send_messages_with_signer::*;
 
 mod send_messages_with_signer_and_nonce;
 pub use send_messages_with_signer_and_nonce::*;
+
+mod signer;
+pub use signer::*;
 
 mod simulation_fee;
 pub use simulation_fee::*;

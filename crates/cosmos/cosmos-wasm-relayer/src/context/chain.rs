@@ -31,17 +31,21 @@ use hermes_core::relayer_components::chain::traits::{
     IbcCommitmentPrefixGetter, IbcCommitmentPrefixGetterComponent,
 };
 use hermes_core::relayer_components::error::traits::{HasRetryableError, RetryableErrorComponent};
-use hermes_core::relayer_components::transaction::impls::{GetGlobalNonceMutex, HasPollTimeout};
+use hermes_core::relayer_components::transaction::impls::{
+    GetGlobalNonceMutex, GetGlobalSignerMutex, HasPollTimeout, SignerWithIndexGetter,
+};
 use hermes_core::relayer_components::transaction::traits::{
     CanPollTxResponse, CanQueryTxResponse, CanSubmitTx, ClientRefreshRateGetter,
     ClientRefreshRateGetterComponent, DefaultSignerGetterComponent, FeeForSimulationGetter,
-    FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent,
+    FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent, SignerGetterComponent,
+    SignerMutexGetterComponent,
 };
 use hermes_core::relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_core::runtime_components::traits::{
     HasRuntime, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_core::test_components::chain::traits::CanQueryBalance;
+use hermes_cosmos_core::chain_components::impls::GetFirstSignerAsDefault;
 use hermes_cosmos_core::chain_components::traits::{
     CanQueryAbci, CanQueryUnbondingPeriod, GasConfigGetter, GasConfigGetterComponent,
     GrpcAddressGetter, GrpcAddressGetterComponent, RpcClientGetter, RpcClientGetterComponent,
@@ -118,8 +122,12 @@ delegate_components! {
             WasmChainComponents,
         NonceAllocationMutexGetterComponent:
             GetGlobalNonceMutex<symbol!("nonce_mutex")>,
+        SignerMutexGetterComponent:
+            GetGlobalSignerMutex<symbol!("signer_mutex"), symbol!("key_entries")>,
         DefaultSignerGetterComponent:
-            UseField<symbol!("key_entry")>,
+            GetFirstSignerAsDefault<symbol!("key_entries")>,
+        SignerGetterComponent:
+            SignerWithIndexGetter<symbol!("key_entries")>,
         ChainIdGetterComponent:
             UseField<symbol!("chain_id")>,
         BlockTimeQuerierComponent:
