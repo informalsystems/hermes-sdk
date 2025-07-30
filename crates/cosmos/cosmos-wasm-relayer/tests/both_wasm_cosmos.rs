@@ -118,6 +118,8 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             client_id_a,
             client_id_b,
             Default::default(),
+            None, // Client refresh not needed for this test
+            None, // Client refresh not needed for this test
         );
 
         // FIXME: connection bootstrap currently fails at OpenTry,

@@ -113,6 +113,8 @@ where
                 &counterparty_chain_id,
                 &target_client_id,
                 &counterparty_client_id,
+                None, // client refresh not needed for this CLI
+                None, // client refresh not needed for this CLI
             )
             .await
             .map_err(App::raise_error)?;

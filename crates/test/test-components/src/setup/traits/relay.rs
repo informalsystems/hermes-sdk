@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use hermes_prelude::*;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
@@ -20,5 +21,7 @@ pub trait CanSetupRelays<A: Async, B: Async>:
         chain_b: &ChainAt<Self, B>,
         client_id_a: &ClientIdOf<ChainAt<Self, A>, ChainAt<Self, B>>,
         client_id_b: &ClientIdOf<ChainAt<Self, B>, ChainAt<Self, A>>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<(RelayAt<Self, A, B>, RelayAt<Self, B, A>), Self::Error>;
 }

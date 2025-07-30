@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use cgp::core::error::ErrorOf;
 use hermes_prelude::*;
@@ -35,6 +36,8 @@ where
         chain_b: &ChainAt<Setup, B>,
         client_id_a: &ClientIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
         client_id_b: &ClientIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<(RelayAt<Setup, A, B>, RelayAt<Setup, B, A>), Setup::Error> {
         let build = setup.builder();
 
@@ -45,6 +48,8 @@ where
                 client_id_b,
                 chain_a.clone(),
                 chain_b.clone(),
+                refresh_rate_a,
+                refresh_rate_b,
             )
             .await
             .map_err(Setup::raise_error)?;
@@ -56,6 +61,8 @@ where
                 client_id_a,
                 chain_b.clone(),
                 chain_a.clone(),
+                refresh_rate_a,
+                refresh_rate_b,
             )
             .await
             .map_err(Setup::raise_error)?;

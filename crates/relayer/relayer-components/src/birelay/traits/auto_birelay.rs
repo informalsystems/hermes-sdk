@@ -12,5 +12,7 @@ pub trait CanAutoBiRelay: HasAsyncErrorType {
         &self,
         clear_past_blocks: Option<Duration>,
         stop_after_blocks: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<(), Self::Error>;
 }
