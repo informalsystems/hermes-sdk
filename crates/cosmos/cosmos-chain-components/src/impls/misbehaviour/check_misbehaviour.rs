@@ -155,130 +155,126 @@ where
             .await
             .map_err(Chain::raise_error)?;
 
-        match maybe_divergence {
-            Some(divergence) => {
-                chain
-                    .log(
-                        "Found divergence while checking for misbehaviour",
-                        &LevelDebug,
-                    )
-                    .await;
-                let supporting = divergence
-                    .evidence
-                    .witness_trace
-                    .into_vec()
-                    .into_iter()
-                    .filter(|lb| {
-                        lb.height() != target_block.height() && lb.height() != tm_trusted_height
-                    })
-                    .collect::<Vec<LightBlock>>();
+        if let Some(divergence) = maybe_divergence {
+            chain
+                .log(
+                    "Found divergence while checking for misbehaviour",
+                    &LevelDebug,
+                )
+                .await;
+            let supporting = divergence
+                .evidence
+                .witness_trace
+                .into_vec()
+                .into_iter()
+                .filter(|lb| {
+                    lb.height() != target_block.height() && lb.height() != tm_trusted_height
+                })
+                .collect::<Vec<LightBlock>>();
 
-                let trusted_validator_set = light_client
-                    .fetch_light_block(&tm_trusted_height.increment())
-                    .await
-                    .map_err(Chain::raise_error)?
-                    .validators;
+            let trusted_validator_set = light_client
+                .fetch_light_block(&tm_trusted_height.increment())
+                .await
+                .map_err(Chain::raise_error)?
+                .validators;
 
-                let mut supporting_headers = Vec::with_capacity(supporting.len());
+            let mut supporting_headers = Vec::with_capacity(supporting.len());
 
-                let mut current_trusted_height = trusted_height;
-                let mut current_trusted_validators = trusted_validator_set.clone();
+            let mut current_trusted_height = trusted_height;
+            let mut current_trusted_validators = trusted_validator_set.clone();
 
-                for support in supporting {
-                    let header = Header {
-                        signed_header: Some(support.signed_header.clone().into()),
-                        validator_set: Some(support.validators.into()),
-                        trusted_height: Some(current_trusted_height.into()),
-                        trusted_validators: Some(current_trusted_validators.into()),
-                    };
+            for support in supporting {
+                let header = Header {
+                    signed_header: Some(support.signed_header.clone().into()),
+                    validator_set: Some(support.validators.into()),
+                    trusted_height: Some(current_trusted_height.into()),
+                    trusted_validators: Some(current_trusted_validators.into()),
+                };
 
-                    // This header is now considered to be the currently trusted header
-                    current_trusted_height = header
+                // This header is now considered to be the currently trusted header
+                current_trusted_height = header
+                    .trusted_height
+                    .ok_or_else(|| {
+                        Chain::raise_error("`trusted_height` missing from support `Header`")
+                    })?
+                    .try_into()
+                    .map_err(Chain::raise_error)?;
+
+                let next_height = TendermintHeight::try_from(
+                    header
                         .trusted_height
                         .ok_or_else(|| {
                             Chain::raise_error("`trusted_height` missing from support `Header`")
                         })?
-                        .try_into()
-                        .map_err(Chain::raise_error)?;
+                        .revision_height,
+                )
+                .map_err(Chain::raise_error)?
+                .increment();
 
-                    let next_height = TendermintHeight::try_from(
-                        header
+                // Therefore we can now trust the next validator set, see NOTE above.
+                current_trusted_validators = light_client
+                    .fetch_light_block(&next_height)
+                    .await
+                    .map_err(Chain::raise_error)?
+                    .validators;
+
+                supporting_headers.push(header);
+            }
+
+            // a) Set the trusted height of the target header to the height of the previous
+            // supporting header if any, or to the initial trusting height otherwise.
+            //
+            // b) Set the trusted validators of the target header to the validators of the successor to
+            // the last supporting header if any, or to the initial trusted validators otherwise.
+            let (latest_trusted_height, latest_trusted_validator_set) = match supporting_headers
+                .last()
+            {
+                Some(prev_header) => {
+                    let prev_height = TendermintHeight::try_from(
+                        prev_header
                             .trusted_height
                             .ok_or_else(|| {
-                                Chain::raise_error("`trusted_height` missing from support `Header`")
+                                Chain::raise_error(
+                                    "`trusted_height` missing from previous `Header`",
+                                )
                             })?
-                            .increment()
-                            .revision_height,
+                            .revision_height
+                            + 1,
                     )
                     .map_err(Chain::raise_error)?;
-
-                    // Therefore we can now trust the next validator set, see NOTE above.
-                    current_trusted_validators = light_client
-                        .fetch_light_block(&next_height)
+                    let prev_succ = light_client
+                        .fetch_light_block(&prev_height)
                         .await
-                        .map_err(Chain::raise_error)?
-                        .validators;
-
-                    supporting_headers.push(header);
-                }
-
-                // a) Set the trusted height of the target header to the height of the previous
-                // supporting header if any, or to the initial trusting height otherwise.
-                //
-                // b) Set the trusted validators of the target header to the validators of the successor to
-                // the last supporting header if any, or to the initial trusted validators otherwise.
-                let (latest_trusted_height, latest_trusted_validator_set) =
-                    match supporting_headers.last() {
-                        Some(prev_header) => {
-                            let prev_height = TendermintHeight::try_from(
-                                prev_header
-                                    .trusted_height
-                                    .ok_or_else(|| {
-                                        Chain::raise_error(
-                                            "`trusted_height` missing from previous `Header`",
-                                        )
-                                    })?
-                                    .revision_height
-                                    + 1,
-                            )
-                            .map_err(Chain::raise_error)?;
-                            let prev_succ = light_client
-                                .fetch_light_block(&prev_height)
-                                .await
-                                .map_err(Chain::raise_error)?;
-                            (
-                                prev_header.trusted_height.ok_or_else(|| {
-                                    Chain::raise_error(
-                                        "`trusted_height` missing from previous `Header`",
-                                    )
-                                })?,
-                                prev_succ.validators,
-                            )
-                        }
-                        None => (trusted_height.into(), trusted_validator_set),
-                    };
-
-                #[allow(deprecated)]
-                Ok(Some(Misbehaviour {
-                    client_id: update_client_event.client_id.to_string(),
-                    header_1: Some(update_client_event.header.clone()),
-                    header_2: Some(Header {
-                        signed_header: Some(divergence.challenging_block.signed_header.into()),
-                        validator_set: Some(divergence.challenging_block.validators.into()),
-                        trusted_height: Some(latest_trusted_height),
-                        trusted_validators: Some(latest_trusted_validator_set.into()),
-                    }),
-                }))
-            }
-            None => {
-                chain
-                    .log(
-                        "No divergence found while checking for misbehaviour",
-                        &LevelDebug,
+                        .map_err(Chain::raise_error)?;
+                    (
+                        prev_header.trusted_height.ok_or_else(|| {
+                            Chain::raise_error("`trusted_height` missing from previous `Header`")
+                        })?,
+                        prev_succ.validators,
                     )
-                    .await;
-                Ok(None)
-            }
+                }
+                None => (trusted_height.into(), trusted_validator_set),
+            };
+
+            #[allow(deprecated)]
+            return Ok(Some(Misbehaviour {
+                client_id: update_client_event.client_id.to_string(),
+                header_1: Some(update_client_event.header.clone()),
+                header_2: Some(Header {
+                    signed_header: Some(divergence.challenging_block.signed_header.into()),
+                    validator_set: Some(divergence.challenging_block.validators.into()),
+                    trusted_height: Some(latest_trusted_height),
+                    trusted_validators: Some(latest_trusted_validator_set.into()),
+                }),
+            }));
         }
+
+        chain
+            .log(
+                "No divergence found while checking for misbehaviour",
+                &LevelDebug,
+            )
+            .await;
+        Ok(None)
     }
 }

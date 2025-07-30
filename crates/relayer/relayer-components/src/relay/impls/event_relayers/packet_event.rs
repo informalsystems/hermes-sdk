@@ -1,10 +1,10 @@
-use alloc::{format, vec};
+use alloc::format;
 use core::marker::PhantomData;
 
 use hermes_chain_components::traits::{
     CanBuildMisbehaviourMessage, CanBuildPacketFromSendPacket, CanCheckMisbehaviour,
-    CanExtractFromEvent, CanQueryChainHeight, CanQueryClientStateWithLatestHeight, CanSendMessages,
-    HasClientStateType, HasUpdateClientEvent,
+    CanExtractFromEvent, CanQueryChainHeight, CanQueryClientStateWithLatestHeight,
+    CanSendSingleMessage, HasClientStateType, HasUpdateClientEvent,
 };
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::{LevelDebug, LevelWarn};
@@ -58,7 +58,7 @@ where
         + CanExtractFromEvent<SrcChain::UpdateClientEvent>
         + CanBuildPacketFromSendPacket<DstChain>
         + CanBuildMisbehaviourMessage<DstChain>
-        + CanSendMessages,
+        + CanSendSingleMessage,
     DstChain: CanCheckMisbehaviour<SrcChain> + HasClientStateType<SrcChain> + HasErrorType,
     MatchPacketDestinationChain: RelayPacketFilter<Relay>,
 {
