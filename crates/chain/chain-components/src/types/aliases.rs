@@ -3,7 +3,7 @@ use hermes_chain_type_components::traits::HasOutgoingPacketType;
 use crate::traits::{
     HasChainIdType, HasChannelIdType, HasClientIdType, HasConnectionIdType, HasEventType,
     HasHeightType, HasMessageType, HasPortIdType, HasSequenceType, HasTimeoutType,
-    HasWriteAckEvent,
+    HasUpdateClientEvent, HasWriteAckEvent,
 };
 
 pub type OutgoingPacketOf<Chain, Counterparty> =
@@ -32,3 +32,5 @@ pub type TimestampOf<Chain> = <Chain as HasTimeoutType>::Timeout;
 
 pub type WriteAckEventOf<Chain, Counterparty> =
     <Chain as HasWriteAckEvent<Counterparty>>::WriteAckEvent;
+
+pub type UpdateClientEventOf<Chain> = <Chain as HasUpdateClientEvent>::UpdateClientEvent;

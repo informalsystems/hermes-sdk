@@ -4,8 +4,10 @@ mod preset {
     use hermes_core::chain_components::traits::{
         AmountQuantityGetterComponent, ClientRecoveryComponent, ClientStatusMethodsComponent,
         ClientStatusQuerierComponent, ClientStatusTypeComponent, ClientUpgradeComponent,
-        ClientUpgradePayloadBuilderComponent, OverrideCreateClientPayloadOptionsComponent,
-        QuantityTypeComponent, RecoverClientPayloadTypeComponent,
+        ClientUpgradePayloadBuilderComponent, EvidenceFieldsGetterComponent,
+        EvidenceTypeProviderComponent, MisbehaviourCheckerComponent,
+        MisbehaviourMessageBuilderComponent, OverrideCreateClientPayloadOptionsComponent,
+        QuantityTypeComponent, RecoverClientPayloadTypeComponent, UpdateClientEventComponent,
         UpgradeClientPayloadTypeComponent,
     };
     use hermes_core::chain_type_components::traits::{
@@ -173,10 +175,13 @@ mod preset {
                 AcknowledgementTypeProviderComponent,
                 AckCommitmentHashTypeProviderComponent,
                 PacketReceiptTypeComponent,
+                EvidenceTypeProviderComponent,
+                EvidenceFieldsGetterComponent,
             ]:
                 ProvideCosmosChainTypes,
             [
                 CreateClientEventComponent,
+                UpdateClientEventComponent,
                 ConnectionOpenInitEventComponent,
                 ConnectionOpenTryEventComponent,
                 ChannelOpenInitEventComponent,
@@ -451,6 +456,9 @@ mod preset {
                 PacketTimeoutTimestampGetterComponent,
 
                 IbcTransferredAmountConverterComponent,
+
+                MisbehaviourCheckerComponent,
+                MisbehaviourMessageBuilderComponent,
             ]:
                 UseDelegate<DelegateCosmosChainComponents>,
         }

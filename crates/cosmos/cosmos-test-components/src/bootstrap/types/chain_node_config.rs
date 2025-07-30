@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use ibc::core::host::types::identifiers::ChainId;
 use toml::Value;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CosmosChainNodeConfig {
     pub chain_id: ChainId,
     pub chain_home_dir: PathBuf,

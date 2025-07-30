@@ -53,10 +53,10 @@ impl<BootstrapA, BootstrapB> CosmosBinaryChannelSetup<BootstrapA, BootstrapB> {
         builder: CosmosBuilder,
     ) -> Self {
         let create_client_payload_options =
-            if let Ok(raw_trusting_period) = var("NEW_TRUSTING_PERIOD") {
+            if let Ok(raw_trusting_period) = var("COSMOS_TRUSTING_PERIOD") {
                 let new_trusting_period = raw_trusting_period
                     .parse::<u64>()
-                    .expect("NEW_TRUSTING_PERIOD should be set to a u64 value");
+                    .expect("COSMOS_TRUSTING_PERIOD should be set to a u64 value");
                 CosmosCreateClientOptions {
                     trusting_period: Duration::from_secs(new_trusting_period),
                     ..Default::default()

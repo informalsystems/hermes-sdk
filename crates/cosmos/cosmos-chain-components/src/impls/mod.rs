@@ -19,6 +19,9 @@ pub use events::*;
 mod message_height;
 pub use message_height::*;
 
+mod misbehaviour;
+pub use misbehaviour::*;
+
 mod packet;
 pub use packet::*;
 

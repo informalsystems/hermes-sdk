@@ -1,6 +1,7 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use hermes_core::chain_components::traits::{
     ClientStatusMethodsComponent, ClientStatusQuerierComponent, ClientStatusTypeComponent,
+    EvidenceTypeProviderComponent,
 };
 use hermes_core::encoding_components::impls::GetDefaultEncoding;
 use hermes_core::encoding_components::traits::{
@@ -45,6 +46,7 @@ delegate_components! {
             SequenceTypeComponent,
             OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
+            EvidenceTypeProviderComponent,
         ]:
             ProvideCosmosChainTypes,
         ClientStateTypeComponent:
