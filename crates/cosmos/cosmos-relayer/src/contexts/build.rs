@@ -2,6 +2,7 @@ use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 use core::ops::Deref;
+use core::time::Duration;
 use std::collections::HashMap;
 use std::fs::File;
 use std::str::FromStr;
@@ -210,6 +211,8 @@ impl CosmosBuilder {
         dst_chain: CosmosChain,
         src_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<CosmosRelay, Error> {
         let relay = CosmosRelay::new(
             self.runtime.clone(),
@@ -219,6 +222,8 @@ impl CosmosBuilder {
             dst_client_id.clone(),
             src_batch_sender,
             dst_batch_sender,
+            refresh_rate_a,
+            refresh_rate_b,
         );
 
         Ok(relay)
@@ -284,6 +289,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildCom
         dst_chain: CosmosChain,
         src_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<CosmosRelay, Error> {
         let relay = build.build_cosmos_relay(
             src_client_id,
@@ -292,6 +299,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<0>, Index<1>> for CosmosBuildCom
             dst_chain,
             src_batch_sender,
             dst_batch_sender,
+            refresh_rate_a,
+            refresh_rate_b,
         )?;
 
         Ok(relay)
@@ -309,6 +318,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildCom
         dst_chain: CosmosChain,
         src_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<CosmosRelay, Error> {
         let relay = build.build_cosmos_relay(
             src_client_id,
@@ -317,6 +328,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, Index<1>, Index<0>> for CosmosBuildCom
             dst_chain,
             src_batch_sender,
             dst_batch_sender,
+            refresh_rate_a,
+            refresh_rate_b,
         )?;
 
         Ok(relay)

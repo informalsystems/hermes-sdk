@@ -1,5 +1,6 @@
 use core::str::FromStr;
 use core::time::Duration;
+use std::env::var;
 use std::path::PathBuf;
 
 use cgp::core::error::ErrorOf;
@@ -106,6 +107,16 @@ where
             }
         }
 
+        let client_refresh_rate = var("COSMOS_REFRESH_RATE")
+            .map(|refresh_str| {
+                Duration::from_secs(
+                    refresh_str
+                        .parse::<u64>()
+                        .expect("failed to parse {refresh_str} to seconds"),
+                )
+            })
+            .ok();
+
         let relayer_chain_config = CosmosChainConfig {
             id: chain_node_config.chain_id.to_string(),
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))
@@ -128,6 +139,7 @@ where
                 .compat_mode()
                 .map(|compat_mode| compat_mode.to_string()),
             block_time: Duration::from_secs(1),
+            client_refresh_rate,
         };
 
         Ok(relayer_chain_config)

@@ -121,6 +121,8 @@ where
                 &reference_chain_id,
                 &client_id,
                 &counterparty_client_id,
+                None, // client refresh not needed for this CLI
+                None, // client refresh not needed for this CLI
             )
             .await
             .map_err(App::raise_error)?;
