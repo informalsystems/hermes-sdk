@@ -28,7 +28,7 @@ where
         if max_signer_length > 0 {
             // Since index 0 is used for the `key_entry` wallet, the maximum value for the index is 1 higher
             // than the number of additional wallets.
-            *signer_index = (*signer_index + 1) % (max_signer_length + 1);
+            *signer_index = (*signer_index + 1) % max_signer_length;
         }
         chain
             .log(
