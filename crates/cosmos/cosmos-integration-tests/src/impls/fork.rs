@@ -14,6 +14,7 @@ use tendermint_rpc::{HttpClient, Url};
 use crate::contexts::{
     CosmosBinaryChannelTestDriver, CosmosBootstrap, CosmosBootstrapFields, CosmosChainDriver,
 };
+use crate::impls::copy_dir_recursive;
 
 #[cgp_new_provider(FullNodeForkerComponent)]
 impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
@@ -135,7 +136,7 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
         runtime.create_dir(&fork_chain_home_dir).await?;
 
         // Copy data to fork
-        copy_dir_recursive(&chain_home_dir, &fork_chain_home_dir);
+        copy_dir_recursive(&chain_home_dir, &fork_chain_home_dir)?;
 
         let fork_chain_config_path = fork_chain_home_dir.join("config").join("config.toml");
 
@@ -262,23 +263,5 @@ impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
             recover_client_payload_options_a: driver.recover_client_payload_options_a.clone(),
             recover_client_payload_options_b: driver.recover_client_payload_options_b.clone(),
         })
-    }
-}
-
-fn copy_dir_recursive(source_dir: &PathBuf, destination_dir: &PathBuf) {
-    if !destination_dir.exists() {
-        std::fs::create_dir_all(destination_dir).expect("failed to create destination directory");
-    }
-
-    for entry in std::fs::read_dir(source_dir).expect("failed to read source directory") {
-        let entry = entry.expect("failed to extract entry");
-        let path = entry.path();
-        let dest_path = destination_dir.join(entry.file_name());
-
-        if path.is_dir() {
-            copy_dir_recursive(&path, &dest_path);
-        } else {
-            std::fs::copy(&path, &dest_path).expect("failed to copy file recusively");
-        }
     }
 }
