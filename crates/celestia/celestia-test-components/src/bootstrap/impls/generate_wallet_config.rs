@@ -71,8 +71,8 @@ where
             validator_staked_amount: None,
         };
 
-        let relayer = CosmosWalletConfig {
-            wallet_id: "relayer".to_owned(),
+        let relayer1 = CosmosWalletConfig {
+            wallet_id: "relayer1".to_owned(),
             genesis_balances: vec![
                 Amount::new(1_000_000_000_000_000_000, denom_for_staking.clone()),
                 Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
@@ -80,8 +80,8 @@ where
             validator_staked_amount: None,
         };
 
-        let relayer_2 = CosmosWalletConfig {
-            wallet_id: "relayer-2".to_owned(),
+        let relayer2 = CosmosWalletConfig {
+            wallet_id: "relayer2".to_owned(),
             genesis_balances: vec![
                 Amount::new(1_000_000_000_000_000_000, denom_for_staking.clone()),
                 Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
@@ -94,8 +94,8 @@ where
             ("sequencer".into(), sequencer),
             ("user1".into(), user1),
             ("user2".into(), user2),
-            ("relayer".into(), relayer),
-            ("relayer-2".into(), relayer_2),
+            ("relayer1".into(), relayer1),
+            ("relayer2".into(), relayer2),
         ]))
     }
 }
