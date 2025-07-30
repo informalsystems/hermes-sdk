@@ -28,7 +28,7 @@ pub trait CanBuildRelayWithBatch<A: Async, B: Async>: HasAsyncErrorType
         dst_chain: ChainAt<Self, B>,
         src_batch_sender: MessageBatchSenderOf<Self::Relay, Src>,
         dst_batch_sender: MessageBatchSenderOf<Self::Relay, Dst>,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<Self::Relay, Self::Error>;
 }

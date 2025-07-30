@@ -37,8 +37,8 @@ where
         chain_b: &ChainAt<Setup, B>,
         client_id_a: &ClientIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
         client_id_b: &ClientIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<BiRelayAt<Setup, A, B>, Setup::Error> {
         let (relay_a_to_b, relay_b_to_a) = setup
             .setup_relays(
@@ -47,8 +47,8 @@ where
                 chain_b,
                 client_id_a,
                 client_id_b,
-                refresh_rate_a_to_b,
-                refresh_rate_b_to_a,
+                refresh_rate_a,
+                refresh_rate_b,
             )
             .await?;
 

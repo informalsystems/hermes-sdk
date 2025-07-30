@@ -68,8 +68,8 @@ where
         bi_relay: &BiRelay,
         clear_past_blocks: Option<Duration>,
         stop_after_blocks: Option<Duration>,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<(), BiRelay::Error> {
         let relay_a_to_b = bi_relay.relay_a_to_b();
         let relay_b_to_a = bi_relay.relay_b_to_a();
@@ -163,7 +163,7 @@ where
                 relay: relay_a_to_b.clone(),
                 start_height: start_height_a.clone(),
                 end_height: end_height_a.clone(),
-                refresh_rate: refresh_rate_a_to_b,
+                refresh_rate: refresh_rate_a,
             }),
             Box::new(BiRelayTask::DestinationAToB {
                 relay: relay_a_to_b.clone(),
@@ -174,7 +174,7 @@ where
                 relay: relay_b_to_a.clone(),
                 start_height: start_height_b,
                 end_height: end_height_b,
-                refresh_rate: refresh_rate_b_to_a,
+                refresh_rate: refresh_rate_b,
             }),
             Box::new(BiRelayTask::DestinationBToA {
                 relay: relay_b_to_a.clone(),

@@ -41,8 +41,8 @@ pub trait CanBootstrapRelay<Src, Dst>:
         dst_payload_options: &CreateClientPayloadOptionsOf<ChainAt<Self, Dst>, ChainAt<Self, Src>>,
         src_message_options: &CreateClientMessageOptionsOf<ChainAt<Self, Src>, ChainAt<Self, Dst>>,
         dst_message_options: &CreateClientMessageOptionsOf<ChainAt<Self, Dst>, ChainAt<Self, Src>>,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<Self::Relay, Self::Error>;
 }
 
@@ -77,8 +77,8 @@ where
         dst_payload_options: &DstChain::CreateClientPayloadOptions,
         src_message_options: &SrcChain::CreateClientMessageOptions,
         dst_message_options: &DstChain::CreateClientMessageOptions,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<Build::Relay, Self::Error> {
         let src_chain = self.build_chain(PhantomData::<Src>, src_chain_id).await?;
 
@@ -111,8 +111,8 @@ where
                 dst_chain_id,
                 &src_client_id,
                 &dst_client_id,
-                refresh_rate_a_to_b,
-                refresh_rate_b_to_a,
+                refresh_rate_a,
+                refresh_rate_b,
             )
             .await?;
 

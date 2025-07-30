@@ -23,8 +23,8 @@ where
         dst_chain_id: &ChainIdAt<Build, Dst>,
         src_client_id: &ClientIdAt<Build, Src, Dst>,
         dst_client_id: &ClientIdAt<Build, Dst, Src>,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<Build::Relay, Build::Error> {
         let src_chain = build.build_chain(PhantomData::<Src>, src_chain_id).await?;
 
@@ -37,8 +37,8 @@ where
                 dst_client_id,
                 src_chain,
                 dst_chain,
-                refresh_rate_a_to_b,
-                refresh_rate_b_to_a,
+                refresh_rate_a,
+                refresh_rate_b,
             )
             .await
     }

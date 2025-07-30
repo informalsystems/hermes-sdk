@@ -48,8 +48,8 @@ pub struct CosmosToWasmCosmosRelay {
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilterConfig,
     pub packet_lock_mutex: Arc<Mutex<BTreeSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
-    pub refresh_rate_a_to_b: Option<Duration>,
-    pub refresh_rate_b_to_a: Option<Duration>,
+    pub refresh_rate_a: Option<Duration>,
+    pub refresh_rate_b: Option<Duration>,
 }
 
 impl CosmosToWasmCosmosRelay {
@@ -61,8 +61,8 @@ impl CosmosToWasmCosmosRelay {
         src_client_id: ClientId,
         dst_client_id: ClientId,
         packet_filter: PacketFilterConfig,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Self {
         Self {
             runtime,
@@ -72,8 +72,8 @@ impl CosmosToWasmCosmosRelay {
             dst_client_id,
             packet_filter,
             packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
-            refresh_rate_a_to_b,
-            refresh_rate_b_to_a,
+            refresh_rate_a,
+            refresh_rate_b,
         }
     }
 }
@@ -106,9 +106,9 @@ delegate_components! {
         PacketMutexGetterComponent:
             UseField<symbol!("packet_lock_mutex")>,
         RefreshRateAtoBGetterComponent:
-            UseField<symbol!("refresh_rate_a_to_b")>,
+            UseField<symbol!("refresh_rate_a")>,
         RefreshRateBtoAGetterComponent:
-            UseField<symbol!("refresh_rate_b_to_a")>,
+            UseField<symbol!("refresh_rate_b")>,
     }
 }
 

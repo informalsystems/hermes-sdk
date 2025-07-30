@@ -22,8 +22,8 @@ pub enum EitherTarget {
 pub struct TargetRelayerTask<Relay> {
     pub relay: Relay,
     pub target: EitherTarget,
-    pub refresh_rate_a_to_b: Option<Duration>,
-    pub refresh_rate_b_to_a: Option<Duration>,
+    pub refresh_rate_a: Option<Duration>,
+    pub refresh_rate_b: Option<Duration>,
 }
 
 impl<Relay> Task for TargetRelayerTask<Relay>
@@ -39,13 +39,13 @@ where
             EitherTarget::Source => {
                 let _ = self
                     .relay
-                    .auto_relay(SourceTarget, self.refresh_rate_a_to_b)
+                    .auto_relay(SourceTarget, self.refresh_rate_a)
                     .await;
             }
             EitherTarget::Destination => {
                 let _ = self
                     .relay
-                    .auto_relay(DestinationTarget, self.refresh_rate_b_to_a)
+                    .auto_relay(DestinationTarget, self.refresh_rate_b)
                     .await;
             }
         }
@@ -72,14 +72,14 @@ where
             Box::new(TargetRelayerTask {
                 relay: relay.clone(),
                 target: EitherTarget::Source,
-                refresh_rate_a_to_b: *relay.refresh_rate_a_to_b(),
-                refresh_rate_b_to_a: *relay.refresh_rate_b_to_a(),
+                refresh_rate_a: *relay.refresh_rate_a(),
+                refresh_rate_b: *relay.refresh_rate_b(),
             }),
             Box::new(TargetRelayerTask {
                 relay: relay.clone(),
                 target: EitherTarget::Destination,
-                refresh_rate_a_to_b: *relay.refresh_rate_a_to_b(),
-                refresh_rate_b_to_a: *relay.refresh_rate_b_to_a(),
+                refresh_rate_a: *relay.refresh_rate_a(),
+                refresh_rate_b: *relay.refresh_rate_b(),
             }),
         ];
 

@@ -28,7 +28,7 @@ where
         chain_id_b: &ChainIdAt<Self, B>,
         client_id_a: &ClientIdAt<Self, A, B>,
         client_id_b: &ClientIdAt<Self, B, A>,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<Self::BiRelay, Self::Error>;
 }

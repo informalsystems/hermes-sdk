@@ -57,8 +57,8 @@ pub struct CosmosRelayFields {
     pub packet_lock_mutex: PacketMutexOf<CosmosRelay>,
     pub message_batch_sender_a: MessageBatchSenderOf<CosmosRelay, Index<0>>,
     pub message_batch_sender_b: MessageBatchSenderOf<CosmosRelay, Index<1>>,
-    pub refresh_rate_a_to_b: Option<Duration>,
-    pub refresh_rate_b_to_a: Option<Duration>,
+    pub refresh_rate_a: Option<Duration>,
+    pub refresh_rate_b: Option<Duration>,
 }
 
 pub trait HasCosmosRelayFields: Send + Sync + 'static {
@@ -88,8 +88,8 @@ impl CosmosRelay {
         dst_client_id: ClientId,
         src_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Src>,
         dst_chain_message_batch_sender: MessageBatchSenderOf<CosmosRelay, Dst>,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Self {
         let relay = Self {
             fields: Arc::new(CosmosRelayFields {
@@ -101,8 +101,8 @@ impl CosmosRelay {
                 message_batch_sender_a: src_chain_message_batch_sender,
                 message_batch_sender_b: dst_chain_message_batch_sender,
                 packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
-                refresh_rate_a_to_b,
-                refresh_rate_b_to_a,
+                refresh_rate_a,
+                refresh_rate_b,
             }),
         };
 
@@ -142,9 +142,9 @@ delegate_components! {
         MessageBatchSenderGetterComponent<Index<1>>:
             UseField<symbol!("message_batch_sender_b")>,
         RefreshRateAtoBGetterComponent:
-            UseField<symbol!("refresh_rate_a_to_b")>,
+            UseField<symbol!("refresh_rate_a")>,
         RefreshRateBtoAGetterComponent:
-            UseField<symbol!("refresh_rate_b_to_a")>,
+            UseField<symbol!("refresh_rate_b")>,
         [
             ChainTypeProviderAtComponent<Src>,
             ChainTypeProviderAtComponent<Dst>,

@@ -70,8 +70,8 @@ where
         dst_client_id: &DstChain::ClientId,
         src_chain: SrcChain,
         dst_chain: DstChain,
-        refresh_rate_a_to_b: Option<Duration>,
-        refresh_rate_b_to_a: Option<Duration>,
+        refresh_rate_a: Option<Duration>,
+        refresh_rate_b: Option<Duration>,
     ) -> Result<Build::Relay, Build::Error> {
         let src_chain_id = src_chain.chain_id();
         let dst_chain_id = dst_chain.chain_id();
@@ -105,8 +105,8 @@ where
                 dst_chain,
                 src_sender,
                 dst_sender,
-                refresh_rate_a_to_b,
-                refresh_rate_b_to_a,
+                refresh_rate_a,
+                refresh_rate_b,
             )
             .await?;
 
