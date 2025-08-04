@@ -1307,9 +1307,9 @@ checksum = "bf151400ff0baff5465007dd2f3e717f3fe502074ca563069ce3a6629d07b289"
 
 [[package]]
 name = "hdpath"
-version = "0.6.3"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dfa5bc9db2c17d2660f53ce217b778d06d68de13d1cd01c0f4e5de4b7918935f"
+checksum = "c7ae08d01cf6bb705191768b0e18a1eb113dbf6af68332404b31756ef2071856"
 dependencies = [
  "byteorder",
 ]
