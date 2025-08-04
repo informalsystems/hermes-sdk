@@ -4548,9 +4548,9 @@ dependencies = [
 
 [[package]]
 name = "tendermint-proto"
-version = "0.40.3"
+version = "0.40.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca44b9eaaa98e8440fbafe5593b8a32a1c395c094ac566b3eb50497f8bd2bee0"
+checksum = "d2c40e13d39ca19082d8a7ed22de7595979350319833698f8b1080f29620a094"
 dependencies = [
  "borsh",
  "bytes",
