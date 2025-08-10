@@ -1,3 +1,5 @@
+use alloc::string::String;
+
 use hermes_prelude::*;
 
 #[cgp_component {
@@ -6,5 +8,5 @@ use hermes_prelude::*;
 }]
 #[async_trait]
 pub trait CanForkFullNode: HasAsyncErrorType + Async + Sized {
-    async fn fork_full_node(&self) -> Result<Self, Self::Error>;
+    async fn fork_full_node(&self, chain_id: String) -> Result<Self, Self::Error>;
 }

@@ -1519,6 +1519,7 @@ dependencies = [
  "hermes-error",
  "hermes-prelude",
  "ibc-client-tendermint",
+ "prost-types",
  "tendermint",
  "tendermint-light-client",
  "tendermint-light-client-detector",

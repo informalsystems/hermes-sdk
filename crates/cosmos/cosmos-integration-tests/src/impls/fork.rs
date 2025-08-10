@@ -20,6 +20,7 @@ use crate::impls::copy_dir_recursive;
 impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
     async fn fork_full_node(
         driver: &CosmosBinaryChannelTestDriver,
+        _chain_id: String,
     ) -> Result<CosmosBinaryChannelTestDriver, HermesError> {
         // Retrieve necessary full node data
         let genesis_config = driver.chain_driver_b.genesis_config.clone();

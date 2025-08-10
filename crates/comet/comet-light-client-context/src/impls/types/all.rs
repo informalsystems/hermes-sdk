@@ -4,7 +4,7 @@ use hermes_comet_light_client_components::traits::{
 };
 use hermes_comet_light_client_components::types::{Verdict, VerificationStatus};
 use hermes_prelude::*;
-use ibc_client_tendermint::types::proto::v1::Misbehaviour;
+use prost_types::Any;
 use tendermint::block::Height;
 use tendermint_light_client_detector::Divergence;
 
@@ -16,6 +16,6 @@ delegate_components! {
         VerificationStatusTypeComponent: VerificationStatus,
         VerdictTypeComponent: Verdict,
         DivergenceTypeProviderComponent: Divergence,
-        EvidenceTypeProviderComponent: Misbehaviour,
+        EvidenceTypeProviderComponent: Any,
     }
 }

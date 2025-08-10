@@ -1,9 +1,10 @@
+use alloc::string::ToString;
 use core::marker::PhantomData;
 use core::time::Duration;
 
 use hermes_chain_components::traits::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, CanQueryChainHeight,
-    CanQueryClientStateWithLatestHeight, CanQueryClientStatus, CanSendMessages,
+    CanQueryClientStateWithLatestHeight, CanQueryClientStatus, CanSendMessages, HasChainId,
     HasClientStateFields, HasClientStatusMethods,
 };
 use hermes_prelude::*;
@@ -41,7 +42,9 @@ where
 
         tokio::time::sleep(Duration::from_secs(10)).await;
 
-        let forked_setup = driver.fork_full_node().await?;
+        let forked_setup = driver
+            .fork_full_node(driver.chain_b().chain_id().to_string())
+            .await?;
 
         tokio::time::sleep(Duration::from_secs(10)).await;
 

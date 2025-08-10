@@ -4,6 +4,9 @@ pub use any::*;
 mod chain_id;
 pub use chain_id::*;
 
+mod client_id;
+pub use client_id::*;
+
 mod commitment_root;
 pub use commitment_root::*;
 

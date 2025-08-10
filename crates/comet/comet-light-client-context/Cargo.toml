@@ -24,3 +24,4 @@ tendermint-rpc                   = { workspace = true }
 tendermint-light-client          = { workspace = true }
 tendermint-light-client-detector = { workspace = true }
 tendermint-light-client-verifier = { workspace = true }
+prost-types                      = { workspace = true }

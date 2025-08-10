@@ -16,6 +16,8 @@ use ibc::core::client::types::Height;
 use ibc::core::host::types::error::DecodingError;
 use ibc_client_tendermint::types::error::TendermintClientError;
 use ibc_client_tendermint::types::proto::v1::{Header, Misbehaviour};
+use prost::{DecodeError, EncodeError, Message};
+use prost_types::Any;
 use tendermint::block::Height as TendermintHeight;
 use tendermint::error::Error as TendermintError;
 use tendermint::validator::Set;
@@ -40,8 +42,10 @@ where
         + CanRaiseAsyncError<TendermintClientError>
         + CanRaiseAsyncError<HermesError>
         + CanRaiseAsyncError<DecodingError>
+        + CanRaiseAsyncError<DecodeError>
+        + CanRaiseAsyncError<EncodeError>
         + CanRaiseAsyncError<&'static str>,
-    Counterparty: HasEvidenceType<Evidence = Misbehaviour>
+    Counterparty: HasEvidenceType<Evidence = Any>
         + HasUpdateClientEvent<UpdateClientEvent = CosmosUpdateClientEvent>,
     TendermintClientState: From<Chain::ClientState>,
     Chain::Runtime: CanSleep,
@@ -51,9 +55,10 @@ where
         update_client_event: &Counterparty::UpdateClientEvent,
         client_state: &Chain::ClientState,
     ) -> Result<Option<Counterparty::Evidence>, Chain::Error> {
-        let event_header = update_client_event.header.clone();
+        let event_header = Header::decode(update_client_event.header.value.as_slice())
+            .map_err(Chain::raise_error)?;
 
-        let event_signed_header = event_header.signed_header.ok_or_else(|| {
+        let event_signed_header = event_header.clone().signed_header.ok_or_else(|| {
             Chain::raise_error("`signed_header` missing from `Header` in Update Client event")
         })?;
 
@@ -62,6 +67,7 @@ where
         })?;
 
         let event_trusted_validator_set: Set = event_header
+            .clone()
             .trusted_validators
             .ok_or_else(|| {
                 Chain::raise_error(
@@ -247,16 +253,18 @@ where
             };
 
             #[allow(deprecated)]
-            return Ok(Some(Misbehaviour {
+            let evidence_any = Any::from_msg(&Misbehaviour {
                 client_id: update_client_event.client_id.to_string(),
-                header_1: Some(update_client_event.header.clone()),
+                header_1: Some(event_header.clone()),
                 header_2: Some(Header {
                     signed_header: Some(divergence.challenging_block.signed_header.into()),
                     validator_set: Some(divergence.challenging_block.validators.into()),
                     trusted_height: Some(latest_trusted_height),
                     trusted_validators: Some(latest_trusted_validator_set.into()),
                 }),
-            }));
+            })
+            .map_err(Chain::raise_error)?;
+            return Ok(Some(evidence_any));
         }
 
         chain

@@ -45,6 +45,7 @@ use ibc::core::host::types::identifiers::{
 use ibc::primitives::{Signer, Timestamp};
 use ibc_client_tendermint::types::proto::v1::Misbehaviour;
 use prost::{EncodeError, Message};
+use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
 use tendermint::{Hash, Time};
@@ -287,17 +288,19 @@ impl<Chain> EvidenceTypeProvider<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
-    type Evidence = Misbehaviour;
+    type Evidence = Any;
 }
 
 #[cgp_provider(EvidenceFieldsGetterComponent)]
 impl<Chain, Counterparty> EvidenceFieldsGetter<Chain, Counterparty> for ProvideCosmosChainTypes
 where
-    Chain: HasEvidenceType<Evidence = Misbehaviour>
-        + HasClientIdType<Counterparty, ClientId = ClientId>,
+    Chain: HasEvidenceType<Evidence = Any> + HasClientIdType<Counterparty, ClientId = ClientId>,
 {
     #[allow(deprecated)]
-    fn evidence_client_id(evidence: &Misbehaviour) -> ClientId {
-        ClientId::from_str(evidence.client_id.as_str()).expect("Invalid client ID in evidence")
+    fn evidence_client_id(evidence: &Any) -> ClientId {
+        let cosmos_evidence = Misbehaviour::decode(&*evidence.value)
+            .expect("failed to decode `Any` to `Misbehaviour`");
+        ClientId::from_str(cosmos_evidence.client_id.as_str())
+            .expect("Invalid client ID in evidence")
     }
 }

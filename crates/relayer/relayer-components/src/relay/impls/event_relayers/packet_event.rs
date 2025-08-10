@@ -4,7 +4,8 @@ use core::marker::PhantomData;
 use hermes_chain_components::traits::{
     CanBuildMisbehaviourMessage, CanBuildPacketFromSendPacket, CanCheckMisbehaviour,
     CanExtractFromEvent, CanQueryChainHeight, CanQueryClientStateWithLatestHeight,
-    CanSendSingleMessage, HasClientStateType, HasUpdateClientEvent,
+    CanSendSingleMessage, HasClientIdType, HasClientStateType, HasEvidenceType,
+    HasUpdateClientEvent,
 };
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::{LevelDebug, LevelWarn};
@@ -59,7 +60,11 @@ where
         + CanBuildPacketFromSendPacket<DstChain>
         + CanBuildMisbehaviourMessage<DstChain>
         + CanSendSingleMessage,
-    DstChain: CanCheckMisbehaviour<SrcChain> + HasClientStateType<SrcChain> + HasErrorType,
+    DstChain: CanCheckMisbehaviour<SrcChain>
+        + HasEvidenceType
+        + HasClientIdType<SrcChain>
+        + HasClientStateType<SrcChain>
+        + HasErrorType,
     MatchPacketDestinationChain: RelayPacketFilter<Relay>,
 {
     async fn relay_chain_event(
