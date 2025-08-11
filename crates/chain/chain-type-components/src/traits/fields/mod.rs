@@ -4,9 +4,6 @@ pub use amount::*;
 mod chain_id;
 pub use chain_id::*;
 
-mod evidence;
-pub use evidence::*;
-
 mod height;
 pub use height::*;
 

@@ -4,10 +4,10 @@ mod preset {
     use hermes_core::chain_components::traits::{
         AmountQuantityGetterComponent, ClientRecoveryComponent, ClientStatusMethodsComponent,
         ClientStatusQuerierComponent, ClientStatusTypeComponent, ClientUpgradeComponent,
-        ClientUpgradePayloadBuilderComponent, EvidenceFieldsGetterComponent,
-        EvidenceTypeProviderComponent, MisbehaviourCheckerComponent,
-        MisbehaviourMessageBuilderComponent, OverrideCreateClientPayloadOptionsComponent,
-        QuantityTypeComponent, RecoverClientPayloadTypeComponent, UpdateClientEventComponent,
+        ClientUpgradePayloadBuilderComponent, EvidenceTypeProviderComponent,
+        MisbehaviourCheckerComponent, MisbehaviourMessageBuilderComponent,
+        OverrideCreateClientPayloadOptionsComponent, QuantityTypeComponent,
+        RecoverClientPayloadTypeComponent, UpdateClientEventComponent,
         UpgradeClientPayloadTypeComponent,
     };
     use hermes_core::chain_type_components::traits::{
@@ -176,7 +176,6 @@ mod preset {
                 AckCommitmentHashTypeProviderComponent,
                 PacketReceiptTypeComponent,
                 EvidenceTypeProviderComponent,
-                EvidenceFieldsGetterComponent,
             ]:
                 ProvideCosmosChainTypes,
             [

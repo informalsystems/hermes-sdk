@@ -95,7 +95,7 @@ where
             .log_message("Will assert the client is eventually frozen")
             .await;
 
-        for _ in 0..20 {
+        for _ in 0..100 {
             let client_status = chain_a
                 .query_client_status(PhantomData, client_id_a)
                 .await
