@@ -24,7 +24,7 @@ jobs:
           - preset: OsmosisToOsmosis
             features: ibc-go-v8
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v30
         with:
           extra_nix_config: |
@@ -62,7 +62,7 @@ jobs:
           - preset: OsmosisToOsmosis
             features: ibc-go-v8
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v30
         with:
           extra_nix_config: |
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v30
         with:
           extra_nix_config: |
@@ -115,7 +115,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v30
         with:
           extra_nix_config: |
