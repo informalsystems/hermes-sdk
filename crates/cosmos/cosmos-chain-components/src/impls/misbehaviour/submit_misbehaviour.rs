@@ -1,16 +1,13 @@
-use alloc::str::FromStr;
-
 use hermes_core::chain_components::traits::{
-    HasEvidenceType, HasMessageType, MisbehaviourMessageBuilder,
+    HasClientIdType, HasEvidenceType, HasMessageType, MisbehaviourMessageBuilder,
     MisbehaviourMessageBuilderComponent,
 };
 use hermes_prelude::*;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc::primitives::Signer;
-use ibc_client_tendermint::types::proto::v1::Misbehaviour;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::MsgSubmitMisbehaviour;
-use prost::{DecodeError, Message};
+use prost::DecodeError;
 use prost_types::Any as ProstAny;
 
 use crate::traits::{CosmosMessage, DynCosmosMessage, ToCosmosMessage};
@@ -28,17 +25,15 @@ impl<Chain, Counterparty> MisbehaviourMessageBuilder<Chain, Counterparty>
     for TendermintMisbehaviourMessageBuilder
 where
     Chain: HasEvidenceType<Evidence = ProstAny>
+        + HasClientIdType<Counterparty, ClientId = ClientId>
         + HasMessageType<Message = CosmosMessage>
         + CanRaiseAsyncError<DecodeError>,
 {
     async fn build_misbehaviour_message(
         _chain: &Chain,
+        client_id: &Chain::ClientId,
         evidence: &ProstAny,
     ) -> Result<Chain::Message, Chain::Error> {
-        let cosmos_evidence = Misbehaviour::decode(&*evidence.value).map_err(Chain::raise_error)?;
-        #[allow(deprecated)]
-        let client_id = ClientId::from_str(cosmos_evidence.client_id.as_str())
-            .expect("Invalid client ID in evidence");
         let msg = SubmitMisbehaviour {
             client_id: client_id.clone(),
             evidence: evidence.clone(),

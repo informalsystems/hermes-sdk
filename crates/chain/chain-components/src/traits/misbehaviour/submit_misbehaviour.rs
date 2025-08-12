@@ -1,5 +1,5 @@
 use cgp::core::component::UseDelegate;
-use hermes_chain_type_components::traits::{HasEvidenceType, HasMessageType};
+use hermes_chain_type_components::traits::{HasClientIdType, HasEvidenceType, HasMessageType};
 use hermes_prelude::*;
 
 #[cgp_component {
@@ -8,10 +8,11 @@ use hermes_prelude::*;
 }]
 #[async_trait]
 pub trait CanBuildMisbehaviourMessage<Counterparty>:
-    HasEvidenceType + HasMessageType + HasAsyncErrorType
+    HasEvidenceType + HasClientIdType<Counterparty> + HasMessageType + HasAsyncErrorType
 {
     async fn build_misbehaviour_message(
         &self,
+        client_id: &Self::ClientId,
         evidence: &Self::Evidence,
     ) -> Result<Self::Message, Self::Error>;
 }
@@ -20,14 +21,15 @@ pub trait CanBuildMisbehaviourMessage<Counterparty>:
 impl<Chain, Counterparty, Components, Delegate> MisbehaviourMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasMessageType + HasEvidenceType + HasAsyncErrorType,
+    Chain: HasMessageType + HasClientIdType<Counterparty> + HasEvidenceType + HasAsyncErrorType,
     Delegate: MisbehaviourMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
 {
     async fn build_misbehaviour_message(
         chain: &Chain,
+        client_id: &Chain::ClientId,
         evidence: &Chain::Evidence,
     ) -> Result<Chain::Message, Chain::Error> {
-        Components::Delegate::build_misbehaviour_message(chain, evidence).await
+        Components::Delegate::build_misbehaviour_message(chain, client_id, evidence).await
     }
 }

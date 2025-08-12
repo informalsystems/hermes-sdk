@@ -106,7 +106,7 @@ where
                         .await;
 
                     let msg = src_chain
-                        .build_misbehaviour_message(&evidence)
+                        .build_misbehaviour_message(&src_client_id, &evidence)
                         .await
                         .map_err(Relay::raise_error)?;
 
@@ -163,7 +163,7 @@ where
                 .map_err(Relay::raise_error)?;
 
             /*
-               First check whether the packet is targetted for the destination chain,
+               First check whether the packet is targeted for the destination chain,
                then use the packet filter in the relay context, as we skip `CanRelayPacket`
                which would have done the packet filtering.
             */
