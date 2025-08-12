@@ -9,7 +9,7 @@ use hermes_chain_components::traits::{
 };
 use hermes_prelude::*;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
-use hermes_test_components::setup::traits::CanForkFullNode;
+use hermes_test_components::setup::traits::{CanForkFullNode, CanHaltFullNode};
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
 use crate::traits::CanUseBinaryTestDriverMethods;
@@ -24,8 +24,10 @@ impl<A, B> Default for TestMisbehaviourDetection<A, B> {
 
 impl<Driver, A, B> TestCase<Driver> for TestMisbehaviourDetection<A, B>
 where
-    Driver:
-        CanUseBinaryTestDriverMethods<A, B> + CanForkFullNode + CanRaiseAsyncError<&'static str>,
+    Driver: CanUseBinaryTestDriverMethods<A, B>
+        + CanForkFullNode
+        + CanHaltFullNode
+        + CanRaiseAsyncError<&'static str>,
     A: Async,
     B: Async,
 {
@@ -41,6 +43,10 @@ where
             .await;
 
         tokio::time::sleep(Duration::from_secs(10)).await;
+
+        driver
+            .halt_full_node(driver.chain_b().chain_id().to_string())
+            .await?;
 
         let forked_setup = driver
             .fork_full_node(driver.chain_b().chain_id().to_string())

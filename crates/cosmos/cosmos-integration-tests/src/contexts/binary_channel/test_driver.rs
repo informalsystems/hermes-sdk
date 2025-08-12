@@ -11,7 +11,8 @@ use hermes_core::test_components::driver::traits::{
 };
 use hermes_core::test_components::setup::traits::{
     CreateClientMessageOptionsGetterAtComponent, CreateClientPayloadOptionsGetterAtComponent,
-    FullNodeForkerComponent, PortIdGetterAtComponent, RecoverClientPayloadOptionsGetterAtComponent,
+    FullNodeForkerComponent, FullNodeHalterComponent, PortIdGetterAtComponent,
+    RecoverClientPayloadOptionsGetterAtComponent,
 };
 use hermes_core::test_components::test_case::traits::recover_client::RecoverClientHandlerComponent;
 use hermes_core::test_components::test_case::traits::upgrade_client::{
@@ -76,7 +77,10 @@ delegate_components! {
             CosmosHandleUpgradeClient,
         SetupUpgradeClientTestHandlerComponent:
             SetupCosmosUpgradeClientTest,
-        FullNodeForkerComponent:
+        [
+            FullNodeForkerComponent,
+            FullNodeHalterComponent,
+        ]:
             ForkSecondFullNode,
         ChainDriverGetterAtComponent<Index<0>>:
             UseField<symbol!("chain_driver_a")>,

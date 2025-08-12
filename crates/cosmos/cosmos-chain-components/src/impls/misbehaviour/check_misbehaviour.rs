@@ -252,6 +252,8 @@ where
                 None => (trusted_height.into(), trusted_validator_set),
             };
 
+            // TODO: Add and use a domain type which can be converted to the protobuf type,
+            // instead of directly using the protobuf type
             #[allow(deprecated)]
             let evidence_any = Any::from_msg(&Misbehaviour {
                 client_id: update_client_event.client_id.to_string(),
