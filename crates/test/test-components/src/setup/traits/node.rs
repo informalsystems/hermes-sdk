@@ -26,5 +26,5 @@ pub trait CanHaltFullNode: HasAsyncErrorType + Async + Sized {
 }]
 #[async_trait]
 pub trait CanResumeFullNode: HasAsyncErrorType + Async + Sized {
-    async fn resumer_full_node(&self, chain_id: String) -> Result<Self, Self::Error>;
+    async fn resume_full_node(&self, chain_id: String) -> Result<Self, Self::Error>;
 }
