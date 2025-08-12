@@ -8,7 +8,7 @@ mod preset {
         MisbehaviourCheckerComponent, MisbehaviourMessageBuilderComponent,
         OverrideCreateClientPayloadOptionsComponent, QuantityTypeComponent,
         RecoverClientPayloadTypeComponent, UpdateClientEventComponent,
-        UpgradeClientPayloadTypeComponent,
+        UpdateClientEventFieldsComponent, UpgradeClientPayloadTypeComponent,
     };
     use hermes_core::chain_type_components::traits::{
         AddressTypeProviderComponent, AmountDenomGetterComponent, AmountTypeProviderComponent,
@@ -181,6 +181,7 @@ mod preset {
             [
                 CreateClientEventComponent,
                 UpdateClientEventComponent,
+                UpdateClientEventFieldsComponent,
                 ConnectionOpenInitEventComponent,
                 ConnectionOpenTryEventComponent,
                 ChannelOpenInitEventComponent,

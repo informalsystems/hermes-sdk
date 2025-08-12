@@ -5,7 +5,7 @@ use hermes_chain_components::traits::{
     CanBuildMisbehaviourMessage, CanBuildPacketFromSendPacket, CanCheckMisbehaviour,
     CanExtractFromEvent, CanQueryChainHeight, CanQueryClientStateWithLatestHeight,
     CanSendSingleMessage, HasClientIdType, HasClientStateType, HasEvidenceType,
-    HasUpdateClientEvent,
+    HasUpdateClientEventFields,
 };
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::{LevelDebug, LevelWarn};
@@ -48,12 +48,11 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanLog<LevelDebug>
         + CanLog<LevelWarn>
-        + HasRelayClientIds
         + CanRelayPacket
         + CanRaiseRelayChainErrors,
     SrcChain: HasErrorType
         + HasSendPacketEvent<DstChain>
-        + HasUpdateClientEvent
+        + HasUpdateClientEventFields<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
         + CanExtractFromEvent<SrcChain::SendPacketEvent>
         + CanExtractFromEvent<SrcChain::UpdateClientEvent>
@@ -88,9 +87,9 @@ where
         } else if let Some(update_client_event) =
             src_chain.try_extract_from_event(PhantomData::<SrcChain::UpdateClientEvent>, event)
         {
-            let src_client_id = relay.src_client_id();
+            let src_client_id = src_chain.client_id(&update_client_event);
             let client_state = src_chain
-                .query_client_state_with_latest_height(PhantomData, src_client_id)
+                .query_client_state_with_latest_height(PhantomData, &src_client_id)
                 .await
                 .map_err(Relay::raise_error)?;
 

@@ -1,7 +1,10 @@
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
-use hermes_core::chain_components::traits::{ProvideUpdateClientEvent, UpdateClientEventComponent};
+use hermes_core::chain_components::traits::{
+    HasUpdateClientEvent, ProvideUpdateClientEvent, ProvideUpdateClientEventFields,
+    UpdateClientEventComponent, UpdateClientEventFieldsComponent,
+};
 use hermes_core::chain_type_components::traits::HasMessageResponseType;
 use hermes_core::relayer_components::chain::traits::{
     ChannelOpenInitEventComponent, ChannelOpenTryEventComponent, ConnectionOpenInitEventComponent,
@@ -75,6 +78,18 @@ where
 #[cgp_provider(UpdateClientEventComponent)]
 impl<Chain> ProvideUpdateClientEvent<Chain> for ProvideCosmosEvents {
     type UpdateClientEvent = CosmosUpdateClientEvent;
+}
+
+#[cgp_provider(UpdateClientEventFieldsComponent)]
+impl<Chain, Counterparty> ProvideUpdateClientEventFields<Chain, Counterparty>
+    for ProvideCosmosEvents
+where
+    Chain: HasClientIdType<Counterparty, ClientId = ClientId>
+        + HasUpdateClientEvent<UpdateClientEvent = CosmosUpdateClientEvent>,
+{
+    fn client_id(_chain: &Chain, update_client_event: &CosmosUpdateClientEvent) -> Chain::ClientId {
+        update_client_event.client_id.clone()
+    }
 }
 
 #[cgp_provider(EventExtractorComponent)]
