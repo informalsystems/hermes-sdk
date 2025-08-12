@@ -15,11 +15,8 @@ use hermes_core::relayer_components::chain::traits::{
     ProvideWriteAckEvent, SendPacketEventComponent, WriteAckEventComponent,
 };
 use hermes_prelude::*;
-use ibc::clients::wasm_types::proto::v1::ClientMessage;
 use ibc::core::channel::types::packet::Packet;
-use ibc::core::client::types::events::{
-    CLIENT_ID_ATTRIBUTE_KEY, CLIENT_TYPE_ATTRIBUTE_KEY, HEADER_ATTRIBUTE_KEY,
-};
+use ibc::core::client::types::events::{CLIENT_ID_ATTRIBUTE_KEY, HEADER_ATTRIBUTE_KEY};
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, ConnectionId};
 use prost::Message;
 use prost_types::Any;
@@ -105,34 +102,14 @@ where
                 .value_str()
                 .ok()?;
 
-            let raw_client_type = event
-                .attributes
-                .iter()
-                .find(|tag| tag.key_bytes() == CLIENT_TYPE_ATTRIBUTE_KEY.as_bytes())?
-                .value_str()
-                .ok()?;
-
             let header_bytes = subtle_encoding::hex::decode(raw_header).ok()?;
             let any_header = Any::decode(header_bytes.as_slice()).ok()?;
-
-            // If the client is of type 08-wasm the header is contained in the `data` field
-            // of the `ClientMessage`
-            let extracted_header = if raw_client_type == "08-wasm" {
-                let decoded_client_message =
-                    ClientMessage::decode(any_header.value.as_slice()).ok()?;
-                Any {
-                    type_url: "/ibc.lightclients.wasm.v1.ClientMessage".to_string(),
-                    value: Message::encode_to_vec(&decoded_client_message),
-                }
-            } else {
-                any_header.clone()
-            };
 
             let client_id = raw_client_id.parse().ok()?;
 
             return Some(CosmosUpdateClientEvent {
                 client_id,
-                header: extracted_header,
+                header: any_header,
             });
         }
         None
