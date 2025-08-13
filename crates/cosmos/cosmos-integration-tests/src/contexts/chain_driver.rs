@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
+use hermes_core::logging_components::traits::LoggerComponent;
 use hermes_core::runtime_components::traits::{
     RuntimeGetter, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
@@ -18,6 +19,9 @@ use hermes_core::test_components::chain_driver::traits::{
     StakingDenom, TransferDenom, UserWallet, ValidatorWallet, WalletGetterComponent,
     WalletsGetterComponent,
 };
+use hermes_core::test_components::test_case::traits::upgrade_client::{
+    SetupUpgradeClientTestHandlerComponent, UpgradeClientHandlerComponent,
+};
 use hermes_cosmos_core::chain_components::impls::RelayerConfig;
 use hermes_cosmos_core::test_components::bootstrap::traits::{
     ChainCommandPathGetter, ChainCommandPathGetterComponent,
@@ -25,12 +29,16 @@ use hermes_cosmos_core::test_components::bootstrap::traits::{
 use hermes_cosmos_core::test_components::bootstrap::types::{
     CosmosChainNodeConfig, CosmosGenesisConfig,
 };
+use hermes_cosmos_core::test_components::chain::impls::{
+    CosmosHandleUpgradeClient, SetupCosmosUpgradeClientTest,
+};
 use hermes_cosmos_core::test_components::chain::types::{CosmosTestWallet, Denom};
 use hermes_cosmos_core::test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
 use hermes_cosmos_core::test_components::chain_driver::impls::CosmosProposalSetupClientUpgradeResult;
 use hermes_cosmos_core::test_components::chain_driver::traits::{
     GrpcPortGetter, GrpcPortGetterComponent, RpcPortGetter, RpcPortGetterComponent,
 };
+use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
 use hermes_cosmos_relayer::contexts::CosmosChain;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
@@ -72,6 +80,12 @@ delegate_components! {
             ProposalStatusTypeComponent,
         ]:
             BaseCosmosChainDriverComponents,
+        UpgradeClientHandlerComponent:
+            CosmosHandleUpgradeClient,
+        SetupUpgradeClientTestHandlerComponent:
+            SetupCosmosUpgradeClientTest,
+        LoggerComponent:
+            TracingLogger,
         WalletsGetterComponent:
             UseField<symbol!("wallets")>,
         WalletGetterComponent<RelayerWallet>:
