@@ -10,8 +10,6 @@ use hermes_core::chain_components::traits::{
 };
 use hermes_core::logging_components::traits::CanLog;
 use hermes_core::logging_components::types::LevelDebug;
-use hermes_core::relayer_components::multi::traits::chain_at::HasChainTypeAt;
-use hermes_core::relayer_components::multi::traits::client_id_at::HasClientIdAt;
 use hermes_core::relayer_components::transaction::traits::{
     CanSendMessagesWithSigner, HasDefaultSigner,
 };
@@ -29,7 +27,6 @@ use hermes_test_components::chain_driver::traits::{
     CanGenerateRandomAmount, HasChain, HasDenom, HasSetupUpgradeClientTestResultType, HasWallet,
     StakingDenom, ValidatorWallet,
 };
-use hermes_test_components::driver::traits::HasChainDriverAt;
 use hermes_test_components::test_case::traits::upgrade_client::{
     SetupUpgradeClientTestHandler, SetupUpgradeClientTestHandlerComponent, UpgradeClientHandler,
     UpgradeClientHandlerComponent,
@@ -61,22 +58,16 @@ const WAIT_SECONDS_FOR_PROPOSAL_STATUS: u64 = 1;
 pub struct CosmosHandleUpgradeClient;
 
 #[cgp_provider(UpgradeClientHandlerComponent)]
-impl<Driver, ChainDriverA, ChainDriverB, ChainA, ChainB>
-    UpgradeClientHandler<Driver, ChainDriverA, ChainA, ChainB> for CosmosHandleUpgradeClient
+impl<ChainDriverA, ChainDriverB, ChainA, ChainB> UpgradeClientHandler<ChainDriverA, ChainDriverB>
+    for CosmosHandleUpgradeClient
 where
-    Driver: HasChainDriverAt<Index<0>, ChainDriver = ChainDriverA>
-        + HasChainDriverAt<Index<1>, ChainDriver = ChainDriverB>
-        + HasClientIdAt<Index<1>, Index<0>>
-        + HasChainTypeAt<Index<0>, Chain = ChainA>
-        + HasChainTypeAt<Index<1>, Chain = ChainB>
-        + CanLog<LevelDebug>
-        + CanRaiseAsyncError<ChainA::Error>
-        + CanRaiseAsyncError<ChainB::Error>
-        + CanRaiseAsyncError<ClientError>,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasSetupUpgradeClientTestResultType<
             SetupUpgradeClientTestResult = CosmosProposalSetupClientUpgradeResult,
-        >,
+        > + CanLog<LevelDebug>
+        + CanRaiseAsyncError<ChainA::Error>
+        + CanRaiseAsyncError<ChainB::Error>
+        + CanRaiseAsyncError<ClientError>,
     ChainDriverB: HasChain<Chain = ChainB>,
     ChainA: CanBuildClientUpgradePayload<ChainB>
         + CanWaitChainReachHeight
@@ -95,37 +86,35 @@ where
         + HasAsyncErrorType,
 {
     async fn handle_upgrade_client(
-        driver: &Driver,
+        chain_driver_a: &ChainDriverA,
         setup_result: &CosmosProposalSetupClientUpgradeResult,
-    ) -> Result<(), Driver::Error> {
-        let chain_driver_a = driver.chain_driver_at(PhantomData::<Index<0>>);
-
+        chain_driver_b: &ChainDriverB,
+        client_id_b: &ChainB::ClientId,
+    ) -> Result<(), ChainDriverA::Error> {
         let chain_a = chain_driver_a.chain();
-
-        let chain_driver_b = driver.chain_driver_at(PhantomData::<Index<1>>);
 
         let chain_b = chain_driver_b.chain();
 
         let sender_wallet = chain_b.get_default_signer();
 
-        let client_id_b = driver.client_id_at(PhantomData::<(Index<1>, Index<0>)>);
-
         let latest_height_a = chain_a
             .query_chain_height()
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         // Build upgrade height based on the setup result
         let upgrade_height = Height::new(
             latest_height_a.revision_number(),
             setup_result.height as u64,
         )
-        .map_err(Driver::raise_error)?;
+        .map_err(ChainDriverA::raise_error)?;
 
         // Must decrement upgrade height since chain halt 1 height before
-        let halt_height = upgrade_height.decrement().map_err(Driver::raise_error)?;
+        let halt_height = upgrade_height
+            .decrement()
+            .map_err(ChainDriverA::raise_error)?;
 
-        driver
+        chain_driver_a
             .log(
                 &format!("will wait for chain to halt at height `{halt_height:?}`"),
                 &LevelDebug,
@@ -136,7 +125,7 @@ where
         chain_a
             .wait_chain_reach_height(&halt_height)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         tokio::time::sleep(Duration::from_secs(3)).await;
 
@@ -144,26 +133,26 @@ where
         let client_b_state = chain_b
             .query_client_state_with_latest_height(PhantomData, client_id_b)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         let client_b_state_height = ChainA::client_state_latest_height(&client_b_state);
 
         let client_b_update_payload = chain_a
             .build_update_client_payload(&client_b_state_height, &upgrade_height, client_b_state)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         let update_messages = chain_b
             .build_update_client_message(client_id_b, client_b_update_payload)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         chain_b
             .send_messages(update_messages)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
-        driver
+        chain_driver_a
             .log(
                 &format!("will upgrade client `{client_id_b:?}`"),
                 &LevelDebug,
@@ -173,22 +162,22 @@ where
         let upgrade_client_payload = chain_a
             .upgrade_client_payload(&upgrade_height)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         let upgrade_client_message = chain_b
             .upgrade_client_message(client_id_b, &upgrade_client_payload)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         chain_b
             .send_messages_with_signer(sender_wallet, &[upgrade_client_message])
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         let client_b_state = chain_b
             .query_client_state_with_latest_height(PhantomData, client_id_b)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         // Assert the client has been upgraded to the new chain ID
         assert_eq!(
@@ -202,16 +191,16 @@ where
 pub struct SetupCosmosUpgradeClientTest;
 
 #[cgp_provider(SetupUpgradeClientTestHandlerComponent)]
-impl<Driver, ChainDriverA, ChainDriverB, ChainA, ChainB>
-    SetupUpgradeClientTestHandler<Driver, ChainDriverA, ChainA, ChainB>
-    for SetupCosmosUpgradeClientTest
+impl<ChainDriverA, ChainDriverB, ChainA, ChainB>
+    SetupUpgradeClientTestHandler<ChainDriverA, ChainDriverB> for SetupCosmosUpgradeClientTest
 where
-    Driver: HasChainDriverAt<Index<0>, ChainDriver = ChainDriverA>
-        + HasChainDriverAt<Index<1>, ChainDriver = ChainDriverB>
-        + HasClientIdAt<Index<1>, Index<0>>
-        + HasChainTypeAt<Index<0>, Chain = ChainA>
-        + HasChainTypeAt<Index<1>, Chain = ChainB>
-        + CanLog<LevelDebug>
+    ChainDriverA: HasChain<Chain = ChainA>
+        + HasWallet<ValidatorWallet>
+        + CanGenerateRandomAmount
+        + HasDenom<StakingDenom>
+        + HasSetupUpgradeClientTestResultType<
+            SetupUpgradeClientTestResult = CosmosProposalSetupClientUpgradeResult,
+        > + CanLog<LevelDebug>
         + CanRaiseAsyncError<ChainA::Error>
         + CanRaiseAsyncError<ChainB::Error>
         + CanRaiseAsyncError<ClientError>
@@ -222,13 +211,6 @@ where
         + CanRaiseAsyncError<Status>
         + CanRaiseAsyncError<String>
         + CanRaiseAsyncError<&'static str>,
-    ChainDriverA: HasChain<Chain = ChainA>
-        + HasWallet<ValidatorWallet>
-        + CanGenerateRandomAmount
-        + HasDenom<StakingDenom>
-        + HasSetupUpgradeClientTestResultType<
-            SetupUpgradeClientTestResult = CosmosProposalSetupClientUpgradeResult,
-        >,
     ChainDriverB: HasChain<Chain = ChainB>,
     ChainA: CanQueryProposalStatus<ProposalId = u64, ProposalStatus = ProposalStatus>
         + CanBuildDepositProposalMessage
@@ -246,10 +228,10 @@ where
     ChainB: CanQueryClientStateWithLatestHeight<ChainA> + HasAsyncErrorType,
 {
     async fn setup_upgrade_client_test(
-        driver: &Driver,
-    ) -> Result<CosmosProposalSetupClientUpgradeResult, Driver::Error> {
-        let chain_driver_a = driver.chain_driver_at(PhantomData::<Index<0>>);
-
+        chain_driver_a: &ChainDriverA,
+        chain_driver_b: &ChainDriverB,
+        client_id_b: &ChainB::ClientId,
+    ) -> Result<CosmosProposalSetupClientUpgradeResult, ChainDriverA::Error> {
         let chain_a = chain_driver_a.chain();
 
         let validator_wallet = chain_driver_a.wallet(PhantomData::<ValidatorWallet>);
@@ -258,42 +240,39 @@ where
 
         let deposit_amount = chain_driver_a.fixed_amount(11000000, denom_a).await;
 
-        let chain_driver_b = driver.chain_driver_at(PhantomData::<Index<1>>);
-
         let chain_b = chain_driver_b.chain();
-
-        let client_id_b = driver.client_id_at(PhantomData::<(Index<1>, Index<0>)>);
 
         let latest_height = chain_a
             .query_chain_height()
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         let mut upgrade_client_state = chain_b
             .query_client_state_with_latest_height(PhantomData, client_id_b)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         // Get the current chain ID and revision number
         let (chain_name, chain_revision_number) = chain_a
             .chain_id()
             .split_chain_id()
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         // Set the upgrade height to the next revision number and revision height to 1
         let upgrade_height =
-            Height::new(chain_revision_number + 1, 1).map_err(Driver::raise_error)?;
+            Height::new(chain_revision_number + 1, 1).map_err(ChainDriverA::raise_error)?;
 
         // Upgrade the chain ID to bump the revision number by 1
         let upgraded_chain_id_str = format!("{chain_name}-{}", chain_revision_number + 1);
-        let upgrade_chain_id = ChainId::new(&upgraded_chain_id_str).map_err(Driver::raise_error)?;
+        let upgrade_chain_id =
+            ChainId::new(&upgraded_chain_id_str).map_err(ChainDriverA::raise_error)?;
 
         // Build the plan height, which is 15 blocks after the queried latest height
         let plan_height = Height::new(
             latest_height.revision_number(),
             latest_height.revision_height() + 15,
         )
-        .map_err(Driver::raise_error)?;
+        .map_err(ChainDriverA::raise_error)?;
 
         // Reset custom fields to zero values
         upgrade_client_state.trusting_period = Duration::from_secs(0);
@@ -323,15 +302,15 @@ where
                 &[upgrade_chain_message],
             )
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         let proposal_status = chain_a
             .query_proposal_status(&1)
             .await
-            .map_err(Driver::raise_error)?;
+            .map_err(ChainDriverA::raise_error)?;
 
         if proposal_status == ProposalStatus::DepositPeriod {
-            driver
+            chain_driver_a
                 .log(
                     "chain upgrade proposal `1` is in deposit period",
                     &LevelDebug,
@@ -346,7 +325,7 @@ where
                     &[deposit_message],
                 )
                 .await
-                .map_err(Driver::raise_error)?;
+                .map_err(ChainDriverA::raise_error)?;
         }
 
         let mut try_number = 0;
@@ -354,10 +333,10 @@ where
             let proposal_status = chain_a
                 .query_proposal_status(&1)
                 .await
-                .map_err(Driver::raise_error)?;
+                .map_err(ChainDriverA::raise_error)?;
 
             if proposal_status == ProposalStatus::VotingPeriod {
-                driver
+                chain_driver_a
                     .log(
                         "chain upgrade proposal `1` is in voting period",
                         &LevelDebug,
@@ -371,13 +350,13 @@ where
                         &[voting_message],
                     )
                     .await
-                    .map_err(Driver::raise_error)?;
+                    .map_err(ChainDriverA::raise_error)?;
 
                 break;
             }
 
             if try_number > MAX_RETRIES_FOR_PROPOSAL_STATUS {
-                return Err(Driver::raise_error(format!("Chain upgrade proposal failed, expected proposal to be in voting period but is {proposal_status:?}")));
+                return Err(ChainDriverA::raise_error(format!("Chain upgrade proposal failed, expected proposal to be in voting period but is {proposal_status:?}")));
             }
             try_number += 1;
 
@@ -389,19 +368,19 @@ where
             let proposal_status = chain_a
                 .query_proposal_status(&1)
                 .await
-                .map_err(Driver::raise_error)?;
+                .map_err(ChainDriverA::raise_error)?;
 
             if proposal_status == ProposalStatus::Passed {
-                driver
+                chain_driver_a
                     .log("chain upgrade proposal `1` passed", &LevelDebug)
                     .await;
 
                 let mut client = QueryClient::connect(
                     Uri::try_from(&chain_a.grpc_address().to_string())
-                        .map_err(Driver::raise_error)?,
+                        .map_err(ChainDriverA::raise_error)?,
                 )
                 .await
-                .map_err(Driver::raise_error)?;
+                .map_err(ChainDriverA::raise_error)?;
 
                 let request = tonic::Request::new(QueryProposalRequest { proposal_id: 1 });
 
@@ -409,28 +388,28 @@ where
                     .proposal(request)
                     .await
                     .map(|r| r.into_inner())
-                    .map_err(Driver::raise_error)?;
+                    .map_err(ChainDriverA::raise_error)?;
 
                 let proposal = response
                     .proposal
-                    .ok_or_else(|| Driver::raise_error("proposal not found: `1`"))?;
+                    .ok_or_else(|| ChainDriverA::raise_error("proposal not found: `1`"))?;
 
                 let passed_proposal = MsgIbcSoftwareUpgrade::decode(
                     proposal
                         .messages
                         .first()
                         .ok_or_else(|| {
-                            Driver::raise_error("queried proposal `1` `messages` is empty")
+                            ChainDriverA::raise_error("queried proposal `1` `messages` is empty")
                         })?
                         .value
                         .as_slice(),
                 )
-                .map_err(Driver::raise_error)?;
+                .map_err(ChainDriverA::raise_error)?;
 
                 let upgrade_height = passed_proposal
                     .plan
                     .ok_or_else(|| {
-                        Driver::raise_error("query passed proposal `1` doesn't have a `Plan`")
+                        ChainDriverA::raise_error("query passed proposal `1` doesn't have a `Plan`")
                     })?
                     .height;
 
@@ -441,7 +420,7 @@ where
             }
 
             if try_number > MAX_RETRIES_FOR_PROPOSAL_STATUS {
-                return Err(Driver::raise_error(format!(
+                return Err(ChainDriverA::raise_error(format!(
                     "Chain upgrade proposal failed with status {proposal_status:?}"
                 )));
             }
