@@ -2,6 +2,7 @@ use core::fmt::Debug;
 
 use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::ProvideType;
+use hermes_chain_type_components::traits::HasClientIdType;
 use hermes_prelude::*;
 
 #[cgp_component {
@@ -36,4 +37,24 @@ where
     Provider: ProvideType<Chain, UpdateClientPayloadTypeComponent, Type = UpdateClientPayload>,
 {
     type UpdateClientPayload = UpdateClientPayload;
+}
+
+#[cgp_component {
+  name: UpdateClientEventComponent,
+  provider: ProvideUpdateClientEvent,
+  context: Chain,
+}]
+pub trait HasUpdateClientEvent {
+    type UpdateClientEvent: Async + Debug;
+}
+
+#[cgp_component {
+  name: UpdateClientEventFieldsComponent,
+  provider: ProvideUpdateClientEventFields,
+  context: Chain,
+}]
+pub trait HasUpdateClientEventFields<Counterparty>:
+    HasClientIdType<Counterparty> + HasUpdateClientEvent
+{
+    fn client_id(&self, update_client_event: &Self::UpdateClientEvent) -> Self::ClientId;
 }

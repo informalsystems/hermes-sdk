@@ -16,8 +16,12 @@ hermes-error                         = { workspace = true }
 hermes-chain-components              = { workspace = true }
 hermes-chain-type-components         = { workspace = true }
 hermes-comet-light-client-components = { workspace = true }
+ibc-client-tendermint                = { workspace = true }
 
 eyre                             = { workspace = true }
 tendermint                       = { workspace = true }
 tendermint-rpc                   = { workspace = true }
+tendermint-light-client          = { workspace = true }
+tendermint-light-client-detector = { workspace = true }
 tendermint-light-client-verifier = { workspace = true }
+prost-types                      = { workspace = true }

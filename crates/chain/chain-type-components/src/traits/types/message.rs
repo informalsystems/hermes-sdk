@@ -1,3 +1,5 @@
+use core::fmt::Debug;
+
 use cgp::core::component::WithProvider;
 use cgp::core::types::ProvideType;
 use hermes_prelude::*;
@@ -48,5 +50,5 @@ pub trait HasMessageType: Sized + Async {
        framework to know about specific message variants, such as
        `UpdateCientMesssage`.
     */
-    type Message: Async;
+    type Message: Async + Debug;
 }

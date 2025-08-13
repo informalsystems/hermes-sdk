@@ -3,6 +3,7 @@ mod preset {
     use hermes_core::chain_components::traits::{
         ClientRecoveryComponent, ClientStatusMethodsComponent, ClientStatusQuerierComponent,
         ClientStatusTypeComponent, ClientUpgradeComponent, ClientUpgradePayloadBuilderComponent,
+        MisbehaviourCheckerComponent, MisbehaviourMessageBuilderComponent,
         RecoverClientPayloadTypeComponent, UpgradeClientPayloadTypeComponent,
     };
     use hermes_core::relayer_components::chain::impls::{
@@ -33,13 +34,14 @@ mod preset {
         BuildAnyCreateClientMessage, BuildCosmosChannelHandshakeMessage,
         BuildCosmosConnectionHandshakeMessage, BuildCosmosCreateClientPayload,
         BuildCosmosPacketMessages, BuildCosmosUpdateClientMessage,
-        BuildTendermintUpdateClientPayload, CosmosClientUpgradePayloadBuilder,
-        CosmosPacketFieldReader, GetCosmosCounterpartyMessageHeight,
-        ProvideCosmosCreateClientSettings, ProvideCosmosPayloadTypes,
-        ProvideNoCreateClientMessageOptionsType, ProvideTendermintClientState,
-        ProvideTendermintClientStatus, ProvideTendermintConsensusState,
-        QueryConsensusStateHeightsFromGrpc, QueryCosmosClientStatus,
-        RecoverClientWithGovernanceProposal, UpgradeClientWithGovernanceProposal,
+        BuildTendermintUpdateClientPayload, CheckTendermintMisbehaviour,
+        CosmosClientUpgradePayloadBuilder, CosmosPacketFieldReader,
+        GetCosmosCounterpartyMessageHeight, ProvideCosmosCreateClientSettings,
+        ProvideCosmosPayloadTypes, ProvideNoCreateClientMessageOptionsType,
+        ProvideTendermintClientState, ProvideTendermintClientStatus,
+        ProvideTendermintConsensusState, QueryConsensusStateHeightsFromGrpc,
+        QueryCosmosClientStatus, RecoverClientWithGovernanceProposal,
+        TendermintMisbehaviourMessageBuilder, UpgradeClientWithGovernanceProposal,
     };
     use hermes_cosmos_test_components::chain::impls::ConvertCosmosIbcAmount;
     use hermes_prelude::*;
@@ -136,6 +138,9 @@ mod preset {
 
             IbcTransferredAmountConverterComponent:
                 ConvertCosmosIbcAmount,
+
+            MisbehaviourCheckerComponent: CheckTendermintMisbehaviour,
+            MisbehaviourMessageBuilderComponent: TendermintMisbehaviourMessageBuilder,
         }
     }
 }

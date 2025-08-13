@@ -671,6 +671,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c74b8349d32d297c9134b8c88677813a227df8f779daa29bfc29c183fe3dca6"
 
 [[package]]
+name = "contracts"
+version = "0.6.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc486fc59d4d0e52ea0b4461a12720c8617338c9ee955cc4013fb7319d264abd"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "core-foundation"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1294,6 +1305,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "half"
+version = "1.8.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1b43ede17f21864e81be2fa654110bf1e793774238d86ef8555c37e6519c0403"
+
+[[package]]
 name = "hashbrown"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1501,7 +1518,11 @@ dependencies = [
  "hermes-comet-light-client-components",
  "hermes-error",
  "hermes-prelude",
+ "ibc-client-tendermint",
+ "prost-types",
  "tendermint",
+ "tendermint-light-client",
+ "tendermint-light-client-detector",
  "tendermint-light-client-verifier",
  "tendermint-rpc",
 ]
@@ -1575,6 +1596,8 @@ dependencies = [
  "sha2 0.10.8",
  "subtle-encoding",
  "tendermint",
+ "tendermint-light-client",
+ "tendermint-light-client-verifier",
  "tendermint-proto",
  "tendermint-rpc",
  "time",
@@ -1593,6 +1616,7 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-prelude",
+ "ibc-client-tendermint",
 ]
 
 [[package]]
@@ -4155,6 +4179,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_cbor"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2bef2ebfde456fb76bbcf9f59315333decc4fda0b2b44b420243c11e0f5ec1f5"
+dependencies = [
+ "half",
+ "serde",
+]
+
+[[package]]
 name = "serde_derive"
 version = "1.0.219"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4531,6 +4565,54 @@ dependencies = [
  "tendermint",
  "toml",
  "url",
+]
+
+[[package]]
+name = "tendermint-light-client"
+version = "0.40.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "20e75b187128e4f7a50e9d6dfc910d3fe982bfa2b85c22efe14b70ee2ef35119"
+dependencies = [
+ "contracts",
+ "crossbeam-channel",
+ "derive_more 0.99.19",
+ "flex-error",
+ "futures",
+ "regex",
+ "serde",
+ "serde_cbor",
+ "serde_derive",
+ "serde_json",
+ "static_assertions",
+ "tendermint",
+ "tendermint-light-client-verifier",
+ "tendermint-rpc",
+ "time",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "tendermint-light-client-detector"
+version = "0.40.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0875b822556e85bd451d73e781c824d0e5b46a8698693fe006e2f4a93c715823"
+dependencies = [
+ "crossbeam-channel",
+ "derive_more 0.99.19",
+ "flex-error",
+ "futures",
+ "serde",
+ "serde_cbor",
+ "serde_derive",
+ "serde_json",
+ "static_assertions",
+ "tendermint",
+ "tendermint-light-client",
+ "tendermint-proto",
+ "tendermint-rpc",
+ "time",
+ "tracing",
 ]
 
 [[package]]

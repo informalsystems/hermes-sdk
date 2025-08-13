@@ -76,7 +76,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
           TEST_PRESET: ${{ matrix.chain.preset }}
-          NEW_TRUSTING_PERIOD: 30
+          COSMOS_TRUSTING_PERIOD: 30
           COSMOS_REFRESH_RATE: 20
         run: |
             nix develop -c \

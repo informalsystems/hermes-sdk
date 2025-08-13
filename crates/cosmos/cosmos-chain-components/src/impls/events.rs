@@ -1,6 +1,10 @@
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 
+use hermes_core::chain_components::traits::{
+    HasUpdateClientEvent, ProvideUpdateClientEvent, ProvideUpdateClientEventFields,
+    UpdateClientEventComponent, UpdateClientEventFieldsComponent,
+};
 use hermes_core::chain_type_components::traits::HasMessageResponseType;
 use hermes_core::relayer_components::chain::traits::{
     ChannelOpenInitEventComponent, ChannelOpenTryEventComponent, ConnectionOpenInitEventComponent,
@@ -15,8 +19,10 @@ use hermes_core::relayer_components::chain::traits::{
 };
 use hermes_prelude::*;
 use ibc::core::channel::types::packet::Packet;
-use ibc::core::client::types::events::CLIENT_ID_ATTRIBUTE_KEY;
+use ibc::core::client::types::events::{CLIENT_ID_ATTRIBUTE_KEY, HEADER_ATTRIBUTE_KEY};
 use ibc::core::host::types::identifiers::{ChannelId, ClientId, ConnectionId};
+use prost::Message;
+use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::types::{
@@ -24,8 +30,12 @@ use crate::types::{
     try_conn_open_init_from_abci_event, try_conn_open_try_from_abci_event,
     try_send_packet_from_abci_event, try_write_acknowledgment_from_abci_event,
     CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent, CosmosConnectionOpenInitEvent,
-    CosmosConnectionOpenTryEvent, CosmosCreateClientEvent, SendPacketEvent, WriteAckEvent,
+    CosmosConnectionOpenTryEvent, CosmosCreateClientEvent, CosmosUpdateClientEvent,
+    SendPacketEvent, WriteAckEvent,
 };
+
+pub const CREATE_CLIENT_EVENT_KIND: &str = "create_client";
+pub const UPDATE_CLIENT_EVENT_KIND: &str = "update_client";
 
 pub struct ProvideCosmosEvents;
 
@@ -51,7 +61,7 @@ where
         _tag: PhantomData<CosmosCreateClientEvent>,
         event: &Chain::Event,
     ) -> Option<CosmosCreateClientEvent> {
-        if event.kind == "create_client" {
+        if event.kind == CREATE_CLIENT_EVENT_KIND {
             for tag in &event.attributes {
                 if tag.key_bytes() == CLIENT_ID_ATTRIBUTE_KEY.as_bytes() {
                     let client_id = tag.value_str().ok()?.parse().ok()?;
@@ -61,6 +71,62 @@ where
             }
         }
 
+        None
+    }
+}
+
+#[cgp_provider(UpdateClientEventComponent)]
+impl<Chain> ProvideUpdateClientEvent<Chain> for ProvideCosmosEvents {
+    type UpdateClientEvent = CosmosUpdateClientEvent;
+}
+
+#[cgp_provider(UpdateClientEventFieldsComponent)]
+impl<Chain, Counterparty> ProvideUpdateClientEventFields<Chain, Counterparty>
+    for ProvideCosmosEvents
+where
+    Chain: HasClientIdType<Counterparty, ClientId = ClientId>
+        + HasUpdateClientEvent<UpdateClientEvent = CosmosUpdateClientEvent>,
+{
+    fn client_id(_chain: &Chain, update_client_event: &CosmosUpdateClientEvent) -> Chain::ClientId {
+        update_client_event.client_id.clone()
+    }
+}
+
+#[cgp_provider(EventExtractorComponent)]
+impl<Chain> EventExtractor<Chain, CosmosUpdateClientEvent> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    fn try_extract_from_event(
+        _chain: &Chain,
+        _tag: PhantomData<CosmosUpdateClientEvent>,
+        event: &Chain::Event,
+    ) -> Option<CosmosUpdateClientEvent> {
+        if event.kind == UPDATE_CLIENT_EVENT_KIND {
+            let raw_header = event
+                .attributes
+                .iter()
+                .find(|tag| tag.key_bytes() == HEADER_ATTRIBUTE_KEY.as_bytes())?
+                .value_str()
+                .ok()?;
+
+            let raw_client_id = event
+                .attributes
+                .iter()
+                .find(|tag| tag.key_bytes() == CLIENT_ID_ATTRIBUTE_KEY.as_bytes())?
+                .value_str()
+                .ok()?;
+
+            let header_bytes = subtle_encoding::hex::decode(raw_header).ok()?;
+            let any_header = Any::decode(header_bytes.as_slice()).ok()?;
+
+            let client_id = raw_client_id.parse().ok()?;
+
+            return Some(CosmosUpdateClientEvent {
+                client_id,
+                header: any_header,
+            });
+        }
         None
     }
 }

@@ -21,6 +21,8 @@ delegate_components! {
             Report,
             tendermint::Error,
             tendermint_rpc::Error,
+            tendermint_light_client::builder::error::Error,
+            tendermint_light_client_detector::Error ,
         ]: ReportError,
         [
             NoInitialTrustedState,

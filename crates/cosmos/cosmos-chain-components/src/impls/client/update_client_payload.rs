@@ -1,5 +1,6 @@
 use hermes_comet_light_client_components::traits::CanBuildLightBlocksForUpdateClient;
 use hermes_comet_light_client_context::contexts::light_client::CometLightClient;
+use hermes_core::chain_components::traits::HasChainId;
 use hermes_core::chain_type_components::traits::HasHeightType;
 use hermes_core::relayer_components::chain::traits::{
     CanQueryChainStatus, HasClientStateType, HasUpdateClientPayloadType,
@@ -24,6 +25,7 @@ impl<Chain, Counterparty> UpdateClientPayloadBuilder<Chain, Counterparty>
     for BuildTendermintUpdateClientPayload
 where
     Chain: HasHeightType<Height = Height>
+        + HasChainId
         + CanQueryChainStatus
         + HasRpcClient
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>
@@ -53,6 +55,7 @@ where
             .map_err(Chain::raise_error)?;
 
         let mut light_client = CometLightClient::new(
+            chain.chain_id().to_string(),
             current_time,
             peer_id,
             rpc_client.clone(),

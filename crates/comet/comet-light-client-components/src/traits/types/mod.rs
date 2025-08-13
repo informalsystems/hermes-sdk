@@ -1,3 +1,6 @@
+mod divergence;
+pub use divergence::*;
+
 mod light_block;
 pub use light_block::*;
 

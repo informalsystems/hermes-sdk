@@ -2,6 +2,7 @@ use alloc::sync::Arc;
 use core::time::Duration;
 
 use cgp::core::error::CanRaiseAsyncError;
+use hermes_core::chain_components::traits::{EvidenceTypeProvider, EvidenceTypeProviderComponent};
 use hermes_core::chain_type_components::impls::UseEventsMessageResponse;
 use hermes_core::chain_type_components::traits::{
     ChainIdTypeProviderComponent, EventTypeProviderComponent, HeightAdjuster,
@@ -39,6 +40,7 @@ use ibc::core::host::types::identifiers::{
 };
 use ibc::primitives::{Signer, Timestamp};
 use prost::{EncodeError, Message};
+use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
 use tendermint::{Hash, Time};
@@ -274,4 +276,12 @@ where
     Chain: Async,
 {
     type ChannelEnd = ChannelEnd;
+}
+
+#[cgp_provider(EvidenceTypeProviderComponent)]
+impl<Chain> EvidenceTypeProvider<Chain> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type Evidence = Any;
 }
