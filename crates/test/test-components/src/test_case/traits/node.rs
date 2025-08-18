@@ -14,6 +14,14 @@ pub trait CanHaltFullNode: HasAsyncErrorType {
   context: ChainDriver,
 }]
 #[async_trait]
-pub trait CanResumeFullNode: HasAsyncErrorType + Async + Sized {
-    async fn resume_full_node(&self) -> Result<Self, Self::Error>;
+pub trait CanResumeFullNode: HasResumeFullNodeOptionsType + HasAsyncErrorType + Sized {
+    async fn resume_full_node(
+        &self,
+        options: &Self::ResumeFullNodeOptions,
+    ) -> Result<Self, Self::Error>;
+}
+
+#[cgp_type]
+pub trait HasResumeFullNodeOptionsType {
+    type ResumeFullNodeOptions: Async;
 }
