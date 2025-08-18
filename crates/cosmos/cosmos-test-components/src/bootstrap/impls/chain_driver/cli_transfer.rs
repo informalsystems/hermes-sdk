@@ -1,3 +1,6 @@
+use alloc::string::String;
+
+use hashbrown::HashMap;
 use hermes_core::chain_components::traits::HasChainId;
 use hermes_core::runtime_components::traits::{CanExecCommand, HasRuntime};
 use hermes_prelude::*;
@@ -22,12 +25,7 @@ where
 {
     async fn cli_transfer_token(
         chain_driver: &ChainDriver,
-        port_id: &str,
-        channel_id: &str,
-        sender: &str,
-        recipient: &str,
-        amount: &str,
-        fees: &str,
+        args: HashMap<&str, String>,
     ) -> Result<(), ChainDriver::Error> {
         let runtime = chain_driver.runtime();
 
@@ -43,12 +41,12 @@ where
                     "tx",
                     "ibc-transfer",
                     "transfer",
-                    port_id,
-                    channel_id,
-                    recipient,
-                    amount,
+                    args.get("port_id").unwrap(),
+                    args.get("channel_id").unwrap(),
+                    args.get("recipient").unwrap(),
+                    args.get("amount").unwrap(),
                     "--from",
-                    sender,
+                    args.get("sender").unwrap(),
                     "--chain-id",
                     chain_id.to_string().as_str(),
                     "--home",
@@ -56,7 +54,7 @@ where
                     "--keyring-backend",
                     "test",
                     "--fees",
-                    fees,
+                    args.get("fees").unwrap(),
                     "--yes",
                 ],
             )

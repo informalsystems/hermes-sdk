@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::core::field::Index;
+use hashbrown::HashMap;
 use hermes_chain_components::traits::CanQueryConsensusStateHeights;
 use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::HasChainId;
@@ -114,19 +115,20 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
+        let args = HashMap::from([
+            ("port_id", port_id_a.to_string()),
+            ("channel_id", channel_id_a.to_string()),
+            ("sender", sender_address.to_string()),
+            ("recipient", recipient_address.to_string()),
+            ("amount", a_to_b_amount.to_string()),
+            ("fees", fee_amount.to_string()),
+        ]);
         // Create 10 transactions which should be batched together with a maximum of 2
         // client updates since the `BatchConfig` `max_delay` is configured to 10 seconds
         // for tests
         for _ in 0..number_of_transfers {
             chain_driver_a
-                .cli_transfer_token(
-                    port_id_a.to_string().as_str(),
-                    channel_id_a.to_string().as_str(),
-                    sender_address.to_string().as_str(),
-                    recipient_address.to_string().as_str(),
-                    a_to_b_amount.to_string().as_str(),
-                    fee_amount.to_string().as_str(),
-                )
+                .cli_transfer_token(args.clone())
                 .await
                 .map_err(Driver::raise_error)?;
 

@@ -20,6 +20,7 @@ hermes-test-components         = { workspace = true }
 ibc       = { workspace = true }
 ibc-proto = { workspace = true }
 
+hashbrown  = { workspace = true }
 http       = { workspace = true }
 itertools  = { workspace = true }
 prost      = { workspace = true }

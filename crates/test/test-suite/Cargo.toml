@@ -20,4 +20,5 @@ hermes-chain-components      = { workspace = true }
 hermes-chain-type-components = { workspace = true }
 hermes-runtime-components    = { workspace = true }
 
+hashbrown = { workspace = true }
 tokio = { workspace = true }
