@@ -46,5 +46,5 @@ pub trait HasEventType: Sized + Async {
        [`WriteAckEvent`](crate::traits::HasWriteAckEvent::WriteAckEvent),
        and _extraction_ methods to parse the variant information from the event.
     */
-    type Event: Async + Debug;
+    type Event: Async + Clone + Debug;
 }

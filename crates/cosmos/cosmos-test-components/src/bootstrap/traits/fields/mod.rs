@@ -1,9 +1,6 @@
 mod account_prefix;
 pub use account_prefix::*;
 
-mod chain_command_path;
-pub use chain_command_path::*;
-
 mod chain_store_dir;
 pub use chain_store_dir::*;
 

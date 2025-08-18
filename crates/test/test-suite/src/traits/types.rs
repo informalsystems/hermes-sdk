@@ -4,14 +4,15 @@ use core::marker::PhantomData;
 use cgp::core::error::ErrorOf;
 use cgp::core::field::Index;
 use cgp::core::macros::blanket_trait;
+use cgp::extra::runtime::HasRuntimeType;
 use hermes_chain_components::traits::{
     CanBuildCreateClientMessage, CanBuildCreateClientPayload, CanBuildUpdateClientMessage,
     CanBuildUpdateClientPayload, CanExtractFromMessageResponse,
     CanOverrideCreateClientPayloadOptions, CanQueryClientStateWithLatestHeight,
-    CanQueryClientStatus, CanRecoverClient, CanSendMessages, CanSendSingleMessage,
-    HasClientStateFields, HasClientStateType, HasClientStatusMethods, HasClientStatusType,
-    HasCreateClientEvent, HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
-    HasRecoverClientPayloadType,
+    CanQueryClientStatus, CanQueryConsensusStateHeights, CanRecoverClient, CanSendMessages,
+    CanSendSingleMessage, HasClientStateFields, HasClientStateType, HasClientStatusMethods,
+    HasClientStatusType, HasCreateClientEvent, HasCreateClientMessageOptionsType,
+    HasCreateClientPayloadOptionsType, HasRecoverClientPayloadType,
 };
 use hermes_chain_components::types::aliases::ClientIdOf;
 use hermes_chain_type_components::traits::{DenomOf, HasAmountDenom};
@@ -28,16 +29,18 @@ use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::traits::client_id_at::HasClientIdAt;
 use hermes_relayer_components::multi::traits::relay_at::HasRelayAt;
 use hermes_relayer_components::relay::traits::{
-    CanAutoRelayWithHeights, CanRelayReceivePacket, DestinationTarget, HasChainTargets,
-    HasDstChain, HasSrcChain, SourceTarget,
+    CanAutoRelayWithHeights, CanRelayBatchReceivePackets, CanRelayReceivePacket, DestinationTarget,
+    HasChainTargets, HasDstChain, HasSrcChain, SourceTarget,
 };
+use hermes_runtime_components::traits::HasFilePathType;
 use hermes_test_components::chain::traits::{
-    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
-    HasAmountMethods, HasDefaultMemo, HasWalletSigner, HasWalletType, WalletOf,
+    CanAssertEventualAmount, CanCliTransferToken, CanConvertIbcTransferredAmount,
+    CanIbcTransferToken, CanQueryBalance, HasAmountMethods, HasDefaultMemo, HasWalletSigner,
+    HasWalletType, WalletOf,
 };
 use hermes_test_components::chain_driver::traits::{
-    CanGenerateRandomAmount, HasChain, HasDenom, HasSetupUpgradeClientTestResultType, HasWallet,
-    StakingDenom, TransferDenom, UserWallet,
+    CanGenerateRandomAmount, HasChain, HasChainCommandPath, HasDenom,
+    HasSetupUpgradeClientTestResultType, HasWallet, StakingDenom, TransferDenom, UserWallet,
 };
 use hermes_test_components::driver::traits::{HasChainDriverAt, HasChannelIdAt, HasRelayDriverAt};
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
@@ -132,13 +135,19 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                           + HasWallet<UserWallet<0>>
                           + HasWallet<UserWallet<1>>
                           + CanGenerateRandomAmount
-                          + HasSetupUpgradeClientTestResultType,
+                          + HasSetupUpgradeClientTestResultType
+                          + CanCliTransferToken
+                          + HasChainCommandPath
+                          + HasRuntimeType<Runtime: HasFilePathType>,
         ChainDriverB: HasDenom<TransferDenom>
                           + HasDenom<StakingDenom>
                           + HasWallet<UserWallet<0>>
                           + HasWallet<UserWallet<1>>
                           + CanGenerateRandomAmount
-                          + HasSetupUpgradeClientTestResultType,
+                          + HasSetupUpgradeClientTestResultType
+                          + CanCliTransferToken
+                          + HasChainCommandPath
+                          + HasRuntimeType<Runtime: HasFilePathType>,
         ChainA: HasChainId
                     + HasWalletType
                     + HasWalletSigner
@@ -150,6 +159,8 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + HasDefaultMemo
                     + CanSendSingleMessage
                     + CanSendMessages
+                    + HasRuntimeType<Runtime: HasFilePathType>
+                    + CanQueryConsensusStateHeights<Self::ChainB>
                     + HasCreateClientPayloadOptionsType<Self::ChainB>
                     + CanBuildCreateClientPayload<Self::ChainB>
                     + CanBuildCreateClientMessage<Self::ChainB>
@@ -183,6 +194,8 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + HasDefaultMemo
                     + CanSendSingleMessage
                     + CanSendMessages
+                    + HasRuntimeType<Runtime: HasFilePathType>
+                    + CanQueryConsensusStateHeights<Self::ChainA>
                     + HasCreateClientPayloadOptionsType<Self::ChainA>
                     + CanBuildCreateClientPayload<Self::ChainA>
                     + CanBuildCreateClientMessage<Self::ChainA>
@@ -207,10 +220,12 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + CanConvertIbcTransferredAmount<Self::ChainA>,
         RelayAToB: HasChainTargets
                        + CanRelayReceivePacket
+                       + CanRelayBatchReceivePackets
                        + CanAutoRelayWithHeights<SourceTarget>
                        + CanAutoRelayWithHeights<DestinationTarget>,
         RelayBToA: HasChainTargets
                        + CanRelayReceivePacket
+                       + CanRelayBatchReceivePackets
                        + CanAutoRelayWithHeights<SourceTarget>
                        + CanAutoRelayWithHeights<DestinationTarget>,
         BiRelay: CanAutoBiRelay,

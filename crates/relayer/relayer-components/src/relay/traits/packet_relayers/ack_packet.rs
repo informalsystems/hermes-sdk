@@ -1,3 +1,5 @@
+use alloc::vec::Vec;
+
 use hermes_prelude::*;
 
 use crate::chain::traits::{AcknowledgementOf, HasAcknowledgementType};
@@ -17,5 +19,21 @@ pub trait CanRelayAckPacket:
         destination_height: &HeightOf<Self::DstChain>,
         packet: &PacketOf<Self>,
         ack: &AcknowledgementOf<Self::DstChain, Self::SrcChain>,
+    ) -> Result<(), Self::Error>;
+}
+
+#[cgp_component {
+  provider: BatchAckPacketsRelayer,
+  context: Relay,
+}]
+#[async_trait]
+pub trait CanRelayBatchAckPackets:
+    HasRelayChains<DstChain: HasAcknowledgementType<Self::SrcChain>>
+{
+    async fn relay_ack_packets(
+        &self,
+        destination_height: Vec<&HeightOf<Self::DstChain>>,
+        packet: Vec<&PacketOf<Self>>,
+        ack: Vec<&AcknowledgementOf<Self::DstChain, Self::SrcChain>>,
     ) -> Result<(), Self::Error>;
 }

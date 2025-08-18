@@ -208,8 +208,6 @@ pub trait CanUseWasmCosmosChain:
     + HasCreateClientPayloadType<WasmCosmosChain, CreateClientPayload = CosmosCreateClientPayload>
     + HasUpdateClientPayloadType<WasmCosmosChain, UpdateClientPayload = CosmosUpdateClientPayload>
     + CanQueryBalance
-    // + CanIbcTransferToken<WasmCosmosChain>
-    // + CanBuildIbcTokenTransferMessage<WasmCosmosChain>
     + CanQueryRawClientState<WasmCosmosChain>
     + CanQueryClientState<WasmCosmosChain>
     + CanQueryClientStateWithProofs<WasmCosmosChain>
@@ -235,7 +233,6 @@ pub trait CanUseWasmCosmosChain:
     + CanQueryTxResponse
     + HasRetryableError
     + HasRuntime
-    // + CanAssertEventualAmount
     + CanQueryAbci
     + CanQueryUnbondingPeriod
     + CanQueryClientState<CosmosChain>
@@ -262,21 +259,17 @@ pub trait CanUseWasmCosmosChain:
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
-    + HasCreateClientMessageOptionsType<
-            CosmosChain,
-            CreateClientMessageOptions = (),
-        >
+    + HasCreateClientMessageOptionsType<CosmosChain, CreateClientMessageOptions = ()>
     + HasDefaultEncoding<AsBytes, Encoding = WasmCosmosEncoding>
     + CanUploadWasmClientCode
 where
     CosmosChain: HasClientStateType<Self, ClientState = TendermintClientState>
         + HasConsensusStateType<Self, ConsensusState = TendermintConsensusState>
         + HasUpdateClientPayloadType<Self>
-        + HasCreateClientPayloadType<Self>
-        ,
+        + HasCreateClientPayloadType<Self>,
     WasmCosmosChain: HasConsensusStateType<Self>
         + HasUpdateClientPayloadType<Self>
-        + HasCreateClientPayloadType<Self>
+        + HasCreateClientPayloadType<Self>,
 {
 }
 

@@ -1,9 +1,10 @@
 use hermes_core::runtime_components::traits::{CanStartChildProcess, HasFilePathType, HasRuntime};
 use hermes_prelude::*;
+use hermes_test_components::chain_driver::traits::HasChainCommandPath;
 
 use crate::bootstrap::traits::{
-    ChainFullNodeStarter, ChainFullNodeStarterComponent, HasChainCommandPath,
-    HasChainGenesisConfigType, HasChainNodeConfigType,
+    ChainFullNodeStarter, ChainFullNodeStarterComponent, HasChainGenesisConfigType,
+    HasChainNodeConfigType,
 };
 use crate::bootstrap::types::{CosmosChainNodeConfig, CosmosGenesisConfig};
 

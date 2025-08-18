@@ -1,6 +1,7 @@
 /*!
    Trait definition for [`HasIbcPacketTypes`].
 */
+use core::fmt::Debug;
 
 use hermes_prelude::*;
 
@@ -18,7 +19,7 @@ pub trait HasOutgoingPacketType<Counterparty>: Async {
        - Packet source: `Self`
        - Packet destination: `Counterparty`
     */
-    type OutgoingPacket: Async;
+    type OutgoingPacket: Async + Debug;
 }
 
 pub trait HasIncomingPacketType<Counterparty>:

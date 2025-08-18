@@ -1,3 +1,5 @@
+use alloc::vec::Vec;
+
 use hermes_prelude::*;
 
 use crate::chain::types::aliases::HeightOf;
@@ -23,5 +25,18 @@ pub trait CanRelayTimeoutUnorderedPacket: HasRelayChains {
         &self,
         destination_height: &HeightOf<Self::DstChain>,
         packet: &PacketOf<Self>,
+    ) -> Result<(), Self::Error>;
+}
+
+#[cgp_component {
+  provider: BatchTimeoutUnorderedPacketsRelayer,
+  context: Relay,
+}]
+#[async_trait]
+pub trait CanRelayBatchTimeoutUnorderedPackets: HasRelayChains {
+    async fn relay_timeout_unordered_packets(
+        &self,
+        destination_height: Vec<&HeightOf<Self::DstChain>>,
+        packet: Vec<&PacketOf<Self>>,
     ) -> Result<(), Self::Error>;
 }
