@@ -1,13 +1,9 @@
 use alloc::sync::Arc;
 use core::str::FromStr;
-use std::path::PathBuf;
 
 use cgp::extra::runtime::HasRuntime;
-use eyre::eyre;
-use hermes_core::runtime_components::traits::{CanCreateDir, CanExecCommand, CanSleep};
-use hermes_core::test_components::setup::traits::{
-    FullNodeForker, FullNodeForkerComponent, FullNodeHalter, FullNodeHalterComponent,
-};
+use hermes_core::runtime_components::traits::{CanCreateDir, CanSleep};
+use hermes_core::test_components::setup::traits::{FullNodeForker, FullNodeForkerComponent};
 use hermes_cosmos_core::test_components::bootstrap::traits::CanStartChainFullNodes;
 use hermes_cosmos_relayer::contexts::{CosmosBuilder, CosmosChain};
 use hermes_error::HermesError;
@@ -20,47 +16,6 @@ use crate::contexts::{
 use crate::impls::copy_dir_recursive;
 
 pub struct ForkSecondFullNode;
-
-#[cgp_provider(FullNodeHalterComponent)]
-impl FullNodeHalter<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {
-    async fn halt_full_node(
-        driver: &CosmosBinaryChannelTestDriver,
-        chain_id: String,
-    ) -> Result<(), HermesError> {
-        let runtime = driver.chain_driver_a.chain.runtime.clone();
-        let node_pid = if chain_id == driver.chain_driver_a.chain.chain_id.to_string() {
-            driver
-                .chain_driver_a
-                .chain_processes
-                .first()
-                .expect("Failed to retrieve Chain Driver A chain process")
-                .id()
-                .expect("failed to retrieve Chain Driver A chain process ID")
-        } else if chain_id == driver.chain_driver_b.chain.chain_id.to_string() {
-            driver
-                .chain_driver_b
-                .chain_processes
-                .first()
-                .expect("Failed to retrieve Chain Driver B chain process")
-                .id()
-                .expect("failed to retrieve Chain Driver B chain process ID")
-        } else {
-            return Err(eyre!("Unknown chain ID: {chain_id}").into());
-        };
-
-        // Stop full node
-        // `kill` is used here instead of `Child::kill()` as the `kill()` method requires
-        // the child process to be mutable.
-        runtime
-            .exec_command(
-                &PathBuf::from("kill".to_string()),
-                &["-s", "KILL", &node_pid.to_string()],
-            )
-            .await?;
-
-        Ok(())
-    }
-}
 
 #[cgp_provider(FullNodeForkerComponent)]
 impl FullNodeForker<CosmosBinaryChannelTestDriver> for ForkSecondFullNode {

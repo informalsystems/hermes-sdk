@@ -19,6 +19,7 @@ use hermes_core::test_components::chain_driver::traits::{
     StakingDenom, TransferDenom, UserWallet, ValidatorWallet, WalletGetterComponent,
     WalletsGetterComponent,
 };
+use hermes_core::test_components::test_case::traits::node::FullNodeHalterComponent;
 use hermes_core::test_components::test_case::traits::upgrade_client::{
     SetupUpgradeClientTestHandlerComponent, UpgradeClientHandlerComponent,
 };
@@ -48,6 +49,8 @@ use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use tokio::process::Child;
 use toml::to_string_pretty;
+
+use crate::impls::HaltCosmosFullNode;
 
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
@@ -84,6 +87,8 @@ delegate_components! {
             CosmosHandleUpgradeClient,
         SetupUpgradeClientTestHandlerComponent:
             SetupCosmosUpgradeClientTest,
+        FullNodeHalterComponent:
+            HaltCosmosFullNode,
         LoggerComponent:
             TracingLogger,
         WalletsGetterComponent:

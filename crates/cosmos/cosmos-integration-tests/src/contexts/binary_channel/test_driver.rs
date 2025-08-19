@@ -11,8 +11,7 @@ use hermes_core::test_components::driver::traits::{
 };
 use hermes_core::test_components::setup::traits::{
     CreateClientMessageOptionsGetterAtComponent, CreateClientPayloadOptionsGetterAtComponent,
-    FullNodeForkerComponent, FullNodeHalterComponent, PortIdGetterAtComponent,
-    RecoverClientPayloadOptionsGetterAtComponent,
+    FullNodeForkerComponent, PortIdGetterAtComponent, RecoverClientPayloadOptionsGetterAtComponent,
 };
 use hermes_core::test_components::test_case::traits::recover_client::RecoverClientHandlerComponent;
 use hermes_cosmos_core::chain_components::impls::CosmosRecoverClientPayload;
@@ -70,7 +69,6 @@ delegate_components! {
             RecoverClientWithProposals,
         [
             FullNodeForkerComponent,
-            FullNodeHalterComponent,
         ]:
             ForkSecondFullNode,
         ChainDriverGetterAtComponent<Index<0>>:
