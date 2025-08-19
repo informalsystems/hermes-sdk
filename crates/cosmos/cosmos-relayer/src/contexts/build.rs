@@ -384,7 +384,16 @@ impl HasBatchConfig<Index<0>, CosmosChain> for CosmosBuilder {
         } else {
             // FIXME: This is a temporary solution for tests, because test setup is not using a config file
             // but is passing empty chain configurations
-            return Ok(BatchConfig::default());
+            let test_batch_config = BatchConfig {
+                max_message_count: 300,
+                max_tx_size: 1000000,
+                buffer_size: 1000000,
+                max_delay: Duration::from_secs(30),
+                sleep_time: Duration::from_millis(100),
+            };
+            tracing::warn!("Chain config for `{chain_id}` is missing, if this is not running in a test setup please stop the relayer and review your configuration file");
+            tracing::warn!("Will use the following BatchConfig: {test_batch_config:?}");
+            return Ok(test_batch_config);
         };
         if let Some(batch_config) = &chain_config.batch_config {
             Ok(batch_config.clone())
@@ -405,7 +414,16 @@ impl HasBatchConfig<Index<1>, CosmosChain> for CosmosBuilder {
         } else {
             // FIXME: This is a temporary solution for tests, because test setup is not using a config file
             // but is passing empty chain configurations
-            return Ok(BatchConfig::default());
+            let test_batch_config = BatchConfig {
+                max_message_count: 300,
+                max_tx_size: 1000000,
+                buffer_size: 1000000,
+                max_delay: Duration::from_secs(30),
+                sleep_time: Duration::from_millis(100),
+            };
+            tracing::warn!("Chain config for `{chain_id}` is missing, if this is not running in a test setup please stop the relayer and review your configuration file");
+            tracing::warn!("Will use the following BatchConfig: {test_batch_config:?}");
+            return Ok(test_batch_config);
         };
         if let Some(batch_config) = &chain_config.batch_config {
             Ok(batch_config.clone())

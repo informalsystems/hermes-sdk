@@ -14,11 +14,11 @@ pub struct BatchConfig {
 impl Default for BatchConfig {
     fn default() -> Self {
         Self {
-            max_message_count: 10,
-            max_tx_size: 1000,
-            buffer_size: 1000,
-            max_delay: Duration::from_secs(1),
-            sleep_time: Duration::from_millis(50),
+            max_message_count: 300,
+            max_tx_size: 1000000,
+            buffer_size: 1000000,
+            max_delay: Duration::from_secs(30),
+            sleep_time: Duration::from_millis(100),
         }
     }
 }
