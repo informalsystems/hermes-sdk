@@ -18,3 +18,4 @@ hermes-runtime-components    = { workspace = true }
 hermes-logging-components    = { workspace = true }
 
 futures = { workspace = true }
+serde   = { workspace = true}

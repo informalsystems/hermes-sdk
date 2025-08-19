@@ -1891,6 +1891,7 @@ dependencies = [
  "hermes-prelude",
  "hermes-relayer-components",
  "hermes-runtime-components",
+ "serde",
 ]
 
 [[package]]

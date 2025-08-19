@@ -71,7 +71,6 @@ pub struct CosmosBuilderFields {
     pub packet_filter: PacketFilterConfig,
     pub telemetry: CosmosTelemetry,
     pub runtime: HermesRuntime,
-    pub batch_config: BatchConfig,
     pub key_map: HashMap<ChainId, Secp256k1KeyPair>,
     pub chain_cache: Arc<Mutex<BTreeMap<ChainId, CosmosChain>>>,
     pub relay_cache: Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>>>,
@@ -131,7 +130,6 @@ impl CosmosBuilder {
             Default::default(),
             Default::default(),
             Default::default(),
-            Default::default(),
         )
     }
 
@@ -140,7 +138,6 @@ impl CosmosBuilder {
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
         packet_filter: PacketFilterConfig,
-        batch_config: BatchConfig,
         key_map: HashMap<ChainId, Secp256k1KeyPair>,
     ) -> Self {
         let config_map = HashMap::from_iter(
@@ -155,7 +152,6 @@ impl CosmosBuilder {
                 packet_filter,
                 telemetry,
                 runtime,
-                batch_config,
                 key_map,
                 chain_cache: Default::default(),
                 relay_cache: Default::default(),
@@ -377,9 +373,45 @@ impl HasRelayCache<Index<1>, Index<0>> for CosmosBuilder {
     }
 }
 
-impl HasBatchConfig for CosmosBuilder {
-    fn batch_config(&self) -> &BatchConfig {
-        &self.batch_config
+impl HasBatchConfig<Index<0>, CosmosChain> for CosmosBuilder {
+    fn batch_config(
+        &self,
+        _tag: PhantomData<Index<0>>,
+        chain_id: &ChainId,
+    ) -> Result<BatchConfig, Error> {
+        let chain_config = if let Some(chain_config) = self.config_map.get(chain_id) {
+            chain_config
+        } else {
+            // FIXME: This is a temporary solution for tests, because test setup is not using a config file
+            // but is passing empty chain configurations
+            return Ok(BatchConfig::default());
+        };
+        if let Some(batch_config) = &chain_config.batch_config {
+            Ok(batch_config.clone())
+        } else {
+            Ok(BatchConfig::default())
+        }
+    }
+}
+
+impl HasBatchConfig<Index<1>, CosmosChain> for CosmosBuilder {
+    fn batch_config(
+        &self,
+        _tag: PhantomData<Index<1>>,
+        chain_id: &ChainId,
+    ) -> Result<BatchConfig, Error> {
+        let chain_config = if let Some(chain_config) = self.config_map.get(chain_id) {
+            chain_config
+        } else {
+            // FIXME: This is a temporary solution for tests, because test setup is not using a config file
+            // but is passing empty chain configurations
+            return Ok(BatchConfig::default());
+        };
+        if let Some(batch_config) = &chain_config.batch_config {
+            Ok(batch_config.clone())
+        } else {
+            Ok(BatchConfig::default())
+        }
     }
 }
 

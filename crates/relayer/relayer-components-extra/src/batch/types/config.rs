@@ -1,6 +1,8 @@
 use core::time::Duration;
 
-#[derive(Debug, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchConfig {
     pub max_message_count: usize,
     pub max_tx_size: usize,

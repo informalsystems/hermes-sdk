@@ -1,10 +1,8 @@
 use alloc::sync::Arc;
-use core::time::Duration;
 use std::env;
 use std::str::FromStr;
 
 use eyre::Report;
-use hermes_core::relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_core::test_components::setup::traits::CanBuildTestDriver;
 use hermes_cosmos_core::chain_components::types::{DynamicGasConfig, PacketFilterConfig};
 use hermes_cosmos_core::tracing_logging_components::subscriber::init_tracing_subscriber;
@@ -63,21 +61,12 @@ pub fn build_osmosis_bootstrap(
     comet_config_modifier: impl Fn(&mut TomlValue) -> Result<(), Error> + Send + Sync + 'static,
     packet_filter: PacketFilterConfig,
 ) -> LegacyCosmosBootstrap {
-    // FIXME: Should we keep these arbitrary values?
-    let batch_config = BatchConfig {
-        max_message_count: 30,
-        max_tx_size: 100000,
-        buffer_size: 100000,
-        max_delay: Duration::from_secs(15),
-        sleep_time: Duration::from_millis(100),
-    };
     let dynamic_gas_config = Some(DynamicGasConfig::new(1.1, 1.6, "osmosis", "stake"));
     let cosmos_builder = CosmosBuilder::new(
         Default::default(),
         runtime.clone(),
         Default::default(),
         packet_filter,
-        batch_config,
         Default::default(),
     );
 
@@ -109,20 +98,11 @@ pub fn build_gaia_bootstrap(
     packet_filter: PacketFilterConfig,
 ) -> CosmosBootstrap {
     let dynamic_gas_config = Some(DynamicGasConfig::default());
-    // FIXME: Should we keep these arbitrary values?
-    let batch_config = BatchConfig {
-        max_message_count: 30,
-        max_tx_size: 100000,
-        buffer_size: 100000,
-        max_delay: Duration::from_secs(15),
-        sleep_time: Duration::from_millis(100),
-    };
     let cosmos_builder = CosmosBuilder::new(
         Default::default(),
         runtime.clone(),
         Default::default(),
         packet_filter,
-        batch_config,
         Default::default(),
     );
 
@@ -276,21 +256,11 @@ pub async fn init_preset_bootstraps(
         .unwrap_or_else(|_| "GaiaToGaia".to_string())
         .parse::<TestPreset>()?;
 
-    // FIXME: Should we keep these arbitrary values?
-    let batch_config = BatchConfig {
-        max_message_count: 30,
-        max_tx_size: 100000,
-        buffer_size: 100000,
-        max_delay: Duration::from_secs(15),
-        sleep_time: Duration::from_millis(100),
-    };
-
     let builder = CosmosBuilder::new(
         Default::default(),
         runtime.clone(),
         Default::default(),
         packet_filter.clone(),
-        batch_config,
         Default::default(),
     );
 

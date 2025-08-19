@@ -5,6 +5,7 @@ use std::path::PathBuf;
 
 use cgp::core::error::ErrorOf;
 use cgp::extra::runtime::HasRuntime;
+use hermes_core::relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_core::runtime_components::traits::{
     CanCreateDir, CanWriteStringToFile, HasFilePathType,
 };
@@ -140,6 +141,14 @@ where
                 .map(|compat_mode| compat_mode.to_string()),
             block_time: Duration::from_secs(1),
             client_refresh_rate,
+            // FIXME: Should we keep these arbitrary values for batch config?
+            batch_config: Some(BatchConfig {
+                max_message_count: 300,
+                max_tx_size: 1000000,
+                buffer_size: 1000000,
+                max_delay: Duration::from_secs(30),
+                sleep_time: Duration::from_millis(100),
+            }),
         };
 
         Ok(relayer_chain_config)

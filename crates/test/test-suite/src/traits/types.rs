@@ -8,11 +8,12 @@ use cgp::extra::runtime::HasRuntimeType;
 use hermes_chain_components::traits::{
     CanBuildCreateClientMessage, CanBuildCreateClientPayload, CanBuildUpdateClientMessage,
     CanBuildUpdateClientPayload, CanExtractFromMessageResponse,
-    CanOverrideCreateClientPayloadOptions, CanQueryClientStateWithLatestHeight,
-    CanQueryClientStatus, CanQueryConsensusStateHeights, CanRecoverClient, CanSendMessages,
-    CanSendSingleMessage, HasClientStateFields, HasClientStateType, HasClientStatusMethods,
-    HasClientStatusType, HasCreateClientEvent, HasCreateClientMessageOptionsType,
-    HasCreateClientPayloadOptionsType, HasRecoverClientPayloadType,
+    CanOverrideCreateClientPayloadOptions, CanQueryClientState,
+    CanQueryClientStateWithLatestHeight, CanQueryClientStatus, CanQueryConsensusStateHeights,
+    CanRecoverClient, CanSendMessages, CanSendSingleMessage, HasClientStateFields,
+    HasClientStateType, HasClientStatusMethods, HasClientStatusType, HasCreateClientEvent,
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+    HasRecoverClientPayloadType,
 };
 use hermes_chain_components::types::aliases::ClientIdOf;
 use hermes_chain_type_components::traits::{DenomOf, HasAmountDenom};
@@ -174,6 +175,7 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + HasClientStatusType<Self::ChainB>
                     + HasClientStatusMethods<Self::ChainB>
                     + CanQueryClientStateWithLatestHeight<Self::ChainB>
+                    + CanQueryClientState<Self::ChainB>
                     + CanQueryClientStatus<Self::ChainB>
                     + HasClientStateFields<Self::ChainB>
                     + CanBuildUpdateClientPayload<Self::ChainB>
@@ -209,6 +211,7 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                     + HasClientStatusType<Self::ChainA>
                     + HasClientStatusMethods<Self::ChainA>
                     + CanQueryClientStateWithLatestHeight<Self::ChainA>
+                    + CanQueryClientState<Self::ChainA>
                     + CanQueryClientStatus<Self::ChainA>
                     + HasClientStateFields<Self::ChainA>
                     + CanBuildUpdateClientPayload<Self::ChainA>

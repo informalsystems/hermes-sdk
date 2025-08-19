@@ -1,6 +1,7 @@
 use core::time::Duration;
 use std::path::PathBuf;
 
+use hermes_core::relayer_components_extra::batch::types::config::BatchConfig;
 use ibc_proto::google::protobuf::Any;
 use serde::{Deserialize, Serialize};
 use tendermint_rpc::Url;
@@ -41,6 +42,8 @@ pub struct CosmosChainConfig {
     // TODO: This can be improved by having refresh rate binded to
     // specific client IDs
     pub client_refresh_rate: Option<Duration>,
+
+    pub batch_config: Option<BatchConfig>,
 }
 
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]

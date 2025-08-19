@@ -37,7 +37,8 @@ pub struct BuildRelayWithBatchWorker;
 impl<Build, SrcTag: Async, DstTag: Async, Relay, SrcChain, DstChain>
     RelayFromChainsBuilder<Build, SrcTag, DstTag> for BuildRelayWithBatchWorker
 where
-    Build: HasBatchConfig
+    Build: HasBatchConfig<SrcTag, SrcChain>
+        + HasBatchConfig<DstTag, DstChain>
         + HasRelayTypeAt<SrcTag, DstTag, Relay = Relay>
         + HasChainTypeAt<SrcTag, Chain = SrcChain>
         + HasChainTypeAt<DstTag, Chain = DstChain>
@@ -76,6 +77,9 @@ where
         let src_chain_id = src_chain.chain_id();
         let dst_chain_id = dst_chain.chain_id();
 
+        let src_batch_config = build.batch_config(PhantomData::<SrcTag>, src_chain_id)?;
+        let dst_batch_config = build.batch_config(PhantomData::<DstTag>, dst_chain_id)?;
+
         let (src_sender, m_src_receiver) = build
             .build_batch_channel(
                 PhantomData::<(SrcTag, DstTag, SourceTarget)>,
@@ -111,17 +115,15 @@ where
             .await?;
 
         if let Some(src_receiver) = m_src_receiver {
-            relay.clone().spawn_batch_message_worker(
-                SourceTarget,
-                build.batch_config().clone(),
-                src_receiver,
-            );
+            relay
+                .clone()
+                .spawn_batch_message_worker(SourceTarget, src_batch_config, src_receiver);
         }
 
         if let Some(dst_receiver) = m_dst_receiver {
             relay.clone().spawn_batch_message_worker(
                 DestinationTarget,
-                build.batch_config().clone(),
+                dst_batch_config,
                 dst_receiver,
             );
         }
