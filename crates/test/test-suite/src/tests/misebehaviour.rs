@@ -33,7 +33,6 @@ where
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
         let relay_driver = driver.relay_driver();
 
-        let chain_driver_a = driver.chain_driver_a();
         let chain_driver_b = driver.chain_driver_b();
 
         let chain_a = driver.chain_a();
@@ -46,10 +45,6 @@ where
 
         tokio::time::sleep(Duration::from_secs(10)).await;
 
-        chain_driver_a
-            .halt_full_node()
-            .await
-            .map_err(Driver::raise_error)?;
         chain_driver_b
             .halt_full_node()
             .await
