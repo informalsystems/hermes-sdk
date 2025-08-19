@@ -10,6 +10,9 @@ pub use fork::*;
 mod init_channel_options;
 pub use init_channel_options::*;
 
+mod node;
+pub use node::*;
+
 mod test_driver;
 pub use test_driver::*;
 

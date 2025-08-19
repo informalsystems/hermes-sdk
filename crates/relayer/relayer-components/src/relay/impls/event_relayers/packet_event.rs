@@ -110,10 +110,25 @@ where
                         .await
                         .map_err(Relay::raise_error)?;
 
-                    src_chain
+                    if let Err(e) = src_chain
                         .send_message(msg)
                         .await
-                        .map_err(Relay::raise_error)?;
+                        .map_err(Relay::raise_error)
+                    {
+                        relay
+                            .log(
+                                &format!("Failed to submit misbeahviour message: {e:?}"),
+                                &LevelWarn,
+                            )
+                            .await;
+                    } else {
+                        relay
+                        .log(
+                            &format!("Successfully submitted misbehaviour message for client {src_client_id}"),
+                            &LevelDebug,
+                        )
+                        .await;
+                    }
                 }
                 Ok(None) => {
                     relay.log("no misbehaviour detected", &LevelDebug).await;

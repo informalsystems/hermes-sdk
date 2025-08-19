@@ -11,18 +11,12 @@ use hermes_core::test_components::driver::traits::{
 };
 use hermes_core::test_components::setup::traits::{
     CreateClientMessageOptionsGetterAtComponent, CreateClientPayloadOptionsGetterAtComponent,
-    FullNodeForkerComponent, FullNodeHalterComponent, PortIdGetterAtComponent,
-    RecoverClientPayloadOptionsGetterAtComponent,
+    FullNodeForkerComponent, PortIdGetterAtComponent, RecoverClientPayloadOptionsGetterAtComponent,
 };
 use hermes_core::test_components::test_case::traits::recover_client::RecoverClientHandlerComponent;
-use hermes_core::test_components::test_case::traits::upgrade_client::{
-    SetupUpgradeClientTestHandlerComponent, UpgradeClientHandlerComponent,
-};
 use hermes_cosmos_core::chain_components::impls::CosmosRecoverClientPayload;
 use hermes_cosmos_core::chain_components::types::CosmosCreateClientOptions;
-use hermes_cosmos_core::test_components::chain::impls::{
-    CosmosHandleUpgradeClient, RecoverClientWithProposals, SetupCosmosUpgradeClientTest,
-};
+use hermes_cosmos_core::test_components::chain::impls::RecoverClientWithProposals;
 use hermes_cosmos_core::tracing_logging_components::contexts::TracingLogger;
 use hermes_error::handlers::DebugError;
 use hermes_error::impls::UseHermesError;
@@ -73,13 +67,8 @@ delegate_components! {
         LoggerComponent: TracingLogger,
         RecoverClientHandlerComponent:
             RecoverClientWithProposals,
-        UpgradeClientHandlerComponent:
-            CosmosHandleUpgradeClient,
-        SetupUpgradeClientTestHandlerComponent:
-            SetupCosmosUpgradeClientTest,
         [
             FullNodeForkerComponent,
-            FullNodeHalterComponent,
         ]:
             ForkSecondFullNode,
         ChainDriverGetterAtComponent<Index<0>>:

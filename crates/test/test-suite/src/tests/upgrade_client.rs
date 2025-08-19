@@ -19,14 +19,25 @@ impl<A, B> Default for TestUpgradeClient<A, B> {
 
 impl<Driver, A, B> TestCase<Driver> for TestUpgradeClient<A, B>
 where
-    Driver: CanUseBinaryTestDriverMethods<A, B>
-        + CanSetupUpgradeClientTest<Driver::ChainDriverA, Driver::ChainA, Driver::ChainB>
-        + CanHandleUpgradeClient<Driver::ChainDriverA, Driver::ChainA, Driver::ChainB>,
+    Driver: CanUseBinaryTestDriverMethods<A, B>,
+    Driver::ChainDriverA: CanSetupUpgradeClientTest<Driver::ChainDriverB>
+        + CanHandleUpgradeClient<Driver::ChainDriverB>,
     A: Async,
     B: Async,
 {
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
-        let setup_result = driver.setup_upgrade_client_test().await?;
-        driver.handle_upgrade_client(&setup_result).await
+        let chain_driver_a = driver.chain_driver_a();
+        let chain_driver_b = driver.chain_driver_b();
+        let client_id_b = driver.client_id_b();
+        let setup_result = chain_driver_a
+            .setup_upgrade_client_test(chain_driver_b, client_id_b)
+            .await
+            .map_err(Driver::raise_error)?;
+        chain_driver_a
+            .handle_upgrade_client(&setup_result, chain_driver_b, client_id_b)
+            .await
+            .map_err(Driver::raise_error)?;
+
+        Ok(())
     }
 }

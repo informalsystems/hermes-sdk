@@ -48,6 +48,7 @@ use hermes_test_components::setup::traits::{
     HasCreateClientMessageOptionsAt, HasCreateClientPayloadOptionsAt, HasPortIdAt,
     HasRecoverClientPayloadOptionsAt,
 };
+use hermes_test_components::test_case::traits::node::CanHaltFullNode;
 
 #[blanket_trait]
 pub trait HasBinaryTestDriverFields<A, B>:
@@ -136,6 +137,7 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                           + HasWallet<UserWallet<1>>
                           + CanGenerateRandomAmount
                           + HasSetupUpgradeClientTestResultType
+                          + CanHaltFullNode
                           + CanCliTransferToken
                           + HasChainCommandPath
                           + HasRuntimeType<Runtime: HasFilePathType>,
@@ -145,6 +147,7 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                           + HasWallet<UserWallet<1>>
                           + CanGenerateRandomAmount
                           + HasSetupUpgradeClientTestResultType
+                          + CanHaltFullNode
                           + CanCliTransferToken
                           + HasChainCommandPath
                           + HasRuntimeType<Runtime: HasFilePathType>,
