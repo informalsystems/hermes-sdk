@@ -35,9 +35,8 @@ use hermes_relayer_components::relay::traits::{
 };
 use hermes_runtime_components::traits::HasFilePathType;
 use hermes_test_components::chain::traits::{
-    CanAssertEventualAmount, CanCliTransferToken, CanConvertIbcTransferredAmount,
-    CanIbcTransferToken, CanQueryBalance, HasAmountMethods, HasDefaultMemo, HasWalletSigner,
-    HasWalletType, WalletOf,
+    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
+    HasAmountMethods, HasDefaultMemo, HasWalletSigner, HasWalletType, WalletOf,
 };
 use hermes_test_components::chain_driver::traits::{
     CanGenerateRandomAmount, HasChain, HasChainCommandPath, HasDenom,
@@ -139,7 +138,6 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                           + CanGenerateRandomAmount
                           + HasSetupUpgradeClientTestResultType
                           + CanHaltFullNode
-                          + CanCliTransferToken
                           + HasChainCommandPath
                           + HasRuntimeType<Runtime: HasFilePathType>,
         ChainDriverB: HasDenom<TransferDenom>
@@ -149,7 +147,6 @@ pub trait CanUseBinaryTestDriverMethods<A, B>:
                           + CanGenerateRandomAmount
                           + HasSetupUpgradeClientTestResultType
                           + CanHaltFullNode
-                          + CanCliTransferToken
                           + HasChainCommandPath
                           + HasRuntimeType<Runtime: HasFilePathType>,
         ChainA: HasChainId

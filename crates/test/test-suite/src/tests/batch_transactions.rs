@@ -3,19 +3,17 @@ use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::core::field::Index;
-use hashbrown::HashMap;
-use hermes_chain_components::traits::CanQueryConsensusStateHeights;
+use hermes_chain_components::traits::{CanQueryChainStatus, CanQueryConsensusStateHeights};
 use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::HasChainId;
 use hermes_test_components::chain::traits::{
-    CanAssertEventualAmount, CanCliTransferToken, CanConvertIbcTransferredAmount, CanQueryBalance,
-    HasAmountMethods, HasWalletType,
+    CanAssertEventualAmount, CanConvertIbcTransferredAmount, CanIbcTransferToken, CanQueryBalance,
+    HasAmountMethods, HasDefaultMemo, HasWalletType,
 };
 use hermes_test_components::chain_driver::traits::CanGenerateRandomAmount;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
-use crate::alloc::string::ToString;
 use crate::traits::CanUseBinaryTestDriverMethods;
 
 pub struct TestBatchIbcTransfer<A = Index<0>, B = Index<1>>(pub PhantomData<(A, B)>);
@@ -55,8 +53,6 @@ where
 
         let denom_a = driver.transfer_denom_a();
 
-        let stake_denom_a = driver.staking_denom_a();
-
         let balance_a1 = chain_a
             .query_balance(sender_address, denom_a)
             .await
@@ -69,8 +65,6 @@ where
         let expected_final_amount_a_to_b = chain_driver_a
             .fixed_amount(1234 * number_of_transfers, denom_a)
             .await;
-
-        let fee_amount = chain_driver_a.fixed_amount(300000, stake_denom_a).await;
 
         let channel_id_a = driver.channel_id_a();
 
@@ -115,20 +109,21 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
-        let args = HashMap::from([
-            ("port_id", port_id_a.to_string()),
-            ("channel_id", channel_id_a.to_string()),
-            ("sender", sender_address.to_string()),
-            ("recipient", recipient_address.to_string()),
-            ("amount", a_to_b_amount.to_string()),
-            ("fees", fee_amount.to_string()),
-        ]);
-        // Create 10 transactions which should be batched together with a maximum of 2
-        // client updates since the `BatchConfig` `max_delay` is configured to 10 seconds
-        // for tests
         for _ in 0..number_of_transfers {
-            chain_driver_a
-                .cli_transfer_token(args.clone())
+            chain_a
+                .ibc_transfer_token(
+                    PhantomData,
+                    channel_id_a,
+                    port_id_a,
+                    wallet_a,
+                    recipient_address,
+                    &a_to_b_amount,
+                    &chain_a.default_memo(),
+                    &chain_b
+                        .query_chain_status()
+                        .await
+                        .map_err(Driver::raise_error)?,
+                )
                 .await
                 .map_err(Driver::raise_error)?;
 

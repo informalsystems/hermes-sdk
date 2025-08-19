@@ -8,7 +8,7 @@ use hermes_core::runtime_components::traits::{
     RuntimeGetter, RuntimeGetterComponent, RuntimeTypeProviderComponent,
 };
 use hermes_core::test_components::chain::traits::{
-    ProposalIdTypeComponent, ProposalStatusTypeComponent, TokenCliTransferrerComponent,
+    ProposalIdTypeComponent, ProposalStatusTypeComponent,
 };
 use hermes_core::test_components::chain_driver::traits::{
     ChainCommandPathGetter, ChainCommandPathGetterComponent, ChainGetter, ChainGetterComponent,
@@ -24,7 +24,6 @@ use hermes_core::test_components::test_case::traits::upgrade_client::{
     SetupUpgradeClientTestHandlerComponent, UpgradeClientHandlerComponent,
 };
 use hermes_cosmos_core::chain_components::impls::RelayerConfig;
-use hermes_cosmos_core::test_components::bootstrap::impls::SendTransferMessageWithCosmosCli;
 use hermes_cosmos_core::test_components::bootstrap::types::{
     CosmosChainNodeConfig, CosmosGenesisConfig,
 };
@@ -99,8 +98,6 @@ delegate_components! {
             UseField<symbol!("user_wallet_a")>,
         WalletGetterComponent<UserWallet<1>>:
             UseField<symbol!("user_wallet_b")>,
-        TokenCliTransferrerComponent:
-            SendTransferMessageWithCosmosCli,
     }
 }
 

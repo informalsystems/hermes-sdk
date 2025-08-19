@@ -122,7 +122,6 @@ bech32                           = { version = "0.9.1" }
 sha2                             = { version = "0.10.8" }
 secp256k1                        = { version = "0.28.2" }
 ics23                            = { version = "0.12" }
-hashbrown                        = { version = "0.14", default-features = false, features = ["ahash"] }
 
 hermes-core    = { version = "0.1.0" }
 hermes-prelude = { version = "0.1.0" }
