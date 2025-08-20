@@ -1,3 +1,4 @@
+use alloc::vec;
 use alloc::vec::Vec;
 
 use hermes_chain_components::traits::MessageSenderComponent;
@@ -17,6 +18,9 @@ where
         chain: &Chain,
         messages: Vec<Chain::Message>,
     ) -> Result<Vec<Chain::MessageResponse>, Chain::Error> {
+        if messages.is_empty() {
+            return Ok(vec![]);
+        }
         let signer = chain.get_default_signer();
         chain.send_messages_with_signer(signer, &messages).await
     }

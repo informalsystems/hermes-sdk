@@ -36,9 +36,8 @@ use hermes_cosmos_test_components::bootstrap::impls::{
     NoModifyCometConfig, NoModifyCosmosSdkConfig, NoModifyGenesisConfig, StartCosmosChain,
 };
 use hermes_cosmos_test_components::bootstrap::traits::{
-    AccountPrefixGetter, AccountPrefixGetterComponent, ChainCommandPathGetter,
-    ChainCommandPathGetterComponent, ChainDriverBuilderComponent, ChainFullNodeStarterComponent,
-    ChainStoreDirGetterComponent, CometConfigModifierComponent,
+    AccountPrefixGetter, AccountPrefixGetterComponent, ChainDriverBuilderComponent,
+    ChainFullNodeStarterComponent, ChainStoreDirGetterComponent, CometConfigModifierComponent,
     CosmosGenesisConfigModifierComponent, CosmosSdkConfigModifierComponent, DenomForStaking,
     DenomForTransfer, DenomPrefixGetter, DenomPrefixGetterComponent, DynamicGasGetterComponent,
     RandomIdFlagGetterComponent, UseRandomIdFlag, WalletConfigGeneratorComponent,
@@ -51,7 +50,9 @@ use hermes_prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::{RuntimeGetterComponent, RuntimeTypeProviderComponent};
 use hermes_test_components::bootstrap::traits::ChainBootstrapperComponent;
-use hermes_test_components::chain_driver::traits::ChainTypeProviderComponent;
+use hermes_test_components::chain_driver::traits::{
+    ChainCommandPathGetter, ChainCommandPathGetterComponent, ChainTypeProviderComponent,
+};
 use hermes_test_components::driver::traits::ChainDriverTypeProviderComponent;
 use hermes_tracing_logging_components::contexts::TracingLogger;
 use tokio::process::Child;

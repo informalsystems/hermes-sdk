@@ -4,6 +4,7 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 use core::mem;
 
+use hermes_chain_type_components::impls::BatchConfig;
 use hermes_logging_components::traits::CanLog;
 use hermes_logging_components::types::LogLevel;
 use hermes_prelude::*;
@@ -15,7 +16,6 @@ use hermes_runtime_components::traits::{
 };
 
 use crate::batch::traits::types::{CanUseMessageBatchChannel, HasMessageBatchChannelTypes};
-use crate::batch::types::config::BatchConfig;
 use crate::batch::types::sink::BatchWorkerSink;
 
 pub struct LogBatchWorker<'a, Target> {

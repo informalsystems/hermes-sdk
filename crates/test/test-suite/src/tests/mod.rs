@@ -1,3 +1,4 @@
+pub mod batch_transactions;
 pub mod clearing;
 pub mod client_refresh;
 pub mod misebehaviour;

@@ -1,4 +1,4 @@
-use alloc::collections::BTreeSet;
+use alloc::vec;
 use alloc::vec::Vec;
 
 use hermes_chain_type_components::traits::HasMessageResponseType;
@@ -21,7 +21,8 @@ where
             Target,
             TargetChain = TargetChain,
             CounterpartyChain = CounterpartyChain,
-        > + CanBuildTargetUpdateClientMessage<Target>,
+        > + CanBuildTargetUpdateClientMessage<Target>
+        + CanRaiseAsyncError<&'static str>,
     InSender: IbcMessageSender<Relay, Sink, Target>,
     TargetChain: HasMessageResponseType + HasCounterpartyMessageHeight<CounterpartyChain>,
     CounterpartyChain: HasIbcChainTypes<TargetChain>,
@@ -31,22 +32,27 @@ where
         target: Target,
         messages: Vec<TargetChain::Message>,
     ) -> Result<Vec<TargetChain::MessageResponse>, Relay::Error> {
-        let update_heights: BTreeSet<CounterpartyChain::Height> = messages
+        if messages.is_empty() {
+            return Ok(vec![]);
+        }
+
+        let update_height: CounterpartyChain::Height = messages
             .iter()
             .flat_map(|message| {
                 TargetChain::counterparty_message_height_for_update_client(message).into_iter()
             })
-            .collect();
+            .max()
+            .ok_or_else(|| {
+                Relay::raise_error("No message found to build update client for target chain")
+            })?;
 
         let mut in_messages = Vec::new();
 
-        for update_height in update_heights {
-            let messages = relay
-                .build_target_update_client_messages(Target::default(), &update_height)
-                .await?;
+        let update_messages = relay
+            .build_target_update_client_messages(Target::default(), &update_height)
+            .await?;
 
-            in_messages.extend(messages);
-        }
+        in_messages.extend(update_messages);
 
         let update_messages_count = in_messages.len();
 

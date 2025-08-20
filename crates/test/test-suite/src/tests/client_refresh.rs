@@ -2,7 +2,10 @@ use core::marker::PhantomData;
 use core::time::Duration;
 
 use cgp::core::field::Index;
-use hermes_chain_components::traits::{CanQueryClientStatus, HasClientStatusMethods};
+use hermes_chain_components::traits::{
+    CanQueryChainHeight, CanQueryClientState, CanQueryClientStatus, HasClientStateFields,
+    HasClientStatusMethods,
+};
 use hermes_prelude::*;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_test_components::test_case::traits::recover_client::CanHandleRecoverClient;
@@ -33,6 +36,19 @@ where
 
         let client_id_a = driver.client_id_a();
 
+        let latest_height_a = chain_a
+            .query_chain_height()
+            .await
+            .map_err(Driver::raise_error)?;
+
+        let client_state = chain_a
+            .query_client_state(PhantomData, client_id_a, &latest_height_a)
+            .await
+            .map_err(Driver::raise_error)?;
+
+        let trusting_period = Driver::ChainB::client_state_trusting_period(&client_state)
+            .ok_or_else(|| Driver::raise_error("Client state does not have a trusting period"))?;
+
         // Start relayer
         let _handle = relay_driver
             .run_relayer_in_background()
@@ -57,10 +73,12 @@ where
 
         drop(_handle);
 
+        let max_loop = trusting_period.as_secs() / 5;
+
         // Sanity check:
-        // Loop during 50 seconds to verify that after stopping the auto relayer
+        // Loop for longer than the configured trusting period to verify that after stopping the auto relayer
         // the client eventually expires
-        for _ in 0..10 {
+        for _ in 0..(max_loop + 2) {
             let client_a_client_status = chain_a
                 .query_client_status(PhantomData, client_id_a)
                 .await

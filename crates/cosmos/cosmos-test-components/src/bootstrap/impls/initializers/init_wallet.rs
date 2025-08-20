@@ -7,11 +7,10 @@ use hermes_core::test_components::chain::traits::HasWalletType;
 use hermes_core::test_components::chain_driver::traits::HasChainType;
 use hermes_cosmos_chain_components::types::Secp256k1KeyPair;
 use hermes_prelude::*;
+use hermes_test_components::chain_driver::traits::HasChainCommandPath;
 use serde_json as json;
 
-use crate::bootstrap::traits::{
-    HasChainCommandPath, HasWalletHdPath, WalletInitializer, WalletInitializerComponent,
-};
+use crate::bootstrap::traits::{HasWalletHdPath, WalletInitializer, WalletInitializerComponent};
 use crate::chain::types::CosmosTestWallet;
 
 pub struct InitCosmosTestWallet<OutputGetter>(pub PhantomData<OutputGetter>);

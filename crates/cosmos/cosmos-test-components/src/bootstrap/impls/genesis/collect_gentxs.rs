@@ -1,8 +1,9 @@
 use hermes_core::runtime_components::traits::{CanExecCommand, HasFilePathType, HasRuntime};
 use hermes_prelude::*;
+use hermes_test_components::chain_driver::traits::HasChainCommandPath;
 
 use crate::bootstrap::traits::{
-    GenesisTransactionsCollector, GenesisTransactionsCollectorComponent, HasChainCommandPath,
+    GenesisTransactionsCollector, GenesisTransactionsCollectorComponent,
 };
 
 pub struct CollectCosmosGentxs;

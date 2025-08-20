@@ -35,6 +35,8 @@ pub trait HasClientStateFields<Counterparty>:
     fn client_state_has_expired(client_state: &Self::ClientState, elapsed: Duration) -> bool;
 
     fn client_state_chain_id(client_state: &Self::ClientState) -> Self::ChainId;
+
+    fn client_state_trusting_period(client_state: &Self::ClientState) -> Option<Duration>;
 }
 
 #[cgp_provider(ClientStateFieldsComponent)]
@@ -59,5 +61,9 @@ where
 
     fn client_state_chain_id(client_state: &Chain::ClientState) -> Chain::ChainId {
         Delegate::client_state_chain_id(client_state)
+    }
+
+    fn client_state_trusting_period(client_state: &Chain::ClientState) -> Option<Duration> {
+        Delegate::client_state_trusting_period(client_state)
     }
 }
