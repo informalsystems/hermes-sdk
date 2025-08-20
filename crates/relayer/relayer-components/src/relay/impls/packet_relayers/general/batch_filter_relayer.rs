@@ -22,6 +22,10 @@ where
         relay: &Relay,
         packets: Vec<&PacketOf<Relay>>,
     ) -> Result<(), Relay::Error> {
+        if packets.is_empty() {
+            return Ok(());
+        }
+
         let mut filtered_packets = vec![];
         for packet in packets.iter() {
             if relay.should_relay_packet(packet).await? {

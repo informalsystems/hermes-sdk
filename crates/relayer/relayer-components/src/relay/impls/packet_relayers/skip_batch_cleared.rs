@@ -36,6 +36,10 @@ where
         source_height: &SrcChain::Height,
         packets: Vec<&SrcChain::OutgoingPacket>,
     ) -> Result<Vec<Option<DstChain::Acknowledgement>>, Relay::Error> {
+        if packets.is_empty() {
+            return Ok(vec![]);
+        }
+
         let mut filtered_packets = vec![];
 
         for packet in packets.iter() {
@@ -76,6 +80,10 @@ where
         packets: Vec<&SrcChain::OutgoingPacket>,
         acks: Vec<&DstChain::Acknowledgement>,
     ) -> Result<(), Relay::Error> {
+        if packets.is_empty() {
+            return Ok(());
+        }
+
         let mut filtered_packets = vec![];
         let mut filtered_heights = vec![];
         let mut filtered_acks = vec![];
@@ -127,6 +135,10 @@ where
         destination_heights: Vec<&DstChain::Height>,
         packets: Vec<&SrcChain::OutgoingPacket>,
     ) -> Result<(), Relay::Error> {
+        if packets.is_empty() {
+            return Ok(());
+        }
+
         let mut filtered_packets = vec![];
         let mut filtered_heights = vec![];
 
@@ -170,6 +182,10 @@ where
         relay: &Relay,
         packets: Vec<&SrcChain::OutgoingPacket>,
     ) -> Result<(), Relay::Error> {
+        if packets.is_empty() {
+            return Ok(());
+        }
+
         let mut filtered_packets = vec![];
 
         for packet in packets.iter() {

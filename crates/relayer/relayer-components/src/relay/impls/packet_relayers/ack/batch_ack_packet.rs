@@ -41,6 +41,10 @@ where
         packets: Vec<&PacketOf<Relay>>,
         acks: Vec<&AcknowledgementOf<Relay::DstChain, Relay::SrcChain>>,
     ) -> Result<(), Relay::Error> {
+        if packets.is_empty() {
+            return Ok(());
+        }
+
         let mut messages = vec![];
 
         for ((destination_height, packet), ack) in destination_heights

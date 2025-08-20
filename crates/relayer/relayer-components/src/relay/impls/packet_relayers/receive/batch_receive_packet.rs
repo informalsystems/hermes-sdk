@@ -41,6 +41,10 @@ where
         source_height: &HeightOf<Relay::SrcChain>,
         packets: Vec<&PacketOf<Relay>>,
     ) -> Result<Vec<Option<DstChain::Acknowledgement>>, Relay::Error> {
+        if packets.is_empty() {
+            return Ok(vec![]);
+        }
+
         let dst_chain = relay.dst_chain();
 
         let src_client_state = dst_chain

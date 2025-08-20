@@ -32,6 +32,10 @@ where
         relay: &Relay,
         packets: Vec<&Relay::Packet>,
     ) -> Result<(), Relay::Error> {
+        if packets.is_empty() {
+            return Ok(());
+        }
+
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
 

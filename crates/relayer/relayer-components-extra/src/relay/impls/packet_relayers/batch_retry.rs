@@ -16,6 +16,10 @@ where
         relay: &Relay,
         packets: Vec<&PacketOf<Relay>>,
     ) -> Result<(), Relay::Error> {
+        if packets.is_empty() {
+            return Ok(());
+        }
+
         relay
             .perform_with_retry("relay_packets", relay.max_retry(), async || {
                 InRelayer::relay_packets(relay, packets.clone()).await

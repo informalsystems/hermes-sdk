@@ -398,7 +398,9 @@ impl HasBatchConfig<Index<0>, CosmosChain> for CosmosBuilder {
         if let Some(batch_config) = &chain_config.batch_config {
             Ok(batch_config.clone())
         } else {
-            Ok(BatchConfig::default())
+            let default_batch_config = BatchConfig::default();
+            tracing::warn!("Chain config for `{chain_id}` is missing batch config, will use default values: {default_batch_config:?}");
+            Ok(default_batch_config)
         }
     }
 }
@@ -428,7 +430,9 @@ impl HasBatchConfig<Index<1>, CosmosChain> for CosmosBuilder {
         if let Some(batch_config) = &chain_config.batch_config {
             Ok(batch_config.clone())
         } else {
-            Ok(BatchConfig::default())
+            let default_batch_config = BatchConfig::default();
+            tracing::warn!("Chain config for `{chain_id}` is missing batch config, will use default values: {default_batch_config:?}");
+            Ok(default_batch_config)
         }
     }
 }
