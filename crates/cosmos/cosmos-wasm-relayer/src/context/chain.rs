@@ -4,6 +4,7 @@ use core::time::Duration;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
 use hermes_any_counterparty::contexts::AnyCounterparty;
 use hermes_core::chain_components::traits::BlockTimeQuerierComponent;
+use hermes_core::chain_type_components::impls::BatchConfig;
 use hermes_core::encoding_components::traits::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeProviderComponent,
     HasDefaultEncoding,
@@ -35,10 +36,10 @@ use hermes_core::relayer_components::transaction::impls::{
     GetGlobalNonceMutex, GetGlobalSignerMutex, HasPollTimeout, SignerWithIndexGetter,
 };
 use hermes_core::relayer_components::transaction::traits::{
-    CanPollTxResponse, CanQueryTxResponse, CanSubmitTx, ClientRefreshRateGetter,
-    ClientRefreshRateGetterComponent, DefaultSignerGetterComponent, FeeForSimulationGetter,
-    FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent, SignerGetterComponent,
-    SignerMutexGetterComponent,
+    BatchConfigGetter, BatchConfigGetterComponent, CanPollTxResponse, CanQueryTxResponse,
+    CanSubmitTx, ClientRefreshRateGetter, ClientRefreshRateGetterComponent,
+    DefaultSignerGetterComponent, FeeForSimulationGetter, FeeForSimulationGetterComponent,
+    NonceAllocationMutexGetterComponent, SignerGetterComponent, SignerMutexGetterComponent,
 };
 use hermes_core::relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_core::runtime_components::traits::{
@@ -138,6 +139,21 @@ delegate_components! {
 delegate_components! {
     DelegateCosmosChainComponents {
         WasmCosmosChain: CosmosToWasmCosmosComponents::Provider,
+    }
+}
+
+#[cgp_provider(BatchConfigGetterComponent)]
+impl BatchConfigGetter<WasmCosmosChain> for WasmCosmosChainComponents {
+    fn batch_config(chain: &WasmCosmosChain) -> BatchConfig {
+        if let Some(batch_config) = &chain.chain_config.batch_config {
+            batch_config.clone()
+        } else {
+            let default_batch_config = BatchConfig::default();
+            tracing::warn!(
+                "missing batch config, will use default values: {default_batch_config:?}"
+            );
+            default_batch_config
+        }
     }
 }
 

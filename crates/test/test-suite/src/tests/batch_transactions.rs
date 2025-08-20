@@ -165,18 +165,23 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
+        let client_a_consensus_height_diff =
+            consensus_heights_a_after_txs.len() - consensus_heights_a_before_txs.len();
+        let client_b_consensus_height_diff =
+            consensus_heights_b_after_txs.len() - consensus_heights_b_before_txs.len();
+
         assert!(
-            consensus_heights_a_before_txs.len() < consensus_heights_a_after_txs.len() + 3,
-            "Expected at most 2 client updates for client A, but got {}: {:?}",
-            consensus_heights_a_after_txs.len() - consensus_heights_a_before_txs.len(),
-            consensus_heights_a_after_txs
-        );
+            client_a_consensus_height_diff < 3,
+            "Expected at most 2 client updates for client A, but got {client_a_consensus_height_diff}");
         assert!(
-            consensus_heights_b_before_txs.len() < consensus_heights_b_after_txs.len() + 3,
-            "Expected at most 2 client updates for client B, but got {}: {:?}",
-            consensus_heights_a_after_txs.len() - consensus_heights_a_before_txs.len(),
-            consensus_heights_a_after_txs
-        );
+            client_b_consensus_height_diff < 3,
+            "Expected at most 2 client updates for client B, but got {client_b_consensus_height_diff}");
+
+        driver
+            .log_message(&format!(
+                "Batching test was successful. Client A was updated: {client_a_consensus_height_diff} times and Client B {client_b_consensus_height_diff} times"
+            ))
+            .await;
 
         Ok(())
     }

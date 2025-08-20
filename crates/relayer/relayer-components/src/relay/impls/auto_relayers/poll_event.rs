@@ -20,6 +20,7 @@ use crate::relay::traits::{
     AutoRelayerWithHeights, AutoRelayerWithHeightsComponent, CanRelayBatchEvent,
     HasTargetChainTypes, HasTargetChains, RelayTarget,
 };
+use crate::transaction::traits::HasBatchConfig;
 
 #[cgp_new_provider(AutoRelayerWithHeightsComponent)]
 impl<Relay, Target> AutoRelayerWithHeights<Relay, Target> for RelayWithPolledEvents
@@ -33,7 +34,7 @@ where
         + for<'a> CanLog<LogAutoRelayWithHeights<'a, Relay, Target>>
         + CanRaiseAsyncError<ErrorOf<Relay::TargetChain>>,
     Target: RelayTarget,
-    Relay::TargetChain: CanIncrementHeight + CanQueryBlockEvents,
+    Relay::TargetChain: CanIncrementHeight + CanQueryBlockEvents + HasBatchConfig,
     Relay::Runtime: CanRunConcurrentTasks + CanSleep + HasTime,
 {
     async fn auto_relay_with_heights(
@@ -44,6 +45,9 @@ where
     ) -> Result<(), Relay::Error> {
         let chain = relay.target_chain();
         let runtime = relay.runtime();
+
+        let batch_config = relay.target_chain().batch_config();
+        let event_batch_period = batch_config.max_delay;
 
         let mut height = start_height.clone();
 
@@ -99,7 +103,7 @@ where
             }
             let now = runtime.now();
             let elapsed = Relay::Runtime::duration_since(&now, &last_sent_time);
-            if elapsed < Duration::from_secs(15) {
+            if elapsed < event_batch_period {
                 continue;
             }
             last_sent_time = now;

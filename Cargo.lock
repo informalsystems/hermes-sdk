@@ -1436,6 +1436,7 @@ version = "0.1.0"
 dependencies = [
  "cgp",
  "hermes-prelude",
+ "serde",
 ]
 
 [[package]]
@@ -1690,6 +1691,7 @@ dependencies = [
  "eyre",
  "futures",
  "hermes-any-counterparty",
+ "hermes-chain-components",
  "hermes-core",
  "hermes-cosmos-core",
  "hermes-error",

@@ -28,9 +28,7 @@ use hermes_core::relayer_components::multi::traits::relay_at::{
 };
 use hermes_core::relayer_components::multi::types::tags::{Dst, Src};
 use hermes_core::relayer_components::relay::traits::SourceTarget;
-use hermes_core::relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_core::relayer_components_extra::batch::traits::types::MessageBatchSenderOf;
-use hermes_core::relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_core::relayer_components_extra::build::traits::cache::{
     BatchSenderCacheAt, BatchSenderCacheGetterComponent,
 };
@@ -370,70 +368,6 @@ impl HasRelayCache<Index<0>, Index<1>> for CosmosBuilder {
 impl HasRelayCache<Index<1>, Index<0>> for CosmosBuilder {
     fn relay_cache(&self) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>> {
         &self.relay_cache
-    }
-}
-
-impl HasBatchConfig<Index<0>, CosmosChain> for CosmosBuilder {
-    fn batch_config(
-        &self,
-        _tag: PhantomData<Index<0>>,
-        chain_id: &ChainId,
-    ) -> Result<BatchConfig, Error> {
-        let chain_config = if let Some(chain_config) = self.config_map.get(chain_id) {
-            chain_config
-        } else {
-            // FIXME: This is a temporary solution for tests, because test setup is not using a config file
-            // but is passing empty chain configurations
-            let test_batch_config = BatchConfig {
-                max_message_count: 300,
-                max_tx_size: 1000000,
-                buffer_size: 1000000,
-                max_delay: Duration::from_secs(30),
-                sleep_time: Duration::from_millis(100),
-            };
-            tracing::warn!("Chain config for `{chain_id}` is missing, if this is not running in a test setup please stop the relayer and review your configuration file");
-            tracing::warn!("Will use the following BatchConfig: {test_batch_config:?}");
-            return Ok(test_batch_config);
-        };
-        if let Some(batch_config) = &chain_config.batch_config {
-            Ok(batch_config.clone())
-        } else {
-            let default_batch_config = BatchConfig::default();
-            tracing::warn!("Chain config for `{chain_id}` is missing batch config, will use default values: {default_batch_config:?}");
-            Ok(default_batch_config)
-        }
-    }
-}
-
-impl HasBatchConfig<Index<1>, CosmosChain> for CosmosBuilder {
-    fn batch_config(
-        &self,
-        _tag: PhantomData<Index<1>>,
-        chain_id: &ChainId,
-    ) -> Result<BatchConfig, Error> {
-        let chain_config = if let Some(chain_config) = self.config_map.get(chain_id) {
-            chain_config
-        } else {
-            // FIXME: This is a temporary solution for tests, because test setup is not using a config file
-            // but is passing empty chain configurations
-            let test_batch_config = BatchConfig {
-                max_message_count: 300,
-                max_tx_size: 1000000,
-                buffer_size: 1000000,
-                max_delay: Duration::from_secs(30),
-                sleep_time: Duration::from_millis(100),
-            };
-            tracing::warn!("Chain config for `{chain_id}` is missing, if this is not running in a test setup please stop the relayer and review your configuration file");
-            tracing::warn!("Will use the following BatchConfig: {test_batch_config:?}");
-            return Ok(test_batch_config);
-        };
-        if let Some(batch_config) = &chain_config.batch_config {
-            Ok(batch_config.clone())
-        } else {
-            let default_batch_config = BatchConfig::default();
-            tracing::warn!("Chain config for `{chain_id}` is missing batch config, will use default values: {default_batch_config:?}");
-            Ok(default_batch_config)
-        }
     }
 }
 

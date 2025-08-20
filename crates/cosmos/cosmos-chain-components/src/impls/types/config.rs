@@ -1,7 +1,7 @@
 use core::time::Duration;
 use std::path::PathBuf;
 
-use hermes_core::relayer_components_extra::batch::types::config::BatchConfig;
+use hermes_core::chain_type_components::impls::BatchConfig;
 use ibc_proto::google::protobuf::Any;
 use serde::{Deserialize, Serialize};
 use tendermint_rpc::Url;

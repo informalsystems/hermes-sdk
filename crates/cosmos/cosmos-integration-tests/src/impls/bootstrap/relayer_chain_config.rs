@@ -5,7 +5,7 @@ use std::path::PathBuf;
 
 use cgp::core::error::ErrorOf;
 use cgp::extra::runtime::HasRuntime;
-use hermes_core::relayer_components_extra::batch::types::config::BatchConfig;
+use hermes_core::chain_type_components::impls::BatchConfig;
 use hermes_core::runtime_components::traits::{
     CanCreateDir, CanWriteStringToFile, HasFilePathType,
 };
