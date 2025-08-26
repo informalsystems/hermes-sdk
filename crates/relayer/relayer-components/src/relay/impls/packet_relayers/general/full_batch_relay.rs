@@ -1,5 +1,4 @@
 use alloc::vec;
-use alloc::vec::Vec;
 
 use hermes_chain_components::traits::{
     CanBuildPacketFromWriteAck, CanQueryChainHeight, CanQueryPacketIsReceived, CanReadPacketFields,
@@ -28,10 +27,7 @@ where
         + CanBuildPacketFromWriteAck<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>,
 {
-    async fn relay_packets(
-        relay: &Relay,
-        packets: Vec<&Relay::Packet>,
-    ) -> Result<(), Relay::Error> {
+    async fn relay_packets(relay: &Relay, packets: &[Relay::Packet]) -> Result<(), Relay::Error> {
         if packets.is_empty() {
             return Ok(());
         }
@@ -81,7 +77,7 @@ where
             if !is_packet_received && has_packet_timed_out {
                 timeout_packets_information.push((destination_height.clone(), (*packet).clone()));
             } else if !is_packet_received {
-                receive_packets.push(*packet);
+                receive_packets.push(packet);
             }
         }
 

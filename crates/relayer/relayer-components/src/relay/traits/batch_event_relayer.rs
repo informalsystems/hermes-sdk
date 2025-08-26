@@ -1,5 +1,3 @@
-use alloc::vec::Vec;
-
 use hermes_chain_components::traits::HasHeightType;
 use hermes_prelude::*;
 
@@ -23,6 +21,6 @@ pub trait CanRelayBatchEvent<Target: RelayTarget>:
     */
     async fn relay_chain_batch_events(
         &self,
-        events: Vec<&EventOf<Self::TargetChain>>,
+        events: &[EventOf<Self::TargetChain>],
     ) -> Result<(), Self::Error>;
 }

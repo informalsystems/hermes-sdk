@@ -1,4 +1,3 @@
-use alloc::vec::Vec;
 use alloc::{format, vec};
 use core::marker::PhantomData;
 
@@ -49,7 +48,7 @@ where
 {
     async fn relay_chain_batch_events(
         relay: &Relay,
-        events: Vec<&EventOf<Relay::SrcChain>>,
+        events: &[EventOf<Relay::SrcChain>],
     ) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
@@ -114,9 +113,7 @@ where
             }
         }
 
-        relay
-            .relay_packets(send_packet_events.iter().collect())
-            .await?;
+        relay.relay_packets(send_packet_events.as_slice()).await?;
 
         Ok(())
     }
@@ -137,7 +134,7 @@ where
 {
     async fn relay_chain_batch_events(
         relay: &Relay,
-        events: Vec<&EventOf<Relay::DstChain>>,
+        events: &[EventOf<Relay::DstChain>],
     ) -> Result<(), Relay::Error> {
         let dst_chain = relay.dst_chain();
         let mut packets_info = vec![];

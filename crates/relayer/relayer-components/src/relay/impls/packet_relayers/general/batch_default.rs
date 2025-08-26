@@ -1,5 +1,3 @@
-use alloc::vec::Vec;
-
 use hermes_chain_components::traits::{
     CanBuildPacketFromWriteAck, CanQueryPacketIsCleared, CanQueryPacketIsReceived,
     CanReadPacketFields,
@@ -39,10 +37,7 @@ where
         + CanBuildPacketFromWriteAck<SrcChain>
         + CanQueryPacketIsReceived<SrcChain>,
 {
-    async fn relay_packets(
-        relay: &Relay,
-        packets: Vec<&Relay::Packet>,
-    ) -> Result<(), Relay::Error> {
+    async fn relay_packets(relay: &Relay, packets: &[Relay::Packet]) -> Result<(), Relay::Error> {
         <BatchLoggerRelayer<BatchFilterRelayer<BatchSkipClearedPackets<PerformFullBatchRelay>>>>::relay_packets(
             relay, packets,
         )

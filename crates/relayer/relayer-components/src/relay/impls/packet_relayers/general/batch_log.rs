@@ -1,5 +1,4 @@
 use alloc::format;
-use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use hermes_logging_components::traits::CanLog;
@@ -18,15 +17,12 @@ where
     Relay: HasRelayChains + CanLog<LevelWarn> + CanLog<LevelInfo>,
     InRelayer: BatchPacketsRelayer<Relay>,
 {
-    async fn relay_packets(
-        relay: &Relay,
-        packets: Vec<&PacketOf<Relay>>,
-    ) -> Result<(), Relay::Error> {
+    async fn relay_packets(relay: &Relay, packets: &[PacketOf<Relay>]) -> Result<(), Relay::Error> {
         if packets.is_empty() {
             return Ok(());
         }
 
-        let res = InRelayer::relay_packets(relay, packets.clone()).await;
+        let res = InRelayer::relay_packets(relay, packets).await;
 
         if let Err(error) = &res {
             relay

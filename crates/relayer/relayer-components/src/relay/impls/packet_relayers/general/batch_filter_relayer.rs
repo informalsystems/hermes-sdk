@@ -1,5 +1,4 @@
 use alloc::vec;
-use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use hermes_prelude::*;
@@ -18,10 +17,7 @@ where
     Relay: CanFilterRelayPackets,
     InRelayer: BatchPacketsRelayer<Relay>,
 {
-    async fn relay_packets(
-        relay: &Relay,
-        packets: Vec<&PacketOf<Relay>>,
-    ) -> Result<(), Relay::Error> {
+    async fn relay_packets(relay: &Relay, packets: &[PacketOf<Relay>]) -> Result<(), Relay::Error> {
         if packets.is_empty() {
             return Ok(());
         }
@@ -29,7 +25,7 @@ where
         let mut filtered_packets = vec![];
         for packet in packets.iter() {
             if relay.should_relay_packet(packet).await? {
-                filtered_packets.push(*packet);
+                filtered_packets.push(packet.clone());
             }
         }
         InRelayer::relay_packets(relay, packets).await

@@ -174,7 +174,7 @@ where
 {
     async fn relay_packets(
         relay: &Relay,
-        packets: Vec<&SrcChain::OutgoingPacket>,
+        packets: &[SrcChain::OutgoingPacket],
     ) -> Result<(), Relay::Error> {
         if packets.is_empty() {
             return Ok(());
@@ -194,10 +194,10 @@ where
                 .map_err(Relay::raise_error)?;
 
             if !packet_is_cleared {
-                filtered_packets.push(*packet);
+                filtered_packets.push((*packet).clone());
             }
         }
-        InRelayer::relay_packets(relay, filtered_packets).await?;
+        InRelayer::relay_packets(relay, filtered_packets.as_slice()).await?;
 
         Ok(())
     }

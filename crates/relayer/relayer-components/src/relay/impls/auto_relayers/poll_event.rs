@@ -151,7 +151,7 @@ where
     async fn run(self) {
         let _ = self
             .relay
-            .relay_chain_batch_events(self.events.iter().collect())
+            .relay_chain_batch_events(self.events.as_slice())
             .await;
     }
 }

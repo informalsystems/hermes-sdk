@@ -1,5 +1,3 @@
-use alloc::vec::Vec;
-
 use hermes_prelude::*;
 
 use crate::relay::traits::HasRelayPacketType;
@@ -19,5 +17,5 @@ pub trait CanRelayPacket: HasRelayPacketType {
 }]
 #[async_trait]
 pub trait CanRelayBatchPackets: HasRelayPacketType {
-    async fn relay_packets(&self, packet: Vec<&Self::Packet>) -> Result<(), Self::Error>;
+    async fn relay_packets(&self, packet: &[Self::Packet]) -> Result<(), Self::Error>;
 }

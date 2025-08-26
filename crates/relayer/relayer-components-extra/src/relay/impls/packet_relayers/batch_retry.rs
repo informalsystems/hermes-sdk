@@ -1,5 +1,3 @@
-use alloc::vec::Vec;
-
 use hermes_prelude::*;
 use hermes_relayer_components::error::traits::{CanPerformRetry, HasMaxErrorRetry};
 use hermes_relayer_components::relay::traits::{
@@ -12,17 +10,14 @@ where
     Relay: HasRelayChains + HasMaxErrorRetry + CanPerformRetry,
     InRelayer: BatchPacketsRelayer<Relay>,
 {
-    async fn relay_packets(
-        relay: &Relay,
-        packets: Vec<&PacketOf<Relay>>,
-    ) -> Result<(), Relay::Error> {
+    async fn relay_packets(relay: &Relay, packets: &[PacketOf<Relay>]) -> Result<(), Relay::Error> {
         if packets.is_empty() {
             return Ok(());
         }
 
         relay
             .perform_with_retry("relay_packets", relay.max_retry(), async || {
-                InRelayer::relay_packets(relay, packets.clone()).await
+                InRelayer::relay_packets(relay, packets).await
             })
             .await
     }
