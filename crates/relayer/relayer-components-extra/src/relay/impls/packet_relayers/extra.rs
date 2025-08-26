@@ -1,4 +1,5 @@
 use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelWarn;
 use hermes_prelude::*;
 use hermes_relayer_components::chain::traits::{
     CanBuildPacketFromWriteAck, CanQueryChainStatus, CanQueryPacketIsCleared,
@@ -37,6 +38,7 @@ where
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>
         + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
+        + CanLog<LevelWarn>
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>,
     SrcChain:
