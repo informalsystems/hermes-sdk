@@ -1,5 +1,3 @@
-use alloc::vec::Vec;
-
 use hermes_prelude::*;
 
 use crate::chain::traits::{AcknowledgementOf, HasAcknowledgementType};
@@ -32,8 +30,10 @@ pub trait CanRelayBatchAckPackets:
 {
     async fn relay_ack_packets(
         &self,
-        destination_height: Vec<&HeightOf<Self::DstChain>>,
-        packet: Vec<&PacketOf<Self>>,
-        ack: Vec<&AcknowledgementOf<Self::DstChain, Self::SrcChain>>,
+        packets_information: &[(
+            HeightOf<Self::DstChain>,
+            PacketOf<Self>,
+            AcknowledgementOf<Self::DstChain, Self::SrcChain>,
+        )],
     ) -> Result<(), Self::Error>;
 }

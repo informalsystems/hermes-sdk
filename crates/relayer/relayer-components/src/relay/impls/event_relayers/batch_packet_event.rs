@@ -140,9 +140,8 @@ where
         events: Vec<&EventOf<Relay::DstChain>>,
     ) -> Result<(), Relay::Error> {
         let dst_chain = relay.dst_chain();
-        let mut packets = vec![];
-        let mut heights = vec![];
-        let mut acks = vec![];
+        let mut packets_info = vec![];
+
         for event in events.iter() {
             let m_ack_event = dst_chain.try_extract_from_event(PhantomData, event);
 
@@ -170,19 +169,11 @@ where
                         .await
                         .map_err(Relay::raise_error)?;
 
-                    packets.push(packet);
-                    heights.push(height);
-                    acks.push(ack);
+                    packets_info.push((height, packet, ack))
                 }
             }
         }
-        relay
-            .relay_ack_packets(
-                heights.iter().collect(),
-                packets.iter().collect(),
-                acks.iter().collect(),
-            )
-            .await?;
+        relay.relay_ack_packets(packets_info.as_slice()).await?;
 
         Ok(())
     }

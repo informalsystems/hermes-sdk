@@ -1,5 +1,4 @@
 use alloc::vec;
-use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use cgp::core::error::ErrorOf;
@@ -36,12 +35,11 @@ where
 {
     async fn relay_timeout_unordered_packets(
         relay: &Relay,
-        destination_height: Vec<&HeightOf<Relay::DstChain>>,
-        packet: Vec<&PacketOf<Relay>>,
+        packets_information: &[(HeightOf<Relay::DstChain>, PacketOf<Relay>)],
     ) -> Result<(), Relay::Error> {
         let mut messages = vec![];
 
-        for (destination_height, packet) in destination_height.iter().zip(packet.iter()) {
+        for (destination_height, packet) in packets_information.iter() {
             let dst_client_state = relay
                 .src_chain()
                 .query_client_state_with_latest_height(PhantomData, relay.src_client_id())

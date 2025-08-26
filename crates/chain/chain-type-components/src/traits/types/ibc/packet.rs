@@ -19,7 +19,7 @@ pub trait HasOutgoingPacketType<Counterparty>: Async {
        - Packet source: `Self`
        - Packet destination: `Counterparty`
     */
-    type OutgoingPacket: Async + Debug;
+    type OutgoingPacket: Async + Clone + Debug;
 }
 
 pub trait HasIncomingPacketType<Counterparty>:
@@ -30,7 +30,7 @@ pub trait HasIncomingPacketType<Counterparty>:
         Counterparty: HasOutgoingPacketType<Self, OutgoingPacket = Self::IncomingPacket>,
     >
 {
-    type IncomingPacket: Async;
+    type IncomingPacket: Async + Clone;
 }
 
 impl<Chain, Counterparty> HasIncomingPacketType<Counterparty> for Chain

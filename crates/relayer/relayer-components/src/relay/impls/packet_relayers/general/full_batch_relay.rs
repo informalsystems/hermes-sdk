@@ -39,9 +39,8 @@ where
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
 
-        let mut timeout_packets = vec![];
-        let mut timeout_heights = vec![];
         let mut receive_packets = vec![];
+        let mut timeout_packets_information = vec![];
 
         let destination_status = dst_chain
             .query_chain_status()
@@ -80,8 +79,7 @@ where
             };
 
             if !is_packet_received && has_packet_timed_out {
-                timeout_packets.push(*packet);
-                timeout_heights.push(destination_height);
+                timeout_packets_information.push((destination_height.clone(), (*packet).clone()));
             } else if !is_packet_received {
                 receive_packets.push(*packet);
             }
@@ -100,7 +98,7 @@ where
             .await?;
 
         relay
-            .relay_timeout_unordered_packets(timeout_heights, timeout_packets)
+            .relay_timeout_unordered_packets(timeout_packets_information.as_slice())
             .await?;
 
         Ok(())

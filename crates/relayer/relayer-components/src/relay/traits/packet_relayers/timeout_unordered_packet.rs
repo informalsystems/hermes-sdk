@@ -1,5 +1,3 @@
-use alloc::vec::Vec;
-
 use hermes_prelude::*;
 
 use crate::chain::types::aliases::HeightOf;
@@ -36,7 +34,6 @@ pub trait CanRelayTimeoutUnorderedPacket: HasRelayChains {
 pub trait CanRelayBatchTimeoutUnorderedPackets: HasRelayChains {
     async fn relay_timeout_unordered_packets(
         &self,
-        destination_height: Vec<&HeightOf<Self::DstChain>>,
-        packet: Vec<&PacketOf<Self>>,
+        packets_information: &[(HeightOf<Self::DstChain>, PacketOf<Self>)],
     ) -> Result<(), Self::Error>;
 }

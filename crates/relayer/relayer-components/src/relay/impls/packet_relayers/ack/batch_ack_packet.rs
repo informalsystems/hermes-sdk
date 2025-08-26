@@ -1,5 +1,4 @@
 use alloc::vec;
-use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use hermes_chain_components::traits::{AcknowledgementOf, HasOutgoingPacketType};
@@ -37,21 +36,19 @@ where
 {
     async fn relay_ack_packets(
         relay: &Relay,
-        destination_heights: Vec<&HeightOf<Relay::DstChain>>,
-        packets: Vec<&PacketOf<Relay>>,
-        acks: Vec<&AcknowledgementOf<Relay::DstChain, Relay::SrcChain>>,
+        packets_information: &[(
+            HeightOf<Relay::DstChain>,
+            PacketOf<Relay>,
+            AcknowledgementOf<Relay::DstChain, Relay::SrcChain>,
+        )],
     ) -> Result<(), Relay::Error> {
-        if packets.is_empty() {
+        if packets_information.is_empty() {
             return Ok(());
         }
 
         let mut messages = vec![];
 
-        for ((destination_height, packet), ack) in destination_heights
-            .iter()
-            .zip(packets.iter())
-            .zip(acks.iter())
-        {
+        for (destination_height, packet, ack) in packets_information.iter() {
             let src_client_state = relay
                 .src_chain()
                 .query_client_state_with_latest_height(PhantomData, relay.src_client_id())

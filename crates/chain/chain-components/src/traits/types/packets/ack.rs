@@ -7,7 +7,7 @@ pub trait HasAckPacketPayloadType<Counterparty>: Async {
 
 #[cgp_type]
 pub trait HasAcknowledgementType<Counterparty>: Async {
-    type Acknowledgement: Async;
+    type Acknowledgement: Async + Clone;
 }
 
 #[cgp_type]

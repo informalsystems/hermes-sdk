@@ -76,23 +76,19 @@ where
 {
     async fn relay_ack_packets(
         relay: &Relay,
-        destination_heights: Vec<&DstChain::Height>,
-        packets: Vec<&SrcChain::OutgoingPacket>,
-        acks: Vec<&DstChain::Acknowledgement>,
+        packets_information: &[(
+            DstChain::Height,
+            SrcChain::OutgoingPacket,
+            DstChain::Acknowledgement,
+        )],
     ) -> Result<(), Relay::Error> {
-        if packets.is_empty() {
+        if packets_information.is_empty() {
             return Ok(());
         }
 
-        let mut filtered_packets = vec![];
-        let mut filtered_heights = vec![];
-        let mut filtered_acks = vec![];
+        let mut filtered_packets_information = vec![];
 
-        for ((destination_height, packet), ack) in destination_heights
-            .iter()
-            .zip(packets.iter())
-            .zip(acks.iter())
-        {
+        for (destination_height, packet, ack) in packets_information.iter() {
             let packet_is_cleared = relay
                 .src_chain()
                 .query_packet_is_cleared(
@@ -104,13 +100,14 @@ where
                 .map_err(Relay::raise_error)?;
 
             if !packet_is_cleared {
-                filtered_packets.push(*packet);
-                filtered_heights.push(*destination_height);
-                filtered_acks.push(*ack);
+                filtered_packets_information.push((
+                    destination_height.clone(),
+                    packet.clone(),
+                    ack.clone(),
+                ))
             }
         }
-        InRelayer::relay_ack_packets(relay, filtered_heights, filtered_packets, filtered_acks)
-            .await?;
+        InRelayer::relay_ack_packets(relay, filtered_packets_information.as_slice()).await?;
 
         Ok(())
     }
@@ -132,17 +129,15 @@ where
 {
     async fn relay_timeout_unordered_packets(
         relay: &Relay,
-        destination_heights: Vec<&DstChain::Height>,
-        packets: Vec<&SrcChain::OutgoingPacket>,
+        packets_information: &[(DstChain::Height, SrcChain::OutgoingPacket)],
     ) -> Result<(), Relay::Error> {
-        if packets.is_empty() {
+        if packets_information.is_empty() {
             return Ok(());
         }
 
-        let mut filtered_packets = vec![];
-        let mut filtered_heights = vec![];
+        let mut filtered_packets_information = vec![];
 
-        for (destination_height, packet) in destination_heights.iter().zip(packets.iter()) {
+        for (destination_height, packet) in packets_information.iter() {
             let packet_is_cleared = relay
                 .src_chain()
                 .query_packet_is_cleared(
@@ -154,11 +149,10 @@ where
                 .map_err(Relay::raise_error)?;
 
             if !packet_is_cleared {
-                filtered_packets.push(*packet);
-                filtered_heights.push(*destination_height);
+                filtered_packets_information.push((destination_height.clone(), packet.clone()));
             }
         }
-        InRelayer::relay_timeout_unordered_packets(relay, filtered_heights, filtered_packets)
+        InRelayer::relay_timeout_unordered_packets(relay, filtered_packets_information.as_slice())
             .await?;
 
         Ok(())
