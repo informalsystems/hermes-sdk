@@ -37,10 +37,10 @@ where
     async fn relay_ack_packets(
         relay: &Relay,
         packets_information: &[(
-            HeightOf<Relay::DstChain>,
             PacketOf<Relay>,
             AcknowledgementOf<Relay::DstChain, Relay::SrcChain>,
         )],
+        batch_latest_height: &HeightOf<Relay::DstChain>,
     ) -> Result<(), Relay::Error> {
         if packets_information.is_empty() {
             return Ok(());
@@ -48,7 +48,7 @@ where
 
         let mut messages = vec![];
 
-        for (destination_height, packet, ack) in packets_information.iter() {
+        for (packet, ack) in packets_information.iter() {
             let src_client_state = relay
                 .src_chain()
                 .query_client_state_with_latest_height(PhantomData, relay.src_client_id())
@@ -57,7 +57,7 @@ where
 
             let payload = relay
                 .dst_chain()
-                .build_ack_packet_payload(&src_client_state, destination_height, packet, ack)
+                .build_ack_packet_payload(&src_client_state, batch_latest_height, packet, ack)
                 .await
                 .map_err(Relay::raise_error)?;
 

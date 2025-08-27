@@ -10,7 +10,7 @@ use hermes_chain_components::traits::{
 };
 use hermes_chain_components::types::aliases::{EventOf, HeightOf};
 use hermes_logging_components::traits::CanLog;
-use hermes_logging_components::types::{LevelInfo, LevelTrace};
+use hermes_logging_components::types::{LevelError, LevelInfo, LevelTrace};
 use hermes_prelude::*;
 use hermes_runtime_components::traits::{
     CanRunConcurrentTasks, CanSleep, HasRuntime, HasTime, Task,
@@ -31,6 +31,7 @@ where
         + CanRelayBatchEvent<Target>
         + CanLog<LevelInfo>
         + CanLog<LevelTrace>
+        + CanLog<LevelError>
         + for<'a> CanLog<LogAutoRelayWithHeights<'a, Relay, Target>>
         + CanRaiseAsyncError<ErrorOf<Relay::TargetChain>>,
     Target: RelayTarget,
@@ -136,7 +137,7 @@ where
 pub struct EventRelayerTask<Relay, Target>
 where
     Target: RelayTarget,
-    Relay: HasTargetChainTypes<Target, TargetChain: HasEventType>,
+    Relay: HasTargetChainTypes<Target, TargetChain: HasEventType> + CanLog<LevelError>,
 {
     pub relay: Relay,
     pub events: Vec<EventOf<Relay::TargetChain>>,
@@ -146,13 +147,18 @@ where
 impl<Relay, Target> Task for EventRelayerTask<Relay, Target>
 where
     Target: RelayTarget,
-    Relay: CanRelayBatchEvent<Target>,
+    Relay: CanRelayBatchEvent<Target> + CanLog<LevelError>,
 {
     async fn run(self) {
-        let _ = self
+        if let Err(e) = self
             .relay
             .relay_chain_batch_events(self.events.as_slice())
-            .await;
+            .await
+        {
+            self.relay
+                .log(&format!("failed to relay batch event: {e:?}"), &LevelError)
+                .await;
+        }
     }
 }
 

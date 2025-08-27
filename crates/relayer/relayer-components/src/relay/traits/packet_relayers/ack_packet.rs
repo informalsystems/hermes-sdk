@@ -31,9 +31,9 @@ pub trait CanRelayBatchAckPackets:
     async fn relay_ack_packets(
         &self,
         packets_information: &[(
-            HeightOf<Self::DstChain>,
             PacketOf<Self>,
             AcknowledgementOf<Self::DstChain, Self::SrcChain>,
         )],
+        batch_latest_height: &HeightOf<Self::DstChain>,
     ) -> Result<(), Self::Error>;
 }

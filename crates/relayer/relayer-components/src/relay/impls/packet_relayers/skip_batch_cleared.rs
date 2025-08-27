@@ -76,11 +76,8 @@ where
 {
     async fn relay_ack_packets(
         relay: &Relay,
-        packets_information: &[(
-            DstChain::Height,
-            SrcChain::OutgoingPacket,
-            DstChain::Acknowledgement,
-        )],
+        packets_information: &[(SrcChain::OutgoingPacket, DstChain::Acknowledgement)],
+        batch_latest_height: &DstChain::Height,
     ) -> Result<(), Relay::Error> {
         if packets_information.is_empty() {
             return Ok(());
@@ -88,7 +85,7 @@ where
 
         let mut filtered_packets_information = vec![];
 
-        for (destination_height, packet, ack) in packets_information.iter() {
+        for (packet, ack) in packets_information.iter() {
             let packet_is_cleared = relay
                 .src_chain()
                 .query_packet_is_cleared(
@@ -100,14 +97,15 @@ where
                 .map_err(Relay::raise_error)?;
 
             if !packet_is_cleared {
-                filtered_packets_information.push((
-                    destination_height.clone(),
-                    packet.clone(),
-                    ack.clone(),
-                ))
+                filtered_packets_information.push((packet.clone(), ack.clone()))
             }
         }
-        InRelayer::relay_ack_packets(relay, filtered_packets_information.as_slice()).await?;
+        InRelayer::relay_ack_packets(
+            relay,
+            filtered_packets_information.as_slice(),
+            batch_latest_height,
+        )
+        .await?;
 
         Ok(())
     }
