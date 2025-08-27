@@ -138,10 +138,6 @@ where
     ) -> Result<(), Relay::Error> {
         let dst_chain = relay.dst_chain();
         let mut packets_info = vec![];
-        let mut batch_latest_height = dst_chain
-            .query_chain_height()
-            .await
-            .map_err(Relay::raise_error)?;
 
         for event in events.iter() {
             let m_ack_event = dst_chain.try_extract_from_event(PhantomData, event);
@@ -165,19 +161,16 @@ where
                         .await
                         .map_err(Relay::raise_error)?;
 
-                    let height = dst_chain
-                        .query_chain_height()
-                        .await
-                        .map_err(Relay::raise_error)?;
-
-                    if height > batch_latest_height {
-                        batch_latest_height = height;
-                    }
-
                     packets_info.push((packet, ack))
                 }
             }
         }
+
+        let batch_latest_height = dst_chain
+            .query_chain_height()
+            .await
+            .map_err(Relay::raise_error)?;
+
         relay
             .relay_ack_packets(packets_info.as_slice(), &batch_latest_height)
             .await?;
