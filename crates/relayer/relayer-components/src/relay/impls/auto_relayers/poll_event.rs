@@ -1,4 +1,5 @@
 use alloc::boxed::Box;
+use alloc::vec::Vec;
 use alloc::{format, vec};
 use core::marker::PhantomData;
 use core::time::Duration;
@@ -9,14 +10,17 @@ use hermes_chain_components::traits::{
 };
 use hermes_chain_components::types::aliases::{EventOf, HeightOf};
 use hermes_logging_components::traits::CanLog;
-use hermes_logging_components::types::{LevelInfo, LevelTrace};
+use hermes_logging_components::types::{LevelError, LevelInfo, LevelTrace};
 use hermes_prelude::*;
-use hermes_runtime_components::traits::{CanRunConcurrentTasks, CanSleep, HasRuntime, Task};
+use hermes_runtime_components::traits::{
+    CanRunConcurrentTasks, CanSleep, HasRuntime, HasTime, Task,
+};
 
 use crate::relay::traits::{
-    AutoRelayerWithHeights, AutoRelayerWithHeightsComponent, CanRelayEvent, HasTargetChainTypes,
-    HasTargetChains, RelayTarget,
+    AutoRelayerWithHeights, AutoRelayerWithHeightsComponent, CanRelayBatchEvent,
+    HasTargetChainTypes, HasTargetChains, RelayTarget,
 };
+use crate::transaction::traits::HasBatchConfig;
 
 #[cgp_new_provider(AutoRelayerWithHeightsComponent)]
 impl<Relay, Target> AutoRelayerWithHeights<Relay, Target> for RelayWithPolledEvents
@@ -24,14 +28,15 @@ where
     Relay: Clone
         + HasRuntime
         + HasTargetChains<Target>
-        + CanRelayEvent<Target>
+        + CanRelayBatchEvent<Target>
         + CanLog<LevelInfo>
         + CanLog<LevelTrace>
+        + CanLog<LevelError>
         + for<'a> CanLog<LogAutoRelayWithHeights<'a, Relay, Target>>
         + CanRaiseAsyncError<ErrorOf<Relay::TargetChain>>,
     Target: RelayTarget,
-    Relay::TargetChain: CanIncrementHeight + CanQueryBlockEvents,
-    Relay::Runtime: CanRunConcurrentTasks + CanSleep,
+    Relay::TargetChain: CanIncrementHeight + CanQueryBlockEvents + HasBatchConfig,
+    Relay::Runtime: CanRunConcurrentTasks + CanSleep + HasTime,
 {
     async fn auto_relay_with_heights(
         relay: &Relay,
@@ -41,6 +46,9 @@ where
     ) -> Result<(), Relay::Error> {
         let chain = relay.target_chain();
         let runtime = relay.runtime();
+
+        let batch_config = relay.target_chain().batch_config();
+        let event_batch_period = batch_config.max_delay;
 
         let mut height = start_height.clone();
 
@@ -56,6 +64,8 @@ where
             )
             .await;
 
+        let mut last_sent_time = runtime.now();
+        let mut batch_events = vec![];
         loop {
             let maybe_events = chain
                 .query_block_events(&height)
@@ -63,7 +73,7 @@ where
                 .map_err(Relay::raise_error);
 
             // TODO: Introduce retry mechanism
-            let events = match maybe_events {
+            let mut events = match maybe_events {
                 Ok(events) => {
                     relay
                         .log(
@@ -89,18 +99,25 @@ where
                 }
             };
 
-            let tasks = events
-                .into_iter()
-                .map(|event| {
-                    Box::new(EventRelayerTask {
-                        relay: relay.clone(),
-                        event,
-                        phantom: PhantomData,
-                    })
-                })
-                .collect();
+            if !events.is_empty() {
+                batch_events.append(&mut events);
+            }
+            let now = runtime.now();
+            let elapsed = Relay::Runtime::duration_since(&now, &last_sent_time);
+            if elapsed < event_batch_period {
+                continue;
+            }
+            last_sent_time = now;
 
-            runtime.run_concurrent_tasks(tasks).await;
+            let tasks = Box::new(EventRelayerTask {
+                relay: relay.clone(),
+                events: batch_events.clone(),
+                phantom: PhantomData,
+            });
+
+            runtime.run_concurrent_tasks(vec![tasks]).await;
+
+            batch_events.clear();
 
             if let Some(end_height) = end_height {
                 if &height > end_height {
@@ -120,20 +137,28 @@ where
 pub struct EventRelayerTask<Relay, Target>
 where
     Target: RelayTarget,
-    Relay: HasTargetChainTypes<Target, TargetChain: HasEventType>,
+    Relay: HasTargetChainTypes<Target, TargetChain: HasEventType> + CanLog<LevelError>,
 {
     pub relay: Relay,
-    pub event: EventOf<Relay::TargetChain>,
+    pub events: Vec<EventOf<Relay::TargetChain>>,
     pub phantom: PhantomData<Target>,
 }
 
 impl<Relay, Target> Task for EventRelayerTask<Relay, Target>
 where
     Target: RelayTarget,
-    Relay: CanRelayEvent<Target>,
+    Relay: CanRelayBatchEvent<Target> + CanLog<LevelError>,
 {
     async fn run(self) {
-        let _ = self.relay.relay_chain_event(&self.event).await;
+        if let Err(e) = self
+            .relay
+            .relay_chain_batch_events(self.events.as_slice())
+            .await
+        {
+            self.relay
+                .log(&format!("failed to relay batch event: {e:?}"), &LevelError)
+                .await;
+        }
     }
 }
 

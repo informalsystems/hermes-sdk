@@ -1,5 +1,5 @@
-use alloc::format;
 use alloc::vec::Vec;
+use alloc::{format, vec};
 
 use hermes_chain_components::traits::{HasChainId, MessageSenderComponent};
 use hermes_logging_components::traits::CanLog;
@@ -21,6 +21,9 @@ where
         chain: &Chain,
         messages: Vec<Chain::Message>,
     ) -> Result<Vec<Chain::MessageResponse>, Chain::Error> {
+        if messages.is_empty() {
+            return Ok(vec![]);
+        }
         let (signer_index_mutex, max_signer_length) = chain.mutex_for_signer();
         let mut signer_index = signer_index_mutex.lock().await;
         let signer = chain.get_signer(*signer_index)?;

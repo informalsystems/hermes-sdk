@@ -1,0 +1,33 @@
+use alloc::vec;
+use core::marker::PhantomData;
+
+use hermes_prelude::*;
+
+use crate::relay::traits::{
+    BatchPacketsRelayer, BatchPacketsRelayerComponent, CanFilterRelayPackets, PacketOf,
+};
+
+pub struct BatchFilterRelayer<InRelayer> {
+    pub phantom: PhantomData<InRelayer>,
+}
+
+#[cgp_provider(BatchPacketsRelayerComponent)]
+impl<Relay, InRelayer> BatchPacketsRelayer<Relay> for BatchFilterRelayer<InRelayer>
+where
+    Relay: CanFilterRelayPackets,
+    InRelayer: BatchPacketsRelayer<Relay>,
+{
+    async fn relay_packets(relay: &Relay, packets: &[PacketOf<Relay>]) -> Result<(), Relay::Error> {
+        if packets.is_empty() {
+            return Ok(());
+        }
+
+        let mut filtered_packets = vec![];
+        for packet in packets.iter() {
+            if relay.should_relay_packet(packet).await? {
+                filtered_packets.push(packet.clone());
+            }
+        }
+        InRelayer::relay_packets(relay, packets).await
+    }
+}

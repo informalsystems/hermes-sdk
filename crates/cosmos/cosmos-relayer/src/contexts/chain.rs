@@ -9,6 +9,7 @@ use hermes_core::chain_components::traits::{
     ClientRecoveryComponent, ClientStatusQuerierComponent, ClientUpgradeComponent,
     ClientUpgradePayloadBuilderComponent, HasRecoverClientPayloadType,
 };
+use hermes_core::chain_type_components::impls::BatchConfig;
 use hermes_core::chain_type_components::traits::{
     ChainIdGetterComponent, HasEventType, HasMessageResponseType,
     MessageResponseEventsGetterComponent,
@@ -42,10 +43,11 @@ use hermes_core::relayer_components::transaction::impls::{
     SignerWithIndexGetter, TxNoResponseError,
 };
 use hermes_core::relayer_components::transaction::traits::{
-    ClientRefreshRateGetter, ClientRefreshRateGetterComponent, DefaultSignerGetterComponent,
-    FeeForSimulationGetter, FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent,
-    SignerGetterComponent, SignerMutexGetterComponent, TxResponsePollerComponent,
-    TxResponseQuerierComponent, TxSubmitterComponent,
+    BatchConfigGetter, BatchConfigGetterComponent, ClientRefreshRateGetter,
+    ClientRefreshRateGetterComponent, DefaultSignerGetterComponent, FeeForSimulationGetter,
+    FeeForSimulationGetterComponent, NonceAllocationMutexGetterComponent, SignerGetterComponent,
+    SignerMutexGetterComponent, TxResponsePollerComponent, TxResponseQuerierComponent,
+    TxSubmitterComponent,
 };
 use hermes_core::relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_core::runtime_components::traits::{
@@ -169,6 +171,21 @@ delegate_components! {
 delegate_components! {
     DelegateCosmosChainComponents {
         CosmosChain: CosmosToCosmosComponents::Provider,
+    }
+}
+
+#[cgp_provider(BatchConfigGetterComponent)]
+impl BatchConfigGetter<CosmosChain> for CosmosChainContextComponents {
+    fn batch_config(chain: &CosmosChain) -> BatchConfig {
+        if let Some(batch_config) = &chain.chain_config.batch_config {
+            batch_config.clone()
+        } else {
+            let default_batch_config = BatchConfig::default();
+            tracing::warn!(
+                "missing batch config, will use default values: {default_batch_config:?}"
+            );
+            default_batch_config
+        }
     }
 }
 

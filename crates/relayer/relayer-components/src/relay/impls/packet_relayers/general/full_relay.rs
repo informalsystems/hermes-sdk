@@ -2,6 +2,7 @@ use hermes_chain_components::traits::{
     CanBuildPacketFromWriteAck, CanQueryChainHeight, CanQueryPacketIsReceived, CanReadPacketFields,
 };
 use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelWarn;
 use hermes_prelude::*;
 
 use crate::chain::traits::{CanQueryChainStatus, HasWriteAckEvent};
@@ -35,6 +36,7 @@ where
         + HasRelayPacketType
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
+        + CanLog<LevelWarn>
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>,
     SrcChain: CanQueryChainStatus + CanReadPacketFields<DstChain>,
@@ -76,7 +78,7 @@ where
             (Some(height), None) => destination_height > &height,
             (None, Some(timestamp)) => DstChain::has_timed_out(destination_timestamp, &timestamp),
             (None, None) => {
-                // TODO: raise error?
+                relay.log("Both packet timeout height and timestamp were not set, will not consider the packet as timed out", &LevelWarn).await;
                 false
             }
         };

@@ -68,7 +68,6 @@ pub fn build_osmosis_bootstrap(
         Default::default(),
         packet_filter,
         Default::default(),
-        Default::default(),
     );
 
     LegacyCosmosBootstrap {
@@ -104,7 +103,6 @@ pub fn build_gaia_bootstrap(
         runtime.clone(),
         Default::default(),
         packet_filter,
-        Default::default(),
         Default::default(),
     );
 
@@ -263,7 +261,6 @@ pub async fn init_preset_bootstraps(
         runtime.clone(),
         Default::default(),
         packet_filter.clone(),
-        Default::default(),
         Default::default(),
     );
 

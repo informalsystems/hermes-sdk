@@ -28,9 +28,7 @@ use hermes_core::relayer_components::multi::traits::relay_at::{
 };
 use hermes_core::relayer_components::multi::types::tags::{Dst, Src};
 use hermes_core::relayer_components::relay::traits::SourceTarget;
-use hermes_core::relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_core::relayer_components_extra::batch::traits::types::MessageBatchSenderOf;
-use hermes_core::relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_core::relayer_components_extra::build::traits::cache::{
     BatchSenderCacheAt, BatchSenderCacheGetterComponent,
 };
@@ -71,7 +69,6 @@ pub struct CosmosBuilderFields {
     pub packet_filter: PacketFilterConfig,
     pub telemetry: CosmosTelemetry,
     pub runtime: HermesRuntime,
-    pub batch_config: BatchConfig,
     pub key_map: HashMap<ChainId, Secp256k1KeyPair>,
     pub chain_cache: Arc<Mutex<BTreeMap<ChainId, CosmosChain>>>,
     pub relay_cache: Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>>>,
@@ -131,7 +128,6 @@ impl CosmosBuilder {
             Default::default(),
             Default::default(),
             Default::default(),
-            Default::default(),
         )
     }
 
@@ -140,7 +136,6 @@ impl CosmosBuilder {
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
         packet_filter: PacketFilterConfig,
-        batch_config: BatchConfig,
         key_map: HashMap<ChainId, Secp256k1KeyPair>,
     ) -> Self {
         let config_map = HashMap::from_iter(
@@ -155,7 +150,6 @@ impl CosmosBuilder {
                 packet_filter,
                 telemetry,
                 runtime,
-                batch_config,
                 key_map,
                 chain_cache: Default::default(),
                 relay_cache: Default::default(),
@@ -374,12 +368,6 @@ impl HasRelayCache<Index<0>, Index<1>> for CosmosBuilder {
 impl HasRelayCache<Index<1>, Index<0>> for CosmosBuilder {
     fn relay_cache(&self) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>> {
         &self.relay_cache
-    }
-}
-
-impl HasBatchConfig for CosmosBuilder {
-    fn batch_config(&self) -> &BatchConfig {
-        &self.batch_config
     }
 }
 

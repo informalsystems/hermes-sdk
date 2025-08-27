@@ -12,3 +12,5 @@ description  = "Implementation of an IBC Relayer in Rust, as a library"
 [dependencies]
 cgp            = { workspace = true }
 hermes-prelude = { workspace = true }
+
+serde = { workspace = true, features = [ "derive" ] }

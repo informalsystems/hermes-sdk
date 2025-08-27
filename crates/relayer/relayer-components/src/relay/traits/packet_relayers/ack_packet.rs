@@ -19,3 +19,21 @@ pub trait CanRelayAckPacket:
         ack: &AcknowledgementOf<Self::DstChain, Self::SrcChain>,
     ) -> Result<(), Self::Error>;
 }
+
+#[cgp_component {
+  provider: BatchAckPacketsRelayer,
+  context: Relay,
+}]
+#[async_trait]
+pub trait CanRelayBatchAckPackets:
+    HasRelayChains<DstChain: HasAcknowledgementType<Self::SrcChain>>
+{
+    async fn relay_ack_packets(
+        &self,
+        packets_information: &[(
+            PacketOf<Self>,
+            AcknowledgementOf<Self::DstChain, Self::SrcChain>,
+        )],
+        batch_latest_height: &HeightOf<Self::DstChain>,
+    ) -> Result<(), Self::Error>;
+}

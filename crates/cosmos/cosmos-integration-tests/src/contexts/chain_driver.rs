@@ -11,22 +11,19 @@ use hermes_core::test_components::chain::traits::{
     ProposalIdTypeComponent, ProposalStatusTypeComponent,
 };
 use hermes_core::test_components::chain_driver::traits::{
-    ChainGetter, ChainGetterComponent, ChainHomeDirGetter, ChainHomeDirGetterComponent,
-    ChainProcessTaker, ChainProcessTakerComponent, ChainStartupWaiterComponent, ChainTypeProvider,
-    ChainTypeProviderComponent, ConfigUpdater, ConfigUpdaterComponent, DenomGetter,
-    DenomGetterComponent, RandomAmountGeneratorComponent, RelayerWallet,
-    SetupUpgradeClientTestResultTypeProvider, SetupUpgradeClientTestResultTypeProviderComponent,
-    StakingDenom, TransferDenom, UserWallet, ValidatorWallet, WalletGetterComponent,
-    WalletsGetterComponent,
+    ChainCommandPathGetter, ChainCommandPathGetterComponent, ChainGetter, ChainGetterComponent,
+    ChainHomeDirGetter, ChainHomeDirGetterComponent, ChainProcessTaker, ChainProcessTakerComponent,
+    ChainStartupWaiterComponent, ChainTypeProvider, ChainTypeProviderComponent, ConfigUpdater,
+    ConfigUpdaterComponent, DenomGetter, DenomGetterComponent, RandomAmountGeneratorComponent,
+    RelayerWallet, SetupUpgradeClientTestResultTypeProvider,
+    SetupUpgradeClientTestResultTypeProviderComponent, StakingDenom, TransferDenom, UserWallet,
+    ValidatorWallet, WalletGetterComponent, WalletsGetterComponent,
 };
 use hermes_core::test_components::test_case::traits::node::FullNodeHalterComponent;
 use hermes_core::test_components::test_case::traits::upgrade_client::{
     SetupUpgradeClientTestHandlerComponent, UpgradeClientHandlerComponent,
 };
 use hermes_cosmos_core::chain_components::impls::RelayerConfig;
-use hermes_cosmos_core::test_components::bootstrap::traits::{
-    ChainCommandPathGetter, ChainCommandPathGetterComponent,
-};
 use hermes_cosmos_core::test_components::bootstrap::types::{
     CosmosChainNodeConfig, CosmosGenesisConfig,
 };

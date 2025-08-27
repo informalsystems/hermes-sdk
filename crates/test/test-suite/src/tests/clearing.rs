@@ -1,4 +1,4 @@
-use alloc::format;
+use alloc::{format, vec};
 use core::marker::PhantomData;
 
 use cgp::core::field::Index;
@@ -9,7 +9,7 @@ use hermes_relayer_components::chain::traits::{
     HasPacketSequence,
 };
 use hermes_relayer_components::relay::traits::{
-    CanAutoRelayWithHeights, CanRelayReceivePacket, DestinationTarget, SourceTarget,
+    CanAutoRelayWithHeights, CanRelayBatchReceivePackets, DestinationTarget, SourceTarget,
 };
 use hermes_test_components::chain::traits::{
     CanIbcTransferToken, CanQueryBalance, HasAmountMethods, HasDefaultMemo, HasWalletType,
@@ -120,7 +120,7 @@ where
                 .map_err(Driver::raise_error)?;
 
             relay_a_to_b
-                .relay_receive_packet(&src_chain_height, &packet_1)
+                .relay_receive_packets(&src_chain_height, vec![&packet_1])
                 .await
                 .map_err(Driver::raise_error)?;
         }

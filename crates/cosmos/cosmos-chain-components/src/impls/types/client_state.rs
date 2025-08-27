@@ -56,4 +56,8 @@ where
     fn client_state_chain_id(client_state: &TendermintClientState) -> ChainId {
         client_state.chain_id.clone()
     }
+
+    fn client_state_trusting_period(client_state: &TendermintClientState) -> Option<Duration> {
+        Some(client_state.trusting_period)
+    }
 }

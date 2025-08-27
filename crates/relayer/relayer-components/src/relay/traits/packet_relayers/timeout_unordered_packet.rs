@@ -25,3 +25,15 @@ pub trait CanRelayTimeoutUnorderedPacket: HasRelayChains {
         packet: &PacketOf<Self>,
     ) -> Result<(), Self::Error>;
 }
+
+#[cgp_component {
+  provider: BatchTimeoutUnorderedPacketsRelayer,
+  context: Relay,
+}]
+#[async_trait]
+pub trait CanRelayBatchTimeoutUnorderedPackets: HasRelayChains {
+    async fn relay_timeout_unordered_packets(
+        &self,
+        packets_information: &[(HeightOf<Self::DstChain>, PacketOf<Self>)],
+    ) -> Result<(), Self::Error>;
+}

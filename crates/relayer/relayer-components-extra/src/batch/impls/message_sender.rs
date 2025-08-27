@@ -1,3 +1,4 @@
+use alloc::vec;
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
@@ -32,6 +33,9 @@ where
         _target: Target,
         messages: Vec<MessageOf<Relay::TargetChain>>,
     ) -> Result<Vec<MessageResponseOf<Relay::TargetChain>>, Relay::Error> {
+        if messages.is_empty() {
+            return Ok(vec![]);
+        }
         let (result_sender, result_receiver) = oneshot::channel();
 
         let message_sender = relay.get_batch_sender(PhantomData::<Target::Chain>);

@@ -4,11 +4,11 @@ use std::path::PathBuf;
 use hermes_core::runtime_components::traits::{
     HasChildProcessType, HasFilePathType, HasRuntimeType,
 };
-use hermes_core::test_components::chain_driver::traits::HasChainType;
+use hermes_core::test_components::chain_driver::traits::{HasChainCommandPath, HasChainType};
 use hermes_core::test_components::driver::traits::HasChainDriverType;
 use hermes_cosmos_core::test_components::bootstrap::traits::{
     ChainDriverBuilder, ChainDriverBuilderComponent, DenomForStaking, DenomForTransfer,
-    HasChainCommandPath, HasChainGenesisConfigType, HasChainNodeConfigType, HasGenesisDenom,
+    HasChainGenesisConfigType, HasChainNodeConfigType, HasGenesisDenom,
 };
 use hermes_cosmos_core::test_components::bootstrap::types::{
     CosmosChainNodeConfig, CosmosGenesisConfig,

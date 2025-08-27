@@ -50,4 +50,10 @@ where
             AnyClientState::Tendermint(cs) => cs.chain_id.clone(),
         }
     }
+
+    fn client_state_trusting_period(client_state: &AnyClientState) -> Option<Duration> {
+        match client_state {
+            AnyClientState::Tendermint(cs) => Some(cs.trusting_period),
+        }
+    }
 }

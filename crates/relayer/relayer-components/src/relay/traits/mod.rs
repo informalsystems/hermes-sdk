@@ -1,6 +1,9 @@
 mod auto_relayer;
 pub use auto_relayer::*;
 
+mod batch_event_relayer;
+pub use batch_event_relayer::*;
+
 mod chains;
 pub use chains::*;
 

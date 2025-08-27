@@ -3,6 +3,7 @@ use hermes_chain_components::traits::{
     CanReadPacketFields,
 };
 use hermes_logging_components::traits::CanLog;
+use hermes_logging_components::types::LevelWarn;
 use hermes_prelude::*;
 
 use crate::chain::traits::{CanQueryChainStatus, HasWriteAckEvent};
@@ -31,6 +32,7 @@ where
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>
         + for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
+        + CanLog<LevelWarn>
         + CanRaiseAsyncError<SrcChain::Error>
         + CanRaiseAsyncError<DstChain::Error>,
     SrcChain:

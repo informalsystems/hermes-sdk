@@ -26,7 +26,8 @@ impl<A, B> Default for TestRecoverClient<A, B> {
 impl<Driver, A, B> TestCase<Driver> for TestRecoverClient<A, B>
 where
     Driver: CanUseBinaryTestDriverMethods<A, B>
-        + CanHandleRecoverClient<Driver::ChainDriverA, Driver::ChainA, Driver::ChainB>,
+        + CanHandleRecoverClient<Driver::ChainDriverA, Driver::ChainA, Driver::ChainB>
+        + CanRaiseAsyncError<&'static str>,
     A: Async,
     B: Async,
 {
@@ -46,6 +47,11 @@ where
             .query_client_state_with_latest_height(PhantomData, subject_client_id)
             .await
             .map_err(Driver::raise_error)?;
+
+        let trusting_period = Driver::ChainB::client_state_trusting_period(&subject_client_state)
+            .ok_or_else(|| {
+            Driver::raise_error("Client state does not have a trusting period")
+        })?;
 
         let subject_client_state_height =
             Driver::ChainB::client_state_latest_height(&subject_client_state);
@@ -69,7 +75,16 @@ where
             .await
             .map_err(Driver::raise_error)?;
 
-        tokio::time::sleep(Duration::from_secs(45)).await;
+        tokio::time::sleep(
+            trusting_period
+                .checked_add(Duration::from_secs(5))
+                .ok_or_else(|| {
+                    Driver::raise_error(
+                        "Adding 5 seconds to `{trusting_period}` caused an overflow",
+                    )
+                })?,
+        )
+        .await;
 
         let subject_client_status = chain_a
             .query_client_status(PhantomData, subject_client_id)
