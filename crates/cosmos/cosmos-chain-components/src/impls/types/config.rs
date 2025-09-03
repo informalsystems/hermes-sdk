@@ -27,6 +27,7 @@ pub struct CosmosChainConfig {
     pub max_block_time: Duration,
 
     pub rpc_addr: Url,
+    pub rpc_header: Vec<(String, String)>,
     pub rpc_timeout: Duration,
     pub address_type: String,
     pub max_msg_num: usize,
