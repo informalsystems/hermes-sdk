@@ -1,10 +1,10 @@
 use ibc_proto::cosmos::base::v1beta1::DecCoin;
-use reqwest::Response;
 use serde::Deserialize;
+use tendermint_rpc::endpoint::abci_query::AbciQuery;
 
 #[derive(Debug)]
 pub struct EipQueryError {
-    pub response: Response,
+    pub response: AbciQuery,
 }
 
 #[derive(Deserialize)]

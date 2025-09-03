@@ -118,6 +118,7 @@ delegate_components! {
             FromUtf8Error,
             EncodeError,
             DecodeError,
+            serde_json::Error,
             InvalidMetadataValue,
             ClientError,
             CommitmentError,

@@ -4,6 +4,7 @@ use hermes_prelude::*;
 use ibc_proto::cosmos::base::v1beta1::DecProto;
 use prost::DecodeError;
 use subtle_encoding::base64;
+use tendermint_rpc::Client;
 
 use crate::impls::{EipBaseFeeHTTPResult, EipQueryError};
 use crate::traits::{EipQuerier, EipQuerierComponent, HasRpcClient};
@@ -20,6 +21,8 @@ where
         + CanRaiseAsyncError<reqwest::Error>
         + CanRaiseAsyncError<subtle_encoding::Error>
         + CanRaiseAsyncError<DecodeError>
+        + CanRaiseAsyncError<tendermint_rpc::Error>
+        + CanRaiseAsyncError<serde_json::Error>
         + CanRaiseAsyncError<core::num::ParseIntError>
         + CanRaiseAsyncError<core::num::ParseFloatError>
         + CanRaiseAsyncError<EipQueryError>,
@@ -28,18 +31,23 @@ where
         chain: &Chain,
         _dynamic_gas_config: &DynamicGasConfig,
     ) -> Result<f64, Chain::Error> {
-        let url = format!(
-            "{}abci_query?path=\"/osmosis.txfees.v1beta1.Query/GetEipBaseFee\"",
-            chain.rpc_address()
-        );
+        let response = chain
+            .rpc_client()
+            .abci_query(
+                Some("/osmosis.txfees.v1beta1.Query/GetEipBaseFee".into()),
+                [],
+                None,
+                false,
+            )
+            .await
+            .map_err(Chain::raise_error)?;
 
-        let response = reqwest::get(&url).await.map_err(Chain::raise_error)?;
-
-        if !response.status().is_success() {
+        if !response.code.is_ok() {
             return Err(Chain::raise_error(EipQueryError { response }));
         }
 
-        let result: EipBaseFeeHTTPResult = response.json().await.map_err(Chain::raise_error)?;
+        let result: EipBaseFeeHTTPResult =
+            serde_json::from_slice(&response.value).map_err(Chain::raise_error)?;
 
         let decoded = base64::decode(result.result.response.value).map_err(Chain::raise_error)?;
 
