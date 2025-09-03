@@ -41,7 +41,7 @@ where
         let client_state_path = format!("clients/{client_id}/clientState");
 
         let client_state_bytes = chain
-            .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), height)
+            .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), Some(height))
             .await?
             .ok_or_else(|| Chain::raise_error(format!("client state not found: {client_id}")))?;
 
@@ -108,7 +108,11 @@ where
         let data = prost::Message::encode_to_vec(&request);
 
         let response = chain
-            .query_abci("/ibc.core.client.v1.Query/ClientStates", &data, height)
+            .query_abci(
+                "/ibc.core.client.v1.Query/ClientStates",
+                &data,
+                Some(height),
+            )
             .await?
             .ok_or_else(|| Chain::raise_error("failed to query for client states"))?;
 

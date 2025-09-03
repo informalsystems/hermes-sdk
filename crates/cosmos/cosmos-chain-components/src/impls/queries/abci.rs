@@ -41,14 +41,17 @@ where
         chain: &Chain,
         path: &str,
         data: &[u8],
-        height: &Height,
+        height: Option<&Height>,
     ) -> Result<Option<Vec<u8>>, Chain::Error> {
-        let tm_height =
-            TendermintHeight::try_from(height.revision_height()).map_err(Chain::raise_error)?;
+        let tm_height = height
+            .map(|height| {
+                TendermintHeight::try_from(height.revision_height()).map_err(Chain::raise_error)
+            })
+            .transpose()?;
 
         let response = chain
             .rpc_client()
-            .abci_query(Some(path.to_owned()), data, Some(tm_height), false)
+            .abci_query(Some(path.to_owned()), data, tm_height, false)
             .await
             .map_err(Chain::raise_error)?;
 
@@ -119,7 +122,7 @@ where
         chain: &Chain,
         path: &str,
         data: &[u8],
-        height: &Chain::Height,
+        height: Option<&Chain::Height>,
     ) -> Result<Option<Vec<u8>>, Chain::Error> {
         chain
             .perform_with_retry("query_abci", 5, async || {

@@ -41,7 +41,7 @@ where
             .query_abci(
                 IBC_QUERY_PATH,
                 consensus_state_path.as_bytes(),
-                query_height,
+                Some(query_height),
             )
             .await?
             .ok_or_else(|| Chain::raise_error(format!("consensus state not found: {client_id}")))?;

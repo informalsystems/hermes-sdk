@@ -33,7 +33,7 @@ where
         let connection_path = format!("connections/{connection_id}");
 
         let connnection_end_bytes = chain
-            .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), height)
+            .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), Some(height))
             .await?
             .ok_or_else(|| {
                 Chain::raise_error(format!("connection end not found: {connection_id}"))

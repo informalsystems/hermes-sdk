@@ -2,11 +2,9 @@ use core::str::FromStr;
 
 use hermes_prelude::*;
 use prost::DecodeError;
-use subtle_encoding::base64;
-use tendermint_rpc::Client;
 
-use crate::impls::{EipBaseFeeHTTPResult, EipQueryError, GasPriceResponse};
-use crate::traits::{EipQuerier, EipQuerierComponent, HasRpcClient};
+use crate::impls::GasPriceResponse;
+use crate::traits::{CanQueryAbci, EipQuerier, EipQuerierComponent};
 use crate::types::DynamicGasConfig;
 
 /// Query EIP-1559 base fee using Skip's feemarket endpoint and decode it using
@@ -16,22 +14,18 @@ pub struct QueryEipFromFeeMarket;
 #[cgp_provider(EipQuerierComponent)]
 impl<Chain> EipQuerier<Chain> for QueryEipFromFeeMarket
 where
-    Chain: HasRpcClient
-        + CanRaiseAsyncError<reqwest::Error>
-        + CanRaiseAsyncError<subtle_encoding::Error>
+    Chain: CanQueryAbci
         + CanRaiseAsyncError<DecodeError>
-        + CanRaiseAsyncError<tendermint_rpc::Error>
-        + CanRaiseAsyncError<serde_json::Error>
-        + CanRaiseAsyncError<core::num::ParseIntError>
         + CanRaiseAsyncError<core::num::ParseFloatError>
-        + CanRaiseAsyncError<&'static str>
-        + CanRaiseAsyncError<EipQueryError>,
+        + CanRaiseAsyncError<&'static str>,
 {
     async fn query_eip_base_fee(
         chain: &Chain,
         dynamic_gas_config: &DynamicGasConfig,
     ) -> Result<f64, Chain::Error> {
-        fn encode_(denom: &str) -> Vec<u8> {
+        fn encode_gas_price_request(denom: &str) -> Vec<u8> {
+            // encodes feemarket's protobuf message `GasPriceRequest`.
+
             // Start with an empty vector to build the encoded data.
             let mut encoded_data: Vec<u8> = Vec::new();
 
@@ -51,30 +45,19 @@ where
             encoded_data
         }
 
-        let encoded_query = encode_(&dynamic_gas_config.denom);
+        let encoded_query = encode_gas_price_request(&dynamic_gas_config.denom);
 
-        let response = chain
-            .rpc_client()
-            .abci_query(
-                Some("/feemarket.feemarket.v1.Query/GasPrices".into()),
-                encoded_query,
+        let abci_value = chain
+            .query_abci(
+                "/feemarket.feemarket.v1.Query/GasPrices",
+                &encoded_query,
                 None,
-                false,
             )
-            .await
-            .map_err(Chain::raise_error)?;
-
-        if !response.code.is_ok() {
-            return Err(Chain::raise_error(EipQueryError { response }));
-        }
-
-        let result: EipBaseFeeHTTPResult =
-            serde_json::from_slice(&response.value).map_err(Chain::raise_error)?;
-
-        let decoded = base64::decode(result.result.response.value).map_err(Chain::raise_error)?;
+            .await?
+            .unwrap();
 
         let gas_price_response: GasPriceResponse =
-            prost::Message::decode(decoded.as_ref()).map_err(Chain::raise_error)?;
+            prost::Message::decode(abci_value.as_ref()).map_err(Chain::raise_error)?;
         let dec_coin = gas_price_response
             .price
             .ok_or_else(|| Chain::raise_error("missing price in GasPriceResponse"))?;

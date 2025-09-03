@@ -11,7 +11,7 @@ pub trait CanQueryAbci: HasHeightType + HasCommitmentProofType + HasAsyncErrorTy
         &self,
         path: &str,
         data: &[u8],
-        height: &Self::Height,
+        height: Option<&Self::Height>,
     ) -> Result<Option<Vec<u8>>, Self::Error>;
 
     async fn query_abci_with_proofs(
