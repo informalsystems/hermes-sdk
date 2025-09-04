@@ -24,7 +24,7 @@ where
         dynamic_gas_config: &DynamicGasConfig,
     ) -> Result<f64, Chain::Error> {
         let gas_price_request = GasPriceRequest {
-            denom: Some(dynamic_gas_config.denom.clone()),
+            denom: dynamic_gas_config.denom.clone(),
         };
 
         let proto_encoded = prost::Message::encode_to_vec(&gas_price_request);

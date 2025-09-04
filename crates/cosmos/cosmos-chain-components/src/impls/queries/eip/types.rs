@@ -5,8 +5,8 @@ use ibc_proto::cosmos::base::v1beta1::DecCoin;
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GasPriceRequest {
     /// denom we are querying gas price in
-    #[prost(message, optional, tag = "1")]
-    pub denom: ::core::option::Option<String>,
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
 }
 
 /// GasPriceResponse is the response type for the Query/GasPrice RPC method.
