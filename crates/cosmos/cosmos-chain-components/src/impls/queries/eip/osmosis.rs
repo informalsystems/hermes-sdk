@@ -15,11 +15,9 @@ pub struct OsmosisQueryEip;
 impl<Chain> EipQuerier<Chain> for OsmosisQueryEip
 where
     Chain: CanQueryAbci
-        + CanRaiseAsyncError<subtle_encoding::Error>
         + CanRaiseAsyncError<DecodeError>
-        + CanRaiseAsyncError<serde_json::Error>
-        + CanRaiseAsyncError<core::num::ParseIntError>
-        + CanRaiseAsyncError<core::num::ParseFloatError>,
+        + CanRaiseAsyncError<core::num::ParseFloatError>
+        + CanRaiseAsyncError<&'static str>,
 {
     async fn query_eip_base_fee(
         chain: &Chain,
@@ -28,7 +26,7 @@ where
         let abci_value = chain
             .query_abci("/osmosis.txfees.v1beta1.Query/GetEipBaseFee", &[], None)
             .await?
-            .unwrap();
+            .ok_or_else(|| Chain::raise_error("GetEipBaseFee response is empty"))?;
 
         let dec_proto: DecProto =
             prost::Message::decode(abci_value.as_ref()).map_err(Chain::raise_error)?;

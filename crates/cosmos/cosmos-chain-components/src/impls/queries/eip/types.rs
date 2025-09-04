@@ -1,25 +1,12 @@
 use ibc_proto::cosmos::base::v1beta1::DecCoin;
-use serde::Deserialize;
-use tendermint_rpc::endpoint::abci_query::AbciQuery;
 
-#[derive(Debug)]
-pub struct EipQueryError {
-    pub response: AbciQuery,
-}
-
-#[derive(Deserialize)]
-pub struct EipBaseFeeHTTPResult {
-    pub result: EipBaseFeeResult,
-}
-
-#[derive(Deserialize)]
-pub struct EipBaseFeeResult {
-    pub response: EipBaseFeeResponse,
-}
-
-#[derive(Deserialize)]
-pub struct EipBaseFeeResponse {
-    pub value: String,
+/// GasPriceRequest is the request type for the Query/GasPrice RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GasPriceRequest {
+    /// denom we are querying gas price in
+    #[prost(message, optional, tag = "1")]
+    pub denom: ::core::option::Option<String>,
 }
 
 /// GasPriceResponse is the response type for the Query/GasPrice RPC method.

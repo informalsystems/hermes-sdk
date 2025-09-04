@@ -3,7 +3,7 @@ use core::str::FromStr;
 use hermes_prelude::*;
 use prost::DecodeError;
 
-use crate::impls::GasPriceResponse;
+use crate::impls::{GasPriceRequest, GasPriceResponse};
 use crate::traits::{CanQueryAbci, EipQuerier, EipQuerierComponent};
 use crate::types::DynamicGasConfig;
 
@@ -23,38 +23,20 @@ where
         chain: &Chain,
         dynamic_gas_config: &DynamicGasConfig,
     ) -> Result<f64, Chain::Error> {
-        fn encode_gas_price_request(denom: &str) -> Vec<u8> {
-            // encodes feemarket's protobuf message `GasPriceRequest`.
+        let gas_price_request = GasPriceRequest {
+            denom: Some(dynamic_gas_config.denom.clone()),
+        };
 
-            // Start with an empty vector to build the encoded data.
-            let mut encoded_data: Vec<u8> = Vec::new();
-
-            // 1. Add the header byte.
-            // The field number is 1, and the wire type for a string is 2 (length-delimited).
-            // The header is calculated as: (field_number << 3) | wire_type = (1 << 3) | 2 = 10.
-            encoded_data.push(10); // 0x0A in hexadecimal
-
-            // 2. Add the length of the string.
-            // For simplicity, we assume the string length fits into a single byte.
-            let len = denom.len() as u8;
-            encoded_data.push(len);
-
-            // 3. Add the raw bytes of the string.
-            encoded_data.extend_from_slice(denom.as_bytes());
-
-            encoded_data
-        }
-
-        let encoded_query = encode_gas_price_request(&dynamic_gas_config.denom);
+        let proto_encoded = prost::Message::encode_to_vec(&gas_price_request);
 
         let abci_value = chain
             .query_abci(
-                "/feemarket.feemarket.v1.Query/GasPrices",
-                &encoded_query,
+                "/feemarket.feemarket.v1.Query/GasPrice",
+                &proto_encoded,
                 None,
             )
             .await?
-            .unwrap();
+            .ok_or_else(|| Chain::raise_error("GasPrice response is empty"))?;
 
         let gas_price_response: GasPriceResponse =
             prost::Message::decode(abci_value.as_ref()).map_err(Chain::raise_error)?;
