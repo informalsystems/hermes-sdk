@@ -176,12 +176,14 @@ impl CosmosBuilder {
             .client(
                 reqwest::Client::builder()
                     .default_headers(reqwest::header::HeaderMap::from_iter(
-                        chain_config.rpc_header.iter().map(|(key, value)| {
-                            (key.try_into().unwrap(), value.try_into().unwrap())
-                        }),
+                        chain_config
+                            .rpc_header
+                            .iter()
+                            .map(|(key, value)| Ok((key.try_into()?, value.try_into()?)))
+                            .collect::<Result<Vec<_>, Error>>()?
+                            .into_iter(),
                     ))
-                    .build()
-                    .unwrap(),
+                    .build()?,
             )
             .build()?;
 
