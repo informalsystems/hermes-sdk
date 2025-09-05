@@ -97,7 +97,11 @@ impl CommandRunner<HermesApp> for QueryChannelEnds {
         let channel_end_path = format!("channelEnds/ports/{port_id}/channels/{channel_id}");
 
         let channel_end_bytes: Vec<u8> = chain
-            .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &query_height)
+            .query_abci(
+                IBC_QUERY_PATH,
+                channel_end_path.as_bytes(),
+                Some(&query_height),
+            )
             .await?
             .ok_or_else(|| {
                 HermesApp::raise_error(format!("channel not found: {channel_id}/{port_id}"))
@@ -135,7 +139,11 @@ impl CommandRunner<HermesApp> for QueryChannelEnds {
         let client_state_path = format!("clients/{client_id}/clientState");
 
         let client_state_bytes = chain
-            .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), &query_height)
+            .query_abci(
+                IBC_QUERY_PATH,
+                client_state_path.as_bytes(),
+                Some(&query_height),
+            )
             .await?
             .ok_or_else(|| {
                 HermesApp::raise_error(format!("client state not found: {client_id}"))

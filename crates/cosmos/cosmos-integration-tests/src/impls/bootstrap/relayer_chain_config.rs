@@ -122,6 +122,7 @@ where
             id: chain_node_config.chain_id.to_string(),
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))
                 .map_err(Bootstrap::raise_error)?,
+            rpc_header: None,
             grpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.grpc_port))
                 .map_err(Bootstrap::raise_error)?,
             rpc_timeout: Duration::from_secs(10),

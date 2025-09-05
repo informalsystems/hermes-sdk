@@ -2,10 +2,9 @@ use core::str::FromStr;
 
 use hermes_prelude::*;
 use prost::DecodeError;
-use subtle_encoding::base64;
 
-use crate::impls::{EipBaseFeeHTTPResult, EipQueryError, GasPriceResponse};
-use crate::traits::{EipQuerier, EipQuerierComponent, HasRpcClient};
+use crate::impls::{GasPriceRequest, GasPriceResponse};
+use crate::traits::{CanQueryAbci, EipQuerier, EipQuerierComponent};
 use crate::types::DynamicGasConfig;
 
 /// Query EIP-1559 base fee using Skip's feemarket endpoint and decode it using
@@ -15,40 +14,35 @@ pub struct QueryEipFromFeeMarket;
 #[cgp_provider(EipQuerierComponent)]
 impl<Chain> EipQuerier<Chain> for QueryEipFromFeeMarket
 where
-    Chain: HasRpcClient
-        + CanRaiseAsyncError<reqwest::Error>
-        + CanRaiseAsyncError<subtle_encoding::Error>
+    Chain: CanQueryAbci
         + CanRaiseAsyncError<DecodeError>
-        + CanRaiseAsyncError<core::num::ParseIntError>
         + CanRaiseAsyncError<core::num::ParseFloatError>
-        + CanRaiseAsyncError<&'static str>
-        + CanRaiseAsyncError<EipQueryError>,
+        + CanRaiseAsyncError<&'static str>,
 {
     async fn query_eip_base_fee(
         chain: &Chain,
         dynamic_gas_config: &DynamicGasConfig,
     ) -> Result<f64, Chain::Error> {
-        let url = format!(
-            "{}abci_query?path=\"/feemarket.feemarket.v1.Query/GasPrices\"&denom={}",
-            chain.rpc_address(),
-            dynamic_gas_config.denom,
-        );
+        let gas_price_request = GasPriceRequest {
+            denom: dynamic_gas_config.denom.clone(),
+        };
 
-        let response = reqwest::get(&url).await.map_err(Chain::raise_error)?;
+        let proto_encoded = prost::Message::encode_to_vec(&gas_price_request);
 
-        if !response.status().is_success() {
-            return Err(Chain::raise_error(EipQueryError { response }));
-        }
-
-        let result: EipBaseFeeHTTPResult = response.json().await.map_err(Chain::raise_error)?;
-
-        let decoded = base64::decode(result.result.response.value).map_err(Chain::raise_error)?;
+        let abci_value = chain
+            .query_abci(
+                "/feemarket.feemarket.v1.Query/GasPrice",
+                &proto_encoded,
+                None,
+            )
+            .await?
+            .ok_or_else(|| Chain::raise_error("GasPrice response is empty"))?;
 
         let gas_price_response: GasPriceResponse =
-            prost::Message::decode(decoded.as_ref()).map_err(Chain::raise_error)?;
+            prost::Message::decode(abci_value.as_ref()).map_err(Chain::raise_error)?;
         let dec_coin = gas_price_response
             .price
-            .ok_or_else(|| Chain::raise_error("missing price in GasPriceRespone"))?;
+            .ok_or_else(|| Chain::raise_error("missing price in GasPriceResponse"))?;
 
         let raw_amount = f64::from_str(&dec_coin.amount).map_err(Chain::raise_error)?;
         let amount = raw_amount / 1000000000000000000.0;

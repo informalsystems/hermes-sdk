@@ -31,9 +31,7 @@ use hermes_core::relayer_components::transaction::traits::HasTxHashType;
 use hermes_core::test_components::chain::impls::{
     EventualAmountTimeoutError, MissingSendPacketEventError,
 };
-use hermes_cosmos_core::chain_components::impls::{
-    AbciQueryError, BroadcastTxError, EipQueryError,
-};
+use hermes_cosmos_core::chain_components::impls::{AbciQueryError, BroadcastTxError};
 use hermes_cosmos_core::protobuf_encoding_components::impls::{
     InvalidWireType, RequiredFieldTagNotFound, TypeUrlMismatchError, UnsupportedWireType,
 };
@@ -118,6 +116,7 @@ delegate_components! {
             FromUtf8Error,
             EncodeError,
             DecodeError,
+            serde_json::Error,
             InvalidMetadataValue,
             ClientError,
             CommitmentError,
@@ -149,7 +148,6 @@ delegate_components! {
             RequiredFieldTagNotFound,
             UnknownClientStateType,
             UnknownConsensusStateType,
-            EipQueryError,
             Status,
             MissingSendPacketEventError,
             ProposalIdNotFound,

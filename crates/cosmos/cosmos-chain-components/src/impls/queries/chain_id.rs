@@ -45,7 +45,11 @@ where
         let channel_end_path = format!("channelEnds/ports/{port_id}/channels/{channel_id}");
 
         let channel_end_bytes = chain
-            .query_abci(IBC_QUERY_PATH, channel_end_path.as_bytes(), &latest_height)
+            .query_abci(
+                IBC_QUERY_PATH,
+                channel_end_path.as_bytes(),
+                Some(&latest_height),
+            )
             .await?
             .ok_or_else(|| {
                 Chain::raise_error(format!("channel not found: {channel_id}/{port_id}"))
@@ -71,7 +75,11 @@ where
         let connection_path = format!("connections/{connection_id}");
 
         let connnection_end_bytes = chain
-            .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), &latest_height)
+            .query_abci(
+                IBC_QUERY_PATH,
+                connection_path.as_bytes(),
+                Some(&latest_height),
+            )
             .await?
             .ok_or_else(|| Chain::raise_error(format!("connection not found: {connection_id}")))?;
 

@@ -172,7 +172,22 @@ impl CosmosBuilder {
     ) -> Result<CosmosChain, Error> {
         let keys = get_keypair(&chain_config)?;
 
-        let mut rpc_client = HttpClient::new(chain_config.rpc_addr.clone())?;
+        let mut rpc_client = HttpClient::builder(chain_config.rpc_addr.clone().try_into()?)
+            .client(
+                reqwest::Client::builder()
+                    .default_headers(reqwest::header::HeaderMap::from_iter(
+                        chain_config
+                            .rpc_header
+                            .clone()
+                            .into_iter()
+                            .flatten()
+                            .map(|header| Ok((header.name.try_into()?, header.value.try_into()?)))
+                            .collect::<Result<Vec<_>, Error>>()?
+                            .into_iter(),
+                    ))
+                    .build()?,
+            )
+            .build()?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
             CompatMode::from_str(compat_mode.as_str()).unwrap()

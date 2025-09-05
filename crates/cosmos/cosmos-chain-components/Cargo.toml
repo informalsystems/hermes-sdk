@@ -19,8 +19,8 @@ hermes-cosmos-encoding-components    = { workspace = true }
 hermes-comet-light-client-components = { workspace = true }
 hermes-comet-light-client-context    = { workspace = true }
 
-ibc = { workspace = true }
-ibc-proto = { workspace = true, features = [ "client", "transport" ] }
+ibc = { workspace = true, features = [ "serde" ] }
+ibc-proto = { workspace = true, features = [ "serde", "client", "transport" ] }
 ibc-client-tendermint = { workspace = true }
 tendermint = { workspace = true, features = [ "secp256k1" ] }
 tendermint-light-client = { workspace = true }

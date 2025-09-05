@@ -26,7 +26,7 @@ where
             .query_abci(
                 "/cosmos.staking.v1beta1.Query/Params",
                 &"".to_owned().into_bytes(),
-                &latest_height,
+                Some(&latest_height),
             )
             .await?
             .ok_or_else(|| Chain::raise_error("failed to query for staking params"))?;
