@@ -15,6 +15,12 @@ pub struct RelayerConfig {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct HttpHeader {
+    pub name: String,
+    pub value: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct CosmosChainConfig {
     pub id: String,
     pub grpc_addr: Url,
@@ -27,7 +33,7 @@ pub struct CosmosChainConfig {
     pub max_block_time: Duration,
 
     pub rpc_addr: Url,
-    pub rpc_header: Vec<(String, String)>,
+    pub rpc_header: Option<Vec<HttpHeader>>,
     pub rpc_timeout: Duration,
     pub address_type: String,
     pub max_msg_num: usize,

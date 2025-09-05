@@ -178,8 +178,10 @@ impl CosmosBuilder {
                     .default_headers(reqwest::header::HeaderMap::from_iter(
                         chain_config
                             .rpc_header
-                            .iter()
-                            .map(|(key, value)| Ok((key.try_into()?, value.try_into()?)))
+                            .clone()
+                            .into_iter()
+                            .flatten()
+                            .map(|header| Ok((header.name.try_into()?, header.value.try_into()?)))
                             .collect::<Result<Vec<_>, Error>>()?
                             .into_iter(),
                     ))
