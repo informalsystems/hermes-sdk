@@ -79,51 +79,40 @@ where
                     continue;
                 }
                 
-                let client_state_result = src_chain
+                let client_state = src_chain
                     .query_client_state_with_latest_height(PhantomData, &src_client_id)
-                    .await;
+                    .await
+                    .map_err(Relay::raise_error)?;
 
-                match client_state_result {
-                    Ok(client_state) => {
-                        match dst_chain
-                            .check_misbehaviour(&update_client_event, &client_state)
+                match dst_chain
+                    .check_misbehaviour(&update_client_event, &client_state)
+                    .await
+                {
+                    Ok(Some(evidence)) => {
+                        relay
+                            .log(
+                                "Found misbehaviour, will build message and submit",
+                                &LevelDebug,
+                            )
+                            .await;
+
+                        let msg = src_chain
+                            .build_misbehaviour_message(&src_client_id, &evidence)
                             .await
-                        {
-                            Ok(Some(evidence)) => {
-                                relay
-                                    .log(
-                                        "Found misbehaviour, will build message and submit",
-                                        &LevelDebug,
-                                    )
-                                    .await;
+                            .map_err(Relay::raise_error)?;
 
-                                let msg = src_chain
-                                    .build_misbehaviour_message(&src_client_id, &evidence)
-                                    .await
-                                    .map_err(Relay::raise_error)?;
-
-                                src_chain
-                                    .send_message(msg)
-                                    .await
-                                    .map_err(Relay::raise_error)?;
-                            }
-                            Ok(None) => {
-                                relay.log("No divergence found while checking for misbehaviour", &LevelWarn).await;
-                            }
-                            Err(e) => {
-                                relay
-                                    .log(
-                                        &format!("error checking for misbehaviour: {e:?}"),
-                                        &LevelWarn,
-                                    )
-                                    .await;
-                            }
-                        }
+                        src_chain
+                            .send_message(msg)
+                            .await
+                            .map_err(Relay::raise_error)?;
+                    }
+                    Ok(None) => {
+                        relay.log("no misbehaviour detected", &LevelDebug).await;
                     }
                     Err(e) => {
                         relay
                             .log(
-                                &format!("failed to query client state for misbehaviour check (client_id: {src_client_id:?}): {e:?}"),
+                                &format!("error checking for misbehaviour: {e:?}"),
                                 &LevelWarn,
                             )
                             .await;
@@ -198,32 +187,4 @@ where
     }
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_client_state_query_error_handling() {
-        // This test verifies that the batch packet event relayer
-        // properly filters update client events to only process those
-        // relevant to the configured relayer client IDs, preventing
-        // TypeUrlMismatchError when encountering unrelated client types.
-        //
-        // On testnets with multiple independent light clients, the relayer
-        // would previously attempt to process all update_client_events,
-        // including those for client types it wasn't configured to handle.
-        // This would cause TypeUrlMismatchError and crash batch processing.
-        //
-        // The fix ensures that:
-        // 1. Only update_client_events for the relay's configured src_client_id are processed
-        // 2. Unrelated client updates are skipped entirely 
-        // 3. Batch processing continues smoothly even with mixed client types
-        //
-        // This approach is more efficient than just handling errors gracefully,
-        // as it avoids unnecessary client state queries for irrelevant clients.
-        
-        // The actual test implementation would require mocking
-        // the chain queries and relay context, which is beyond
-        // the scope of this minimal fix. This test serves as
-        // documentation of the expected behavior.
-        assert!(true, "Client state queries should be filtered by configured client IDs");
-    }
-}
+
