@@ -76,6 +76,14 @@ where
 
                 // Only process update client events for the client ID that this relay is responsible for
                 if &src_client_id != relay.src_client_id() {
+                    relay
+                        .log(
+                            &format!(
+                                "Unknown client ID {src_client_id}. Skipping update client event."
+                            ),
+                            &LevelDebug,
+                        )
+                        .await;
                     continue;
                 }
 
