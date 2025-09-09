@@ -46,12 +46,14 @@ pub struct PacketEventRelayer;
 impl<Relay, SrcChain, DstChain> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + CanLog<LevelDebug>
         + CanLog<LevelWarn>
         + CanRelayPacket
         + CanRaiseRelayChainErrors,
     SrcChain: HasErrorType
         + HasSendPacketEvent<DstChain>
+        + HasClientIdType<DstChain, ClientId: PartialEq>
         + HasUpdateClientEventFields<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
         + CanExtractFromEvent<SrcChain::SendPacketEvent>
@@ -88,58 +90,71 @@ where
             src_chain.try_extract_from_event(PhantomData::<SrcChain::UpdateClientEvent>, event)
         {
             let src_client_id = src_chain.client_id(&update_client_event);
-            let client_state = src_chain
-                .query_client_state_with_latest_height(PhantomData, &src_client_id)
-                .await
-                .map_err(Relay::raise_error)?;
 
-            match dst_chain
-                .check_misbehaviour(&update_client_event, &client_state)
-                .await
-            {
-                Ok(Some(evidence)) => {
-                    relay
-                        .log(
-                            "Found misbehaviour, will build message and submit",
-                            &LevelDebug,
-                        )
-                        .await;
+            // Only process update client events for the client ID that this relay is responsible for
+            if &src_client_id != relay.src_client_id() {
+                relay
+                    .log(
+                        &format!(
+                            "Unknown client ID {src_client_id}. Skipping update client event."
+                        ),
+                        &LevelDebug,
+                    )
+                    .await;
+            } else {
+                let client_state = src_chain
+                    .query_client_state_with_latest_height(PhantomData, &src_client_id)
+                    .await
+                    .map_err(Relay::raise_error)?;
 
-                    let msg = src_chain
-                        .build_misbehaviour_message(&src_client_id, &evidence)
-                        .await
-                        .map_err(Relay::raise_error)?;
-
-                    if let Err(e) = src_chain
-                        .send_message(msg)
-                        .await
-                        .map_err(Relay::raise_error)
-                    {
+                match dst_chain
+                    .check_misbehaviour(&update_client_event, &client_state)
+                    .await
+                {
+                    Ok(Some(evidence)) => {
                         relay
                             .log(
-                                &format!("Failed to submit misbeahviour message: {e:?}"),
-                                &LevelWarn,
+                                "Found misbehaviour, will build message and submit",
+                                &LevelDebug,
                             )
                             .await;
-                    } else {
-                        relay
+
+                        let msg = src_chain
+                            .build_misbehaviour_message(&src_client_id, &evidence)
+                            .await
+                            .map_err(Relay::raise_error)?;
+
+                        if let Err(e) = src_chain
+                            .send_message(msg)
+                            .await
+                            .map_err(Relay::raise_error)
+                        {
+                            relay
+                                .log(
+                                    &format!("Failed to submit misbeahviour message: {e:?}"),
+                                    &LevelWarn,
+                                )
+                                .await;
+                        } else {
+                            relay
                         .log(
                             &format!("Successfully submitted misbehaviour message for client {src_client_id}"),
                             &LevelDebug,
                         )
                         .await;
+                        }
                     }
-                }
-                Ok(None) => {
-                    relay.log("no misbehaviour detected", &LevelDebug).await;
-                }
-                Err(e) => {
-                    relay
-                        .log(
-                            &format!("error checking for misbehaviour: {e:?}"),
-                            &LevelWarn,
-                        )
-                        .await;
+                    Ok(None) => {
+                        relay.log("no misbehaviour detected", &LevelDebug).await;
+                    }
+                    Err(e) => {
+                        relay
+                            .log(
+                                &format!("error checking for misbehaviour: {e:?}"),
+                                &LevelWarn,
+                            )
+                            .await;
+                    }
                 }
             }
         }

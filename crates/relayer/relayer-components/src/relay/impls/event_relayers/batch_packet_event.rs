@@ -33,6 +33,7 @@ where
         + CanRaiseRelayChainErrors,
     SrcChain: HasErrorType
         + HasSendPacketEvent<DstChain>
+        + HasClientIdType<DstChain, ClientId: PartialEq>
         + HasUpdateClientEventFields<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
         + CanExtractFromEvent<SrcChain::SendPacketEvent>
@@ -46,7 +47,6 @@ where
         + HasClientStateType<SrcChain>
         + HasErrorType,
     MatchPacketDestinationChain: RelayPacketFilter<Relay>,
-    SrcChain::ClientId: PartialEq,
 {
     async fn relay_chain_batch_events(
         relay: &Relay,
