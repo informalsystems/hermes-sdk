@@ -26,12 +26,14 @@ pub struct BatchPacketEventRelayer;
 impl<Relay, SrcChain, DstChain> BatchEventRelayer<Relay, SourceTarget> for BatchPacketEventRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + CanLog<LevelDebug>
         + CanLog<LevelWarn>
         + CanRelayBatchPackets
         + CanRaiseRelayChainErrors,
     SrcChain: HasErrorType
         + HasSendPacketEvent<DstChain>
+        + HasClientIdType<DstChain, ClientId: PartialEq>
         + HasUpdateClientEventFields<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
         + CanExtractFromEvent<SrcChain::SendPacketEvent>
@@ -71,6 +73,20 @@ where
                 src_chain.try_extract_from_event(PhantomData::<SrcChain::UpdateClientEvent>, event)
             {
                 let src_client_id = src_chain.client_id(&update_client_event);
+
+                // Only process update client events for the client ID that this relay is responsible for
+                if &src_client_id != relay.src_client_id() {
+                    relay
+                        .log(
+                            &format!(
+                                "Unknown client ID {src_client_id}. Skipping update client event at batch IBC relay."
+                            ),
+                            &LevelDebug,
+                        )
+                        .await;
+                    continue;
+                }
+
                 let client_state = src_chain
                     .query_client_state_with_latest_height(PhantomData, &src_client_id)
                     .await

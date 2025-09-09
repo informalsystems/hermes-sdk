@@ -46,12 +46,14 @@ pub struct PacketEventRelayer;
 impl<Relay, SrcChain, DstChain> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasRelayClientIds
         + CanLog<LevelDebug>
         + CanLog<LevelWarn>
         + CanRelayPacket
         + CanRaiseRelayChainErrors,
     SrcChain: HasErrorType
         + HasSendPacketEvent<DstChain>
+        + HasClientIdType<DstChain, ClientId: PartialEq>
         + HasUpdateClientEventFields<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
         + CanExtractFromEvent<SrcChain::SendPacketEvent>
@@ -88,6 +90,21 @@ where
             src_chain.try_extract_from_event(PhantomData::<SrcChain::UpdateClientEvent>, event)
         {
             let src_client_id = src_chain.client_id(&update_client_event);
+
+            // Only process update client events for the client ID that this relay is responsible for
+            if &src_client_id != relay.src_client_id() {
+                relay
+                    .log(
+                        &format!(
+                            "Unknown client ID {src_client_id}. Skipping update client event at single IBC relay."
+                        ),
+                        &LevelDebug,
+                    )
+                    .await;
+
+                return Ok(());
+            }
+
             let client_state = src_chain
                 .query_client_state_with_latest_height(PhantomData, &src_client_id)
                 .await
