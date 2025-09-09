@@ -79,7 +79,7 @@ where
                     relay
                         .log(
                             &format!(
-                                "Unknown client ID {src_client_id}. Skipping update client event."
+                                "Unknown client ID {src_client_id}. Skipping update client event at batch IBC relay."
                             ),
                             &LevelDebug,
                         )
